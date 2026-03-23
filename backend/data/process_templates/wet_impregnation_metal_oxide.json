@@ -1,0 +1,20 @@
+{
+  "id": "wet_impregnation_metal_oxide",
+  "name": "Wet Impregnation - Metal on Oxide Support",
+  "description": "Standard incipient wetness impregnation of metal precursor on oxide support (Al2O3, SiO2, TiO2), followed by drying and calcination.",
+  "category": "Supported Metal",
+  "example_catalysts": ["Ni/Al2O3", "Co/Al2O3", "Cu/SiO2"],
+  "steps": [
+    "mixer_slurry",
+    "incipient_wetness",
+    "dryer_rotary_100_300C",
+    "kiln_continuous_indirect",
+    "mill",
+    "scrubber_nox"
+  ],
+  "typical_parameters": {
+    "metal_loading_wt_pct": {"min": 1, "max": 30, "default": 15},
+    "calcination_temp_C": {"min": 300, "max": 800, "default": 500},
+    "order_size_tons": {"min": 1, "max": 200, "default": 20}
+  }
+}

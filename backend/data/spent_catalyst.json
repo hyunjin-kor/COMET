@@ -1,0 +1,56 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "source": "Based on methodology from Baddour et al. 2018, Chapter 9",
+    "note": "Parameters for spent catalyst recovery value calculations"
+  },
+  "losses_use": {
+    "TiO2": {
+      "fixed": {"support": 0.02, "metal": 0.10},
+      "slurry": {"support": 0.03, "metal": 0.13}
+    },
+    "Al2O3": {
+      "fixed": {"support": 0.02, "metal": 0.03},
+      "slurry": {"support": 0.02, "metal": 0.04}
+    },
+    "SiO2": {
+      "fixed": {"support": 0.02, "metal": 0.03},
+      "slurry": {"support": 0.02, "metal": 0.04}
+    },
+    "Carbon": {
+      "fixed": {"support": 0.02, "metal": 0.025},
+      "slurry": {"support": 0.06, "metal": 0.05}
+    },
+    "Carbonate": {
+      "fixed": {"support": 0.05, "metal": 0.05},
+      "slurry": {"support": 0.05, "metal": 0.05}
+    },
+    "Clay": {
+      "fixed": {"support": 0.05, "metal": 0.05},
+      "slurry": {"support": 0.05, "metal": 0.05}
+    }
+  },
+  "losses_refining": {
+    "Pd": {"high": 0.04, "low": 0.01, "avg": 0.035},
+    "Pt": {"high": 0.03, "low": 0.01, "avg": 0.030},
+    "Rh": {"high": 0.10, "low": 0.05, "avg": 0.075},
+    "Ru": {"high": 0.25, "low": 0.15, "avg": 0.200},
+    "Au": {"avg": 0.10},
+    "Ir": {"avg": 0.10},
+    "Ni": {"avg": 0.20},
+    "Co": {"avg": 0.20}
+  },
+  "refining_charges_per_troz": {
+    "Pt": 14.5,
+    "Pd": 12.5,
+    "Rh": 16.0,
+    "Au": 11.0,
+    "Ru": 20.0,
+    "Ir": 25.0,
+    "Ag": 11.5
+  },
+  "processing_fees": {
+    "thermox_per_lb": {"low": 0.125, "high": 0.15, "avg": 0.1375},
+    "incoming_per_ft3": {"low": 90, "high": 130, "avg": 110}
+  }
+}

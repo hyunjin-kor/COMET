@@ -1,0 +1,80 @@
+"""Price escalation using ChemPPI and CEPCI indices.
+
+Adjusts costs between reference years using producer price indices.
+"""
+
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+_DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+
+
+def _load_index(index_type: str) -> dict[str, float]:
+    """Load index data from JSON file."""
+    filepath = _DATA_DIR / f"{index_type}.json"
+    with open(filepath) as f:
+        data = json.load(f)
+    return {str(k): float(v) for k, v in data["annual"].items()}
+
+
+def escalate_cost(
+    cost: float,
+    from_year: int,
+    to_year: int,
+    index_type: str = "chemppi",
+    index_data: dict[str, float] | None = None,
+) -> float:
+    """Escalate a cost from one year to another using a price index.
+
+    Args:
+        cost: Original cost value.
+        from_year: Year of the original cost basis.
+        to_year: Target year for escalation.
+        index_type: "chemppi" for operating/materials costs,
+                    "cepci" for equipment/capital costs.
+        index_data: Optional pre-loaded index dict. If None, loads from file.
+
+    Returns:
+        Escalated cost value.
+
+    Raises:
+        KeyError: If a year is not found in the index data.
+    """
+    if from_year == to_year:
+        return cost
+
+    if index_data is None:
+        index_data = _load_index(index_type)
+
+    from_key = str(from_year)
+    to_key = str(to_year)
+
+    if from_key not in index_data:
+        raise KeyError(f"Year {from_year} not found in {index_type} index data")
+    if to_key not in index_data:
+        raise KeyError(f"Year {to_year} not found in {index_type} index data")
+
+    return cost * (index_data[to_key] / index_data[from_key])
+
+
+def get_escalation_factor(
+    from_year: int,
+    to_year: int,
+    index_type: str = "chemppi",
+) -> float:
+    """Get the escalation factor between two years.
+
+    Args:
+        from_year: Base year.
+        to_year: Target year.
+        index_type: "chemppi" or "cepci".
+
+    Returns:
+        Multiplicative escalation factor.
+    """
+    if from_year == to_year:
+        return 1.0
+    index_data = _load_index(index_type)
+    return index_data[str(to_year)] / index_data[str(from_year)]

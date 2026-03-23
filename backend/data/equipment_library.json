@@ -1,0 +1,66 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "basis_year": 2018,
+    "source": "Public literature: Peters & Timmerhaus, Garrett, Seider et al.",
+    "note": "Equipment cost correlations: Cost = a + b * S^n, where S is sizing parameter"
+  },
+  "equipment": {
+    "reactor_cstr": {
+      "name": "CSTR Reactor",
+      "sizing_parameter": "volume_gal",
+      "a": 0, "b": 590, "n": 0.58,
+      "size_range": {"min": 100, "max": 10000},
+      "material_factor": {"CS": 1.0, "SS304": 1.3, "SS316": 1.5, "Hastelloy": 2.5}
+    },
+    "heat_exchanger_shell_tube": {
+      "name": "Shell & Tube Heat Exchanger",
+      "sizing_parameter": "area_ft2",
+      "a": 0, "b": 350, "n": 0.60,
+      "size_range": {"min": 50, "max": 5000},
+      "material_factor": {"CS": 1.0, "SS304": 1.5, "SS316": 1.7}
+    },
+    "pump_centrifugal": {
+      "name": "Centrifugal Pump",
+      "sizing_parameter": "flow_gpm",
+      "a": 3000, "b": 50, "n": 0.70,
+      "size_range": {"min": 10, "max": 1000},
+      "material_factor": {"CS": 1.0, "SS316": 1.8}
+    },
+    "tank_storage": {
+      "name": "Storage Tank",
+      "sizing_parameter": "volume_gal",
+      "a": 0, "b": 200, "n": 0.55,
+      "size_range": {"min": 500, "max": 50000},
+      "material_factor": {"CS": 1.0, "SS304": 1.4}
+    },
+    "rotary_kiln": {
+      "name": "Rotary Kiln / Calciner",
+      "sizing_parameter": "throughput_lb_hr",
+      "a": 50000, "b": 100, "n": 0.75,
+      "size_range": {"min": 100, "max": 10000},
+      "material_factor": {"CS": 1.0, "refractory_lined": 1.3}
+    },
+    "filter_press": {
+      "name": "Filter Press",
+      "sizing_parameter": "area_ft2",
+      "a": 5000, "b": 250, "n": 0.60,
+      "size_range": {"min": 10, "max": 1000},
+      "material_factor": {"CS": 1.0, "SS316": 1.6}
+    },
+    "spray_dryer": {
+      "name": "Spray Dryer",
+      "sizing_parameter": "evap_rate_lb_hr",
+      "a": 80000, "b": 200, "n": 0.70,
+      "size_range": {"min": 50, "max": 5000},
+      "material_factor": {"CS": 1.0, "SS316": 1.5}
+    },
+    "extruder": {
+      "name": "Extruder",
+      "sizing_parameter": "throughput_lb_hr",
+      "a": 30000, "b": 150, "n": 0.65,
+      "size_range": {"min": 50, "max": 5000},
+      "material_factor": {"CS": 1.0, "SS316": 1.4}
+    }
+  }
+}

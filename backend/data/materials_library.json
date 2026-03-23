@@ -1,0 +1,227 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "source": "Public sources: USGS, Sigma-Aldrich catalog, ICIS public pricing",
+    "basis_year": 2023,
+    "note": "Prices are approximate public references. Not from CatCost proprietary data."
+  },
+  "metals": {
+    "Pt": {
+      "name": "Platinum",
+      "symbol": "Pt",
+      "mw": 195.08,
+      "category": "PGM",
+      "unit": "$/troy_oz",
+      "reference_price": 950.0,
+      "price_source": "LBMA",
+      "common_precursors": [
+        {
+          "name": "Chloroplatinic acid (H2PtCl6)",
+          "formula": "H2PtCl6·6H2O",
+          "mw": 517.90,
+          "metal_fraction": 0.3768,
+          "markup": 1.05
+        },
+        {
+          "name": "Tetraammineplatinum(II) nitrate",
+          "formula": "Pt(NH3)4(NO3)2",
+          "mw": 387.21,
+          "metal_fraction": 0.5038,
+          "markup": 1.10
+        }
+      ]
+    },
+    "Pd": {
+      "name": "Palladium",
+      "symbol": "Pd",
+      "mw": 106.42,
+      "category": "PGM",
+      "unit": "$/troy_oz",
+      "reference_price": 1050.0,
+      "price_source": "LBMA",
+      "common_precursors": [
+        {
+          "name": "Palladium(II) chloride",
+          "formula": "PdCl2",
+          "mw": 177.33,
+          "metal_fraction": 0.5999,
+          "markup": 1.05
+        }
+      ]
+    },
+    "Rh": {
+      "name": "Rhodium",
+      "symbol": "Rh",
+      "mw": 102.91,
+      "category": "PGM",
+      "unit": "$/troy_oz",
+      "reference_price": 4500.0,
+      "price_source": "Johnson Matthey"
+    },
+    "Ru": {
+      "name": "Ruthenium",
+      "symbol": "Ru",
+      "mw": 101.07,
+      "category": "PGM",
+      "unit": "$/troy_oz",
+      "reference_price": 450.0,
+      "price_source": "Johnson Matthey"
+    },
+    "Ir": {
+      "name": "Iridium",
+      "symbol": "Ir",
+      "mw": 192.22,
+      "category": "PGM",
+      "unit": "$/troy_oz",
+      "reference_price": 4800.0,
+      "price_source": "Johnson Matthey"
+    },
+    "Au": {
+      "name": "Gold",
+      "symbol": "Au",
+      "mw": 196.97,
+      "category": "Precious",
+      "unit": "$/troy_oz",
+      "reference_price": 2000.0,
+      "price_source": "LBMA"
+    },
+    "Ag": {
+      "name": "Silver",
+      "symbol": "Ag",
+      "mw": 107.87,
+      "category": "Precious",
+      "unit": "$/troy_oz",
+      "reference_price": 24.0,
+      "price_source": "LBMA"
+    },
+    "Ni": {
+      "name": "Nickel",
+      "symbol": "Ni",
+      "mw": 58.69,
+      "category": "Base",
+      "unit": "$/lb",
+      "reference_price": 7.50,
+      "price_source": "LME",
+      "common_precursors": [
+        {
+          "name": "Nickel(II) nitrate hexahydrate",
+          "formula": "Ni(NO3)2·6H2O",
+          "mw": 290.79,
+          "metal_fraction": 0.2018,
+          "markup": 1.05
+        }
+      ]
+    },
+    "Co": {
+      "name": "Cobalt",
+      "symbol": "Co",
+      "mw": 58.93,
+      "category": "Base",
+      "unit": "$/lb",
+      "reference_price": 14.50,
+      "price_source": "LME"
+    },
+    "Cu": {
+      "name": "Copper",
+      "symbol": "Cu",
+      "mw": 63.55,
+      "category": "Base",
+      "unit": "$/lb",
+      "reference_price": 3.80,
+      "price_source": "LME"
+    },
+    "Mo": {
+      "name": "Molybdenum",
+      "symbol": "Mo",
+      "mw": 95.95,
+      "category": "Base",
+      "unit": "$/lb",
+      "reference_price": 22.0,
+      "price_source": "LME"
+    },
+    "W": {
+      "name": "Tungsten",
+      "symbol": "W",
+      "mw": 183.84,
+      "category": "Base",
+      "unit": "$/lb",
+      "reference_price": 18.0,
+      "price_source": "Market"
+    },
+    "Fe": {
+      "name": "Iron",
+      "symbol": "Fe",
+      "mw": 55.85,
+      "category": "Base",
+      "unit": "$/lb",
+      "reference_price": 0.05,
+      "price_source": "Market"
+    }
+  },
+  "supports": {
+    "Al2O3": {
+      "name": "Alumina (gamma)",
+      "formula": "Al2O3",
+      "mw": 101.96,
+      "bulk_density_lb_per_ft3": 55.0,
+      "lab_prices": [
+        [1, 25.0],
+        [5, 100.0],
+        [25, 375.0]
+      ],
+      "estimated_bulk_price_per_lb": 0.50
+    },
+    "SiO2": {
+      "name": "Silica",
+      "formula": "SiO2",
+      "mw": 60.08,
+      "bulk_density_lb_per_ft3": 35.0,
+      "lab_prices": [
+        [1, 20.0],
+        [5, 80.0],
+        [25, 300.0]
+      ],
+      "estimated_bulk_price_per_lb": 0.30
+    },
+    "TiO2": {
+      "name": "Titania",
+      "formula": "TiO2",
+      "mw": 79.87,
+      "bulk_density_lb_per_ft3": 60.0,
+      "estimated_bulk_price_per_lb": 0.80
+    },
+    "Carbon": {
+      "name": "Activated Carbon",
+      "formula": "C",
+      "mw": 12.01,
+      "bulk_density_lb_per_ft3": 30.0,
+      "lab_prices": [
+        [1, 15.0],
+        [5, 60.0],
+        [25, 200.0]
+      ],
+      "estimated_bulk_price_per_lb": 0.75
+    },
+    "ZSM-5": {
+      "name": "ZSM-5 Zeolite",
+      "formula": "ZSM-5",
+      "mw": null,
+      "bulk_density_lb_per_ft3": 45.0,
+      "estimated_bulk_price_per_lb": 1.50
+    },
+    "USY": {
+      "name": "Ultra-Stable Y Zeolite",
+      "formula": "USY",
+      "mw": null,
+      "bulk_density_lb_per_ft3": 45.0,
+      "estimated_bulk_price_per_lb": 1.20
+    }
+  },
+  "solvents_additives": {
+    "DI_water": {"name": "Deionized water", "unit": "$/gal", "price": 0.05},
+    "HCl": {"name": "Hydrochloric acid", "unit": "$/lb", "price": 0.10},
+    "HNO3": {"name": "Nitric acid", "unit": "$/lb", "price": 0.25},
+    "NH4OH": {"name": "Ammonium hydroxide", "unit": "$/lb", "price": 0.20},
+    "citric_acid": {"name": "Citric acid", "unit": "$/lb", "price": 0.50}
+  }
+}
