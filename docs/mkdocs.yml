@@ -1,0 +1,25 @@
+site_name: CatPrice Documentation
+site_description: Real-time metal price based catalyst manufacturing cost estimation
+repo_url: https://github.com/yourusername/catprice
+theme:
+  name: material
+  palette:
+    primary: blue
+    accent: blue
+  features:
+    - navigation.sections
+    - navigation.expand
+    - content.code.copy
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Methodology: methodology.md
+  - API Reference: api-reference.md
+  - Contributing: contributing.md
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - admonition
+  - tables

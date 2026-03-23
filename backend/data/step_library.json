@@ -1,0 +1,126 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "basis_year": 2017,
+    "basis_index": "ChemPPI mid-2017",
+    "source": "Based on methodology from Baddour et al. 2018, Table 6.1",
+    "note": "Hourly costs ($/hr) for each processing step by production scale"
+  },
+  "scale_thresholds_tons": {
+    "small": {"min": 1, "max": 5, "production_rate_tons_per_day": 1},
+    "medium": {"min": 5, "max": 70, "production_rate_tons_per_day": 10},
+    "large": {"min": 70, "max": 1000, "production_rate_tons_per_day": 150}
+  },
+  "cleaning_time_days": {
+    "small": 0.5,
+    "medium": 1.0,
+    "large": 1.0
+  },
+  "steps": {
+    "ball_forming": {
+      "name": "Ball Forming",
+      "description": "Forming catalyst into spherical pellets",
+      "hourly_cost": {"small": 100, "medium": 150, "large": null}
+    },
+    "crystallizer": {
+      "name": "Crystallizer",
+      "description": "Crystallization of precursors",
+      "hourly_cost": {"small": 100, "medium": 200, "large": 300}
+    },
+    "dryer_batch_vacuum_tray": {
+      "name": "Dryer (Batch Vacuum Tray)",
+      "description": "Batch vacuum tray drying",
+      "hourly_cost": {"small": 50, "medium": null, "large": null}
+    },
+    "dryer_rotary_40_100C": {
+      "name": "Dryer (Rotary, 40-100\u00b0C)",
+      "description": "Rotary drying at 40-100\u00b0C",
+      "hourly_cost": {"small": 75, "medium": 100, "large": 200}
+    },
+    "dryer_rotary_100_300C": {
+      "name": "Dryer (Rotary, 100-300\u00b0C)",
+      "description": "Rotary drying at 100-300\u00b0C",
+      "hourly_cost": {"small": 100, "medium": 150, "large": 300}
+    },
+    "dryer_spray": {
+      "name": "Spray Dryer",
+      "description": "Spray drying for particle formation",
+      "hourly_cost": {"small": null, "medium": 300, "large": 550}
+    },
+    "extruder_with_feeder": {
+      "name": "Extruder with Feeder",
+      "description": "Extrusion of catalyst into shaped forms",
+      "hourly_cost": {"small": 100, "medium": 200, "large": 425}
+    },
+    "filter_belt_vacuum": {
+      "name": "Filter (Belt Vacuum)",
+      "description": "Continuous belt vacuum filtration",
+      "hourly_cost": {"small": 125, "medium": 175, "large": 400}
+    },
+    "filter_plate_frame": {
+      "name": "Filter (Plate & Frame)",
+      "description": "Plate and frame filtration",
+      "hourly_cost": {"small": 75, "medium": null, "large": null}
+    },
+    "filter_rotary_vacuum": {
+      "name": "Filter (Rotary Vacuum)",
+      "description": "Rotary vacuum filtration",
+      "hourly_cost": {"small": null, "medium": 100, "large": 300}
+    },
+    "flare": {
+      "name": "Flare",
+      "description": "Off-gas flaring system",
+      "hourly_cost": {"small": 50, "medium": 75, "large": 150}
+    },
+    "incipient_wetness": {
+      "name": "Incipient Wetness Impregnation",
+      "description": "Incipient wetness impregnation of support",
+      "hourly_cost": {"small": 75, "medium": 100, "large": 200}
+    },
+    "kiln_batch": {
+      "name": "Kiln (Batch)",
+      "description": "Batch calcination kiln",
+      "hourly_cost": {"small": 75, "medium": null, "large": null}
+    },
+    "kiln_continuous_direct": {
+      "name": "Kiln (Continuous, Direct)",
+      "description": "Continuous direct-fired rotary kiln",
+      "hourly_cost": {"small": null, "medium": 225, "large": 400}
+    },
+    "kiln_continuous_indirect": {
+      "name": "Kiln (Continuous, Indirect)",
+      "description": "Continuous indirect-fired rotary kiln",
+      "hourly_cost": {"small": null, "medium": 175, "large": 325}
+    },
+    "mill": {
+      "name": "Mill",
+      "description": "Grinding and milling",
+      "hourly_cost": {"small": 50, "medium": 100, "large": 200}
+    },
+    "mixer_dry_blender": {
+      "name": "Mixer (Dry Blender)",
+      "description": "Dry blending and mixing",
+      "hourly_cost": {"small": 50, "medium": 100, "large": 200}
+    },
+    "mixer_slurry": {
+      "name": "Mixer (Slurry)",
+      "description": "Wet slurry mixing",
+      "hourly_cost": {"small": 75, "medium": 100, "large": 200}
+    },
+    "reactor_simple": {
+      "name": "Reactor (Simple)",
+      "description": "Simple reactor vessel",
+      "hourly_cost": {"small": 30, "medium": 60, "large": 200}
+    },
+    "reactor_multistep": {
+      "name": "Reactor (Multistep)",
+      "description": "Complex multistep reactor system",
+      "hourly_cost": {"small": 100, "medium": 175, "large": 600}
+    },
+    "scrubber_nox": {
+      "name": "Scrubber (NOx)",
+      "description": "NOx abatement scrubber",
+      "hourly_cost": {"small": 35, "medium": 75, "large": 200}
+    }
+  }
+}

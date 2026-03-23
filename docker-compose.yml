@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      target: production
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:///./catprice.db
+      - METALS_DEV_API_KEY=${METALS_DEV_API_KEY:-}
+      - METALPRICE_API_KEY=${METALPRICE_API_KEY:-}
+      - BLS_API_KEY=${BLS_API_KEY:-}
+    volumes:
+      - catprice-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  catprice-data:

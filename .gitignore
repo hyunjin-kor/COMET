@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# Database
+*.db
+
+# Environment
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Pytest
+.pytest_cache/
+
+# Ruff
+.ruff_cache/
+
+# CatCost original files (proprietary)
+CatCost_v1-1-1/
+*.xlsx
+*.pdf
+
+# Misc
+*.txt

@@ -1,0 +1,19 @@
+{
+  "mass": {
+    "kg_per_lb": 0.453592,
+    "lb_per_kg": 2.20462,
+    "g_per_troy_oz": 31.1035,
+    "lb_per_troy_oz": 0.0685714,
+    "troy_oz_per_lb": 14.5833,
+    "ton_per_lb": 0.0005,
+    "lb_per_ton": 2000,
+    "metric_ton_per_lb": 0.000453592,
+    "lb_per_metric_ton": 2204.62
+  },
+  "volume": {
+    "L_per_gal": 3.78541,
+    "gal_per_L": 0.264172,
+    "ft3_per_L": 0.0353147,
+    "L_per_ft3": 28.3168
+  }
+}
