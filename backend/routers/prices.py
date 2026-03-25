@@ -30,6 +30,32 @@ def _is_live_source(source: str | None) -> bool:
     )
 
 
+def _source_type_from_source(source: str | None) -> str:
+    return "live" if _is_live_source(source) else "indexed"
+
+
+def _serialize_price_row(
+    *,
+    symbol: str,
+    name: str,
+    price: float,
+    unit: str,
+    source: str,
+    fetched_at: str | None,
+) -> dict:
+    source_type = _source_type_from_source(source)
+    return {
+        "symbol": symbol,
+        "name": name,
+        "price": price,
+        "unit": unit,
+        "source": source,
+        "source_type": source_type,
+        "is_live": source_type == "live",
+        "fetched_at": fetched_at,
+    }
+
+
 @router.get("")
 def get_all_prices(session: Session = Depends(get_session)):
     """Get latest price for every metal (DB cache first, then reference)."""
@@ -41,31 +67,29 @@ def get_all_prices(session: Session = Depends(get_session)):
     for p in db_prices:
         if p.symbol not in seen:
             seen.add(p.symbol)
-            result.append({
-                "symbol":     p.symbol,
-                "name":       p.name,
-                "price":      p.price,
-                "unit":       p.unit,
-                "source":     p.source,
-                "is_live":    _is_live_source(p.source),
-                "fetched_at": p.fetched_at.isoformat(),
-            })
+            result.append(_serialize_price_row(
+                symbol=p.symbol,
+                name=p.name,
+                price=p.price,
+                unit=p.unit,
+                source=p.source,
+                fetched_at=p.fetched_at.isoformat(),
+            ))
 
     # Fill missing symbols from reference
     for sym, info in get_reference_prices().items():
         if sym not in seen:
-            result.append({
-                "symbol":     sym,
-                "name":       info["name"],
-                "price":      info["price"],
-                "unit":       info["unit"],
-                "source":     info["source"],
-                "is_live":    False,
-                "fetched_at": info["fetched_at"],
-            })
+            result.append(_serialize_price_row(
+                symbol=sym,
+                name=info["name"],
+                price=info["price"],
+                unit=info["unit"],
+                source=info["source"],
+                fetched_at=info["fetched_at"],
+            ))
 
     # Sort: live prices first, then alphabetical
-    result.sort(key=lambda x: (0 if x["is_live"] else 1, x["symbol"]))
+    result.sort(key=lambda x: (0 if x["source_type"] == "live" else 1, x["symbol"]))
     return result
 
 
@@ -81,17 +105,26 @@ def get_price(symbol: str, session: Session = Depends(get_session)):
     )
     p = session.exec(stmt).first()
     if p:
-        return {
-            "symbol": p.symbol, "name": p.name, "price": p.price,
-            "unit": p.unit, "source": p.source,
-            "is_live": _is_live_source(p.source),
-            "fetched_at": p.fetched_at.isoformat(),
-        }
+        return _serialize_price_row(
+            symbol=p.symbol,
+            name=p.name,
+            price=p.price,
+            unit=p.unit,
+            source=p.source,
+            fetched_at=p.fetched_at.isoformat(),
+        )
     refs = get_reference_prices()
     if symbol not in refs:
         raise HTTPException(status_code=404, detail=f"Metal '{symbol}' not found")
     info = refs[symbol]
-    return {**info, "symbol": symbol, "is_live": False}
+    return _serialize_price_row(
+        symbol=symbol,
+        name=info["name"],
+        price=info["price"],
+        unit=info["unit"],
+        source=info["source"],
+        fetched_at=info["fetched_at"],
+    )
 
 
 @router.get("/{symbol}/history")

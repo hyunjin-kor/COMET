@@ -11,7 +11,9 @@ class MetalPriceResponse(BaseModel):
     price: float
     unit: str
     source: str
-    fetched_at: datetime
+    source_type: str
+    is_live: bool
+    fetched_at: datetime | None
 
 
 class MetalPriceHistoryResponse(BaseModel):

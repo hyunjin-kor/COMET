@@ -83,6 +83,7 @@ export interface MetalPrice {
   price: number;
   unit: string;
   source: string;
+  source_type: 'live' | 'indexed' | 'manual';
   is_live: boolean;
   fetched_at: string | null;
 }
