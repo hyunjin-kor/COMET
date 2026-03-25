@@ -44,6 +44,10 @@ function showAndFocusMainWindow(reason = 'show') {
   if (!mainWindow || mainWindow.isDestroyed()) return;
 
   debugLog(`Showing main window (${reason})`);
+  if (splashWindow && !splashWindow.isDestroyed()) {
+    splashWindow.close();
+    splashWindow = null;
+  }
   if (mainWindow.isMinimized()) {
     mainWindow.restore();
   }
