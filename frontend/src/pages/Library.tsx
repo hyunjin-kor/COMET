@@ -173,51 +173,53 @@ export default function Library() {
             <EmptyState message="No materials found" />
           ) : (
             <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
-              <table className="w-full text-sm">
-                <thead className="sticky top-0 z-10">
-                  <tr className="bg-slate-50 text-slate-500 border-b border-slate-200">
-                    <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider">Material</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Type</th>
-                    <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider">Bulk Price ($/{unit})</th>
-                    <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider">Year</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Source</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100 max-h-[62vh] overflow-auto">
-                  {materials.map(m => {
-                    const { bg, dot } = categoryBadge(m.category);
-                    return (
-                      <tr key={m.id} className="hover:bg-slate-50 transition-colors">
-                        <td className="px-5 py-2.5">
-                          <div className="flex items-center gap-2 font-medium text-slate-800">
-                            <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${dot}`} />
-                            <span className="truncate max-w-xs" title={m.name}>{m.name}</span>
-                            {m.is_custom && (
-                              <span className="text-[10px] bg-indigo-100 text-indigo-600 px-1.5 py-0.5 rounded font-semibold flex-shrink-0">custom</span>
-                            )}
-                          </div>
-                        </td>
-                        <td className="px-4 py-2.5">
-                          <span className={`text-[11px] px-2 py-0.5 rounded-full border font-medium ${bg}`}>
-                            {m.category || '—'}
-                          </span>
-                        </td>
-                        <td className="px-4 py-2.5 text-right font-mono text-slate-700 text-xs">
-                          {m.price != null
-                            ? `$${toDisplay(Number(m.price)).toFixed(3)}${fmtLabel}`
-                            : <span className="text-slate-300">—</span>}
-                        </td>
-                        <td className="px-4 py-2.5 text-right text-slate-400 text-xs tabular-nums">
-                          {m.quote_year || <span className="text-slate-300">—</span>}
-                        </td>
-                        <td className="px-4 py-2.5 text-slate-400 text-xs max-w-[140px]">
-                          <span className="truncate block" title={m.quote_source}>{m.quote_source || '—'}</span>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+              <div className="max-h-[62vh] overflow-auto">
+                <table className="w-full text-sm">
+                  <thead className="sticky top-0 z-10">
+                    <tr className="bg-slate-50 text-slate-500 border-b border-slate-200">
+                      <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider">Material</th>
+                      <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Type</th>
+                      <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider">Bulk Price ($/{unit})</th>
+                      <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider">Year</th>
+                      <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Source</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {materials.map(m => {
+                      const { bg, dot } = categoryBadge(m.category);
+                      return (
+                        <tr key={m.id} className="hover:bg-slate-50 transition-colors">
+                          <td className="px-5 py-2.5">
+                            <div className="flex items-center gap-2 font-medium text-slate-800">
+                              <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${dot}`} />
+                              <span className="truncate max-w-xs" title={m.name}>{m.name}</span>
+                              {m.is_custom && (
+                                <span className="text-[10px] bg-indigo-100 text-indigo-600 px-1.5 py-0.5 rounded font-semibold flex-shrink-0">custom</span>
+                              )}
+                            </div>
+                          </td>
+                          <td className="px-4 py-2.5">
+                            <span className={`text-[11px] px-2 py-0.5 rounded-full border font-medium ${bg}`}>
+                              {m.category || '—'}
+                            </span>
+                          </td>
+                          <td className="px-4 py-2.5 text-right font-mono text-slate-700 text-xs">
+                            {m.price != null
+                              ? `$${toDisplay(Number(m.price)).toFixed(3)}${fmtLabel}`
+                              : <span className="text-slate-300">—</span>}
+                          </td>
+                          <td className="px-4 py-2.5 text-right text-slate-400 text-xs tabular-nums">
+                            {m.quote_year || <span className="text-slate-300">—</span>}
+                          </td>
+                          <td className="px-4 py-2.5 text-slate-400 text-xs max-w-[140px]">
+                            <span className="truncate block" title={m.quote_source}>{m.quote_source || '—'}</span>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </>
@@ -237,49 +239,51 @@ export default function Library() {
             <LoadingSpinner />
           ) : (
             <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="bg-slate-50 border-b border-slate-200">
-                    <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Step Name</th>
-                    <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-violet-500">
-                      Small
-                      <div className="font-normal text-slate-400 normal-case">1 t/day</div>
-                    </th>
-                    <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-blue-500">
-                      Medium
-                      <div className="font-normal text-slate-400 normal-case">10 t/day</div>
-                    </th>
-                    <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-teal-500">
-                      Large
-                      <div className="font-normal text-slate-400 normal-case">150 t/day</div>
-                    </th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-400">Note</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {steps.map((s, i) => (
-                    <tr key={i} className="hover:bg-slate-50 transition-colors">
-                      <td className="px-5 py-3 font-medium text-slate-800">{s.name}</td>
-                      {(['cost_small', 'cost_medium', 'cost_large'] as const).map((field, fi) => {
-                        const val = s[field];
-                        const colors = ['text-violet-700 bg-violet-50', 'text-blue-700 bg-blue-50', 'text-teal-700 bg-teal-50'];
-                        return (
-                          <td key={fi} className="px-4 py-3 text-right">
-                            {val != null ? (
-                              <span className={`font-mono text-xs px-2 py-0.5 rounded ${colors[fi]}`}>
-                                ${val}/hr
-                              </span>
-                            ) : (
-                              <span className="text-slate-200 text-xs">—</span>
-                            )}
-                          </td>
-                        );
-                      })}
-                      <td className="px-4 py-3 text-xs text-slate-400">{s.note || ''}</td>
+              <div className="max-h-[62vh] overflow-auto">
+                <table className="w-full text-sm">
+                  <thead className="sticky top-0 z-10">
+                    <tr className="bg-slate-50 border-b border-slate-200">
+                      <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Step Name</th>
+                      <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-violet-500">
+                        Small
+                        <div className="font-normal text-slate-400 normal-case">1 t/day</div>
+                      </th>
+                      <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-blue-500">
+                        Medium
+                        <div className="font-normal text-slate-400 normal-case">10 t/day</div>
+                      </th>
+                      <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-teal-500">
+                        Large
+                        <div className="font-normal text-slate-400 normal-case">150 t/day</div>
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-400">Note</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {steps.map((s, i) => (
+                      <tr key={i} className="hover:bg-slate-50 transition-colors">
+                        <td className="px-5 py-3 font-medium text-slate-800">{s.name}</td>
+                        {(['cost_small', 'cost_medium', 'cost_large'] as const).map((field, fi) => {
+                          const val = s[field];
+                          const colors = ['text-violet-700 bg-violet-50', 'text-blue-700 bg-blue-50', 'text-teal-700 bg-teal-50'];
+                          return (
+                            <td key={fi} className="px-4 py-3 text-right">
+                              {val != null ? (
+                                <span className={`font-mono text-xs px-2 py-0.5 rounded ${colors[fi]}`}>
+                                  ${val}/hr
+                                </span>
+                              ) : (
+                                <span className="text-slate-200 text-xs">—</span>
+                              )}
+                            </td>
+                          );
+                        })}
+                        <td className="px-4 py-3 text-xs text-slate-400">{s.note || ''}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </>

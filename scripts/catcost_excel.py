@@ -24,6 +24,10 @@ WORKBOOK_PATH = Path(__file__).resolve().parent.parent / "CatCost_v1-1-1" / "Cat
 DATA_DIR = Path(__file__).resolve().parent.parent / "backend" / "data"
 PROCESS_TEMPLATES_DIR = DATA_DIR / "process_templates"
 
+TEXT_OVERRIDES = {
+    "Phosphoric acid, comÃªl and tech., 75% tanks, delivered": "Phosphoric acid, com'l and tech., 75% tanks, delivered",
+}
+
 STEP_NAME_TO_KEY = {
     "Ball forming unit": "ball_forming",
     "Crystallizer": "crystallizer",
@@ -117,7 +121,8 @@ def _to_int(value: str | None) -> int | None:
 
 
 def _clean_text(value: str | None) -> str:
-    return (value or "").strip()
+    cleaned = (value or "").strip()
+    return TEXT_OVERRIDES.get(cleaned, cleaned)
 
 
 def _write_json(path: Path, payload: dict[str, Any]) -> None:

@@ -1,4 +1,5 @@
 @echo off
+setlocal EnableDelayedExpansion
 cd /d "%~dp0"
 
 :: Find Python 3.11 / 3.12
@@ -27,6 +28,7 @@ exit /b 1
 :: Fast path: everything already installed - launch silently, no window
 if exist "node_modules\electron\dist\electron.exe" (
   if exist "frontend\dist\index.html" (
+    call :ensure_backend
     set "NODE_ENV=production"
     set "CATPRICE_PYTHON=%PYTHON_EXE%"
     start "" "node_modules\electron\dist\electron.exe" .
@@ -77,7 +79,21 @@ echo.
 echo   Setup complete! Starting CatPrice...
 echo.
 
+call :ensure_backend
 set "NODE_ENV=production"
 set "CATPRICE_PYTHON=%PYTHON_EXE%"
 start "" "node_modules\electron\dist\electron.exe" .
 exit
+
+:ensure_backend
+powershell -NoProfile -ExecutionPolicy Bypass -Command "try { $resp = Invoke-WebRequest -UseBasicParsing 'http://127.0.0.1:8765/api/health' -TimeoutSec 2; if ($resp.StatusCode -eq 200) { exit 0 } else { exit 1 } } catch { exit 1 }"
+if %errorlevel% equ 0 goto :eof
+
+powershell -NoProfile -ExecutionPolicy Bypass -Command "Start-Process -WindowStyle Hidden -FilePath '%PYTHON_EXE%' -ArgumentList '-m','uvicorn','backend.main:app','--host','127.0.0.1','--port','8765','--log-level','warning' -WorkingDirectory '%CD%'"
+
+for /l %%I in (1,1,20) do (
+  powershell -NoProfile -ExecutionPolicy Bypass -Command "try { $resp = Invoke-WebRequest -UseBasicParsing 'http://127.0.0.1:8765/api/health' -TimeoutSec 2; if ($resp.StatusCode -eq 200) { exit 0 } else { exit 1 } } catch { exit 1 }"
+  if !errorlevel! equ 0 goto :eof
+  >nul timeout /t 1
+)
+goto :eof

@@ -23,6 +23,41 @@ let backendProcess = null;
 let splashWindow = null;
 let tray = null;
 
+function waitForBackend(timeoutMs) {
+  return new Promise((resolve) => {
+    const start = Date.now();
+    let settled = false;
+
+    const finish = (value) => {
+      if (!settled) {
+        settled = true;
+        resolve(value);
+      }
+    };
+
+    const poll = () => {
+      const req = http.get(HEALTH_URL, (res) => {
+        res.resume();
+        finish(res.statusCode === 200);
+      });
+
+      req.setTimeout(2000, () => {
+        req.destroy();
+      });
+
+      req.on('error', () => {
+        if (Date.now() - start >= timeoutMs) {
+          finish(false);
+        } else {
+          setTimeout(poll, POLL_INTERVAL_MS);
+        }
+      });
+    };
+
+    poll();
+  });
+}
+
 // ─── Backend Detection ────────────────────────────────────────────────────────
 function getPythonExecutable() {
   // 1. Explicitly set by start.bat via env var
@@ -69,7 +104,12 @@ function getBackendDir() {
 }
 
 // ─── Backend Lifecycle ────────────────────────────────────────────────────────
-function startBackend() {
+async function startBackend() {
+  if (await waitForBackend(5_000)) {
+    console.log('[Backend] Reusing existing server');
+    return;
+  }
+
   return new Promise((resolve, reject) => {
     const python = getPythonExecutable();
     const backendDir = getBackendDir();
@@ -115,22 +155,14 @@ function startBackend() {
       }
     });
 
-    // Poll health endpoint
-    const start = Date.now();
-    const poll = setInterval(() => {
-      http.get(HEALTH_URL, (res) => {
-        if (res.statusCode === 200) {
-          clearInterval(poll);
-          console.log('[Backend] Ready!');
-          resolve();
-        }
-      }).on('error', () => {
-        if (Date.now() - start > MAX_WAIT_MS) {
-          clearInterval(poll);
-          reject(new Error('Backend startup timed out'));
-        }
-      });
-    }, POLL_INTERVAL_MS);
+    waitForBackend(MAX_WAIT_MS).then((ready) => {
+      if (ready) {
+        console.log('[Backend] Ready!');
+        resolve();
+      } else {
+        reject(new Error('Backend startup timed out'));
+      }
+    });
   });
 }
 
@@ -255,7 +287,7 @@ function createMainWindow() {
     {
       label: 'Help',
       submenu: [
-        { label: 'CatPrice Documentation', click: () => shell.openExternal('https://github.com/') },
+        { label: 'CatPrice Documentation', click: () => shell.openExternal('https://github.com/hyunjin-kor/CatPrice') },
         { label: 'About CatPrice', click: showAbout },
       ],
     },
