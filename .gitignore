@@ -46,6 +46,7 @@ CatCost_v1-1-1/
 tmp/
 backend/data/_catcost_raw_extract.json
 CodexLauncher.vbs
+CLAUDE.md
 scripts/create_codex_shortcut.ps1
 scripts/export_codex_icon.py
 scripts/launch_codex.ps1
