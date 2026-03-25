@@ -119,4 +119,4 @@ It does not try to be a full plant design simulator.
 
 ## License
 
-MIT
+All rights reserved.

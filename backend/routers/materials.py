@@ -1,17 +1,17 @@
 """Materials library API endpoints."""
 
 import json
-from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import Session, select
 
 from backend.database import get_session
 from backend.models.material import Material
+from backend.paths import data_dir
 
 router = APIRouter(prefix="/api/materials", tags=["materials"])
 
-_DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+_DATA_DIR = data_dir()
 
 
 def _load_library() -> list:

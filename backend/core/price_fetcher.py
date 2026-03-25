@@ -8,14 +8,14 @@ import json
 import logging
 import re
 from datetime import datetime, timezone
-from pathlib import Path
 
 import httpx
 
 from backend.config import settings
+from backend.paths import data_dir
 
 logger = logging.getLogger(__name__)
-_DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+_DATA_DIR = data_dir()
 _HTTP_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/122 Safari/537.36",
     "Accept-Language": "en-US,en;q=0.9",

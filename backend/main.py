@@ -14,6 +14,7 @@ from fastapi.staticfiles import StaticFiles
 
 from backend.config import settings
 from backend.database import create_db_and_tables
+from backend.paths import frontend_dist_dir
 from backend.routers import calculator, catcost_import, compare, materials, prices, uncertainty
 from backend.services.price_scheduler import collect_prices
 
@@ -75,7 +76,7 @@ app.add_middleware(
 )
 
 # SPA catch-all is registered AFTER all API routers (see bottom of file)
-_FRONTEND_DIST = Path(__file__).parent.parent / "frontend" / "dist"
+_FRONTEND_DIST = frontend_dist_dir()
 
 # Register routers
 app.include_router(calculator.router)

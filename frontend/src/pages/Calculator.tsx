@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 import {
+  apiUrl,
   calculateCost,
   fetchPrices,
   type ComponentInput,
@@ -180,7 +181,7 @@ export default function Calculator() {
   async function refreshPrices() {
     setRefreshing(true);
     try {
-      await fetch('/api/prices/refresh', { method: 'POST' });
+      await fetch(apiUrl('/prices/refresh'), { method: 'POST' });
       setLiveMap(toFeedMap(await fetchPrices()));
       setPricesUpdatedAt(new Date());
     } finally {

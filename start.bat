@@ -2,6 +2,11 @@
 setlocal EnableDelayedExpansion
 cd /d "%~dp0"
 
+if exist "dist-electron\win-unpacked\CatPrice.exe" (
+    start "" "dist-electron\win-unpacked\CatPrice.exe"
+    exit /b 0
+)
+
 :: Find Python 3.11 / 3.12
 set "PYTHON_EXE="
 if exist "C:\Users\%USERNAME%\AppData\Local\Programs\Python\Python311\python.exe" (

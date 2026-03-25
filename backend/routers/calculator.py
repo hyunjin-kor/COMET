@@ -1,6 +1,7 @@
 """Calculator API endpoints."""
 
 import json
+from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
@@ -8,9 +9,11 @@ from sqlmodel import Session
 from backend.core.cost_engine import estimate_catalyst_cost, estimate_catalyst_cost_simple
 from backend.database import get_session
 from backend.models.estimate import Estimate
+from backend.paths import data_dir
 from backend.schemas.cost_input import ComponentInput, CostCalculationRequest, QuickCalculationRequest
 
 router = APIRouter(prefix="/api", tags=["calculator"])
+_DATA_DIR = data_dir()
 
 
 @router.post("/calculate")
@@ -48,12 +51,7 @@ def calculate_cost_quick(req: QuickCalculationRequest):
     steps = ["mixer_slurry", "incipient_wetness", "dryer_rotary_100_300C"]
     if req.template_id:
         import json as _json
-        from pathlib import Path
-        template_path = (
-            Path(__file__).resolve().parent.parent
-            / "data" / "process_templates"
-            / f"{req.template_id}.json"
-        )
+        template_path = _DATA_DIR / "process_templates" / f"{req.template_id}.json"
         if template_path.exists():
             with open(template_path, encoding="utf-8") as f:
                 template = _json.load(f)

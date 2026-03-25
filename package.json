@@ -3,24 +3,25 @@
   "version": "1.0.0",
   "description": "Real-time metal price based catalyst manufacturing cost estimator",
   "main": "electron/main.js",
-  "author": "CatPrice Contributors",
-  "license": "MIT",
+  "author": "hyunjin-kor",
+  "license": "UNLICENSED",
   "scripts": {
     "dev": "concurrently --kill-others-on-fail \"npm run dev:backend\" \"npm run dev:frontend\" \"npm run electron:wait\"",
     "dev:backend": "uvicorn backend.main:app --host 127.0.0.1 --port 8765 --reload",
     "dev:frontend": "cross-env VITE_BACKEND_PORT=8765 cd frontend && npm run dev",
     "electron:wait": "wait-on http://127.0.0.1:8765/api/health http://localhost:5173 && npm run electron:dev",
     "electron:dev": "cross-env NODE_ENV=development electron .",
-    "build": "npm run build:frontend && npm run electron:build",
+    "build": "npm run build:frontend && npm run build:backend-sidecar && npm run electron:build",
     "build:frontend": "cd frontend && npm run build",
+    "build:backend-sidecar": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build_backend_bundle.ps1",
     "electron:build": "electron-builder build --win",
     "electron:build:all": "electron-builder build -mwl",
-    "pack": "electron-builder --dir"
+    "pack": "npm run build:frontend && npm run build:backend-sidecar && electron-builder --dir"
   },
   "build": {
     "appId": "com.catprice.app",
     "productName": "CatPrice",
-    "copyright": "Copyright © 2024 CatPrice Contributors",
+    "copyright": "Copyright 2026 hyunjin-kor",
     "directories": {
       "output": "dist-electron"
     },
@@ -31,18 +32,8 @@
     ],
     "extraResources": [
       {
-        "from": "backend",
-        "to": "backend",
-        "filter": [
-          "**/*",
-          "!__pycache__/**",
-          "!tests/**",
-          "!*.pyc"
-        ]
-      },
-      {
-        "from": "backend/data",
-        "to": "backend/data"
+        "from": "build/backend-sidecar/CatPriceBackend",
+        "to": "backend-sidecar"
       }
     ],
     "win": {
@@ -55,7 +46,8 @@
         }
       ],
       "icon": "frontend/public/icon.ico",
-      "requestedExecutionLevel": "asInvoker"
+      "requestedExecutionLevel": "asInvoker",
+      "signAndEditExecutable": false
     },
     "nsis": {
       "oneClick": false,

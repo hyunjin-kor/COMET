@@ -106,6 +106,21 @@ function getBackendDir() {
   return path.join(__dirname, '..', 'backend');
 }
 
+function getPackagedBackendExecutable() {
+  const candidates = [
+    path.join(process.resourcesPath, 'backend-sidecar', 'CatPriceBackend.exe'),
+    path.join(process.resourcesPath, 'backend-sidecar', 'CatPriceBackend', 'CatPriceBackend.exe'),
+  ];
+  return candidates.find((candidate) => fs.existsSync(candidate)) || null;
+}
+
+function getDatabasePath() {
+  if (app.isPackaged) {
+    return path.join(app.getPath('userData'), 'catprice.db');
+  }
+  return path.join(__dirname, '..', 'catprice.db');
+}
+
 // ─── Backend Lifecycle ────────────────────────────────────────────────────────
 async function startBackend() {
   if (await waitForBackend(5_000)) {
@@ -114,37 +129,50 @@ async function startBackend() {
   }
 
   return new Promise((resolve, reject) => {
-    const python = getPythonExecutable();
-    const backendDir = getBackendDir();
-    const mainPy = path.join(backendDir, '..', 'backend', 'main.py');
-    const actualMainPy = app.isPackaged
-      ? path.join(backendDir, 'main.py')
-      : path.join(__dirname, '..', 'backend', 'main.py');
-
-    console.log(`[Backend] Starting: ${python} -m uvicorn backend.main:app`);
-    console.log(`[Backend] CWD: ${path.join(__dirname, '..')}`);
-
     const env = {
       ...process.env,
       PORT: String(BACKEND_PORT),
       HOST: BACKEND_HOST,
-      DATABASE_URL: `sqlite:///${path.join(__dirname, '..', 'catprice.db')}`,
+      DATABASE_URL: `sqlite:///${getDatabasePath().replace(/\\/g, '/')}`,
     };
 
-    backendProcess = spawn(
-      python,
-      [
-        '-m', 'uvicorn', 'backend.main:app',
-        '--host', BACKEND_HOST,
-        '--port', String(BACKEND_PORT),
-        '--log-level', 'warning',
-      ],
-      {
-        cwd: app.isPackaged ? process.resourcesPath : path.join(__dirname, '..'),
+    if (app.isPackaged) {
+      const backendExe = getPackagedBackendExecutable();
+      if (!backendExe) {
+        reject(new Error('Packaged backend sidecar not found. Rebuild the desktop bundle.'));
+        return;
+      }
+
+      console.log(`[Backend] Starting packaged sidecar: ${backendExe}`);
+      backendProcess = spawn(backendExe, [], {
+        cwd: path.dirname(backendExe),
         env,
         windowsHide: true,
-      }
-    );
+      });
+    } else {
+      const python = getPythonExecutable();
+      const backendCwd = path.join(__dirname, '..');
+      const backendDir = getBackendDir();
+
+      console.log(`[Backend] Starting: ${python} -m uvicorn backend.main:app`);
+      console.log(`[Backend] CWD: ${backendCwd}`);
+      console.log(`[Backend] Source dir: ${backendDir}`);
+
+      backendProcess = spawn(
+        python,
+        [
+          '-m', 'uvicorn', 'backend.main:app',
+          '--host', BACKEND_HOST,
+          '--port', String(BACKEND_PORT),
+          '--log-level', 'warning',
+        ],
+        {
+          cwd: backendCwd,
+          env,
+          windowsHide: true,
+        }
+      );
+    }
 
     backendProcess.stdout.on('data', (d) => console.log(`[Backend] ${d.toString().trim()}`));
     backendProcess.stderr.on('data', (d) => console.error(`[Backend] ${d.toString().trim()}`));
@@ -253,7 +281,7 @@ function createMainWindow() {
     height: 900,
     minWidth: 900,
     minHeight: 600,
-    title: 'CatPrice — Catalyst Cost Tool',
+    title: 'CatPrice | Catalyst Cost Tool',
     backgroundColor: '#060b14',
     show: false,
     icon: path.join(__dirname, 'icon.png'),
@@ -301,7 +329,7 @@ function createMainWindow() {
   // Load from backend-served frontend (in prod) or Vite dev server
   // dev mode: NODE_ENV=development AND a Vite server is expected on 5173
   const isDev = process.env.NODE_ENV === 'development';
-  const startUrl = isDev ? `http://localhost:5173` : `${BACKEND_URL}`;
+  const packagedIndex = path.join(app.getAppPath(), 'frontend', 'dist', 'index.html');
 
   function showMain() {
     if (mainWindow && !mainWindow.isDestroyed() && !mainWindow.isVisible()) {
@@ -338,9 +366,19 @@ p{color:#7099cc;font-size:14px;max-width:500px;text-align:center}
       .catch(() => {});
   });
 
-  mainWindow.loadURL(startUrl).catch(err => {
-    console.error('[Window] loadURL threw:', err);
-  });
+  if (isDev) {
+    mainWindow.loadURL('http://localhost:5173').catch((err) => {
+      console.error('[Window] loadURL threw:', err);
+    });
+  } else if (app.isPackaged) {
+    mainWindow.loadFile(packagedIndex).catch((err) => {
+      console.error('[Window] loadFile threw:', err);
+    });
+  } else {
+    mainWindow.loadURL(BACKEND_URL).catch((err) => {
+      console.error('[Window] loadURL threw:', err);
+    });
+  }
 
   mainWindow.on('closed', () => { mainWindow = null; });
 
@@ -355,14 +393,14 @@ function showAbout() {
   dialog.showMessageBox(mainWindow, {
     type: 'info',
     title: 'About CatPrice',
-    message: 'CatPrice — Catalyst Cost Tool',
+    message: 'CatPrice | Catalyst Cost Tool',
     detail: [
       `Version ${app.getVersion()}`,
       '',
       'Real-time metal price based catalyst manufacturing cost estimator.',
       'Based on CatCost methodology (Baddour et al. 2018, Van Allsburg et al. 2022).',
       '',
-      '© 2024 CatPrice Contributors | MIT License',
+      'Copyright 2026 hyunjin-kor | All rights reserved',
     ].join('\n'),
     buttons: ['OK'],
   });
