@@ -202,7 +202,7 @@ function createSplashWindow() {
   <div class="subtitle">Catalyst Cost Tool</div>
   <div class="spinner"></div>
   <div class="status">Starting backend server...</div>
-  <div class="version">v1.0.0</div>
+  <div class="version">v${app.getVersion()}</div>
 </body>
 </html>`;
 
@@ -321,7 +321,7 @@ function showAbout() {
     title: 'About CatPrice',
     message: 'CatPrice — Catalyst Cost Tool',
     detail: [
-      'Version 1.0.0',
+      `Version ${app.getVersion()}`,
       '',
       'Real-time metal price based catalyst manufacturing cost estimator.',
       'Based on CatCost methodology (Baddour et al. 2018, Van Allsburg et al. 2022).',
