@@ -33,6 +33,7 @@ const SUPPORT_OPTIONS = [
   { name: 'ZrO2',       price: 5.00, note: 'Zirconia' },
   { name: 'SiO2-Al2O3', price: 0.80, note: 'Silica-Alumina' },
 ];
+const SUPPORT_OPTION_MAP = Object.fromEntries(SUPPORT_OPTIONS.map((option) => [option.name, option]));
 
 // scales: which scales each step supports (CatCost Table 6.1)
 // null = not available at that scale
@@ -265,30 +266,44 @@ export default function Calculator() {
 
   // ── render ─────────────────────────────────────────────────────────────────
   return (
-    <div className="p-6 max-w-7xl">
+    <div className="w-full px-7 py-7">
       {/* Page Header */}
-      <div className="mb-6">
-        <h2 className="text-xl font-bold text-slate-800">Catalyst Cost Calculator</h2>
-        <p className="text-sm text-slate-400 mt-0.5">
-          CatCost Step Method · 활성금속 + 지지체 조성과 공정을 설정하면 제조원가를 추정합니다
-        </p>
+      <div className="mb-7 flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+        <div>
+          <span className="section-kicker">Catalyst Workspace</span>
+          <h2 className="mt-3 text-[30px] font-semibold tracking-[-0.03em] text-slate-900">Catalyst Cost Calculator</h2>
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-500">
+            Step Method 기준으로 활성금속, 촉매 지지체, 공정 단계를 조합해서 제조원가를 빠르게 추정합니다.
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <span className="rounded-full border border-slate-200 bg-white/80 px-3 py-1.5 text-xs font-medium text-slate-600 shadow-sm">
+            Live metal pricing
+          </span>
+          <span className="rounded-full border border-slate-200 bg-white/80 px-3 py-1.5 text-xs font-medium text-slate-600 shadow-sm">
+            Plant-scale workflow
+          </span>
+          <span className="rounded-full border border-slate-200 bg-white/80 px-3 py-1.5 text-xs font-medium text-slate-600 shadow-sm">
+            {steps.length} process steps selected
+          </span>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.06fr)_minmax(380px,0.94fr)]">
 
         {/* ── LEFT: Inputs ───────────────────────────────────────────────── */}
         <div className="space-y-4">
 
           {/* Card 1 — Composition */}
-          <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-5 space-y-4">
-            <div className="flex items-center gap-2.5">
+          <div className="surface-card p-6 space-y-4">
+            <div className="flex flex-wrap items-start justify-between gap-3 border-b border-slate-100 pb-4">
               <h3 className="font-semibold text-slate-800 flex items-center gap-2.5 text-sm">
                 <span className="w-5 h-5 rounded-full bg-indigo-600 text-white text-[10px] flex items-center justify-center font-bold">1</span>
                 Catalyst Composition
               </h3>
-              <div className="ml-auto flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 {pricesUpdatedAt && (
-                  <span className="text-[10px] text-slate-400">
+                  <span className="text-[11px] text-slate-400">
                     시세 기준 {pricesUpdatedAt.toLocaleTimeString()}
                   </span>
                 )}
@@ -326,22 +341,24 @@ export default function Calculator() {
                   const hasLive   = metalInfo?.is_live === true;    // confirmed API live
                   const hasRef    = metalInfo !== undefined && !hasLive; // reference/escalated
                   return (
-                  <div key={row.id} className="flex gap-2 items-center">
+                  <div key={row.id} className="flex flex-wrap items-center gap-2 rounded-2xl border border-slate-200/80 bg-slate-50/70 p-2.5">
                     <select
                       value={row.name}
                       onChange={e => onMetalChange(row.id, e.target.value)}
-                      className="flex-1 input-base"
+                      className="input-base min-w-[11rem] flex-[1_1_15rem] bg-white"
                     >
                       <option value="">— select —</option>
                       {KNOWN_METALS.map(m => <option key={m}>{m}</option>)}
                     </select>
-                    <input
-                      type="number" step="0.1" min="0" max="100"
-                      value={row.wt_pct}
-                      onChange={e => updateRow(row.id, { wt_pct: +e.target.value })}
-                      className="w-16 input-base text-right font-mono"
-                    />
-                    <span className="text-xs text-slate-400">wt%</span>
+                    <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-3 py-2">
+                      <input
+                        type="number" step="0.1" min="0" max="100"
+                        value={row.wt_pct}
+                        onChange={e => updateRow(row.id, { wt_pct: +e.target.value })}
+                        className="w-11 border-0 bg-transparent p-0 text-right text-sm font-medium font-mono text-slate-800 focus:outline-none"
+                      />
+                      <span className="text-[11px] text-slate-400">wt%</span>
+                    </div>
 
                     {/* Price mode indicator */}
                     {row.is_live ? (
@@ -375,17 +392,23 @@ export default function Calculator() {
                       </span>
                     ) : null}
 
-                    <span className="text-xs text-slate-400">$</span>
-                    <input
-                      type="number" step="0.01" min="0"
-                      value={toDisplay(row.price_per_lb).toFixed(2)}
-                      readOnly={row.is_live}
-                      onChange={e => !row.is_live && updateRow(row.id, { price_per_lb: toInternal(+e.target.value) })}
-                      className={`w-20 input-base text-right font-mono ${
-                        row.is_live ? 'border-emerald-300 bg-emerald-50 text-emerald-800 cursor-not-allowed select-none' : ''
-                      }`}
-                    />
-                    <span className="text-xs text-slate-400">{fmtLabel}</span>
+                    <div className={`flex items-center gap-2 rounded-2xl border px-3 py-2 ${
+                      row.is_live
+                        ? 'border-emerald-300 bg-emerald-50 text-emerald-800'
+                        : 'border-slate-200 bg-white'
+                    }`}>
+                      <span className="text-[11px] text-slate-400">$</span>
+                      <input
+                        type="number" step="0.01" min="0"
+                        value={toDisplay(row.price_per_lb).toFixed(2)}
+                        readOnly={row.is_live}
+                        onChange={e => !row.is_live && updateRow(row.id, { price_per_lb: toInternal(+e.target.value) })}
+                        className={`w-14 border-0 bg-transparent p-0 text-right text-sm font-medium font-mono focus:outline-none ${
+                          row.is_live ? 'cursor-not-allowed select-none text-emerald-800' : 'text-slate-800'
+                        }`}
+                      />
+                      <span className="text-[11px] text-slate-400">{fmtLabel}</span>
+                    </div>
                     <button
                       onClick={() => removeRow(row.id)}
                       className="w-6 h-6 flex items-center justify-center rounded-lg text-slate-300 hover:text-red-500 hover:bg-red-50 transition-colors text-base"
@@ -423,21 +446,23 @@ export default function Calculator() {
                   const hasLive   = metalInfo?.is_live === true;
                   const hasRef    = metalInfo !== undefined && !hasLive;
                   return (
-                  <div key={row.id} className="flex gap-2 items-center">
+                  <div key={row.id} className="flex flex-wrap items-center gap-2 rounded-2xl border border-slate-200/80 bg-slate-50/70 p-2.5">
                     <input
                       type="text"
                       value={row.name}
                       onChange={e => onMetalChange(row.id, e.target.value)}
                       placeholder="e.g. Re, K, Sn, Ce"
-                      className="flex-1 input-base"
+                      className="input-base min-w-[11rem] flex-[1_1_15rem] bg-white"
                     />
-                    <input
-                      type="number" step="0.1" min="0" max="100"
-                      value={row.wt_pct}
-                      onChange={e => updateRow(row.id, { wt_pct: +e.target.value })}
-                      className="w-16 input-base text-right font-mono"
-                    />
-                    <span className="text-xs text-slate-400">wt%</span>
+                    <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-3 py-2">
+                      <input
+                        type="number" step="0.1" min="0" max="100"
+                        value={row.wt_pct}
+                        onChange={e => updateRow(row.id, { wt_pct: +e.target.value })}
+                        className="w-11 border-0 bg-transparent p-0 text-right text-sm font-medium font-mono text-slate-800 focus:outline-none"
+                      />
+                      <span className="text-[11px] text-slate-400">wt%</span>
+                    </div>
                     {row.is_live ? (
                       <button onClick={() => toggleRowLive(row.id)} title="실시간 시세 연동 중 · 클릭하면 수동 전환"
                         className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-bold whitespace-nowrap border bg-emerald-50 text-emerald-700 border-emerald-300 hover:bg-emerald-100">
@@ -453,15 +478,23 @@ export default function Calculator() {
                         <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />REF
                       </span>
                     ) : null}
-                    <span className="text-xs text-slate-400">$</span>
-                    <input
-                      type="number" step="0.01" min="0"
-                      value={toDisplay(row.price_per_lb).toFixed(2)}
-                      readOnly={row.is_live}
-                      onChange={e => !row.is_live && updateRow(row.id, { price_per_lb: toInternal(+e.target.value) })}
-                      className={`w-20 input-base text-right font-mono ${row.is_live ? 'border-emerald-300 bg-emerald-50 text-emerald-800 cursor-not-allowed' : ''}`}
-                    />
-                    <span className="text-xs text-slate-400">{fmtLabel}</span>
+                    <div className={`flex items-center gap-2 rounded-2xl border px-3 py-2 ${
+                      row.is_live
+                        ? 'border-emerald-300 bg-emerald-50 text-emerald-800'
+                        : 'border-slate-200 bg-white'
+                    }`}>
+                      <span className="text-[11px] text-slate-400">$</span>
+                      <input
+                        type="number" step="0.01" min="0"
+                        value={toDisplay(row.price_per_lb).toFixed(2)}
+                        readOnly={row.is_live}
+                        onChange={e => !row.is_live && updateRow(row.id, { price_per_lb: toInternal(+e.target.value) })}
+                        className={`w-14 border-0 bg-transparent p-0 text-right text-sm font-medium font-mono focus:outline-none ${
+                          row.is_live ? 'cursor-not-allowed text-emerald-800' : 'text-slate-800'
+                        }`}
+                      />
+                      <span className="text-[11px] text-slate-400">{fmtLabel}</span>
+                    </div>
                     <button onClick={() => removeRow(row.id)}
                       className="w-6 h-6 flex items-center justify-center rounded-lg text-slate-300 hover:text-red-500 hover:bg-red-50 transition-colors text-base">×</button>
                   </div>
@@ -480,34 +513,41 @@ export default function Calculator() {
                 <span className="text-xs font-semibold text-emerald-700 uppercase tracking-wider">Support</span>
               </div>
               {rows.filter(r => r.role === 'support').map(row => (
-                <div key={row.id} className="flex gap-2 items-center">
-                  <select
-                    value={row.name}
-                    onChange={e => {
-                      const sp = SUPPORT_OPTIONS.find(s => s.name === e.target.value);
-                      updateRow(row.id, { name: e.target.value, price_per_lb: sp?.price ?? row.price_per_lb });
-                    }}
-                    className="flex-1 input-base"
-                  >
-                    {SUPPORT_OPTIONS.map(s => (
-                      <option key={s.name} value={s.name}>{s.name} — {s.note}</option>
-                    ))}
-                  </select>
-                  <div className="flex items-center gap-1">
-                    <span className="w-16 text-right font-mono text-sm bg-slate-100 border border-slate-200 rounded-lg px-2 py-1.5 text-slate-600">
+                <div key={row.id} className="flex flex-wrap items-start gap-2 rounded-2xl border border-slate-200/80 bg-slate-50/70 p-2.5">
+                  <div className="min-w-[12rem] flex-[1_1_18rem]">
+                    <select
+                      value={row.name}
+                      onChange={e => {
+                        const sp = SUPPORT_OPTIONS.find(s => s.name === e.target.value);
+                        updateRow(row.id, { name: e.target.value, price_per_lb: sp?.price ?? row.price_per_lb });
+                      }}
+                      className="input-base bg-white"
+                    >
+                      {SUPPORT_OPTIONS.map(s => (
+                        <option key={s.name} value={s.name}>{s.name}</option>
+                      ))}
+                    </select>
+                    <p className="mt-1 pl-1 text-[11px] text-slate-500">
+                      {SUPPORT_OPTION_MAP[row.name]?.note ?? 'Support material'}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-100 px-3 py-2 text-slate-600">
+                    <span className="w-11 text-right font-mono text-sm">
                       {supportWtPct.toFixed(1)}
                     </span>
-                    <span className="text-xs text-slate-400">wt%</span>
-                    <span className="text-[10px] text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">auto</span>
+                    <span className="text-[11px] text-slate-400">wt%</span>
+                    <span className="rounded-full bg-white px-2 py-0.5 text-[10px] text-slate-400">auto</span>
                   </div>
-                  <span className="text-xs text-slate-400">$</span>
-                  <input
-                    type="number" step="0.01" min="0"
-                    value={toDisplay(row.price_per_lb).toFixed(2)}
-                    onChange={e => updateRow(row.id, { price_per_lb: toInternal(+e.target.value) })}
-                    className="w-20 input-base text-right font-mono"
-                  />
-                  <span className="text-xs text-slate-400">{fmtLabel}</span>
+                  <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-3 py-2">
+                    <span className="text-[11px] text-slate-400">$</span>
+                    <input
+                      type="number" step="0.01" min="0"
+                      value={toDisplay(row.price_per_lb).toFixed(2)}
+                      onChange={e => updateRow(row.id, { price_per_lb: toInternal(+e.target.value) })}
+                      className="w-14 border-0 bg-transparent p-0 text-right text-sm font-medium font-mono text-slate-800 focus:outline-none"
+                    />
+                    <span className="text-[11px] text-slate-400">{fmtLabel}</span>
+                  </div>
                 </div>
               ))}
             </div>
@@ -537,14 +577,14 @@ export default function Calculator() {
           </div>
 
           {/* Card 2 — Process */}
-          <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-5 space-y-4">
+          <div className="surface-card p-6 space-y-4">
             <h3 className="font-semibold text-slate-800 flex items-center gap-2.5 text-sm">
               <span className="w-5 h-5 rounded-full bg-indigo-600 text-white text-[10px] flex items-center justify-center font-bold">2</span>
               Manufacturing Process
             </h3>
 
             {/* Order size */}
-            <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
+            <div className="flex flex-wrap items-center gap-3 pb-3 border-b border-slate-100">
               <span className="text-sm text-slate-500 w-24 flex-shrink-0">Order Size</span>
               <input
                 type="number" min="1" step="1"
@@ -645,7 +685,7 @@ export default function Calculator() {
 
         {/* ── RIGHT: Results ─────────────────────────────────────────────── */}
         {result ? (
-          <div className="space-y-4">
+          <div className="space-y-4 xl:sticky xl:top-7 self-start">
 
             {/* KPI cards */}
             <div className="grid grid-cols-2 gap-3">
@@ -671,7 +711,7 @@ export default function Calculator() {
             </div>
 
             {/* Donut chart */}
-            <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+            <div className="surface-card overflow-hidden">
               <div className="px-5 pt-4 pb-2">
                 <h3 className="font-semibold text-slate-700 text-sm">Cost Breakdown</h3>
               </div>
@@ -698,7 +738,7 @@ export default function Calculator() {
             </div>
 
             {/* Materials breakdown */}
-            <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-5">
+            <div className="surface-card p-5">
               <h3 className="font-semibold text-slate-700 text-sm mb-3">Materials Breakdown</h3>
               <div className="space-y-2.5">
                 {result.materials.components.map((c, i) => (
@@ -732,7 +772,7 @@ export default function Calculator() {
             </div>
 
             {/* Cost summary */}
-            <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-5">
+            <div className="surface-card p-5">
               <h3 className="font-semibold text-slate-700 text-sm mb-3">Cost Summary</h3>
               <div className="rounded-xl overflow-hidden border border-slate-100">
                 <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-100">
@@ -784,14 +824,44 @@ export default function Calculator() {
           </div>
         ) : (
           /* Empty state */
-          <div className="flex flex-col items-center justify-center h-72 bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl border-2 border-dashed border-slate-200">
-            <div className="w-14 h-14 rounded-2xl bg-white shadow-sm border border-slate-200 flex items-center justify-center mb-4">
+          <div className="surface-card flex min-h-[520px] flex-col justify-between overflow-hidden p-7">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Results Canvas</p>
+                <h3 className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-slate-900">Estimate preview</h3>
+                <p className="mt-2 max-w-sm text-sm leading-6 text-slate-500">
+                  좌측 입력을 마치고 계산을 실행하면 원가, 재료비 비중, 처리 단계 비용이 여기에 정리됩니다.
+                </p>
+              </div>
+              <div className="rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1 text-[11px] font-medium text-emerald-700">
+                Ready for run
+              </div>
+            </div>
+            <div className="flex flex-col items-center justify-center rounded-[28px] border border-dashed border-slate-200 bg-[linear-gradient(135deg,rgba(59,130,246,0.05),rgba(255,255,255,0.65))] px-6 py-14 text-center">
+              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-3xl border border-slate-200 bg-white shadow-sm">
               <svg viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="1.5" className="w-7 h-7">
                 <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
+              </div>
+              <div className="text-base font-semibold text-slate-700">결과가 여기에 표시됩니다</div>
+              <div className="mt-2 max-w-sm text-sm leading-6 text-slate-500">
+                조성과 공정을 입력한 뒤 계산을 실행하면 제조원가, 비용 분해, 규모별 처리비가 이 패널에 나타납니다.
+              </div>
             </div>
-            <div className="text-sm font-medium text-slate-500">결과가 여기에 표시됩니다</div>
-            <div className="text-xs text-slate-400 mt-1">조성과 공정을 입력하고 Calculate를 누르세요</div>
+            <div className="grid gap-3 sm:grid-cols-3">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+                <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Materials</div>
+                <div className="mt-2 text-sm font-medium text-slate-700">Active metal, promoter, support</div>
+              </div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+                <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Processing</div>
+                <div className="mt-2 text-sm font-medium text-slate-700">Campaign duration and step cost</div>
+              </div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+                <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Decision</div>
+                <div className="mt-2 text-sm font-medium text-slate-700">Selling price and cost balance</div>
+              </div>
+            </div>
           </div>
         )}
 
