@@ -8,6 +8,25 @@
 
 ## Installation
 
+### Desktop app
+
+```bash
+npm install
+npm run pack
+```
+
+The packaged app is generated at:
+
+```text
+dist-electron\win-unpacked\CatPrice.exe
+```
+
+Before rebuilding, you can stop any running desktop instance with:
+
+```bash
+npm run desktop:stop
+```
+
 ### Backend
 
 ```bash
@@ -62,4 +81,26 @@ pytest backend/tests/ -v
 
 # Frontend type check
 cd frontend && npx tsc --noEmit
+```
+
+## Desktop Smoke Test
+
+After packaging, run:
+
+```bash
+npm run smoke:desktop
+```
+
+This verifies:
+
+- desktop launch
+- backend health
+- prices API
+- sample calculation API
+- second-instance recovery
+
+The desktop launcher log is written to:
+
+```text
+C:\Users\<your-user>\AppData\Roaming\CatPrice\catprice-launcher.log
 ```

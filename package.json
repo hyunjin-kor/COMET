@@ -1,6 +1,6 @@
 {
   "name": "catprice",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Real-time metal price based catalyst manufacturing cost estimator",
   "main": "electron/main.js",
   "author": "hyunjin-kor",
@@ -11,12 +11,15 @@
     "dev:frontend": "cross-env VITE_BACKEND_PORT=8765 cd frontend && npm run dev",
     "electron:wait": "wait-on http://127.0.0.1:8765/api/health http://localhost:5173 && npm run electron:dev",
     "electron:dev": "cross-env NODE_ENV=development electron .",
+    "desktop:stop": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/stop_catprice_processes.ps1 -Quiet",
+    "smoke:desktop": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/smoke_test_desktop.ps1",
     "build": "npm run build:frontend && npm run build:backend-sidecar && npm run electron:build",
     "build:frontend": "cd frontend && npm run build",
     "build:backend-sidecar": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build_backend_bundle.ps1",
-    "electron:build": "electron-builder build --win",
+    "electron:build": "npm run desktop:stop && electron-builder build --win",
     "electron:build:all": "electron-builder build -mwl",
-    "pack": "npm run build:frontend && npm run build:backend-sidecar && electron-builder --dir"
+    "pack": "npm run build:frontend && npm run build:backend-sidecar && npm run desktop:stop && electron-builder --dir",
+    "pack:smoke": "npm run pack && npm run smoke:desktop"
   },
   "build": {
     "appId": "com.catprice.app",
