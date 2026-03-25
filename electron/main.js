@@ -9,6 +9,9 @@ const { spawn } = require('child_process');
 const http = require('http');
 const fs = require('fs');
 
+// Prevent black-window rendering issues on some Windows GPU/driver setups.
+app.disableHardwareAcceleration();
+
 // ─── Configuration ───────────────────────────────────────────────────────────
 const BACKEND_PORT = 8765;      // Avoid conflicts with other services
 const BACKEND_HOST = '127.0.0.1';
@@ -186,10 +189,11 @@ function createSplashWindow() {
     width: 480,
     height: 300,
     frame: false,
-    transparent: true,
+    transparent: false,
     alwaysOnTop: true,
     resizable: false,
     skipTaskbar: true,
+    backgroundColor: '#060b14',
     webPreferences: { nodeIntegration: false },
   });
 
@@ -381,6 +385,16 @@ app.whenReady().then(async () => {
   }
 
   createMainWindow();
+});
+
+app.on('render-process-gone', (_event, webContents, details) => {
+  console.error('[Renderer] process gone:', details);
+  if (mainWindow && webContents.id === mainWindow.webContents.id) {
+    dialog.showErrorBox(
+      'Renderer Error',
+      `The CatPrice window stopped responding (${details.reason}). Please restart the app.`
+    );
+  }
 });
 
 app.on('window-all-closed', () => {
