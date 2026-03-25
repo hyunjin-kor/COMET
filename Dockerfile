@@ -32,8 +32,8 @@ RUN pip install --no-cache-dir . && pip install --no-cache-dir uvicorn[standard]
 
 COPY backend/ backend/
 
-# Copy built frontend
-COPY --from=frontend-build /app/dist /app/static
+# Copy built frontend to the path that main.py expects
+COPY --from=frontend-build /app/dist /app/frontend/dist
 
 EXPOSE 8000
 CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -1,126 +1,203 @@
 {
-  "metadata": {
-    "version": "1.0.0",
-    "basis_year": 2017,
-    "basis_index": "ChemPPI mid-2017",
-    "source": "Based on methodology from Baddour et al. 2018, Table 6.1",
-    "note": "Hourly costs ($/hr) for each processing step by production scale"
+  "version": "1.1.1",
+  "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+  "basis_year": 2017,
+  "basis_currency": "USD",
+  "scale_thresholds": {
+    "small_tons_per_day": 1,
+    "medium_tons_per_day": 10,
+    "large_tons_per_day": 150
   },
-  "scale_thresholds_tons": {
-    "small": {"min": 1, "max": 5, "production_rate_tons_per_day": 1},
-    "medium": {"min": 5, "max": 70, "production_rate_tons_per_day": 10},
-    "large": {"min": 70, "max": 1000, "production_rate_tons_per_day": 150}
-  },
-  "cleaning_time_days": {
-    "small": 0.5,
-    "medium": 1.0,
-    "large": 1.0
-  },
-  "steps": {
-    "ball_forming": {
-      "name": "Ball Forming",
-      "description": "Forming catalyst into spherical pellets",
-      "hourly_cost": {"small": 100, "medium": 150, "large": null}
+  "total_count": 21,
+  "steps": [
+    {
+      "name": "Ball forming unit",
+      "key": "ball_forming",
+      "cost_small": 100.0,
+      "cost_medium": 150.0,
+      "cost_large": null,
+      "note": "N/A at large scale",
+      "basis": "$/hr, mid-2017"
     },
-    "crystallizer": {
+    {
       "name": "Crystallizer",
-      "description": "Crystallization of precursors",
-      "hourly_cost": {"small": 100, "medium": 200, "large": 300}
+      "key": "crystallizer",
+      "cost_small": 100.0,
+      "cost_medium": 200.0,
+      "cost_large": 300.0,
+      "note": "-",
+      "basis": "$/hr, mid-2017"
     },
-    "dryer_batch_vacuum_tray": {
-      "name": "Dryer (Batch Vacuum Tray)",
-      "description": "Batch vacuum tray drying",
-      "hourly_cost": {"small": 50, "medium": null, "large": null}
+    {
+      "name": "Dryer, batch vacuum tray",
+      "key": "dryer_batch_vacuum_tray",
+      "cost_small": 50.0,
+      "cost_medium": null,
+      "cost_large": null,
+      "note": "Small scale only",
+      "basis": "$/hr, mid-2017"
     },
-    "dryer_rotary_40_100C": {
-      "name": "Dryer (Rotary, 40-100\u00b0C)",
-      "description": "Rotary drying at 40-100\u00b0C",
-      "hourly_cost": {"small": 75, "medium": 100, "large": 200}
+    {
+      "name": "Dryer, rotary (40–100 °C)",
+      "key": "dryer_rotary_40_100C",
+      "cost_small": 75.0,
+      "cost_medium": 100.0,
+      "cost_large": 200.0,
+      "note": "-",
+      "basis": "$/hr, mid-2017"
     },
-    "dryer_rotary_100_300C": {
-      "name": "Dryer (Rotary, 100-300\u00b0C)",
-      "description": "Rotary drying at 100-300\u00b0C",
-      "hourly_cost": {"small": 100, "medium": 150, "large": 300}
+    {
+      "name": "Dryer, rotary (100–300 °C)",
+      "key": "dryer_rotary_100_300C",
+      "cost_small": 100.0,
+      "cost_medium": 150.0,
+      "cost_large": 300.0,
+      "note": "For higher temp use kiln",
+      "basis": "$/hr, mid-2017"
     },
-    "dryer_spray": {
-      "name": "Spray Dryer",
-      "description": "Spray drying for particle formation",
-      "hourly_cost": {"small": null, "medium": 300, "large": 550}
+    {
+      "name": "Dryer, spray",
+      "key": "dryer_spray",
+      "cost_small": null,
+      "cost_medium": 300.0,
+      "cost_large": 550.0,
+      "note": "Substitute with rotary dryer at small scale",
+      "basis": "$/hr, mid-2017"
     },
-    "extruder_with_feeder": {
-      "name": "Extruder with Feeder",
-      "description": "Extrusion of catalyst into shaped forms",
-      "hourly_cost": {"small": 100, "medium": 200, "large": 425}
+    {
+      "name": "Extruder, with feeder",
+      "key": "extruder_with_feeder",
+      "cost_small": 100.0,
+      "cost_medium": 200.0,
+      "cost_large": 425.0,
+      "note": "Bonnot",
+      "basis": "$/hr, mid-2017"
     },
-    "filter_belt_vacuum": {
-      "name": "Filter (Belt Vacuum)",
-      "description": "Continuous belt vacuum filtration",
-      "hourly_cost": {"small": 125, "medium": 175, "large": 400}
+    {
+      "name": "Filter, belt vacuum",
+      "key": "filter_belt_vacuum",
+      "cost_small": 125.0,
+      "cost_medium": 175.0,
+      "cost_large": 400.0,
+      "note": "-",
+      "basis": "$/hr, mid-2017"
     },
-    "filter_plate_frame": {
-      "name": "Filter (Plate & Frame)",
-      "description": "Plate and frame filtration",
-      "hourly_cost": {"small": 75, "medium": null, "large": null}
+    {
+      "name": "Filter, plate and frame",
+      "key": "filter_plate_frame",
+      "cost_small": 75.0,
+      "cost_medium": null,
+      "cost_large": null,
+      "note": "Substitute with belt or rotary vacuum at M/L scale",
+      "basis": "$/hr, mid-2017"
     },
-    "filter_rotary_vacuum": {
-      "name": "Filter (Rotary Vacuum)",
-      "description": "Rotary vacuum filtration",
-      "hourly_cost": {"small": null, "medium": 100, "large": 300}
+    {
+      "name": "Filter, rotary vacuum",
+      "key": "filter_rotary_vacuum",
+      "cost_small": null,
+      "cost_medium": 100.0,
+      "cost_large": 300.0,
+      "note": "Substitute with plate and frame at small scale",
+      "basis": "$/hr, mid-2017"
     },
-    "flare": {
+    {
       "name": "Flare",
-      "description": "Off-gas flaring system",
-      "hourly_cost": {"small": 50, "medium": 75, "large": 150}
+      "key": "flare",
+      "cost_small": 50.0,
+      "cost_medium": 75.0,
+      "cost_large": 150.0,
+      "note": "-",
+      "basis": "$/hr, mid-2017"
     },
-    "incipient_wetness": {
-      "name": "Incipient Wetness Impregnation",
-      "description": "Incipient wetness impregnation of support",
-      "hourly_cost": {"small": 75, "medium": 100, "large": 200}
+    {
+      "name": "Incipient wetness (impregnation)",
+      "key": "incipient_wetness",
+      "cost_small": 75.0,
+      "cost_medium": 100.0,
+      "cost_large": 200.0,
+      "note": "-",
+      "basis": "$/hr, mid-2017"
     },
-    "kiln_batch": {
-      "name": "Kiln (Batch)",
-      "description": "Batch calcination kiln",
-      "hourly_cost": {"small": 75, "medium": null, "large": null}
+    {
+      "name": "Kiln, batch (300–1290 °C)",
+      "key": "kiln_batch",
+      "cost_small": 75.0,
+      "cost_medium": null,
+      "cost_large": null,
+      "note": "A.k.a. calciner. Sub with continuous kiln at M/L scale",
+      "basis": "$/hr, mid-2017"
     },
-    "kiln_continuous_direct": {
-      "name": "Kiln (Continuous, Direct)",
-      "description": "Continuous direct-fired rotary kiln",
-      "hourly_cost": {"small": null, "medium": 225, "large": 400}
+    {
+      "name": "Kiln, continuous direct (300–1290 °C)",
+      "key": "kiln_continuous_direct",
+      "cost_small": null,
+      "cost_medium": 225.0,
+      "cost_large": 400.0,
+      "note": "A.k.a. calciner. Sub with batch kiln at small scale",
+      "basis": "$/hr, mid-2017"
     },
-    "kiln_continuous_indirect": {
-      "name": "Kiln (Continuous, Indirect)",
-      "description": "Continuous indirect-fired rotary kiln",
-      "hourly_cost": {"small": null, "medium": 175, "large": 325}
+    {
+      "name": "Kiln, continuous indirect (300–1290 °C)",
+      "key": "kiln_continuous_indirect",
+      "cost_small": null,
+      "cost_medium": 175.0,
+      "cost_large": 325.0,
+      "note": "A.k.a. calciner. Sub with batch kiln at small scale",
+      "basis": "$/hr, mid-2017"
     },
-    "mill": {
+    {
       "name": "Mill",
-      "description": "Grinding and milling",
-      "hourly_cost": {"small": 50, "medium": 100, "large": 200}
+      "key": "mill",
+      "cost_small": 50.0,
+      "cost_medium": 100.0,
+      "cost_large": 200.0,
+      "note": "-",
+      "basis": "$/hr, mid-2017"
     },
-    "mixer_dry_blender": {
-      "name": "Mixer (Dry Blender)",
-      "description": "Dry blending and mixing",
-      "hourly_cost": {"small": 50, "medium": 100, "large": 200}
+    {
+      "name": "Mixer, dry blender",
+      "key": "mixer_dry_blender",
+      "cost_small": 50.0,
+      "cost_medium": 100.0,
+      "cost_large": 200.0,
+      "note": "-",
+      "basis": "$/hr, mid-2017"
     },
-    "mixer_slurry": {
-      "name": "Mixer (Slurry)",
-      "description": "Wet slurry mixing",
-      "hourly_cost": {"small": 75, "medium": 100, "large": 200}
+    {
+      "name": "Mixer, slurry",
+      "key": "mixer_slurry",
+      "cost_small": 75.0,
+      "cost_medium": 100.0,
+      "cost_large": 200.0,
+      "note": "Muller",
+      "basis": "$/hr, mid-2017"
     },
-    "reactor_simple": {
-      "name": "Reactor (Simple)",
-      "description": "Simple reactor vessel",
-      "hourly_cost": {"small": 30, "medium": 60, "large": 200}
+    {
+      "name": "Reactor, simple (mixing)",
+      "key": "reactor_simple",
+      "cost_small": 30.0,
+      "cost_medium": 60.0,
+      "cost_large": 200.0,
+      "note": "-",
+      "basis": "$/hr, mid-2017"
     },
-    "reactor_multistep": {
-      "name": "Reactor (Multistep)",
-      "description": "Complex multistep reactor system",
-      "hourly_cost": {"small": 100, "medium": 175, "large": 600}
+    {
+      "name": "Reactor, multistep",
+      "key": "reactor_multistep",
+      "cost_small": 100.0,
+      "cost_medium": 175.0,
+      "cost_large": 600.0,
+      "note": "-",
+      "basis": "$/hr, mid-2017"
     },
-    "scrubber_nox": {
-      "name": "Scrubber (NOx)",
-      "description": "NOx abatement scrubber",
-      "hourly_cost": {"small": 35, "medium": 75, "large": 200}
+    {
+      "name": "Scrubber, NOx",
+      "key": "scrubber_nox",
+      "cost_small": 35.0,
+      "cost_medium": 75.0,
+      "cost_large": 200.0,
+      "note": "-",
+      "basis": "$/hr, mid-2017"
     }
-  }
+  ]
 }

@@ -1,0 +1,128 @@
+{
+  "id": "zeolite_beta_with_metal_active_site",
+  "name": "Zeolite Beta with Metal Active Site",
+  "description": "Based on 5% Cu on Zeolite Beta at 200-ton scale.",
+  "category": "Zeolite",
+  "example_catalysts": [
+    "Pd/Beta",
+    "Pt/Beta"
+  ],
+  "steps": [
+    "reactor_simple",
+    "crystallizer",
+    "crystallizer",
+    "reactor_simple",
+    "filter_rotary_vacuum",
+    "dryer_rotary_100_300C",
+    "kiln_continuous_indirect",
+    "reactor_multistep",
+    "filter_rotary_vacuum",
+    "kiln_continuous_indirect",
+    "scrubber_nox",
+    "mill",
+    "mixer_slurry",
+    "extruder_with_feeder",
+    "incipient_wetness",
+    "dryer_rotary_100_300C",
+    "kiln_continuous_indirect"
+  ],
+  "step_quantities": [
+    {
+      "step": "reactor_simple",
+      "template_step_name": "Reactor, simple (mixing)",
+      "quantity": 1.0,
+      "note": "-"
+    },
+    {
+      "step": "crystallizer",
+      "template_step_name": "Crystallizer",
+      "quantity": 2.0,
+      "note": "-"
+    },
+    {
+      "step": "reactor_simple",
+      "template_step_name": "Reactor, simple (mixing)",
+      "quantity": 1.0,
+      "note": "-"
+    },
+    {
+      "step": "filter_rotary_vacuum",
+      "template_step_name": "Filter, rotary vacuum",
+      "quantity": 1.0,
+      "note": "Substitute with plate and frame at small scale"
+    },
+    {
+      "step": "dryer_rotary_100_300C",
+      "template_step_name": "Dryer, rotary (100–300 °C)",
+      "quantity": 1.0,
+      "note": "For higher temp use kiln"
+    },
+    {
+      "step": "kiln_continuous_indirect",
+      "template_step_name": "Kiln, continuous indirect (300–1290 °C)",
+      "quantity": 1.0,
+      "note": "A.k.a. calciner. Sub with batch kiln at small scale"
+    },
+    {
+      "step": "reactor_multistep",
+      "template_step_name": "Reactor, multistep",
+      "quantity": 1.0,
+      "note": "-"
+    },
+    {
+      "step": "filter_rotary_vacuum",
+      "template_step_name": "Filter, rotary vacuum",
+      "quantity": 1.0,
+      "note": "Substitute with plate and frame at small scale"
+    },
+    {
+      "step": "kiln_continuous_indirect",
+      "template_step_name": "Kiln, continuous indirect (300–1290 °C)",
+      "quantity": 1.0,
+      "note": "A.k.a. calciner. Sub with batch kiln at small scale"
+    },
+    {
+      "step": "scrubber_nox",
+      "template_step_name": "Scrubber, NOx",
+      "quantity": 1.0,
+      "note": "-"
+    },
+    {
+      "step": "mill",
+      "template_step_name": "Mill",
+      "quantity": 1.0,
+      "note": "-"
+    },
+    {
+      "step": "mixer_slurry",
+      "template_step_name": "Mixer, slurry",
+      "quantity": 1.0,
+      "note": "Muller"
+    },
+    {
+      "step": "extruder_with_feeder",
+      "template_step_name": "Extruder, with feeder",
+      "quantity": 1.0,
+      "note": "Bonnot"
+    },
+    {
+      "step": "incipient_wetness",
+      "template_step_name": "Incipient wetness (impregnation)",
+      "quantity": 1.0,
+      "note": "-"
+    },
+    {
+      "step": "dryer_rotary_100_300C",
+      "template_step_name": "Dryer, rotary (100–300 °C)",
+      "quantity": 1.0,
+      "note": "For higher temp use kiln"
+    },
+    {
+      "step": "kiln_continuous_indirect",
+      "template_step_name": "Kiln, continuous indirect (300–1290 °C)",
+      "quantity": 1.0,
+      "note": "A.k.a. calciner. Sub with batch kiln at small scale"
+    }
+  ],
+  "source": "CatCost_v1-1-1.xlsx, 3a Step Method sheet"
+}

@@ -1,0 +1,83 @@
+{
+  "id": "zeolite_zsm_5_bulk",
+  "name": "Zeolite ZSM-5 (Bulk)",
+  "description": "Based on ZSM-5 at 200-ton scale.",
+  "category": "Zeolite",
+  "example_catalysts": [
+    "ZSM-5"
+  ],
+  "steps": [
+    "reactor_simple",
+    "crystallizer",
+    "crystallizer",
+    "crystallizer",
+    "filter_rotary_vacuum",
+    "filter_rotary_vacuum",
+    "reactor_multistep",
+    "reactor_multistep",
+    "filter_rotary_vacuum",
+    "filter_rotary_vacuum",
+    "dryer_rotary_100_300C",
+    "dryer_rotary_100_300C",
+    "kiln_continuous_indirect",
+    "scrubber_nox",
+    "mill"
+  ],
+  "step_quantities": [
+    {
+      "step": "reactor_simple",
+      "template_step_name": "Reactor, simple (mixing)",
+      "quantity": 1.0,
+      "note": "-"
+    },
+    {
+      "step": "crystallizer",
+      "template_step_name": "Crystallizer",
+      "quantity": 3.0,
+      "note": "-"
+    },
+    {
+      "step": "filter_rotary_vacuum",
+      "template_step_name": "Filter, rotary vacuum",
+      "quantity": 2.0,
+      "note": "Substitute with plate and frame at small scale"
+    },
+    {
+      "step": "reactor_multistep",
+      "template_step_name": "Reactor, multistep",
+      "quantity": 2.0,
+      "note": "-"
+    },
+    {
+      "step": "filter_rotary_vacuum",
+      "template_step_name": "Filter, rotary vacuum",
+      "quantity": 2.0,
+      "note": "Substitute with plate and frame at small scale"
+    },
+    {
+      "step": "dryer_rotary_100_300C",
+      "template_step_name": "Dryer, rotary (100–300 °C)",
+      "quantity": 2.0,
+      "note": "For higher temp use kiln"
+    },
+    {
+      "step": "kiln_continuous_indirect",
+      "template_step_name": "Kiln, continuous indirect (300–1290 °C)",
+      "quantity": 1.0,
+      "note": "A.k.a. calciner. Sub with batch kiln at small scale"
+    },
+    {
+      "step": "scrubber_nox",
+      "template_step_name": "Scrubber, NOx",
+      "quantity": 1.0,
+      "note": "-"
+    },
+    {
+      "step": "mill",
+      "template_step_name": "Mill",
+      "quantity": 1.0,
+      "note": "-"
+    }
+  ],
+  "source": "CatCost_v1-1-1.xlsx, 3a Step Method sheet"
+}

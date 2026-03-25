@@ -11,12 +11,26 @@ from pathlib import Path
 _DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 
 
+def _coerce_index_value(index_type: str, value) -> float:
+    if isinstance(value, (int, float)):
+        return float(value)
+    if isinstance(value, dict):
+        if index_type == "cepci":
+            for key in ("CEPCI_equip", "CEPCI"):
+                if key in value and value[key] not in (None, ""):
+                    return float(value[key])
+        for nested_value in value.values():
+            if nested_value not in (None, ""):
+                return float(nested_value)
+    raise TypeError(f"Unsupported {index_type} index value: {value!r}")
+
+
 def _load_index(index_type: str) -> dict[str, float]:
     """Load index data from JSON file."""
     filepath = _DATA_DIR / f"{index_type}.json"
-    with open(filepath) as f:
+    with open(filepath, encoding="utf-8") as f:
         data = json.load(f)
-    return {str(k): float(v) for k, v in data["annual"].items()}
+    return {str(k): _coerce_index_value(index_type, v) for k, v in data["annual"].items()}
 
 
 def escalate_cost(

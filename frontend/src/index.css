@@ -5,3 +5,27 @@ body {
   font-family: system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
+
+/* ── Shared utility classes ─────────────────────────────────────────────── */
+
+.input-base {
+  @apply rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-800
+         focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400
+         hover:border-slate-300 transition-colors;
+}
+
+/* Scrollbar styling for tables */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

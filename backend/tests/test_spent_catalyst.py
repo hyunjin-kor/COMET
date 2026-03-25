@@ -44,8 +44,8 @@ class TestMetalRecovery:
             reactor_type="slurry",
             catalyst_bulk_density=60.0,
         )
-        # TiO2 slurry has higher metal loss (13%) than fixed (10%)
-        assert result["loss_use_pct"] == pytest.approx(13.0)
+        # CatCost workbook average for TiO2 slurry metal loss is 12.5%
+        assert result["loss_use_pct"] == pytest.approx(12.5)
 
     def test_unknown_support_defaults(self):
         result = calculate_metal_recovery_value(

@@ -1,0 +1,146 @@
+{
+  "metadata": {
+    "version": "1.1.1",
+    "source": "CatCost v1.1.1, 3d CapEx sheet",
+    "note": "All values as % of purchased equipment cost unless noted"
+  },
+  "direct_capital": {
+    "purchased_equipment": {
+      "name": "Purchased Equipment",
+      "units": "% of purchased equipment cost",
+      "base": 100.0,
+      "low": 75.0,
+      "high": 125.0
+    },
+    "installation": {
+      "name": "Installation",
+      "units": "% of purchased equipment cost",
+      "base": 0.0,
+      "low": 0.0,
+      "high": 0.0
+    },
+    "instrumentation_controls": {
+      "name": "Instrumentation and Controls",
+      "units": "% of purchased equipment cost",
+      "base": 26.0,
+      "low": 18.0,
+      "high": 36.0
+    },
+    "piping": {
+      "name": "Piping",
+      "units": "% of purchased equipment cost",
+      "base": 31.0,
+      "low": 16.0,
+      "high": 68.0
+    },
+    "electrical": {
+      "name": "Electrical",
+      "units": "% of purchased equipment cost",
+      "base": 10.0,
+      "low": 10.0,
+      "high": 11.0
+    },
+    "buildings": {
+      "name": "Buildings",
+      "units": "% of purchased equipment cost",
+      "base": 29.0,
+      "low": 7.0,
+      "high": 47.0
+    },
+    "yard_improvements": {
+      "name": "Yard Improvements",
+      "units": "% of purchased equipment cost",
+      "base": 12.0,
+      "low": 10.0,
+      "high": 15.0
+    },
+    "service_facilities": {
+      "name": "Service Facilities",
+      "units": "% of purchased equipment cost",
+      "base": 55.0,
+      "low": 40.0,
+      "high": 70.0
+    },
+    "waste_treatment": {
+      "name": "Waste Treatment",
+      "units": "% of purchased equipment cost",
+      "base": 5.0,
+      "low": 2.0,
+      "high": 6.0
+    },
+    "land": {
+      "name": "Land",
+      "units": "% of purchased equipment cost",
+      "base": 6.0,
+      "low": 4.0,
+      "high": 8.0
+    }
+  },
+  "indirect_capital": {
+    "engineering_supervision": {
+      "name": "Engineering and Supervision",
+      "units": "% of purchased equipment cost",
+      "base": 32.0,
+      "low": 32.0,
+      "high": 33.0
+    },
+    "construction_expenses": {
+      "name": "Construction Expenses",
+      "units": "% of purchased equipment cost",
+      "base": 34.0,
+      "low": 34.0,
+      "high": 41.0
+    },
+    "legal_expenses": {
+      "name": "Legal Expenses",
+      "units": "% of purchased equipment cost",
+      "base": 4.0,
+      "low": 4.0,
+      "high": 4.0
+    },
+    "contractors_fee": {
+      "name": "Contractor's Fee",
+      "units": "% of purchased equipment cost",
+      "base": 19.0,
+      "low": 17.0,
+      "high": 22.0
+    },
+    "contingency": {
+      "name": "Contingency",
+      "units": "% of purchased equipment cost",
+      "base": 37.0,
+      "low": 35.0,
+      "high": 44.0
+    }
+  },
+  "totals": {
+    "total_direct": {
+      "name": "Total Direct",
+      "units": "% of purchased equipment cost",
+      "base": 274.0,
+      "low": null,
+      "high": null
+    },
+    "total_indirect": {
+      "name": "Total Indirect",
+      "units": "% of purchased equipment cost",
+      "base": 126.0,
+      "low": null,
+      "high": null
+    },
+    "total_fci": {
+      "name": "Total Fixed Capital Investment (FCI)",
+      "units": "% of purchased equipment cost",
+      "base": 400.0,
+      "low": null,
+      "high": null
+    },
+    "total_tci": {
+      "name": "Total Capital Investment (TCI)",
+      "units": "% of purchased equipment cost",
+      "base": 475.0,
+      "low": null,
+      "high": null
+    }
+  }
+}

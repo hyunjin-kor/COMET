@@ -1,0 +1,98 @@
+{
+  "metadata": {
+    "version": "1.1.1",
+    "source": "CatCost v1.1.1, 3e OpEx sheet"
+  },
+  "direct_labor": {
+    "labor_rate": {
+      "name": "Direct Labor Rate",
+      "base": 48.0,
+      "low": 43.2,
+      "high": 55.199999999999996,
+      "units": "$/hr"
+    }
+  },
+  "direct_operating": {
+    "supervisory_clerical": {
+      "name": "Supervisory and Clerical Labor",
+      "base": 18.0,
+      "low": 10.0,
+      "high": 20.0,
+      "units": "% of DL"
+    },
+    "laboratory_charges": {
+      "name": "Laboratory Charges",
+      "base": 15.0,
+      "low": 10.0,
+      "high": 20.0,
+      "units": "% of DL"
+    },
+    "maintenance_repair": {
+      "name": "Maintenance and Repair (M&R)",
+      "base": 5.0,
+      "low": 5.0,
+      "high": 9.0,
+      "units": "% of FCI"
+    },
+    "operating_supplies": {
+      "name": "Operating Supplies",
+      "base": 15.0,
+      "low": 10.0,
+      "high": 20.0,
+      "units": "% of M&R"
+    }
+  },
+  "fixed_operating": {
+    "local_taxes": {
+      "name": "Local Taxes",
+      "base": 2.5,
+      "low": 1.0,
+      "high": 4.0,
+      "units": "% of FCI"
+    },
+    "insurance": {
+      "name": "Insurance",
+      "base": 0.8,
+      "low": 0.4,
+      "high": 1.0,
+      "units": "% of FCI"
+    },
+    "rent": {
+      "name": "Rent",
+      "base": 10.0,
+      "low": 8.0,
+      "high": 12.0,
+      "units": "% of value of land"
+    },
+    "plant_overhead": {
+      "name": "Plant Overhead",
+      "base": 60.0,
+      "low": 50.0,
+      "high": 70.0,
+      "units": "% of LSM"
+    }
+  },
+  "general_expenses": {
+    "administration": {
+      "name": "Administration",
+      "base": 20.0,
+      "low": 12.0,
+      "high": 30.0,
+      "units": "% of LSM"
+    },
+    "distribution_marketing": {
+      "name": "Distribution and Marketing",
+      "base": 10.0,
+      "low": 2.0,
+      "high": 20.0,
+      "units": "% of op. costs excluding precious metals content"
+    },
+    "research_development": {
+      "name": "Research and Development",
+      "base": 5.0,
+      "low": 4.0,
+      "high": 8.0,
+      "units": "% of op. costs excluding precious metals content"
+    }
+  }
+}

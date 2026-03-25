@@ -1,0 +1,73 @@
+{
+  "id": "metal_earth_abundant_on_metal_oxide",
+  "name": "Metal (Earth Abundant) on Metal Oxide",
+  "description": "Based on 21% Ni/Al2O3 at 20-ton scale.",
+  "category": "Supported Metal",
+  "example_catalysts": [
+    "Ni/Al2O3",
+    "Co/TiO2",
+    "Cu/SiO2"
+  ],
+  "steps": [
+    "incipient_wetness",
+    "dryer_rotary_40_100C",
+    "kiln_continuous_indirect",
+    "scrubber_nox",
+    "crystallizer",
+    "filter_rotary_vacuum",
+    "dryer_rotary_40_100C",
+    "kiln_continuous_indirect",
+    "kiln_continuous_indirect"
+  ],
+  "step_quantities": [
+    {
+      "step": "incipient_wetness",
+      "template_step_name": "Incipient wetness (impregnation)",
+      "quantity": 1.0,
+      "note": "-"
+    },
+    {
+      "step": "dryer_rotary_40_100C",
+      "template_step_name": "Dryer, rotary (40–100 °C)",
+      "quantity": 1.0,
+      "note": "-"
+    },
+    {
+      "step": "kiln_continuous_indirect",
+      "template_step_name": "Kiln, continuous indirect (300–1290 °C)",
+      "quantity": 1.0,
+      "note": "A.k.a. calciner. Sub with batch kiln at small scale"
+    },
+    {
+      "step": "scrubber_nox",
+      "template_step_name": "Scrubber, NOx",
+      "quantity": 1.0,
+      "note": "-"
+    },
+    {
+      "step": "crystallizer",
+      "template_step_name": "Crystallizer",
+      "quantity": 1.0,
+      "note": "-"
+    },
+    {
+      "step": "filter_rotary_vacuum",
+      "template_step_name": "Filter, rotary vacuum",
+      "quantity": 1.0,
+      "note": "Substitute with plate and frame at small scale"
+    },
+    {
+      "step": "dryer_rotary_40_100C",
+      "template_step_name": "Dryer, rotary (40–100 °C)",
+      "quantity": 1.0,
+      "note": "-"
+    },
+    {
+      "step": "kiln_continuous_indirect",
+      "template_step_name": "Kiln, continuous indirect (300–1290 °C)",
+      "quantity": 2.0,
+      "note": "A.k.a. calciner. Sub with batch kiln at small scale"
+    }
+  ],
+  "source": "CatCost_v1-1-1.xlsx, 3a Step Method sheet"
+}
