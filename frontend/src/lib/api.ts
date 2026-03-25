@@ -1,7 +1,14 @@
-const BASE = '/api';
+const API_ROOT =
+  typeof window !== 'undefined' && window.location.protocol === 'file:'
+    ? 'http://127.0.0.1:8765/api'
+    : '/api';
+
+export function apiUrl(path: string): string {
+  return `${API_ROOT}${path}`;
+}
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
-  const res = await fetch(`${BASE}${path}`, {
+  const res = await fetch(apiUrl(path), {
     headers: { 'Content-Type': 'application/json' },
     ...options,
   });

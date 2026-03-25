@@ -7,15 +7,15 @@ from __future__ import annotations
 
 import json
 import logging
-from pathlib import Path
 
 import httpx
 
 from backend.config import settings
+from backend.paths import data_dir
 
 logger = logging.getLogger(__name__)
 
-_DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+_DATA_DIR = data_dir()
 BLS_API_URL = "https://api.bls.gov/publicAPI/v2/timeseries/data/"
 CHEMPPI_SERIES_ID = "PCU325---325---"
 

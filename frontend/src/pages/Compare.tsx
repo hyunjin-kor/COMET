@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend } from 'recharts';
+import { apiUrl } from '../lib/api';
 import { useUnit } from '../lib/use-unit';
 
 interface Composition {
@@ -72,7 +73,7 @@ export default function Compare() {
   const handleCompare = async () => {
     setLoading(true); setError('');
     try {
-      const resp = await fetch('/api/compare', {
+      const resp = await fetch(apiUrl('/compare'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ compositions: comps }),

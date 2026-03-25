@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell } from 'recharts';
+import { apiUrl } from '../lib/api';
 import { useUnit } from '../lib/use-unit';
 
 interface MCResult {
@@ -33,7 +34,7 @@ export default function Uncertainty() {
   const handleRun = async () => {
     setLoading(true); setError('');
     try {
-      const resp = await fetch('/api/uncertainty', {
+      const resp = await fetch(apiUrl('/uncertainty'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

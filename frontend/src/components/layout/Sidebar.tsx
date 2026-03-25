@@ -146,7 +146,7 @@ export default function Sidebar() {
         <div className="h-px bg-gradient-to-r from-slate-700 via-slate-600 to-transparent mb-3" />
         <div className="flex items-center justify-between">
           <span className="text-[10px] text-slate-600 font-mono">v1.0.0</span>
-          <span className="text-[10px] text-slate-600">MIT License</span>
+          <span className="text-[10px] text-slate-600">All rights reserved</span>
         </div>
         <div className="mt-1.5 text-[9px] leading-relaxed text-slate-700">
           Based on CatCost methodology<br/>Baddour et al. 2018

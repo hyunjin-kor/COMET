@@ -1,9 +1,9 @@
 [project]
 name = "catprice"
-version = "0.1.0"
+version = "1.0.0"
 description = "Real-time metal price based catalyst manufacturing cost estimation tool"
 readme = "README.md"
-license = "MIT"
+license = { text = "All rights reserved" }
 requires-python = ">=3.11"
 dependencies = [
     "fastapi>=0.110",
@@ -22,6 +22,7 @@ dependencies = [
 dev = [
     "pytest>=8.0",
     "pytest-asyncio>=0.23",
+    "pyinstaller>=6.0",
     "ruff>=0.3",
     "pre-commit>=3.6",
 ]
@@ -35,4 +36,3 @@ select = ["E", "F", "I", "N", "W", "UP"]
 
 [tool.pytest.ini_options]
 testpaths = ["backend/tests"]
-asyncio_mode = "auto"

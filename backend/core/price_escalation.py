@@ -6,9 +6,10 @@ Adjusts costs between reference years using producer price indices.
 from __future__ import annotations
 
 import json
-from pathlib import Path
 
-_DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+from backend.paths import data_dir
+
+_DATA_DIR = data_dir()
 
 
 def _coerce_index_value(index_type: str, value) -> float:

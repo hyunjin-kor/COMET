@@ -9,7 +9,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { fetchPrices, type MetalPrice } from '../lib/api';
+import { apiUrl, fetchPrices, type MetalPrice } from '../lib/api';
 
 type HistoryPoint = { date: string; price: number; open: number; high: number; low: number };
 type Period = '1mo' | '3mo' | '6mo' | '1y' | '2y' | '5y';
@@ -127,7 +127,7 @@ export default function Prices() {
   useEffect(() => {
     if (!selected) return;
     setHistLoading(true);
-    fetch(`/api/prices/${selected}/history?period=${period}`)
+    fetch(apiUrl(`/prices/${selected}/history?period=${period}`))
       .then((response) => response.json())
       .then((payload) => {
         setHistory(payload.history || []);
@@ -143,10 +143,10 @@ export default function Prices() {
   const handleRefresh = async () => {
     setRefreshing(true);
     try {
-      await fetch('/api/prices/refresh', { method: 'POST' });
+      await fetch(apiUrl('/prices/refresh'), { method: 'POST' });
       load();
       if (selected) {
-        const response = await fetch(`/api/prices/${selected}/history?period=${period}`);
+        const response = await fetch(apiUrl(`/prices/${selected}/history?period=${period}`));
         const payload = await response.json();
         setHistory(payload.history || []);
         setHistorySource(payload.source || null);
