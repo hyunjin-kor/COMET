@@ -26,6 +26,37 @@ let backendProcess = null;
 let splashWindow = null;
 let tray = null;
 
+function debugLog(message) {
+  const line = `[${new Date().toISOString()}] ${message}`;
+  console.log(line);
+  try {
+    const baseDir = app.isReady()
+      ? app.getPath('userData')
+      : (process.env.TEMP || __dirname);
+    fs.mkdirSync(baseDir, { recursive: true });
+    fs.appendFileSync(path.join(baseDir, 'catprice-launcher.log'), `${line}\n`);
+  } catch (_error) {
+    // Ignore file logging failures.
+  }
+}
+
+function showAndFocusMainWindow(reason = 'show') {
+  if (!mainWindow || mainWindow.isDestroyed()) return;
+
+  debugLog(`Showing main window (${reason})`);
+  if (mainWindow.isMinimized()) {
+    mainWindow.restore();
+  }
+  if (!mainWindow.isVisible()) {
+    mainWindow.show();
+  }
+  mainWindow.center();
+  mainWindow.moveTop();
+  mainWindow.focus();
+  mainWindow.setAlwaysOnTop(true);
+  mainWindow.setAlwaysOnTop(false);
+}
+
 function waitForBackend(timeoutMs) {
   return new Promise((resolve) => {
     const start = Date.now();
@@ -123,8 +154,9 @@ function getDatabasePath() {
 
 // ─── Backend Lifecycle ────────────────────────────────────────────────────────
 async function startBackend() {
+  debugLog('Checking for existing backend');
   if (await waitForBackend(5_000)) {
-    console.log('[Backend] Reusing existing server');
+    debugLog('Reusing existing backend server');
     return;
   }
 
@@ -143,7 +175,7 @@ async function startBackend() {
         return;
       }
 
-      console.log(`[Backend] Starting packaged sidecar: ${backendExe}`);
+      debugLog(`Starting packaged backend sidecar: ${backendExe}`);
       backendProcess = spawn(backendExe, [], {
         cwd: path.dirname(backendExe),
         env,
@@ -154,9 +186,9 @@ async function startBackend() {
       const backendCwd = path.join(__dirname, '..');
       const backendDir = getBackendDir();
 
-      console.log(`[Backend] Starting: ${python} -m uvicorn backend.main:app`);
-      console.log(`[Backend] CWD: ${backendCwd}`);
-      console.log(`[Backend] Source dir: ${backendDir}`);
+      debugLog(`Starting development backend with ${python}`);
+      debugLog(`Backend CWD: ${backendCwd}`);
+      debugLog(`Backend source dir: ${backendDir}`);
 
       backendProcess = spawn(
         python,
@@ -174,23 +206,24 @@ async function startBackend() {
       );
     }
 
-    backendProcess.stdout.on('data', (d) => console.log(`[Backend] ${d.toString().trim()}`));
-    backendProcess.stderr.on('data', (d) => console.error(`[Backend] ${d.toString().trim()}`));
+    backendProcess.stdout.on('data', (d) => debugLog(`[Backend] ${d.toString().trim()}`));
+    backendProcess.stderr.on('data', (d) => debugLog(`[Backend:stderr] ${d.toString().trim()}`));
     backendProcess.on('error', (err) => {
-      console.error('[Backend] Failed to start:', err);
+      debugLog(`Backend failed to start: ${err.message}`);
       reject(err);
     });
     backendProcess.on('exit', (code) => {
       if (code !== 0 && code !== null) {
-        console.error(`[Backend] Exited with code ${code}`);
+        debugLog(`Backend exited with code ${code}`);
       }
     });
 
     waitForBackend(MAX_WAIT_MS).then((ready) => {
       if (ready) {
-        console.log('[Backend] Ready!');
+        debugLog('Backend is ready');
         resolve();
       } else {
+        debugLog('Backend startup timed out');
         reject(new Error('Backend startup timed out'));
       }
     });
@@ -199,7 +232,7 @@ async function startBackend() {
 
 function stopBackend() {
   if (backendProcess) {
-    console.log('[Backend] Stopping...');
+    debugLog('Stopping backend');
     backendProcess.kill('SIGTERM');
     // Force kill after 3 seconds
     setTimeout(() => {
@@ -213,6 +246,7 @@ function stopBackend() {
 
 // ─── Splash Screen ────────────────────────────────────────────────────────────
 function createSplashWindow() {
+  debugLog('Creating splash window');
   splashWindow = new BrowserWindow({
     width: 480,
     height: 300,
@@ -276,6 +310,7 @@ function createSplashWindow() {
 
 // ─── Main Window ──────────────────────────────────────────────────────────────
 function createMainWindow() {
+  debugLog('Creating main window');
   mainWindow = new BrowserWindow({
     width: 1400,
     height: 900,
@@ -337,12 +372,13 @@ function createMainWindow() {
         splashWindow.close();
         splashWindow = null;
       }
-      mainWindow.show();
-      mainWindow.focus();
+      showAndFocusMainWindow('ready-to-show');
     }
   }
 
   mainWindow.once('ready-to-show', showMain);
+  mainWindow.webContents.once('dom-ready', () => showAndFocusMainWindow('dom-ready'));
+  mainWindow.webContents.once('did-finish-load', () => showAndFocusMainWindow('did-finish-load'));
 
   // Fallback: force-show after 12 s if ready-to-show never fires
   const showTimer = setTimeout(showMain, 12000);
@@ -351,7 +387,8 @@ function createMainWindow() {
   // If the page fails to load, show an inline error so the window appears
   mainWindow.webContents.on('did-fail-load', (event, code, desc, url) => {
     console.error(`[Window] did-fail-load ${url} → ${desc} (${code})`);
-    showMain();
+    debugLog(`Window failed to load ${url} (${code})`);
+    showAndFocusMainWindow('did-fail-load');
     mainWindow.webContents.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(`
 <!DOCTYPE html><html><head><style>
 body{background:#060b14;color:#ccc;font-family:'Segoe UI',sans-serif;display:flex;
@@ -367,16 +404,19 @@ p{color:#7099cc;font-size:14px;max-width:500px;text-align:center}
   });
 
   if (isDev) {
+    debugLog('Loading development frontend URL');
     mainWindow.loadURL('http://localhost:5173').catch((err) => {
-      console.error('[Window] loadURL threw:', err);
+      debugLog(`Window loadURL threw: ${err.message}`);
     });
   } else if (app.isPackaged) {
+    debugLog(`Loading packaged frontend file: ${packagedIndex}`);
     mainWindow.loadFile(packagedIndex).catch((err) => {
-      console.error('[Window] loadFile threw:', err);
+      debugLog(`Window loadFile threw: ${err.message}`);
     });
   } else {
+    debugLog(`Loading backend frontend URL: ${BACKEND_URL}`);
     mainWindow.loadURL(BACKEND_URL).catch((err) => {
-      console.error('[Window] loadURL threw:', err);
+      debugLog(`Window loadURL threw: ${err.message}`);
     });
   }
 
@@ -408,12 +448,19 @@ function showAbout() {
 
 // ─── App Lifecycle ────────────────────────────────────────────────────────────
 app.whenReady().then(async () => {
+  if (!gotLock) {
+    debugLog('Skipping startup because single-instance lock is not owned');
+    app.quit();
+    return;
+  }
+
+  debugLog('App ready');
   createSplashWindow();
 
   try {
     await startBackend();
   } catch (err) {
-    console.error('Backend failed to start:', err);
+    debugLog(`Backend startup failure: ${err.message}`);
     dialog.showErrorBox(
       'Backend Error',
       `Could not start the CatPrice server.\n\n${err.message}\n\nMake sure Python 3.11+ is installed and dependencies are set up.\nRun: pip install -r requirements.txt`
@@ -426,7 +473,7 @@ app.whenReady().then(async () => {
 });
 
 app.on('render-process-gone', (_event, webContents, details) => {
-  console.error('[Renderer] process gone:', details);
+  debugLog(`Renderer process gone: ${JSON.stringify(details)}`);
   if (mainWindow && webContents.id === mainWindow.webContents.id) {
     dialog.showErrorBox(
       'Renderer Error',
@@ -436,12 +483,18 @@ app.on('render-process-gone', (_event, webContents, details) => {
 });
 
 app.on('window-all-closed', () => {
+  debugLog('All windows closed');
   stopBackend();
   if (process.platform !== 'darwin') app.quit();
 });
 
 app.on('activate', () => {
-  if (BrowserWindow.getAllWindows().length === 0) createMainWindow();
+  debugLog('App activate');
+  if (BrowserWindow.getAllWindows().length === 0) {
+    createMainWindow();
+  } else {
+    showAndFocusMainWindow('activate');
+  }
 });
 
 app.on('before-quit', () => stopBackend());
@@ -449,12 +502,20 @@ app.on('before-quit', () => stopBackend());
 // Prevent multiple instances
 const gotLock = app.requestSingleInstanceLock();
 if (!gotLock) {
+  debugLog('Another CatPrice instance already owns the single-instance lock');
   app.quit();
 } else {
   app.on('second-instance', () => {
-    if (mainWindow) {
-      if (mainWindow.isMinimized()) mainWindow.restore();
-      mainWindow.focus();
+    debugLog('Received second-instance event');
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      showAndFocusMainWindow('second-instance');
+    } else if (splashWindow && !splashWindow.isDestroyed()) {
+      debugLog('Showing splash window for second-instance');
+      splashWindow.show();
+      splashWindow.moveTop();
+      splashWindow.focus();
+    } else if (app.isReady()) {
+      createMainWindow();
     }
   });
 }
