@@ -13,17 +13,20 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 }
 
 // Calculator
+export interface ComponentInput {
+  role: 'active_metal' | 'promoter' | 'support';
+  name: string;
+  wt_pct: number;
+  price_per_lb: number;
+  precursor_markup?: number;
+}
+
 export interface CostInput {
-  metal_symbol: string;
-  metal_price: number;
-  metal_price_unit: string;
-  metal_loading_wt_pct: number;
-  support_name: string;
-  support_price_per_lb: number;
+  components: ComponentInput[];
   steps: string[];
   order_size_tons: number;
-  precursor_metal_fraction?: number;
-  precursor_markup?: number;
+  ga_overhead_pct?: number;
+  sard_pct?: number;
   basis_year?: number;
   target_year?: number;
   include_spent_value?: boolean;
@@ -31,12 +34,21 @@ export interface CostInput {
   catalyst_bulk_density?: number;
 }
 
+export interface ComponentBreakdown {
+  role: string;
+  name: string;
+  wt_pct: number;
+  wt_frac: number;
+  price_per_lb: number;
+  precursor_markup: number;
+  cost_per_lb_cat: number;
+  cost_pct: number;
+}
+
 export interface CostResult {
   input_summary: Record<string, unknown>;
   materials: {
-    metal_precursor_cost_per_lb: number;
-    support_cost_per_lb: number;
-    solvent_cost_per_lb: number;
+    components: ComponentBreakdown[];
     total_materials_cost_per_lb: number;
   };
   step_method: {
@@ -46,7 +58,6 @@ export interface CostResult {
     estimated_price_per_lb: number;
     estimated_price_per_kg: number;
     margin_pct: number;
-    step_details: { step: string; hourly_cost: number }[];
     [key: string]: unknown;
   };
   summary: {
@@ -72,6 +83,7 @@ export interface MetalPrice {
   price: number;
   unit: string;
   source: string;
+  is_live: boolean;
   fetched_at: string | null;
 }
 
@@ -86,9 +98,14 @@ export interface MaterialItem {
   formula: string | null;
   category: string;
   mw: number | null;
-  price: number;
-  price_unit: string;
-  source: string;
+  density: number | null;
+  concentration_pct: number | null;
+  price: number | null;
+  price_unit: string | null;
+  quote_year: number | null;
+  quote_source: string;
+  notes: string;
+  has_lab_data: boolean;
   is_custom: boolean;
 }
 
@@ -113,8 +130,18 @@ export interface ProcessTemplate {
 export const fetchTemplates = () => request<ProcessTemplate[]>('/materials/templates');
 
 // Steps
+export interface StepLibraryItem {
+  name: string;
+  key: string;
+  cost_small: number | null;
+  cost_medium: number | null;
+  cost_large: number | null;
+  note: string;
+  basis: string;
+}
+
 export const fetchSteps = () =>
-  request<Record<string, { name: string; description: string; hourly_cost: Record<string, number | null> }>>('/materials/steps');
+  request<StepLibraryItem[]>('/materials/steps');
 
 // Health
 export const checkHealth = () => request<{ status: string; version: string }>('/health');

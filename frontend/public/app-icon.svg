@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#0f1b35"/>
+      <stop offset="100%" stop-color="#060b14"/>
+    </radialGradient>
+    <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.8"/>
+      <stop offset="50%" stop-color="#0066aa" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#003366" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="orbit1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00d4ff"/>
+      <stop offset="50%" stop-color="#7b2fff"/>
+      <stop offset="100%" stop-color="#ff6b35"/>
+    </linearGradient>
+    <linearGradient id="orbit2" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ff6b35"/>
+      <stop offset="100%" stop-color="#00d4ff"/>
+    </linearGradient>
+    <linearGradient id="orbit3" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7b2fff"/>
+      <stop offset="100%" stop-color="#00ff88"/>
+    </linearGradient>
+    <linearGradient id="tagGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffd700"/>
+      <stop offset="100%" stop-color="#ff8c00"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="coreBlur">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <circle cx="256" cy="256" r="256" fill="url(#bgGrad)"/>
+
+  <!-- Grid lines (subtle) -->
+  <g opacity="0.07" stroke="#00d4ff" stroke-width="0.8">
+    <line x1="128" y1="20" x2="128" y2="492"/>
+    <line x1="192" y1="20" x2="192" y2="492"/>
+    <line x1="256" y1="20" x2="256" y2="492"/>
+    <line x1="320" y1="20" x2="320" y2="492"/>
+    <line x1="384" y1="20" x2="384" y2="492"/>
+    <line x1="20" y1="128" x2="492" y2="128"/>
+    <line x1="20" y1="192" x2="492" y2="192"/>
+    <line x1="20" y1="256" x2="492" y2="256"/>
+    <line x1="20" y1="320" x2="492" y2="320"/>
+    <line x1="20" y1="384" x2="492" y2="384"/>
+  </g>
+
+  <!-- Core halo -->
+  <circle cx="256" cy="256" r="95" fill="url(#coreGlow)" filter="url(#coreBlur)" opacity="0.6"/>
+
+  <!-- Orbit 1 (tilted -20deg) -->
+  <g transform="translate(256,256) rotate(-20)">
+    <ellipse cx="0" cy="0" rx="155" ry="42" fill="none" stroke="url(#orbit1)" stroke-width="2.5" opacity="0.8" filter="url(#glow)"/>
+    <circle cx="148" cy="-15" r="9" fill="#00d4ff" filter="url(#glow)"/>
+    <circle cx="148" cy="-15" r="4.5" fill="white"/>
+  </g>
+
+  <!-- Orbit 2 (tilted +65deg) -->
+  <g transform="translate(256,256) rotate(65)">
+    <ellipse cx="0" cy="0" rx="155" ry="42" fill="none" stroke="url(#orbit2)" stroke-width="2.5" opacity="0.8" filter="url(#glow)"/>
+    <circle cx="-95" cy="38" r="9" fill="#ff6b35" filter="url(#glow)"/>
+    <circle cx="-95" cy="38" r="4.5" fill="white"/>
+  </g>
+
+  <!-- Orbit 3 (tilted -65deg) -->
+  <g transform="translate(256,256) rotate(-65)">
+    <ellipse cx="0" cy="0" rx="155" ry="42" fill="none" stroke="url(#orbit3)" stroke-width="2.5" opacity="0.8" filter="url(#glow)"/>
+    <circle cx="75" cy="44" r="9" fill="#7b2fff" filter="url(#glow)"/>
+    <circle cx="75" cy="44" r="4.5" fill="white"/>
+  </g>
+
+  <!-- Nucleus outer ring -->
+  <circle cx="256" cy="256" r="40" fill="#08152a" stroke="#00d4ff" stroke-width="3" filter="url(#glow)"/>
+  <circle cx="256" cy="256" r="32" fill="#0d1e3a"/>
+  <!-- Nucleus particles -->
+  <circle cx="249" cy="249" r="7" fill="#00d4ff" opacity="0.95"/>
+  <circle cx="264" cy="249" r="7" fill="#7b2fff" opacity="0.95"/>
+  <circle cx="256" cy="263" r="7" fill="#00ff88" opacity="0.95"/>
+  <circle cx="256" cy="243" r="5" fill="#ff6b35" opacity="0.8"/>
+
+  <!-- Price tag (bottom-right quadrant) -->
+  <g transform="translate(305,305)" filter="url(#glow)">
+    <rect x="0" y="0" width="58" height="44" rx="8" fill="url(#tagGrad)"/>
+    <circle cx="11" cy="13" r="4.5" fill="#060b14"/>
+    <text x="34" y="34" font-family="Arial Black,sans-serif" font-size="28" font-weight="900"
+          fill="#060b14" text-anchor="middle">$</text>
+  </g>
+
+  <!-- App name -->
+  <text x="256" y="450" font-family="Arial,sans-serif" font-size="40" font-weight="700"
+        fill="white" text-anchor="middle" letter-spacing="1">
+    <tspan fill="#00d4ff">Cat</tspan><tspan fill="#ffd700">Price</tspan>
+  </text>
+  <text x="256" y="478" font-family="Arial,sans-serif" font-size="13" fill="#5580aa"
+        text-anchor="middle" letter-spacing="4">CATALYST COST TOOL</text>
+
+  <!-- Outer decorative ring -->
+  <circle cx="256" cy="256" r="248" fill="none" stroke="#00d4ff" stroke-width="1.5" opacity="0.25"/>
+</svg>

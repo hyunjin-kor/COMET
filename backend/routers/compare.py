@@ -3,7 +3,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
-from backend.core.cost_engine import estimate_catalyst_cost
+from backend.core.cost_engine import estimate_catalyst_cost_simple
 
 router = APIRouter(prefix="/api", tags=["compare"])
 
@@ -30,7 +30,7 @@ def compare_compositions(req: CompareRequest):
     results = []
     for i, comp in enumerate(req.compositions):
         try:
-            result = estimate_catalyst_cost(
+            result = estimate_catalyst_cost_simple(
                 metal_symbol=comp.metal_symbol,
                 metal_price=comp.metal_price,
                 metal_price_unit=comp.metal_price_unit,

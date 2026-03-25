@@ -1,56 +1,646 @@
 {
-  "metadata": {
-    "version": "1.0.0",
-    "source": "Based on methodology from Baddour et al. 2018, Chapter 9",
-    "note": "Parameters for spent catalyst recovery value calculations"
-  },
-  "losses_use": {
-    "TiO2": {
-      "fixed": {"support": 0.02, "metal": 0.10},
-      "slurry": {"support": 0.03, "metal": 0.13}
-    },
+  "version": "1.1.1",
+  "source": "CatCost_v1-1-1.xlsx, Spent Cat Library sheet",
+  "basis_year": 2016,
+  "supports": {
     "Al2O3": {
-      "fixed": {"support": 0.02, "metal": 0.03},
-      "slurry": {"support": 0.02, "metal": 0.04}
-    },
-    "SiO2": {
-      "fixed": {"support": 0.02, "metal": 0.03},
-      "slurry": {"support": 0.02, "metal": 0.04}
+      "fixed_bed_loss_support_pct": {
+        "low": null,
+        "high": null,
+        "avg": 2.0
+      },
+      "fixed_bed_loss_metal_pct": {
+        "low": 2.0,
+        "high": 4.0,
+        "avg": 3.0
+      },
+      "slurry_loss_support_pct": {
+        "low": 1.0,
+        "high": 3.0,
+        "avg": 2.0
+      },
+      "slurry_loss_metal_pct": {
+        "low": 3.0,
+        "high": 5.0,
+        "avg": 4.0
+      },
+      "thermal_ox_fee_per_lb": {
+        "low": 0.125,
+        "high": 0.15,
+        "avg": 0.1375
+      },
+      "incoming_fee_per_ft3": {
+        "low": 108.0,
+        "high": 123.0,
+        "avg": 115.5
+      },
+      "metal_contaminant_fee_per_ft3": {
+        "low": 14.0,
+        "high": 18.0,
+        "avg": 16.0
+      }
     },
     "Carbon": {
-      "fixed": {"support": 0.02, "metal": 0.025},
-      "slurry": {"support": 0.06, "metal": 0.05}
+      "fixed_bed_loss_support_pct": {
+        "low": null,
+        "high": null,
+        "avg": 2.0
+      },
+      "fixed_bed_loss_metal_pct": {
+        "low": 2.0,
+        "high": 3.0,
+        "avg": 2.5
+      },
+      "slurry_loss_support_pct": {
+        "low": 4.0,
+        "high": 8.0,
+        "avg": 6.0
+      },
+      "slurry_loss_metal_pct": {
+        "low": 2.0,
+        "high": 8.0,
+        "avg": 5.0
+      },
+      "thermal_ox_fee_per_lb": {
+        "low": 0.125,
+        "high": 0.15,
+        "avg": 0.1375
+      },
+      "incoming_fee_per_ft3": {
+        "low": 94.0,
+        "high": 115.0,
+        "avg": 104.5
+      },
+      "metal_contaminant_fee_per_ft3": {
+        "low": 15.0,
+        "high": 21.0,
+        "avg": 18.0
+      }
     },
     "Carbonate": {
-      "fixed": {"support": 0.05, "metal": 0.05},
-      "slurry": {"support": 0.05, "metal": 0.05}
+      "fixed_bed_loss_support_pct": {
+        "low": null,
+        "high": null,
+        "avg": 5.0
+      },
+      "fixed_bed_loss_metal_pct": {
+        "low": null,
+        "high": null,
+        "avg": 5.0
+      },
+      "slurry_loss_support_pct": {
+        "low": null,
+        "high": null,
+        "avg": 5.0
+      },
+      "slurry_loss_metal_pct": {
+        "low": null,
+        "high": null,
+        "avg": 5.0
+      },
+      "thermal_ox_fee_per_lb": {
+        "low": 0.125,
+        "high": 0.15,
+        "avg": 0.1375
+      },
+      "incoming_fee_per_ft3": {
+        "low": 108.0,
+        "high": 123.0,
+        "avg": 115.5
+      },
+      "metal_contaminant_fee_per_ft3": {
+        "low": 14.0,
+        "high": 18.0,
+        "avg": 16.0
+      }
     },
     "Clay": {
-      "fixed": {"support": 0.05, "metal": 0.05},
-      "slurry": {"support": 0.05, "metal": 0.05}
+      "fixed_bed_loss_support_pct": {
+        "low": null,
+        "high": null,
+        "avg": 5.0
+      },
+      "fixed_bed_loss_metal_pct": {
+        "low": null,
+        "high": null,
+        "avg": 5.0
+      },
+      "slurry_loss_support_pct": {
+        "low": null,
+        "high": null,
+        "avg": 5.0
+      },
+      "slurry_loss_metal_pct": {
+        "low": null,
+        "high": null,
+        "avg": 5.0
+      },
+      "thermal_ox_fee_per_lb": {
+        "low": 0.125,
+        "high": 0.15,
+        "avg": 0.1375
+      },
+      "incoming_fee_per_ft3": {
+        "low": 108.0,
+        "high": 123.0,
+        "avg": 115.5
+      },
+      "metal_contaminant_fee_per_ft3": {
+        "low": 14.0,
+        "high": 18.0,
+        "avg": 16.0
+      }
+    },
+    "SiO2": {
+      "fixed_bed_loss_support_pct": {
+        "low": null,
+        "high": null,
+        "avg": 2.0
+      },
+      "fixed_bed_loss_metal_pct": {
+        "low": 2.0,
+        "high": 4.0,
+        "avg": 3.0
+      },
+      "slurry_loss_support_pct": {
+        "low": 1.0,
+        "high": 3.0,
+        "avg": 2.0
+      },
+      "slurry_loss_metal_pct": {
+        "low": 3.0,
+        "high": 5.0,
+        "avg": 4.0
+      },
+      "thermal_ox_fee_per_lb": {
+        "low": 0.125,
+        "high": 0.15,
+        "avg": 0.1375
+      },
+      "incoming_fee_per_ft3": {
+        "low": 108.0,
+        "high": 123.0,
+        "avg": 115.5
+      },
+      "metal_contaminant_fee_per_ft3": {
+        "low": 14.0,
+        "high": 18.0,
+        "avg": 16.0
+      }
+    },
+    "Sponge of metal (no support)": {
+      "fixed_bed_loss_support_pct": {
+        "low": null,
+        "high": null,
+        "avg": null
+      },
+      "fixed_bed_loss_metal_pct": {
+        "low": null,
+        "high": null,
+        "avg": 5.0
+      },
+      "slurry_loss_support_pct": {
+        "low": null,
+        "high": null,
+        "avg": null
+      },
+      "slurry_loss_metal_pct": {
+        "low": null,
+        "high": null,
+        "avg": 5.0
+      },
+      "thermal_ox_fee_per_lb": {
+        "low": 0.125,
+        "high": 0.15,
+        "avg": 0.1375
+      },
+      "incoming_fee_per_ft3": {
+        "low": 81.0,
+        "high": 92.0,
+        "avg": 86.5
+      },
+      "metal_contaminant_fee_per_ft3": {
+        "low": 11.0,
+        "high": 14.0,
+        "avg": 12.5
+      }
+    },
+    "TiO2": {
+      "fixed_bed_loss_support_pct": {
+        "low": null,
+        "high": null,
+        "avg": 2.0
+      },
+      "fixed_bed_loss_metal_pct": {
+        "low": 8.0,
+        "high": 12.0,
+        "avg": 10.0
+      },
+      "slurry_loss_support_pct": {
+        "low": 2.0,
+        "high": 4.0,
+        "avg": 3.0
+      },
+      "slurry_loss_metal_pct": {
+        "low": 10.0,
+        "high": 15.0,
+        "avg": 12.5
+      },
+      "thermal_ox_fee_per_lb": {
+        "low": 0.125,
+        "high": 0.15,
+        "avg": 0.1375
+      },
+      "incoming_fee_per_ft3": {
+        "low": 108.0,
+        "high": 123.0,
+        "avg": 115.5
+      },
+      "metal_contaminant_fee_per_ft3": {
+        "low": 14.0,
+        "high": 18.0,
+        "avg": 16.0
+      }
+    },
+    "ZrO2": {
+      "fixed_bed_loss_support_pct": {
+        "low": null,
+        "high": null,
+        "avg": 2.0
+      },
+      "fixed_bed_loss_metal_pct": {
+        "low": 8.0,
+        "high": 12.0,
+        "avg": 10.0
+      },
+      "slurry_loss_support_pct": {
+        "low": 2.0,
+        "high": 4.0,
+        "avg": 3.0
+      },
+      "slurry_loss_metal_pct": {
+        "low": 10.0,
+        "high": 15.0,
+        "avg": 12.5
+      },
+      "thermal_ox_fee_per_lb": {
+        "low": 0.125,
+        "high": 0.15,
+        "avg": 0.1375
+      },
+      "incoming_fee_per_ft3": {
+        "low": 108.0,
+        "high": 123.0,
+        "avg": 115.5
+      },
+      "metal_contaminant_fee_per_ft3": {
+        "low": 14.0,
+        "high": 18.0,
+        "avg": 16.0
+      }
     }
   },
-  "losses_refining": {
-    "Pd": {"high": 0.04, "low": 0.01, "avg": 0.035},
-    "Pt": {"high": 0.03, "low": 0.01, "avg": 0.030},
-    "Rh": {"high": 0.10, "low": 0.05, "avg": 0.075},
-    "Ru": {"high": 0.25, "low": 0.15, "avg": 0.200},
-    "Au": {"avg": 0.10},
-    "Ir": {"avg": 0.10},
-    "Ni": {"avg": 0.20},
-    "Co": {"avg": 0.20}
+  "metals": {
+    "Aluminum": {
+      "loss_refining_pct": {
+        "low": null,
+        "high": null,
+        "avg": 70.0
+      },
+      "refining_charge_per_troy_oz": null,
+      "is_precious_metal": false,
+      "spot_price": 0.96,
+      "spot_unit": "lb",
+      "spot_year": 2018,
+      "spot_source": "infomine.com",
+      "note": "Claus, misc"
+    },
+    "Cobalt": {
+      "loss_refining_pct": {
+        "low": null,
+        "high": null,
+        "avg": 20.0
+      },
+      "refining_charge_per_troy_oz": null,
+      "is_precious_metal": false,
+      "spot_price": 29.6,
+      "spot_unit": "lb",
+      "spot_year": 2018,
+      "spot_source": "infomine.com",
+      "note": ""
+    },
+    "Copper": {
+      "loss_refining_pct": {
+        "low": 15.0,
+        "high": 25.0,
+        "avg": 20.0
+      },
+      "refining_charge_per_troy_oz": null,
+      "is_precious_metal": false,
+      "spot_price": 2.75,
+      "spot_unit": "lb",
+      "spot_year": 2018,
+      "spot_source": "infomine.com",
+      "note": "CuZn"
+    },
+    "Gold": {
+      "loss_refining_pct": {
+        "low": null,
+        "high": null,
+        "avg": 10.0
+      },
+      "refining_charge_per_troy_oz": 11.0,
+      "is_precious_metal": true,
+      "spot_price": 1200.8,
+      "spot_unit": "oz t",
+      "spot_year": 2018,
+      "spot_source": "infomine.com",
+      "note": ""
+    },
+    "Iridium": {
+      "loss_refining_pct": {
+        "low": null,
+        "high": null,
+        "avg": 10.0
+      },
+      "refining_charge_per_troy_oz": 25.0,
+      "is_precious_metal": true,
+      "spot_price": 1440.0,
+      "spot_unit": "oz t",
+      "spot_year": 2018,
+      "spot_source": "infomine.com",
+      "note": ""
+    },
+    "Iron": {
+      "loss_refining_pct": {
+        "low": null,
+        "high": null,
+        "avg": 40.0
+      },
+      "refining_charge_per_troy_oz": null,
+      "is_precious_metal": false,
+      "spot_price": 95.0,
+      "spot_unit": "ton",
+      "spot_year": 2018,
+      "spot_source": "Unprepared iron from https://www.cmcrecyclingindependence.com/current-pricing/",
+      "note": ""
+    },
+    "Molybdenum": {
+      "loss_refining_pct": {
+        "low": 20.0,
+        "high": 30.0,
+        "avg": 25.0
+      },
+      "refining_charge_per_troy_oz": null,
+      "is_precious_metal": false,
+      "spot_price": 24000.0,
+      "spot_unit": "tonne",
+      "spot_year": 2018,
+      "spot_source": "London Metals Exchange",
+      "note": ""
+    },
+    "Nickel": {
+      "loss_refining_pct": {
+        "low": null,
+        "high": null,
+        "avg": 20.0
+      },
+      "refining_charge_per_troy_oz": null,
+      "is_precious_metal": false,
+      "spot_price": 6.08,
+      "spot_unit": "lb",
+      "spot_year": 2018,
+      "spot_source": "infomine.com",
+      "note": ""
+    },
+    "Palladium": {
+      "loss_refining_pct": {
+        "low": 1.0,
+        "high": 4.0,
+        "avg": 2.5
+      },
+      "refining_charge_per_troy_oz": 12.5,
+      "is_precious_metal": true,
+      "spot_price": 975.0,
+      "spot_unit": "oz t",
+      "spot_year": 2018,
+      "spot_source": "infomine.com",
+      "note": ""
+    },
+    "Platinum": {
+      "loss_refining_pct": {
+        "low": 1.0,
+        "high": 3.0,
+        "avg": 2.0
+      },
+      "refining_charge_per_troy_oz": 14.5,
+      "is_precious_metal": true,
+      "spot_price": 793.5,
+      "spot_unit": "oz t",
+      "spot_year": 2018,
+      "spot_source": "infomine.com",
+      "note": ""
+    },
+    "Rhodium": {
+      "loss_refining_pct": {
+        "low": 5.0,
+        "high": 10.0,
+        "avg": 7.5
+      },
+      "refining_charge_per_troy_oz": 16.0,
+      "is_precious_metal": true,
+      "spot_price": 2390.0,
+      "spot_unit": "oz t",
+      "spot_year": 2018,
+      "spot_source": "infomine.com",
+      "note": ""
+    },
+    "Ruthenium": {
+      "loss_refining_pct": {
+        "low": 15.0,
+        "high": 25.0,
+        "avg": 20.0
+      },
+      "refining_charge_per_troy_oz": 20.0,
+      "is_precious_metal": true,
+      "spot_price": 260.0,
+      "spot_unit": "oz t",
+      "spot_year": 2018,
+      "spot_source": "infomine.com",
+      "note": ""
+    },
+    "Silver": {
+      "loss_refining_pct": {
+        "low": 2.0,
+        "high": 3.0,
+        "avg": 2.5
+      },
+      "refining_charge_per_troy_oz": 11.5,
+      "is_precious_metal": true,
+      "spot_price": 14.58,
+      "spot_unit": "oz t",
+      "spot_year": 2018,
+      "spot_source": "infomine.com",
+      "note": ""
+    },
+    "Tungsten": {
+      "loss_refining_pct": {
+        "low": 15.0,
+        "high": 25.0,
+        "avg": 20.0
+      },
+      "refining_charge_per_troy_oz": null,
+      "is_precious_metal": false,
+      "spot_price": 24.04,
+      "spot_unit": "kg",
+      "spot_year": 2016,
+      "spot_source": "InvestmentMine",
+      "note": "NiW"
+    }
   },
-  "refining_charges_per_troz": {
-    "Pt": 14.5,
-    "Pd": 12.5,
-    "Rh": 16.0,
-    "Au": 11.0,
-    "Ru": 20.0,
-    "Ir": 25.0,
-    "Ag": 11.5
+  "landfill_classes": {
+    "Zeolite, Silica, Alumina": {
+      "landfill_fee_per_lb": {
+        "low": 0.15,
+        "high": 0.2,
+        "avg": 0.175
+      },
+      "sale_value_per_lb": {
+        "low": null,
+        "high": null,
+        "avg": 0.05
+      },
+      "note": "e.g. for cement"
+    },
+    "Ni/Mo, Co/Mo, Ni/W": {
+      "landfill_fee_per_lb": {
+        "low": null,
+        "high": null,
+        "avg": 0.75
+      },
+      "sale_value_per_lb": {
+        "low": null,
+        "high": null,
+        "avg": null
+      },
+      "note": ""
+    },
+    "PGM/Noble metal": {
+      "landfill_fee_per_lb": {
+        "low": 1.0,
+        "high": 3.0,
+        "avg": 2.0
+      },
+      "sale_value_per_lb": {
+        "low": 1.0,
+        "high": 1.3,
+        "avg": 1.15
+      },
+      "note": "e.g. to smelter or refiner, typically <0.2% PGM"
+    },
+    "Hazardous (e.g. RCRA metals)": {
+      "landfill_fee_per_lb": {
+        "low": 1.0,
+        "high": 3.0,
+        "avg": 2.0
+      },
+      "sale_value_per_lb": {
+        "low": null,
+        "high": null,
+        "avg": null
+      },
+      "note": ""
+    }
   },
-  "processing_fees": {
-    "thermox_per_lb": {"low": 0.125, "high": 0.15, "avg": 0.1375},
-    "incoming_per_ft3": {"low": 90, "high": 130, "avg": 110}
+  "bulk_densities": {
+    "Activated C granules": {
+      "lb_per_ft3": 46.0,
+      "kg_per_m3": 736.8493152542096,
+      "note": "containing 50% moisture"
+    },
+    "Activated C powder": {
+      "lb_per_ft3": 42.0,
+      "kg_per_m3": 672.7754617538435,
+      "note": "containing 50% moisture"
+    },
+    "Al2O3/SiO2, 44%/51%": {
+      "lb_per_ft3": 50.0,
+      "kg_per_m3": 800.9231687545756,
+      "note": "dry extrudate"
+    },
+    "Metal on Al2O3": {
+      "lb_per_ft3": 45.0,
+      "kg_per_m3": 720.8308518791181,
+      "note": "dry extrudate"
+    },
+    "Metal on TiO2": {
+      "lb_per_ft3": 65.0,
+      "kg_per_m3": 1041.2001193809483,
+      "note": "dry extrudate"
+    },
+    "Metal on ZrO2": {
+      "lb_per_ft3": 66.0,
+      "kg_per_m3": 1057.21858275604,
+      "note": "dry extrudate"
+    },
+    "SiO2, 3/16\"": {
+      "lb_per_ft3": 30.0,
+      "kg_per_m3": 480.5539012527454,
+      "note": "dry spheres"
+    },
+    "SiO2, high surface area 160 m2/g": {
+      "lb_per_ft3": 39.0,
+      "kg_per_m3": 624.720071628569,
+      "note": "dry pellet/extrudate"
+    },
+    "SiO2, high surface area 250 m2/g": {
+      "lb_per_ft3": 22.0,
+      "kg_per_m3": 352.4061942520133,
+      "note": "dry pellet/extrudate"
+    },
+    "Sponge Ni, Co, or Cu": {
+      "lb_per_ft3": 71.25,
+      "kg_per_m3": 1141.3155154752703,
+      "note": "dry basis; average of 67.5-75 lb/ft3"
+    },
+    "TiO2, anatase, high surface area": {
+      "lb_per_ft3": 55.0,
+      "kg_per_m3": 881.0154856300333,
+      "note": "150 m2/g, dry pellet/extrudate"
+    }
+  },
+  "rcra_metals": {
+    "As": {
+      "tclp_limit_mg_per_l": 5.0,
+      "estimated_concentration_wt_pct": 0.01
+    },
+    "Ba": {
+      "tclp_limit_mg_per_l": 100.0,
+      "estimated_concentration_wt_pct": 0.2
+    },
+    "Cd": {
+      "tclp_limit_mg_per_l": 1.0,
+      "estimated_concentration_wt_pct": 0.002
+    },
+    "Cr": {
+      "tclp_limit_mg_per_l": 5.0,
+      "estimated_concentration_wt_pct": 0.01
+    },
+    "Pb": {
+      "tclp_limit_mg_per_l": 5.0,
+      "estimated_concentration_wt_pct": 0.01
+    },
+    "Hg": {
+      "tclp_limit_mg_per_l": 0.2,
+      "estimated_concentration_wt_pct": 0.00039999999999999996
+    },
+    "Se": {
+      "tclp_limit_mg_per_l": 1.0,
+      "estimated_concentration_wt_pct": 0.002
+    },
+    "Ag": {
+      "tclp_limit_mg_per_l": 5.0,
+      "estimated_concentration_wt_pct": 0.01
+    }
   }
 }

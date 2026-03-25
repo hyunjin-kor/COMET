@@ -1,0 +1,10 @@
+{
+  "id": "custom_step_process",
+  "name": "Custom Step Process",
+  "description": "",
+  "category": "CatCost Template",
+  "example_catalysts": [],
+  "steps": [],
+  "step_quantities": [],
+  "source": "CatCost_v1-1-1.xlsx, 3a Step Method sheet"
+}

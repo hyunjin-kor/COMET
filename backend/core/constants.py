@@ -105,23 +105,31 @@ OPEX_FACTORS_DEFAULT: dict[str, float] = {
 
 # --- Spent catalyst recovery (Chapter 9) ---
 LOSSES_USE: dict[str, dict[str, dict[str, float]]] = {
-    "TiO2":      {"fixed": {"support": 0.02, "metal": 0.10}, "slurry": {"support": 0.03, "metal": 0.13}},
+    "TiO2":      {"fixed": {"support": 0.02, "metal": 0.10}, "slurry": {"support": 0.03, "metal": 0.125}},
     "Al2O3":     {"fixed": {"support": 0.02, "metal": 0.03}, "slurry": {"support": 0.02, "metal": 0.04}},
     "SiO2":      {"fixed": {"support": 0.02, "metal": 0.03}, "slurry": {"support": 0.02, "metal": 0.04}},
     "Carbon":    {"fixed": {"support": 0.02, "metal": 0.025}, "slurry": {"support": 0.06, "metal": 0.05}},
     "Carbonate": {"fixed": {"support": 0.05, "metal": 0.05}, "slurry": {"support": 0.05, "metal": 0.05}},
     "Clay":      {"fixed": {"support": 0.05, "metal": 0.05}, "slurry": {"support": 0.05, "metal": 0.05}},
+    "ZrO2":      {"fixed": {"support": 0.02, "metal": 0.10}, "slurry": {"support": 0.03, "metal": 0.125}},
+    "Sponge of metal (no support)": {
+        "fixed": {"support": 0.0, "metal": 0.05},
+        "slurry": {"support": 0.0, "metal": 0.05},
+    },
 }
 
 LOSSES_REFINING: dict[str, dict[str, float]] = {
-    "Pd": {"high": 0.04, "low": 0.01, "avg": 0.035},
-    "Pt": {"high": 0.03, "low": 0.01, "avg": 0.030},
+    "Pd": {"high": 0.04, "low": 0.01, "avg": 0.025},
+    "Pt": {"high": 0.03, "low": 0.01, "avg": 0.020},
     "Rh": {"high": 0.10, "low": 0.05, "avg": 0.075},
     "Ru": {"high": 0.25, "low": 0.15, "avg": 0.200},
     "Au": {"avg": 0.10},
     "Ir": {"avg": 0.10},
     "Ni": {"avg": 0.20},
     "Co": {"avg": 0.20},
+    "Cu": {"high": 0.25, "low": 0.15, "avg": 0.20},
+    "W": {"high": 0.25, "low": 0.15, "avg": 0.20},
+    "Mo": {"high": 0.30, "low": 0.20, "avg": 0.25},
 }
 
 REFINING_CHARGES: dict[str, float] = {  # $/TrOz recovered
@@ -131,6 +139,16 @@ REFINING_CHARGES: dict[str, float] = {  # $/TrOz recovered
 
 DEFAULT_THERMOX_PER_LB = 0.1375
 DEFAULT_INCOMING_PER_FT3 = 110.0
+SUPPORT_RECOVERY_COSTS: dict[str, dict[str, float]] = {
+    "Al2O3": {"thermox_per_lb": 0.1375, "incoming_fee_per_ft3": 115.5},
+    "Carbon": {"thermox_per_lb": 0.1375, "incoming_fee_per_ft3": 104.5},
+    "Carbonate": {"thermox_per_lb": 0.1375, "incoming_fee_per_ft3": 115.5},
+    "Clay": {"thermox_per_lb": 0.1375, "incoming_fee_per_ft3": 115.5},
+    "SiO2": {"thermox_per_lb": 0.1375, "incoming_fee_per_ft3": 115.5},
+    "Sponge of metal (no support)": {"thermox_per_lb": 0.1375, "incoming_fee_per_ft3": 86.5},
+    "TiO2": {"thermox_per_lb": 0.1375, "incoming_fee_per_ft3": 115.5},
+    "ZrO2": {"thermox_per_lb": 0.1375, "incoming_fee_per_ft3": 115.5},
+}
 
 # --- Equipment cost scaling ---
 DEFAULT_SCALING_EXPONENT = 0.6  # Six-tenths rule

@@ -24,9 +24,10 @@ CatPrice estimates catalyst manufacturing costs using the Step Method and CapEx/
 | Layer | Technology |
 |-------|-----------|
 | Backend | FastAPI, Python 3.11+, SQLModel, SQLite |
-| Frontend | React 18, TypeScript, Vite, Tailwind CSS |
+| Frontend | React 19, TypeScript, Vite, Tailwind CSS |
 | Charts | Recharts |
 | Scheduler | APScheduler |
+| Desktop | Electron |
 
 ## Quick Start
 
@@ -43,6 +44,13 @@ npm run dev
 ```
 
 Open http://localhost:5173
+
+### Desktop App
+
+```bash
+npm install
+npm run dev
+```
 
 ### Docker
 
@@ -64,6 +72,8 @@ BLS_API_KEY=your_key
 
 ```bash
 pytest backend/tests/ -v
+cd frontend && npm run lint && npm run build
+python scripts/validate_catcost_data.py
 ```
 
 ## Academic Citation

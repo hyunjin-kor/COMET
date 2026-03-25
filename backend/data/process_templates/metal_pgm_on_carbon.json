@@ -1,0 +1,58 @@
+{
+  "id": "metal_pgm_on_carbon",
+  "name": "Metal (PGM) on Carbon",
+  "description": "Based on 2% Pt/C at 2-ton scale.",
+  "category": "Supported PGM",
+  "example_catalysts": [
+    "Pt/C",
+    "Pd/C",
+    "Ru/C"
+  ],
+  "steps": [
+    "incipient_wetness",
+    "reactor_multistep",
+    "scrubber_nox",
+    "filter_rotary_vacuum",
+    "reactor_simple",
+    "dryer_rotary_40_100C"
+  ],
+  "step_quantities": [
+    {
+      "step": "incipient_wetness",
+      "template_step_name": "Incipient wetness (impregnation)",
+      "quantity": 1.0,
+      "note": "-"
+    },
+    {
+      "step": "reactor_multistep",
+      "template_step_name": "Reactor, multistep",
+      "quantity": 1.0,
+      "note": "-"
+    },
+    {
+      "step": "scrubber_nox",
+      "template_step_name": "Scrubber, NOx",
+      "quantity": 1.0,
+      "note": "-"
+    },
+    {
+      "step": "filter_rotary_vacuum",
+      "template_step_name": "Filter, rotary vacuum",
+      "quantity": 1.0,
+      "note": "Substitute with plate and frame at small scale"
+    },
+    {
+      "step": "reactor_simple",
+      "template_step_name": "Reactor, simple (mixing)",
+      "quantity": 1.0,
+      "note": "-"
+    },
+    {
+      "step": "dryer_rotary_40_100C",
+      "template_step_name": "Dryer, rotary (40–100 °C)",
+      "quantity": 1.0,
+      "note": "-"
+    }
+  ],
+  "source": "CatCost_v1-1-1.xlsx, 3a Step Method sheet"
+}

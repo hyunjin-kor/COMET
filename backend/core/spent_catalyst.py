@@ -12,6 +12,7 @@ from backend.core.constants import (
     LOSSES_REFINING,
     LOSSES_USE,
     REFINING_CHARGES,
+    SUPPORT_RECOVERY_COSTS,
 )
 
 
@@ -46,6 +47,11 @@ def calculate_metal_recovery_value(
     l_metal_use = use_losses.get("metal", 0.05)
     l_support_use = use_losses.get("support", 0.02)
     l_metal_ref = LOSSES_REFINING.get(metal_symbol, {}).get("avg", 0.10)
+    support_costs = SUPPORT_RECOVERY_COSTS.get(support, {})
+    if thermox_per_lb == DEFAULT_THERMOX_PER_LB:
+        thermox_per_lb = support_costs.get("thermox_per_lb", thermox_per_lb)
+    if incoming_per_ft3 == DEFAULT_INCOMING_PER_FT3:
+        incoming_per_ft3 = support_costs.get("incoming_fee_per_ft3", incoming_per_ft3)
 
     # Salvage value of metal per lb catalyst
     v_metal = (1 - l_metal_use) * (1 - l_metal_ref) * metal_loading * metal_spot_price
