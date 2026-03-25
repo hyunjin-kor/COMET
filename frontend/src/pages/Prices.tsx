@@ -1,7 +1,13 @@
 import { useEffect, useState } from 'react';
 import {
-  XAxis, YAxis, Tooltip, ResponsiveContainer,
-  CartesianGrid, ReferenceLine, Area, AreaChart,
+  Area,
+  AreaChart,
+  CartesianGrid,
+  ReferenceLine,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from 'recharts';
 import { fetchPrices, type MetalPrice } from '../lib/api';
 
@@ -9,7 +15,12 @@ type HistoryPoint = { date: string; price: number; open: number; high: number; l
 type Period = '1mo' | '3mo' | '6mo' | '1y' | '2y' | '5y';
 
 const PERIOD_LABELS: Record<Period, string> = {
-  '1mo': '1M', '3mo': '3M', '6mo': '6M', '1y': '1Y', '2y': '2Y', '5y': '5Y',
+  '1mo': '1M',
+  '3mo': '3M',
+  '6mo': '6M',
+  '1y': '1Y',
+  '2y': '2Y',
+  '5y': '5Y',
 };
 
 const GROUP_ORDER = ['PGM', 'Precious', 'Base'];
@@ -20,11 +31,20 @@ const GROUPS: Record<string, { title: string; subtitle: string; symbols: string[
 };
 
 const METAL_COLORS: Record<string, string> = {
-  Pt: '#818cf8', Pd: '#6366f1', Rh: '#a78bfa',
-  Ru: '#c084fc', Ir: '#e879f9',
-  Au: '#fbbf24', Ag: '#94a3b8',
-  Ni: '#34d399', Co: '#2dd4bf', Cu: '#fb923c',
-  Al: '#60a5fa', Mo: '#a3a3a3', W: '#78716c', Fe: '#f87171',
+  Pt: '#818cf8',
+  Pd: '#6366f1',
+  Rh: '#a78bfa',
+  Ru: '#c084fc',
+  Ir: '#e879f9',
+  Au: '#fbbf24',
+  Ag: '#94a3b8',
+  Ni: '#34d399',
+  Co: '#2dd4bf',
+  Cu: '#fb923c',
+  Al: '#60a5fa',
+  Mo: '#a3a3a3',
+  W: '#78716c',
+  Fe: '#f87171',
 };
 
 function fmtPrice(price: number | null) {
@@ -34,21 +54,48 @@ function fmtPrice(price: number | null) {
   return `$${price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })}`;
 }
 
-function LiveBadge({ isLive }: { isLive: boolean }) {
-  if (isLive) {
-    return (
-      <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-500">
-        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-        LIVE
-      </span>
-    );
+function sourceBadgeStyles(sourceType: MetalPrice['source_type']) {
+  if (sourceType === 'live') {
+    return {
+      text: 'LIVE',
+      className: 'border-emerald-500/20 bg-emerald-500/10 text-emerald-600',
+      dot: 'bg-emerald-400 animate-pulse',
+    };
   }
+  if (sourceType === 'indexed') {
+    return {
+      text: 'INDEXED',
+      className: 'border-amber-200 bg-amber-50 text-amber-700',
+      dot: 'bg-amber-400',
+    };
+  }
+  return {
+    text: 'MANUAL',
+    className: 'border-slate-200 bg-slate-100 text-slate-600',
+    dot: 'bg-slate-400',
+  };
+}
 
+function SourceBadge({ sourceType }: { sourceType: MetalPrice['source_type'] }) {
+  const badge = sourceBadgeStyles(sourceType);
   return (
-    <span className="rounded-full border border-slate-200 bg-slate-100 px-1.5 py-0.5 text-[10px] text-slate-500">
-      REF
+    <span className={`inline-flex items-center gap-1 rounded-full border px-1.5 py-0.5 text-[10px] font-semibold ${badge.className}`}>
+      <span className={`h-1.5 w-1.5 rounded-full ${badge.dot}`} />
+      {badge.text}
     </span>
   );
+}
+
+function sourceSummary(rows: (MetalPrice & { is_live?: boolean })[]) {
+  const liveCount = rows.filter((row) => row.source_type === 'live').length;
+  const indexedCount = rows.filter((row) => row.source_type === 'indexed').length;
+  return `${liveCount} live · ${indexedCount} indexed`;
+}
+
+function sourceDescription(row: MetalPrice) {
+  if (row.source_type === 'live') return row.source;
+  if (row.source_type === 'indexed') return 'CatCost reference + ChemPPI trend adjustment';
+  return 'Manual price input';
 }
 
 export default function Prices() {
@@ -68,8 +115,8 @@ export default function Prices() {
       .then((data) => {
         const rows = data as (MetalPrice & { is_live?: boolean })[];
         setPrices(rows);
-        const live = rows.find((p) => p.fetched_at && p.is_live);
-        if (live?.fetched_at) setLastUpdate(live.fetched_at);
+        const freshest = rows.find((row) => row.fetched_at);
+        if (freshest?.fetched_at) setLastUpdate(freshest.fetched_at);
       })
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -81,10 +128,10 @@ export default function Prices() {
     if (!selected) return;
     setHistLoading(true);
     fetch(`/api/prices/${selected}/history?period=${period}`)
-      .then((r) => r.json())
-      .then((d) => {
-        setHistory(d.history || []);
-        setHistorySource(d.source || null);
+      .then((response) => response.json())
+      .then((payload) => {
+        setHistory(payload.history || []);
+        setHistorySource(payload.source || null);
       })
       .catch(() => {
         setHistory([]);
@@ -99,19 +146,19 @@ export default function Prices() {
       await fetch('/api/prices/refresh', { method: 'POST' });
       load();
       if (selected) {
-        const r = await fetch(`/api/prices/${selected}/history?period=${period}`);
-        const d = await r.json();
-        setHistory(d.history || []);
-        setHistorySource(d.source || null);
+        const response = await fetch(`/api/prices/${selected}/history?period=${period}`);
+        const payload = await response.json();
+        setHistory(payload.history || []);
+        setHistorySource(payload.source || null);
       }
     } catch {
-      // Ignore refresh failures in the UI. Cards will keep the last stored values.
+      // Keep the current snapshot if refresh fails.
     } finally {
       setRefreshing(false);
     }
   };
 
-  const priceMap = Object.fromEntries(prices.map((p) => [p.symbol, p]));
+  const priceMap = Object.fromEntries(prices.map((row) => [row.symbol, row]));
   const pctChange = history.length >= 2
     ? ((history[history.length - 1].price - history[0].price) / history[0].price) * 100
     : null;
@@ -133,9 +180,10 @@ export default function Prices() {
           <h2 className="text-xl font-bold text-slate-800">Metal Prices</h2>
           <p className="mt-0.5 text-sm text-slate-400">
             {lastUpdate
-              ? `Live market feeds · Updated ${new Date(lastUpdate).toLocaleTimeString()}`
-              : 'Reference prices · CatCost 2018 + ChemPPI escalation'}
+              ? `Feeds and indexed benchmarks · Updated ${new Date(lastUpdate).toLocaleTimeString()}`
+              : 'Live feeds and indexed benchmarks'}
           </p>
+          <p className="mt-1 text-xs text-slate-400">{sourceSummary(prices)}</p>
         </div>
         <button
           onClick={handleRefresh}
@@ -161,7 +209,6 @@ export default function Prices() {
             </div>
             <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
               {items.map((priceRow) => {
-                const isLive = !!(priceRow as MetalPrice & { is_live?: boolean }).is_live;
                 const isSelected = selected === priceRow.symbol;
                 const accent = METAL_COLORS[priceRow.symbol] || '#64748b';
                 return (
@@ -181,7 +228,7 @@ export default function Prices() {
                       >
                         {priceRow.symbol}
                       </span>
-                      <LiveBadge isLive={isLive} />
+                      <SourceBadge sourceType={priceRow.source_type} />
                     </div>
 
                     <div className="mb-2 truncate text-[11px] text-slate-400">{priceRow.name}</div>
@@ -193,11 +240,11 @@ export default function Prices() {
                       {priceRow.unit}
                     </div>
                     <div className={`mt-2 truncate text-[10px] ${isSelected ? 'text-slate-500' : 'text-slate-400'}`}>
-                      {isLive ? priceRow.source : 'CatCost reference + ChemPPI'}
+                      {sourceDescription(priceRow)}
                     </div>
 
                     {!isSelected && (
-                      <div className="mt-1.5 text-[10px] font-medium text-blue-400">view chart →</div>
+                      <div className="mt-1.5 text-[10px] font-medium text-blue-400">view history →</div>
                     )}
                   </button>
                 );
@@ -263,7 +310,7 @@ export default function Prices() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
                 <span className="text-sm">No history data for {selected}</span>
-                <span className="text-xs">No stored time-series found for this symbol yet.</span>
+                <span className="text-xs">This symbol has no stored trend series yet.</span>
               </div>
             ) : (
               <ResponsiveContainer width="100%" height={260}>
@@ -330,7 +377,7 @@ export default function Prices() {
                 </div>
               ))}
               <div className="ml-auto self-center text-xs text-slate-400">
-                {(historySource || 'Price feed')} · {history.length} pts
+                {(historySource || 'Stored series')} · {history.length} pts
               </div>
             </div>
           )}

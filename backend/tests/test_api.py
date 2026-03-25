@@ -68,6 +68,8 @@ class TestPrices:
         symbols = {p["symbol"] for p in data}
         assert "Pt" in symbols
         assert "Ni" in symbols
+        assert all("source_type" in p for p in data)
+        assert all(p["source_type"] in {"live", "indexed"} for p in data)
 
     def test_get_single_price(self, client):
         resp = client.get("/api/prices/Pt")
@@ -75,6 +77,7 @@ class TestPrices:
         data = resp.json()
         assert data["symbol"] == "Pt"
         assert data["price"] > 0
+        assert data["source_type"] in {"live", "indexed"}
 
     def test_get_unknown_metal(self, client):
         resp = client.get("/api/prices/Xx")
