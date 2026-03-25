@@ -61,7 +61,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="CatPrice API",
     description="Real-time metal price based catalyst manufacturing cost estimation",
-    version="0.1.0",
+    version="1.0.0",
     lifespan=lifespan,
 )
 
@@ -91,7 +91,7 @@ def health():
     """Server health check."""
     return {
         "status": "ok",
-        "version": "0.1.0",
+        "version": "1.0.0",
         "last_price_update": _last_price_update.isoformat() if _last_price_update else None,
         "scheduler_running": scheduler.running,
     }
