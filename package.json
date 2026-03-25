@@ -1,6 +1,6 @@
 {
   "name": "catprice",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Real-time metal price based catalyst manufacturing cost estimator",
   "main": "electron/main.js",
   "author": "CatPrice Contributors",
@@ -33,7 +33,12 @@
       {
         "from": "backend",
         "to": "backend",
-        "filter": ["**/*", "!__pycache__/**", "!tests/**", "!*.pyc"]
+        "filter": [
+          "**/*",
+          "!__pycache__/**",
+          "!tests/**",
+          "!*.pyc"
+        ]
       },
       {
         "from": "backend/data",
@@ -42,7 +47,12 @@
     ],
     "win": {
       "target": [
-        { "target": "nsis", "arch": ["x64"] }
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
       ],
       "icon": "frontend/public/icon.ico",
       "requestedExecutionLevel": "asInvoker"
