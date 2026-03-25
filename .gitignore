@@ -20,6 +20,7 @@ venv/
 *.swp
 
 # Frontend
+node_modules/
 frontend/node_modules/
 frontend/dist/
 
@@ -40,3 +41,5 @@ CatCost_v1-1-1/
 
 # Misc
 *.txt
+tmp/
+backend/data/_catcost_raw_extract.json

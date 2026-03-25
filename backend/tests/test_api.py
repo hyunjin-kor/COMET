@@ -92,7 +92,8 @@ class TestMaterials:
         resp = client.get("/api/materials?category=metal")
         assert resp.status_code == 200
         data = resp.json()
-        assert all(m["category"] == "metal" for m in data)
+        assert data
+        assert all("metal" in (m["category"] or "").lower() for m in data)
 
     def test_search(self, client):
         resp = client.get("/api/materials?q=plat")
@@ -116,4 +117,4 @@ class TestMaterials:
         resp = client.get("/api/materials/steps")
         assert resp.status_code == 200
         data = resp.json()
-        assert "mixer_slurry" in data
+        assert any(step["key"] == "mixer_slurry" for step in data)

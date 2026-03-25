@@ -1,0 +1,118 @@
+{
+  "id": "fcc_catalyst_usy_w_re",
+  "name": "FCC Catalyst (USY w/ RE)",
+  "description": "A modern FCC catalyst based on ultrastable zeolite Y with rare earth at 200-ton scale.",
+  "category": "FCC/Zeolite",
+  "example_catalysts": [
+    "USY FCC catalyst",
+    "REY FCC catalyst"
+  ],
+  "steps": [
+    "reactor_simple",
+    "crystallizer",
+    "crystallizer",
+    "filter_rotary_vacuum",
+    "filter_rotary_vacuum",
+    "filter_rotary_vacuum",
+    "filter_rotary_vacuum",
+    "reactor_simple",
+    "reactor_simple",
+    "reactor_simple",
+    "reactor_simple",
+    "kiln_continuous_indirect",
+    "reactor_multistep",
+    "filter_rotary_vacuum",
+    "reactor_multistep",
+    "mixer_slurry",
+    "mixer_slurry",
+    "dryer_spray",
+    "reactor_simple",
+    "reactor_simple",
+    "reactor_simple",
+    "reactor_simple",
+    "filter_rotary_vacuum",
+    "filter_rotary_vacuum",
+    "dryer_rotary_100_300C"
+  ],
+  "step_quantities": [
+    {
+      "step": "reactor_simple",
+      "template_step_name": "Reactor, simple (mixing)",
+      "quantity": 1.0,
+      "note": "-"
+    },
+    {
+      "step": "crystallizer",
+      "template_step_name": "Crystallizer",
+      "quantity": 2.0,
+      "note": "-"
+    },
+    {
+      "step": "filter_rotary_vacuum",
+      "template_step_name": "Filter, rotary vacuum",
+      "quantity": 4.0,
+      "note": "Substitute with plate and frame at small scale"
+    },
+    {
+      "step": "reactor_simple",
+      "template_step_name": "Reactor, simple (mixing)",
+      "quantity": 4.0,
+      "note": "-"
+    },
+    {
+      "step": "kiln_continuous_indirect",
+      "template_step_name": "Kiln, continuous indirect (300–1290 °C)",
+      "quantity": 1.0,
+      "note": "A.k.a. calciner. Sub with batch kiln at small scale"
+    },
+    {
+      "step": "reactor_multistep",
+      "template_step_name": "Reactor, multistep",
+      "quantity": 1.0,
+      "note": "-"
+    },
+    {
+      "step": "filter_rotary_vacuum",
+      "template_step_name": "Filter, rotary vacuum",
+      "quantity": 1.0,
+      "note": "Substitute with plate and frame at small scale"
+    },
+    {
+      "step": "reactor_multistep",
+      "template_step_name": "Reactor, multistep",
+      "quantity": 1.0,
+      "note": "-"
+    },
+    {
+      "step": "mixer_slurry",
+      "template_step_name": "Mixer, slurry",
+      "quantity": 2.0,
+      "note": "Muller"
+    },
+    {
+      "step": "dryer_spray",
+      "template_step_name": "Dryer, spray",
+      "quantity": 1.0,
+      "note": "Substitute with rotary dryer at small scale"
+    },
+    {
+      "step": "reactor_simple",
+      "template_step_name": "Reactor, simple (mixing)",
+      "quantity": 4.0,
+      "note": "-"
+    },
+    {
+      "step": "filter_rotary_vacuum",
+      "template_step_name": "Filter, rotary vacuum",
+      "quantity": 2.0,
+      "note": "Substitute with plate and frame at small scale"
+    },
+    {
+      "step": "dryer_rotary_100_300C",
+      "template_step_name": "Dryer, rotary (100–300 °C)",
+      "quantity": 1.0,
+      "note": "For higher temp use kiln"
+    }
+  ],
+  "source": "CatCost_v1-1-1.xlsx, 3a Step Method sheet"
+}

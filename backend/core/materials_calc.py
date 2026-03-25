@@ -127,6 +127,65 @@ def precursor_price_from_metal(
     return metal_spot_price / metal_fraction * conversion_markup
 
 
+def calculate_materials_cost_multi(components: list[dict]) -> dict:
+    """Calculate total materials cost for a multi-component catalyst formulation.
+
+    For each component the contribution per lb of finished catalyst is::
+
+        cost = (wt_pct / total_wt) × price_per_lb × precursor_markup
+
+    The precursor_markup captures the additional cost of using a metal salt /
+    compound precursor instead of the pure metal (typically 1.0–1.10).
+
+    Args:
+        components: List of component dicts, each with:
+            - role (str): "active_metal" | "promoter" | "support"
+            - name (str): element symbol or material name
+            - wt_pct (float): weight percent (> 0)
+            - price_per_lb (float): price in $/lb
+            - precursor_markup (float, optional): default 1.0
+
+    Returns:
+        Dict with ``total_materials_cost_per_lb`` and per-component ``components`` list.
+
+    Raises:
+        ValueError: if components is empty or total wt_pct is zero.
+    """
+    if not components:
+        raise ValueError("components list is empty")
+    total_wt = sum(float(c["wt_pct"]) for c in components)
+    if total_wt <= 0:
+        raise ValueError("Total weight percent must be positive")
+
+    breakdown: list[dict] = []
+    total_cost = 0.0
+
+    for c in components:
+        wt_frac = float(c["wt_pct"]) / total_wt
+        markup = float(c.get("precursor_markup", 1.0))
+        price = float(c["price_per_lb"])
+        cost = wt_frac * price * markup
+        total_cost += cost
+        breakdown.append({
+            "role": c["role"],
+            "name": c["name"],
+            "wt_pct": round(float(c["wt_pct"]), 3),
+            "wt_frac": round(wt_frac, 6),
+            "price_per_lb": round(price, 4),
+            "precursor_markup": round(markup, 4),
+            "cost_per_lb_cat": round(cost, 6),
+            "cost_pct": 0.0,  # filled below
+        })
+
+    for item in breakdown:
+        item["cost_pct"] = round(item["cost_per_lb_cat"] / total_cost * 100, 1) if total_cost > 0 else 0.0
+
+    return {
+        "components": breakdown,
+        "total_materials_cost_per_lb": round(total_cost, 6),
+    }
+
+
 def calculate_materials_cost(
     metal_price_per_lb: float,
     metal_loading_wt_pct: float,

@@ -1,34 +1,329 @@
 {
-  "metadata": {
-    "description": "Chemical Engineering Plant Cost Index (CEPCI)",
-    "base_period": "1957-59 = 100",
-    "source": "Chemical Engineering Magazine (publicly available annual values)"
-  },
+  "version": "1.1.1",
+  "source": "CatCost_v1-1-1.xlsx, CEPCI sheet",
+  "description": "Chemical Engineering Plant Cost Index and related indices",
   "annual": {
-    "2000": 394.1,
-    "2001": 394.3,
-    "2002": 395.6,
-    "2003": 402.0,
-    "2004": 444.2,
-    "2005": 468.2,
-    "2006": 499.6,
-    "2007": 525.4,
-    "2008": 575.4,
-    "2009": 521.9,
-    "2010": 550.8,
-    "2011": 585.7,
-    "2012": 584.6,
-    "2013": 567.3,
-    "2014": 576.1,
-    "2015": 556.8,
-    "2016": 541.7,
-    "2017": 567.5,
-    "2018": 603.1,
-    "2019": 607.5,
-    "2020": 596.2,
-    "2021": 708.8,
-    "2022": 816.0,
-    "2023": 797.9,
-    "2024": 785.0
+    "1980": {
+      "CEPCI": 261.0,
+      "MS": 675.0,
+      "NF": 823.0,
+      "ENR": 303.0,
+      "CEPCI_equip": null
+    },
+    "1981": {
+      "CEPCI": 297.0,
+      "MS": 745.0,
+      "NF": 904.0,
+      "ENR": 330.0,
+      "CEPCI_equip": null
+    },
+    "1982": {
+      "CEPCI": 314.0,
+      "MS": 774.0,
+      "NF": 977.0,
+      "ENR": 357.0,
+      "CEPCI_equip": null
+    },
+    "1983": {
+      "CEPCI": 317.0,
+      "MS": 786.0,
+      "NF": 1026.0,
+      "ENR": 380.0,
+      "CEPCI_equip": null
+    },
+    "1984": {
+      "CEPCI": 323.0,
+      "MS": 806.0,
+      "NF": 1061.0,
+      "ENR": 387.0,
+      "CEPCI_equip": null
+    },
+    "1985": {
+      "CEPCI": 325.0,
+      "MS": 813.0,
+      "NF": 1074.0,
+      "ENR": 392.0,
+      "CEPCI_equip": null
+    },
+    "1986": {
+      "CEPCI": 318.0,
+      "MS": 817.0,
+      "NF": 1090.0,
+      "ENR": 401.0,
+      "CEPCI_equip": null
+    },
+    "1987": {
+      "CEPCI": 324.0,
+      "MS": 830.0,
+      "NF": 1122.0,
+      "ENR": 412.0,
+      "CEPCI_equip": null
+    },
+    "1988": {
+      "CEPCI": 343.0,
+      "MS": 870.0,
+      "NF": 1165.0,
+      "ENR": 422.0,
+      "CEPCI_equip": null
+    },
+    "1989": {
+      "CEPCI": 355.0,
+      "MS": 914.0,
+      "NF": 1196.0,
+      "ENR": 429.0,
+      "CEPCI_equip": null
+    },
+    "1990": {
+      "CEPCI": 358.0,
+      "MS": 935.0,
+      "NF": 1226.0,
+      "ENR": 441.0,
+      "CEPCI_equip": null
+    },
+    "1991": {
+      "CEPCI": 361.0,
+      "MS": 952.0,
+      "NF": 1253.0,
+      "ENR": 450.0,
+      "CEPCI_equip": null
+    },
+    "1992": {
+      "CEPCI": 358.0,
+      "MS": 960.0,
+      "NF": 1277.0,
+      "ENR": 464.0,
+      "CEPCI_equip": null
+    },
+    "1993": {
+      "CEPCI": 359.0,
+      "MS": 975.0,
+      "NF": 1311.0,
+      "ENR": 485.0,
+      "CEPCI_equip": null
+    },
+    "1994": {
+      "CEPCI": 368.0,
+      "MS": 1000.0,
+      "NF": 1350.0,
+      "ENR": 503.0,
+      "CEPCI_equip": null
+    },
+    "1995": {
+      "CEPCI": 381.0,
+      "MS": 1037.0,
+      "NF": 1392.0,
+      "ENR": 509.0,
+      "CEPCI_equip": null
+    },
+    "1996": {
+      "CEPCI": 382.0,
+      "MS": 1051.0,
+      "NF": 1419.0,
+      "ENR": 524.0,
+      "CEPCI_equip": 428.3
+    },
+    "1997": {
+      "CEPCI": 387.0,
+      "MS": 1068.0,
+      "NF": 1449.0,
+      "ENR": 542.0,
+      "CEPCI_equip": null
+    },
+    "1998": {
+      "CEPCI": 390.0,
+      "MS": 1075.0,
+      "NF": 1478.0,
+      "ENR": 551.0,
+      "CEPCI_equip": null
+    },
+    "1999": {
+      "CEPCI": 391.0,
+      "MS": 1083.0,
+      "NF": 1497.0,
+      "ENR": 564.0,
+      "CEPCI_equip": null
+    },
+    "2000": {
+      "CEPCI": 394.0,
+      "MS": 1110.0,
+      "NF": 1543.0,
+      "ENR": 579.0,
+      "CEPCI_equip": null
+    },
+    "2001": {
+      "CEPCI": 394.0,
+      "MS": 1109.0,
+      "NF": 1580.0,
+      "ENR": 590.0,
+      "CEPCI_equip": null
+    },
+    "2002": {
+      "CEPCI": 396.0,
+      "MS": 1121.0,
+      "NF": 1642.0,
+      "ENR": 609.0,
+      "CEPCI_equip": null
+    },
+    "2003": {
+      "CEPCI": 402.0,
+      "MS": 1143.0,
+      "NF": 1710.0,
+      "ENR": 623.0,
+      "CEPCI_equip": null
+    },
+    "2004": {
+      "CEPCI": 444.0,
+      "MS": 1202.0,
+      "NF": 1834.0,
+      "ENR": 662.0,
+      "CEPCI_equip": null
+    },
+    "2005": {
+      "CEPCI": 468.0,
+      "MS": 1295.0,
+      "NF": 1919.0,
+      "ENR": 693.0,
+      "CEPCI_equip": null
+    },
+    "2006": {
+      "CEPCI": 500.0,
+      "MS": 1365.0,
+      "NF": 2008.0,
+      "ENR": 722.0,
+      "CEPCI_equip": null
+    },
+    "2007": {
+      "CEPCI": 525.0,
+      "MS": 1399.0,
+      "NF": 2107.0,
+      "ENR": 742.0,
+      "CEPCI_equip": null
+    },
+    "2008": {
+      "CEPCI": 575.0,
+      "MS": 1478.0,
+      "NF": 2251.0,
+      "ENR": 774.0,
+      "CEPCI_equip": null
+    },
+    "2009": {
+      "CEPCI": 522.0,
+      "MS": 1446.0,
+      "NF": 2218.0,
+      "ENR": 798.0,
+      "CEPCI_equip": null
+    },
+    "2010": {
+      "CEPCI": 551.0,
+      "MS": 1477.0,
+      "NF": 2338.0,
+      "ENR": 819.0,
+      "CEPCI_equip": null
+    },
+    "2011": {
+      "CEPCI": 586.0,
+      "MS": 1537.0,
+      "NF": 2436.0,
+      "ENR": 844.0,
+      "CEPCI_equip": null
+    },
+    "2012": {
+      "CEPCI": 585.0,
+      "MS": null,
+      "NF": 2465.0,
+      "ENR": 867.0,
+      "CEPCI_equip": null
+    },
+    "2013": {
+      "CEPCI": 567.0,
+      "MS": null,
+      "NF": 2490.0,
+      "ENR": 889.0,
+      "CEPCI_equip": null
+    },
+    "2014": {
+      "CEPCI": 576.1,
+      "MS": null,
+      "NF": null,
+      "ENR": null,
+      "CEPCI_equip": 699.4
+    },
+    "2015": {
+      "CEPCI": 556.8,
+      "MS": null,
+      "NF": null,
+      "ENR": null,
+      "CEPCI_equip": 670.3
+    },
+    "2016": {
+      "CEPCI": 541.7,
+      "MS": null,
+      "NF": null,
+      "ENR": null,
+      "CEPCI_equip": 646.7
+    },
+    "2017": {
+      "CEPCI": 567.5,
+      "MS": null,
+      "NF": null,
+      "ENR": null,
+      "CEPCI_equip": 684.4
+    },
+    "2018": {
+      "CEPCI": 603.1,
+      "MS": null,
+      "NF": null,
+      "ENR": null,
+      "CEPCI_equip": 734.1
+    },
+    "2019": {
+      "CEPCI": 607.5,
+      "MS": null,
+      "NF": null,
+      "ENR": null,
+      "CEPCI_equip": 740.0
+    },
+    "2020": {
+      "CEPCI": 596.2,
+      "MS": null,
+      "NF": null,
+      "ENR": null,
+      "CEPCI_equip": 722.7
+    },
+    "2021": {
+      "CEPCI": 708.0,
+      "MS": null,
+      "NF": null,
+      "ENR": null,
+      "CEPCI_equip": 880.6
+    },
+    "2022": {
+      "CEPCI": 816.0,
+      "MS": null,
+      "NF": null,
+      "ENR": null,
+      "CEPCI_equip": 1035.1
+    },
+    "2023": {
+      "CEPCI": 797.9,
+      "MS": null,
+      "NF": null,
+      "ENR": null,
+      "CEPCI_equip": 1005.0
+    },
+    "2024": {
+      "CEPCI": 796.16,
+      "MS": null,
+      "NF": null,
+      "ENR": null,
+      "CEPCI_equip": 999.057
+    },
+    "2025": {
+      "CEPCI": 786.7,
+      "MS": null,
+      "NF": null,
+      "ENR": null,
+      "CEPCI_equip": 984.0
+    }
   }
 }
