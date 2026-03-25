@@ -1,17 +1,45 @@
 @import "tailwindcss";
 
+:root {
+  color: #0f172a;
+  background:
+    radial-gradient(circle at top left, rgba(59, 130, 246, 0.14), transparent 28%),
+    linear-gradient(180deg, #f8fafc 0%, #eef4fb 100%);
+  font-family: "Aptos", "Segoe UI", "Noto Sans KR", sans-serif;
+}
+
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(59, 130, 246, 0.14), transparent 28%),
+    linear-gradient(180deg, #f8fafc 0%, #eef4fb 100%);
+  font-family: "Aptos", "Segoe UI", "Noto Sans KR", sans-serif;
   -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100vh;
 }
 
 /* ── Shared utility classes ─────────────────────────────────────────────── */
 
 .input-base {
-  @apply rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-800
-         focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400
-         hover:border-slate-300 transition-colors;
+  @apply w-full min-w-0 rounded-2xl border border-slate-200/90 bg-white px-3.5 py-2 text-sm text-slate-800
+         shadow-[inset_0_1px_0_rgba(255,255,255,0.75),0_1px_2px_rgba(15,23,42,0.04)]
+         focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-400
+         hover:border-slate-300 transition-all;
+}
+
+.surface-card {
+  @apply rounded-[28px] border border-slate-200/90 bg-white/88
+         shadow-[0_14px_40px_rgba(15,23,42,0.08)]
+         backdrop-blur-sm;
+}
+
+.section-kicker {
+  @apply inline-flex items-center gap-2 rounded-full border border-blue-200/80 bg-blue-50/90 px-3 py-1
+         text-[11px] font-semibold uppercase tracking-[0.18em] text-blue-700;
 }
 
 /* Scrollbar styling for tables */

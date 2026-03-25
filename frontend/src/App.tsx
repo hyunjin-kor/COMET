@@ -11,7 +11,7 @@ export default function App() {
   return (
     <UnitProvider>
       <BrowserRouter>
-        <div className="flex min-h-screen bg-slate-50">
+        <div className="flex min-h-screen bg-transparent text-slate-900">
           <Sidebar />
           <main className="flex-1 overflow-auto min-w-0">
             <Routes>
