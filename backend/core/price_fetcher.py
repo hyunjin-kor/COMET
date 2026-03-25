@@ -1,17 +1,13 @@
-"""Metal price fetcher — real-time via yfinance (Yahoo Finance futures).
-
-Primary source  : yfinance (FREE, no API key) — Pt, Pd, Au, Ag, Cu, Al
-Optional upgrade: Metals.Dev / MetalpriceAPI when API keys are set in .env
-Reference fallback: CatCost 2018 reference prices + ChemPPI escalation
-"""
+"""Metal price fetcher with live market feeds and CatCost fallbacks."""
 
 from __future__ import annotations
 
 import asyncio
+import html as html_lib
 import json
 import logging
 import re
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 import httpx
@@ -20,51 +16,81 @@ from backend.config import settings
 
 logger = logging.getLogger(__name__)
 _DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+_HTTP_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/122 Safari/537.36",
+    "Accept-Language": "en-US,en;q=0.9",
+}
 
-# ── Yahoo Finance ticker map ──────────────────────────────────────────────────
 # (symbol, ticker, name, unit, price_factor)
-YFINANCE_METALS: list[tuple[str, str, str, str, float]] = [
-    ("Pt", "PL=F",  "Platinum",  "$/troy_oz", 1.0),
-    ("Pd", "PA=F",  "Palladium", "$/troy_oz", 1.0),
-    ("Au", "GC=F",  "Gold",      "$/troy_oz", 1.0),
-    ("Ag", "SI=F",  "Silver",    "$/troy_oz", 1.0),
-    ("Cu", "HG=F",  "Copper",    "$/lb",      1.0),
-    # ALI=F (COMEX Aluminum) is quoted in $/MT — convert to $/lb
-    ("Al", "ALI=F", "Aluminum",  "$/lb",      1 / 2204.62),
+YAHOO_METALS: list[tuple[str, str, str, str, float]] = [
+    ("Pt", "PL=F", "Platinum", "$/troy_oz", 1.0),
+    ("Pd", "PA=F", "Palladium", "$/troy_oz", 1.0),
+    ("Au", "GC=F", "Gold", "$/troy_oz", 1.0),
+    ("Ag", "SI=F", "Silver", "$/troy_oz", 1.0),
+    ("Cu", "HG=F", "Copper", "$/lb", 1.0),
+    # ALI=F is quoted in USD per metric ton.
+    ("Al", "ALI=F", "Aluminum", "$/lb", 1 / 2204.62),
 ]
 
-# Metals without free live data — covered by paid APIs or reference escalation
 _NAMES: dict[str, str] = {
-    "Au": "Gold",       "Ag": "Silver",     "Pt": "Platinum",
-    "Pd": "Palladium",  "Rh": "Rhodium",    "Ir": "Iridium",
-    "Ru": "Ruthenium",  "Ni": "Nickel",     "Co": "Cobalt",
-    "Cu": "Copper",     "Al": "Aluminum",   "Mo": "Molybdenum",
-    "W":  "Tungsten",   "Fe": "Iron",
+    "Au": "Gold",
+    "Ag": "Silver",
+    "Pt": "Platinum",
+    "Pd": "Palladium",
+    "Rh": "Rhodium",
+    "Ir": "Iridium",
+    "Ru": "Ruthenium",
+    "Ni": "Nickel",
+    "Co": "Cobalt",
+    "Cu": "Copper",
+    "Al": "Aluminum",
+    "Mo": "Molybdenum",
+    "W": "Tungsten",
+    "Fe": "Iron",
 }
 _UNITS: dict[str, str] = {
-    "Au": "$/troy_oz", "Ag": "$/troy_oz", "Pt": "$/troy_oz",
-    "Pd": "$/troy_oz", "Rh": "$/troy_oz", "Ir": "$/troy_oz",
-    "Ru": "$/troy_oz", "Ni": "$/lb",      "Co": "$/lb",
-    "Cu": "$/lb",      "Al": "$/lb",      "Mo": "$/lb",
-    "W":  "$/lb",      "Fe": "$/lb",
+    "Au": "$/troy_oz",
+    "Ag": "$/troy_oz",
+    "Pt": "$/troy_oz",
+    "Pd": "$/troy_oz",
+    "Rh": "$/troy_oz",
+    "Ir": "$/troy_oz",
+    "Ru": "$/troy_oz",
+    "Ni": "$/lb",
+    "Co": "$/lb",
+    "Cu": "$/lb",
+    "Al": "$/lb",
+    "Mo": "$/lb",
+    "W": "$/lb",
+    "Fe": "$/lb",
 }
 
-# CatCost 2018 reference prices (basis for ChemPPI escalation)
+# CatCost 2018 reference prices, escalated with ChemPPI when live data is unavailable.
 _CATCOST_REF: dict[str, float] = {
-    "Au": 1200.8, "Ir": 1440.0, "Pd":  975.0, "Pt":  793.5,
-    "Rh": 2390.0, "Ru":  260.0, "Ag":   14.58,
-    "Al":    0.96, "Co":  29.6, "Cu":    2.75,
-    "Fe":    0.0475, "Mo": 12.0, "Ni":   6.08, "W":  24.04,
+    "Au": 1200.8,
+    "Ir": 1440.0,
+    "Pd": 975.0,
+    "Pt": 793.5,
+    "Rh": 2390.0,
+    "Ru": 260.0,
+    "Ag": 14.58,
+    "Al": 0.96,
+    "Co": 29.6,
+    "Cu": 2.75,
+    "Fe": 0.0475,
+    "Mo": 12.0,
+    "Ni": 6.08,
+    "W": 24.04,
 }
 
 
 def _escalate(price_2018: float) -> float:
-    """Scale a 2018 price to today using ChemPPI index."""
+    """Scale a 2018 price to today using the ChemPPI index."""
     try:
         with open(_DATA_DIR / "chemppi.json", encoding="utf-8") as f:
             annual = json.load(f).get("annual", {})
         base = float(annual.get("2018", 0))
-        latest_year = max(int(y) for y in annual if annual[y])
+        latest_year = max(int(year) for year in annual if annual[year])
         latest = float(annual.get(str(latest_year), 0))
         if base and latest:
             return round(price_2018 * (latest / base), 4)
@@ -73,49 +99,115 @@ def _escalate(price_2018: float) -> float:
     return price_2018
 
 
-# ── yfinance (primary free source) ───────────────────────────────────────────
+def _latest_non_null(values: list[float | None]) -> float | None:
+    for value in reversed(values):
+        if value is not None:
+            return float(value)
+    return None
 
-def _yfinance_sync() -> dict[str, dict]:
-    try:
-        import yfinance as yf  # type: ignore
-    except ImportError:
-        logger.warning("yfinance not installed — pip install yfinance")
+
+def _timestamp_to_iso(timestamp: int | None) -> str:
+    if timestamp:
+        return datetime.fromtimestamp(timestamp, tz=timezone.utc).replace(tzinfo=None).isoformat()
+    return datetime.now(timezone.utc).replace(tzinfo=None).isoformat()
+
+
+def _extract_yahoo_quote(payload: dict, factor: float) -> tuple[float | None, str]:
+    result = ((payload.get("chart") or {}).get("result") or [None])[0] or {}
+    meta = result.get("meta") or {}
+    indicators = result.get("indicators") or {}
+    quote_block = (indicators.get("quote") or [{}])[0]
+    closes = quote_block.get("close") or []
+
+    raw_price = meta.get("regularMarketPrice")
+    if raw_price in (None, 0):
+        raw_price = _latest_non_null(closes)
+    if raw_price in (None, 0):
+        return None, datetime.now(timezone.utc).replace(tzinfo=None).isoformat()
+
+    market_ts = meta.get("regularMarketTime") or meta.get("currentTradingPeriod", {}).get("regular", {}).get("end")
+    return round(float(raw_price) * factor, 4), _timestamp_to_iso(market_ts)
+
+
+def _extract_yahoo_history(payload: dict, factor: float) -> list[dict]:
+    result = ((payload.get("chart") or {}).get("result") or [None])[0] or {}
+    timestamps = result.get("timestamp") or []
+    indicators = result.get("indicators") or {}
+    quote_block = (indicators.get("quote") or [{}])[0]
+    opens = quote_block.get("open") or []
+    highs = quote_block.get("high") or []
+    lows = quote_block.get("low") or []
+    closes = quote_block.get("close") or []
+
+    history: list[dict] = []
+    for idx, ts in enumerate(timestamps):
+        close = closes[idx] if idx < len(closes) else None
+        if close is None:
+            continue
+        open_ = opens[idx] if idx < len(opens) and opens[idx] is not None else close
+        high = highs[idx] if idx < len(highs) and highs[idx] is not None else close
+        low = lows[idx] if idx < len(lows) and lows[idx] is not None else close
+        history.append({
+            "date": datetime.fromtimestamp(ts, tz=timezone.utc).strftime("%Y-%m-%d"),
+            "price": round(float(close) * factor, 4),
+            "open": round(float(open_) * factor, 4),
+            "high": round(float(high) * factor, 4),
+            "low": round(float(low) * factor, 4),
+        })
+    return history
+
+
+async def _fetch_yahoo_quote(
+    client: httpx.AsyncClient,
+    sym: str,
+    ticker: str,
+    name: str,
+    unit: str,
+    factor: float,
+) -> dict[str, dict]:
+    resp = await client.get(
+        f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}",
+        params={"range": "5d", "interval": "1d", "includePrePost": "false"},
+    )
+    resp.raise_for_status()
+    price, fetched_at = _extract_yahoo_quote(resp.json(), factor)
+    if price is None:
         return {}
-
-    results: dict[str, dict] = {}
-    for sym, ticker, name, unit, factor in YFINANCE_METALS:
-        try:
-            hist = yf.Ticker(ticker).history(period="5d", auto_adjust=True)
-            if hist.empty:
-                continue
-            closes = hist["Close"].dropna()
-            if closes.empty:
-                continue
-            price = round(float(closes.iloc[-1]) * factor, 4)
-            results[sym] = {
-                "name": name, "price": price, "unit": unit,
-                "source": "Yahoo Finance (live)", "ticker": ticker,
-                "fetched_at": datetime.utcnow().isoformat(),
-            }
-        except Exception as e:
-            logger.debug("yfinance %s: %s", sym, e)
-
-    logger.info("yfinance: %d metals — %s", len(results), list(results))
-    return results
+    return {
+        sym: {
+            "name": name,
+            "price": price,
+            "unit": unit,
+            "source": "Yahoo Finance (live)",
+            "ticker": ticker,
+            "fetched_at": fetched_at,
+        }
+    }
 
 
 async def fetch_yfinance() -> dict[str, dict]:
-    loop = asyncio.get_event_loop()
-    return await loop.run_in_executor(None, _yfinance_sync)
+    """Fetch live futures-backed quotes from the Yahoo chart API."""
+    results: dict[str, dict] = {}
+    async with httpx.AsyncClient(timeout=20, headers=_HTTP_HEADERS) as client:
+        tasks = [
+            _fetch_yahoo_quote(client, sym, ticker, name, unit, factor)
+            for sym, ticker, name, unit, factor in YAHOO_METALS
+        ]
+        for item in await asyncio.gather(*tasks, return_exceptions=True):
+            if isinstance(item, Exception):
+                logger.debug("Yahoo Finance fetch failed: %s", item)
+                continue
+            results.update(item)
 
+    logger.info("Yahoo Finance: %d metals -> %s", len(results), list(results))
+    return results
 
-# ── Metals.Dev (optional paid) ───────────────────────────────────────────────
 
 async def fetch_metals_dev() -> dict[str, dict]:
     api_key = settings.metals_dev_api_key
     if not api_key:
         raise ValueError("METALS_DEV_API_KEY not set")
-    async with httpx.AsyncClient(timeout=30) as client:
+    async with httpx.AsyncClient(timeout=30, headers=_HTTP_HEADERS) as client:
         resp = await client.get(
             "https://api.metals.dev/v1/latest",
             params={"api_key": api_key, "currency": "USD", "unit": "toz"},
@@ -123,30 +215,39 @@ async def fetch_metals_dev() -> dict[str, dict]:
         resp.raise_for_status()
         raw = resp.json().get("metals", {})
     name_to_sym = {
-        "gold": "Au", "silver": "Ag", "platinum": "Pt", "palladium": "Pd",
-        "rhodium": "Rh", "iridium": "Ir", "ruthenium": "Ru",
-        "nickel": "Ni", "cobalt": "Co", "copper": "Cu",
-        "aluminum": "Al", "molybdenum": "Mo", "tungsten": "W",
+        "gold": "Au",
+        "silver": "Ag",
+        "platinum": "Pt",
+        "palladium": "Pd",
+        "rhodium": "Rh",
+        "iridium": "Ir",
+        "ruthenium": "Ru",
+        "nickel": "Ni",
+        "cobalt": "Co",
+        "copper": "Cu",
+        "aluminum": "Al",
+        "molybdenum": "Mo",
+        "tungsten": "W",
     }
     results: dict[str, dict] = {}
     for raw_name, sym in name_to_sym.items():
         val = raw.get(raw_name)
         if val:
             results[sym] = {
-                "name": _NAMES.get(sym, sym), "price": round(float(val), 4),
-                "unit": _UNITS.get(sym, "$/troy_oz"), "source": "Metals.Dev",
-                "fetched_at": datetime.utcnow().isoformat(),
+                "name": _NAMES.get(sym, sym),
+                "price": round(float(val), 4),
+                "unit": _UNITS.get(sym, "$/troy_oz"),
+                "source": "Metals.Dev",
+                "fetched_at": datetime.now(timezone.utc).replace(tzinfo=None).isoformat(),
             }
     return results
 
-
-# ── MetalpriceAPI (optional paid) ────────────────────────────────────────────
 
 async def fetch_metalprice_api() -> dict[str, dict]:
     api_key = settings.metalprice_api_key
     if not api_key:
         raise ValueError("METALPRICE_API_KEY not set")
-    async with httpx.AsyncClient(timeout=30) as client:
+    async with httpx.AsyncClient(timeout=30, headers=_HTTP_HEADERS) as client:
         resp = await client.get(
             "https://api.metalpriceapi.com/v1/latest",
             params={"api_key": api_key, "base": "USD"},
@@ -161,55 +262,40 @@ async def fetch_metalprice_api() -> dict[str, dict]:
             results[sym] = {
                 "name": _NAMES.get(sym, sym),
                 "price": round(1.0 / float(rate), 4),
-                "unit": "$/troy_oz", "source": "MetalpriceAPI",
-                "fetched_at": datetime.utcnow().isoformat(),
+                "unit": "$/troy_oz",
+                "source": "MetalpriceAPI",
+                "fetched_at": datetime.now(timezone.utc).replace(tzinfo=None).isoformat(),
             }
     return results
 
 
-# ── Kitco scraper (Rh — free, scraping permitted per robots.txt) ─────────────
-
 async def fetch_kitco() -> dict[str, dict]:
-    """Scrape Kitco precious-metals page for Rhodium spot price.
-
-    Kitco embeds live quote data in a Next.js __NEXT_DATA__ script tag.
-    robots.txt: Allow: /  — scraping is permitted.
-    Returns a dict with 'Rh' (and potentially cross-check metals).
-    """
+    """Scrape Kitco's precious-metals page for current spot prices."""
     url = "https://www.kitco.com/price/precious-metals"
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36",
-        "Accept": "text/html,application/xhtml+xml",
-        "Accept-Language": "en-US,en;q=0.9",
-    }
     try:
-        async with httpx.AsyncClient(timeout=20, follow_redirects=True) as client:
-            resp = await client.get(url, headers=headers)
+        async with httpx.AsyncClient(timeout=20, follow_redirects=True, headers=_HTTP_HEADERS) as client:
+            resp = await client.get(url)
             resp.raise_for_status()
             html = resp.text
 
-        # Extract __NEXT_DATA__ JSON
-        m = re.search(r'<script id="__NEXT_DATA__" type="application/json">(.*?)</script>', html, re.S)
-        if not m:
+        match = re.search(r'<script id="__NEXT_DATA__" type="application/json">(.*?)</script>', html, re.S)
+        if not match:
             logger.warning("Kitco: __NEXT_DATA__ not found in page")
             return {}
 
-        data = json.loads(m.group(1))
-
-        # Navigate: props → pageProps → dehydratedState → queries
+        data = json.loads(match.group(1))
         queries = (
             data.get("props", {})
-                .get("pageProps", {})
-                .get("dehydratedState", {})
-                .get("queries", [])
+            .get("pageProps", {})
+            .get("dehydratedState", {})
+            .get("queries", [])
         )
 
-        # Find the allMetalsQuote query
         metals_data = None
-        for q in queries:
-            qkey = q.get("queryKey", [])
+        for query in queries:
+            qkey = query.get("queryKey", [])
             if isinstance(qkey, list) and "allMetalsQuote" in qkey:
-                metals_data = q.get("state", {}).get("data", {})
+                metals_data = query.get("state", {}).get("data", {})
                 break
 
         if not metals_data:
@@ -217,14 +303,12 @@ async def fetch_kitco() -> dict[str, dict]:
             return {}
 
         results: dict[str, dict] = {}
-
-        # Map Kitco metal names to our symbols
         kitco_map = {
-            "rhodium":  ("Rh", "Rhodium",  "$/troy_oz"),
+            "rhodium": ("Rh", "Rhodium", "$/troy_oz"),
             "platinum": ("Pt", "Platinum", "$/troy_oz"),
-            "palladium":("Pd", "Palladium","$/troy_oz"),
-            "gold":     ("Au", "Gold",     "$/troy_oz"),
-            "silver":   ("Ag", "Silver",   "$/troy_oz"),
+            "palladium": ("Pd", "Palladium", "$/troy_oz"),
+            "gold": ("Au", "Gold", "$/troy_oz"),
+            "silver": ("Ag", "Silver", "$/troy_oz"),
         }
 
         for kitco_name, (sym, name, unit) in kitco_map.items():
@@ -249,186 +333,147 @@ async def fetch_kitco() -> dict[str, dict]:
                 "price": round(price, 4),
                 "unit": unit,
                 "source": "Kitco (live)",
-                "fetched_at": datetime.utcnow().isoformat(),
+                "fetched_at": datetime.now(timezone.utc).replace(tzinfo=None).isoformat(),
             }
 
-        logger.info("Kitco: %d metals — %s", len(results), list(results))
+        logger.info("Kitco: %d metals -> %s", len(results), list(results))
         return results
-
     except Exception as e:
         logger.warning("Kitco scraper failed: %s", e)
         return {}
 
 
-# ── Kitco Base Metals ── NOTE: base metals are loaded via client-side XHR,
-# not in SSR __NEXT_DATA__. Scraping confirmed non-viable. Kept as stub.
-
 async def fetch_kitco_base() -> dict[str, dict]:
-    """Scrape Kitco base-metals page for Ni, Cu, Al live prices.
+    """Keep the old base-metals stub for compatibility."""
+    return {}
 
-    Same Next.js __NEXT_DATA__ structure as the precious-metals page.
-    """
-    url = "https://www.kitco.com/price/base-metals"
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36",
-        "Accept": "text/html,application/xhtml+xml",
-        "Accept-Language": "en-US,en;q=0.9",
-    }
-    # Base metals Kitco quotes in $/lb
-    KITCO_BASE_MAP = {
-        "nickel":   ("Ni", "Nickel",   "$/lb"),
-        "copper":   ("Cu", "Copper",   "$/lb"),
-        "aluminum": ("Al", "Aluminum", "$/lb"),
-        "zinc":     ("Zn", "Zinc",     "$/lb"),
-        "lead":     ("Pb", "Lead",     "$/lb"),
-        "tin":      ("Sn", "Tin",      "$/lb"),
-    }
-    try:
-        async with httpx.AsyncClient(timeout=20, follow_redirects=True) as client:
-            resp = await client.get(url, headers=headers)
-            resp.raise_for_status()
-            html = resp.text
 
-        m = re.search(
-            r'<script id="__NEXT_DATA__" type="application/json">(.*?)</script>',
-            html, re.S,
-        )
-        if not m:
-            logger.warning("Kitco base: __NEXT_DATA__ not found")
-            return {}
-
-        data = json.loads(m.group(1))
-        queries = (
-            data.get("props", {})
-                .get("pageProps", {})
-                .get("dehydratedState", {})
-                .get("queries", [])
-        )
-
-        metals_data: dict | None = None
-        for q in queries:
-            qkey = q.get("queryKey", [])
-            if isinstance(qkey, list) and "allMetalsQuote" in qkey:
-                metals_data = q.get("state", {}).get("data", {})
-                break
-
-        if not metals_data:
-            logger.warning("Kitco base: allMetalsQuote query not found")
-            return {}
-
-        results: dict[str, dict] = {}
-        for kitco_name, (sym, name, unit) in KITCO_BASE_MAP.items():
-            metal_obj = metals_data.get(kitco_name, {})
-            entries = metal_obj.get("results", [])
-            if not entries:
-                continue
-            entry = entries[0]
-            bid = entry.get("bid")
-            ask = entry.get("ask")
-            mid = entry.get("mid")
-            if mid and float(mid) > 0:
-                price = float(mid)
-            elif bid and ask and float(bid) > 0:
-                price = (float(bid) + float(ask)) / 2
-            elif bid and float(bid) > 0:
-                price = float(bid)
-            else:
-                continue
-            results[sym] = {
-                "name": name, "price": round(price, 6), "unit": unit,
-                "source": "Kitco (live)", "fetched_at": datetime.utcnow().isoformat(),
-            }
-
-        logger.info("Kitco base: %d metals — %s", len(results), list(results))
-        return results
-
-    except Exception as e:
-        logger.warning("Kitco base scraper failed: %s", e)
+def _parse_johnson_matthey_current_prices(page_html: str) -> dict[str, dict]:
+    match = re.search(r'id="currentMetalPrices"[^>]*value="([^"]+)"', page_html)
+    if not match:
         return {}
 
+    raw_value = html_lib.unescape(match.group(1))
+    try:
+        payload = json.loads(raw_value)
+    except json.JSONDecodeError:
+        return {}
 
-# ── Johnson Matthey — Ru, Ir (and cross-check PGMs) ─────────────────────────
+    metal_map = {
+        "Pt": ("Platinum", "$/troy_oz"),
+        "Pd": ("Palladium", "$/troy_oz"),
+        "Rh": ("Rhodium", "$/troy_oz"),
+        "Ru": ("Ruthenium", "$/troy_oz"),
+        "Ir": ("Iridium", "$/troy_oz"),
+    }
+
+    results: dict[str, dict] = {}
+    for item in payload.get("currentMetalList", []):
+        code = item.get("metalCode")
+        if code not in metal_map or code in results:
+            continue
+
+        price = item.get("price")
+        date_str = item.get("metalValueDate")
+        if not price:
+            continue
+
+        fetched_at = None
+        if date_str:
+            try:
+                fetched_at = datetime.strptime(date_str, "%d/%m/%Y").isoformat()
+            except ValueError:
+                fetched_at = None
+
+        name, unit = metal_map[code]
+        results[code] = {
+            "name": name,
+            "price": round(float(price), 4),
+            "unit": unit,
+            "source": "Johnson Matthey (live)",
+            "fetched_at": fetched_at or datetime.now(timezone.utc).replace(tzinfo=None).isoformat(),
+        }
+    return results
+
 
 async def fetch_johnson_matthey() -> dict[str, dict]:
-    """Fetch PGM prices from Johnson Matthey's market data page.
-
-    JM publishes daily AM/PM fixings for Pt, Pd, Rh, Ru, Ir.
-    The page embeds data in a JSON API response loaded at runtime.
-    Tries the Next.js __NEXT_DATA__ route first, then falls back to
-    scanning inline script tags for embedded price objects.
-    """
-    url = "https://matthey.com/en/market-data/pgm-data"
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36",
-        "Accept": "text/html,application/xhtml+xml",
-        "Accept-Language": "en-US,en;q=0.9",
-        "Referer": "https://matthey.com/",
-    }
-    JM_MAP = {
-        "platinum":  ("Pt", "Platinum",  "$/troy_oz"),
-        "palladium": ("Pd", "Palladium", "$/troy_oz"),
-        "rhodium":   ("Rh", "Rhodium",   "$/troy_oz"),
-        "ruthenium": ("Ru", "Ruthenium", "$/troy_oz"),
-        "iridium":   ("Ir", "Iridium",   "$/troy_oz"),
-    }
+    """Fetch current PGM prices from Johnson Matthey's PGM management page."""
+    url = "https://matthey.com/products-and-markets/pgms-and-circularity/pgm-management"
     try:
-        async with httpx.AsyncClient(timeout=25, follow_redirects=True) as client:
-            resp = await client.get(url, headers=headers)
+        async with httpx.AsyncClient(timeout=25, follow_redirects=True, headers=_HTTP_HEADERS) as client:
+            resp = await client.get(url)
             resp.raise_for_status()
             html = resp.text
-
-        results: dict[str, dict] = {}
-
-        # Strategy 1: __NEXT_DATA__ JSON blob
-        m = re.search(
-            r'<script id="__NEXT_DATA__" type="application/json">(.*?)</script>',
-            html, re.S,
-        )
-        if m:
-            try:
-                page_data = json.loads(m.group(1))
-                # Walk all nested dicts/lists looking for price keys
-                raw_str = json.dumps(page_data)
-                for metal_key, (sym, name, unit) in JM_MAP.items():
-                    # Look for patterns like "platinum":{"am":XXXX,"pm":XXXX}
-                    pat = rf'"{metal_key}"\s*:\s*\{{[^}}]*?"(?:am|pm|price|value)"\s*:\s*([0-9]+(?:\.[0-9]+)?)'
-                    hit = re.search(pat, raw_str, re.I)
-                    if hit:
-                        price = float(hit.group(1))
-                        if price > 0:
-                            results[sym] = {
-                                "name": name, "price": round(price, 2),
-                                "unit": unit, "source": "Johnson Matthey (live)",
-                                "fetched_at": datetime.utcnow().isoformat(),
-                            }
-            except Exception:
-                pass
-
-        # Strategy 2: scan all inline <script> tags for price data objects
-        if not results:
-            scripts = re.findall(r'<script[^>]*>(.*?)</script>', html, re.S)
-            for script in scripts:
-                for metal_key, (sym, name, unit) in JM_MAP.items():
-                    pat = rf'{metal_key}["\s:]+([0-9]{{3,5}}(?:\.[0-9]+)?)'
-                    hit = re.search(pat, script, re.I)
-                    if hit and sym not in results:
-                        price = float(hit.group(1))
-                        if price > 0:
-                            results[sym] = {
-                                "name": name, "price": round(price, 2),
-                                "unit": unit, "source": "Johnson Matthey (live)",
-                                "fetched_at": datetime.utcnow().isoformat(),
-                            }
-
-        logger.info("Johnson Matthey: %d metals — %s", len(results), list(results))
+        results = _parse_johnson_matthey_current_prices(html)
+        logger.info("Johnson Matthey: %d metals -> %s", len(results), list(results))
         return results
-
     except Exception as e:
         logger.warning("Johnson Matthey scraper failed: %s", e)
         return {}
 
 
-# ── Reference prices ─────────────────────────────────────────────────────────
+def _parse_markets_insider_quote(
+    html: str,
+    *,
+    symbol: str,
+    name: str,
+    unit: str,
+    factor: float,
+) -> dict | None:
+    match = re.search(r'price-section__current-value">\s*([0-9][0-9,]*(?:\.[0-9]+)?)', html)
+    if not match:
+        return None
+
+    raw_price = float(match.group(1).replace(",", ""))
+    time_match = re.search(
+        r'price-section__additionals.*?<span>\s*([^<]+)\s*</span>\s*<span>\s*MI Indication\s*</span>',
+        html,
+        re.S,
+    )
+    return {
+        "symbol": symbol,
+        "name": name,
+        "price": round(raw_price * factor, 4),
+        "unit": unit,
+        "source": "Markets Insider (live)",
+        "fetched_at": datetime.now(timezone.utc).replace(tzinfo=None).isoformat(),
+        "market_hint": time_match.group(1).strip() if time_match else None,
+    }
+
+
+async def fetch_markets_insider() -> dict[str, dict]:
+    """Fetch free market data from Markets Insider commodity pages."""
+    sources = [
+        {
+            "symbol": "Ni",
+            "name": "Nickel",
+            "url": "https://markets.businessinsider.com/commodities/nickel-price",
+            "unit": "$/lb",
+            "factor": 1 / 2204.62,
+        },
+    ]
+
+    results: dict[str, dict] = {}
+    async with httpx.AsyncClient(timeout=20, headers=_HTTP_HEADERS, follow_redirects=True) as client:
+        for source in sources:
+            try:
+                resp = await client.get(source["url"])
+                resp.raise_for_status()
+                quote = _parse_markets_insider_quote(
+                    resp.text,
+                    symbol=source["symbol"],
+                    name=source["name"],
+                    unit=source["unit"],
+                    factor=source["factor"],
+                )
+                if quote:
+                    results[source["symbol"]] = quote
+            except Exception as e:
+                logger.warning("Markets Insider %s failed: %s", source["symbol"], e)
+
+    logger.info("Markets Insider: %d metals -> %s", len(results), list(results))
+    return results
+
 
 def get_reference_prices() -> dict[str, dict]:
     """Return all metals with 2018 CatCost prices escalated by ChemPPI."""
@@ -444,39 +489,33 @@ def get_reference_prices() -> dict[str, dict]:
     }
 
 
-# ── Master fetch ──────────────────────────────────────────────────────────────
-
 async def fetch_all_prices() -> dict[str, dict]:
-    """Fetch prices from all available sources (best-effort, layered).
-
-    Layer 1 : Reference prices for everything (always works — CatCost 2018 + ChemPPI)
-    Layer 2 : Metals.Dev if METALS_DEV_API_KEY set (overwrites all — Ni, Co, Ru, Ir too)
-    Layer 3 : yfinance (free — Pt, Pd, Au, Ag, Cu, Al)
-    Layer 4 : Kitco precious-metals scraper (free — Rh, cross-checks PGMs)
-    Layer 5 : MetalpriceAPI if METALPRICE_API_KEY set (fills remaining PGMs)
-
-    Free live coverage: Pt, Pd, Au, Ag, Cu, Al (yfinance) + Rh (Kitco)
-    For Ni, Co, Ru, Ir, Mo, W — configure METALS_DEV_API_KEY or METALPRICE_API_KEY.
-    """
+    """Fetch prices from all available sources using a layered fallback strategy."""
     results = get_reference_prices()
 
     if settings.metals_dev_api_key:
         try:
-            paid = await fetch_metals_dev()
-            results.update(paid)
+            results.update(await fetch_metals_dev())
         except Exception as e:
             logger.warning("Metals.Dev failed: %s", e)
 
-    # Run free scrapers concurrently
-    yf_task    = asyncio.create_task(fetch_yfinance())
+    yahoo_task = asyncio.create_task(fetch_yfinance())
     kitco_task = asyncio.create_task(fetch_kitco())
+    jm_task = asyncio.create_task(fetch_johnson_matthey())
+    mi_task = asyncio.create_task(fetch_markets_insider())
 
-    yf_data, kitco_data = await asyncio.gather(yf_task, kitco_task, return_exceptions=True)
+    yahoo_data, kitco_data, jm_data, mi_data = await asyncio.gather(
+        yahoo_task,
+        kitco_task,
+        jm_task,
+        mi_task,
+        return_exceptions=True,
+    )
 
-    if isinstance(yf_data, dict):
-        results.update(yf_data)
+    if isinstance(yahoo_data, dict):
+        results.update(yahoo_data)
     else:
-        logger.warning("yfinance failed: %s", yf_data)
+        logger.warning("Yahoo Finance failed: %s", yahoo_data)
 
     if isinstance(kitco_data, dict):
         for sym, data in kitco_data.items():
@@ -486,50 +525,53 @@ async def fetch_all_prices() -> dict[str, dict]:
     else:
         logger.warning("Kitco failed: %s", kitco_data)
 
+    if isinstance(jm_data, dict):
+        for sym, data in jm_data.items():
+            existing_src = results.get(sym, {}).get("source", "")
+            if sym in {"Ru", "Ir"} or "CatCost" in existing_src:
+                results[sym] = data
+    else:
+        logger.warning("Johnson Matthey failed: %s", jm_data)
+
+    if isinstance(mi_data, dict):
+        for sym, data in mi_data.items():
+            existing_src = results.get(sym, {}).get("source", "")
+            if "CatCost" in existing_src:
+                results[sym] = data
+    else:
+        logger.warning("Markets Insider failed: %s", mi_data)
+
     if settings.metalprice_api_key:
         try:
             backup = await fetch_metalprice_api()
             for sym, data in backup.items():
-                src = results.get(sym, {}).get("source", "")
-                if "CatCost" in src:
+                existing_src = results.get(sym, {}).get("source", "")
+                if "CatCost" in existing_src:
                     results[sym] = data
         except Exception as e:
             logger.warning("MetalpriceAPI failed: %s", e)
 
-    live_count = sum(1 for v in results.values() if "CatCost" not in v.get("source", ""))
+    live_count = sum(1 for value in results.values() if "CatCost" not in value.get("source", ""))
     logger.info("fetch_all_prices: %d total, %d live", len(results), live_count)
     return results
 
 
 async def fetch_history(symbol: str, period: str = "1y") -> list[dict]:
-    """Return OHLC history for a metal from Yahoo Finance.
-
-    Args:
-        symbol: e.g. "Pt", "Au"
-        period: yfinance period string — "1mo", "3mo", "6mo", "1y", "2y", "5y"
-    """
-    ticker_map = {sym: t for sym, t, *_ in YFINANCE_METALS}
-    ticker = ticker_map.get(symbol)
-    if not ticker:
+    """Return OHLC history for a metal from the Yahoo chart API."""
+    ticker_map = {sym: (ticker, factor) for sym, ticker, *_rest, factor in YAHOO_METALS}
+    ticker_data = ticker_map.get(symbol)
+    if not ticker_data:
         return []
 
-    def _get() -> list[dict]:
-        import yfinance as yf  # type: ignore
-        hist = yf.Ticker(ticker).history(period=period, auto_adjust=True)
-        out = []
-        for ts, row in hist.iterrows():
-            out.append({
-                "date":  ts.strftime("%Y-%m-%d"),
-                "price": round(float(row["Close"]), 4),
-                "open":  round(float(row["Open"]),  4),
-                "high":  round(float(row["High"]),  4),
-                "low":   round(float(row["Low"]),   4),
-            })
-        return out
-
+    ticker, factor = ticker_data
     try:
-        loop = asyncio.get_event_loop()
-        return await loop.run_in_executor(None, _get)
+        async with httpx.AsyncClient(timeout=20, headers=_HTTP_HEADERS) as client:
+            resp = await client.get(
+                f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}",
+                params={"range": period, "interval": "1d", "includePrePost": "false"},
+            )
+            resp.raise_for_status()
+        return _extract_yahoo_history(resp.json(), factor)
     except Exception as e:
         logger.warning("fetch_history(%s, %s): %s", symbol, period, e)
         return []

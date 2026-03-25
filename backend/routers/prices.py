@@ -16,6 +16,20 @@ def _normalize(symbol: str) -> str:
     return symbol.capitalize() if len(symbol) <= 2 else symbol
 
 
+def _is_live_source(source: str | None) -> bool:
+    return any(
+        label in (source or "")
+        for label in (
+            "Yahoo Finance",
+            "Metals.Dev",
+            "Kitco",
+            "Johnson Matthey",
+            "Markets Insider",
+            "MetalpriceAPI",
+        )
+    )
+
+
 @router.get("")
 def get_all_prices(session: Session = Depends(get_session)):
     """Get latest price for every metal (DB cache first, then reference)."""
@@ -33,7 +47,7 @@ def get_all_prices(session: Session = Depends(get_session)):
                 "price":      p.price,
                 "unit":       p.unit,
                 "source":     p.source,
-                "is_live":    any(s in (p.source or "") for s in ("Yahoo Finance", "Metals.Dev", "Kitco", "Johnson Matthey")),
+                "is_live":    _is_live_source(p.source),
                 "fetched_at": p.fetched_at.isoformat(),
             })
 
@@ -70,7 +84,7 @@ def get_price(symbol: str, session: Session = Depends(get_session)):
         return {
             "symbol": p.symbol, "name": p.name, "price": p.price,
             "unit": p.unit, "source": p.source,
-            "is_live": any(s in (p.source or "") for s in ("Yahoo Finance", "Metals.Dev", "Kitco")),
+            "is_live": _is_live_source(p.source),
             "fetched_at": p.fetched_at.isoformat(),
         }
     refs = get_reference_prices()
