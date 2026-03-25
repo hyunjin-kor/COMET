@@ -33,4 +33,5 @@ uvicorn backend.main:app --reload
 cd frontend && npm install && npm run dev
 ```
 
-Visit `http://localhost:5173` to use the application.
+During local development, open `http://localhost:5173` on the same machine that is running `npm run dev`.
+This is a loopback-only address, not a public deployment URL.

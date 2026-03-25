@@ -34,6 +34,8 @@ npm install
 npm run dev
 ```
 
+The Vite development UI is available at `http://localhost:5173` on the same machine only.
+
 ### Docker (one-command)
 
 ```bash

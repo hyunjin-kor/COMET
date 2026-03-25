@@ -43,7 +43,8 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173
+The local development UI runs at `http://localhost:5173`.
+This is a loopback-only address for your own machine, not a public service URL.
 
 ### Desktop App
 

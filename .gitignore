@@ -23,6 +23,8 @@ venv/
 node_modules/
 frontend/node_modules/
 frontend/dist/
+dist-electron/
+dist-electron-*/
 
 # OS
 .DS_Store
@@ -43,3 +45,7 @@ CatCost_v1-1-1/
 *.txt
 tmp/
 backend/data/_catcost_raw_extract.json
+CodexLauncher.vbs
+scripts/create_codex_shortcut.ps1
+scripts/export_codex_icon.py
+scripts/launch_codex.ps1
