@@ -165,6 +165,13 @@ async function startBackend() {
   }
 
   return new Promise((resolve, reject) => {
+    let startupSettled = false;
+    const finishStartup = (handler, value) => {
+      if (startupSettled) return;
+      startupSettled = true;
+      handler(value);
+    };
+
     const env = {
       ...process.env,
       PORT: String(BACKEND_PORT),
@@ -214,21 +221,24 @@ async function startBackend() {
     backendProcess.stderr.on('data', (d) => debugLog(`[Backend:stderr] ${d.toString().trim()}`));
     backendProcess.on('error', (err) => {
       debugLog(`Backend failed to start: ${err.message}`);
-      reject(err);
+      finishStartup(reject, err);
     });
     backendProcess.on('exit', (code) => {
       if (code !== 0 && code !== null) {
         debugLog(`Backend exited with code ${code}`);
+      }
+      if (!startupSettled) {
+        finishStartup(reject, new Error(`Backend exited during startup (code ${code ?? 'unknown'})`));
       }
     });
 
     waitForBackend(MAX_WAIT_MS).then((ready) => {
       if (ready) {
         debugLog('Backend is ready');
-        resolve();
+        finishStartup(resolve);
       } else {
         debugLog('Backend startup timed out');
-        reject(new Error('Backend startup timed out'));
+        finishStartup(reject, new Error('Backend startup timed out'));
       }
     });
   });

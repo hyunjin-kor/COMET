@@ -1,5 +1,31 @@
 # Release Notes
 
+## v1.0.1 Desktop Hardening
+
+Date: March 26, 2026
+
+This patch release focuses on desktop startup reliability, packaging repeatability, and release verification.
+
+### Included In This Update
+
+- Added a packaged backend sidecar build flow for the Electron desktop app.
+- Fixed splash-screen hang cases where the backend was ready but the splash window remained visible.
+- Improved second-instance handling so relaunch brings the running app forward instead of starting a broken duplicate path.
+- Added launcher logging at `AppData\Roaming\CatPrice\catprice-launcher.log`.
+- Added `desktop:stop`, `smoke:desktop`, and `pack:smoke` scripts for repeatable desktop validation.
+- Added desktop troubleshooting documentation and updated getting-started instructions.
+
+### Validation Status
+
+The following checks passed on March 26, 2026:
+
+```bash
+python -m pytest backend/tests -q
+cd frontend && npm run lint
+cd frontend && npm run build
+npm run pack:smoke
+```
+
 ## Release Prep Snapshot
 
 Date: March 25, 2026

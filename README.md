@@ -49,6 +49,35 @@ Methodology basis:
 
 For normal use, install or run the desktop app from this repository and work through the Electron wrapper.
 
+### Desktop packaging
+
+```bash
+npm install
+npm run pack
+```
+
+The packaged desktop executable is created at:
+
+```text
+dist-electron\win-unpacked\CatPrice.exe
+```
+
+Before rebuilding desktop artifacts, CatPrice now stops old desktop processes automatically. You can also stop them manually:
+
+```bash
+npm run desktop:stop
+```
+
+### Desktop smoke test
+
+After packaging, run:
+
+```bash
+npm run smoke:desktop
+```
+
+This checks desktop launch, backend readiness, the prices endpoint, a sample calculate request, and re-launch behavior.
+
 ### Local development
 
 ```bash
@@ -99,6 +128,19 @@ cd frontend && npm run lint
 cd frontend && npm run build
 python scripts/validate_catcost_data.py
 ```
+
+Desktop packaging validation:
+
+```bash
+npm run pack
+npm run smoke:desktop
+```
+
+## Troubleshooting
+
+- Desktop launcher log: `C:\Users\<your-user>\AppData\Roaming\CatPrice\catprice-launcher.log`
+- If packaging fails with `Access is denied`, run `npm run desktop:stop` and retry.
+- If the splash screen appears to stall, check `http://127.0.0.1:8765/api/health` and the launcher log first.
 
 ## Project Scope
 
