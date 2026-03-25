@@ -149,9 +149,10 @@ export default function Calculator() {
     }));
   }, [liveMap]);
 
-  async function refreshLivePrices() {
+async function refreshLivePrices() {
     setRefreshing(true);
     try {
+      await fetch('/api/prices/refresh', { method: 'POST' });
       const prices: MetalPrice[] = await fetchPrices();
       const m: Record<string, { price_per_lb: number; is_live: boolean }> = {};
       for (const p of prices) {

@@ -12,8 +12,6 @@ const PERIOD_LABELS: Record<Period, string> = {
   '1mo': '1M', '3mo': '3M', '6mo': '6M', '1y': '1Y', '2y': '2Y', '5y': '5Y',
 };
 
-const CHART_SYMBOLS = new Set(['Pt', 'Pd', 'Au', 'Ag', 'Cu', 'Al']);
-
 const GROUP_ORDER = ['PGM', 'Precious', 'Base'];
 const GROUPS: Record<string, { title: string; subtitle: string; symbols: string[] }> = {
   PGM: { title: 'Platinum Group Metals', subtitle: 'PGM', symbols: ['Pt', 'Pd', 'Rh', 'Ru', 'Ir'] },
@@ -59,6 +57,7 @@ export default function Prices() {
   const [refreshing, setRefreshing] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
   const [history, setHistory] = useState<HistoryPoint[]>([]);
+  const [historySource, setHistorySource] = useState<string | null>(null);
   const [histLoading, setHistLoading] = useState(false);
   const [period, setPeriod] = useState<Period>('1y');
   const [lastUpdate, setLastUpdate] = useState<string | null>(null);
@@ -83,8 +82,14 @@ export default function Prices() {
     setHistLoading(true);
     fetch(`/api/prices/${selected}/history?period=${period}`)
       .then((r) => r.json())
-      .then((d) => setHistory(d.history || []))
-      .catch(() => setHistory([]))
+      .then((d) => {
+        setHistory(d.history || []);
+        setHistorySource(d.source || null);
+      })
+      .catch(() => {
+        setHistory([]);
+        setHistorySource(null);
+      })
       .finally(() => setHistLoading(false));
   }, [selected, period]);
 
@@ -97,6 +102,7 @@ export default function Prices() {
         const r = await fetch(`/api/prices/${selected}/history?period=${period}`);
         const d = await r.json();
         setHistory(d.history || []);
+        setHistorySource(d.source || null);
       }
     } catch {
       // Ignore refresh failures in the UI. Cards will keep the last stored values.
@@ -158,17 +164,14 @@ export default function Prices() {
                 const isLive = !!(priceRow as MetalPrice & { is_live?: boolean }).is_live;
                 const isSelected = selected === priceRow.symbol;
                 const accent = METAL_COLORS[priceRow.symbol] || '#64748b';
-                const canChart = CHART_SYMBOLS.has(priceRow.symbol);
                 return (
                   <button
                     key={priceRow.symbol}
-                    onClick={() => canChart ? setSelected(isSelected ? null : priceRow.symbol) : undefined}
+                    onClick={() => setSelected(isSelected ? null : priceRow.symbol)}
                     className={`text-left rounded-2xl border p-4 transition-all duration-150 ${
                       isSelected
                         ? 'border-blue-400/50 bg-gradient-to-br from-slate-800 to-slate-900 shadow-xl shadow-blue-900/20'
-                        : canChart
-                          ? 'cursor-pointer border-slate-200 bg-white hover:border-slate-300 hover:shadow-md'
-                          : 'cursor-default border-slate-200 bg-white'
+                        : 'cursor-pointer border-slate-200 bg-white hover:border-slate-300 hover:shadow-md'
                     }`}
                   >
                     <div className="mb-2 flex items-center justify-between">
@@ -193,7 +196,7 @@ export default function Prices() {
                       {isLive ? priceRow.source : 'CatCost reference + ChemPPI'}
                     </div>
 
-                    {canChart && !isSelected && (
+                    {!isSelected && (
                       <div className="mt-1.5 text-[10px] font-medium text-blue-400">view chart →</div>
                     )}
                   </button>
@@ -260,7 +263,7 @@ export default function Prices() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
                 <span className="text-sm">No history data for {selected}</span>
-                <span className="text-xs">Charts available for: {[...CHART_SYMBOLS].join(', ')}</span>
+                <span className="text-xs">No stored time-series found for this symbol yet.</span>
               </div>
             ) : (
               <ResponsiveContainer width="100%" height={260}>
@@ -327,7 +330,7 @@ export default function Prices() {
                 </div>
               ))}
               <div className="ml-auto self-center text-xs text-slate-400">
-                Yahoo Finance · {history.length} pts
+                {(historySource || 'Price feed')} · {history.length} pts
               </div>
             </div>
           )}
