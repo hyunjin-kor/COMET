@@ -1,107 +1,94 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
-    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#0f1b35"/>
-      <stop offset="100%" stop-color="#060b14"/>
+    <radialGradient id="bg" cx="32%" cy="22%" r="78%">
+      <stop offset="0%" stop-color="#23395d"/>
+      <stop offset="55%" stop-color="#101b2e"/>
+      <stop offset="100%" stop-color="#070d17"/>
     </radialGradient>
-    <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.8"/>
-      <stop offset="50%" stop-color="#0066aa" stop-opacity="0.4"/>
-      <stop offset="100%" stop-color="#003366" stop-opacity="0"/>
-    </radialGradient>
-    <linearGradient id="orbit1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#00d4ff"/>
-      <stop offset="50%" stop-color="#7b2fff"/>
-      <stop offset="100%" stop-color="#ff6b35"/>
+    <linearGradient id="ring" x1="96" y1="96" x2="416" y2="416" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0ea5e9"/>
     </linearGradient>
-    <linearGradient id="orbit2" x1="100%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#ff6b35"/>
-      <stop offset="100%" stop-color="#00d4ff"/>
+    <linearGradient id="catFill" x1="170" y1="136" x2="336" y2="376" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#203555"/>
+      <stop offset="100%" stop-color="#132238"/>
     </linearGradient>
-    <linearGradient id="orbit3" x1="0%" y1="100%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#7b2fff"/>
-      <stop offset="100%" stop-color="#00ff88"/>
+    <linearGradient id="tagFill" x1="304" y1="294" x2="420" y2="404" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#fde047"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
     </linearGradient>
-    <linearGradient id="tagGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ffd700"/>
-      <stop offset="100%" stop-color="#ff8c00"/>
-    </linearGradient>
-    <filter id="glow">
-      <feGaussianBlur stdDeviation="3" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-    <filter id="coreBlur">
-      <feGaussianBlur stdDeviation="10" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
     </filter>
   </defs>
 
-  <!-- Background -->
-  <circle cx="256" cy="256" r="256" fill="url(#bgGrad)"/>
+  <circle cx="256" cy="256" r="228" fill="url(#bg)"/>
+  <circle cx="256" cy="256" r="220" fill="none" stroke="url(#ring)" stroke-width="12"/>
+  <circle cx="228" cy="188" r="116" fill="#38bdf8" opacity="0.08" filter="url(#glow)"/>
 
-  <!-- Grid lines (subtle) -->
-  <g opacity="0.07" stroke="#00d4ff" stroke-width="0.8">
-    <line x1="128" y1="20" x2="128" y2="492"/>
-    <line x1="192" y1="20" x2="192" y2="492"/>
-    <line x1="256" y1="20" x2="256" y2="492"/>
-    <line x1="320" y1="20" x2="320" y2="492"/>
-    <line x1="384" y1="20" x2="384" y2="492"/>
-    <line x1="20" y1="128" x2="492" y2="128"/>
-    <line x1="20" y1="192" x2="492" y2="192"/>
-    <line x1="20" y1="256" x2="492" y2="256"/>
-    <line x1="20" y1="320" x2="492" y2="320"/>
-    <line x1="20" y1="384" x2="492" y2="384"/>
+  <g stroke="#5eead4" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.95">
+    <path d="M132 170 L188 126 L238 152" />
+    <path d="M238 152 L292 120 L346 150" />
+    <path d="M346 150 L372 204" />
+  </g>
+  <g filter="url(#glow)">
+    <circle cx="132" cy="170" r="13" fill="#38bdf8"/>
+    <circle cx="188" cy="126" r="11" fill="#67e8f9"/>
+    <circle cx="238" cy="152" r="12" fill="#5eead4"/>
+    <circle cx="292" cy="120" r="11" fill="#93c5fd"/>
+    <circle cx="346" cy="150" r="12" fill="#38bdf8"/>
+    <circle cx="372" cy="204" r="10" fill="#5eead4"/>
   </g>
 
-  <!-- Core halo -->
-  <circle cx="256" cy="256" r="95" fill="url(#coreGlow)" filter="url(#coreBlur)" opacity="0.6"/>
+  <path
+    d="M171 330
+       C159 280 166 226 188 180
+       L218 112
+       L256 157
+       L294 112
+       L324 180
+       C346 226 353 280 341 330
+       C316 364 289 386 256 396
+       C223 386 196 364 171 330Z"
+    fill="url(#catFill)"
+    stroke="#f8fafc"
+    stroke-width="16"
+    stroke-linejoin="round"
+  />
 
-  <!-- Orbit 1 (tilted -20deg) -->
-  <g transform="translate(256,256) rotate(-20)">
-    <ellipse cx="0" cy="0" rx="155" ry="42" fill="none" stroke="url(#orbit1)" stroke-width="2.5" opacity="0.8" filter="url(#glow)"/>
-    <circle cx="148" cy="-15" r="9" fill="#00d4ff" filter="url(#glow)"/>
-    <circle cx="148" cy="-15" r="4.5" fill="white"/>
+  <path d="M206 262 C216 250 228 244 240 244" stroke="#f8fafc" stroke-width="12" stroke-linecap="round"/>
+  <path d="M272 244 C284 244 296 250 306 262" stroke="#f8fafc" stroke-width="12" stroke-linecap="round"/>
+  <circle cx="223" cy="261" r="8" fill="#38bdf8"/>
+  <circle cx="289" cy="261" r="8" fill="#38bdf8"/>
+  <path d="M256 283 L239 300 L256 312 L273 300 Z" fill="#f59e0b"/>
+  <path d="M240 322 C247 332 253 336 256 336 C259 336 265 332 272 322" stroke="#f8fafc" stroke-width="10" stroke-linecap="round"/>
+
+  <g stroke="#f8fafc" stroke-width="8" stroke-linecap="round" opacity="0.95">
+    <path d="M212 302 L150 286"/>
+    <path d="M210 320 L144 320"/>
+    <path d="M212 338 L154 356"/>
+    <path d="M300 302 L362 286"/>
+    <path d="M302 320 L368 320"/>
+    <path d="M300 338 L358 356"/>
   </g>
 
-  <!-- Orbit 2 (tilted +65deg) -->
-  <g transform="translate(256,256) rotate(65)">
-    <ellipse cx="0" cy="0" rx="155" ry="42" fill="none" stroke="url(#orbit2)" stroke-width="2.5" opacity="0.8" filter="url(#glow)"/>
-    <circle cx="-95" cy="38" r="9" fill="#ff6b35" filter="url(#glow)"/>
-    <circle cx="-95" cy="38" r="4.5" fill="white"/>
+  <g transform="rotate(-10 352 348)" filter="url(#glow)">
+    <path
+      d="M304 294 H386
+         C398 294 408 304 408 316
+         V380
+         C408 392 398 402 386 402
+         H304
+         C292 402 282 392 282 380
+         V316
+         C282 304 292 294 304 294Z"
+      fill="url(#tagFill)"
+    />
+    <circle cx="302" cy="318" r="9" fill="#10131a"/>
+    <text x="348" y="368" font-family="Segoe UI, Arial, sans-serif" font-size="84" font-weight="900" text-anchor="middle" fill="#111827">$</text>
   </g>
-
-  <!-- Orbit 3 (tilted -65deg) -->
-  <g transform="translate(256,256) rotate(-65)">
-    <ellipse cx="0" cy="0" rx="155" ry="42" fill="none" stroke="url(#orbit3)" stroke-width="2.5" opacity="0.8" filter="url(#glow)"/>
-    <circle cx="75" cy="44" r="9" fill="#7b2fff" filter="url(#glow)"/>
-    <circle cx="75" cy="44" r="4.5" fill="white"/>
-  </g>
-
-  <!-- Nucleus outer ring -->
-  <circle cx="256" cy="256" r="40" fill="#08152a" stroke="#00d4ff" stroke-width="3" filter="url(#glow)"/>
-  <circle cx="256" cy="256" r="32" fill="#0d1e3a"/>
-  <!-- Nucleus particles -->
-  <circle cx="249" cy="249" r="7" fill="#00d4ff" opacity="0.95"/>
-  <circle cx="264" cy="249" r="7" fill="#7b2fff" opacity="0.95"/>
-  <circle cx="256" cy="263" r="7" fill="#00ff88" opacity="0.95"/>
-  <circle cx="256" cy="243" r="5" fill="#ff6b35" opacity="0.8"/>
-
-  <!-- Price tag (bottom-right quadrant) -->
-  <g transform="translate(305,305)" filter="url(#glow)">
-    <rect x="0" y="0" width="58" height="44" rx="8" fill="url(#tagGrad)"/>
-    <circle cx="11" cy="13" r="4.5" fill="#060b14"/>
-    <text x="34" y="34" font-family="Arial Black,sans-serif" font-size="28" font-weight="900"
-          fill="#060b14" text-anchor="middle">$</text>
-  </g>
-
-  <!-- App name -->
-  <text x="256" y="450" font-family="Arial,sans-serif" font-size="40" font-weight="700"
-        fill="white" text-anchor="middle" letter-spacing="1">
-    <tspan fill="#00d4ff">Cat</tspan><tspan fill="#ffd700">Price</tspan>
-  </text>
-  <text x="256" y="478" font-family="Arial,sans-serif" font-size="13" fill="#5580aa"
-        text-anchor="middle" letter-spacing="4">CATALYST COST TOOL</text>
-
-  <!-- Outer decorative ring -->
-  <circle cx="256" cy="256" r="248" fill="none" stroke="#00d4ff" stroke-width="1.5" opacity="0.25"/>
 </svg>
