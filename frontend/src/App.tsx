@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, HashRouter, Route, Routes } from 'react-router-dom';
 import Sidebar from './components/layout/Sidebar';
 import Calculator from './pages/Calculator';
 import Prices from './pages/Prices';
@@ -8,9 +8,11 @@ import Uncertainty from './pages/Uncertainty';
 import { UnitProvider } from './lib/units';
 
 export default function App() {
+  const Router = typeof window !== 'undefined' && window.location.protocol === 'file:' ? HashRouter : BrowserRouter;
+
   return (
     <UnitProvider>
-      <BrowserRouter>
+      <Router>
         <div className="flex min-h-screen bg-transparent text-slate-900">
           <Sidebar />
           <main className="flex-1 overflow-auto min-w-0">
@@ -23,7 +25,7 @@ export default function App() {
             </Routes>
           </main>
         </div>
-      </BrowserRouter>
+      </Router>
     </UnitProvider>
   );
 }

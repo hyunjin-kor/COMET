@@ -331,7 +331,7 @@ function createMainWindow() {
     minWidth: 900,
     minHeight: 600,
     title: 'CatPrice | Catalyst Cost Tool',
-    backgroundColor: '#060b14',
+    backgroundColor: '#f8fafc',
     show: false,
     icon: path.join(__dirname, 'icon.png'),
     webPreferences: {
@@ -424,7 +424,7 @@ p{color:#7099cc;font-size:14px;max-width:500px;text-align:center}
     });
   } else if (app.isPackaged) {
     debugLog(`Loading packaged frontend file: ${packagedIndex}`);
-    mainWindow.loadFile(packagedIndex).catch((err) => {
+    mainWindow.loadFile(packagedIndex, { hash: '/' }).catch((err) => {
       debugLog(`Window loadFile threw: ${err.message}`);
     });
   } else {
