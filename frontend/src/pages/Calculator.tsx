@@ -26,7 +26,6 @@ const SUPPORT_OPTIONS = [
   { name: 'ZrO2', price: 5, note: 'Zirconia' },
   { name: 'SiO2-Al2O3', price: 0.8, note: 'Silica-alumina' },
 ] as const;
-const SUPPORT_OPTION_MAP = Object.fromEntries(SUPPORT_OPTIONS.map((option) => [option.name, option]));
 const ALL_STEPS = [
   { key: 'mixer_dry_blender', label: 'Dry Blender', category: 'Mixing', scales: ['small', 'medium', 'large'] },
   { key: 'mixer_slurry', label: 'Slurry Mixer', category: 'Mixing', scales: ['small', 'medium', 'large'] },
@@ -232,9 +231,8 @@ export default function Calculator() {
   const supportWtPct = Math.max(0, 100 - nonSupportWt);
   const hasActiveMetal = rows.some((row) => row.role === 'active_metal' && row.name.trim() !== '');
   const isValid = hasActiveMetal && nonSupportWt > 0 && nonSupportWt <= 100;
-  const scaleLabel = currentScale === 'small' ? 'Small / 1 t/day' : currentScale === 'medium' ? 'Medium / 10 t/day' : 'Large / 150 t/day';
+  const scaleLabel = currentScale === 'small' ? 'Small · 1 t/day' : currentScale === 'medium' ? 'Medium · 10 t/day' : 'Large · 150 t/day';
   const scaleBadge = currentScale === 'small' ? 'bg-violet-100 text-violet-700' : currentScale === 'medium' ? 'bg-blue-100 text-blue-700' : 'bg-teal-100 text-teal-700';
-  const trackedFeeds = Object.keys(liveMap).length;
 
   async function handleCalculate() {
     if (!isValid || steps.length === 0) return;
@@ -298,8 +296,8 @@ export default function Calculator() {
   function renderPriceField(row: Row) {
     const locked = row.source_type !== 'manual';
     return (
-      <div className={`flex items-center gap-2 rounded-2xl border px-3 py-2 ${priceFieldClass(row.source_type)}`}>
-        <span className="text-[11px] text-slate-400">$</span>
+      <>
+        <span className="text-xs text-slate-400">$</span>
         <input
           type="number"
           step="0.01"
@@ -307,18 +305,18 @@ export default function Calculator() {
           value={toDisplay(row.price_per_lb).toFixed(2)}
           readOnly={locked}
           onChange={(e) => !locked && updateRow(row.id, { price_per_lb: toInternal(+e.target.value) })}
-          className={`w-16 border-0 bg-transparent p-0 text-right text-sm font-medium font-mono focus:outline-none ${priceInputClass(row.source_type)}`}
+          className={`w-20 input-base text-right font-mono ${priceFieldClass(row.source_type)} ${priceInputClass(row.source_type)}`}
         />
-        <span className="text-[11px] text-slate-400">{fmtLabel}</span>
-      </div>
+        <span className="text-xs text-slate-400">{fmtLabel}</span>
+      </>
     );
   }
 
   function renderRows(role: 'active_metal' | 'promoter') {
     const items = rows.filter((row) => row.role === role);
     const accent = role === 'active_metal'
-      ? { dot: 'bg-indigo-500', text: 'text-indigo-700', button: 'text-indigo-600 hover:text-indigo-800', title: 'Active Metals', empty: 'No active metals yet.' }
-      : { dot: 'bg-purple-500', text: 'text-purple-700', button: 'text-purple-600 hover:text-purple-800', title: 'Promoters', empty: 'No promoters added.' };
+      ? { dot: 'bg-indigo-500', text: 'text-indigo-700', button: 'text-indigo-600 hover:text-indigo-800', title: 'Active Metals', empty: 'None - click + Add' }
+      : { dot: 'bg-purple-500', text: 'text-purple-700', button: 'text-purple-600 hover:text-purple-800', title: 'Promoters', empty: 'None' };
     return (
       <div>
         <div className="mb-2 flex items-center justify-between">
@@ -332,23 +330,20 @@ export default function Calculator() {
         </div>
         <div className="space-y-2">
           {items.map((row) => (
-            <div key={row.id} className="flex flex-wrap items-center gap-2 rounded-2xl border border-slate-200/80 bg-slate-50/70 p-2.5">
+            <div key={row.id} className="flex items-center gap-2">
               {role === 'active_metal' ? (
-                <select value={row.name} onChange={(e) => onMetalChange(row.id, e.target.value)} className="input-base min-w-[11rem] flex-[1_1_15rem] bg-white">
-                  <option value="">Select metal</option>
+                <select value={row.name} onChange={(e) => onMetalChange(row.id, e.target.value)} className="input-base flex-1">
+                  <option value="">- select -</option>
                   {KNOWN_METALS.map((metal) => <option key={metal} value={metal}>{metal}</option>)}
                 </select>
               ) : (
-                <input type="text" list="known-metal-options" value={row.name} onChange={(e) => onMetalChange(row.id, e.target.value)} placeholder="e.g. Re, K, Sn, Ce" className="input-base min-w-[11rem] flex-[1_1_15rem] bg-white" />
+                <input type="text" list="known-metal-options" value={row.name} onChange={(e) => onMetalChange(row.id, e.target.value)} placeholder="e.g. Re, K, Sn, Ce" className="input-base flex-1" />
               )}
-              <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-3 py-2">
-                <input type="number" step="0.1" min="0" max="100" value={row.wt_pct} onChange={(e) => updateRow(row.id, { wt_pct: +e.target.value })} className="w-11 border-0 bg-transparent p-0 text-right text-sm font-medium font-mono text-slate-800 focus:outline-none" />
-                <span className="text-[11px] text-slate-400">wt%</span>
-              </div>
+              <input type="number" step="0.1" min="0" max="100" value={row.wt_pct} onChange={(e) => updateRow(row.id, { wt_pct: +e.target.value })} className="w-16 input-base text-right font-mono" />
+              <span className="text-xs text-slate-400">wt%</span>
               {renderSourceChip(row)}
               {renderPriceField(row)}
               <button onClick={() => removeRow(row.id)} className="flex h-6 w-6 items-center justify-center rounded-lg text-base text-slate-300 transition-colors hover:bg-red-50 hover:text-red-500" aria-label="Remove row">x</button>
-              <p className="basis-full pl-1 text-[11px] text-slate-400">{row.source_type === 'manual' ? 'Using manual input for this material.' : row.source}</p>
             </div>
           ))}
           {items.length === 0 && <p className="pl-3.5 text-xs text-slate-400">{accent.empty}</p>}
@@ -360,7 +355,7 @@ export default function Calculator() {
   function renderResultsPanel() {
     if (!result) return null;
     return (
-      <div className="self-start space-y-4 xl:sticky xl:top-7">
+      <div className="space-y-4">
         <div className="grid grid-cols-2 gap-3">
           <div className="rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 p-5 text-white shadow-lg shadow-blue-500/20">
             <div className="mb-2 text-xs font-medium uppercase tracking-wider opacity-70">Estimated Cost</div>
@@ -373,7 +368,7 @@ export default function Calculator() {
             <div className="mt-1 text-sm opacity-60">{Number(result.step_method.campaign_days).toFixed(1)}-day campaign</div>
           </div>
         </div>
-        <div className="surface-card overflow-hidden">
+        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
           <div className="px-5 pb-2 pt-4"><h3 className="text-sm font-semibold text-slate-700">Cost Breakdown</h3></div>
           <ResponsiveContainer width="100%" height={220}>
             <PieChart>
@@ -385,7 +380,7 @@ export default function Calculator() {
             </PieChart>
           </ResponsiveContainer>
         </div>
-        <div className="surface-card p-5">
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <h3 className="mb-3 text-sm font-semibold text-slate-700">Materials Breakdown</h3>
           <div className="space-y-2.5">
             {result.materials.components.map((component, index) => (
@@ -401,7 +396,7 @@ export default function Calculator() {
             <div className="flex justify-between border-t border-slate-100 pt-2.5 text-sm font-semibold text-slate-800"><span>Total Materials</span><span className="font-mono">${toDisplay(result.materials.total_materials_cost_per_lb).toFixed(4)}{fmtLabel}</span></div>
           </div>
         </div>
-        <div className="surface-card p-5">
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <h3 className="mb-3 text-sm font-semibold text-slate-700">Cost Summary</h3>
           <div className="overflow-hidden rounded-xl border border-slate-100">
             <div className="flex items-center justify-between border-b border-slate-100 px-4 py-2.5"><span className="text-sm text-slate-600">Materials</span><div className="flex items-center gap-2"><span className="rounded-full bg-slate-100 px-1.5 py-0.5 text-xs text-slate-400">{result.summary.materials_pct}%</span><span className="text-sm font-medium font-mono text-slate-700">${toDisplay(result.materials.total_materials_cost_per_lb).toFixed(4)}{fmtLabel}</span></div></div>
@@ -410,7 +405,7 @@ export default function Calculator() {
             <div className="flex items-center justify-between border-b border-slate-100 px-4 py-2.5"><span className="text-sm text-slate-400">Selling Margin ({Number(result.step_method.margin_pct).toFixed(1)}%)</span><span className="text-sm font-mono text-slate-400">included</span></div>
             <div className="flex items-center justify-between border-t border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50 px-4 py-3"><span className="text-sm font-bold text-blue-800">Estimated Selling Price</span><span className="text-sm font-bold font-mono text-blue-800">${toDisplay(result.summary.estimated_price_per_lb).toFixed(4)}{fmtLabel}&nbsp;=&nbsp;${(unit === 'kg' ? result.summary.estimated_price_per_lb : result.summary.estimated_price_per_kg).toFixed(2)}/{unit === 'kg' ? 'lb' : 'kg'}</span></div>
           </div>
-          <p className="mt-2.5 text-xs text-slate-400">* CatCost Step Method basis. 2017-{new Date().getFullYear()} ChemPPI escalation applied.</p>
+          <p className="mt-2.5 text-xs text-slate-400">* CatCost Step Method basis. 2017 - {new Date().getFullYear()} ChemPPI escalation applied.</p>
         </div>
       </div>
     );
@@ -418,58 +413,37 @@ export default function Calculator() {
 
   function renderEmptyPanel() {
     return (
-      <div className="surface-card flex min-h-[520px] flex-col justify-between overflow-hidden p-7">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Results Canvas</p>
-            <h3 className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-slate-900">Estimate preview</h3>
-            <p className="mt-2 max-w-sm text-sm leading-6 text-slate-500">Run a calculation to see selling price, material share, and processing cost in one place.</p>
-          </div>
-          <div className="rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1 text-[11px] font-medium text-emerald-700">Ready to calculate</div>
+      <div className="flex h-72 flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-gradient-to-br from-slate-50 to-slate-100">
+        <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-slate-200 bg-white shadow-sm">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="1.5" className="h-7 w-7"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18" strokeLinecap="round" strokeLinejoin="round" /></svg>
         </div>
-        <div className="flex flex-col items-center justify-center rounded-[28px] border border-dashed border-slate-200 bg-[linear-gradient(135deg,rgba(59,130,246,0.05),rgba(255,255,255,0.65))] px-6 py-14 text-center">
-          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-3xl border border-slate-200 bg-white shadow-sm">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="1.5" className="h-7 w-7"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18" strokeLinecap="round" strokeLinejoin="round" /></svg>
-          </div>
-          <div className="text-base font-semibold text-slate-700">Results appear here</div>
-          <div className="mt-2 max-w-sm text-sm leading-6 text-slate-500">Enter composition and process steps, then run Calculate to generate the cost summary and breakdown.</div>
-        </div>
-        <div className="grid gap-3 sm:grid-cols-3">
-          <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3"><div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Materials</div><div className="mt-2 text-sm font-medium text-slate-700">Active metal, promoter, support</div></div>
-          <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3"><div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Processing</div><div className="mt-2 text-sm font-medium text-slate-700">Campaign duration and step cost</div></div>
-          <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3"><div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Decision</div><div className="mt-2 text-sm font-medium text-slate-700">Selling price and cost balance</div></div>
-        </div>
+        <div className="text-sm font-medium text-slate-500">결과가 여기에 표시됩니다</div>
+        <div className="mt-1 text-xs text-slate-400">조성과 공정을 입력하고 Calculate를 누르세요</div>
       </div>
     );
   }
 
   return (
-    <div className="w-full px-7 py-7">
-      <div className="mb-7 flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+    <div className="max-w-7xl p-6">
+      <div className="mb-6">
         <div>
-          <span className="section-kicker">Catalyst Workspace</span>
-          <h2 className="mt-3 text-[30px] font-semibold tracking-[-0.03em] text-slate-900">Catalyst Cost Calculator</h2>
-          <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-500">Combine composition, price sources, and plant-scale steps to estimate catalyst selling cost.</p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <span className="rounded-full border border-slate-200 bg-white/80 px-3 py-1.5 text-xs font-medium text-slate-600 shadow-sm">{trackedFeeds} tracked feeds</span>
-          <span className="rounded-full border border-slate-200 bg-white/80 px-3 py-1.5 text-xs font-medium text-slate-600 shadow-sm">Live + indexed + manual pricing</span>
-          <span className="rounded-full border border-slate-200 bg-white/80 px-3 py-1.5 text-xs font-medium text-slate-600 shadow-sm">{steps.length} process steps selected</span>
+          <h2 className="text-xl font-bold text-slate-800">Catalyst Cost Calculator</h2>
+          <p className="mt-0.5 text-sm text-slate-400">CatCost Step Method · 활성금속 + 지지체 조성과 공정을 설정하면 제조원가를 추정합니다</p>
         </div>
       </div>
 
       <datalist id="known-metal-options">{KNOWN_METALS.map((metal) => <option key={metal} value={metal} />)}</datalist>
 
-      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.06fr)_minmax(380px,0.94fr)]">
+      <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
         <div className="space-y-4">
-          <div className="surface-card space-y-4 p-6">
-            <div className="flex flex-wrap items-start justify-between gap-3 border-b border-slate-100 pb-4">
+          <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="flex items-center gap-2.5">
               <h3 className="flex items-center gap-2.5 text-sm font-semibold text-slate-800"><span className="flex h-5 w-5 items-center justify-center rounded-full bg-indigo-600 text-[10px] font-bold text-white">1</span>Catalyst Composition</h3>
-              <div className="flex flex-wrap items-center gap-2">
-                {pricesUpdatedAt && <span className="text-[11px] text-slate-400">Prices refreshed {pricesUpdatedAt.toLocaleTimeString()}</span>}
+              <div className="ml-auto flex items-center gap-2">
+                {pricesUpdatedAt && <span className="text-[10px] text-slate-400">시세 기준 {pricesUpdatedAt.toLocaleTimeString()}</span>}
                 <button onClick={refreshPrices} disabled={refreshing} className="flex items-center gap-1 rounded-lg border border-slate-200 bg-slate-100 px-2 py-1 text-[11px] font-medium text-slate-500 transition-all hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700 disabled:opacity-50">
                   <svg className={`h-3 w-3 ${refreshing ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                  {refreshing ? 'Refreshing...' : 'Refresh prices'}
+                  {refreshing ? '갱신 중…' : '시세 갱신'}
                 </button>
               </div>
             </div>
@@ -478,32 +452,31 @@ export default function Calculator() {
             <div>
               <div className="mb-2 flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-emerald-500" /><span className="text-xs font-semibold uppercase tracking-wider text-emerald-700">Support</span></div>
               {rows.filter((row) => row.role === 'support').map((row) => (
-                <div key={row.id} className="flex flex-wrap items-start gap-2 rounded-2xl border border-slate-200/80 bg-slate-50/70 p-2.5">
-                  <div className="min-w-[12rem] flex-[1_1_18rem]">
-                    <select value={row.name} onChange={(e) => {
+                <div key={row.id} className="flex items-center gap-2">
+                  <select value={row.name} onChange={(e) => {
                       const support = SUPPORT_OPTIONS.find((item) => item.name === e.target.value);
                       updateRow(row.id, { name: e.target.value, price_per_lb: support?.price ?? row.price_per_lb, source_type: 'manual', source: 'Manual support default' });
-                    }} className="input-base bg-white">
-                      {SUPPORT_OPTIONS.map((support) => <option key={support.name} value={support.name}>{support.name}</option>)}
+                    }} className="input-base flex-1">
+                      {SUPPORT_OPTIONS.map((support) => <option key={support.name} value={support.name}>{support.name} - {support.note}</option>)}
                     </select>
-                    <p className="mt-1 pl-1 text-[11px] text-slate-500">{SUPPORT_OPTION_MAP[row.name]?.note ?? 'Support material'}</p>
+                  <div className="flex items-center gap-1">
+                    <span className="w-16 rounded-lg border border-slate-200 bg-slate-100 px-2 py-1.5 text-right font-mono text-sm text-slate-600">{supportWtPct.toFixed(1)}</span>
+                    <span className="text-xs text-slate-400">wt%</span>
+                    <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] text-slate-400">auto</span>
                   </div>
-                  <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-100 px-3 py-2 text-slate-600"><span className="w-11 text-right font-mono text-sm">{supportWtPct.toFixed(1)}</span><span className="text-[11px] text-slate-400">wt%</span><span className="rounded-full bg-white px-2 py-0.5 text-[10px] text-slate-400">auto</span></div>
-                  <span className={`flex items-center gap-1 rounded-lg border px-2 py-1 text-[10px] font-bold whitespace-nowrap ${sourceBadgeClass(row.source_type)}`}><span className="h-1.5 w-1.5 rounded-full bg-slate-400" />MANUAL</span>
                   {renderPriceField(row)}
-                  <p className="basis-full pl-1 text-[11px] text-slate-400">Support pricing is managed manually.</p>
                 </div>
               ))}
             </div>
             <div className={`flex items-center gap-2.5 rounded-xl border px-3.5 py-2.5 text-xs ${isValid ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : 'border-amber-200 bg-amber-50 text-amber-700'}`}>
-              <div className={`flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${isValid ? 'bg-emerald-200 text-emerald-700' : 'bg-amber-200 text-amber-700'}`}>{isValid ? 'OK' : '!'}</div>
-              <span>{isValid ? `Composition OK - active ${nonSupportWt.toFixed(1)}% + support ${supportWtPct.toFixed(1)}%` : !hasActiveMetal ? 'Add at least one active metal.' : nonSupportWt > 100 ? 'Active metal + promoter loading cannot exceed 100%.' : 'Set a positive active metal loading.'}</span>
+              <div className={`flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${isValid ? 'bg-emerald-200 text-emerald-700' : 'bg-amber-200 text-amber-700'}`}>{isValid ? '✓' : '!'}</div>
+              <span>{isValid ? `Composition OK · active ${nonSupportWt.toFixed(1)}% + support ${supportWtPct.toFixed(1)}%` : !hasActiveMetal ? 'Active metal을 최소 1개 추가하세요' : nonSupportWt > 100 ? 'Active + Promoter 합계가 100%를 초과합니다' : 'Active metal 비율을 입력하세요'}</span>
             </div>
           </div>
 
-          <div className="surface-card space-y-4 p-6">
+          <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
             <h3 className="flex items-center gap-2.5 text-sm font-semibold text-slate-800"><span className="flex h-5 w-5 items-center justify-center rounded-full bg-indigo-600 text-[10px] font-bold text-white">2</span>Manufacturing Process</h3>
-            <div className="flex flex-wrap items-center gap-3 border-b border-slate-100 pb-3">
+            <div className="flex items-center gap-3 border-b border-slate-100 pb-3">
               <span className="w-24 flex-shrink-0 text-sm text-slate-500">Order Size</span>
               <input type="number" min="1" step="1" value={orderSize} onChange={(e) => setOrderSize(Math.max(1, +e.target.value))} className="input-base w-24 text-center font-mono" />
               <span className="text-xs text-slate-400">tons</span>
@@ -536,7 +509,7 @@ export default function Calculator() {
           </div>
 
           <button onClick={handleCalculate} disabled={loading || !isValid || steps.length === 0} className="w-full rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 py-3.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition-all hover:from-blue-700 hover:to-indigo-700 disabled:opacity-40 disabled:shadow-none">
-            {loading ? <span className="flex items-center justify-center gap-2"><span className="h-4 w-4 rounded-full border-2 border-white border-t-transparent animate-spin" />Calculating...</span> : 'Calculate Manufacturing Cost'}
+            {loading ? <span className="flex items-center justify-center gap-2"><span className="h-4 w-4 rounded-full border-2 border-white border-t-transparent animate-spin" />Calculating…</span> : 'Calculate Manufacturing Cost →'}
           </button>
           {error && <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"><span className="font-medium">Error:</span> {error}</div>}
         </div>
