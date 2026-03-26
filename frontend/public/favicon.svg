@@ -1,99 +1,95 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
-    <radialGradient id="bg" cx="32%" cy="24%" r="78%">
-      <stop offset="0%" stop-color="#23395d"/>
-      <stop offset="58%" stop-color="#0f1a2c"/>
+    <radialGradient id="bg" cx="34%" cy="24%" r="80%">
+      <stop offset="0%" stop-color="#223b61"/>
+      <stop offset="58%" stop-color="#101a2c"/>
       <stop offset="100%" stop-color="#070d16"/>
     </radialGradient>
-    <linearGradient id="ring" x1="88" y1="88" x2="424" y2="424" gradientUnits="userSpaceOnUse">
+    <linearGradient id="ring" x1="96" y1="96" x2="416" y2="416" gradientUnits="userSpaceOnUse">
       <stop offset="0%" stop-color="#38bdf8"/>
       <stop offset="100%" stop-color="#0ea5e9"/>
     </linearGradient>
-    <linearGradient id="pellet" x1="182" y1="142" x2="330" y2="316" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#28486d"/>
-      <stop offset="100%" stop-color="#14263e"/>
+    <linearGradient id="pelletOuter" x1="182" y1="144" x2="330" y2="316" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#31527d"/>
+      <stop offset="100%" stop-color="#172943"/>
     </linearGradient>
-    <linearGradient id="pelletCore" x1="204" y1="172" x2="308" y2="292" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#31547f"/>
-      <stop offset="100%" stop-color="#1b3351"/>
+    <linearGradient id="pelletInner" x1="208" y1="176" x2="304" y2="286" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#3d6495"/>
+      <stop offset="100%" stop-color="#20395c"/>
     </linearGradient>
-    <linearGradient id="tagFill" x1="296" y1="296" x2="404" y2="404" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#fde047"/>
-      <stop offset="100%" stop-color="#f59e0b"/>
+    <linearGradient id="gold" x1="160" y1="338" x2="362" y2="256" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#fde68a"/>
     </linearGradient>
   </defs>
 
   <circle cx="256" cy="256" r="228" fill="url(#bg)"/>
   <circle cx="256" cy="256" r="220" fill="none" stroke="url(#ring)" stroke-width="12"/>
 
-  <g stroke="#5eead4" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.95">
-    <path d="M130 176 L192 132 L256 168 L320 132 L382 178" />
-    <path d="M256 168 L256 116" />
+  <g stroke="#67e8f9" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.95">
+    <path d="M138 186 L196 140 L256 174 L318 138 L374 182" />
   </g>
   <g>
-    <circle cx="130" cy="176" r="13" fill="#38bdf8"/>
-    <circle cx="192" cy="132" r="11" fill="#67e8f9"/>
-    <circle cx="256" cy="168" r="12" fill="#5eead4"/>
-    <circle cx="320" cy="132" r="11" fill="#93c5fd"/>
-    <circle cx="382" cy="178" r="13" fill="#38bdf8"/>
-    <circle cx="256" cy="116" r="10" fill="#5eead4"/>
+    <circle cx="138" cy="186" r="13" fill="#38bdf8"/>
+    <circle cx="196" cy="140" r="11" fill="#7dd3fc"/>
+    <circle cx="256" cy="174" r="12" fill="#5eead4"/>
+    <circle cx="318" cy="138" r="11" fill="#93c5fd"/>
+    <circle cx="374" cy="182" r="13" fill="#38bdf8"/>
   </g>
 
   <path
-    d="M256 130
-       L338 176
-       L338 270
-       L256 316
-       L174 270
-       L174 176 Z"
-    fill="url(#pellet)"
+    d="M256 134
+       L336 180
+       L336 272
+       L256 318
+       L176 272
+       L176 180 Z"
+    fill="url(#pelletOuter)"
     stroke="#f8fafc"
     stroke-width="16"
     stroke-linejoin="round"
   />
   <path
-    d="M256 168
-       L306 196
-       L306 252
-       L256 280
-       L206 252
-       L206 196 Z"
-    fill="url(#pelletCore)"
-    opacity="0.95"
+    d="M256 174
+       L304 202
+       L304 250
+       L256 278
+       L208 250
+       L208 202 Z"
+    fill="url(#pelletInner)"
+    opacity="0.98"
   />
-  <path d="M256 130 V316" stroke="#f8fafc" stroke-width="10" opacity="0.85"/>
-  <path d="M174 176 L256 222 L338 176" stroke="#f8fafc" stroke-width="10" opacity="0.85" fill="none" stroke-linejoin="round"/>
+  <path d="M256 134 V318" stroke="#f8fafc" stroke-width="10" opacity="0.78"/>
+  <path d="M176 180 L256 226 L336 180" stroke="#f8fafc" stroke-width="10" opacity="0.78" fill="none" stroke-linejoin="round"/>
 
-  <g fill="#e0f2fe">
-    <circle cx="226" cy="206" r="15"/>
-    <circle cx="286" cy="206" r="15"/>
-    <circle cx="256" cy="246" r="16"/>
+  <g stroke="#dbeafe" stroke-width="9" stroke-linecap="round" opacity="0.96">
+    <path d="M224 206 L256 226 L288 206"/>
+    <path d="M256 226 L256 256"/>
   </g>
-  <g fill="#0f172a" opacity="0.9">
-    <circle cx="226" cy="206" r="7"/>
-    <circle cx="286" cy="206" r="7"/>
-    <circle cx="256" cy="246" r="8"/>
+  <g fill="#e0f2fe">
+    <circle cx="224" cy="206" r="15"/>
+    <circle cx="288" cy="206" r="15"/>
+    <circle cx="256" cy="256" r="16"/>
+  </g>
+  <g fill="#0f172a" opacity="0.92">
+    <circle cx="224" cy="206" r="7"/>
+    <circle cx="288" cy="206" r="7"/>
+    <circle cx="256" cy="256" r="8"/>
+  </g>
+
+  <g fill="none" stroke="url(#gold)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M166 332 C206 330 224 312 248 298 C278 280 304 280 340 248" />
+    <path d="M320 246 L342 246 L334 224" />
+  </g>
+  <g fill="#fbbf24" stroke="#fff7ed" stroke-width="5">
+    <circle cx="166" cy="332" r="10"/>
+    <circle cx="248" cy="298" r="11"/>
+    <circle cx="340" cy="248" r="11"/>
   </g>
 
   <g stroke="#38bdf8" stroke-width="8" stroke-linecap="round" opacity="0.95">
-    <path d="M212 286 H300"/>
-    <path d="M224 304 H288"/>
-    <path d="M238 322 H274"/>
-  </g>
-
-  <g transform="rotate(-10 348 346)">
-    <path
-      d="M302 296 H384
-         C396 296 406 306 406 318
-         V382
-         C406 394 396 404 384 404
-         H302
-         C290 404 280 394 280 382
-         V318
-         C280 306 290 296 302 296Z"
-      fill="url(#tagFill)"
-    />
-    <circle cx="300" cy="320" r="9" fill="#111827"/>
-    <text x="344" y="370" font-family="Segoe UI, Arial, sans-serif" font-size="84" font-weight="900" text-anchor="middle" fill="#111827">$</text>
+    <path d="M214 292 H298"/>
+    <path d="M226 310 H286"/>
+    <path d="M238 328 H274"/>
   </g>
 </svg>
