@@ -1,19 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
-    <radialGradient id="bg" cx="32%" cy="22%" r="78%">
+    <radialGradient id="bg" cx="32%" cy="24%" r="78%">
       <stop offset="0%" stop-color="#23395d"/>
-      <stop offset="55%" stop-color="#101b2e"/>
-      <stop offset="100%" stop-color="#070d17"/>
+      <stop offset="58%" stop-color="#0f1a2c"/>
+      <stop offset="100%" stop-color="#070d16"/>
     </radialGradient>
-    <linearGradient id="ring" x1="96" y1="96" x2="416" y2="416" gradientUnits="userSpaceOnUse">
+    <linearGradient id="ring" x1="88" y1="88" x2="424" y2="424" gradientUnits="userSpaceOnUse">
       <stop offset="0%" stop-color="#38bdf8"/>
       <stop offset="100%" stop-color="#0ea5e9"/>
     </linearGradient>
-    <linearGradient id="catFill" x1="170" y1="136" x2="336" y2="376" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#203555"/>
-      <stop offset="100%" stop-color="#132238"/>
+    <linearGradient id="pellet" x1="182" y1="142" x2="330" y2="316" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#28486d"/>
+      <stop offset="100%" stop-color="#14263e"/>
     </linearGradient>
-    <linearGradient id="tagFill" x1="304" y1="294" x2="420" y2="404" gradientUnits="userSpaceOnUse">
+    <linearGradient id="pelletCore" x1="204" y1="172" x2="308" y2="292" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#31547f"/>
+      <stop offset="100%" stop-color="#1b3351"/>
+    </linearGradient>
+    <linearGradient id="tagFill" x1="296" y1="296" x2="404" y2="404" gradientUnits="userSpaceOnUse">
       <stop offset="0%" stop-color="#fde047"/>
       <stop offset="100%" stop-color="#f59e0b"/>
     </linearGradient>
@@ -22,65 +26,74 @@
   <circle cx="256" cy="256" r="228" fill="url(#bg)"/>
   <circle cx="256" cy="256" r="220" fill="none" stroke="url(#ring)" stroke-width="12"/>
 
-  <g stroke="#5eead4" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.95">
-    <path d="M132 170 L188 126 L238 152" />
-    <path d="M238 152 L292 120 L346 150" />
-    <path d="M346 150 L372 204" />
+  <g stroke="#5eead4" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.95">
+    <path d="M130 176 L192 132 L256 168 L320 132 L382 178" />
+    <path d="M256 168 L256 116" />
   </g>
   <g>
-    <circle cx="132" cy="170" r="13" fill="#38bdf8"/>
-    <circle cx="188" cy="126" r="11" fill="#67e8f9"/>
-    <circle cx="238" cy="152" r="12" fill="#5eead4"/>
-    <circle cx="292" cy="120" r="11" fill="#93c5fd"/>
-    <circle cx="346" cy="150" r="12" fill="#38bdf8"/>
-    <circle cx="372" cy="204" r="10" fill="#5eead4"/>
+    <circle cx="130" cy="176" r="13" fill="#38bdf8"/>
+    <circle cx="192" cy="132" r="11" fill="#67e8f9"/>
+    <circle cx="256" cy="168" r="12" fill="#5eead4"/>
+    <circle cx="320" cy="132" r="11" fill="#93c5fd"/>
+    <circle cx="382" cy="178" r="13" fill="#38bdf8"/>
+    <circle cx="256" cy="116" r="10" fill="#5eead4"/>
   </g>
 
   <path
-    d="M171 330
-       C159 280 166 226 188 180
-       L218 112
-       L256 157
-       L294 112
-       L324 180
-       C346 226 353 280 341 330
-       C316 364 289 386 256 396
-       C223 386 196 364 171 330Z"
-    fill="url(#catFill)"
+    d="M256 130
+       L338 176
+       L338 270
+       L256 316
+       L174 270
+       L174 176 Z"
+    fill="url(#pellet)"
     stroke="#f8fafc"
     stroke-width="16"
     stroke-linejoin="round"
   />
+  <path
+    d="M256 168
+       L306 196
+       L306 252
+       L256 280
+       L206 252
+       L206 196 Z"
+    fill="url(#pelletCore)"
+    opacity="0.95"
+  />
+  <path d="M256 130 V316" stroke="#f8fafc" stroke-width="10" opacity="0.85"/>
+  <path d="M174 176 L256 222 L338 176" stroke="#f8fafc" stroke-width="10" opacity="0.85" fill="none" stroke-linejoin="round"/>
 
-  <path d="M206 262 C216 250 228 244 240 244" stroke="#f8fafc" stroke-width="12" stroke-linecap="round"/>
-  <path d="M272 244 C284 244 296 250 306 262" stroke="#f8fafc" stroke-width="12" stroke-linecap="round"/>
-  <circle cx="223" cy="261" r="8" fill="#38bdf8"/>
-  <circle cx="289" cy="261" r="8" fill="#38bdf8"/>
-  <path d="M256 283 L239 300 L256 312 L273 300 Z" fill="#f59e0b"/>
-  <path d="M240 322 C247 332 253 336 256 336 C259 336 265 332 272 322" stroke="#f8fafc" stroke-width="10" stroke-linecap="round"/>
-
-  <g stroke="#f8fafc" stroke-width="8" stroke-linecap="round" opacity="0.95">
-    <path d="M212 302 L150 286"/>
-    <path d="M210 320 L144 320"/>
-    <path d="M212 338 L154 356"/>
-    <path d="M300 302 L362 286"/>
-    <path d="M302 320 L368 320"/>
-    <path d="M300 338 L358 356"/>
+  <g fill="#e0f2fe">
+    <circle cx="226" cy="206" r="15"/>
+    <circle cx="286" cy="206" r="15"/>
+    <circle cx="256" cy="246" r="16"/>
+  </g>
+  <g fill="#0f172a" opacity="0.9">
+    <circle cx="226" cy="206" r="7"/>
+    <circle cx="286" cy="206" r="7"/>
+    <circle cx="256" cy="246" r="8"/>
   </g>
 
-  <g transform="rotate(-10 352 348)">
+  <g stroke="#38bdf8" stroke-width="8" stroke-linecap="round" opacity="0.95">
+    <path d="M212 286 H300"/>
+    <path d="M224 304 H288"/>
+    <path d="M238 322 H274"/>
+  </g>
+
+  <g transform="rotate(-10 348 346)">
     <path
-      d="M304 294 H386
-         C398 294 408 304 408 316
-         V380
-         C408 392 398 402 386 402
-         H304
-         C292 402 282 392 282 380
-         V316
-         C282 304 292 294 304 294Z"
+      d="M302 296 H384
+         C396 296 406 306 406 318
+         V382
+         C406 394 396 404 384 404
+         H302
+         C290 404 280 394 280 382
+         V318
+         C280 306 290 296 302 296Z"
       fill="url(#tagFill)"
     />
-    <circle cx="302" cy="318" r="9" fill="#10131a"/>
-    <text x="348" y="368" font-family="Segoe UI, Arial, sans-serif" font-size="84" font-weight="900" text-anchor="middle" fill="#111827">$</text>
+    <circle cx="300" cy="320" r="9" fill="#111827"/>
+    <text x="344" y="370" font-family="Segoe UI, Arial, sans-serif" font-size="84" font-weight="900" text-anchor="middle" fill="#111827">$</text>
   </g>
 </svg>
