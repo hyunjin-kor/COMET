@@ -3,7 +3,7 @@
  * Launches the FastAPI backend as a sidecar and shows the React frontend
  */
 
-const { app, BrowserWindow, shell, dialog, Menu, Tray, nativeImage } = require('electron');
+const { app, BrowserWindow, shell, dialog, Menu } = require('electron');
 const path = require('path');
 const { spawn } = require('child_process');
 const http = require('http');
@@ -24,7 +24,42 @@ const POLL_INTERVAL_MS = 500;
 let mainWindow = null;
 let backendProcess = null;
 let splashWindow = null;
-let tray = null;
+
+const BRAND_MARK_SVG = `
+<svg viewBox="0 0 160 160" width="42" height="42" fill="none" aria-hidden="true">
+  <defs>
+    <linearGradient id="cp-bg" x1="80" y1="14" x2="80" y2="146" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5CC1FF"/>
+      <stop offset="1" stop-color="#2676DB"/>
+    </linearGradient>
+    <radialGradient id="cp-shine" cx="30%" cy="22%" r="36%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="cp-core" x1="80" y1="40" x2="80" y2="124" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#17365E"/>
+      <stop offset="1" stop-color="#0D2445"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="14" y="14" width="132" height="132" rx="36" fill="url(#cp-bg)" />
+  <rect x="14.75" y="14.75" width="130.5" height="130.5" rx="35.25" stroke="#FFFFFF" stroke-opacity="0.36" stroke-width="1.5" />
+  <circle cx="52" cy="44" r="28" fill="url(#cp-shine)" />
+  <path
+    d="M80 42 106 58V102L80 118 54 102V58L80 42Z"
+    fill="url(#cp-core)"
+    stroke="#E8F5FF"
+    stroke-opacity="0.92"
+    stroke-width="4"
+    stroke-linejoin="round"
+  />
+  <circle cx="68" cy="74" r="7" fill="#A5F2E0" />
+  <circle cx="92" cy="74" r="7" fill="#A5F2E0" />
+  <circle cx="80" cy="92" r="7" fill="#A5F2E0" />
+
+  <path d="M42 106 62 92 80 98 108 68" stroke="#FFFFFF" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M120 58 100 62 108 80Z" fill="#FFD66B" />
+</svg>`;
 
 function debugLog(message) {
   const line = `[${new Date().toISOString()}] ${message}`;
@@ -54,7 +89,6 @@ function showAndFocusMainWindow(reason = 'show') {
   if (!mainWindow.isVisible()) {
     mainWindow.show();
   }
-  mainWindow.center();
   mainWindow.moveTop();
   mainWindow.focus();
   mainWindow.setAlwaysOnTop(true);
@@ -262,14 +296,14 @@ function stopBackend() {
 function createSplashWindow() {
   debugLog('Creating splash window');
   splashWindow = new BrowserWindow({
-    width: 480,
-    height: 300,
+    width: 560,
+    height: 356,
     frame: false,
     transparent: false,
     alwaysOnTop: true,
     resizable: false,
     skipTaskbar: true,
-    backgroundColor: '#060b14',
+    backgroundColor: '#091321',
     webPreferences: { nodeIntegration: false },
   });
 
@@ -280,41 +314,180 @@ function createSplashWindow() {
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    background: linear-gradient(135deg, #0f1b35 0%, #060b14 100%);
-    border: 1px solid #00d4ff44;
-    border-radius: 16px;
-    color: white;
-    font-family: 'Segoe UI', Arial, sans-serif;
+    background:
+      radial-gradient(circle at 16% 18%, rgba(120, 242, 208, 0.16), transparent 0 26%),
+      radial-gradient(circle at 84% 12%, rgba(239, 195, 108, 0.14), transparent 0 22%),
+      linear-gradient(160deg, #0a1320 0%, #101d31 52%, #09111d 100%);
+    color: #f8fafc;
+    font-family: 'Aptos', 'Segoe UI', sans-serif;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100vh;
     overflow: hidden;
+    padding: 14px;
   }
-  .logo { font-size: 52px; font-weight: 800; letter-spacing: 2px; margin-bottom: 8px; }
-  .logo span.cat { color: #00d4ff; }
-  .logo span.price { color: #ffd700; }
-  .subtitle { color: #5580aa; font-size: 13px; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 32px; }
-  .spinner {
-    width: 40px; height: 40px;
-    border: 3px solid #1a2a4a;
-    border-top: 3px solid #00d4ff;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin-bottom: 16px;
+  body::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+    background-size: 84px 84px;
+    mask-image: radial-gradient(circle at center, black 22%, transparent 82%);
+    opacity: 0.5;
   }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .status { color: #7099cc; font-size: 14px; }
-  .version { position: absolute; bottom: 16px; color: #2a3a5a; font-size: 11px; }
+  .panel {
+    position: relative;
+    width: 100%;
+    min-height: 100%;
+    padding: 18px 18px 16px;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+    box-shadow: 0 22px 52px rgba(0, 0, 0, 0.28);
+    backdrop-filter: blur(18px);
+    display: flex;
+    flex-direction: column;
+  }
+  .panel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle at top left, rgba(120, 242, 208, 0.16), transparent 0 34%);
+    pointer-events: none;
+  }
+  .row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    z-index: 1;
+  }
+  .mark {
+    width: 64px;
+    height: 64px;
+    border-radius: 22px;
+    display: grid;
+    place-items: center;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.10);
+  }
+  .eyebrow {
+    color: #94a3b8;
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+  }
+  .logo {
+    margin-top: 4px;
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+  .logo span.cat { color: #f8fafc; }
+  .logo span.price { color: #78f2d0; }
+  .subtitle {
+    margin-top: 8px;
+    max-width: 300px;
+    color: #cbd5e1;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .meta {
+    position: relative;
+    z-index: 1;
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .stat {
+    padding: 12px 12px 13px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.04);
+  }
+  .stat .label {
+    color: #94a3b8;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+  .stat .value {
+    margin-top: 8px;
+    color: #f8fafc;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .progress {
+    position: relative;
+    z-index: 1;
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .track {
+    flex: 1;
+    height: 9px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+  }
+  .bar {
+    height: 100%;
+    width: 42%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #78f2d0, #efc36c);
+    animation: loading 1.5s ease-in-out infinite;
+    transform-origin: left center;
+  }
+  .status {
+    position: relative;
+    z-index: 1;
+    margin-top: 10px;
+    color: #cbd5e1;
+    font-size: 12.5px;
+    line-height: 1.45;
+  }
+  .version {
+    position: relative;
+    z-index: 1;
+    margin-top: auto;
+    padding-top: 10px;
+    color: #64748b;
+    font-size: 11px;
+  }
+  @keyframes loading {
+    0% { transform: translateX(-38%) scaleX(0.72); opacity: 0.78; }
+    50% { transform: translateX(18%) scaleX(1); opacity: 1; }
+    100% { transform: translateX(128%) scaleX(0.72); opacity: 0.78; }
+  }
 </style>
 </head>
 <body>
-  <div class="logo"><span class="cat">Cat</span><span class="price">Price</span></div>
-  <div class="subtitle">Catalyst Cost Tool</div>
-  <div class="spinner"></div>
-  <div class="status">Starting backend server...</div>
-  <div class="version">v${app.getVersion()}</div>
+  <div class="panel">
+    <div class="row">
+      <div class="mark">${BRAND_MARK_SVG}</div>
+      <div>
+        <div class="eyebrow">Desktop Workspace</div>
+        <div class="logo"><span class="cat">Cat</span><span class="price">Price</span></div>
+        <div class="subtitle">Live metals, catalyst cost intelligence, and process economics loading into the desktop workspace.</div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="stat"><div class="label">Mode</div><div class="value">Desktop launch</div></div>
+      <div class="stat"><div class="label">Engine</div><div class="value">FastAPI shell</div></div>
+      <div class="stat"><div class="label">Focus</div><div class="value">Cost studio</div></div>
+    </div>
+    <div class="progress"><div class="track"><div class="bar"></div></div></div>
+    <div class="status">Starting the backend and fitting the market workspace to the window...</div>
+    <div class="version">v${app.getVersion()}</div>
+  </div>
 </body>
 </html>`;
 
@@ -325,15 +498,32 @@ function createSplashWindow() {
 // ─── Main Window ──────────────────────────────────────────────────────────────
 function createMainWindow() {
   debugLog('Creating main window');
+  const desktopChromeOptions = process.platform === 'win32'
+    ? {
+        frame: false,
+        titleBarStyle: 'hidden',
+        titleBarOverlay: {
+          color: '#f7f1e6',
+          symbolColor: '#142033',
+          height: 44,
+        },
+        backgroundMaterial: 'mica',
+        autoHideMenuBar: true,
+      }
+    : process.platform === 'darwin'
+      ? { titleBarStyle: 'hiddenInset' }
+      : {};
+
   mainWindow = new BrowserWindow({
-    width: 1400,
-    height: 900,
-    minWidth: 900,
-    minHeight: 600,
+    width: 1480,
+    height: 940,
+    minWidth: 1120,
+    minHeight: 720,
     title: 'CatPrice | Catalyst Cost Tool',
-    backgroundColor: '#f8fafc',
+    backgroundColor: '#f7f1e6',
     show: false,
     icon: path.join(__dirname, 'icon.png'),
+    ...desktopChromeOptions,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
@@ -458,6 +648,7 @@ function showAbout() {
     ].join('\n'),
     buttons: ['OK'],
   });
+  mainWindow.center();
 }
 
 // ─── App Lifecycle ────────────────────────────────────────────────────────────

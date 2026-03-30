@@ -1,155 +1,134 @@
 import { NavLink } from 'react-router-dom';
 import { useUnit } from '../../lib/use-unit';
-
-const navItems = [
-  {
-    to: '/',
-    label: 'Calculator',
-    sub: 'Cost Estimator',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-5 h-5">
-        <rect x="4" y="3" width="16" height="18" rx="2" />
-        <path d="M8 7h8M8 11h5M8 15h3" strokeLinecap="round" />
-        <path d="M15 14l2 2 3-3" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
-  },
-  {
-    to: '/prices',
-    label: 'Metal Prices',
-    sub: 'Live Market Data',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-5 h-5">
-        <path d="M3 17l4-4 4 2 4-6 4 3" strokeLinecap="round" strokeLinejoin="round" />
-        <circle cx="21" cy="12" r="1" fill="currentColor" stroke="none" />
-        <path d="M3 21h18" strokeLinecap="round" />
-      </svg>
-    ),
-  },
-  {
-    to: '/compare',
-    label: 'Compare',
-    sub: 'Side-by-Side',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-5 h-5">
-        <rect x="3" y="6" width="7" height="14" rx="1.5" />
-        <rect x="14" y="6" width="7" height="14" rx="1.5" />
-        <path d="M10 12h4" strokeLinecap="round" />
-        <path d="M6 3v3M18 3v3" strokeLinecap="round" />
-      </svg>
-    ),
-  },
-  {
-    to: '/uncertainty',
-    label: 'Uncertainty',
-    sub: 'Monte Carlo',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-5 h-5">
-        <path d="M2 12C2 12 5 4 12 4s10 8 10 8-3 8-10 8S2 12 2 12z" />
-        <circle cx="12" cy="12" r="3" />
-        <path d="M12 2v2M12 20v2M2 12H4M20 12h2" strokeLinecap="round" />
-      </svg>
-    ),
-  },
-  {
-    to: '/library',
-    label: 'Library',
-    sub: 'Materials & Steps',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-5 h-5">
-        <path d="M4 19.5A2.5 2.5 0 016.5 17H20" strokeLinecap="round" />
-        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z" />
-        <path d="M9 7h6M9 11h4" strokeLinecap="round" />
-      </svg>
-    ),
-  },
-];
+import BrandMark from './BrandMark';
+import { navigationItems } from './navigation';
 
 export default function Sidebar() {
   const { unit, toggle } = useUnit();
+
   return (
-    <aside className="w-60 min-h-screen flex-shrink-0 select-none bg-[#0f1623] text-white">
-      {/* Brand */}
-      <div className="px-5 pb-5 pt-6">
-        <div className="mb-1 flex items-center gap-3">
-          <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-900/40">
-            <svg viewBox="0 0 24 24" fill="none" className="w-4.5 h-4.5">
-              <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
+    <aside className="hidden lg:block">
+      <div className="surface-rail sticky top-[98px] overflow-hidden p-5">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(120,242,208,0.18),transparent_0_34%),radial-gradient(circle_at_bottom_right,rgba(239,195,108,0.12),transparent_0_26%)]" />
+
+        <div className="relative flex flex-col gap-6">
           <div>
-            <h1 className="text-[15px] font-bold leading-none tracking-tight text-white">CatPrice</h1>
-            <p className="mt-0.5 text-[10px] leading-none text-slate-500">Catalyst Cost Estimator</p>
-          </div>
-        </div>
-        <div className="mt-4 h-px bg-gradient-to-r from-slate-700 via-slate-600 to-transparent" />
-      </div>
-
-      {/* Nav */}
-      <nav className="flex-1 space-y-0.5 px-3">
-        {navItems.map((item) => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            end={item.to === '/'}
-            className={({ isActive }) =>
-              `group flex items-center gap-3 rounded-xl border px-3 py-2.5 text-sm transition-all duration-150 ${
-                isActive
-                  ? 'border-blue-500/30 bg-gradient-to-r from-blue-600/30 to-indigo-600/20 text-white shadow-sm'
-                  : 'border-transparent text-slate-400 hover:bg-white/5 hover:text-slate-200'
-              }`
-            }
-          >
-            {({ isActive }) => (
-              <>
-                <span className={`flex-shrink-0 transition-colors ${isActive ? 'text-blue-400' : 'text-slate-500 group-hover:text-slate-300'}`}>
-                  {item.icon}
-                </span>
-                <div className="min-w-0">
-                  <div className={`text-[13px] font-medium leading-none ${isActive ? 'text-white' : ''}`}>{item.label}</div>
-                  <div className={`mt-0.5 text-[10px] leading-none transition-colors ${isActive ? 'text-blue-300/70' : 'text-slate-600 group-hover:text-slate-500'}`}>{item.sub}</div>
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="flex h-14 w-14 items-center justify-center rounded-[24px] border border-white/10 bg-white/8">
+                  <BrandMark className="h-10 w-10" />
                 </div>
-                {isActive && (
-                  <span className="ml-auto h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blue-400" />
+
+                <div className="min-w-0">
+                  <div className="font-display text-[1.9rem] leading-none text-white">CatPrice</div>
+                  <div className="mt-1 text-xs leading-5 text-slate-400">
+                    Industrial-scale catalyst cost estimation with live price references layered onto CatCost-style modules.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-5 grid gap-2">
+              <div className="rounded-[22px] border border-white/10 bg-white/6 px-4 py-3">
+                <div className="cp-subtle-label !text-slate-400">Workspace mode</div>
+                <div className="mt-2 text-sm font-semibold text-white">Desktop costing terminal</div>
+                <div className="mt-1 text-xs leading-5 text-slate-400">
+                  Inputs, libraries, outputs, comparison, and uncertainty analysis in one shell.
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div className="rounded-[22px] border border-white/10 bg-white/6 px-4 py-3">
+                  <div className="cp-subtle-label !text-slate-400">Basis</div>
+                  <div className="mt-2 text-sm font-semibold text-white">CatCost</div>
+                </div>
+                <div className="rounded-[22px] border border-white/10 bg-white/6 px-4 py-3">
+                  <div className="cp-subtle-label !text-slate-400">View</div>
+                  <div className="mt-2 text-sm font-semibold text-white">Live + indexed</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-2 border-t border-white/10 pt-6">
+            <div className="cp-subtle-label !text-slate-400">Navigation</div>
+            {navigationItems.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.to === '/'}
+                className={({ isActive }) =>
+                  `group block rounded-[24px] border px-4 py-4 transition ${
+                    isActive
+                      ? 'border-[#7cf1d0]/18 bg-[linear-gradient(135deg,rgba(124,241,208,0.18),rgba(255,255,255,0.06))] shadow-[0_18px_38px_rgba(0,0,0,0.16)]'
+                      : 'border-white/8 bg-white/[0.03] hover:border-white/14 hover:bg-white/[0.05]'
+                  }`
+                }
+              >
+                {({ isActive }) => (
+                  <div className="flex items-start gap-3">
+                    <div
+                      className={`mt-0.5 flex h-11 w-11 flex-none items-center justify-center rounded-[18px] border transition ${
+                        isActive
+                          ? 'border-[#7cf1d0]/28 bg-[#7cf1d0]/14 text-[#bdfae7]'
+                          : 'border-white/10 bg-white/6 text-slate-300 group-hover:text-white'
+                      }`}
+                    >
+                      <item.Icon className="h-5 w-5" />
+                    </div>
+
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <div className="truncate text-sm font-semibold text-white">{item.label}</div>
+                        {isActive && <span className="h-2 w-2 rounded-full bg-[#7cf1d0]" />}
+                      </div>
+                      <div className="mt-1 text-xs leading-5 text-slate-400">{item.subtitle}</div>
+                    </div>
+                  </div>
                 )}
-              </>
-            )}
-          </NavLink>
-        ))}
-      </nav>
+              </NavLink>
+            ))}
+          </div>
 
-      {/* Footer */}
-      <div className="px-4 py-4">
-        <div className="mb-3 h-px bg-gradient-to-r from-slate-700 via-slate-600 to-transparent" />
+          <div className="border-t border-white/10 pt-6">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <div className="cp-subtle-label !text-slate-400">Output unit</div>
+                <div className="mt-2 text-sm font-semibold text-white">Working display</div>
+              </div>
 
-        {/* Unit toggle */}
-        <div className="mb-3 flex items-center justify-between">
-          <span className="text-[10px] font-medium uppercase tracking-wider text-slate-500">Unit</span>
-          <button
-            onClick={toggle}
-            className="flex h-6 items-center gap-0 rounded-full border border-slate-700 bg-slate-800 p-0.5 transition-all"
-            title="Toggle kg / lb"
-          >
-            <span className={`flex h-5 items-center px-2.5 rounded-full text-[10px] font-bold transition-all ${
-              unit === 'kg'
-                ? 'bg-blue-500 text-white shadow-sm'
-                : 'text-slate-500'
-            }`}>kg</span>
-            <span className={`flex h-5 items-center px-2.5 rounded-full text-[10px] font-bold transition-all ${
-              unit === 'lb'
-                ? 'bg-blue-500 text-white shadow-sm'
-                : 'text-slate-500'
-            }`}>lb</span>
-          </button>
-        </div>
+              <button
+                onClick={toggle}
+                className="no-drag flex items-center gap-1 rounded-full border border-white/10 bg-white/6 p-1"
+                title="Toggle output units"
+              >
+                <span
+                  className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
+                    unit === 'kg' ? 'bg-[#7cf1d0] text-slate-950' : 'text-slate-300'
+                  }`}
+                >
+                  kg
+                </span>
+                <span
+                  className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
+                    unit === 'lb' ? 'bg-[#7cf1d0] text-slate-950' : 'text-slate-300'
+                  }`}
+                >
+                  lb
+                </span>
+              </button>
+            </div>
 
-        <div className="mb-3 h-px bg-gradient-to-r from-slate-700 via-slate-600 to-transparent" />
-        <div className="flex items-center justify-between">
-          <span className="text-[10px] text-slate-600 font-mono">v1.0.1</span>
-          <span className="text-[10px] text-slate-600">All rights reserved</span>
-        </div>
-        <div className="mt-1.5 text-[9px] leading-relaxed text-slate-700">
-          Based on CatCost methodology<br/>Baddour et al. 2018
+            <div className="mt-4 rounded-[24px] border border-white/10 bg-white/6 px-4 py-4">
+              <div className="cp-subtle-label !text-slate-400">Methodology note</div>
+              <div className="mt-2 text-xs leading-6 text-slate-400">
+                CatCost integrates essential cost-estimation methods in a user-friendly tool; CatPrice follows that module structure and adds live market references plus a desktop workspace.
+              </div>
+              <div className="mt-3 text-[11px] leading-5 text-slate-500">
+                Baddour et al. 2018 / Van Allsburg et al. 2022
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </aside>

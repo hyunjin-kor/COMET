@@ -44,6 +44,8 @@ CatCost_v1-1-1/
 # Misc
 *.txt
 tmp/
+output/
+.playwright-cli/
 backend/data/_catcost_raw_extract.json
 CodexLauncher.vbs
 CLAUDE.md

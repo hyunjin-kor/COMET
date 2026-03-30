@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 import {
-  apiUrl,
   calculateCost,
   fetchPrices,
+  refreshPrices as refreshPriceFeed,
   type ComponentInput,
   type CostInput,
   type CostResult,
@@ -13,37 +13,38 @@ import { useUnit } from '../lib/use-unit';
 
 const TROY_OZ_PER_LB = 14.5833;
 const KNOWN_METALS = ['Pt', 'Pd', 'Rh', 'Ru', 'Ir', 'Ni', 'Co', 'Cu', 'Fe', 'Mo', 'W', 'Au', 'Ag', 'Al'];
-const CHART_COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'];
+const CHART_COLORS = ['#78f2d0', '#88a8ff', '#efc36c', '#f3a08d', '#c5b7ff', '#8de0ff'];
+const QUICK_ORDER_SIZES = [2, 20, 200];
 const SUPPORT_OPTIONS = [
-  { name: 'Al2O3', price: 0.5, note: 'Alumina - most common' },
-  { name: 'SiO2', price: 0.3, note: 'Silica' },
-  { name: 'TiO2', price: 1.2, note: 'Titania' },
+  { name: 'Al2O3', price: 0.5, note: 'Alumina, default refinery support' },
+  { name: 'SiO2', price: 0.3, note: 'Silica support' },
+  { name: 'TiO2', price: 1.2, note: 'Titania support' },
   { name: 'Carbon', price: 1.5, note: 'Activated carbon' },
-  { name: 'ZSM-5', price: 3, note: 'Zeolite (MFI)' },
-  { name: 'USY', price: 2.5, note: 'Zeolite (FAU) - FCC' },
-  { name: 'CeO2', price: 2, note: 'Ceria' },
-  { name: 'MgO', price: 0.4, note: 'Magnesia' },
-  { name: 'ZrO2', price: 5, note: 'Zirconia' },
-  { name: 'SiO2-Al2O3', price: 0.8, note: 'Silica-alumina' },
+  { name: 'ZSM-5', price: 3, note: 'Zeolite, MFI family' },
+  { name: 'USY', price: 2.5, note: 'FCC-grade zeolite' },
+  { name: 'CeO2', price: 2, note: 'Ceria support' },
+  { name: 'MgO', price: 0.4, note: 'Magnesia support' },
+  { name: 'ZrO2', price: 5, note: 'Zirconia support' },
+  { name: 'SiO2-Al2O3', price: 0.8, note: 'Silica-alumina blend' },
 ] as const;
 const ALL_STEPS = [
   { key: 'mixer_dry_blender', label: 'Dry Blender', category: 'Mixing', scales: ['small', 'medium', 'large'] },
   { key: 'mixer_slurry', label: 'Slurry Mixer', category: 'Mixing', scales: ['small', 'medium', 'large'] },
   { key: 'incipient_wetness', label: 'Incipient Wetness', category: 'Impregnation', scales: ['small', 'medium', 'large'] },
-  { key: 'reactor_simple', label: 'Reactor - Simple', category: 'Reaction', scales: ['small', 'medium', 'large'] },
-  { key: 'reactor_multistep', label: 'Reactor - Multistep', category: 'Reaction', scales: ['small', 'medium', 'large'] },
+  { key: 'reactor_simple', label: 'Simple Reactor', category: 'Reaction', scales: ['small', 'medium', 'large'] },
+  { key: 'reactor_multistep', label: 'Multistep Reactor', category: 'Reaction', scales: ['small', 'medium', 'large'] },
   { key: 'crystallizer', label: 'Crystallizer', category: 'Reaction', scales: ['small', 'medium', 'large'] },
-  { key: 'dryer_batch_vacuum_tray', label: 'Dryer - Batch Vacuum', category: 'Drying', scales: ['small'] },
-  { key: 'dryer_rotary_40_100C', label: 'Dryer - Rotary 40-100 C', category: 'Drying', scales: ['small', 'medium', 'large'] },
-  { key: 'dryer_rotary_100_300C', label: 'Dryer - Rotary 100-300 C', category: 'Drying', scales: ['small', 'medium', 'large'] },
+  { key: 'dryer_batch_vacuum_tray', label: 'Vacuum Tray Dryer', category: 'Drying', scales: ['small'] },
+  { key: 'dryer_rotary_40_100C', label: 'Rotary Dryer 40-100 C', category: 'Drying', scales: ['small', 'medium', 'large'] },
+  { key: 'dryer_rotary_100_300C', label: 'Rotary Dryer 100-300 C', category: 'Drying', scales: ['small', 'medium', 'large'] },
   { key: 'dryer_spray', label: 'Spray Dryer', category: 'Drying', scales: ['medium', 'large'] },
-  { key: 'kiln_batch', label: 'Kiln - Batch', category: 'Calcination', scales: ['small'] },
-  { key: 'kiln_continuous_direct', label: 'Kiln - Direct', category: 'Calcination', scales: ['medium', 'large'] },
-  { key: 'kiln_continuous_indirect', label: 'Kiln - Indirect', category: 'Calcination', scales: ['medium', 'large'] },
+  { key: 'kiln_batch', label: 'Batch Kiln', category: 'Calcination', scales: ['small'] },
+  { key: 'kiln_continuous_direct', label: 'Continuous Kiln Direct', category: 'Calcination', scales: ['medium', 'large'] },
+  { key: 'kiln_continuous_indirect', label: 'Continuous Kiln Indirect', category: 'Calcination', scales: ['medium', 'large'] },
   { key: 'filter_belt_vacuum', label: 'Belt Vacuum Filter', category: 'Separation', scales: ['small', 'medium', 'large'] },
-  { key: 'filter_plate_frame', label: 'Plate & Frame Filter', category: 'Separation', scales: ['small'] },
+  { key: 'filter_plate_frame', label: 'Plate and Frame Filter', category: 'Separation', scales: ['small'] },
   { key: 'filter_rotary_vacuum', label: 'Rotary Vacuum Filter', category: 'Separation', scales: ['medium', 'large'] },
-  { key: 'extruder_with_feeder', label: 'Extruder + Feeder', category: 'Forming', scales: ['small', 'medium', 'large'] },
+  { key: 'extruder_with_feeder', label: 'Extruder with Feeder', category: 'Forming', scales: ['small', 'medium', 'large'] },
   { key: 'ball_forming', label: 'Ball Forming', category: 'Forming', scales: ['small', 'medium'] },
   { key: 'mill', label: 'Mill', category: 'Size Reduction', scales: ['small', 'medium', 'large'] },
   { key: 'flare', label: 'Flare', category: 'Utilities', scales: ['small', 'medium', 'large'] },
@@ -54,65 +55,37 @@ const STEP_CATEGORIES = [...new Set(ALL_STEPS.map((step) => step.category))];
 type Role = 'active_metal' | 'promoter' | 'support';
 type SourceType = 'live' | 'indexed' | 'manual';
 type Scale = 'small' | 'medium' | 'large';
-
-interface FeedPrice {
-  price_per_lb: number;
-  source_type: Exclude<SourceType, 'manual'>;
-  source: string;
-}
-
-interface Row {
-  id: string;
-  role: Role;
-  name: string;
-  wt_pct: number;
-  price_per_lb: number;
-  source_type: SourceType;
-  source: string;
-}
+interface FeedPrice { price_per_lb: number; source_type: Exclude<SourceType, 'manual'>; source: string; }
+interface Row { id: string; role: Role; name: string; wt_pct: number; price_per_lb: number; source_type: SourceType; source: string; }
 
 let nextId = 1;
 const uid = () => String(nextId++);
+const toPerLb = (price: number, unit: string) => unit === '$/troy_oz' ? price * TROY_OZ_PER_LB : unit === '$/kg' ? price / 2.20462 : price;
+const getScale = (tons: number): Scale => (tons < 5 ? 'small' : tons < 70 ? 'medium' : 'large');
+const sourceTypeLabel = (sourceType: SourceType) => sourceType === 'live' ? 'Live' : sourceType === 'indexed' ? 'Indexed' : 'Manual';
+const defaultRows = (): Row[] => [
+  { id: uid(), role: 'active_metal', name: 'Ni', wt_pct: 20, price_per_lb: 0, source_type: 'manual', source: 'Manual input' },
+  { id: uid(), role: 'support', name: 'Al2O3', wt_pct: 80, price_per_lb: 0.5, source_type: 'manual', source: 'Manual support default' },
+];
+const sourceTone = (sourceType: SourceType) =>
+  sourceType === 'live' ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : sourceType === 'indexed' ? 'border-amber-200 bg-amber-50 text-amber-700' : 'border-slate-200 bg-white text-slate-600';
+const priceTone = (sourceType: SourceType) =>
+  sourceType === 'live' ? 'border-emerald-200 bg-emerald-50/70 text-emerald-800' : sourceType === 'indexed' ? 'border-amber-200 bg-amber-50/70 text-amber-800' : '';
+const scaleMeta = (scale: Scale) =>
+  scale === 'small'
+    ? { label: 'Small', rate: '1 t/day', classes: 'border-violet-200 bg-violet-50 text-violet-700' }
+    : scale === 'medium'
+      ? { label: 'Medium', rate: '10 t/day', classes: 'border-sky-200 bg-sky-50 text-sky-700' }
+      : { label: 'Large', rate: '150 t/day', classes: 'border-teal-200 bg-teal-50 text-teal-700' };
 
-function toPerLb(price: number, unit: string): number {
-  if (unit === '$/troy_oz') return price * TROY_OZ_PER_LB;
-  if (unit === '$/kg') return price / 2.20462;
-  return price;
-}
-
-function getScale(orderSizeTons: number): Scale {
-  if (orderSizeTons < 5) return 'small';
-  if (orderSizeTons < 70) return 'medium';
-  return 'large';
-}
-
-function sourceTypeLabel(sourceType: SourceType) {
-  return sourceType === 'live' ? 'LIVE' : sourceType === 'indexed' ? 'INDEXED' : 'MANUAL';
-}
-
-function sourceBadgeClass(sourceType: SourceType) {
-  if (sourceType === 'live') return 'border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100';
-  if (sourceType === 'indexed') return 'border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100';
-  return 'border-slate-200 bg-slate-100 text-slate-500 hover:bg-slate-200';
-}
-
-function priceFieldClass(sourceType: SourceType) {
-  if (sourceType === 'live') return 'border-emerald-300 bg-emerald-50 text-emerald-800';
-  if (sourceType === 'indexed') return 'border-amber-200 bg-amber-50 text-amber-800';
-  return 'border-slate-200 bg-white';
-}
-
-function priceInputClass(sourceType: SourceType) {
-  if (sourceType === 'live') return 'cursor-not-allowed select-none text-emerald-800';
-  if (sourceType === 'indexed') return 'cursor-not-allowed select-none text-amber-800';
-  return 'text-slate-800';
-}
-
-function defaultRows(): Row[] {
-  return [
-    { id: uid(), role: 'active_metal', name: 'Ni', wt_pct: 20, price_per_lb: 0, source_type: 'manual', source: 'Manual input' },
-    { id: uid(), role: 'support', name: 'Al2O3', wt_pct: 80, price_per_lb: 0.5, source_type: 'manual', source: 'Manual support default' },
-  ];
+function MetricTile({ label, value, detail, dark = false }: { label: string; value: string; detail: string; dark?: boolean }) {
+  return (
+    <div className={dark ? 'cp-metric-tile-dark' : 'cp-metric-tile'}>
+      <div className={`cp-subtle-label ${dark ? '!text-slate-400' : ''}`}>{label}</div>
+      <div className={`mt-2 text-2xl font-display ${dark ? 'text-white' : 'text-slate-900'}`}>{value}</div>
+      <div className={`mt-1 text-xs leading-5 ${dark ? 'text-slate-400' : 'text-slate-500'}`}>{detail}</div>
+    </div>
+  );
 }
 
 export default function Calculator() {
@@ -122,65 +95,50 @@ export default function Calculator() {
   const [orderSize, setOrderSize] = useState(20);
   const [result, setResult] = useState<CostResult | null>(null);
   const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState('');
   const [liveMap, setLiveMap] = useState<Record<string, FeedPrice>>({});
   const [pricesUpdatedAt, setPricesUpdatedAt] = useState<Date | null>(null);
-  const [refreshing, setRefreshing] = useState(false);
   const currentScale = getScale(orderSize);
+  const scale = scaleMeta(currentScale);
 
   useEffect(() => {
-    setSteps((prev) =>
-      prev.filter((key) => {
-        const step = ALL_STEPS.find((item) => item.key === key);
-        return step ? (step.scales as readonly Scale[]).includes(currentScale) : false;
-      }),
-    );
+    setSteps((previous) => previous.filter((key) => {
+      const step = ALL_STEPS.find((item) => item.key === key);
+      return step ? (step.scales as readonly Scale[]).includes(currentScale) : false;
+    }));
   }, [currentScale]);
+
+  useEffect(() => {
+    async function loadPrices() {
+      try {
+        const prices = await fetchPrices();
+        const map = toFeedMap(prices);
+        setLiveMap(map);
+        setPricesUpdatedAt(new Date());
+        setRows((previous) => previous.map((row) => row.role === 'support' || !map[row.name] ? row : { ...row, price_per_lb: map[row.name].price_per_lb, source_type: map[row.name].source_type, source: map[row.name].source }));
+      } catch {}
+    }
+    void loadPrices();
+  }, []);
+
+  useEffect(() => {
+    setRows((previous) => previous.map((row) => row.role === 'support' || row.source_type === 'manual' || !liveMap[row.name] ? row : { ...row, price_per_lb: liveMap[row.name].price_per_lb, source_type: liveMap[row.name].source_type, source: liveMap[row.name].source }));
+  }, [liveMap]);
 
   function toFeedMap(prices: MetalPrice[]) {
     const map: Record<string, FeedPrice> = {};
     for (const price of prices) {
       if (price.source_type === 'manual') continue;
-      map[price.symbol] = {
-        price_per_lb: toPerLb(price.price, price.unit),
-        source_type: price.source_type as Exclude<SourceType, 'manual'>,
-        source: price.source,
-      };
+      map[price.symbol] = { price_per_lb: toPerLb(price.price, price.unit), source_type: price.source_type as Exclude<SourceType, 'manual'>, source: price.source };
     }
     return map;
   }
 
-  useEffect(() => {
-    fetchPrices()
-      .then((prices) => {
-        const map = toFeedMap(prices);
-        setLiveMap(map);
-        setPricesUpdatedAt(new Date());
-        setRows((prev) =>
-          prev.map((row) =>
-            row.role === 'support' || !map[row.name]
-              ? row
-              : { ...row, price_per_lb: map[row.name].price_per_lb, source_type: map[row.name].source_type, source: map[row.name].source },
-          ),
-        );
-      })
-      .catch(() => {});
-  }, []);
-
-  useEffect(() => {
-    setRows((prev) =>
-      prev.map((row) =>
-        row.role === 'support' || row.source_type === 'manual' || !liveMap[row.name]
-          ? row
-          : { ...row, price_per_lb: liveMap[row.name].price_per_lb, source_type: liveMap[row.name].source_type, source: liveMap[row.name].source },
-      ),
-    );
-  }, [liveMap]);
-
-  async function refreshPrices() {
+  async function syncPrices() {
     setRefreshing(true);
     try {
-      await fetch(apiUrl('/prices/refresh'), { method: 'POST' });
+      await refreshPriceFeed();
       setLiveMap(toFeedMap(await fetchPrices()));
       setPricesUpdatedAt(new Date());
     } finally {
@@ -188,51 +146,41 @@ export default function Calculator() {
     }
   }
 
-  function updateRow(id: string, patch: Partial<Row>) {
-    setRows((prev) => prev.map((row) => (row.id === id ? { ...row, ...patch } : row)));
-  }
-
-  function onMetalChange(id: string, name: string) {
-    const feed = liveMap[name];
-    updateRow(id, {
-      name,
-      price_per_lb: feed?.price_per_lb ?? 0,
-      source_type: feed?.source_type ?? 'manual',
-      source: feed?.source ?? 'Manual input',
-    });
-  }
+  const updateRow = (id: string, patch: Partial<Row>) => setRows((previous) => previous.map((row) => row.id === id ? { ...row, ...patch } : row));
+  const onMaterialChange = (id: string, name: string) => updateRow(id, { name, price_per_lb: liveMap[name]?.price_per_lb ?? 0, source_type: liveMap[name]?.source_type ?? 'manual', source: liveMap[name]?.source ?? 'Manual input' });
+  const addRow = (role: 'active_metal' | 'promoter') => setRows((previous) => {
+    const row = { id: uid(), role, name: '', wt_pct: 0, price_per_lb: 0, source_type: 'manual' as const, source: 'Manual input' };
+    const supportIndex = previous.findIndex((item) => item.role === 'support');
+    return supportIndex === -1 ? [...previous, row] : [...previous.slice(0, supportIndex), row, ...previous.slice(supportIndex)];
+  });
+  const removeRow = (id: string) => setRows((previous) => previous.filter((row) => row.id !== id));
+  const toggleStep = (stepKey: string) => setSteps((previous) => previous.includes(stepKey) ? previous.filter((item) => item !== stepKey) : [...previous, stepKey]);
 
   function toggleRowSource(id: string) {
-    setRows((prev) =>
-      prev.map((row) => {
-        if (row.id !== id) return row;
-        const feed = liveMap[row.name];
-        if (!feed) return row;
-        return row.source_type === 'manual'
-          ? { ...row, price_per_lb: feed.price_per_lb, source_type: feed.source_type, source: feed.source }
-          : { ...row, source_type: 'manual', source: 'Manual input' };
-      }),
-    );
-  }
-
-  function addRow(role: 'active_metal' | 'promoter') {
-    const newRow: Row = { id: uid(), role, name: '', wt_pct: 0, price_per_lb: 0, source_type: 'manual', source: 'Manual input' };
-    setRows((prev) => {
-      const supportIndex = prev.findIndex((row) => row.role === 'support');
-      return supportIndex === -1 ? [...prev, newRow] : [...prev.slice(0, supportIndex), newRow, ...prev.slice(supportIndex)];
-    });
-  }
-
-  function removeRow(id: string) {
-    setRows((prev) => prev.filter((row) => row.id !== id));
+    setRows((previous) => previous.map((row) => {
+      if (row.id !== id) return row;
+      const feed = liveMap[row.name];
+      if (!feed) return row;
+      return row.source_type === 'manual'
+        ? { ...row, price_per_lb: feed.price_per_lb, source_type: feed.source_type, source: feed.source }
+        : { ...row, source_type: 'manual', source: 'Manual input' };
+    }));
   }
 
   const nonSupportWt = rows.filter((row) => row.role !== 'support').reduce((sum, row) => sum + row.wt_pct, 0);
   const supportWtPct = Math.max(0, 100 - nonSupportWt);
-  const hasActiveMetal = rows.some((row) => row.role === 'active_metal' && row.name.trim() !== '');
-  const isValid = hasActiveMetal && nonSupportWt > 0 && nonSupportWt <= 100;
-  const scaleLabel = currentScale === 'small' ? 'Small · 1 t/day' : currentScale === 'medium' ? 'Medium · 10 t/day' : 'Large · 150 t/day';
-  const scaleBadge = currentScale === 'small' ? 'bg-violet-100 text-violet-700' : currentScale === 'medium' ? 'bg-blue-100 text-blue-700' : 'bg-teal-100 text-teal-700';
+  const selectedSupport = rows.find((row) => row.role === 'support');
+  const liveFeedCount = Object.values(liveMap).filter((feed) => feed.source_type === 'live').length;
+  const indexedFeedCount = Object.values(liveMap).filter((feed) => feed.source_type === 'indexed').length;
+  const activeMetalCount = rows.filter((row) => row.role === 'active_metal' && row.name.trim()).length;
+  const isValid = activeMetalCount > 0 && nonSupportWt > 0 && nonSupportWt <= 100;
+  const altPrice = result ? (unit === 'kg' ? result.summary.estimated_price_per_lb : result.summary.estimated_price_per_kg) : null;
+  const altLabel = unit === 'kg' ? '/lb' : '/kg';
+  const pieData = result ? [
+    ...result.materials.components.map((component) => ({ name: component.role === 'support' ? `${component.name} support` : component.role === 'promoter' ? `${component.name} promoter` : component.name, value: component.cost_pct })),
+    { name: 'Processing', value: result.summary.processing_pct },
+    { name: 'G&A + margin', value: Math.max(0, 100 - result.summary.materials_pct - result.summary.processing_pct) },
+  ] : [];
 
   async function handleCalculate() {
     if (!isValid || steps.length === 0) return;
@@ -240,280 +188,299 @@ export default function Calculator() {
     setError('');
     try {
       const supportRow = rows.find((row) => row.role === 'support');
-      if (!supportRow) throw new Error('Support is required');
+      if (!supportRow) throw new Error('Support is required.');
       const components: ComponentInput[] = [
         ...rows.filter((row) => row.role !== 'support').map((row) => ({ role: row.role, name: row.name, wt_pct: row.wt_pct, price_per_lb: row.price_per_lb })),
         { role: 'support', name: supportRow.name, wt_pct: supportWtPct, price_per_lb: supportRow.price_per_lb },
       ];
       const input: CostInput = { components, steps, order_size_tons: orderSize };
       setResult(await calculateCost(input));
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : String(err));
+    } catch (caughtError: unknown) {
+      setError(caughtError instanceof Error ? caughtError.message : String(caughtError));
     } finally {
       setLoading(false);
     }
   }
 
-  const pieData = result
-    ? [
-        ...result.materials.components.map((component) => ({
-          name: `${component.name}${component.role === 'support' ? ' (Support)' : component.role === 'promoter' ? ' (Promoter)' : ''}`,
-          value: component.cost_pct,
-        })),
-        { name: 'Processing', value: result.summary.processing_pct },
-        { name: 'G&A + Margin', value: Math.max(0, 100 - result.summary.materials_pct - result.summary.processing_pct) },
-      ]
-    : [];
-
-  function sourceTitle(row: Row, feed?: FeedPrice) {
-    if (row.source_type === 'manual') {
-      return feed ? `Manual input. Click to use ${sourceTypeLabel(feed.source_type)} pricing from ${feed.source}.` : 'Manual input. No tracked feed is available.';
-    }
-    return `${row.source}. Click to switch to manual input.`;
-  }
-
-  function renderSourceChip(row: Row) {
+  function sourceChip(row: Row) {
     const feed = liveMap[row.name];
-    const dot = row.source_type === 'live' ? 'bg-emerald-500 animate-pulse' : row.source_type === 'indexed' ? 'bg-amber-400' : 'bg-slate-400';
-    const className = `flex items-center gap-1 rounded-lg border px-2 py-1 text-[10px] font-bold whitespace-nowrap transition-all ${sourceBadgeClass(row.source_type)}`;
-    const content = (
-      <>
-        <span className={`h-1.5 w-1.5 rounded-full ${dot}`} />
-        {sourceTypeLabel(row.source_type)}
-      </>
-    );
-    return feed ? (
-      <button onClick={() => toggleRowSource(row.id)} title={sourceTitle(row, feed)} className={className}>
-        {content}
-      </button>
-    ) : (
-      <span title={sourceTitle(row)} className={`${className} cursor-default`}>
-        {content}
-      </span>
-    );
+    const dotClass = row.source_type === 'live' ? 'bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.32)]' : row.source_type === 'indexed' ? 'bg-amber-500' : 'bg-slate-500';
+    const className = `inline-flex items-center gap-2 rounded-full border px-3 py-2 text-xs font-semibold transition ${sourceTone(row.source_type)}`;
+    const content = <><span className={`h-2 w-2 rounded-full ${dotClass}`} /><span>{sourceTypeLabel(row.source_type)}</span></>;
+    if (!feed) return <span className={`${className} cursor-default`} title={row.source}>{content}</span>;
+    const title = row.source_type === 'manual' ? `Manual input. Switch to ${sourceTypeLabel(feed.source_type)} feed from ${feed.source}.` : `${row.source}. Switch back to manual input.`;
+    return <button onClick={() => toggleRowSource(row.id)} title={title} className={className}>{content}</button>;
   }
 
-  function renderPriceField(row: Row) {
+  function priceField(row: Row) {
     const locked = row.source_type !== 'manual';
     return (
-      <>
-        <span className="text-xs text-slate-400">$</span>
-        <input
-          type="number"
-          step="0.01"
-          min="0"
-          value={toDisplay(row.price_per_lb).toFixed(2)}
-          readOnly={locked}
-          onChange={(e) => !locked && updateRow(row.id, { price_per_lb: toInternal(+e.target.value) })}
-          className={`w-20 input-base text-right font-mono ${priceFieldClass(row.source_type)} ${priceInputClass(row.source_type)}`}
-        />
-        <span className="text-xs text-slate-400">{fmtLabel}</span>
-      </>
+      <div className="flex items-center gap-2">
+        <span className="text-xs text-slate-500">$</span>
+        <input type="number" step="0.01" min="0" value={toDisplay(row.price_per_lb).toFixed(2)} readOnly={locked} onChange={(event) => !locked && updateRow(row.id, { price_per_lb: toInternal(Number(event.target.value)) })} className={`input-base w-28 text-right font-mono ${priceTone(row.source_type)} ${locked ? 'cursor-not-allowed' : ''}`} />
+        <span className="text-xs text-slate-500">{fmtLabel}</span>
+      </div>
     );
   }
 
   function renderRows(role: 'active_metal' | 'promoter') {
     const items = rows.filter((row) => row.role === role);
-    const accent = role === 'active_metal'
-      ? { dot: 'bg-indigo-500', text: 'text-indigo-700', button: 'text-indigo-600 hover:text-indigo-800', title: 'Active Metals', empty: 'None - click + Add' }
-      : { dot: 'bg-purple-500', text: 'text-purple-700', button: 'text-purple-600 hover:text-purple-800', title: 'Promoters', empty: 'None' };
-    return (
-      <div>
-        <div className="mb-2 flex items-center justify-between">
-          <div className="flex items-center gap-1.5">
-            <span className={`h-2 w-2 rounded-full ${accent.dot}`} />
-            <span className={`text-xs font-semibold uppercase tracking-wider ${accent.text}`}>
-              {accent.title} {role === 'promoter' && <span className="font-normal normal-case text-slate-400">(optional)</span>}
-            </span>
-          </div>
-          <button onClick={() => addRow(role)} className={`text-xs font-semibold transition-colors ${accent.button}`}>+ Add</button>
-        </div>
-        <div className="space-y-2">
-          {items.map((row) => (
-            <div key={row.id} className="flex items-center gap-2">
-              {role === 'active_metal' ? (
-                <select value={row.name} onChange={(e) => onMetalChange(row.id, e.target.value)} className="input-base flex-1">
-                  <option value="">- select -</option>
-                  {KNOWN_METALS.map((metal) => <option key={metal} value={metal}>{metal}</option>)}
-                </select>
-              ) : (
-                <input type="text" list="known-metal-options" value={row.name} onChange={(e) => onMetalChange(row.id, e.target.value)} placeholder="e.g. Re, K, Sn, Ce" className="input-base flex-1" />
-              )}
-              <input type="number" step="0.1" min="0" max="100" value={row.wt_pct} onChange={(e) => updateRow(row.id, { wt_pct: +e.target.value })} className="w-16 input-base text-right font-mono" />
-              <span className="text-xs text-slate-400">wt%</span>
-              {renderSourceChip(row)}
-              {renderPriceField(row)}
-              <button onClick={() => removeRow(row.id)} className="flex h-6 w-6 items-center justify-center rounded-lg text-base text-slate-300 transition-colors hover:bg-red-50 hover:text-red-500" aria-label="Remove row">x</button>
-            </div>
-          ))}
-          {items.length === 0 && <p className="pl-3.5 text-xs text-slate-400">{accent.empty}</p>}
-        </div>
-      </div>
-    );
-  }
+    const copy = role === 'active_metal'
+      ? { title: 'Active metals', description: 'These rows drive live feed mapping and the primary catalyst cost basis.', accent: 'bg-[#78f2d0]', button: 'Add active metal', placeholder: 'At least one active metal is required.' }
+      : { title: 'Promoters', description: 'Optional promoter metals or additives that influence recipe cost.', accent: 'bg-[#88a8ff]', button: 'Add promoter', placeholder: 'No promoters added yet.' };
 
-  function renderResultsPanel() {
-    if (!result) return null;
     return (
-      <div className="space-y-4">
-        <div className="grid grid-cols-2 gap-3">
-          <div className="rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 p-5 text-white shadow-lg shadow-blue-500/20">
-            <div className="mb-2 text-xs font-medium uppercase tracking-wider opacity-70">Estimated Cost</div>
-            <div className="text-3xl font-bold tracking-tight">${toDisplay(result.summary.estimated_price_per_lb).toFixed(2)}<span className="ml-0.5 text-sm font-normal opacity-60">{fmtLabel}</span></div>
-            <div className="mt-1 text-sm opacity-60">${(unit === 'kg' ? result.summary.estimated_price_per_lb : result.summary.estimated_price_per_kg).toFixed(2)}/{unit === 'kg' ? 'lb' : 'kg'}</div>
+      <div className="space-y-3">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <div className="flex items-center gap-2"><span className={`h-2.5 w-2.5 rounded-full ${copy.accent}`} /><h3 className="text-sm font-semibold text-slate-950">{copy.title}</h3></div>
+            <p className="mt-1 text-xs leading-6 text-slate-500">{copy.description}</p>
           </div>
-          <div className="rounded-2xl bg-gradient-to-br from-slate-700 to-slate-800 p-5 text-white shadow-lg">
-            <div className="mb-2 text-xs font-medium uppercase tracking-wider opacity-70">Production Scale</div>
-            <div className="text-3xl font-bold capitalize tracking-tight">{result.step_method.scale}</div>
-            <div className="mt-1 text-sm opacity-60">{Number(result.step_method.campaign_days).toFixed(1)}-day campaign</div>
-          </div>
+          <button onClick={() => addRow(role)} className="cp-button-secondary px-3 py-2 text-xs">{copy.button}</button>
         </div>
-        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-          <div className="px-5 pb-2 pt-4"><h3 className="text-sm font-semibold text-slate-700">Cost Breakdown</h3></div>
-          <ResponsiveContainer width="100%" height={220}>
-            <PieChart>
-              <Pie data={pieData} cx="50%" cy="50%" innerRadius={52} outerRadius={80} dataKey="value" paddingAngle={2}>
-                {pieData.map((_, index) => <Cell key={index} fill={CHART_COLORS[index % CHART_COLORS.length]} strokeWidth={0} />)}
-              </Pie>
-              <Tooltip formatter={(value) => [`${Number(value).toFixed(1)}%`, 'Share']} contentStyle={{ borderRadius: 10, border: '1px solid #e2e8f0', fontSize: 12 }} />
-              <Legend iconSize={8} iconType="circle" wrapperStyle={{ fontSize: 11, paddingTop: 4 }} />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h3 className="mb-3 text-sm font-semibold text-slate-700">Materials Breakdown</h3>
-          <div className="space-y-2.5">
-            {result.materials.components.map((component, index) => (
-              <div key={index} className="flex items-center gap-2.5">
-                <span className="h-2.5 w-2.5 flex-shrink-0 rounded-full" style={{ background: CHART_COLORS[index % CHART_COLORS.length] }} />
-                <span className="flex-1 truncate text-sm font-medium text-slate-700">{component.name}</span>
-                <span className="w-14 text-right text-xs tabular-nums text-slate-400">{(component.wt_frac * 100).toFixed(1)} wt%</span>
-                <span className="w-20 text-right font-mono text-xs tabular-nums text-slate-500">${toDisplay(component.price_per_lb).toFixed(3)}{fmtLabel}</span>
-                <span className="w-24 text-right font-mono text-xs tabular-nums text-slate-700">${toDisplay(component.cost_per_lb_cat).toFixed(4)}{catLabel}</span>
-                <span className="w-9 text-right text-xs font-medium tabular-nums text-slate-400">{component.cost_pct}%</span>
+        {items.length === 0 ? <div className="rounded-[24px] border border-dashed border-slate-300 bg-white/44 px-4 py-4 text-sm text-slate-500">{copy.placeholder}</div> : (
+          <div className="space-y-3">
+            {items.map((row) => (
+              <div key={row.id} className="surface-ghost p-4">
+                <div className="grid gap-3 xl:grid-cols-[minmax(0,1.35fr)_120px_auto_auto_42px] xl:items-center">
+                  {role === 'active_metal'
+                    ? <select value={row.name} onChange={(event) => onMaterialChange(row.id, event.target.value)} className="input-base"><option value="">Select metal</option>{KNOWN_METALS.map((metal) => <option key={metal} value={metal}>{metal}</option>)}</select>
+                    : <input type="text" list="known-metal-options" value={row.name} onChange={(event) => onMaterialChange(row.id, event.target.value)} placeholder="e.g. Re, K, Sn, Ce" className="input-base" />}
+                  <div className="flex items-center gap-2"><input type="number" step="0.1" min="0" max="100" value={row.wt_pct} onChange={(event) => updateRow(row.id, { wt_pct: Number(event.target.value) })} className="input-base text-right font-mono" /><span className="text-xs text-slate-500">wt%</span></div>
+                  {sourceChip(row)}
+                  {priceField(row)}
+                  <button onClick={() => removeRow(row.id)} className="flex h-10 w-10 items-center justify-center rounded-[18px] border border-slate-300 bg-white/74 text-slate-400 transition hover:border-red-300 hover:bg-red-50 hover:text-red-700" aria-label="Remove row">×</button>
+                </div>
+                <div className="mt-3 text-xs text-slate-500">{row.source}</div>
               </div>
             ))}
-            <div className="flex justify-between border-t border-slate-100 pt-2.5 text-sm font-semibold text-slate-800"><span>Total Materials</span><span className="font-mono">${toDisplay(result.materials.total_materials_cost_per_lb).toFixed(4)}{fmtLabel}</span></div>
           </div>
-        </div>
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h3 className="mb-3 text-sm font-semibold text-slate-700">Cost Summary</h3>
-          <div className="overflow-hidden rounded-xl border border-slate-100">
-            <div className="flex items-center justify-between border-b border-slate-100 px-4 py-2.5"><span className="text-sm text-slate-600">Materials</span><div className="flex items-center gap-2"><span className="rounded-full bg-slate-100 px-1.5 py-0.5 text-xs text-slate-400">{result.summary.materials_pct}%</span><span className="text-sm font-medium font-mono text-slate-700">${toDisplay(result.materials.total_materials_cost_per_lb).toFixed(4)}{fmtLabel}</span></div></div>
-            <div className="flex items-center justify-between border-b border-slate-100 px-4 py-2.5"><span className="text-sm text-slate-600">Step Method Processing</span><div className="flex items-center gap-2"><span className="rounded-full bg-slate-100 px-1.5 py-0.5 text-xs text-slate-400">{result.summary.processing_pct}%</span><span className="text-sm font-medium font-mono text-slate-700">${toDisplay(Number(result.step_method.processing_cost_per_lb)).toFixed(4)}{fmtLabel}</span></div></div>
-            <div className="flex items-center justify-between border-b border-slate-100 px-4 py-2.5"><span className="text-sm text-slate-400">G&A + SARD</span><span className="text-sm font-mono text-slate-400">included</span></div>
-            <div className="flex items-center justify-between border-b border-slate-100 px-4 py-2.5"><span className="text-sm text-slate-400">Selling Margin ({Number(result.step_method.margin_pct).toFixed(1)}%)</span><span className="text-sm font-mono text-slate-400">included</span></div>
-            <div className="flex items-center justify-between border-t border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50 px-4 py-3"><span className="text-sm font-bold text-blue-800">Estimated Selling Price</span><span className="text-sm font-bold font-mono text-blue-800">${toDisplay(result.summary.estimated_price_per_lb).toFixed(4)}{fmtLabel}&nbsp;=&nbsp;${(unit === 'kg' ? result.summary.estimated_price_per_lb : result.summary.estimated_price_per_kg).toFixed(2)}/{unit === 'kg' ? 'lb' : 'kg'}</span></div>
-          </div>
-          <p className="mt-2.5 text-xs text-slate-400">* CatCost Step Method basis. 2017 - {new Date().getFullYear()} ChemPPI escalation applied.</p>
-        </div>
+        )}
       </div>
     );
   }
 
-  function renderEmptyPanel() {
-    return (
-      <div className="flex h-72 flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-gradient-to-br from-slate-50 to-slate-100">
-        <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-slate-200 bg-white shadow-sm">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="1.5" className="h-7 w-7"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18" strokeLinecap="round" strokeLinejoin="round" /></svg>
-        </div>
-        <div className="text-sm font-medium text-slate-500">결과가 여기에 표시됩니다</div>
-        <div className="mt-1 text-xs text-slate-400">조성과 공정을 입력하고 Calculate를 누르세요</div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="max-w-7xl p-6">
-      <div className="mb-6">
-        <div>
-          <h2 className="text-xl font-bold text-slate-800">Catalyst Cost Calculator</h2>
-          <p className="mt-0.5 text-sm text-slate-400">CatCost Step Method · 활성금속 + 지지체 조성과 공정을 설정하면 제조원가를 추정합니다</p>
-        </div>
-      </div>
-
-      <datalist id="known-metal-options">{KNOWN_METALS.map((metal) => <option key={metal} value={metal} />)}</datalist>
-
-      <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
-        <div className="space-y-4">
-          <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-            <div className="flex items-center gap-2.5">
-              <h3 className="flex items-center gap-2.5 text-sm font-semibold text-slate-800"><span className="flex h-5 w-5 items-center justify-center rounded-full bg-indigo-600 text-[10px] font-bold text-white">1</span>Catalyst Composition</h3>
-              <div className="ml-auto flex items-center gap-2">
-                {pricesUpdatedAt && <span className="text-[10px] text-slate-400">시세 기준 {pricesUpdatedAt.toLocaleTimeString()}</span>}
-                <button onClick={refreshPrices} disabled={refreshing} className="flex items-center gap-1 rounded-lg border border-slate-200 bg-slate-100 px-2 py-1 text-[11px] font-medium text-slate-500 transition-all hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700 disabled:opacity-50">
-                  <svg className={`h-3 w-3 ${refreshing ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                  {refreshing ? '갱신 중…' : '시세 갱신'}
-                </button>
+  function renderResultPanel() {
+    if (!result) {
+      return (
+        <section className="surface-card cp-enter flex min-h-[640px] flex-col justify-between overflow-hidden px-5 py-6 sm:px-6">
+          <div>
+            <span className="section-kicker">Estimate Outputs</span>
+            <h2 className="mt-4 font-display text-[clamp(1.7rem,2.6vw,2.8rem)] leading-[0.98] text-slate-950">Outputs are ready once the estimate basis is complete.</h2>
+            <p className="mt-3 max-w-xl text-sm leading-7 text-slate-600">Run the estimate to assemble materials, processing, and selling-price outputs from the current synthesis and business inputs.</p>
+          </div>
+          <div className="mt-8 space-y-4">
+            <div className="surface-ghost overflow-hidden p-5">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <div className="cp-subtle-label">Inputs Snapshot</div>
+                  <div className="mt-2 text-lg font-semibold text-slate-950">Synthesis and business basis</div>
+                </div>
+                <span className="cp-chip">{selectedSupport?.name ?? 'Support pending'}</span>
+              </div>
+              <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                <MetricTile label="Active metals" value={String(activeMetalCount)} detail="Named active inputs" />
+                <MetricTile label="Feed mix" value={`${liveFeedCount}/${indexedFeedCount}`} detail="Live / indexed feeds" />
+                <MetricTile label="Next action" value="Run estimate" detail="Materials, processing, and margin populate here." />
               </div>
             </div>
-            {renderRows('active_metal')}
-            {renderRows('promoter')}
-            <div>
-              <div className="mb-2 flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-emerald-500" /><span className="text-xs font-semibold uppercase tracking-wider text-emerald-700">Support</span></div>
-              {rows.filter((row) => row.role === 'support').map((row) => (
-                <div key={row.id} className="flex items-center gap-2">
-                  <select value={row.name} onChange={(e) => {
-                      const support = SUPPORT_OPTIONS.find((item) => item.name === e.target.value);
-                      updateRow(row.id, { name: e.target.value, price_per_lb: support?.price ?? row.price_per_lb, source_type: 'manual', source: 'Manual support default' });
-                    }} className="input-base flex-1">
-                      {SUPPORT_OPTIONS.map((support) => <option key={support.name} value={support.name}>{support.name} - {support.note}</option>)}
-                    </select>
-                  <div className="flex items-center gap-1">
-                    <span className="w-16 rounded-lg border border-slate-200 bg-slate-100 px-2 py-1.5 text-right font-mono text-sm text-slate-600">{supportWtPct.toFixed(1)}</span>
-                    <span className="text-xs text-slate-400">wt%</span>
-                    <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] text-slate-400">auto</span>
-                  </div>
-                  {renderPriceField(row)}
-                </div>
-              ))}
+            <div className="surface-ink overflow-hidden p-5">
+              <div className="grid gap-4 lg:grid-cols-3">
+                <MetricTile label="Recipe load" value={`${nonSupportWt.toFixed(1)} wt%`} detail={`Support auto-fills ${supportWtPct.toFixed(1)} wt%`} dark />
+                <MetricTile label="Selected steps" value={String(steps.length)} detail={steps.length > 0 ? `${steps[0]}${steps.length > 1 ? ` +${steps.length - 1}` : ''}` : 'Choose at least one step'} dark />
+                <MetricTile label="Scale window" value={scale.label} detail={`${orderSize} tons / ${scale.rate}`} dark />
+              </div>
             </div>
-            <div className={`flex items-center gap-2.5 rounded-xl border px-3.5 py-2.5 text-xs ${isValid ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : 'border-amber-200 bg-amber-50 text-amber-700'}`}>
-              <div className={`flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${isValid ? 'bg-emerald-200 text-emerald-700' : 'bg-amber-200 text-amber-700'}`}>{isValid ? '✓' : '!'}</div>
-              <span>{isValid ? `Composition OK · active ${nonSupportWt.toFixed(1)}% + support ${supportWtPct.toFixed(1)}%` : !hasActiveMetal ? 'Active metal을 최소 1개 추가하세요' : nonSupportWt > 100 ? 'Active + Promoter 합계가 100%를 초과합니다' : 'Active metal 비율을 입력하세요'}</span>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <MetricTile label="Tracked feeds" value={String(liveFeedCount + indexedFeedCount)} detail={`${liveFeedCount} live / ${indexedFeedCount} indexed`} />
+              <MetricTile label="Support" value={selectedSupport?.name ?? 'Pending'} detail={`Current unit cost ${selectedSupport ? `$${toDisplay(selectedSupport.price_per_lb).toFixed(2)}${fmtLabel}` : 'N/A'}`} />
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    const summaryRows = [
+      { label: 'Materials', share: result.summary.materials_pct, value: `$${toDisplay(result.materials.total_materials_cost_per_lb).toFixed(3)}${fmtLabel}` },
+      { label: 'Processing', share: result.summary.processing_pct, value: `$${toDisplay(Number(result.step_method.processing_cost_per_lb)).toFixed(3)}${fmtLabel}` },
+      { label: 'G&A + margin', share: Math.max(0, 100 - result.summary.materials_pct - result.summary.processing_pct), value: 'Included' },
+    ];
+
+    return (
+      <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6">
+        <div className="surface-ink relative overflow-hidden p-5">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(120,242,208,0.24),transparent_0_36%),radial-gradient(circle_at_bottom_right,rgba(239,195,108,0.15),transparent_0_28%)]" />
+          <div className="relative grid gap-4 xl:grid-cols-[minmax(0,1.05fr)_320px]">
+            <div>
+              <div className="cp-subtle-label !text-slate-400">Estimated selling price</div>
+              <div className="mt-5 flex flex-wrap items-end gap-3">
+                <div className="font-display text-[clamp(2.6rem,5vw,4.7rem)] leading-none text-white">${toDisplay(result.summary.estimated_price_per_lb).toFixed(2)}</div>
+                <div className="pb-1 text-lg text-slate-300">{fmtLabel}</div>
+              </div>
+              <div className="mt-3 text-sm text-slate-300">Alternate view: {altPrice != null ? `$${altPrice.toFixed(2)}${altLabel}` : 'n/a'}</div>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-3 xl:grid-cols-1">
+              <MetricTile label="Scale" value={result.step_method.scale} detail={`${orderSize} tons order`} dark />
+              <MetricTile label="Campaign" value={`${Number(result.step_method.campaign_days).toFixed(1)} d`} detail={`${steps.length} selected steps`} dark />
+              <MetricTile label="Margin" value={`${Number(result.step_method.margin_pct).toFixed(1)}%`} detail="Selling margin contribution" dark />
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-5 grid gap-4 2xl:grid-cols-[0.9fr_1.1fr]">
+          <div className="space-y-4">
+            <div className="surface-ghost p-5">
+              <div className="flex items-center justify-between gap-3"><div><div className="cp-subtle-label">Cost Structure</div><div className="mt-2 text-xl font-semibold text-slate-950">Materials vs processing</div></div><span className="cp-chip">{result.materials.components.length} materials</span></div>
+              <div className="mt-5 space-y-4">
+                {summaryRows.map((item, index) => (
+                  <div key={item.label}>
+                    <div className="flex items-center justify-between gap-3 text-sm"><span className="text-slate-600">{item.label}</span><span className="font-semibold text-slate-950">{item.value}</span></div>
+                    <div className="mt-2 h-2 rounded-full bg-slate-200/80"><div className="h-full rounded-full" style={{ width: `${Math.max(item.share, 4)}%`, backgroundColor: CHART_COLORS[index] }} /></div>
+                    <div className="mt-1 text-xs text-slate-500">{item.share.toFixed(1)}% share</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="surface-ghost p-5">
+              <div className="text-sm font-semibold text-slate-950">Breakdown wheel</div>
+              <div className="mt-1 text-xs text-slate-500">Materials, processing, and selling adjustments.</div>
+              <div className="mt-4 h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie data={pieData} innerRadius={72} outerRadius={108} dataKey="value" paddingAngle={3} stroke="transparent">
+                      {pieData.map((entry, index) => <Cell key={entry.name} fill={CHART_COLORS[index % CHART_COLORS.length]} />)}
+                    </Pie>
+                    <Tooltip formatter={(value) => [`${Number(value).toFixed(1)}%`, 'Share']} contentStyle={{ borderRadius: 18, border: '1px solid rgba(31,47,72,0.10)', background: 'rgba(255,251,245,0.96)', color: '#142033', fontSize: 12, boxShadow: '0 18px 48px rgba(23,34,51,0.12)' }} />
+                    <Legend iconSize={10} iconType="circle" wrapperStyle={{ color: '#66748b', fontSize: 12 }} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </div>
 
-          <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-            <h3 className="flex items-center gap-2.5 text-sm font-semibold text-slate-800"><span className="flex h-5 w-5 items-center justify-center rounded-full bg-indigo-600 text-[10px] font-bold text-white">2</span>Manufacturing Process</h3>
-            <div className="flex items-center gap-3 border-b border-slate-100 pb-3">
-              <span className="w-24 flex-shrink-0 text-sm text-slate-500">Order Size</span>
-              <input type="number" min="1" step="1" value={orderSize} onChange={(e) => setOrderSize(Math.max(1, +e.target.value))} className="input-base w-24 text-center font-mono" />
-              <span className="text-xs text-slate-400">tons</span>
-              <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${scaleBadge}`}>{scaleLabel}</span>
+          <div className="surface-ghost p-5">
+            <div className="flex items-center justify-between gap-3"><div><div className="cp-subtle-label">Material Ledger</div><div className="mt-2 text-xl font-semibold text-slate-950">Component-level catalyst cost</div></div><span className="cp-chip">{selectedSupport?.name ?? 'Support'}</span></div>
+            <div className="mt-4 overflow-hidden rounded-[24px] border border-slate-900/8 bg-white/56">
+              <div className="grid grid-cols-[minmax(0,1.4fr)_90px_110px_110px_72px] gap-3 border-b border-slate-900/8 bg-white/46 px-4 py-3 text-[11px] uppercase tracking-[0.18em] text-slate-500"><span>Material</span><span className="text-right">wt%</span><span className="text-right">Unit</span><span className="text-right">Catalyst</span><span className="text-right">Share</span></div>
+              <div className="divide-y divide-slate-900/8">
+                {result.materials.components.map((component, index) => (
+                  <div key={`${component.name}-${component.role}`} className="grid grid-cols-[minmax(0,1.4fr)_90px_110px_110px_72px] gap-3 px-4 py-3 text-sm">
+                    <div className="flex min-w-0 items-center gap-3"><span className="h-2.5 w-2.5 flex-none rounded-full" style={{ backgroundColor: CHART_COLORS[index % CHART_COLORS.length] }} /><div className="min-w-0"><div className="truncate text-slate-950">{component.name}</div><div className="text-xs text-slate-500">{component.role}</div></div></div>
+                    <span className="text-right font-mono text-slate-700">{(component.wt_frac * 100).toFixed(1)}</span>
+                    <span className="text-right font-mono text-slate-700">${toDisplay(component.price_per_lb).toFixed(3)}</span>
+                    <span className="text-right font-mono text-slate-950">${toDisplay(component.cost_per_lb_cat).toFixed(3)}</span>
+                    <span className="text-right font-mono text-slate-500">{component.cost_pct}%</span>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div>
-              <div className="mb-2.5 flex items-center justify-between"><span className="text-sm font-medium text-slate-600">Processing Steps</span><span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-400">{steps.length} selected</span></div>
-              <div className="max-h-64 space-y-3 overflow-y-auto pr-1">
+            <div className="mt-4 rounded-[24px] border border-slate-900/8 bg-white/60 p-4">
+              <div className="flex items-center justify-between gap-3 text-sm"><span className="text-slate-600">Total material cost</span><span className="font-semibold text-slate-950">${toDisplay(result.materials.total_materials_cost_per_lb).toFixed(4)}{catLabel}</span></div>
+              <div className="mt-2 text-xs leading-6 text-slate-500">CatCost step basis with backend escalation and margin treatment applied in the calculation engine.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  const validationMessage = isValid
+    ? `Recipe balance is valid: ${nonSupportWt.toFixed(1)} wt% actives and promoters, ${supportWtPct.toFixed(1)} wt% support.`
+    : activeMetalCount === 0
+      ? 'Add at least one active metal before running the estimate.'
+      : nonSupportWt > 100
+        ? 'Active metals and promoters exceed 100 wt%.'
+        : 'Enter a valid non-zero loading for the active portion of the recipe.';
+
+  return (
+    <div className="space-y-4">
+      <datalist id="known-metal-options">{KNOWN_METALS.map((metal) => <option key={metal} value={metal} />)}</datalist>
+
+      <section className="surface-card cp-enter overflow-hidden px-5 py-5 sm:px-6">
+        <div className="space-y-5">
+          <div>
+            <span className="section-kicker">Estimate Builder</span>
+            <h2 className="mt-4 max-w-3xl font-display text-[clamp(1.95rem,3vw,3.2rem)] leading-[0.96] text-slate-950">Turn catalyst inputs into an industrial-scale cost estimate.</h2>
+            <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">Enter the synthesis inputs you know today, connect them to live or manual price references, and complete a CatCost-style step-method estimate from the same surface.</p>
+          </div>
+
+          <div className="grid gap-3 md:grid-cols-3">
+            <MetricTile label="Tracked metals" value={String(liveFeedCount + indexedFeedCount)} detail={`${liveFeedCount} live / ${indexedFeedCount} indexed`} />
+            <MetricTile label="Process steps" value={String(steps.length)} detail={steps.length > 0 ? 'Active process path' : 'Select at least one step'} />
+            <MetricTile label="Current scale" value={scale.label} detail={`${orderSize} tons / ${scale.rate}`} />
+          </div>
+        </div>
+      </section>
+
+      <div className="grid gap-4 xl:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)]">
+      <section className="surface-card cp-enter overflow-hidden px-5 py-5 sm:px-6" style={{ animationDelay: '0.06s' }}>
+          <div className="space-y-6">
+            <div className="flex flex-col gap-4 border-b border-slate-900/8 pb-5 lg:flex-row lg:items-end lg:justify-between">
+              <div>
+                <div className="cp-subtle-label">Synthesis Inputs</div>
+                <h2 className="mt-2 text-2xl font-semibold text-slate-950">Enter catalyst composition and material pricing</h2>
+                <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-600">Use metal loading, support choice, and raw-material pricing as the starting synthesis inputs, then switch any row back to manual pricing when you need a procurement scenario.</p>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="cp-chip">{pricesUpdatedAt ? `Feed synced ${pricesUpdatedAt.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}` : 'Feed status pending'}</span>
+                <button onClick={syncPrices} disabled={refreshing} className="cp-button-secondary"><span className={`mr-2 inline-flex h-4 w-4 rounded-full border-2 border-current border-t-transparent ${refreshing ? 'animate-spin' : ''}`} />{refreshing ? 'Refreshing feed' : 'Refresh feed'}</button>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              {renderRows('active_metal')}
+              {renderRows('promoter')}
+
+              <div className="surface-ghost p-4">
+                <div><div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#efc36c]" /><h3 className="text-sm font-semibold text-slate-950">Support</h3></div><p className="mt-1 text-xs leading-6 text-slate-500">Support loading closes the balance automatically after actives and promoters are set.</p></div>
+                {rows.filter((row) => row.role === 'support').map((row) => (
+                  <div key={row.id} className="mt-4 grid gap-3 xl:grid-cols-[minmax(0,1.3fr)_180px_auto] xl:items-center">
+                    <select value={row.name} onChange={(event) => { const support = SUPPORT_OPTIONS.find((item) => item.name === event.target.value); updateRow(row.id, { name: event.target.value, price_per_lb: support?.price ?? row.price_per_lb, source_type: 'manual', source: 'Manual support default' }); }} className="input-base">
+                      {SUPPORT_OPTIONS.map((support) => <option key={support.name} value={support.name}>{support.name} / {support.note}</option>)}
+                    </select>
+                    <div className="input-base flex items-center justify-between gap-3 bg-white/76"><span className="text-xs text-slate-500">Auto share</span><span className="font-mono text-slate-950">{supportWtPct.toFixed(1)} wt%</span></div>
+                    {priceField(row)}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-5 border-t border-slate-900/8 pt-5">
+              <div><div className="cp-subtle-label">Step Method</div><h2 className="mt-2 text-2xl font-semibold text-slate-950">Map the lab procedure to industrial process steps</h2><p className="mt-2 max-w-2xl text-sm leading-7 text-slate-600">Choose the common manufacturing steps that best approximate the lab synthesis, and let order size set the small, medium, or large campaign basis.</p></div>
+              <div className="surface-ghost p-4">
+                <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+                  <div><div className="cp-subtle-label">Order size</div><div className="mt-3 flex flex-wrap items-center gap-3"><input type="number" min="1" step="1" value={orderSize} onChange={(event) => setOrderSize(Math.max(1, Number(event.target.value)))} className="input-base w-32 text-center font-mono" /><span className="text-sm text-slate-500">tons per campaign</span><span className={`rounded-full border px-3 py-1 text-xs font-semibold ${scale.classes}`}>{scale.label} / {scale.rate}</span></div></div>
+                  <div className="cp-toolbar">{QUICK_ORDER_SIZES.map((size) => <button key={size} onClick={() => setOrderSize(size)} className={`rounded-[16px] px-3 py-2 text-xs font-semibold transition ${orderSize === size ? 'bg-slate-950 text-white' : 'text-slate-600 hover:bg-white hover:text-slate-900'}`}>{size} tons</button>)}</div>
+                </div>
+              </div>
+              <div className="grid gap-4 lg:grid-cols-2">
                 {STEP_CATEGORIES.map((category) => (
-                  <div key={category}>
-                    <div className="mb-1.5 px-1 text-[10px] font-semibold uppercase tracking-wider text-slate-400">{category}</div>
-                    <div className="grid grid-cols-2 gap-1">
+                  <div key={category} className="surface-ghost p-4">
+                    <div className="cp-subtle-label">{category}</div>
+                    <div className="mt-3 flex flex-wrap gap-2">
                       {ALL_STEPS.filter((step) => step.category === category).map((step) => {
                         const available = (step.scales as readonly Scale[]).includes(currentScale);
                         const checked = steps.includes(step.key);
-                        const scaleText = step.scales.length === 3 ? null : step.scales.map((scale) => scale[0].toUpperCase()).join('/');
-                        return (
-                          <label key={step.key} title={available ? undefined : `Not available at ${currentScale} scale`} className={`flex select-none items-center gap-2 rounded-lg border px-2.5 py-2 text-xs transition-all ${!available ? 'cursor-not-allowed border-transparent text-slate-400 opacity-35' : checked ? 'cursor-pointer border-indigo-200 bg-indigo-50 font-medium text-indigo-700' : 'cursor-pointer border-transparent text-slate-600 hover:border-slate-200 hover:bg-slate-50'}`}>
-                            <input type="checkbox" checked={checked} disabled={!available} onChange={() => setSteps((prev) => prev.includes(step.key) ? prev.filter((item) => item !== step.key) : [...prev, step.key])} className="flex-shrink-0 rounded accent-indigo-600" />
-                            <span className="flex-1 leading-tight">{step.label}</span>
-                            {scaleText && <span className={`flex-shrink-0 rounded px-1 py-0.5 text-[9px] font-bold ${available ? 'bg-slate-200 text-slate-500' : 'bg-red-100 text-red-400'}`}>{scaleText}</span>}
-                          </label>
-                        );
+                        const availabilityLabel = step.scales.length === 3 ? null : step.scales.map((item) => item[0].toUpperCase()).join('/');
+                        return <button key={step.key} onClick={() => available && toggleStep(step.key)} disabled={!available} title={available ? step.label : `Not available at ${scale.label.toLowerCase()} scale`} className={`rounded-[18px] border px-3 py-2 text-left text-sm transition ${!available ? 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400' : checked ? 'border-teal-200 bg-teal-50 text-teal-700' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}><div className="font-medium">{step.label}</div>{availabilityLabel ? <div className="mt-1 text-[10px] uppercase tracking-[0.18em] text-slate-400">{availabilityLabel}</div> : null}</button>;
                       })}
                     </div>
                   </div>
                 ))}
               </div>
             </div>
-          </div>
 
-          <button onClick={handleCalculate} disabled={loading || !isValid || steps.length === 0} className="w-full rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 py-3.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition-all hover:from-blue-700 hover:to-indigo-700 disabled:opacity-40 disabled:shadow-none">
-            {loading ? <span className="flex items-center justify-center gap-2"><span className="h-4 w-4 rounded-full border-2 border-white border-t-transparent animate-spin" />Calculating…</span> : 'Calculate Manufacturing Cost →'}
-          </button>
-          {error && <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"><span className="font-medium">Error:</span> {error}</div>}
-        </div>
-        {result ? renderResultsPanel() : renderEmptyPanel()}
+            <div className={`rounded-[24px] border px-4 py-4 text-sm ${isValid ? 'border-emerald-200 bg-emerald-50 text-emerald-800' : 'border-amber-200 bg-amber-50 text-amber-800'}`}>{validationMessage}</div>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <button onClick={handleCalculate} disabled={loading || !isValid || steps.length === 0} className="cp-button-primary min-w-[220px]">{loading ? <><span className="mr-2 inline-flex h-4 w-4 animate-spin rounded-full border-2 border-slate-950 border-t-transparent" />Calculating estimate</> : 'Calculate estimate'}</button>
+              <div className="text-xs leading-6 text-slate-500">The estimate returns materials, processing, and selling-price contributions in one CatCost-style output bundle.</div>
+            </div>
+            {error ? <div className="rounded-[24px] border border-red-200 bg-red-50 px-4 py-4 text-sm text-red-700"><span className="font-semibold">Calculation failed.</span> {error}</div> : null}
+          </div>
+        </section>
+
+        {renderResultPanel()}
       </div>
     </div>
   );
