@@ -215,9 +215,9 @@ export default function Calculator() {
   function priceField(row: Row) {
     const locked = row.source_type !== 'manual';
     return (
-      <div className="flex items-center gap-2">
+      <div className="flex flex-none items-center gap-2">
         <span className="text-xs text-slate-500">$</span>
-        <input type="number" step="0.01" min="0" value={toDisplay(row.price_per_lb).toFixed(2)} readOnly={locked} onChange={(event) => !locked && updateRow(row.id, { price_per_lb: toInternal(Number(event.target.value)) })} className={`input-base w-28 text-right font-mono ${priceTone(row.source_type)} ${locked ? 'cursor-not-allowed' : ''}`} />
+        <input type="number" step="0.01" min="0" value={toDisplay(row.price_per_lb).toFixed(2)} readOnly={locked} onChange={(event) => !locked && updateRow(row.id, { price_per_lb: toInternal(Number(event.target.value)) })} className={`input-base w-32 text-right font-mono ${priceTone(row.source_type)} ${locked ? 'cursor-not-allowed' : ''}`} />
         <span className="text-xs text-slate-500">{fmtLabel}</span>
       </div>
     );
@@ -242,14 +242,14 @@ export default function Calculator() {
           <div className="space-y-3">
             {items.map((row) => (
               <div key={row.id} className="surface-ghost p-4">
-                <div className="grid gap-3 xl:grid-cols-[minmax(0,1.35fr)_120px_auto_auto_42px] xl:items-center">
+                <div className="flex flex-wrap items-center gap-3">
                   {role === 'active_metal'
-                    ? <select value={row.name} onChange={(event) => onMaterialChange(row.id, event.target.value)} className="input-base"><option value="">Select metal</option>{KNOWN_METALS.map((metal) => <option key={metal} value={metal}>{metal}</option>)}</select>
-                    : <input type="text" list="known-metal-options" value={row.name} onChange={(event) => onMaterialChange(row.id, event.target.value)} placeholder="e.g. Re, K, Sn, Ce" className="input-base" />}
-                  <div className="flex items-center gap-2"><input type="number" step="0.1" min="0" max="100" value={row.wt_pct} onChange={(event) => updateRow(row.id, { wt_pct: Number(event.target.value) })} className="input-base text-right font-mono" /><span className="text-xs text-slate-500">wt%</span></div>
+                    ? <select value={row.name} onChange={(event) => onMaterialChange(row.id, event.target.value)} className="input-base min-w-[160px] flex-[1.4_1_220px] pr-10"><option value="">Select metal</option>{KNOWN_METALS.map((metal) => <option key={metal} value={metal}>{metal}</option>)}</select>
+                    : <input type="text" list="known-metal-options" value={row.name} onChange={(event) => onMaterialChange(row.id, event.target.value)} placeholder="e.g. Re, K, Sn, Ce" className="input-base min-w-[160px] flex-[1.4_1_220px]" />}
+                  <div className="flex flex-none items-center gap-2"><input type="number" step="0.1" min="0" max="100" value={row.wt_pct} onChange={(event) => updateRow(row.id, { wt_pct: Number(event.target.value) })} className="input-base w-28 text-right font-mono" /><span className="text-xs text-slate-500">wt%</span></div>
                   {sourceChip(row)}
                   {priceField(row)}
-                  <button onClick={() => removeRow(row.id)} className="flex h-10 w-10 items-center justify-center rounded-[18px] border border-slate-300 bg-white/74 text-slate-400 transition hover:border-red-300 hover:bg-red-50 hover:text-red-700" aria-label="Remove row">×</button>
+                  <button onClick={() => removeRow(row.id)} className="flex h-10 w-10 flex-none items-center justify-center rounded-[18px] border border-slate-300 bg-white/74 text-slate-400 transition hover:border-red-300 hover:bg-red-50 hover:text-red-700" aria-label="Remove row">x</button>
                 </div>
                 <div className="mt-3 text-xs text-slate-500">{row.source}</div>
               </div>
@@ -263,14 +263,14 @@ export default function Calculator() {
   function renderResultPanel() {
     if (!result) {
       return (
-        <section className="surface-card cp-enter flex min-h-[640px] flex-col justify-between overflow-hidden px-5 py-6 sm:px-6">
+        <section className="surface-card cp-enter flex min-h-[500px] flex-col justify-between overflow-hidden px-4 py-5 sm:px-5">
           <div>
             <span className="section-kicker">Estimate Outputs</span>
             <h2 className="mt-4 font-display text-[clamp(1.7rem,2.6vw,2.8rem)] leading-[0.98] text-slate-950">Outputs are ready once the estimate basis is complete.</h2>
-            <p className="mt-3 max-w-xl text-sm leading-7 text-slate-600">Run the estimate to assemble materials, processing, and selling-price outputs from the current synthesis and business inputs.</p>
+            <p className="mt-3 max-w-xl text-sm leading-6 text-slate-600">Run the estimate to assemble materials, processing, and selling-price outputs from the current synthesis and business inputs.</p>
           </div>
-          <div className="mt-8 space-y-4">
-            <div className="surface-ghost overflow-hidden p-5">
+          <div className="mt-6 space-y-3">
+            <div className="surface-ghost overflow-hidden p-4">
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <div className="cp-subtle-label">Inputs Snapshot</div>
@@ -278,20 +278,20 @@ export default function Calculator() {
                 </div>
                 <span className="cp-chip">{selectedSupport?.name ?? 'Support pending'}</span>
               </div>
-              <div className="mt-4 grid gap-3 sm:grid-cols-3">
+              <div className="mt-4 grid gap-2.5 sm:grid-cols-3">
                 <MetricTile label="Active metals" value={String(activeMetalCount)} detail="Named active inputs" />
                 <MetricTile label="Feed mix" value={`${liveFeedCount}/${indexedFeedCount}`} detail="Live / indexed feeds" />
                 <MetricTile label="Next action" value="Run estimate" detail="Materials, processing, and margin populate here." />
               </div>
             </div>
-            <div className="surface-ink overflow-hidden p-5">
-              <div className="grid gap-4 lg:grid-cols-3">
+            <div className="surface-ink overflow-hidden p-4">
+              <div className="grid gap-2.5 lg:grid-cols-3">
                 <MetricTile label="Recipe load" value={`${nonSupportWt.toFixed(1)} wt%`} detail={`Support auto-fills ${supportWtPct.toFixed(1)} wt%`} dark />
                 <MetricTile label="Selected steps" value={String(steps.length)} detail={steps.length > 0 ? `${steps[0]}${steps.length > 1 ? ` +${steps.length - 1}` : ''}` : 'Choose at least one step'} dark />
                 <MetricTile label="Scale window" value={scale.label} detail={`${orderSize} tons / ${scale.rate}`} dark />
               </div>
             </div>
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-2.5 sm:grid-cols-2">
               <MetricTile label="Tracked feeds" value={String(liveFeedCount + indexedFeedCount)} detail={`${liveFeedCount} live / ${indexedFeedCount} indexed`} />
               <MetricTile label="Support" value={selectedSupport?.name ?? 'Pending'} detail={`Current unit cost ${selectedSupport ? `$${toDisplay(selectedSupport.price_per_lb).toFixed(2)}${fmtLabel}` : 'N/A'}`} />
             </div>
@@ -307,19 +307,19 @@ export default function Calculator() {
     ];
 
     return (
-      <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6">
-        <div className="surface-ink relative overflow-hidden p-5">
+      <section className="surface-card cp-enter overflow-hidden px-4 py-5 sm:px-5">
+        <div className="surface-ink relative overflow-hidden p-4">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(120,242,208,0.24),transparent_0_36%),radial-gradient(circle_at_bottom_right,rgba(239,195,108,0.15),transparent_0_28%)]" />
-          <div className="relative grid gap-4 xl:grid-cols-[minmax(0,1.05fr)_320px]">
+          <div className="relative grid gap-3 xl:grid-cols-[minmax(0,1.05fr)_300px]">
             <div>
               <div className="cp-subtle-label !text-slate-400">Estimated selling price</div>
-              <div className="mt-5 flex flex-wrap items-end gap-3">
+              <div className="mt-4 flex flex-wrap items-end gap-3">
                 <div className="font-display text-[clamp(2.6rem,5vw,4.7rem)] leading-none text-white">${toDisplay(result.summary.estimated_price_per_lb).toFixed(2)}</div>
                 <div className="pb-1 text-lg text-slate-300">{fmtLabel}</div>
               </div>
               <div className="mt-3 text-sm text-slate-300">Alternate view: {altPrice != null ? `$${altPrice.toFixed(2)}${altLabel}` : 'n/a'}</div>
             </div>
-            <div className="grid gap-3 sm:grid-cols-3 xl:grid-cols-1">
+            <div className="grid gap-2.5 sm:grid-cols-3 xl:grid-cols-1">
               <MetricTile label="Scale" value={result.step_method.scale} detail={`${orderSize} tons order`} dark />
               <MetricTile label="Campaign" value={`${Number(result.step_method.campaign_days).toFixed(1)} d`} detail={`${steps.length} selected steps`} dark />
               <MetricTile label="Margin" value={`${Number(result.step_method.margin_pct).toFixed(1)}%`} detail="Selling margin contribution" dark />
@@ -327,11 +327,11 @@ export default function Calculator() {
           </div>
         </div>
 
-        <div className="mt-5 grid gap-4 2xl:grid-cols-[0.9fr_1.1fr]">
-          <div className="space-y-4">
-            <div className="surface-ghost p-5">
+        <div className="mt-4 grid gap-3 xl:grid-cols-[0.88fr_1.12fr]">
+          <div className="space-y-3">
+            <div className="surface-ghost p-4">
               <div className="flex items-center justify-between gap-3"><div><div className="cp-subtle-label">Cost Structure</div><div className="mt-2 text-xl font-semibold text-slate-950">Materials vs processing</div></div><span className="cp-chip">{result.materials.components.length} materials</span></div>
-              <div className="mt-5 space-y-4">
+              <div className="mt-4 space-y-3">
                 {summaryRows.map((item, index) => (
                   <div key={item.label}>
                     <div className="flex items-center justify-between gap-3 text-sm"><span className="text-slate-600">{item.label}</span><span className="font-semibold text-slate-950">{item.value}</span></div>
@@ -342,10 +342,10 @@ export default function Calculator() {
               </div>
             </div>
 
-            <div className="surface-ghost p-5">
+            <div className="surface-ghost p-4">
               <div className="text-sm font-semibold text-slate-950">Breakdown wheel</div>
               <div className="mt-1 text-xs text-slate-500">Materials, processing, and selling adjustments.</div>
-              <div className="mt-4 h-[300px]">
+              <div className="mt-3 h-[280px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie data={pieData} innerRadius={72} outerRadius={108} dataKey="value" paddingAngle={3} stroke="transparent">
@@ -359,14 +359,14 @@ export default function Calculator() {
             </div>
           </div>
 
-          <div className="surface-ghost p-5">
+          <div className="surface-ghost p-4">
             <div className="flex items-center justify-between gap-3"><div><div className="cp-subtle-label">Material Ledger</div><div className="mt-2 text-xl font-semibold text-slate-950">Component-level catalyst cost</div></div><span className="cp-chip">{selectedSupport?.name ?? 'Support'}</span></div>
-            <div className="mt-4 overflow-hidden rounded-[24px] border border-slate-900/8 bg-white/56">
+            <div className="mt-3 overflow-hidden rounded-[22px] border border-slate-900/8 bg-white/56">
               <div className="grid grid-cols-[minmax(0,1.4fr)_90px_110px_110px_72px] gap-3 border-b border-slate-900/8 bg-white/46 px-4 py-3 text-[11px] uppercase tracking-[0.18em] text-slate-500"><span>Material</span><span className="text-right">wt%</span><span className="text-right">Unit</span><span className="text-right">Catalyst</span><span className="text-right">Share</span></div>
               <div className="divide-y divide-slate-900/8">
                 {result.materials.components.map((component, index) => (
                   <div key={`${component.name}-${component.role}`} className="grid grid-cols-[minmax(0,1.4fr)_90px_110px_110px_72px] gap-3 px-4 py-3 text-sm">
-                    <div className="flex min-w-0 items-center gap-3"><span className="h-2.5 w-2.5 flex-none rounded-full" style={{ backgroundColor: CHART_COLORS[index % CHART_COLORS.length] }} /><div className="min-w-0"><div className="truncate text-slate-950">{component.name}</div><div className="text-xs text-slate-500">{component.role}</div></div></div>
+                    <div className="flex min-w-0 items-center gap-2.5"><span className="h-2.5 w-2.5 flex-none rounded-full" style={{ backgroundColor: CHART_COLORS[index % CHART_COLORS.length] }} /><div className="min-w-0"><div className="truncate text-slate-950">{component.name}</div><div className="text-xs text-slate-500">{component.role}</div></div></div>
                     <span className="text-right font-mono text-slate-700">{(component.wt_frac * 100).toFixed(1)}</span>
                     <span className="text-right font-mono text-slate-700">${toDisplay(component.price_per_lb).toFixed(3)}</span>
                     <span className="text-right font-mono text-slate-950">${toDisplay(component.cost_per_lb_cat).toFixed(3)}</span>
@@ -375,7 +375,7 @@ export default function Calculator() {
                 ))}
               </div>
             </div>
-            <div className="mt-4 rounded-[24px] border border-slate-900/8 bg-white/60 p-4">
+            <div className="mt-3 rounded-[22px] border border-slate-900/8 bg-white/60 p-4">
               <div className="flex items-center justify-between gap-3 text-sm"><span className="text-slate-600">Total material cost</span><span className="font-semibold text-slate-950">${toDisplay(result.materials.total_materials_cost_per_lb).toFixed(4)}{catLabel}</span></div>
               <div className="mt-2 text-xs leading-6 text-slate-500">CatCost step basis with backend escalation and margin treatment applied in the calculation engine.</div>
             </div>
@@ -394,33 +394,17 @@ export default function Calculator() {
         : 'Enter a valid non-zero loading for the active portion of the recipe.';
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <datalist id="known-metal-options">{KNOWN_METALS.map((metal) => <option key={metal} value={metal} />)}</datalist>
 
-      <section className="surface-card cp-enter overflow-hidden px-5 py-5 sm:px-6">
-        <div className="space-y-5">
-          <div>
-            <span className="section-kicker">Estimate Builder</span>
-            <h2 className="mt-4 max-w-3xl font-display text-[clamp(1.95rem,3vw,3.2rem)] leading-[0.96] text-slate-950">Turn catalyst inputs into an industrial-scale cost estimate.</h2>
-            <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">Enter the synthesis inputs you know today, connect them to live or manual price references, and complete a CatCost-style step-method estimate from the same surface.</p>
-          </div>
-
-          <div className="grid gap-3 md:grid-cols-3">
-            <MetricTile label="Tracked metals" value={String(liveFeedCount + indexedFeedCount)} detail={`${liveFeedCount} live / ${indexedFeedCount} indexed`} />
-            <MetricTile label="Process steps" value={String(steps.length)} detail={steps.length > 0 ? 'Active process path' : 'Select at least one step'} />
-            <MetricTile label="Current scale" value={scale.label} detail={`${orderSize} tons / ${scale.rate}`} />
-          </div>
-        </div>
-      </section>
-
       <div className="grid gap-4 xl:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)]">
-      <section className="surface-card cp-enter overflow-hidden px-5 py-5 sm:px-6" style={{ animationDelay: '0.06s' }}>
+        <section className="surface-card cp-enter overflow-hidden px-4 py-4 sm:px-5" style={{ animationDelay: '0.06s' }}>
           <div className="space-y-6">
-            <div className="flex flex-col gap-4 border-b border-slate-900/8 pb-5 lg:flex-row lg:items-end lg:justify-between">
+            <div className="flex flex-col gap-4 border-b border-slate-900/8 pb-4 lg:flex-row lg:items-end lg:justify-between">
               <div>
                 <div className="cp-subtle-label">Synthesis Inputs</div>
                 <h2 className="mt-2 text-2xl font-semibold text-slate-950">Enter catalyst composition and material pricing</h2>
-                <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-600">Use metal loading, support choice, and raw-material pricing as the starting synthesis inputs, then switch any row back to manual pricing when you need a procurement scenario.</p>
+                <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">Use metal loading, support choice, and raw-material pricing as the starting synthesis inputs, then switch any row back to manual pricing when you need a procurement scenario.</p>
               </div>
               <div className="flex flex-wrap items-center gap-2">
                 <span className="cp-chip">{pricesUpdatedAt ? `Feed synced ${pricesUpdatedAt.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}` : 'Feed status pending'}</span>
@@ -428,42 +412,48 @@ export default function Calculator() {
               </div>
             </div>
 
-            <div className="space-y-4">
+            <div className="grid gap-2.5 md:grid-cols-3">
+              <MetricTile label="Tracked metals" value={String(liveFeedCount + indexedFeedCount)} detail={`${liveFeedCount} live / ${indexedFeedCount} indexed`} />
+              <MetricTile label="Process steps" value={String(steps.length)} detail={steps.length > 0 ? 'Active process path' : 'Select at least one step'} />
+              <MetricTile label="Current scale" value={scale.label} detail={`${orderSize} tons / ${scale.rate}`} />
+            </div>
+
+            <div className="space-y-3.5">
               {renderRows('active_metal')}
               {renderRows('promoter')}
 
-              <div className="surface-ghost p-4">
-                <div><div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#efc36c]" /><h3 className="text-sm font-semibold text-slate-950">Support</h3></div><p className="mt-1 text-xs leading-6 text-slate-500">Support loading closes the balance automatically after actives and promoters are set.</p></div>
+              <div className="surface-ghost p-3.5">
+                <div><div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#efc36c]" /><h3 className="text-sm font-semibold text-slate-950">Support</h3></div><p className="mt-1 text-xs leading-5 text-slate-500">Support loading closes the balance automatically after actives and promoters are set.</p></div>
                 {rows.filter((row) => row.role === 'support').map((row) => (
-                  <div key={row.id} className="mt-4 grid gap-3 xl:grid-cols-[minmax(0,1.3fr)_180px_auto] xl:items-center">
-                    <select value={row.name} onChange={(event) => { const support = SUPPORT_OPTIONS.find((item) => item.name === event.target.value); updateRow(row.id, { name: event.target.value, price_per_lb: support?.price ?? row.price_per_lb, source_type: 'manual', source: 'Manual support default' }); }} className="input-base">
+                  <div key={row.id} className="mt-3.5 flex flex-wrap items-center gap-3">
+                    <select value={row.name} onChange={(event) => { const support = SUPPORT_OPTIONS.find((item) => item.name === event.target.value); updateRow(row.id, { name: event.target.value, price_per_lb: support?.price ?? row.price_per_lb, source_type: 'manual', source: 'Manual support default' }); }} className="input-base min-w-[180px] flex-[1.3_1_260px] pr-10">
                       {SUPPORT_OPTIONS.map((support) => <option key={support.name} value={support.name}>{support.name} / {support.note}</option>)}
                     </select>
-                    <div className="input-base flex items-center justify-between gap-3 bg-white/76"><span className="text-xs text-slate-500">Auto share</span><span className="font-mono text-slate-950">{supportWtPct.toFixed(1)} wt%</span></div>
+                    <div className="input-base flex min-w-[170px] flex-none items-center justify-between gap-3 bg-white/76"><span className="text-xs text-slate-500">Auto share</span><span className="font-mono text-slate-950">{supportWtPct.toFixed(1)} wt%</span></div>
                     {priceField(row)}
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="space-y-5 border-t border-slate-900/8 pt-5">
-              <div><div className="cp-subtle-label">Step Method</div><h2 className="mt-2 text-2xl font-semibold text-slate-950">Map the lab procedure to industrial process steps</h2><p className="mt-2 max-w-2xl text-sm leading-7 text-slate-600">Choose the common manufacturing steps that best approximate the lab synthesis, and let order size set the small, medium, or large campaign basis.</p></div>
-              <div className="surface-ghost p-4">
+            <div className="space-y-4 border-t border-slate-900/8 pt-4">
+              <div><div className="cp-subtle-label">Step Method</div><h2 className="mt-2 text-2xl font-semibold text-slate-950">Map the lab procedure to industrial process steps</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">Choose the common manufacturing steps that best approximate the lab synthesis, and let order size set the small, medium, or large campaign basis.</p></div>
+              <div className="surface-ghost p-3.5">
                 <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
                   <div><div className="cp-subtle-label">Order size</div><div className="mt-3 flex flex-wrap items-center gap-3"><input type="number" min="1" step="1" value={orderSize} onChange={(event) => setOrderSize(Math.max(1, Number(event.target.value)))} className="input-base w-32 text-center font-mono" /><span className="text-sm text-slate-500">tons per campaign</span><span className={`rounded-full border px-3 py-1 text-xs font-semibold ${scale.classes}`}>{scale.label} / {scale.rate}</span></div></div>
                   <div className="cp-toolbar">{QUICK_ORDER_SIZES.map((size) => <button key={size} onClick={() => setOrderSize(size)} className={`rounded-[16px] px-3 py-2 text-xs font-semibold transition ${orderSize === size ? 'bg-slate-950 text-white' : 'text-slate-600 hover:bg-white hover:text-slate-900'}`}>{size} tons</button>)}</div>
                 </div>
               </div>
-              <div className="grid gap-4 lg:grid-cols-2">
+              <div className="grid gap-3 lg:grid-cols-2 xl:grid-cols-3">
                 {STEP_CATEGORIES.map((category) => (
-                  <div key={category} className="surface-ghost p-4">
+                  <div key={category} className="surface-ghost p-3.5">
                     <div className="cp-subtle-label">{category}</div>
                     <div className="mt-3 flex flex-wrap gap-2">
                       {ALL_STEPS.filter((step) => step.category === category).map((step) => {
                         const available = (step.scales as readonly Scale[]).includes(currentScale);
                         const checked = steps.includes(step.key);
                         const availabilityLabel = step.scales.length === 3 ? null : step.scales.map((item) => item[0].toUpperCase()).join('/');
-                        return <button key={step.key} onClick={() => available && toggleStep(step.key)} disabled={!available} title={available ? step.label : `Not available at ${scale.label.toLowerCase()} scale`} className={`rounded-[18px] border px-3 py-2 text-left text-sm transition ${!available ? 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400' : checked ? 'border-teal-200 bg-teal-50 text-teal-700' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}><div className="font-medium">{step.label}</div>{availabilityLabel ? <div className="mt-1 text-[10px] uppercase tracking-[0.18em] text-slate-400">{availabilityLabel}</div> : null}</button>;
+                        return <button key={step.key} onClick={() => available && toggleStep(step.key)} disabled={!available} title={available ? step.label : `Not available at ${scale.label.toLowerCase()} scale`} className={`rounded-[16px] border px-3 py-2 text-left text-sm transition ${!available ? 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400' : checked ? 'border-teal-200 bg-teal-50 text-teal-700' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}><div className="font-medium">{step.label}</div>{availabilityLabel ? <div className="mt-1 text-[10px] uppercase tracking-[0.18em] text-slate-400">{availabilityLabel}</div> : null}</button>;
                       })}
                     </div>
                   </div>

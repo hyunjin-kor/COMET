@@ -117,27 +117,6 @@ export default function Uncertainty() {
 
   return (
     <div className="space-y-4">
-      <section className="surface-card cp-enter overflow-hidden px-5 py-5 sm:px-6">
-        <div className="space-y-5">
-          <div>
-            <span className="section-kicker">Monte Carlo</span>
-            <h2 className="mt-4 max-w-3xl font-display text-[clamp(1.95rem,3vw,3.1rem)] leading-[0.96] text-slate-950">
-              Study contributors to uncertainty in catalyst cost.
-            </h2>
-            <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
-              Probe price, loading, and scale assumptions through a probabilistic run to see how wide the estimate can
-              spread under realistic uncertainty.
-            </p>
-          </div>
-
-          <div className="grid gap-3 md:grid-cols-3">
-            <StatTile label="Simulations" value={nSim.toLocaleString('en-US')} detail="Configured sample count" />
-            <StatTile label="Metal" value={metalSymbol} detail={`${loadingPct.toFixed(1)} wt% loading`} />
-            <StatTile label="Order size" value={`${orderSize}`} detail="Tons per campaign" />
-          </div>
-        </div>
-      </section>
-
       <div className="grid gap-4 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
         <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.06s' }}>
           <div className="border-b border-slate-900/8 pb-5">

@@ -23,18 +23,8 @@ function categoryTone(category: string) {
   return 'border-slate-200 bg-white text-slate-600';
 }
 
-function HeaderMetric({ label, value, detail }: { label: string; value: string; detail: string }) {
-  return (
-    <div className="cp-metric-tile">
-      <div className="cp-subtle-label">{label}</div>
-      <div className="mt-2 text-2xl font-display text-slate-900">{value}</div>
-      <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div>
-    </div>
-  );
-}
-
 export default function Library() {
-  const { unit, toDisplay, fmtLabel } = useUnit();
+  const { toDisplay, fmtLabel } = useUnit();
   const [tab, setTab] = useState<Tab>('materials');
   const [materials, setMaterials] = useState<MaterialItem[]>([]);
   const [templates, setTemplates] = useState<ProcessTemplate[]>([]);
@@ -43,7 +33,6 @@ export default function Library() {
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [loading, setLoading] = useState(true);
-  const [totalShown, setTotalShown] = useState(0);
 
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(search), 300);
@@ -60,7 +49,6 @@ export default function Library() {
           const data = await fetchMaterials(category || undefined, debouncedSearch || undefined);
           if (!cancelled) {
             setMaterials(data);
-            setTotalShown(data.length);
           }
           return;
         }
@@ -78,7 +66,6 @@ export default function Library() {
           setMaterials([]);
           setTemplates([]);
           setSteps([]);
-          setTotalShown(0);
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -93,26 +80,6 @@ export default function Library() {
 
   return (
     <div className="space-y-4">
-      <section className="surface-card cp-enter overflow-hidden px-5 py-5 sm:px-6">
-        <div className="space-y-5">
-          <div>
-            <span className="section-kicker">Reference Catalog</span>
-            <h2 className="mt-4 max-w-3xl font-display text-[clamp(1.95rem,3vw,3.1rem)] leading-[0.96] text-slate-950">
-              Browse the libraries that support a catalyst estimate.
-            </h2>
-            <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
-              Move through materials, step-library rates, and common process templates without leaving the estimate workspace.
-            </p>
-          </div>
-
-          <div className="grid gap-3 md:grid-cols-3">
-            <HeaderMetric label="Materials" value={String(totalShown)} detail={`Rows in the materials library (${unit})`} />
-            <HeaderMetric label="Steps" value={String(steps.length)} detail="Step Library records" />
-            <HeaderMetric label="Templates" value={String(templates.length)} detail="Common process templates" />
-          </div>
-        </div>
-      </section>
-
       <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.06s' }}>
         <div className="flex flex-col gap-4 border-b border-slate-900/8 pb-5 lg:flex-row lg:items-end lg:justify-between">
           <div>

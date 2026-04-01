@@ -3,7 +3,7 @@
  * Launches the FastAPI backend as a sidecar and shows the React frontend
  */
 
-const { app, BrowserWindow, shell, dialog, Menu } = require('electron');
+const { app, BrowserWindow, shell, dialog, Menu, ipcMain } = require('electron');
 const path = require('path');
 const { spawn } = require('child_process');
 const http = require('http');
@@ -25,40 +25,84 @@ let mainWindow = null;
 let backendProcess = null;
 let splashWindow = null;
 
+function sendWindowState() {
+  if (!mainWindow || mainWindow.isDestroyed()) return;
+  mainWindow.webContents.send('window-state-changed', {
+    isMaximized: mainWindow.isMaximized(),
+  });
+}
+
 const BRAND_MARK_SVG = `
-<svg viewBox="0 0 160 160" width="42" height="42" fill="none" aria-hidden="true">
+<svg viewBox="0 0 512 512" width="42" height="42" fill="none" aria-hidden="true">
   <defs>
-    <linearGradient id="cp-bg" x1="80" y1="14" x2="80" y2="146" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#5CC1FF"/>
-      <stop offset="1" stop-color="#2676DB"/>
+    <linearGradient id="cp-bg" x1="86" y1="64" x2="426" y2="448" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#171c24"/>
+      <stop offset="100%" stop-color="#2a313d"/>
     </linearGradient>
-    <radialGradient id="cp-shine" cx="30%" cy="22%" r="36%">
-      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.22"/>
-      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
-    </radialGradient>
-    <linearGradient id="cp-core" x1="80" y1="40" x2="80" y2="124" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#17365E"/>
-      <stop offset="1" stop-color="#0D2445"/>
+    <linearGradient id="cp-frame" x1="192" y1="134" x2="320" y2="362" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#f1f6ff"/>
+      <stop offset="100%" stop-color="#a1b1c8"/>
+    </linearGradient>
+    <linearGradient id="cp-signal" x1="154" y1="338" x2="358" y2="208" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#3ac8ff"/>
+      <stop offset="100%" stop-color="#49e0c1"/>
     </linearGradient>
   </defs>
 
-  <rect x="14" y="14" width="132" height="132" rx="36" fill="url(#cp-bg)" />
-  <rect x="14.75" y="14.75" width="130.5" height="130.5" rx="35.25" stroke="#FFFFFF" stroke-opacity="0.36" stroke-width="1.5" />
-  <circle cx="52" cy="44" r="28" fill="url(#cp-shine)" />
+  <rect x="40" y="40" width="432" height="432" rx="110" fill="url(#cp-bg)" />
+  <rect x="54" y="54" width="404" height="404" rx="96" fill="none" stroke="#3c4659" stroke-width="8" />
+  <g opacity="0.16" stroke="#d8e1ef" stroke-width="4" stroke-linecap="round">
+    <path d="M156 166H356" />
+    <path d="M156 214H356" />
+    <path d="M156 262H356" />
+    <path d="M156 310H356" />
+    <path d="M156 358H356" />
+    <path d="M192 142V382" />
+    <path d="M256 142V382" />
+    <path d="M320 142V382" />
+  </g>
   <path
-    d="M80 42 106 58V102L80 118 54 102V58L80 42Z"
-    fill="url(#cp-core)"
-    stroke="#E8F5FF"
-    stroke-opacity="0.92"
-    stroke-width="4"
+    d="M214 132 H298 L320 176 V308
+       C320 338 296 362 266 362
+       H246
+       C216 362 192 338 192 308
+       V176
+       Z"
+    fill="none"
+    stroke="url(#cp-frame)"
+    stroke-width="20"
     stroke-linejoin="round"
   />
-  <circle cx="68" cy="74" r="7" fill="#A5F2E0" />
-  <circle cx="92" cy="74" r="7" fill="#A5F2E0" />
-  <circle cx="80" cy="92" r="7" fill="#A5F2E0" />
-
-  <path d="M42 106 62 92 80 98 108 68" stroke="#FFFFFF" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" />
-  <path d="M120 58 100 62 108 80Z" fill="#FFD66B" />
+  <path
+    d="M204 232 H308 V298
+       C308 317 293 332 274 332
+       H238
+       C219 332 204 317 204 298
+       Z"
+    fill="#243240"
+  />
+  <g fill="#e7eef8">
+    <circle cx="228" cy="256" r="12" />
+    <circle cx="256" cy="240" r="12" />
+    <circle cx="284" cy="256" r="12" />
+    <circle cx="240" cy="286" r="12" />
+    <circle cx="268" cy="286" r="12" />
+  </g>
+  <path
+    d="M154 338
+       C194 320 226 304 258 286
+       C292 266 324 240 358 208"
+    fill="none"
+    stroke="url(#cp-signal)"
+    stroke-width="18"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <g fill="#171c24" stroke="#49dec6" stroke-width="7">
+    <circle cx="154" cy="338" r="11" />
+    <circle cx="258" cy="286" r="11" />
+    <circle cx="358" cy="208" r="11" />
+  </g>
 </svg>`;
 
 function debugLog(message) {
@@ -501,13 +545,6 @@ function createMainWindow() {
   const desktopChromeOptions = process.platform === 'win32'
     ? {
         frame: false,
-        titleBarStyle: 'hidden',
-        titleBarOverlay: {
-          color: '#f7f1e6',
-          symbolColor: '#142033',
-          height: 44,
-        },
-        backgroundMaterial: 'mica',
         autoHideMenuBar: true,
       }
     : process.platform === 'darwin'
@@ -520,7 +557,7 @@ function createMainWindow() {
     minWidth: 1120,
     minHeight: 720,
     title: 'CatPrice | Catalyst Cost Tool',
-    backgroundColor: '#f7f1e6',
+    backgroundColor: '#fbf7f1',
     show: false,
     icon: path.join(__dirname, 'icon.png'),
     ...desktopChromeOptions,
@@ -582,7 +619,10 @@ function createMainWindow() {
 
   mainWindow.once('ready-to-show', showMain);
   mainWindow.webContents.once('dom-ready', () => showAndFocusMainWindow('dom-ready'));
-  mainWindow.webContents.once('did-finish-load', () => showAndFocusMainWindow('did-finish-load'));
+  mainWindow.webContents.once('did-finish-load', () => {
+    showAndFocusMainWindow('did-finish-load');
+    sendWindowState();
+  });
 
   // Fallback: force-show after 12 s if ready-to-show never fires
   const showTimer = setTimeout(showMain, 12000);
@@ -625,6 +665,10 @@ p{color:#7099cc;font-size:14px;max-width:500px;text-align:center}
   }
 
   mainWindow.on('closed', () => { mainWindow = null; });
+  mainWindow.on('maximize', sendWindowState);
+  mainWindow.on('unmaximize', sendWindowState);
+  mainWindow.on('enter-full-screen', sendWindowState);
+  mainWindow.on('leave-full-screen', sendWindowState);
 
   // Open external links in default browser
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
@@ -650,6 +694,36 @@ function showAbout() {
   });
   mainWindow.center();
 }
+
+ipcMain.handle('window:minimize', () => {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.minimize();
+  }
+});
+
+ipcMain.handle('window:toggle-maximize', () => {
+  if (!mainWindow || mainWindow.isDestroyed()) return false;
+
+  if (mainWindow.isMaximized()) {
+    mainWindow.unmaximize();
+  } else {
+    mainWindow.maximize();
+  }
+
+  sendWindowState();
+  return mainWindow.isMaximized();
+});
+
+ipcMain.handle('window:close', () => {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.close();
+  }
+});
+
+ipcMain.handle('window:is-maximized', () => {
+  if (!mainWindow || mainWindow.isDestroyed()) return false;
+  return mainWindow.isMaximized();
+});
 
 // ─── App Lifecycle ────────────────────────────────────────────────────────────
 app.whenReady().then(async () => {
