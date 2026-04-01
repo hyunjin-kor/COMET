@@ -19,7 +19,6 @@ const BACKEND_URL  = `http://${BACKEND_HOST}:${BACKEND_PORT}`;
 const HEALTH_URL   = `${BACKEND_URL}/api/health`;
 const MAX_WAIT_MS  = 30_000;    // 30 seconds max startup wait
 const POLL_INTERVAL_MS = 500;
-const DOCUMENTATION_URL = process.env.CATPRICE_DOCUMENTATION_URL || '';
 
 // ─── State ────────────────────────────────────────────────────────────────────
 let mainWindow = null;
@@ -233,6 +232,13 @@ function getDatabasePath() {
     return path.join(app.getPath('userData'), 'catprice.db');
   }
   return path.join(__dirname, '..', 'catprice.db');
+}
+
+function getFrontendEntry() {
+  if (app.isPackaged) {
+    return path.join(app.getAppPath(), 'frontend', 'dist', 'index.html');
+  }
+  return path.join(__dirname, '..', 'frontend', 'dist', 'index.html');
 }
 
 // ─── Backend Lifecycle ────────────────────────────────────────────────────────
@@ -596,17 +602,15 @@ function createMainWindow() {
     {
       label: 'Help',
       submenu: [
-        ...(DOCUMENTATION_URL ? [{ label: 'CatPrice Documentation', click: () => shell.openExternal(DOCUMENTATION_URL) }] : []),
         { label: 'About CatPrice', click: showAbout },
       ],
     },
   ]);
   Menu.setApplicationMenu(menu);
 
-  // Load from backend-served frontend (in prod) or Vite dev server
-  // dev mode: NODE_ENV=development AND a Vite server is expected on 5173
+  // Development uses Vite. Desktop builds load bundled files directly.
   const isDev = process.env.NODE_ENV === 'development';
-  const packagedIndex = path.join(app.getAppPath(), 'frontend', 'dist', 'index.html');
+  const frontendEntry = getFrontendEntry();
 
   function showMain() {
     if (mainWindow && !mainWindow.isDestroyed() && !mainWindow.isVisible()) {
@@ -653,15 +657,10 @@ p{color:#7099cc;font-size:14px;max-width:500px;text-align:center}
     mainWindow.loadURL('http://localhost:5173').catch((err) => {
       debugLog(`Window loadURL threw: ${err.message}`);
     });
-  } else if (app.isPackaged) {
-    debugLog(`Loading packaged frontend file: ${packagedIndex}`);
-    mainWindow.loadFile(packagedIndex, { hash: '/' }).catch((err) => {
-      debugLog(`Window loadFile threw: ${err.message}`);
-    });
   } else {
-    debugLog(`Loading backend frontend URL: ${BACKEND_URL}`);
-    mainWindow.loadURL(BACKEND_URL).catch((err) => {
-      debugLog(`Window loadURL threw: ${err.message}`);
+    debugLog(`Loading desktop frontend file: ${frontendEntry}`);
+    mainWindow.loadFile(frontendEntry, { hash: '/' }).catch((err) => {
+      debugLog(`Window loadFile threw: ${err.message}`);
     });
   }
 

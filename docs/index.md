@@ -1,37 +1,20 @@
-# CatPrice
+# CatPrice Documentation
 
-**Real-time metal price based catalyst manufacturing cost estimation tool.**
+CatPrice is a desktop-only catalyst cost tool. The application is packaged and distributed through Electron, while the FastAPI backend runs as a local loopback sidecar inside the desktop workflow.
 
-CatPrice is an open-source tool that estimates catalyst manufacturing costs using the Step Method and CapEx/OpEx Factors methodology, with real-time metal spot price integration.
+## Focus
 
-## Features
+- desktop packaging and installation
+- catalyst composition costing
+- local-only calculation workflow
+- live and indexed metal pricing
+- uncertainty and comparison analysis
 
-- **Step Method Calculator** - Estimate catalyst selling price based on processing steps, production scale, and materials cost
-- **Real-time Metal Prices** - Automatic daily price updates from Metals.Dev and MetalpriceAPI
-- **Composition Comparison** - Compare up to 4 catalyst compositions side-by-side
-- **Monte Carlo Uncertainty** - Probabilistic cost ranges via simulation
-- **Materials Library** - Comprehensive database of metals, supports, and precursors
-- **Process Templates** - Pre-configured templates for common catalyst types
-- **Price Escalation** - ChemPPI/CEPCI-based cost adjustment between years
-- **Spent Catalyst Recovery** - Estimate reclaimed value of spent PGM catalysts
-
-## Academic Citation
-
-This tool implements methodologies from:
-
-- Baddour, F.G., et al. (2018). "An Exceptionally Mild and Scalable Solution-Phase Synthesis of Molybdenum Carbide Nanoparticles for Thermocatalytic CO2 Hydrogenation." *Journal of the American Chemical Society*.
-- Van Allsburg, K.M., et al. (2022). "Early-stage evaluation of catalyst manufacturing cost and environmental impact using CatCost." *Nature Catalysis*.
-
-## Quick Start
+## Local Development
 
 ```bash
-# Backend
-pip install -e .
-uvicorn backend.main:app --reload
-
-# Frontend
-cd frontend && npm install && npm run dev
+npm install
+npm run dev
 ```
 
-During local development, open `http://localhost:5173` on the same machine that is running `npm run dev`.
-This is a loopback-only address, not a public deployment URL.
+This starts the Electron shell, the local FastAPI sidecar, and the Vite renderer used during desktop development.

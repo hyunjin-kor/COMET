@@ -1,6 +1,9 @@
 # API Reference
 
-Base URL: `http://localhost:8000/api`
+Base URL:
+
+- Electron/local desktop dev: `http://127.0.0.1:8765/api`
+- Standalone backend debug runs: `http://localhost:8000/api`
 
 ## Calculator
 

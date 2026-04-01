@@ -7,12 +7,13 @@ git clone https://github.com/yourusername/catprice.git
 cd catprice
 pip install -e ".[dev]"
 cd frontend && npm install && cd ..
+npm install
 ```
 
 ## Code Standards
 
-- **Python**: ruff (formatter + linter), type hints required, Google-style docstrings
-- **TypeScript**: strict mode, ESLint
+- **Python**: ruff, type hints required, Google-style docstrings
+- **TypeScript**: strict mode
 - **Commits**: Conventional Commits (`feat:`, `fix:`, `docs:`, `test:`)
 - **PRs**: Include tests, one feature per PR
 
@@ -20,7 +21,14 @@ cd frontend && npm install && cd ..
 
 ```bash
 pytest backend/tests/ -v
-cd frontend && npx tsc --noEmit
+cd frontend && npm run build
+```
+
+## Desktop Packaging Check
+
+```bash
+npm run build
+npm run smoke:desktop
 ```
 
 ## Adding a New Processing Step
@@ -37,4 +45,4 @@ cd frontend && npx tsc --noEmit
 
 ## License
 
-MIT License. See LICENSE file.
+All rights reserved. See `LICENSE`.

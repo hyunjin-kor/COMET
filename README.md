@@ -1,8 +1,8 @@
 # CatPrice
 
-CatPrice is a catalyst manufacturing cost estimator built around the CatCost methodology, updated with live metal feeds, indexed reference prices, and a desktop-friendly workflow.
+CatPrice is a desktop-first catalyst manufacturing cost estimator built around the CatCost methodology, live metal feeds, indexed reference prices, and a packaged Electron workflow.
 
-It is designed for quick early-stage costing of catalyst compositions and process routes without forcing users into a spreadsheet-heavy workflow.
+It is designed for early-stage costing of catalyst compositions and process routes without a spreadsheet-heavy workflow or any public server deployment.
 
 ## What It Does
 
@@ -12,21 +12,11 @@ It is designed for quick early-stage costing of catalyst compositions and proces
 - Runs Monte Carlo uncertainty analysis
 - Applies ChemPPI and CEPCI escalation
 - Includes material, step, and process template libraries
-- Supports desktop usage through Electron
-
-## Price Sources
-
-CatPrice now makes the price source explicit in the UI:
-
-- `LIVE`: current tracked market feed
-- `INDEXED`: CatCost reference price adjusted with ChemPPI trend logic
-- `MANUAL`: user-entered price
-
-This avoids mixing real-time data and reference values without telling the user which is which.
+- Ships as a Windows desktop app through Electron
 
 ## Why This Project
 
-CatPrice is not a replacement for CatCost. It is a more approachable interface around the same methodology, with better visibility into source data, faster iteration, and a modern desktop/web experience.
+CatPrice is not a replacement for CatCost. It is a desktop-focused interface around the same methodology, with better visibility into source data and faster iteration.
 
 Methodology basis:
 
@@ -37,38 +27,37 @@ Methodology basis:
 
 | Layer | Technology |
 | --- | --- |
-| Backend | FastAPI, Python, SQLModel, SQLite |
-| Frontend | React 19, TypeScript, Vite, Tailwind CSS |
-| Desktop | Electron |
+| Desktop shell | Electron |
+| Renderer UI | React 19, TypeScript, Vite, Tailwind CSS |
+| Local sidecar API | FastAPI, Python, SQLModel, SQLite |
 | Charts | Recharts |
 | Scheduling | APScheduler |
 
-## Getting Started
-
-### Desktop-first use
-
-For normal use, install or run the desktop app from this repository and work through the Electron wrapper.
-
-### Desktop packaging
+## Desktop Packaging
 
 ```bash
 npm install
-npm run pack
+npm run build
 ```
 
-The packaged desktop executable is created at:
+The Windows installer and unpacked app are created under:
 
 ```text
-dist-electron\win-unpacked\CatPrice.exe
+dist-electron\
 ```
 
-Before rebuilding desktop artifacts, CatPrice now stops old desktop processes automatically. You can also stop them manually:
+Main outputs:
+
+- `dist-electron\CatPrice Setup 1.0.1.exe`
+- `dist-electron\win-unpacked\CatPrice.exe`
+
+Before rebuilding desktop artifacts, CatPrice stops old desktop processes automatically. You can also stop them manually:
 
 ```bash
 npm run desktop:stop
 ```
 
-### Desktop smoke test
+## Desktop Smoke Test
 
 After packaging, run:
 
@@ -78,35 +67,20 @@ npm run smoke:desktop
 
 This checks desktop launch, backend readiness, the prices endpoint, a sample calculate request, and re-launch behavior.
 
-### Local development
-
-```bash
-# backend
-pip install -e .
-cp .env.example .env
-uvicorn backend.main:app --host 127.0.0.1 --port 8765 --reload
-
-# frontend
-cd frontend
-npm install
-npm run dev
-```
-
-The local development UI runs at `http://localhost:5173`.
-This is a loopback-only development address on your own machine, not a public deployment URL.
-
-### Full app development
+## Local Desktop Development
 
 ```bash
 npm install
 npm run dev
 ```
 
-### Docker
+This starts:
 
-```bash
-docker compose up --build
-```
+- the FastAPI sidecar on `127.0.0.1:8765`
+- the Vite renderer on `http://localhost:5173`
+- the Electron desktop shell
+
+The browser URL is only a local renderer development service for the Electron shell. CatPrice is no longer intended for any public server deployment.
 
 ## Optional API Keys
 
@@ -124,7 +98,6 @@ BLS_API_KEY=your_key
 
 ```bash
 python -m pytest backend/tests -q
-cd frontend && npm run lint
 cd frontend && npm run build
 python scripts/validate_catcost_data.py
 ```
@@ -132,7 +105,7 @@ python scripts/validate_catcost_data.py
 Desktop packaging validation:
 
 ```bash
-npm run pack
+npm run build
 npm run smoke:desktop
 ```
 
@@ -141,17 +114,6 @@ npm run smoke:desktop
 - Desktop launcher log: `C:\Users\<your-user>\AppData\Roaming\CatPrice\catprice-launcher.log`
 - If packaging fails with `Access is denied`, run `npm run desktop:stop` and retry.
 - If the splash screen appears to stall, check `http://127.0.0.1:8765/api/health` and the launcher log first.
-
-## Project Scope
-
-CatPrice focuses on:
-
-- catalyst composition costing
-- early-stage process cost estimation
-- price-source transparency
-- faster iteration than spreadsheet-based workflows
-
-It does not try to be a full plant design simulator.
 
 ## Academic Basis
 

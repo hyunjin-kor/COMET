@@ -17,7 +17,6 @@
     "build:frontend": "cd frontend && npm run build",
     "build:backend-sidecar": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build_backend_bundle.ps1",
     "electron:build": "npm run desktop:stop && electron-builder build --win",
-    "electron:build:all": "electron-builder build -mwl",
     "pack": "npm run build:frontend && npm run build:backend-sidecar && npm run desktop:stop && electron-builder --dir",
     "pack:smoke": "npm run pack && npm run smoke:desktop"
   },
@@ -58,16 +57,6 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "CatPrice"
-    },
-    "mac": {
-      "target": "dmg",
-      "icon": "frontend/public/icon.png",
-      "category": "public.app-category.productivity"
-    },
-    "linux": {
-      "target": "AppImage",
-      "icon": "frontend/public/icon.png",
-      "category": "Science"
     }
   },
   "dependencies": {
