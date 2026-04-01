@@ -1,6 +1,5 @@
 site_name: CatPrice Documentation
 site_description: Real-time metal price based catalyst manufacturing cost estimation
-repo_url: https://github.com/hyunjin-kor/CatPrice
 theme:
   name: material
   palette:

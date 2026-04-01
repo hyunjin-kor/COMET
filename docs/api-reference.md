@@ -42,7 +42,7 @@ Single metal price (e.g., `/api/prices/Pt`).
 Price history with `?limit=30` parameter.
 
 ### POST /api/prices/refresh
-Manually trigger price update from APIs.
+Manually trigger price update from APIs. In non-debug deployments this is limited to local requests by default.
 
 ## Materials
 

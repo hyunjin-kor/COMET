@@ -440,7 +440,7 @@ GET  /api/health             — 서버 상태 + 시세 업데이트 시각
 
 ---
 
-## 9. Claude Code 사용법
+## 9. Codex 개발 사용법
 
 ```bash
 # 이 파일을 프로젝트 루트에 놓고:
