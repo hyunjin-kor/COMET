@@ -58,90 +58,13 @@ function LibraryIcon({ className = '' }: IconProps) {
 export type NavigationItem = {
   to: string;
   label: string;
-  subtitle: string;
-  eyebrow: string;
-  summary: string;
-  signals: { label: string; value: string }[];
   Icon: (props: IconProps) => ReactElement;
 };
 
 export const navigationItems: NavigationItem[] = [
-  {
-    to: '/',
-    label: 'Calculator',
-    subtitle: 'Organize inputs, materials, and step-method processing for one estimate.',
-    eyebrow: 'Estimate Inputs',
-    summary:
-      'Translate synthesis inputs and business inputs into an industrial-scale catalyst estimate, with CatPrice layering live metal references onto a CatCost-style materials and step-method workflow.',
-    signals: [
-      { label: 'Inputs', value: 'Synthesis + business basis' },
-      { label: 'Method', value: 'Materials + step method' },
-      { label: 'Output', value: 'Estimate per kg and per lb' },
-    ],
-    Icon: CalculatorIcon,
-  },
-  {
-    to: '/prices',
-    label: 'Market Board',
-    subtitle: 'Track the metal references behind materials and spent-catalyst valuation.',
-    eyebrow: 'Price References',
-    summary:
-      'Monitor platinum-group, precious, and industrial metals with live and indexed references that extend the price-library logic used by CatCost materials and spent-catalyst workflows.',
-    signals: [
-      { label: 'Coverage', value: 'PGM, precious, and base metals' },
-      { label: 'Source', value: 'Live + indexed references' },
-      { label: 'History', value: 'Stored series and refresh' },
-    ],
-    Icon: PricesIcon,
-  },
-  {
-    to: '/compare',
-    label: 'Compare',
-    subtitle: 'Benchmark alternative catalyst candidates on one estimate basis.',
-    eyebrow: 'Scenario Comparison',
-    summary:
-      'Hold the estimate basis steady, vary composition and order assumptions, and compare how alternative catalyst candidates shift material, processing, and total estimated cost.',
-    signals: [
-      { label: 'Scenarios', value: '2 to 4 candidates' },
-      { label: 'Basis', value: 'Shared estimate logic' },
-      { label: 'Ranking', value: 'Lowest estimate highlighted' },
-    ],
-    Icon: CompareIcon,
-  },
-  {
-    to: '/uncertainty',
-    label: 'Uncertainty',
-    subtitle: 'Study contributors to uncertainty in catalyst cost.',
-    eyebrow: 'Uncertainty Analysis',
-    summary:
-      'Probe the range of plausible catalyst costs by sampling uncertainty in price and scale assumptions, echoing CatCost’s goal of helping researchers study cost uncertainty without building their own toolchain.',
-    signals: [
-      { label: 'Engine', value: 'Monte Carlo sampling' },
-      { label: 'Envelope', value: 'P5 to P95 bands' },
-      { label: 'Inputs', value: 'Price, support, and scale' },
-    ],
-    Icon: UncertaintyIcon,
-  },
-  {
-    to: '/library',
-    label: 'Library',
-    subtitle: 'Browse the libraries that support a CatCost-style estimate.',
-    eyebrow: 'Reference Catalog',
-    summary:
-      'Move through Materials Library rows, Step Library rates, and common process templates from one workspace, with CatPrice keeping the same module-oriented structure used in CatCost.',
-    signals: [
-      { label: 'Catalog', value: 'Materials, steps, templates' },
-      { label: 'Search', value: 'Filter by term or category' },
-      { label: 'Basis', value: 'CatCost-style libraries' },
-    ],
-    Icon: LibraryIcon,
-  },
+  { to: '/', label: 'Calculator', Icon: CalculatorIcon },
+  { to: '/prices', label: 'Market Board', Icon: PricesIcon },
+  { to: '/compare', label: 'Compare', Icon: CompareIcon },
+  { to: '/uncertainty', label: 'Uncertainty', Icon: UncertaintyIcon },
+  { to: '/library', label: 'Library', Icon: LibraryIcon },
 ];
-
-export function getNavigationItem(pathname: string): NavigationItem {
-  const match = navigationItems.find((item) =>
-    item.to === '/' ? pathname === '/' : pathname.startsWith(item.to),
-  );
-
-  return match ?? navigationItems[0];
-}

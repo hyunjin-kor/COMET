@@ -78,7 +78,7 @@ function FieldBlock({
 }
 
 export default function Compare() {
-  const { unit, toDisplay, toInternal, fmtLabel } = useUnit();
+  const { toDisplay, toInternal, fmtLabel } = useUnit();
   const [comps, setComps] = useState<Composition[]>([emptyComp(), emptyComp()]);
   const [results, setResults] = useState<CompareResult[]>([]);
   const [loading, setLoading] = useState(false);
@@ -135,27 +135,6 @@ export default function Compare() {
 
   return (
     <div className="space-y-4">
-      <section className="surface-card cp-enter overflow-hidden px-5 py-5 sm:px-6">
-        <div className="space-y-5">
-          <div>
-            <span className="section-kicker">Scenario Rack</span>
-            <h2 className="mt-4 max-w-3xl font-display text-[clamp(1.95rem,3vw,3.1rem)] leading-[0.96] text-slate-950">
-              Compare catalyst candidates on one estimate basis.
-            </h2>
-            <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
-              Hold the estimate logic steady, vary composition and order assumptions, and rank each candidate against
-              the same backend cost engine.
-            </p>
-          </div>
-
-          <div className="grid gap-3 md:grid-cols-3">
-            <ScenarioMetric label="Scenarios" value={String(comps.length)} detail="Two to four recipes in one run" />
-            <ScenarioMetric label="Results" value={String(results.length)} detail="Rows returned from compare API" />
-            <ScenarioMetric label="Display" value={unit.toUpperCase()} detail={`Values shown ${fmtLabel}`} />
-          </div>
-        </div>
-      </section>
-
       <div className="grid gap-4 xl:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
         <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.06s' }}>
           <div className="flex flex-col gap-4 border-b border-slate-900/8 pb-5 sm:flex-row sm:items-end sm:justify-between">

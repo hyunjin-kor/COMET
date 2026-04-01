@@ -76,16 +76,6 @@ function SourceBadge({ sourceType }: { sourceType: MetalPrice['source_type'] }) 
   );
 }
 
-function BoardMetric({ label, value, detail }: { label: string; value: string; detail: string }) {
-  return (
-    <div className="cp-metric-tile">
-      <div className="cp-subtle-label">{label}</div>
-      <div className="mt-2 text-2xl font-display text-slate-900">{value}</div>
-      <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div>
-    </div>
-  );
-}
-
 export default function Prices() {
   const [prices, setPrices] = useState<(MetalPrice & { is_live?: boolean })[]>([]);
   const [loading, setLoading] = useState(true);
@@ -95,7 +85,6 @@ export default function Prices() {
   const [historySource, setHistorySource] = useState<string | null>(null);
   const [histLoading, setHistLoading] = useState(false);
   const [period, setPeriod] = useState<Period>('1y');
-  const [lastUpdate, setLastUpdate] = useState<string | null>(null);
 
   const load = () => {
     setLoading(true);
@@ -104,8 +93,6 @@ export default function Prices() {
         const rows = data as (MetalPrice & { is_live?: boolean })[];
         setPrices(rows);
         if (!selected && rows.length > 0) setSelected(rows[0].symbol);
-        const freshest = rows.find((row) => row.fetched_at);
-        if (freshest?.fetched_at) setLastUpdate(freshest.fetched_at);
       })
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -143,8 +130,6 @@ export default function Prices() {
 
   const priceMap = Object.fromEntries(prices.map((row) => [row.symbol, row]));
   const selectedRow = selected ? priceMap[selected] : null;
-  const liveCount = prices.filter((row) => row.source_type === 'live').length;
-  const indexedCount = prices.filter((row) => row.source_type === 'indexed').length;
   const pctChange = history.length >= 2 ? ((history[history.length - 1].price - history[0].price) / history[0].price) * 100 : null;
   const isUp = pctChange != null && pctChange >= 0;
 
@@ -159,39 +144,6 @@ export default function Prices() {
 
   return (
     <div className="space-y-4">
-      <section className="surface-card cp-enter overflow-hidden px-5 py-5 sm:px-6">
-        <div className="space-y-5">
-          <div>
-            <span className="section-kicker">Spot Feed Monitor</span>
-            <h2 className="mt-4 max-w-3xl font-display text-[clamp(1.95rem,3vw,3.1rem)] leading-[0.96] text-slate-950">
-              Track the metal references behind catalyst pricing.
-            </h2>
-            <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
-              Monitor live and indexed references for platinum-group, precious, and industrial metals, then move into
-              stored history for any symbol used in the estimate workflow.
-            </p>
-          </div>
-
-          <div className="grid gap-3 md:grid-cols-3">
-            <BoardMetric label="Live feeds" value={String(liveCount)} detail={`${indexedCount} indexed fallback quotes`} />
-            <BoardMetric label="Selected symbol" value={selectedRow?.symbol ?? 'None'} detail={selectedRow ? selectedRow.name : 'Choose a metal'} />
-            <BoardMetric
-              label="Last sync"
-              value={
-                lastUpdate
-                  ? new Date(lastUpdate).toLocaleTimeString('en-US', {
-                      hour: 'numeric',
-                      minute: '2-digit',
-                      hour12: true,
-                    })
-                  : 'N/A'
-              }
-              detail="Latest known timestamp"
-            />
-          </div>
-        </div>
-      </section>
-
       <div className="grid gap-4 xl:grid-cols-[minmax(0,0.94fr)_minmax(0,1.06fr)]">
         <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.06s' }}>
           <div className="mb-5 flex flex-col gap-4 border-b border-slate-900/8 pb-5 sm:flex-row sm:items-end sm:justify-between">
