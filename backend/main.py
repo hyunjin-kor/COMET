@@ -1,13 +1,12 @@
 """FastAPI application entry point."""
 
 import logging
-import os
 from contextlib import asynccontextmanager
 from datetime import datetime
 from pathlib import Path
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
@@ -24,15 +23,20 @@ scheduler = AsyncIOScheduler()
 _last_price_update: datetime | None = None
 
 
-async def _scheduled_price_update():
+async def _scheduled_price_update() -> None:
     """Scheduled task to collect metal prices."""
     global _last_price_update
     try:
         await collect_prices()
         _last_price_update = datetime.utcnow()
         logger.info("Scheduled price update completed")
-    except Exception as e:
-        logger.error("Scheduled price update failed: %s", e)
+    except Exception as exc:  # pragma: no cover - defensive logging
+        logger.error("Scheduled price update failed: %s", exc)
+
+
+def _is_local_request(host: str | None) -> bool:
+    """Allow manual refresh only from loopback/test clients by default."""
+    return host in {"127.0.0.1", "::1", "localhost", "testclient", None}
 
 
 @asynccontextmanager
@@ -40,11 +44,11 @@ async def lifespan(app: FastAPI):
     """Create DB tables, fetch prices on startup, then schedule hourly updates."""
     create_db_and_tables()
 
-    # Fetch prices immediately on startup (non-blocking)
+    # Fetch prices immediately on startup without blocking boot.
     import asyncio
+
     asyncio.create_task(_scheduled_price_update())
 
-    # Refresh every hour
     scheduler.add_job(
         _scheduled_price_update,
         "interval",
@@ -66,7 +70,6 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# CORS for frontend dev server
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins_list,
@@ -75,10 +78,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# SPA catch-all is registered AFTER all API routers (see bottom of file)
-_FRONTEND_DIST = frontend_dist_dir()
+# SPA catch-all is registered after all API routers.
+_FRONTEND_DIST = frontend_dist_dir().resolve()
 
-# Register routers
 app.include_router(calculator.router)
 app.include_router(prices.router)
 app.include_router(materials.router)
@@ -99,8 +101,12 @@ def health():
 
 
 @app.post("/api/prices/refresh")
-async def refresh_prices():
+async def refresh_prices(request: Request):
     """Manually trigger a price update."""
+    client_host = request.client.host if request.client else None
+    if not settings.debug and not _is_local_request(client_host):
+        raise HTTPException(status_code=403, detail="Manual refresh is only available from local requests.")
+
     global _last_price_update
     prices_data = await collect_prices()
     _last_price_update = datetime.utcnow()
@@ -111,9 +117,7 @@ async def refresh_prices():
     }
 
 
-# ─── SPA Fallback (must be LAST, after all API routes) ────────────────────────
 if _FRONTEND_DIST.exists():
-    # Serve static assets
     _assets_dir = _FRONTEND_DIST / "assets"
     if _assets_dir.exists():
         app.mount("/assets", StaticFiles(directory=str(_assets_dir)), name="assets")
@@ -131,14 +135,25 @@ if _FRONTEND_DIST.exists():
             },
         )
 
+    def _resolve_frontend_asset(full_path: str) -> Path | None:
+        """Resolve a frontend asset path without allowing traversal outside dist."""
+        candidate = (_FRONTEND_DIST / full_path).resolve()
+        try:
+            candidate.relative_to(_FRONTEND_DIST)
+        except ValueError:
+            return None
+        if candidate.is_file():
+            return candidate
+        return None
+
     @app.get("/", include_in_schema=False)
     async def serve_root():
         return _no_cache_html(str(_FRONTEND_DIST / "index.html"))
 
     @app.get("/{full_path:path}", include_in_schema=False)
     async def serve_spa(full_path: str):
-        """Serve React SPA — only for non-API paths."""
-        candidate = _FRONTEND_DIST / full_path
-        if candidate.exists() and candidate.is_file():
+        """Serve the React SPA for non-API paths."""
+        candidate = _resolve_frontend_asset(full_path)
+        if candidate is not None:
             return FileResponse(str(candidate))
         return _no_cache_html(str(_FRONTEND_DIST / "index.html"))

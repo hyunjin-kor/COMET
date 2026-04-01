@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "description": "Real-time metal price based catalyst manufacturing cost estimator",
   "main": "electron/main.js",
-  "author": "hyunjin-kor",
+  "author": "CatPrice contributors",
   "license": "UNLICENSED",
   "scripts": {
     "dev": "concurrently --kill-others-on-fail \"npm run dev:backend\" \"npm run dev:frontend\" \"npm run electron:wait\"",
@@ -24,7 +24,7 @@
   "build": {
     "appId": "com.catprice.app",
     "productName": "CatPrice",
-    "copyright": "Copyright 2026 hyunjin-kor",
+    "copyright": "Copyright 2026 CatPrice contributors",
     "directories": {
       "output": "dist-electron"
     },

@@ -19,6 +19,7 @@ const BACKEND_URL  = `http://${BACKEND_HOST}:${BACKEND_PORT}`;
 const HEALTH_URL   = `${BACKEND_URL}/api/health`;
 const MAX_WAIT_MS  = 30_000;    // 30 seconds max startup wait
 const POLL_INTERVAL_MS = 500;
+const DOCUMENTATION_URL = process.env.CATPRICE_DOCUMENTATION_URL || '';
 
 // ─── State ────────────────────────────────────────────────────────────────────
 let mainWindow = null;
@@ -595,7 +596,7 @@ function createMainWindow() {
     {
       label: 'Help',
       submenu: [
-        { label: 'CatPrice Documentation', click: () => shell.openExternal('https://github.com/hyunjin-kor/CatPrice') },
+        ...(DOCUMENTATION_URL ? [{ label: 'CatPrice Documentation', click: () => shell.openExternal(DOCUMENTATION_URL) }] : []),
         { label: 'About CatPrice', click: showAbout },
       ],
     },
@@ -688,7 +689,7 @@ function showAbout() {
       'Real-time metal price based catalyst manufacturing cost estimator.',
       'Based on CatCost methodology (Baddour et al. 2018, Van Allsburg et al. 2022).',
       '',
-      'Copyright 2026 hyunjin-kor | All rights reserved',
+      'Copyright 2026 CatPrice contributors | All rights reserved',
     ].join('\n'),
     buttons: ['OK'],
   });
