@@ -5,21 +5,25 @@
 - Python 3.11+
 - Node.js 18+
 - npm 9+
+- Windows for desktop packaging
 
-## Installation
-
-### Desktop app
+## Desktop Build
 
 ```bash
 npm install
-npm run pack
+npm run build
 ```
 
-The packaged app is generated at:
+The packaged app is generated under:
 
 ```text
-dist-electron\win-unpacked\CatPrice.exe
+dist-electron\
 ```
+
+Primary outputs:
+
+- `dist-electron\CatPrice Setup 1.0.1.exe`
+- `dist-electron\win-unpacked\CatPrice.exe`
 
 Before rebuilding, you can stop any running desktop instance with:
 
@@ -27,45 +31,20 @@ Before rebuilding, you can stop any running desktop instance with:
 npm run desktop:stop
 ```
 
-### Backend
+## Local Desktop Development
 
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/catprice.git
-cd catprice
-
-# Install Python dependencies
-pip install -e ".[dev]"
-
-# Copy environment file
-cp .env.example .env
-# Edit .env with your API keys (optional)
-
-# Start the API server
-uvicorn backend.main:app --reload
-```
-
-### Frontend
-
-```bash
-cd frontend
 npm install
 npm run dev
 ```
 
-The Vite development UI is available at `http://localhost:5173` on the same machine only.
-
-### Docker (one-command)
-
-```bash
-docker compose up --build
-```
+The Vite renderer appears at `http://localhost:5173`, but this is only a local development service for the Electron app on the same machine.
 
 ## Configuration
 
 ### API Keys (Optional)
 
-CatPrice works without API keys using reference prices. For real-time prices:
+CatPrice works without API keys using indexed or manual prices. For real-time prices:
 
 | Key | Source | Free Tier |
 |-----|--------|-----------|
@@ -76,11 +55,8 @@ CatPrice works without API keys using reference prices. For real-time prices:
 ## Running Tests
 
 ```bash
-# Backend
 pytest backend/tests/ -v
-
-# Frontend type check
-cd frontend && npx tsc --noEmit
+cd frontend && npm run build
 ```
 
 ## Desktop Smoke Test

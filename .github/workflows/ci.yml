@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [master]
   pull_request:
-    branches: [main]
+    branches: [master]
 
 jobs:
   backend:
@@ -39,9 +39,6 @@ jobs:
 
       - name: Install
         run: npm ci
-
-      - name: Type check
-        run: npx tsc --noEmit
 
       - name: Build
         run: npm run build

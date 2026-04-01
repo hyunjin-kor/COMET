@@ -27,11 +27,3 @@ def data_dir() -> Path:
     if env_dir:
         return Path(env_dir).resolve()
     return app_root() / "backend" / "data"
-
-
-def frontend_dist_dir() -> Path:
-    """Return the built frontend directory when served by FastAPI."""
-    env_dir = os.getenv("CATPRICE_FRONTEND_DIST")
-    if env_dir:
-        return Path(env_dir).resolve()
-    return app_root() / "frontend" / "dist"
