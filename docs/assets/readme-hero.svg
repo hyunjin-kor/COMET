@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 840" role="img" aria-labelledby="title desc">
+  <title id="title">CatPrice desktop product showcase</title>
+  <desc id="desc">A premium GitHub hero image for the CatPrice desktop application with the app icon and desktop-focused messaging.</desc>
+  <defs>
+    <linearGradient id="bg" x1="160" y1="60" x2="1260" y2="780" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0b1220"/>
+      <stop offset="48%" stop-color="#142033"/>
+      <stop offset="100%" stop-color="#0a0f18"/>
+    </linearGradient>
+    <radialGradient id="glowA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(280 210) rotate(35) scale(400 320)">
+      <stop offset="0%" stop-color="#3ad0ff" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#3ad0ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1180 720) rotate(-18) scale(440 260)">
+      <stop offset="0%" stop-color="#4ae2bf" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#4ae2bf" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="lineA" x1="188" y1="198" x2="362" y2="306" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#37c9ff"/>
+      <stop offset="100%" stop-color="#4ce1c0"/>
+    </linearGradient>
+    <linearGradient id="iconBg" x1="86" y1="64" x2="426" y2="448" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#171c24"/>
+      <stop offset="100%" stop-color="#2a313d"/>
+    </linearGradient>
+    <linearGradient id="iconFrame" x1="192" y1="134" x2="320" y2="362" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#f1f6ff"/>
+      <stop offset="100%" stop-color="#a1b1c8"/>
+    </linearGradient>
+    <linearGradient id="iconSignal" x1="154" y1="338" x2="358" y2="208" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#3ac8ff"/>
+      <stop offset="100%" stop-color="#49e0c1"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="24" stdDeviation="30" flood-color="#05080d" flood-opacity="0.38"/>
+    </filter>
+  </defs>
+
+  <rect width="1440" height="840" rx="36" fill="url(#bg)"/>
+  <rect width="1440" height="840" rx="36" fill="url(#glowA)"/>
+  <rect width="1440" height="840" rx="36" fill="url(#glowB)"/>
+
+  <g opacity="0.1">
+    <path d="M80 146H1360" stroke="#dce6f5" stroke-width="1"/>
+    <path d="M80 278H1360" stroke="#dce6f5" stroke-width="1"/>
+    <path d="M80 410H1360" stroke="#dce6f5" stroke-width="1"/>
+    <path d="M80 542H1360" stroke="#dce6f5" stroke-width="1"/>
+    <path d="M80 674H1360" stroke="#dce6f5" stroke-width="1"/>
+    <path d="M208 80V760" stroke="#dce6f5" stroke-width="1"/>
+    <path d="M388 80V760" stroke="#dce6f5" stroke-width="1"/>
+    <path d="M568 80V760" stroke="#dce6f5" stroke-width="1"/>
+    <path d="M748 80V760" stroke="#dce6f5" stroke-width="1"/>
+    <path d="M928 80V760" stroke="#dce6f5" stroke-width="1"/>
+    <path d="M1108 80V760" stroke="#dce6f5" stroke-width="1"/>
+    <path d="M1288 80V760" stroke="#dce6f5" stroke-width="1"/>
+  </g>
+
+  <rect x="72" y="72" width="1296" height="696" rx="32" fill="none" stroke="rgba(255,255,255,0.08)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="118" y="166" width="350" height="350" rx="48" fill="#101722" stroke="rgba(255,255,255,0.08)"/>
+    <g transform="translate(37 85) scale(1.0)">
+      <rect x="121" y="121" width="344" height="344" rx="88" fill="url(#iconBg)"/>
+      <rect x="132" y="132" width="322" height="322" rx="76" fill="none" stroke="#3c4659" stroke-width="8"/>
+      <g opacity="0.16" stroke="#d8e1ef" stroke-width="4" stroke-linecap="round">
+        <path d="M214 208H372"/>
+        <path d="M214 246H372"/>
+        <path d="M214 284H372"/>
+        <path d="M214 322H372"/>
+        <path d="M214 360H372"/>
+        <path d="M242 190V390"/>
+        <path d="M293 190V390"/>
+        <path d="M344 190V390"/>
+      </g>
+      <path d="M260 181H327L346 215V325C346 350 326 370 301 370H284C259 370 239 350 239 325V215Z" fill="none" stroke="url(#iconFrame)" stroke-width="18" stroke-linejoin="round"/>
+      <path d="M250 261H336V317C336 332 324 344 309 344H277C262 344 250 332 250 317Z" fill="#243240"/>
+      <g fill="#e7eef8">
+        <circle cx="270" cy="281" r="11"/>
+        <circle cx="293" cy="268" r="11"/>
+        <circle cx="316" cy="281" r="11"/>
+        <circle cx="279" cy="306" r="11"/>
+        <circle cx="302" cy="306" r="11"/>
+      </g>
+      <path d="M213 344C245 330 270 318 295 303C322 287 349 266 377 240" fill="none" stroke="url(#iconSignal)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+      <g fill="#171c24" stroke="#49dec6" stroke-width="7">
+        <circle cx="213" cy="344" r="10"/>
+        <circle cx="295" cy="303" r="10"/>
+        <circle cx="377" cy="240" r="10"/>
+      </g>
+    </g>
+  </g>
+
+  <g font-family="'Segoe UI', Arial, sans-serif" fill="#f5f8fd">
+    <text x="540" y="188" font-size="18" letter-spacing="5" fill="#7aa2c8">DESKTOP RELEASE</text>
+    <text x="540" y="282" font-size="82" font-weight="700">CatPrice</text>
+    <text x="540" y="350" font-size="30" fill="#cad6e8">Catalyst cost intelligence that looks and ships like a desktop product.</text>
+    <text x="540" y="402" font-size="26" fill="#9fb0c9">CatCost-based economics, live metal feeds, indexed references, and packaged Windows delivery.</text>
+  </g>
+
+  <g font-family="'Segoe UI', Arial, sans-serif" font-size="22">
+    <rect x="540" y="454" width="180" height="48" rx="24" fill="#101824" stroke="rgba(255,255,255,0.12)"/>
+    <text x="630" y="484" text-anchor="middle" fill="#ecf4ff">Windows</text>
+    <rect x="736" y="454" width="180" height="48" rx="24" fill="#101824" stroke="rgba(255,255,255,0.12)"/>
+    <text x="826" y="484" text-anchor="middle" fill="#ecf4ff">Electron</text>
+    <rect x="932" y="454" width="240" height="48" rx="24" fill="#101824" stroke="rgba(255,255,255,0.12)"/>
+    <text x="1052" y="484" text-anchor="middle" fill="#ecf4ff">Local FastAPI</text>
+    <rect x="1188" y="454" width="170" height="48" rx="24" fill="#101824" stroke="rgba(255,255,255,0.12)"/>
+    <text x="1273" y="484" text-anchor="middle" fill="#ecf4ff">SQLite</text>
+  </g>
+
+  <g filter="url(#shadow)" font-family="'Segoe UI', Arial, sans-serif">
+    <rect x="540" y="550" width="254" height="150" rx="28" fill="#111926" stroke="rgba(255,255,255,0.08)"/>
+    <text x="572" y="602" font-size="18" letter-spacing="3" fill="#8ca6c7">PRICE MODES</text>
+    <text x="572" y="646" font-size="34" font-weight="700" fill="#f5f8fd">LIVE / INDEXED / MANUAL</text>
+    <text x="572" y="680" font-size="20" fill="#9fb0c9">Explicit source states inside the desktop workflow.</text>
+
+    <rect x="824" y="550" width="254" height="150" rx="28" fill="#111926" stroke="rgba(255,255,255,0.08)"/>
+    <text x="856" y="602" font-size="18" letter-spacing="3" fill="#8ca6c7">PACKAGED FLOW</text>
+    <text x="856" y="646" font-size="34" font-weight="700" fill="#f5f8fd">INSTALLER + EXE</text>
+    <text x="856" y="680" font-size="20" fill="#9fb0c9">Built for a polished Windows desktop release path.</text>
+
+    <rect x="1108" y="550" width="252" height="150" rx="28" fill="#111926" stroke="rgba(255,255,255,0.08)"/>
+    <text x="1140" y="602" font-size="18" letter-spacing="3" fill="#8ca6c7">NO PUBLIC SERVER</text>
+    <text x="1140" y="646" font-size="34" font-weight="700" fill="#f5f8fd">LOCAL SIDE-CAR</text>
+    <text x="1140" y="680" font-size="20" fill="#9fb0c9">React renderer plus loopback API, packaged together.</text>
+  </g>
+
+  <path d="M109 591C190 580 255 553 317 504C382 452 430 395 462 335" fill="none" stroke="url(#lineA)" stroke-width="8" stroke-linecap="round" opacity="0.65"/>
+</svg>
