@@ -121,8 +121,8 @@ export default function Uncertainty() {
         <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.06s' }}>
           <div className="border-b border-slate-900/8 pb-5">
             <div className="cp-subtle-label">Scenario Inputs</div>
-            <h2 className="mt-2 text-2xl font-semibold text-slate-950">Uncertainty inputs</h2>
-            <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-600">
+            <h2 className="cp-heading-xl mt-2">Uncertainty inputs</h2>
+            <p className="cp-body-copy mt-2 max-w-2xl">
               Choose a metal and baseline assumptions, then sample the uncertainty envelope for the estimate inputs that matter most.
             </p>
           </div>
@@ -224,10 +224,10 @@ export default function Uncertainty() {
             <div className="flex min-h-[520px] flex-col justify-between">
               <div>
                 <span className="section-kicker">Distribution Output</span>
-                <h2 className="mt-4 font-display text-[clamp(1.7rem,2.6vw,2.7rem)] leading-[0.98] text-slate-950">
+                <h2 className="cp-heading-xl mt-4">
                   Run the analysis to reveal the estimate envelope.
                 </h2>
-                <p className="mt-3 max-w-xl text-sm leading-7 text-slate-600">
+                <p className="cp-body-copy mt-3 max-w-xl">
                   This panel shows percentile bands, distribution shape, and simulation success counts after the backend finishes sampling.
                 </p>
               </div>
@@ -259,7 +259,7 @@ export default function Uncertainty() {
 
               <div className="mt-5 rounded-[28px] border border-slate-900/8 bg-white/62 p-5 backdrop-blur-xl">
                 <div className="cp-subtle-label">Distribution Sketch</div>
-                <div className="mt-2 text-xl font-semibold text-slate-950">Percentile-weighted shape</div>
+                <div className="cp-heading-lg mt-2">Percentile-weighted shape</div>
 
                 <div className="mt-5 h-[280px]">
                   <ResponsiveContainer width="100%" height="100%">

@@ -149,8 +149,8 @@ export default function Prices() {
           <div className="mb-5 flex flex-col gap-4 border-b border-slate-900/8 pb-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <div className="cp-subtle-label">Quote Board</div>
-              <h2 className="mt-2 text-2xl font-semibold text-slate-950">Metals reference board</h2>
-              <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-600">
+              <h2 className="cp-heading-xl mt-2">Metals reference board</h2>
+              <p className="cp-body-copy mt-2 max-w-2xl">
                 Grouped view for PGM, precious, and industrial metals with clear provenance for each live or indexed reference.
               </p>
             </div>
@@ -219,7 +219,7 @@ export default function Prices() {
             <div className="flex flex-col gap-4 border-b border-white/10 pb-5 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <div className="cp-subtle-label !text-slate-400">Selected Trend</div>
-                <h2 className="mt-2 text-2xl font-semibold text-white">{selectedRow?.name ?? 'Choose a metal'}</h2>
+                <h2 className="font-display mt-2 text-[clamp(1.75rem,2.4vw,2.35rem)] leading-[1.0] text-white">{selectedRow?.name ?? 'Choose a metal'}</h2>
                 <div className="mt-2 flex flex-wrap items-center gap-2">
                   {selectedRow ? <SourceBadge sourceType={selectedRow.source_type} /> : null}
                   {pctChange != null ? (

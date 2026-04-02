@@ -2,8 +2,8 @@
 
 :root {
   color-scheme: light;
-  --font-display: "Bahnschrift", "Aptos Display", "Segoe UI Variable Display", "Noto Sans KR", "Malgun Gothic", sans-serif;
-  --font-body: "Aptos", "Segoe UI Variable Text", "Segoe UI", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  --font-display: "Segoe UI Variable Display", "Segoe UI", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  --font-body: "Segoe UI Variable Text", "Segoe UI", "Noto Sans KR", "Malgun Gothic", sans-serif;
   --bg-base: #f6f1e8;
   --bg-soft: #fbf8f2;
   --bg-muted: #ede5d8;
@@ -94,7 +94,33 @@ textarea {
 
 .font-display {
   font-family: var(--font-display);
-  letter-spacing: -0.05em;
+  letter-spacing: -0.045em;
+  font-weight: 650;
+}
+
+.cp-heading-xl {
+  font-family: var(--font-display);
+  font-weight: 650;
+  letter-spacing: -0.045em;
+  @apply text-[clamp(1.75rem,2.4vw,2.45rem)] leading-[0.98] text-slate-950;
+}
+
+.cp-heading-lg {
+  font-family: var(--font-display);
+  font-weight: 650;
+  letter-spacing: -0.04em;
+  @apply text-[clamp(1.25rem,1.6vw,1.6rem)] leading-[1.02] text-slate-950;
+}
+
+.cp-heading-sm {
+  font-family: var(--font-display);
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  @apply text-[1.05rem] leading-[1.08] text-slate-950;
+}
+
+.cp-body-copy {
+  @apply text-sm leading-7 text-slate-600;
 }
 
 .cp-shell {

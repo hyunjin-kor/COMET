@@ -370,7 +370,7 @@ function createSplashWindow() {
       radial-gradient(circle at 84% 12%, rgba(239, 195, 108, 0.14), transparent 0 22%),
       linear-gradient(160deg, #0a1320 0%, #101d31 52%, #09111d 100%);
     color: #f8fafc;
-    font-family: 'Aptos', 'Segoe UI', sans-serif;
+    font-family: 'Segoe UI Variable Text', 'Segoe UI', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -435,9 +435,10 @@ function createSplashWindow() {
   .logo {
     margin-top: 4px;
     font-size: 34px;
-    font-weight: 800;
-    letter-spacing: -0.04em;
+    font-weight: 700;
+    letter-spacing: -0.045em;
     line-height: 1;
+    font-family: 'Segoe UI Variable Display', 'Segoe UI', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
   }
   .logo span.cat { color: #f8fafc; }
   .logo span.price { color: #78f2d0; }
@@ -640,7 +641,7 @@ function createMainWindow() {
     showAndFocusMainWindow('did-fail-load');
     mainWindow.webContents.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(`
 <!DOCTYPE html><html><head><style>
-body{background:#060b14;color:#ccc;font-family:'Segoe UI',sans-serif;display:flex;
+body{background:#060b14;color:#ccc;font-family:'Segoe UI Variable Text','Segoe UI','Noto Sans KR','Malgun Gothic',sans-serif;display:flex;
 flex-direction:column;align-items:center;justify-content:center;height:100vh;margin:0}
 h1{color:#ff4444;font-size:22px}code{background:#1a2a4a;padding:4px 10px;border-radius:4px;color:#00d4ff}
 p{color:#7099cc;font-size:14px;max-width:500px;text-align:center}

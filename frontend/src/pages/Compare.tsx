@@ -140,8 +140,8 @@ export default function Compare() {
           <div className="flex flex-col gap-4 border-b border-slate-900/8 pb-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <div className="cp-subtle-label">Scenario Editor</div>
-              <h2 className="mt-2 text-2xl font-semibold text-slate-950">Configure estimate variants</h2>
-              <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-600">
+              <h2 className="cp-heading-xl mt-2">Configure estimate variants</h2>
+              <p className="cp-body-copy mt-2 max-w-2xl">
                 Each scenario keeps the same estimate structure but carries its own metal, support, loading, and
                 campaign-size assumptions.
               </p>
@@ -172,7 +172,7 @@ export default function Compare() {
                         value={composition.label}
                         onChange={(event) => updateComp(index, 'label', event.target.value)}
                         placeholder={`Scenario ${index + 1} label`}
-                        className="mt-2 w-full bg-transparent text-xl font-semibold text-slate-950 outline-none placeholder:text-slate-400"
+                        className="mt-2 w-full bg-transparent font-display text-[1.45rem] leading-none text-slate-950 outline-none placeholder:text-slate-400"
                       />
                     </div>
                   </div>
@@ -300,10 +300,10 @@ export default function Compare() {
             <div className="flex min-h-[520px] flex-col justify-between">
               <div>
                 <span className="section-kicker">Ranking Board</span>
-                <h2 className="mt-4 font-display text-[clamp(1.7rem,2.6vw,2.7rem)] leading-[0.98] text-slate-950">
+                <h2 className="cp-heading-xl mt-4">
                   Run a comparison to rank the estimate outputs.
                 </h2>
-                <p className="mt-3 max-w-xl text-sm leading-7 text-slate-600">
+                <p className="cp-body-copy mt-3 max-w-xl">
                   This board turns into a stacked cost chart and ranked scenario list once the backend returns a shared-basis comparison.
                 </p>
               </div>
@@ -356,7 +356,7 @@ export default function Compare() {
                 <div className="flex items-end justify-between gap-3">
                   <div>
                     <div className="cp-subtle-label">Stacked Cost Comparison</div>
-                    <div className="mt-2 text-xl font-semibold text-slate-950">Materials, processing, and markup</div>
+                    <div className="cp-heading-lg mt-2">Materials, processing, and markup</div>
                   </div>
                   {bestScenario ? <span className="cp-chip">Best: {bestScenario.label}</span> : null}
                 </div>
