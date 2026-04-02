@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./docs/assets/readme-hero.svg" alt="CatPrice desktop product hero" width="100%" />
+  <img src="./docs/assets/readme-hero.png" alt="CatPrice desktop app hero" width="100%" />
 </p>
 
 <p align="center">
