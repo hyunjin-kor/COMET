@@ -1,9 +1,9 @@
 <p align="center">
-  <img src="./docs/assets/readme-hero.svg" alt="CatPrice desktop showcase" width="100%" />
+  <img src="./docs/assets/readme-hero.svg" alt="CatPrice desktop product hero" width="100%" />
 </p>
 
 <p align="center">
-  <img src="./frontend/public/app-icon.svg" width="116" alt="CatPrice app icon" />
+  <img src="./frontend/public/app-icon.svg" width="110" alt="CatPrice app icon" />
 </p>
 
 <h1 align="center">CatPrice</h1>
@@ -21,24 +21,20 @@
   <code>SQLite</code>
 </p>
 
-CatPrice is built to feel like a shipped desktop product rather than a spreadsheet wrapper. It keeps the CatCost methodology, makes price-source states explicit, and packages the full workflow into a local Windows app without relying on a public server deployment.
+CatPrice is built to feel like shipped desktop software rather than a spreadsheet wrapper. It keeps the CatCost methodology, makes price-source states explicit, and packages the full workflow into a local Windows app without relying on public server deployment.
 
-## Why It Feels Like Product Software
+## Product Highlights
 
 | Area | What CatPrice emphasizes |
 | --- | --- |
-| Desktop delivery | Installer + unpacked app outputs for a clean Windows release path |
+| Desktop release | Installer + unpacked app outputs for a clean Windows release path |
 | Cost workflow | Step Method, indexed escalation, comparison, and uncertainty analysis |
 | Price clarity | `LIVE`, `INDEXED`, and `MANUAL` states shown directly in the app |
 | Local architecture | Electron shell, local FastAPI sidecar, React renderer, SQLite persistence |
 
 ## App Mark
 
-<p align="center">
-  <img src="./frontend/public/app-icon.svg" width="180" alt="CatPrice app icon large preview" />
-</p>
-
-The mark combines a catalyst chamber silhouette, internal particles, and an upward signal line. It is meant to read as both catalyst manufacturing and market-aware pricing in a single desktop icon.
+The mark combines a catalyst chamber silhouette, internal particles, and an upward signal line. It is meant to read as catalyst manufacturing and market-aware pricing in a single desktop icon.
 
 ## What It Does
 

@@ -84,8 +84,8 @@ export default function Library() {
         <div className="flex flex-col gap-4 border-b border-slate-900/8 pb-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <div className="cp-subtle-label">Library Mode</div>
-            <h2 className="mt-2 text-2xl font-semibold text-slate-950">Libraries and templates</h2>
-            <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-600">
+            <h2 className="cp-heading-xl mt-2">Libraries and templates</h2>
+            <p className="cp-body-copy mt-2 max-w-2xl">
               Switch between the Materials Library, Step Library, and template process paths from the same panel.
             </p>
           </div>
@@ -214,7 +214,7 @@ export default function Library() {
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <div className="cp-subtle-label">{template.category || 'Template'}</div>
-                      <h3 className="mt-2 text-xl font-semibold text-slate-950">{template.name}</h3>
+                      <h3 className="cp-heading-lg mt-2">{template.name}</h3>
                     </div>
                     <span className="cp-chip">{template.steps.length} steps</span>
                   </div>

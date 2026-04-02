@@ -233,7 +233,7 @@ export default function Calculator() {
       <div className="space-y-3">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <div className="flex items-center gap-2"><span className={`h-2.5 w-2.5 rounded-full ${copy.accent}`} /><h3 className="text-sm font-semibold text-slate-950">{copy.title}</h3></div>
+            <div className="flex items-center gap-2"><span className={`h-2.5 w-2.5 rounded-full ${copy.accent}`} /><h3 className="cp-heading-sm">{copy.title}</h3></div>
             <p className="mt-1 text-xs leading-6 text-slate-500">{copy.description}</p>
           </div>
           <button onClick={() => addRow(role)} className="cp-button-secondary px-3 py-2 text-xs">{copy.button}</button>
@@ -266,15 +266,15 @@ export default function Calculator() {
         <section className="surface-card cp-enter flex min-h-[500px] flex-col justify-between overflow-hidden px-4 py-5 sm:px-5">
           <div>
             <span className="section-kicker">Estimate Outputs</span>
-            <h2 className="mt-4 font-display text-[clamp(1.7rem,2.6vw,2.8rem)] leading-[0.98] text-slate-950">Outputs are ready once the estimate basis is complete.</h2>
-            <p className="mt-3 max-w-xl text-sm leading-6 text-slate-600">Run the estimate to assemble materials, processing, and selling-price outputs from the current synthesis and business inputs.</p>
+            <h2 className="cp-heading-xl mt-4">Outputs are ready once the estimate basis is complete.</h2>
+            <p className="cp-body-copy mt-3 max-w-xl">Run the estimate to assemble materials, processing, and selling-price outputs from the current synthesis and business inputs.</p>
           </div>
           <div className="mt-6 space-y-3">
             <div className="surface-ghost overflow-hidden p-4">
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <div className="cp-subtle-label">Inputs Snapshot</div>
-                  <div className="mt-2 text-lg font-semibold text-slate-950">Synthesis and business basis</div>
+                  <div className="cp-heading-sm mt-2">Synthesis and business basis</div>
                 </div>
                 <span className="cp-chip">{selectedSupport?.name ?? 'Support pending'}</span>
               </div>
@@ -330,7 +330,7 @@ export default function Calculator() {
         <div className="mt-4 grid gap-3 xl:grid-cols-[0.88fr_1.12fr]">
           <div className="space-y-3">
             <div className="surface-ghost p-4">
-              <div className="flex items-center justify-between gap-3"><div><div className="cp-subtle-label">Cost Structure</div><div className="mt-2 text-xl font-semibold text-slate-950">Materials vs processing</div></div><span className="cp-chip">{result.materials.components.length} materials</span></div>
+              <div className="flex items-center justify-between gap-3"><div><div className="cp-subtle-label">Cost Structure</div><div className="cp-heading-lg mt-2">Materials vs processing</div></div><span className="cp-chip">{result.materials.components.length} materials</span></div>
               <div className="mt-4 space-y-3">
                 {summaryRows.map((item, index) => (
                   <div key={item.label}>
@@ -343,7 +343,7 @@ export default function Calculator() {
             </div>
 
             <div className="surface-ghost p-4">
-              <div className="text-sm font-semibold text-slate-950">Breakdown wheel</div>
+              <div className="cp-heading-sm">Breakdown wheel</div>
               <div className="mt-1 text-xs text-slate-500">Materials, processing, and selling adjustments.</div>
               <div className="mt-3 h-[280px]">
                 <ResponsiveContainer width="100%" height="100%">
@@ -360,7 +360,7 @@ export default function Calculator() {
           </div>
 
           <div className="surface-ghost p-4">
-            <div className="flex items-center justify-between gap-3"><div><div className="cp-subtle-label">Material Ledger</div><div className="mt-2 text-xl font-semibold text-slate-950">Component-level catalyst cost</div></div><span className="cp-chip">{selectedSupport?.name ?? 'Support'}</span></div>
+            <div className="flex items-center justify-between gap-3"><div><div className="cp-subtle-label">Material Ledger</div><div className="cp-heading-lg mt-2">Component-level catalyst cost</div></div><span className="cp-chip">{selectedSupport?.name ?? 'Support'}</span></div>
             <div className="mt-3 overflow-hidden rounded-[22px] border border-slate-900/8 bg-white/56">
               <div className="grid grid-cols-[minmax(0,1.4fr)_90px_110px_110px_72px] gap-3 border-b border-slate-900/8 bg-white/46 px-4 py-3 text-[11px] uppercase tracking-[0.18em] text-slate-500"><span>Material</span><span className="text-right">wt%</span><span className="text-right">Unit</span><span className="text-right">Catalyst</span><span className="text-right">Share</span></div>
               <div className="divide-y divide-slate-900/8">
@@ -403,8 +403,8 @@ export default function Calculator() {
             <div className="flex flex-col gap-4 border-b border-slate-900/8 pb-4 lg:flex-row lg:items-end lg:justify-between">
               <div>
                 <div className="cp-subtle-label">Synthesis Inputs</div>
-                <h2 className="mt-2 text-2xl font-semibold text-slate-950">Enter catalyst composition and material pricing</h2>
-                <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">Use metal loading, support choice, and raw-material pricing as the starting synthesis inputs, then switch any row back to manual pricing when you need a procurement scenario.</p>
+                <h2 className="cp-heading-xl mt-2">Enter catalyst composition and material pricing</h2>
+                <p className="cp-body-copy mt-2 max-w-2xl">Use metal loading, support choice, and raw-material pricing as the starting synthesis inputs, then switch any row back to manual pricing when you need a procurement scenario.</p>
               </div>
               <div className="flex flex-wrap items-center gap-2">
                 <span className="cp-chip">{pricesUpdatedAt ? `Feed synced ${pricesUpdatedAt.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}` : 'Feed status pending'}</span>
@@ -423,7 +423,7 @@ export default function Calculator() {
               {renderRows('promoter')}
 
               <div className="surface-ghost p-3.5">
-                <div><div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#efc36c]" /><h3 className="text-sm font-semibold text-slate-950">Support</h3></div><p className="mt-1 text-xs leading-5 text-slate-500">Support loading closes the balance automatically after actives and promoters are set.</p></div>
+              <div><div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#efc36c]" /><h3 className="cp-heading-sm">Support</h3></div><p className="mt-1 text-xs leading-5 text-slate-500">Support loading closes the balance automatically after actives and promoters are set.</p></div>
                 {rows.filter((row) => row.role === 'support').map((row) => (
                   <div key={row.id} className="mt-3.5 flex flex-wrap items-center gap-3">
                     <select value={row.name} onChange={(event) => { const support = SUPPORT_OPTIONS.find((item) => item.name === event.target.value); updateRow(row.id, { name: event.target.value, price_per_lb: support?.price ?? row.price_per_lb, source_type: 'manual', source: 'Manual support default' }); }} className="input-base min-w-[180px] flex-[1.3_1_260px] pr-10">
@@ -437,7 +437,7 @@ export default function Calculator() {
             </div>
 
             <div className="space-y-4 border-t border-slate-900/8 pt-4">
-              <div><div className="cp-subtle-label">Step Method</div><h2 className="mt-2 text-2xl font-semibold text-slate-950">Map the lab procedure to industrial process steps</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">Choose the common manufacturing steps that best approximate the lab synthesis, and let order size set the small, medium, or large campaign basis.</p></div>
+              <div><div className="cp-subtle-label">Step Method</div><h2 className="cp-heading-xl mt-2">Map the lab procedure to industrial process steps</h2><p className="cp-body-copy mt-2 max-w-2xl">Choose the common manufacturing steps that best approximate the lab synthesis, and let order size set the small, medium, or large campaign basis.</p></div>
               <div className="surface-ghost p-3.5">
                 <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
                   <div><div className="cp-subtle-label">Order size</div><div className="mt-3 flex flex-wrap items-center gap-3"><input type="number" min="1" step="1" value={orderSize} onChange={(event) => setOrderSize(Math.max(1, Number(event.target.value)))} className="input-base w-32 text-center font-mono" /><span className="text-sm text-slate-500">tons per campaign</span><span className={`rounded-full border px-3 py-1 text-xs font-semibold ${scale.classes}`}>{scale.label} / {scale.rate}</span></div></div>

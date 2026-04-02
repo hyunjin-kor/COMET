@@ -91,7 +91,7 @@ export default function TopNavigation() {
         <div className="drag-region relative border-b border-slate-900/8 px-4 pb-1.5 pt-[calc(env(titlebar-area-height,0px)+8px)]">
           <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(120,242,208,0.06),transparent_28%,transparent_72%,rgba(239,195,108,0.08))]" />
           <div className="relative flex items-center justify-between gap-3">
-            <div className="text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-500">Desktop Window</div>
+            <div className="cp-subtle-label">Desktop Window</div>
             <div className="hidden h-6 w-28 rounded-full border border-slate-900/8 bg-white/40 xl:block" />
           </div>
         </div>

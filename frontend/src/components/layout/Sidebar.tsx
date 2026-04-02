@@ -19,7 +19,7 @@ export default function Sidebar() {
 
             <div className="min-w-0">
               <div className="font-display text-[1.45rem] leading-none text-white">CatPrice</div>
-              <div className="mt-1 text-xs text-slate-400">Catalyst cost tools</div>
+              <div className="mt-1 text-xs text-slate-400">Catalyst cost workspace</div>
             </div>
           </div>
 
