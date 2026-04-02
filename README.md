@@ -1,8 +1,44 @@
-# CatPrice
+<p align="center">
+  <img src="./docs/assets/readme-hero.svg" alt="CatPrice desktop showcase" width="100%" />
+</p>
 
-CatPrice is a desktop-first catalyst manufacturing cost estimator built around the CatCost methodology, live metal feeds, indexed reference prices, and a packaged Electron workflow.
+<p align="center">
+  <img src="./frontend/public/app-icon.svg" width="116" alt="CatPrice app icon" />
+</p>
 
-It is designed for early-stage costing of catalyst compositions and process routes without a spreadsheet-heavy workflow or any public server deployment.
+<h1 align="center">CatPrice</h1>
+
+<p align="center">
+  <strong>Desktop-first catalyst cost intelligence.</strong><br />
+  CatCost-based economics, live metal feeds, indexed references, and packaged Windows delivery.
+</p>
+
+<p align="center">
+  <code>Windows desktop</code>
+  <code>Electron shell</code>
+  <code>Local FastAPI sidecar</code>
+  <code>React renderer</code>
+  <code>SQLite</code>
+</p>
+
+CatPrice is built to feel like a shipped desktop product rather than a spreadsheet wrapper. It keeps the CatCost methodology, makes price-source states explicit, and packages the full workflow into a local Windows app without relying on a public server deployment.
+
+## Why It Feels Like Product Software
+
+| Area | What CatPrice emphasizes |
+| --- | --- |
+| Desktop delivery | Installer + unpacked app outputs for a clean Windows release path |
+| Cost workflow | Step Method, indexed escalation, comparison, and uncertainty analysis |
+| Price clarity | `LIVE`, `INDEXED`, and `MANUAL` states shown directly in the app |
+| Local architecture | Electron shell, local FastAPI sidecar, React renderer, SQLite persistence |
+
+## App Mark
+
+<p align="center">
+  <img src="./frontend/public/app-icon.svg" width="180" alt="CatPrice app icon large preview" />
+</p>
+
+The mark combines a catalyst chamber silhouette, internal particles, and an upward signal line. It is meant to read as both catalyst manufacturing and market-aware pricing in a single desktop icon.
 
 ## What It Does
 
@@ -12,38 +48,13 @@ It is designed for early-stage costing of catalyst compositions and process rout
 - Runs Monte Carlo uncertainty analysis
 - Applies ChemPPI and CEPCI escalation
 - Includes material, step, and process template libraries
-- Ships as a Windows desktop app through Electron
+- Ships as a packaged Windows desktop app through Electron
 
-## Why This Project
-
-CatPrice is not a replacement for CatCost. It is a desktop-focused interface around the same methodology, with better visibility into source data and faster iteration.
-
-Methodology basis:
-
-- Baddour et al. 2018
-- Van Allsburg et al. 2022
-
-## Stack
-
-| Layer | Technology |
-| --- | --- |
-| Desktop shell | Electron |
-| Renderer UI | React 19, TypeScript, Vite, Tailwind CSS |
-| Local sidecar API | FastAPI, Python, SQLModel, SQLite |
-| Charts | Recharts |
-| Scheduling | APScheduler |
-
-## Desktop Packaging
+## Desktop Release
 
 ```bash
 npm install
 npm run build
-```
-
-The Windows installer and unpacked app are created under:
-
-```text
-dist-electron\
 ```
 
 Main outputs:
@@ -58,8 +69,6 @@ npm run desktop:stop
 ```
 
 ## Desktop Smoke Test
-
-After packaging, run:
 
 ```bash
 npm run smoke:desktop
@@ -80,13 +89,11 @@ This starts:
 - the Vite renderer on `http://localhost:5173`
 - the Electron desktop shell
 
-The browser URL is only a local renderer development service for the Electron shell. CatPrice is no longer intended for any public server deployment.
+The browser URL is only a local renderer development service for the Electron shell. CatPrice is not intended for public server deployment.
 
 ## Optional API Keys
 
 CatPrice works without API keys by falling back to indexed or manual prices.
-
-Add these to `.env` only if you want external data integrations:
 
 ```env
 METALS_DEV_API_KEY=your_key
@@ -108,12 +115,6 @@ Desktop packaging validation:
 npm run build
 npm run smoke:desktop
 ```
-
-## Troubleshooting
-
-- Desktop launcher log: `C:\Users\<your-user>\AppData\Roaming\CatPrice\catprice-launcher.log`
-- If packaging fails with `Access is denied`, run `npm run desktop:stop` and retry.
-- If the splash screen appears to stall, check `http://127.0.0.1:8765/api/health` and the launcher log first.
 
 ## Academic Basis
 
