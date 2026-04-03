@@ -281,13 +281,17 @@ export default function Calculator() {
   function renderLaunchPanel() {
     const latestGenerated = latestSnapshot ? new Date(latestSnapshot.generatedAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }) : null;
     return (
-      <section className="surface-card cp-enter flex min-h-[500px] flex-col justify-between overflow-hidden px-4 py-5 sm:px-5">
-        <div>
-          <span className="section-kicker">Result Board</span>
-          <h2 className="cp-heading-xl mt-4">Outputs open on their own review surface.</h2>
-          <p className="cp-body-copy mt-3 max-w-xl">Calculate the estimate, move into a dedicated result board, then come back here when you want to tune composition, support, or the selected process path.</p>
+      <section className="surface-card cp-enter self-start overflow-hidden px-4 py-4 sm:px-5 xl:sticky xl:top-4">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <span className="section-kicker">Result Board</span>
+            <h2 className="cp-heading-lg mt-3">Review outputs on a separate board.</h2>
+            <p className="mt-2 max-w-[30rem] text-sm leading-7 text-slate-600">Keep inputs here, move reading and review to the result board, then jump back without losing the current recipe draft.</p>
+          </div>
+          <button onClick={() => navigate('/calculator/result')} disabled={!latestSnapshot} className="cp-button-secondary px-4 py-2.5 text-xs">Open latest</button>
         </div>
-        <div className="mt-6 space-y-3">
+
+        <div className="mt-4 space-y-3">
           <div className="surface-ink overflow-hidden p-4">
             <div className="cp-subtle-label !text-slate-400">Latest board</div>
             <div className="mt-3 flex flex-wrap items-end gap-3">
@@ -295,17 +299,22 @@ export default function Calculator() {
               <div className="pb-1 text-lg text-slate-300">{latestSnapshot ? fmtLabel : ''}</div>
             </div>
             <div className="mt-2 text-sm text-slate-300">{latestSnapshot ? `Generated ${latestGenerated} with ${latestSnapshot.selectedSupportName ?? 'support'} as the current basis.` : 'No result board created yet. The first successful estimate will open it automatically.'}</div>
-            <div className="mt-4 grid gap-2.5 sm:grid-cols-3 xl:grid-cols-1">
+            <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
               <MetricTile label="Current scale" value={scale.label} detail={`${orderSize} tons / ${scale.rate}`} dark />
               <MetricTile label="Selected steps" value={String(steps.length)} detail={steps.length > 0 ? `${formatStepLabel(steps[0])}${steps.length > 1 ? ` +${steps.length - 1}` : ''}` : 'Choose at least one'} dark />
               <MetricTile label="Tracked feeds" value={String(liveFeedCount + indexedFeedCount)} detail={`${liveFeedCount} live / ${indexedFeedCount} indexed`} dark />
+              <MetricTile label="Recipe load" value={`${nonSupportWt.toFixed(1)} wt%`} detail={`Support closes at ${supportWtPct.toFixed(1)} wt%`} dark />
             </div>
           </div>
+
           <div className="grid gap-2.5 sm:grid-cols-2">
-            <MetricTile label="Recipe load" value={`${nonSupportWt.toFixed(1)} wt%`} detail={`Support auto-fills ${supportWtPct.toFixed(1)} wt%`} />
             <MetricTile label="Support" value={selectedSupport?.name ?? 'Pending'} detail={selectedSupport ? `${selectedSupport.source_type === 'manual' ? 'Manual' : 'Feed-linked'} pricing` : 'Support pending'} />
+            <MetricTile label="Feed sync" value={pricesUpdatedAt ? pricesUpdatedAt.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }) : 'Pending'} detail="Latest price fetch on this screen" />
           </div>
-          <button onClick={() => navigate('/calculator/result')} disabled={!latestSnapshot} className="cp-button-secondary w-full justify-center">Open latest result board</button>
+
+          <div className="rounded-[24px] border border-slate-900/8 bg-white/56 px-4 py-3 text-xs leading-6 text-slate-600">
+            The result board is optimized for reading, not editing. Run a calculation here, review the board there, and return to this screen when you want to change materials or process steps.
+          </div>
         </div>
       </section>
     );
@@ -323,7 +332,7 @@ export default function Calculator() {
     <div className="space-y-3">
       <datalist id="known-metal-options">{KNOWN_METALS.map((metal) => <option key={metal} value={metal} />)}</datalist>
 
-      <div className="grid gap-4 xl:grid-cols-[minmax(0,1.08fr)_minmax(320px,0.92fr)]">
+      <div className="grid gap-4 xl:grid-cols-[minmax(0,1.16fr)_minmax(340px,0.84fr)]">
         <section className="surface-card cp-enter overflow-hidden px-4 py-4 sm:px-5" style={{ animationDelay: '0.06s' }}>
           <div className="space-y-6">
             <div className="flex flex-col gap-4 border-b border-slate-900/8 pb-4 lg:flex-row lg:items-end lg:justify-between">
