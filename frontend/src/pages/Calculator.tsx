@@ -327,7 +327,7 @@ export default function Calculator() {
           </div>
         </div>
 
-        <div className="mt-4 grid gap-3 xl:grid-cols-[0.88fr_1.12fr]">
+        <div className="mt-4 grid gap-3 xl:grid-cols-[minmax(270px,0.74fr)_minmax(0,1.26fr)]">
           <div className="space-y-3">
             <div className="surface-ghost p-4">
               <div className="flex items-center justify-between gap-3"><div><div className="cp-subtle-label">Cost Structure</div><div className="cp-heading-lg mt-2">Materials vs processing</div></div><span className="cp-chip">{result.materials.components.length} materials</span></div>
@@ -345,7 +345,7 @@ export default function Calculator() {
             <div className="surface-ghost p-4">
               <div className="cp-heading-sm">Breakdown wheel</div>
               <div className="mt-1 text-xs text-slate-500">Materials, processing, and selling adjustments.</div>
-              <div className="mt-3 h-[280px]">
+              <div className="mt-3 h-[250px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie data={pieData} innerRadius={72} outerRadius={108} dataKey="value" paddingAngle={3} stroke="transparent">
@@ -360,19 +360,28 @@ export default function Calculator() {
           </div>
 
           <div className="surface-ghost p-4">
-            <div className="flex items-center justify-between gap-3"><div><div className="cp-subtle-label">Material Ledger</div><div className="cp-heading-lg mt-2">Component-level catalyst cost</div></div><span className="cp-chip">{selectedSupport?.name ?? 'Support'}</span></div>
-            <div className="mt-3 overflow-hidden rounded-[22px] border border-slate-900/8 bg-white/56">
-              <div className="grid grid-cols-[minmax(0,1.4fr)_90px_110px_110px_72px] gap-3 border-b border-slate-900/8 bg-white/46 px-4 py-3 text-[11px] uppercase tracking-[0.18em] text-slate-500"><span>Material</span><span className="text-right">wt%</span><span className="text-right">Unit</span><span className="text-right">Catalyst</span><span className="text-right">Share</span></div>
-              <div className="divide-y divide-slate-900/8">
-                {result.materials.components.map((component, index) => (
-                  <div key={`${component.name}-${component.role}`} className="grid grid-cols-[minmax(0,1.4fr)_90px_110px_110px_72px] gap-3 px-4 py-3 text-sm">
-                    <div className="flex min-w-0 items-center gap-2.5"><span className="h-2.5 w-2.5 flex-none rounded-full" style={{ backgroundColor: CHART_COLORS[index % CHART_COLORS.length] }} /><div className="min-w-0"><div className="truncate text-slate-950">{component.name}</div><div className="text-xs text-slate-500">{component.role}</div></div></div>
-                    <span className="text-right font-mono text-slate-700">{(component.wt_frac * 100).toFixed(1)}</span>
-                    <span className="text-right font-mono text-slate-700">${toDisplay(component.price_per_lb).toFixed(3)}</span>
-                    <span className="text-right font-mono text-slate-950">${toDisplay(component.cost_per_lb_cat).toFixed(3)}</span>
-                    <span className="text-right font-mono text-slate-500">{component.cost_pct}%</span>
-                  </div>
-                ))}
+            <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div className="min-w-0">
+                <div className="cp-subtle-label">Material Ledger</div>
+                <div className="cp-heading-lg mt-2 max-w-[18ch]">Catalyst component ledger</div>
+                <div className="mt-1 text-xs leading-6 text-slate-500">Per-component loading, source cost, and contribution inside the selling-price estimate.</div>
+              </div>
+              <span className="cp-chip shrink-0">{selectedSupport?.name ?? 'Support'}</span>
+            </div>
+            <div className="mt-3 overflow-x-auto rounded-[22px] border border-slate-900/8 bg-white/56">
+              <div className="min-w-[620px]">
+                <div className="grid grid-cols-[minmax(0,1.36fr)_64px_88px_96px_64px] gap-3 border-b border-slate-900/8 bg-white/46 px-4 py-3 text-[10px] uppercase tracking-[0.16em] text-slate-500"><span>Material</span><span className="text-right">wt%</span><span className="text-right">Unit</span><span className="text-right">Per cat</span><span className="text-right">Share</span></div>
+                <div className="divide-y divide-slate-900/8">
+                  {result.materials.components.map((component, index) => (
+                    <div key={`${component.name}-${component.role}`} className="grid grid-cols-[minmax(0,1.36fr)_64px_88px_96px_64px] gap-3 px-4 py-3 text-[13px] leading-5">
+                      <div className="flex min-w-0 items-center gap-2.5"><span className="h-2.5 w-2.5 flex-none rounded-full" style={{ backgroundColor: CHART_COLORS[index % CHART_COLORS.length] }} /><div className="min-w-0"><div className="truncate text-slate-950">{component.name}</div><div className="text-[11px] uppercase tracking-[0.08em] text-slate-400">{component.role}</div></div></div>
+                      <span className="text-right font-mono text-slate-700">{(component.wt_frac * 100).toFixed(1)}</span>
+                      <span className="text-right font-mono text-slate-700">${toDisplay(component.price_per_lb).toFixed(3)}</span>
+                      <span className="text-right font-mono text-slate-950">${toDisplay(component.cost_per_lb_cat).toFixed(3)}</span>
+                      <span className="text-right font-mono text-slate-500">{Number(component.cost_pct).toFixed(1)}%</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
             <div className="mt-3 rounded-[22px] border border-slate-900/8 bg-white/60 p-4">
@@ -397,7 +406,7 @@ export default function Calculator() {
     <div className="space-y-3">
       <datalist id="known-metal-options">{KNOWN_METALS.map((metal) => <option key={metal} value={metal} />)}</datalist>
 
-      <div className="grid gap-4 xl:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)]">
+      <div className="grid gap-4 xl:grid-cols-[minmax(0,0.96fr)_minmax(0,1.04fr)]">
         <section className="surface-card cp-enter overflow-hidden px-4 py-4 sm:px-5" style={{ animationDelay: '0.06s' }}>
           <div className="space-y-6">
             <div className="flex flex-col gap-4 border-b border-slate-900/8 pb-4 lg:flex-row lg:items-end lg:justify-between">
