@@ -7,7 +7,7 @@ export default function AppFrame() {
     <div className="cp-shell relative min-h-screen overflow-x-hidden">
       <TopNavigation />
 
-      <main className="mx-auto max-w-[1640px] px-3 pb-6 pt-2 sm:px-4 lg:px-5 lg:pt-1.5">
+      <main className="mx-auto max-w-[1720px] px-3 pb-6 pt-2 sm:px-4 lg:px-5 lg:pt-1.5">
         <div className="grid gap-3 lg:grid-cols-[248px_minmax(0,1fr)] xl:gap-4">
           <Sidebar />
 
