@@ -1,10 +1,11 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useUnit } from '../../lib/use-unit';
 import BrandMark from './BrandMark';
-import { navigationItems } from './navigation';
+import { isNavigationPathActive, navigationItems } from './navigation';
 
 export default function Sidebar() {
   const { unit, toggle } = useUnit();
+  const location = useLocation();
 
   return (
     <aside className="hidden lg:block">
@@ -24,36 +25,33 @@ export default function Sidebar() {
           </div>
 
           <nav className="space-y-2">
-            {navigationItems.map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                end={item.to === '/'}
-                className={({ isActive }) =>
-                  `group flex items-center gap-3 rounded-[20px] border px-3 py-3 transition ${
+            {navigationItems.map((item) => {
+              const isActive = isNavigationPathActive(location.pathname, item.to);
+
+              return (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  className={`group flex items-center gap-3 rounded-[20px] border px-3 py-3 transition ${
                     isActive
                       ? 'border-[#7cf1d0]/20 bg-[linear-gradient(135deg,rgba(124,241,208,0.18),rgba(255,255,255,0.06))] shadow-[0_16px_34px_rgba(0,0,0,0.14)]'
                       : 'border-white/8 bg-white/[0.03] hover:border-white/14 hover:bg-white/[0.05]'
-                  }`
-                }
-              >
-                {({ isActive }) => (
-                  <>
-                    <div
-                      className={`flex h-10 w-10 flex-none items-center justify-center rounded-[16px] border transition ${
-                        isActive
-                          ? 'border-[#7cf1d0]/28 bg-[#7cf1d0]/14 text-[#bdfae7]'
-                          : 'border-white/10 bg-white/6 text-slate-300 group-hover:text-white'
-                      }`}
-                    >
-                      <item.Icon className="h-5 w-5" />
-                    </div>
+                  }`}
+                >
+                  <div
+                    className={`flex h-10 w-10 flex-none items-center justify-center rounded-[16px] border transition ${
+                      isActive
+                        ? 'border-[#7cf1d0]/28 bg-[#7cf1d0]/14 text-[#bdfae7]'
+                        : 'border-white/10 bg-white/6 text-slate-300 group-hover:text-white'
+                    }`}
+                  >
+                    <item.Icon className="h-5 w-5" />
+                  </div>
 
-                    <div className="min-w-0 text-sm font-semibold text-white">{item.label}</div>
-                  </>
-                )}
-              </NavLink>
-            ))}
+                  <div className="min-w-0 text-sm font-semibold text-white">{item.label}</div>
+                </NavLink>
+              );
+            })}
           </nav>
 
           <div className="border-t border-white/10 pt-4">

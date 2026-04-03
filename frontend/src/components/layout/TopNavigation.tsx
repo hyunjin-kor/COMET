@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useUnit } from '../../lib/use-unit';
 import BrandMark from './BrandMark';
-import { navigationItems } from './navigation';
+import { isNavigationPathActive, navigationItems } from './navigation';
 
 function MinimizeIcon() {
   return (
@@ -35,6 +35,7 @@ function CloseIcon() {
 
 export default function TopNavigation() {
   const { unit, toggle } = useUnit();
+  const location = useLocation();
   const isWindowsDesktop = typeof window !== 'undefined' && window.catpriceDesktop?.platform === 'win32';
   const [isMaximized, setIsMaximized] = useState(false);
 
@@ -132,36 +133,33 @@ export default function TopNavigation() {
           </div>
 
           <nav className="mt-3 flex gap-2 overflow-x-auto pb-1">
-            {navigationItems.map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                end={item.to === '/'}
-                className={({ isActive }) =>
-                  `group flex min-w-[148px] items-center gap-3 rounded-[18px] border px-3.5 py-2.5 transition ${
+            {navigationItems.map((item) => {
+              const isActive = isNavigationPathActive(location.pathname, item.to);
+
+              return (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  className={`group flex min-w-[148px] items-center gap-3 rounded-[18px] border px-3.5 py-2.5 transition ${
                     isActive
                       ? 'border-teal-300/55 bg-[linear-gradient(135deg,rgba(124,241,208,0.22),rgba(255,255,255,0.94))] shadow-[0_10px_24px_rgba(23,34,51,0.07)]'
                       : 'border-slate-300/70 bg-white/74 hover:border-slate-400/70 hover:bg-white'
-                  }`
-                }
-              >
-                {({ isActive }) => (
-                  <>
-                    <div
-                      className={`flex h-9 w-9 flex-none items-center justify-center rounded-[14px] border transition ${
-                        isActive
-                          ? 'border-teal-300/55 bg-teal-50 text-teal-700'
-                          : 'border-slate-300/60 bg-slate-50 text-slate-500 group-hover:text-slate-700'
-                      }`}
-                    >
-                      <item.Icon className="h-[18px] w-[18px]" />
-                    </div>
+                  }`}
+                >
+                  <div
+                    className={`flex h-9 w-9 flex-none items-center justify-center rounded-[14px] border transition ${
+                      isActive
+                        ? 'border-teal-300/55 bg-teal-50 text-teal-700'
+                        : 'border-slate-300/60 bg-slate-50 text-slate-500 group-hover:text-slate-700'
+                    }`}
+                  >
+                    <item.Icon className="h-[18px] w-[18px]" />
+                  </div>
 
-                    <div className="truncate text-sm font-semibold text-slate-900">{item.label}</div>
-                  </>
-                )}
-              </NavLink>
-            ))}
+                  <div className="truncate text-sm font-semibold text-slate-900">{item.label}</div>
+                </NavLink>
+              );
+            })}
           </nav>
         </div>
       </div>
