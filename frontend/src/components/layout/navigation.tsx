@@ -68,3 +68,11 @@ export const navigationItems: NavigationItem[] = [
   { to: '/uncertainty', label: 'Uncertainty', Icon: UncertaintyIcon },
   { to: '/library', label: 'Library', Icon: LibraryIcon },
 ];
+
+export function isNavigationPathActive(pathname: string, to: string): boolean {
+  if (to === '/') {
+    return pathname === '/' || pathname.startsWith('/calculator/');
+  }
+
+  return pathname === to || pathname.startsWith(`${to}/`);
+}
