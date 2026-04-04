@@ -4,7 +4,7 @@
   "description": "Real-time metal price based catalyst manufacturing cost estimator",
   "main": "electron/main.js",
   "author": "CatPrice contributors",
-  "license": "UNLICENSED",
+  "license": "SEE LICENSE IN LICENSE",
   "scripts": {
     "dev": "concurrently --kill-others-on-fail \"npm run dev:backend\" \"npm run dev:frontend\" \"npm run electron:wait\"",
     "dev:backend": "uvicorn backend.main:app --host 127.0.0.1 --port 8765 --reload",
