@@ -1,423 +1,535 @@
-import { useState } from 'react';
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import { apiUrl } from '../lib/api';
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+  fetchDecisionBenchmark,
+  type DecisionBenchmark,
+  type DecisionCandidate,
+} from '../lib/api';
+import {
+  saveCalculatorDraft,
+  type CalculatorBenchmarkPreset,
+  type CalculatorRow,
+} from '../lib/calculator-session';
 import { useUnit } from '../lib/use-unit';
 
-interface Composition {
+type DecisionProfile = 'balanced' | 'cost-first' | 'evidence-first';
+
+const PROFILE_OPTIONS: Array<{
+  id: DecisionProfile;
   label: string;
-  metal_symbol: string;
-  metal_price: number;
-  metal_price_unit: string;
-  metal_loading_wt_pct: number;
-  support_name: string;
-  support_price_per_lb: number;
-  steps: string[];
-  order_size_tons: number;
+  note: string;
+}> = [
+  { id: 'balanced', label: 'Balanced', note: 'Economics, evidence, route, and performance' },
+  { id: 'cost-first', label: 'Cost-first', note: 'Bias toward lowest current catalyst cost' },
+  { id: 'evidence-first', label: 'Evidence-first', note: 'Reward stronger source transparency and route reproducibility' },
+];
+
+function uid() {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') return crypto.randomUUID();
+  return `row-${Date.now()}-${Math.random().toString(16).slice(2, 10)}`;
 }
 
-interface CompareResult {
-  label: string;
-  estimated_price_per_lb: number;
-  materials_cost_per_lb: number;
-  processing_cost_per_lb: number;
-  scale: string;
+function scoreTone(score: number) {
+  if (score >= 80) return 'text-emerald-700';
+  if (score >= 60) return 'text-slate-950';
+  return 'text-amber-700';
 }
 
-const KNOWN_METALS = ['Ni', 'Co', 'Cu', 'Fe', 'Pt', 'Pd', 'Rh', 'Ru', 'Ir', 'Mo', 'W', 'Au', 'Ag', 'Al'];
-const SUPPORT_OPTIONS = ['Al2O3', 'SiO2', 'TiO2', 'Carbon', 'ZSM-5', 'USY', 'CeO2', 'MgO', 'ZrO2'];
-const PALETTE = ['#78f2d0', '#88a8ff', '#efc36c', '#f3a08d'];
+function sourceTone(sourceType: string) {
+  if (sourceType === 'live') return 'border-emerald-200 bg-emerald-50 text-emerald-700';
+  if (sourceType === 'indexed') return 'border-amber-200 bg-amber-50 text-amber-700';
+  return 'border-slate-200 bg-white text-slate-600';
+}
 
-function emptyComp(): Composition {
+function toBenchmarkPreset(candidate: DecisionCandidate): CalculatorBenchmarkPreset {
   return {
-    label: '',
-    metal_symbol: 'Ni',
-    metal_price: 7.5,
-    metal_price_unit: '$/lb',
-    metal_loading_wt_pct: 15,
-    support_name: 'Al2O3',
-    support_price_per_lb: 0.5,
-    steps: ['mixer_slurry', 'incipient_wetness', 'dryer_rotary_100_300C'],
-    order_size_tons: 20,
+    slug: candidate.slug,
+    title: candidate.title,
+    archetype: candidate.archetype,
+    screening_basis: candidate.screening_basis,
+    screening_summary: candidate.screening_summary,
+    route: candidate.route,
+    scores: candidate.scores,
+    decision_notes: candidate.decision_notes,
   };
 }
 
-function scaleLabel(tons: number) {
-  if (tons < 5) return 'Small';
-  if (tons < 70) return 'Medium';
-  return 'Large';
+function toCalculatorRows(candidate: DecisionCandidate): CalculatorRow[] {
+  return candidate.components.map((component) => ({
+    id: uid(),
+    role: component.role as CalculatorRow['role'],
+    name: component.name,
+    wt_pct: component.wt_pct,
+    price_per_lb: component.price_per_lb,
+    source_type:
+      component.source_type === 'live' || component.source_type === 'indexed'
+        ? component.source_type
+        : 'manual',
+    source: component.pricing_note || component.source,
+  }));
 }
 
-function ScenarioMetric({ label, value, detail }: { label: string; value: string; detail: string }) {
+function MetricTile({ label, value, detail }: { label: string; value: string; detail: string }) {
   return (
     <div className="cp-metric-tile">
       <div className="cp-subtle-label">{label}</div>
-      <div className="mt-2 text-2xl font-display text-slate-900">{value}</div>
+      <div className="mt-2 text-2xl font-display text-slate-950">{value}</div>
       <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div>
     </div>
   );
 }
 
-function FieldBlock({
-  label,
-  hint,
-  children,
-}: {
-  label: string;
-  hint?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <label className="block">
-      <div className="flex items-center justify-between gap-3">
-        <span className="cp-subtle-label">{label}</span>
-        {hint ? <span className="text-[11px] text-slate-400">{hint}</span> : null}
-      </div>
-      <div className="mt-2">{children}</div>
-    </label>
-  );
-}
-
 export default function Compare() {
-  const { toDisplay, toInternal, fmtLabel } = useUnit();
-  const [comps, setComps] = useState<Composition[]>([emptyComp(), emptyComp()]);
-  const [results, setResults] = useState<CompareResult[]>([]);
-  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { toDisplay, fmtLabel } = useUnit();
+  const [profile, setProfile] = useState<DecisionProfile>('balanced');
+  const [benchmark, setBenchmark] = useState<DecisionBenchmark | null>(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [activeSlug, setActiveSlug] = useState<string | null>(null);
 
-  const updateComp = (index: number, field: keyof Composition, value: string | number) => {
-    setComps((previous) => previous.map((comp, compIndex) => (compIndex === index ? { ...comp, [field]: value } : comp)));
-  };
-
-  const addComp = () => {
-    if (comps.length < 4) setComps((previous) => [...previous, emptyComp()]);
-  };
-
-  const removeComp = (index: number) => {
-    if (comps.length > 2) setComps((previous) => previous.filter((_, compIndex) => compIndex !== index));
-  };
-
-  const handleCompare = async () => {
+  useEffect(() => {
     setLoading(true);
     setError('');
+    fetchDecisionBenchmark('ammonia-cracking', profile)
+      .then((payload) => {
+        setBenchmark(payload);
+        setActiveSlug((current) => current ?? payload.winner?.slug ?? payload.candidates[0]?.slug ?? null);
+      })
+      .catch((caughtError: unknown) => {
+        setError(caughtError instanceof Error ? caughtError.message : 'Failed to load decision board');
+      })
+      .finally(() => setLoading(false));
+  }, [profile]);
 
-    try {
-      const response = await fetch(apiUrl('/compare'), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ compositions: comps }),
-      });
+  const candidates = benchmark?.candidates ?? [];
+  const activeCandidate = useMemo(
+    () => candidates.find((candidate) => candidate.slug === activeSlug) ?? benchmark?.winner ?? null,
+    [activeSlug, benchmark?.winner, candidates],
+  );
 
-      if (!response.ok) throw new Error((await response.json()).detail);
-      setResults((await response.json()).compositions);
-    } catch (caughtError: unknown) {
-      setError(caughtError instanceof Error ? caughtError.message : 'Compare failed');
-    } finally {
-      setLoading(false);
-    }
-  };
+  function loadIntoCalculator(candidate: DecisionCandidate) {
+    saveCalculatorDraft({
+      rows: toCalculatorRows(candidate),
+      steps: candidate.route.steps,
+      orderSize: Number(candidate.estimate.input_summary.order_size_tons ?? 20),
+      pricesUpdatedAt: benchmark?.price_basis_updated_at ?? null,
+      benchmarkCandidate: toBenchmarkPreset(candidate),
+    });
+    navigate('/');
+  }
 
-  const chartData = results.map((result) => ({
-    name: result.label,
-    Materials: +toDisplay(result.materials_cost_per_lb).toFixed(3),
-    Processing: +toDisplay(result.processing_cost_per_lb).toFixed(3),
-    'G&A + Margin': +toDisplay(
-      result.estimated_price_per_lb - result.materials_cost_per_lb - result.processing_cost_per_lb,
-    ).toFixed(3),
-  }));
+  if (loading) {
+    return (
+      <div className="surface-card flex items-center gap-3 px-5 py-6 text-slate-600">
+        <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#78f2d0] border-t-transparent" />
+        Loading ammonia cracking benchmark board...
+      </div>
+    );
+  }
 
-  const bestIdx = results.length
-    ? results.reduce((bestIndex, result, index) =>
-        result.estimated_price_per_lb < results[bestIndex].estimated_price_per_lb ? index : bestIndex,
-      0)
-    : -1;
+  if (error || !benchmark || !activeCandidate) {
+    return (
+      <section className="surface-card cp-enter overflow-hidden p-6 sm:p-7">
+        <span className="section-kicker">Decision Board</span>
+        <h1 className="cp-heading-xl mt-4">Benchmark board is unavailable.</h1>
+        <p className="cp-body-copy mt-3 max-w-xl">
+          {error || 'The ammonia cracking benchmark did not return any candidate data.'}
+        </p>
+      </section>
+    );
+  }
 
-  const bestScenario = bestIdx >= 0 ? results[bestIdx] : null;
+  const winner = benchmark.winner;
+  const updatedAt = benchmark.price_basis_updated_at
+    ? new Date(benchmark.price_basis_updated_at).toLocaleString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+      })
+    : 'Reference basis';
 
   return (
     <div className="space-y-4">
-      <div className="grid gap-4 xl:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
-        <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.06s' }}>
-          <div className="flex flex-col gap-4 border-b border-slate-900/8 pb-5 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <div className="cp-subtle-label">Scenario Editor</div>
-              <h2 className="cp-heading-xl mt-2">Configure estimate variants</h2>
-              <p className="cp-body-copy mt-2 max-w-2xl">
-                Each scenario keeps the same estimate structure but carries its own metal, support, loading, and
-                campaign-size assumptions.
-              </p>
-            </div>
+      <section className="surface-card cp-enter overflow-hidden p-5 sm:p-6">
+        <div className="grid gap-4 xl:grid-cols-[minmax(0,1.1fr)_minmax(330px,0.9fr)]">
+          <div className="surface-ink relative overflow-hidden p-5 sm:p-6">
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(120,242,208,0.22),transparent_0_32%),radial-gradient(circle_at_bottom_right,rgba(239,195,108,0.14),transparent_0_28%)]" />
+            <div className="relative">
+              <div className="cp-subtle-label !text-slate-400">Benchmark Harness</div>
+              <h1 className="mt-3 font-display text-[clamp(2rem,4vw,3.5rem)] leading-[0.94] text-white">
+                {benchmark.title}
+              </h1>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <span className="cp-chip-dark">{benchmark.reaction}</span>
+                <span className="cp-chip-dark">{benchmark.decision_profile.label}</span>
+                <span className="cp-chip-dark">Updated {updatedAt}</span>
+              </div>
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">{benchmark.objective}</p>
 
-            {comps.length < 4 && (
-              <button onClick={addComp} className="cp-button-secondary">
-                Add scenario
-              </button>
-            )}
-          </div>
-
-          <div className="mt-5 space-y-4">
-            {comps.map((composition, index) => (
-              <article key={`${composition.label}-${index}`} className="surface-ghost overflow-hidden p-4 sm:p-5">
-                <div className="flex flex-col gap-4 border-b border-slate-900/8 pb-4 sm:flex-row sm:items-start sm:justify-between">
-                  <div className="flex min-w-0 items-start gap-3">
-                    <div
-                      className="flex h-11 w-11 flex-none items-center justify-center rounded-[18px] text-sm font-semibold text-slate-950"
-                      style={{ backgroundColor: PALETTE[index] }}
-                    >
-                      {index + 1}
+              {winner ? (
+                <div className="mt-6 rounded-[26px] border border-white/10 bg-white/6 p-4">
+                  <div className="cp-subtle-label !text-slate-400">Current winner</div>
+                  <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                      <div className="text-2xl font-display text-white">{winner.title}</div>
+                      <div className="mt-1 text-sm text-slate-300">{winner.archetype}</div>
                     </div>
-
-                    <div className="min-w-0">
-                      <div className="cp-subtle-label">Scenario {index + 1}</div>
-                      <input
-                        value={composition.label}
-                        onChange={(event) => updateComp(index, 'label', event.target.value)}
-                        placeholder={`Scenario ${index + 1} label`}
-                        className="mt-2 w-full bg-transparent font-display text-[1.45rem] leading-none text-slate-950 outline-none placeholder:text-slate-400"
-                      />
+                    <div className="text-left sm:text-right">
+                      <div className="text-3xl font-display text-white">
+                        ${toDisplay(winner.summary.landed_cost_per_lb).toFixed(2)}
+                      </div>
+                      <div className="mt-1 text-sm text-slate-300">{fmtLabel}</div>
                     </div>
                   </div>
-
-                  <div className="flex items-center gap-2">
-                    <span className="cp-chip">{scaleLabel(composition.order_size_tons)} scale</span>
-                    {comps.length > 2 && (
-                      <button onClick={() => removeComp(index)} className="cp-button-secondary px-3 py-2 text-xs">
-                        Remove
-                      </button>
-                    )}
+                  <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                    <div className="cp-metric-tile-dark">
+                      <div className="cp-subtle-label !text-slate-400">Total score</div>
+                      <div className="mt-2 text-xl font-display text-white">{winner.scores.total.toFixed(1)}</div>
+                    </div>
+                    <div className="cp-metric-tile-dark">
+                      <div className="cp-subtle-label !text-slate-400">Evidence</div>
+                      <div className="mt-2 text-xl font-display text-white">{winner.scores.evidence.toFixed(1)}</div>
+                    </div>
+                    <div className="cp-metric-tile-dark">
+                      <div className="cp-subtle-label !text-slate-400">Window</div>
+                      <div className="mt-2 text-xl font-display text-white">
+                        {winner.summary.temperature_window_c[0]}-{winner.summary.temperature_window_c[1]} C
+                      </div>
+                    </div>
                   </div>
                 </div>
-
-                <div className="mt-4 grid gap-4 md:grid-cols-2">
-                  <FieldBlock label="Metal">
-                    <select
-                      value={composition.metal_symbol}
-                      onChange={(event) => updateComp(index, 'metal_symbol', event.target.value)}
-                      className="input-base"
-                    >
-                      {KNOWN_METALS.map((metal) => (
-                        <option key={metal} value={metal}>
-                          {metal}
-                        </option>
-                      ))}
-                    </select>
-                  </FieldBlock>
-
-                  <FieldBlock label="Metal price" hint={fmtLabel}>
-                    <input
-                      type="number"
-                      step="0.01"
-                      value={toDisplay(composition.metal_price).toFixed(2)}
-                      onChange={(event) => updateComp(index, 'metal_price', toInternal(Number(event.target.value)))}
-                      className="input-base font-mono"
-                    />
-                  </FieldBlock>
-
-                  <FieldBlock label="Loading" hint="wt%">
-                    <input
-                      type="number"
-                      step="0.1"
-                      min="0.1"
-                      max="99"
-                      value={composition.metal_loading_wt_pct}
-                      onChange={(event) => updateComp(index, 'metal_loading_wt_pct', Number(event.target.value))}
-                      className="input-base font-mono"
-                    />
-                  </FieldBlock>
-
-                  <FieldBlock label="Order size" hint="tons">
-                    <input
-                      type="number"
-                      step="1"
-                      min="1"
-                      value={composition.order_size_tons}
-                      onChange={(event) => updateComp(index, 'order_size_tons', Number(event.target.value))}
-                      className="input-base font-mono"
-                    />
-                  </FieldBlock>
-
-                  <FieldBlock label="Support">
-                    <select
-                      value={composition.support_name}
-                      onChange={(event) => updateComp(index, 'support_name', event.target.value)}
-                      className="input-base"
-                    >
-                      {SUPPORT_OPTIONS.map((support) => (
-                        <option key={support} value={support}>
-                          {support}
-                        </option>
-                      ))}
-                    </select>
-                  </FieldBlock>
-
-                  <FieldBlock label="Support price" hint={fmtLabel}>
-                    <input
-                      type="number"
-                      step="0.01"
-                      value={toDisplay(composition.support_price_per_lb).toFixed(2)}
-                      onChange={(event) =>
-                        updateComp(index, 'support_price_per_lb', toInternal(Number(event.target.value)))
-                      }
-                      className="input-base font-mono"
-                    />
-                  </FieldBlock>
-                </div>
-
-                <div className="mt-4 flex flex-wrap items-center gap-2 text-xs text-slate-500">
-                  <span className="cp-chip">
-                    ${toDisplay(composition.metal_price).toFixed(2)}
-                    {fmtLabel} metal
-                  </span>
-                  <span className="cp-chip">{composition.metal_loading_wt_pct.toFixed(1)} wt% loading</span>
-                  <span className="cp-chip">{composition.steps.length} process steps</span>
-                </div>
-              </article>
-            ))}
-          </div>
-
-          <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <button onClick={handleCompare} disabled={loading} className="cp-button-primary min-w-[220px]">
-              {loading ? (
-                <>
-                  <span className="mr-2 inline-flex h-4 w-4 animate-spin rounded-full border-2 border-slate-950 border-t-transparent" />
-                  Comparing scenarios
-                </>
-              ) : (
-                `Compare ${comps.length} scenarios`
-              )}
-            </button>
-
-            <div className="text-xs leading-6 text-slate-500">
-              The compare API returns materials, processing, and total estimated selling price for each submitted
-              scenario.
+              ) : null}
             </div>
           </div>
 
-          {error && <div className="mt-4 rounded-[24px] border border-red-200 bg-red-50 px-4 py-4 text-sm text-red-700">{error}</div>}
-        </section>
-
-        <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.1s' }}>
-          {!results.length ? (
-            <div className="flex min-h-[520px] flex-col justify-between">
-              <div>
-                <span className="section-kicker">Ranking Board</span>
-                <h2 className="cp-heading-xl mt-4">
-                  Run a comparison to rank the estimate outputs.
-                </h2>
-                <p className="cp-body-copy mt-3 max-w-xl">
-                  This board turns into a stacked cost chart and ranked scenario list once the backend returns a shared-basis comparison.
-                </p>
-              </div>
-
-              <div className="grid gap-3 sm:grid-cols-3">
-                <ScenarioMetric label="Best price" value="Pending" detail="Shown after compare run" />
-                <ScenarioMetric label="Cost split" value="Pending" detail="Materials, processing, and margin" />
-                <ScenarioMetric label="Scenario lead" value="Pending" detail="Lowest selling price highlighted" />
-              </div>
-            </div>
-          ) : (
-            <>
-              <div className="surface-ink relative overflow-hidden p-5">
-                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(120,242,208,0.22),transparent_0_34%),radial-gradient(circle_at_bottom_right,rgba(239,195,108,0.15),transparent_0_26%)]" />
-
-                <div className="relative flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-                  <div>
-                    <div className="cp-subtle-label !text-slate-400">Lowest estimate</div>
-                    <div className="mt-2 text-3xl font-display text-white">{bestScenario?.label}</div>
-                    <div className="mt-2 text-sm text-slate-300">
-                      Lowest returned estimate across {results.length} compared recipes.
-                    </div>
-                  </div>
-
-                  {bestScenario && (
-                    <div className="grid gap-3 sm:grid-cols-3 lg:min-w-[420px]">
-                      <div className="cp-metric-tile-dark">
-                        <div className="cp-subtle-label !text-slate-400">Total</div>
-                        <div className="mt-2 text-xl font-display text-white">
-                          ${toDisplay(bestScenario.estimated_price_per_lb).toFixed(3)}
-                          {fmtLabel}
-                        </div>
-                      </div>
-                      <div className="cp-metric-tile-dark">
-                        <div className="cp-subtle-label !text-slate-400">Materials</div>
-                        <div className="mt-2 text-xl font-display text-white">
-                          ${toDisplay(bestScenario.materials_cost_per_lb).toFixed(3)}
-                        </div>
-                      </div>
-                      <div className="cp-metric-tile-dark">
-                        <div className="cp-subtle-label !text-slate-400">Scale</div>
-                        <div className="mt-2 text-xl font-display text-white">{bestScenario.scale}</div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="mt-5 rounded-[28px] border border-slate-900/8 bg-white/62 p-5 backdrop-blur-xl">
-                <div className="flex items-end justify-between gap-3">
-                  <div>
-                    <div className="cp-subtle-label">Stacked Cost Comparison</div>
-                    <div className="cp-heading-lg mt-2">Materials, processing, and markup</div>
-                  </div>
-                  {bestScenario ? <span className="cp-chip">Best: {bestScenario.label}</span> : null}
-                </div>
-
-                <div className="mt-5 h-[320px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={chartData} barSize={52}>
-                      <CartesianGrid stroke="rgba(100,116,139,0.18)" vertical={false} />
-                      <XAxis dataKey="name" tick={{ fill: '#66748b', fontSize: 11 }} axisLine={false} tickLine={false} />
-                      <YAxis tick={{ fill: '#66748b', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(value) => `$${value}`} />
-                      <Tooltip
-                        formatter={(value) => [`$${Number(value).toFixed(3)}${fmtLabel}`]}
-                        contentStyle={{
-                          borderRadius: 18,
-                          border: '1px solid rgba(31,47,72,0.10)',
-                          background: 'rgba(255,251,245,0.96)',
-                          color: '#142033',
-                          fontSize: 12,
-                          boxShadow: '0 18px 48px rgba(23,34,51,0.12)',
-                        }}
-                      />
-                      <Bar dataKey="Materials" stackId="a" fill="#78f2d0" radius={[6, 6, 0, 0]} />
-                      <Bar dataKey="Processing" stackId="a" fill="#88a8ff" />
-                      <Bar dataKey="G&A + Margin" stackId="a" fill="#efc36c" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-
-              <div className="mt-5 space-y-3">
-                {results.map((result, index) => (
-                  <div
-                    key={result.label}
-                    className={`grid gap-3 rounded-[24px] border px-4 py-4 sm:grid-cols-[minmax(0,1fr)_auto_auto_auto] sm:items-center ${
-                      index === bestIdx
-                        ? 'border-emerald-200 bg-emerald-50/80'
-                        : 'border-slate-900/8 bg-white/64'
+          <div className="space-y-3">
+            <div className="surface-ghost p-4">
+              <div className="cp-subtle-label">Decision profile</div>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {PROFILE_OPTIONS.map((option) => (
+                  <button
+                    key={option.id}
+                    onClick={() => setProfile(option.id)}
+                    className={`rounded-[18px] border px-3 py-2 text-left text-sm transition ${
+                      option.id === profile
+                        ? 'border-teal-200 bg-teal-50 text-teal-700'
+                        : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
                     }`}
                   >
-                    <div className="flex min-w-0 items-center gap-3">
-                      <span className="h-3 w-3 rounded-full" style={{ backgroundColor: PALETTE[index] }} />
-                      <div className="min-w-0">
-                        <div className="truncate font-semibold text-slate-950">{result.label}</div>
-                        <div className="text-xs text-slate-500">{result.scale} scale</div>
-                      </div>
-                    </div>
-                    <div className="text-sm text-slate-600">
-                      Materials ${toDisplay(result.materials_cost_per_lb).toFixed(3)}
-                    </div>
-                    <div className="text-sm text-slate-600">
-                      Processing ${toDisplay(result.processing_cost_per_lb).toFixed(3)}
-                    </div>
-                    <div className={`text-sm font-semibold ${index === bestIdx ? 'text-emerald-700' : 'text-slate-950'}`}>
-                      ${toDisplay(result.estimated_price_per_lb).toFixed(3)}
-                      {fmtLabel}
-                    </div>
-                  </div>
+                    <div className="font-semibold">{option.label}</div>
+                    <div className="mt-1 text-xs leading-5 text-slate-500">{option.note}</div>
+                  </button>
                 ))}
               </div>
-            </>
-          )}
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2">
+              <MetricTile
+                label="Economics"
+                value={`${Math.round(benchmark.decision_profile.weights.economics * 100)}%`}
+                detail="Current-price bias"
+              />
+              <MetricTile
+                label="Evidence"
+                value={`${Math.round(benchmark.decision_profile.weights.evidence * 100)}%`}
+                detail="Source confidence weight"
+              />
+              <MetricTile
+                label="Route"
+                value={`${Math.round(benchmark.decision_profile.weights.route * 100)}%`}
+                detail="Manufacturing confidence"
+              />
+              <MetricTile
+                label="Performance"
+                value={`${Math.round(benchmark.decision_profile.weights.performance * 100)}%`}
+                detail="Activity / operating window"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="grid gap-4 xl:grid-cols-[minmax(360px,0.82fr)_minmax(0,1.18fr)]">
+        <section className="surface-card p-4">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <div className="cp-subtle-label">Ranked candidates</div>
+              <div className="cp-heading-lg mt-2">Which route is most economic right now?</div>
+            </div>
+            <span className="cp-chip">{candidates.length} candidates</span>
+          </div>
+
+          <div className="mt-4 space-y-3">
+            {candidates.map((candidate, index) => {
+              const active = activeCandidate.slug === candidate.slug;
+              return (
+                <button
+                  key={candidate.slug}
+                  onClick={() => setActiveSlug(candidate.slug)}
+                  className={`w-full rounded-[24px] border px-4 py-4 text-left transition ${
+                    active
+                      ? 'border-emerald-200 bg-emerald-50/80'
+                      : 'border-slate-900/8 bg-white/64 hover:bg-white/88'
+                  }`}
+                >
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-3">
+                        <span className="flex h-9 w-9 items-center justify-center rounded-[16px] border border-slate-900/8 bg-white/72 text-sm font-semibold text-slate-950">
+                          {index + 1}
+                        </span>
+                        <div className="min-w-0">
+                          <div className="truncate font-semibold text-slate-950">{candidate.title}</div>
+                          <div className="mt-1 text-xs text-slate-500">{candidate.archetype}</div>
+                        </div>
+                      </div>
+                      <div className="mt-3 text-sm leading-6 text-slate-600">{candidate.screening_summary}</div>
+                    </div>
+
+                    <div className="grid shrink-0 gap-2 text-right sm:min-w-[150px]">
+                      <div>
+                        <div className="cp-subtle-label">Landed</div>
+                        <div className="mt-2 text-2xl font-display text-slate-950">
+                          ${toDisplay(candidate.summary.landed_cost_per_lb).toFixed(2)}
+                        </div>
+                        <div className="text-xs text-slate-500">{fmtLabel}</div>
+                      </div>
+                      <div className={`text-sm font-semibold ${scoreTone(candidate.scores.total)}`}>
+                        Score {candidate.scores.total.toFixed(1)}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 grid gap-2.5 sm:grid-cols-4">
+                    {(
+                      [
+                        ['Economics', candidate.scores.economics],
+                        ['Evidence', candidate.scores.evidence],
+                        ['Route', candidate.scores.route],
+                        ['Performance', candidate.scores.performance],
+                      ] as const
+                    ).map(([label, score]) => (
+                      <div key={label}>
+                        <div className="flex items-center justify-between gap-2 text-xs text-slate-500">
+                          <span>{label}</span>
+                          <span>{score.toFixed(1)}</span>
+                        </div>
+                        <div className="mt-1.5 h-2 rounded-full bg-slate-200/80">
+                          <div
+                            className="h-full rounded-full bg-[linear-gradient(90deg,#78f2d0,#88a8ff)]"
+                            style={{ width: `${Math.max(8, Math.min(score, 100))}%` }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </section>
+
+        <section className="surface-card p-4">
+          <div className="flex flex-col gap-3 border-b border-slate-900/8 pb-4 sm:flex-row sm:items-start sm:justify-between">
+            <div className="min-w-0">
+              <div className="cp-subtle-label">Selected candidate</div>
+              <div className="cp-heading-lg mt-2">{activeCandidate.title}</div>
+              <div className="mt-1 text-sm text-slate-500">{activeCandidate.archetype}</div>
+            </div>
+
+            <button onClick={() => loadIntoCalculator(activeCandidate)} className="cp-button-primary">
+              Load into calculator
+            </button>
+          </div>
+
+          <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+            <MetricTile
+              label="Landed cost"
+              value={`$${toDisplay(activeCandidate.summary.landed_cost_per_lb).toFixed(2)}`}
+              detail={fmtLabel}
+            />
+            <MetricTile
+              label="Materials"
+              value={`$${toDisplay(activeCandidate.summary.materials_cost_per_lb).toFixed(2)}`}
+              detail="Raw material stack"
+            />
+            <MetricTile
+              label="Processing"
+              value={`$${toDisplay(activeCandidate.summary.processing_cost_per_lb).toFixed(2)}`}
+              detail="Step-method operations"
+            />
+            <MetricTile
+              label="Route extras"
+              value={`$${toDisplay(activeCandidate.summary.route_extra_cost_per_lb).toFixed(2)}`}
+              detail="QA + activation + route overhead"
+            />
+          </div>
+
+          <div className="mt-4 grid gap-4 xl:grid-cols-[minmax(0,1.05fr)_minmax(330px,0.95fr)]">
+            <div className="space-y-4">
+              <div className="surface-ghost p-4">
+                <div className="cp-subtle-label">Manufacturing route</div>
+                <div className="mt-2 cp-heading-sm">{activeCandidate.route.name}</div>
+                <div className="mt-2 text-sm leading-7 text-slate-600">{activeCandidate.route.route_note}</div>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <span className="cp-chip">{activeCandidate.route.manufacturing_mode}</span>
+                  <span className="cp-chip">{activeCandidate.summary.temperature_window_c[0]}-{activeCandidate.summary.temperature_window_c[1]} C</span>
+                  <span className="cp-chip">{activeCandidate.summary.scale} scale</span>
+                </div>
+
+                <div className="mt-4 grid gap-3 md:grid-cols-3">
+                  {(
+                    [
+                      ['Preprocess', activeCandidate.route.preprocess],
+                      ['Synthesis', activeCandidate.route.synthesis],
+                      ['Postprocess', activeCandidate.route.postprocess],
+                    ] as Array<[string, string[]]>
+                  ).map(([label, items]) => (
+                    <div key={label} className="rounded-[22px] border border-slate-900/8 bg-white/64 p-3">
+                      <div className="cp-subtle-label">{label}</div>
+                      <div className="mt-3 space-y-2">
+                        {items.map((item) => (
+                          <div key={item} className="text-sm leading-6 text-slate-700">
+                            {item}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-4 rounded-[22px] border border-slate-900/8 bg-white/64 p-3">
+                  <div className="cp-subtle-label">Quality gates</div>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {activeCandidate.route.quality_gates.map((item) => (
+                      <span key={item} className="cp-chip">
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="surface-ghost p-4">
+                <div className="cp-subtle-label">Component evidence</div>
+                <div className="mt-4 space-y-3">
+                  {activeCandidate.components.map((component) => (
+                    <div
+                      key={`${component.name}-${component.role}`}
+                      className="rounded-[22px] border border-slate-900/8 bg-white/64 px-4 py-3"
+                    >
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                        <div>
+                          <div className="font-semibold text-slate-950">{component.name}</div>
+                          <div className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-400">
+                            {component.role.replace('_', ' ')}
+                          </div>
+                        </div>
+                        <div className="text-left sm:text-right">
+                          <div className="text-lg font-display text-slate-950">
+                            ${toDisplay(component.cost_per_lb_cat).toFixed(2)}
+                          </div>
+                          <div className="text-xs text-slate-500">{component.cost_pct.toFixed(1)}% of materials</div>
+                        </div>
+                      </div>
+
+                      <div className="mt-3 flex flex-wrap items-center gap-2">
+                        <span className={`rounded-full border px-3 py-1 text-xs font-semibold ${sourceTone(component.source_type)}`}>
+                          {component.source_type}
+                        </span>
+                        <span className="cp-chip">{component.evidence.label}</span>
+                        <span className="cp-chip">Confidence {component.evidence.confidence_score}</span>
+                      </div>
+                      <div className="mt-3 text-sm leading-6 text-slate-600">{component.pricing_note}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="surface-ghost p-4">
+                <div className="cp-subtle-label">Scoring readout</div>
+                <div className="mt-4 space-y-3">
+                  {(
+                    [
+                      ['Economics', activeCandidate.scores.economics, 'Current landed catalyst cost'],
+                      ['Evidence', activeCandidate.scores.evidence, 'Source confidence across price drivers'],
+                      ['Route', activeCandidate.scores.route, 'Manufacturing reproducibility and maturity'],
+                      ['Performance', activeCandidate.scores.performance, 'Activity / operating window credit'],
+                    ] as const
+                  ).map(([label, score, detail]) => (
+                    <div key={label}>
+                      <div className="flex items-center justify-between gap-2 text-sm">
+                        <span className="font-semibold text-slate-900">{label}</span>
+                        <span className={scoreTone(score)}>{score.toFixed(1)}</span>
+                      </div>
+                      <div className="mt-2 h-2 rounded-full bg-slate-200/80">
+                        <div
+                          className="h-full rounded-full bg-[linear-gradient(90deg,#78f2d0,#88a8ff)]"
+                          style={{ width: `${Math.max(8, Math.min(score, 100))}%` }}
+                        />
+                      </div>
+                      <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="surface-ghost p-4">
+                <div className="cp-subtle-label">Decision notes</div>
+                <div className="mt-3 space-y-2">
+                  {activeCandidate.decision_notes.map((note) => (
+                    <div key={note} className="rounded-[18px] border border-slate-900/8 bg-white/64 px-3 py-2 text-sm leading-6 text-slate-700">
+                      {note}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="surface-ghost p-4">
+                <div className="cp-subtle-label">Literature + catalog anchors</div>
+                <div className="mt-3 space-y-3">
+                  {activeCandidate.literature_basis.map((item) => (
+                    <a
+                      key={item.id}
+                      href={item.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="block rounded-[18px] border border-slate-900/8 bg-white/64 px-3 py-3 transition hover:bg-white"
+                    >
+                      <div className="font-semibold text-slate-950">{item.label}</div>
+                      <div className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-400">{item.kind}</div>
+                      <div className="mt-2 text-sm leading-6 text-slate-600">{item.note}</div>
+                    </a>
+                  ))}
+                </div>
+
+                <div className="mt-4 space-y-3">
+                  {activeCandidate.catalog_quotes.map((quote) => (
+                    <a
+                      key={quote.id}
+                      href={quote.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="block rounded-[18px] border border-slate-900/8 bg-white/64 px-3 py-3 transition hover:bg-white"
+                    >
+                      <div className="font-semibold text-slate-950">{quote.material}</div>
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        <span className="cp-chip">{quote.pack_size}</span>
+                        <span className="cp-chip">${quote.price_usd.toFixed(2)} pack</span>
+                        <span className="cp-chip">${quote.normalized_price_per_lb.toFixed(0)}/lb normalized</span>
+                      </div>
+                      <div className="mt-2 text-sm leading-6 text-slate-600">{quote.note}</div>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
       </div>
     </div>

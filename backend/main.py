@@ -10,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from backend.config import settings
 from backend.database import create_db_and_tables
-from backend.routers import calculator, catcost_import, compare, materials, prices, uncertainty
+from backend.routers import calculator, catcost_import, compare, decision, materials, prices, uncertainty
 from backend.services.price_scheduler import collect_prices
 
 logger = logging.getLogger(__name__)
@@ -85,6 +85,7 @@ app.include_router(materials.router)
 app.include_router(uncertainty.router)
 app.include_router(compare.router)
 app.include_router(catcost_import.router)
+app.include_router(decision.router)
 
 
 @app.get("/api/health")

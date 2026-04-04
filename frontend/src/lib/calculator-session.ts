@@ -1,4 +1,4 @@
-import type { CostResult } from './api';
+import type { CostResult, DecisionCandidate } from './api';
 
 export type CalculatorRole = 'active_metal' | 'promoter' | 'support';
 export type CalculatorSourceType = 'live' | 'indexed' | 'manual';
@@ -18,6 +18,7 @@ export interface CalculatorDraft {
   steps: string[];
   orderSize: number;
   pricesUpdatedAt: string | null;
+  benchmarkCandidate?: CalculatorBenchmarkPreset | null;
 }
 
 export interface CalculatorResultSnapshot {
@@ -32,7 +33,13 @@ export interface CalculatorResultSnapshot {
   nonSupportWt: number;
   supportWtPct: number;
   generatedAt: string;
+  benchmarkCandidate?: CalculatorBenchmarkPreset | null;
 }
+
+export type CalculatorBenchmarkPreset = Pick<
+  DecisionCandidate,
+  'slug' | 'title' | 'archetype' | 'screening_basis' | 'screening_summary' | 'route' | 'scores' | 'decision_notes'
+>;
 
 const DRAFT_KEY = 'catprice_calculator_draft';
 const RESULT_KEY = 'catprice_calculator_result';

@@ -93,6 +93,17 @@ export interface MetalPrice {
   source_type: 'live' | 'indexed' | 'manual';
   is_live: boolean;
   fetched_at: string | null;
+  evidence: {
+    tier: string;
+    confidence_score: number;
+    transparency: string;
+    acquisition_mode: string;
+    freshness_target_hours: number | null;
+    freshness_status: string;
+    age_hours: number | null;
+    label: string;
+    note: string;
+  };
 }
 
 export const fetchPrices = () => request<MetalPrice[]>('/prices');
@@ -157,3 +168,125 @@ export const checkHealth = () => request<{ status: string; version: string }>('/
 // Refresh prices
 export const refreshPrices = () =>
   request<{ status: string; prices_fetched: number }>('/prices/refresh', { method: 'POST' });
+
+export interface BenchmarkFamilySummary {
+  family: string;
+  title: string;
+  reaction: string;
+  objective: string;
+  candidate_count: number;
+}
+
+export interface DecisionCitation {
+  id: string;
+  label: string;
+  url: string;
+  kind: string;
+  note: string;
+}
+
+export interface CatalogQuote {
+  id: string;
+  supplier: string;
+  material: string;
+  sku: string;
+  pack_size: string;
+  price_usd: number;
+  normalized_price_per_lb: number;
+  url: string;
+  note: string;
+}
+
+export interface DecisionComponent {
+  role: string;
+  name: string;
+  wt_pct: number;
+  wt_frac: number;
+  price_per_lb: number;
+  precursor_markup: number;
+  cost_per_lb_cat: number;
+  cost_pct: number;
+  source_type: string;
+  source: string;
+  price_basis: string;
+  pricing_note: string;
+  evidence: MetalPrice['evidence'];
+  catalog_quotes: CatalogQuote[];
+}
+
+export interface DecisionCandidate {
+  slug: string;
+  title: string;
+  archetype: string;
+  screening_basis: string;
+  screening_summary: string;
+  summary: {
+    base_estimated_price_per_lb: number;
+    landed_cost_per_lb: number;
+    landed_cost_per_kg: number;
+    route_extra_cost_per_lb: number;
+    materials_cost_per_lb: number;
+    processing_cost_per_lb: number;
+    scale: string;
+    temperature_window_c: [number, number];
+    dominant_cost_driver: string;
+  };
+  scores: {
+    economics: number;
+    evidence: number;
+    route: number;
+    performance: number;
+    total: number;
+  };
+  route: {
+    name: string;
+    manufacturing_mode: string;
+    preprocess: string[];
+    synthesis: string[];
+    postprocess: string[];
+    quality_gates: string[];
+    steps: string[];
+    route_note: string;
+  };
+  evidence_summary: {
+    weighted_confidence_score: number;
+    live_component_count: number;
+    fixed_component_count: number;
+    indexed_component_count: number;
+  };
+  components: DecisionComponent[];
+  decision_notes: string[];
+  literature_basis: DecisionCitation[];
+  catalog_quotes: CatalogQuote[];
+  estimate: CostResult;
+}
+
+export interface DecisionBenchmark {
+  family: string;
+  title: string;
+  reaction: string;
+  objective: string;
+  decision_profile: {
+    id: 'balanced' | 'cost-first' | 'evidence-first';
+    label: string;
+    description: string;
+    weights: {
+      economics: number;
+      evidence: number;
+      route: number;
+      performance: number;
+    };
+  };
+  price_basis_updated_at: string | null;
+  winner: DecisionCandidate | null;
+  candidates: DecisionCandidate[];
+  citations: DecisionCitation[];
+}
+
+export const fetchBenchmarkFamilies = () => request<{ families: BenchmarkFamilySummary[] }>('/decision/benchmarks');
+
+export const fetchDecisionBenchmark = (
+  family: string,
+  profile: 'balanced' | 'cost-first' | 'evidence-first' = 'balanced',
+) =>
+  request<DecisionBenchmark>(`/decision/benchmarks/${family}?profile=${profile}`);

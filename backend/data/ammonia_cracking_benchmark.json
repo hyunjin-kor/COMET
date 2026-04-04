@@ -1,0 +1,437 @@
+{
+  "family": "ammonia-cracking",
+  "title": "Ammonia cracking benchmark harness",
+  "reaction": "2 NH3 -> N2 + 3 H2",
+  "objective": "Rank benchmark ammonia-decomposition catalysts with live metal feeds, transparent procurement anchors, and route-confidence weighting.",
+  "decision_profiles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Balance economics, source confidence, route confidence, and performance.",
+      "weights": {
+        "economics": 0.45,
+        "evidence": 0.2,
+        "route": 0.2,
+        "performance": 0.15
+      }
+    },
+    "cost-first": {
+      "label": "Cost-first",
+      "description": "Bias ranking toward selling cost while keeping route and evidence guardrails.",
+      "weights": {
+        "economics": 0.6,
+        "evidence": 0.15,
+        "route": 0.15,
+        "performance": 0.1
+      }
+    },
+    "evidence-first": {
+      "label": "Evidence-first",
+      "description": "Reward transparent, higher-confidence pricing and more reproducible routes.",
+      "weights": {
+        "economics": 0.35,
+        "evidence": 0.35,
+        "route": 0.15,
+        "performance": 0.15
+      }
+    }
+  },
+  "citations": [
+    {
+      "id": "economic-screening-2026",
+      "label": "Cleaner Energy Systems 2026",
+      "url": "https://naos-be.zcu.cz/server/api/core/bitstreams/ee92fa23-ea1c-42b4-ad67-e0230bce7552/content",
+      "kind": "literature",
+      "note": "Economic analysis summary comparing Ru, Ni, and Co ammonia-decomposition catalysts under matched conditions."
+    },
+    {
+      "id": "ru-mgo-nature-2023",
+      "label": "Nature Communications 2023",
+      "url": "https://www.nature.com/articles/s41467-023-36339-w",
+      "kind": "literature",
+      "note": "Ru ensembles on MgO(111) reported as a high-activity ammonia-decomposition architecture."
+    },
+    {
+      "id": "ni-mgo-ceo2-2025",
+      "label": "PubMed 2025",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41452228/",
+      "kind": "literature",
+      "note": "Ni_xMg_1-xO/CeO2 interface catalyst highlighted for efficient ammonia decomposition without noble metal loading."
+    },
+    {
+      "id": "sigma-ni-nitrate",
+      "label": "Sigma-Aldrich 203874",
+      "url": "https://www.sigmaaldrich.com/US/en/product/aldrich/203874",
+      "kind": "catalog",
+      "note": "Nickel nitrate hexahydrate procurement anchor with public pack-size pricing."
+    },
+    {
+      "id": "sigma-ru-chloride",
+      "label": "Sigma-Aldrich 206229",
+      "url": "https://www.sigmaaldrich.com/US/en/product/aldrich/206229",
+      "kind": "catalog",
+      "note": "Ruthenium chloride hydrate procurement anchor with public pack-size pricing."
+    },
+    {
+      "id": "sigma-mgo",
+      "label": "Sigma-Aldrich 63107",
+      "url": "https://www.sigmaaldrich.com/US/en/product/sial/63107",
+      "kind": "catalog",
+      "note": "Magnesium oxide reagent pricing used as a transparent support-price anchor, not a direct industrial support basis."
+    },
+    {
+      "id": "sigma-ceo2",
+      "label": "Sigma-Aldrich 211575",
+      "url": "https://www.sigmaaldrich.com/US/en/product/aldrich/211575",
+      "kind": "catalog",
+      "note": "Cerium oxide public catalog price used as a promoter/support procurement anchor."
+    },
+    {
+      "id": "sigma-alumina",
+      "label": "Sigma-Aldrich 202606",
+      "url": "https://www.sigmaaldrich.com/US/en/product/aldrich/202606",
+      "kind": "catalog",
+      "note": "Alumina public catalog price used as a transparency anchor while screening cost uses an engineering support proxy."
+    }
+  ],
+  "catalog_quotes": [
+    {
+      "id": "sigma-ni-nitrate",
+      "supplier": "Sigma-Aldrich",
+      "material": "Nickel(II) nitrate hexahydrate",
+      "sku": "203874-20G",
+      "pack_size": "20 g",
+      "price_usd": 73.5,
+      "normalized_price_per_lb": 1666.81,
+      "url": "https://www.sigmaaldrich.com/US/en/product/aldrich/203874",
+      "note": "Public reagent price used as a procurement sanity check; CatPrice still tracks Ni on a live metal basis for screening."
+    },
+    {
+      "id": "sigma-ru-chloride",
+      "supplier": "Sigma-Aldrich",
+      "material": "Ruthenium(III) chloride hydrate",
+      "sku": "206229-1G",
+      "pack_size": "1 g",
+      "price_usd": 68.7,
+      "normalized_price_per_lb": 31161.02,
+      "url": "https://www.sigmaaldrich.com/US/en/product/aldrich/206229",
+      "note": "Transparent reagent price anchor for Ru precursor procurement."
+    },
+    {
+      "id": "sigma-mgo",
+      "supplier": "Sigma-Aldrich",
+      "material": "Magnesium oxide",
+      "sku": "63107-1KG-F",
+      "pack_size": "1 kg",
+      "price_usd": 212.0,
+      "normalized_price_per_lb": 96.16,
+      "url": "https://www.sigmaaldrich.com/US/en/product/sial/63107",
+      "note": "Public support anchor; bulk industrial support pricing is screened separately to avoid lab-pack distortion."
+    },
+    {
+      "id": "sigma-ceo2",
+      "supplier": "Sigma-Aldrich",
+      "material": "Cerium(IV) oxide",
+      "sku": "211575-100G",
+      "pack_size": "100 g",
+      "price_usd": 76.5,
+      "normalized_price_per_lb": 346.99,
+      "url": "https://www.sigmaaldrich.com/US/en/product/aldrich/211575",
+      "note": "Transparent promoter/support anchor for ceria-containing routes."
+    },
+    {
+      "id": "sigma-alumina",
+      "supplier": "Sigma-Aldrich",
+      "material": "Aluminum oxide",
+      "sku": "202606-20G",
+      "pack_size": "20 g",
+      "price_usd": 224.0,
+      "normalized_price_per_lb": 5079.31,
+      "url": "https://www.sigmaaldrich.com/US/en/product/aldrich/202606",
+      "note": "Public alumina catalog price used as a transparency anchor; screening support cost remains an engineering proxy."
+    }
+  ],
+  "route_templates": [
+    {
+      "id": "oxide-wet-impregnation",
+      "name": "Wet impregnation on oxide support",
+      "manufacturing_mode": "Fixed-bed pellet catalyst",
+      "preprocess": [
+        "Support pre-dry and sieve",
+        "Metal-salt solution make-up",
+        "Impregnation liquor ratio check"
+      ],
+      "synthesis": [
+        "Slurry mixing or incipient wetness loading",
+        "Aging after deposition"
+      ],
+      "postprocess": [
+        "Rotary drying",
+        "Indirect calcination",
+        "Hydrogen activation"
+      ],
+      "quality_gates": [
+        "Metal loading confirmation",
+        "Surface area and crush strength",
+        "Ammonia conversion spot test"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple"
+      ],
+      "non_step_cost_per_lb": 0.42,
+      "route_confidence": 87,
+      "route_note": "Most transferable route for industrial catalyst screening and the easiest baseline to scale."
+    },
+    {
+      "id": "interface-engineered-ni-route",
+      "name": "Interface-engineered Ni-MgO-CeO2 route",
+      "manufacturing_mode": "Mixed-oxide interface catalyst",
+      "preprocess": [
+        "Separate oxide support preparation",
+        "Metal and promoter precursor balancing",
+        "Controlled pH or precursor complexation"
+      ],
+      "synthesis": [
+        "Multistep deposition or co-precipitation",
+        "Intermediate filtration and wash"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination",
+        "Hydrogen activation and interface conditioning"
+      ],
+      "quality_gates": [
+        "Ni dispersion check",
+        "Ceria distribution / oxygen-vacancy proxy",
+        "Ammonia light-off comparison"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "reactor_multistep",
+        "filter_rotary_vacuum",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple"
+      ],
+      "non_step_cost_per_lb": 0.74,
+      "route_confidence": 69,
+      "route_note": "Improves performance without noble metal loading, but route discipline and support engineering are less mature."
+    },
+    {
+      "id": "ru-basic-oxide-route",
+      "name": "Ru dispersion on basic oxide",
+      "manufacturing_mode": "High-activity Ru screening route",
+      "preprocess": [
+        "Support conditioning",
+        "Low-loading Ru precursor dosing",
+        "Noble-metal accounting"
+      ],
+      "synthesis": [
+        "Low-volume deposition with tight Ru balance",
+        "Dispersion hold or controlled drying"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination or decomposition hold",
+        "Reduction / activation"
+      ],
+      "quality_gates": [
+        "Ru utilization check",
+        "Support basicity confirmation",
+        "Low-temperature ammonia conversion"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple"
+      ],
+      "non_step_cost_per_lb": 0.58,
+      "route_confidence": 76,
+      "route_note": "Premium low-temperature route with the clearest activity upside but the highest sensitivity to Ru pricing."
+    }
+  ],
+  "candidates": [
+    {
+      "slug": "ni-alumina-baseline",
+      "title": "Ni/gamma-Al2O3 baseline",
+      "archetype": "Cost anchor",
+      "screening_basis": "engineering_proxy",
+      "summary": "Non-noble industrial baseline for current-price screening.",
+      "route_template_id": "oxide-wet-impregnation",
+      "order_size_tons": 20,
+      "performance_index": 63,
+      "manufacturing_readiness": 91,
+      "screening_exactness": 60,
+      "temperature_window_c": [550, 700],
+      "literature_basis_ids": [
+        "economic-screening-2026",
+        "sigma-ni-nitrate",
+        "sigma-alumina"
+      ],
+      "catalog_quote_ids": [
+        "sigma-ni-nitrate",
+        "sigma-alumina"
+      ],
+      "decision_notes": [
+        "Tracks Ni live price directly, so economics move with a broadly traded industrial metal.",
+        "Lowest route complexity and easiest basis to defend in desktop screening."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Ni",
+          "wt_pct": 12.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ni",
+            "precursor_markup": 1.18,
+            "note": "Live Ni feed with nitrate-style precursor markup."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Al2O3",
+          "wt_pct": 88.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.5,
+            "evidence_label": "Engineering support proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 64,
+            "transparency": "derived_index",
+            "note": "Industrial support screening proxy retained to avoid lab-pack alumina distortion."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "ni-mgo-ceo2-interface",
+      "title": "Ni-MgO/CeO2 interface",
+      "archetype": "Non-noble performance route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Ni route that aims to recover activity through support/interface engineering instead of noble metal loading.",
+      "route_template_id": "interface-engineered-ni-route",
+      "order_size_tons": 20,
+      "performance_index": 84,
+      "manufacturing_readiness": 61,
+      "screening_exactness": 67,
+      "temperature_window_c": [475, 650],
+      "literature_basis_ids": [
+        "economic-screening-2026",
+        "ni-mgo-ceo2-2025",
+        "sigma-ni-nitrate",
+        "sigma-ceo2",
+        "sigma-mgo"
+      ],
+      "catalog_quote_ids": [
+        "sigma-ni-nitrate",
+        "sigma-ceo2",
+        "sigma-mgo"
+      ],
+      "decision_notes": [
+        "Still avoids Ru, but the route adds ceria handling and tighter support engineering.",
+        "Useful when you want better low-temperature activity without moving to a noble-metal basis."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Ni",
+          "wt_pct": 15.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ni",
+            "precursor_markup": 1.18,
+            "note": "Live Ni feed with precursor markup."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "CeO2",
+          "wt_pct": 15.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 2.0,
+            "evidence_label": "Ceria screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 66,
+            "transparency": "derived_index",
+            "note": "Ceria promoter priced with a conservative engineering proxy; Sigma quote retained as a procurement anchor."
+          }
+        },
+        {
+          "role": "support",
+          "name": "MgO",
+          "wt_pct": 70.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.4,
+            "evidence_label": "MgO engineering proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 63,
+            "transparency": "derived_index",
+            "note": "MgO support uses a screening proxy rather than reagent-pack pricing."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "ru-mgo-premium",
+      "title": "Ru/MgO premium",
+      "archetype": "Low-temperature premium",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "High-activity Ru route for low-temperature ammonia cracking when activity is worth a noble-metal premium.",
+      "route_template_id": "ru-basic-oxide-route",
+      "order_size_tons": 20,
+      "performance_index": 96,
+      "manufacturing_readiness": 74,
+      "screening_exactness": 84,
+      "temperature_window_c": [400, 575],
+      "literature_basis_ids": [
+        "economic-screening-2026",
+        "ru-mgo-nature-2023",
+        "sigma-ru-chloride",
+        "sigma-mgo"
+      ],
+      "catalog_quote_ids": [
+        "sigma-ru-chloride",
+        "sigma-mgo"
+      ],
+      "decision_notes": [
+        "Performance leader at low temperature, but economics are dominated by Ru exposure.",
+        "Best fit when reactor temperature or start-up intensity matters more than catalyst replacement cost."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Ru",
+          "wt_pct": 3.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ru",
+            "precursor_markup": 1.32,
+            "note": "Ru feed tracked on the live/reference metal board with precursor markup."
+          }
+        },
+        {
+          "role": "support",
+          "name": "MgO",
+          "wt_pct": 97.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.4,
+            "evidence_label": "MgO engineering proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 63,
+            "transparency": "derived_index",
+            "note": "Support cost kept on an engineering basis even though a public Sigma quote is attached for transparency."
+          }
+        }
+      ]
+    }
+  ]
+}

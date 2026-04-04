@@ -219,7 +219,9 @@ export default function Prices() {
                             </span>
                             <div className="min-w-0">
                               <div className="truncate font-semibold text-slate-950">{row.name}</div>
-                              <div className="truncate text-xs text-slate-500">{sourceDescription(row)}</div>
+                              <div className="truncate text-xs text-slate-500">
+                                {sourceDescription(row)} · {row.evidence.label}
+                              </div>
                             </div>
                           </div>
 
@@ -372,6 +374,26 @@ export default function Prices() {
                       <div className="mt-1 text-xs leading-5 text-slate-400">{historySource || 'Stored metal price series'}</div>
                     </div>
                   </div>
+
+                  {selectedRow ? (
+                    <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                      <div className="rounded-[22px] border border-white/10 bg-white/6 p-3">
+                        <div className="cp-subtle-label !text-slate-400">Evidence tier</div>
+                        <div className="mt-2 text-sm font-semibold text-white">{selectedRow.evidence.label}</div>
+                        <div className="mt-1 text-xs leading-5 text-slate-400">{selectedRow.evidence.note}</div>
+                      </div>
+                      <div className="rounded-[22px] border border-white/10 bg-white/6 p-3">
+                        <div className="cp-subtle-label !text-slate-400">Confidence</div>
+                        <div className="mt-2 text-sm font-semibold text-white">{selectedRow.evidence.confidence_score}</div>
+                        <div className="mt-1 text-xs leading-5 text-slate-400">{selectedRow.evidence.transparency}</div>
+                      </div>
+                      <div className="rounded-[22px] border border-white/10 bg-white/6 p-3">
+                        <div className="cp-subtle-label !text-slate-400">Freshness</div>
+                        <div className="mt-2 text-sm font-semibold text-white">{selectedRow.evidence.freshness_status}</div>
+                        <div className="mt-1 text-xs leading-5 text-slate-400">{selectedRow.evidence.acquisition_mode}</div>
+                      </div>
+                    </div>
+                  ) : null}
                 </>
               )}
             </div>

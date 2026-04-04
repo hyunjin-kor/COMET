@@ -92,6 +92,7 @@ export default function CalculatorResult() {
                 <span className="cp-chip-dark">Generated {generatedAt}</span>
                 <span className="cp-chip-dark">{snapshot.selectedSupportName ?? 'Support pending'}</span>
                 <span className="cp-chip-dark">{snapshot.stepLabels.length} process steps</span>
+                {snapshot.benchmarkCandidate ? <span className="cp-chip-dark">{snapshot.benchmarkCandidate.title}</span> : null}
               </div>
             </div>
           </div>
@@ -164,6 +165,19 @@ export default function CalculatorResult() {
               {snapshot.stepLabels.map((label) => <span key={label} className="cp-chip">{label}</span>)}
             </div>
           </div>
+
+          {snapshot.benchmarkCandidate ? (
+            <div className="mt-4 rounded-[24px] border border-emerald-200 bg-emerald-50/80 p-4">
+              <div className="cp-subtle-label !text-emerald-700">Benchmark context</div>
+              <div className="mt-2 cp-heading-sm">{snapshot.benchmarkCandidate.title}</div>
+              <div className="mt-2 text-sm leading-6 text-emerald-900">{snapshot.benchmarkCandidate.screening_summary}</div>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <span className="cp-chip">{snapshot.benchmarkCandidate.archetype}</span>
+                <span className="cp-chip">{snapshot.benchmarkCandidate.route.name}</span>
+                <span className="cp-chip">Evidence {snapshot.benchmarkCandidate.scores.evidence.toFixed(1)}</span>
+              </div>
+            </div>
+          ) : null}
         </section>
 
         <section className="surface-card p-4">

@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   calculateCost,
+  fetchDecisionBenchmark,
   fetchPrices,
   refreshPrices as refreshPriceFeed,
   type ComponentInput,
   type CostInput,
+  type DecisionCandidate,
   type MetalPrice,
 } from '../lib/api';
 import {
@@ -13,6 +15,7 @@ import {
   loadCalculatorResultSnapshot,
   saveCalculatorDraft,
   saveCalculatorResultSnapshot,
+  type CalculatorBenchmarkPreset,
   type CalculatorResultSnapshot,
   type CalculatorRow,
 } from '../lib/calculator-session';
@@ -71,10 +74,33 @@ function uid() {
 const toPerLb = (price: number, unit: string) => unit === '$/troy_oz' ? price * TROY_OZ_PER_LB : unit === '$/kg' ? price / 2.20462 : price;
 const getScale = (tons: number): Scale => (tons < 5 ? 'small' : tons < 70 ? 'medium' : 'large');
 const sourceTypeLabel = (sourceType: SourceType) => sourceType === 'live' ? 'Live' : sourceType === 'indexed' ? 'Indexed' : 'Manual';
+const toBenchmarkPreset = (candidate: DecisionCandidate): CalculatorBenchmarkPreset => ({
+  slug: candidate.slug,
+  title: candidate.title,
+  archetype: candidate.archetype,
+  screening_basis: candidate.screening_basis,
+  screening_summary: candidate.screening_summary,
+  route: candidate.route,
+  scores: candidate.scores,
+  decision_notes: candidate.decision_notes,
+});
 const defaultRows = (): CalculatorRow[] => [
   { id: uid(), role: 'active_metal', name: 'Ni', wt_pct: 20, price_per_lb: 0, source_type: 'manual', source: 'Manual input' },
   { id: uid(), role: 'support', name: 'Al2O3', wt_pct: 80, price_per_lb: 0.5, source_type: 'manual', source: 'Manual support default' },
 ];
+const rowsFromCandidate = (candidate: DecisionCandidate): CalculatorRow[] =>
+  candidate.components.map((component) => ({
+    id: uid(),
+    role: component.role as CalculatorRow['role'],
+    name: component.name,
+    wt_pct: component.wt_pct,
+    price_per_lb: component.price_per_lb,
+    source_type:
+      component.source_type === 'live' || component.source_type === 'indexed'
+        ? component.source_type
+        : 'manual',
+    source: component.pricing_note || component.source,
+  }));
 const sourceTone = (sourceType: SourceType) => sourceType === 'live' ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : sourceType === 'indexed' ? 'border-amber-200 bg-amber-50 text-amber-700' : 'border-slate-200 bg-white text-slate-600';
 const priceTone = (sourceType: SourceType) => sourceType === 'live' ? 'border-emerald-200 bg-emerald-50/70 text-emerald-800' : sourceType === 'indexed' ? 'border-amber-200 bg-amber-50/70 text-amber-800' : '';
 const scaleMeta = (scale: Scale) => scale === 'small' ? { label: 'Small', rate: '1 t/day', classes: 'border-violet-200 bg-violet-50 text-violet-700' } : scale === 'medium' ? { label: 'Medium', rate: '10 t/day', classes: 'border-sky-200 bg-sky-50 text-sky-700' } : { label: 'Large', rate: '150 t/day', classes: 'border-teal-200 bg-teal-50 text-teal-700' };
@@ -97,6 +123,8 @@ export default function Calculator() {
   const [rows, setRows] = useState<CalculatorRow[]>(() => storedDraft?.rows?.length ? storedDraft.rows : defaultRows());
   const [steps, setSteps] = useState<string[]>(() => storedDraft?.steps?.length ? storedDraft.steps : DEFAULT_STEPS);
   const [orderSize, setOrderSize] = useState<number>(() => storedDraft?.orderSize ?? 20);
+  const [benchmarkCandidates, setBenchmarkCandidates] = useState<DecisionCandidate[]>([]);
+  const [selectedBenchmark, setSelectedBenchmark] = useState<CalculatorBenchmarkPreset | null>(() => storedDraft?.benchmarkCandidate ?? null);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState('');
@@ -107,8 +135,14 @@ export default function Calculator() {
   const scale = scaleMeta(currentScale);
 
   useEffect(() => {
-    saveCalculatorDraft({ rows, steps, orderSize, pricesUpdatedAt: pricesUpdatedAt ? pricesUpdatedAt.toISOString() : null });
-  }, [orderSize, pricesUpdatedAt, rows, steps]);
+    saveCalculatorDraft({
+      rows,
+      steps,
+      orderSize,
+      pricesUpdatedAt: pricesUpdatedAt ? pricesUpdatedAt.toISOString() : null,
+      benchmarkCandidate: selectedBenchmark,
+    });
+  }, [orderSize, pricesUpdatedAt, rows, selectedBenchmark, steps]);
 
   useEffect(() => {
     setSteps((previous) => previous.filter((key) => {
@@ -129,6 +163,12 @@ export default function Calculator() {
     }
 
     void loadPrices();
+  }, []);
+
+  useEffect(() => {
+    fetchDecisionBenchmark('ammonia-cracking', 'balanced')
+      .then((payload) => setBenchmarkCandidates(payload.candidates))
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -208,6 +248,7 @@ export default function Calculator() {
         nonSupportWt,
         supportWtPct,
         generatedAt: new Date().toISOString(),
+        benchmarkCandidate: selectedBenchmark,
       };
 
       saveCalculatorResultSnapshot(snapshot);
@@ -237,6 +278,63 @@ export default function Calculator() {
         <span className="text-xs text-slate-500">$</span>
         <input type="number" step="0.01" min="0" value={toDisplay(row.price_per_lb).toFixed(2)} readOnly={locked} onChange={(event) => !locked && updateRow(row.id, { price_per_lb: toInternal(Number(event.target.value)) })} className={`input-base w-32 text-right font-mono ${priceTone(row.source_type)} ${locked ? 'cursor-not-allowed' : ''}`} />
         <span className="text-xs text-slate-500">{fmtLabel}</span>
+      </div>
+    );
+  }
+
+  function applyBenchmarkCandidate(candidate: DecisionCandidate) {
+    setRows(rowsFromCandidate(candidate));
+    setSteps(candidate.route.steps);
+    setOrderSize(Number(candidate.estimate.input_summary.order_size_tons ?? 20));
+    setSelectedBenchmark(toBenchmarkPreset(candidate));
+  }
+
+  function renderBenchmarkBoard() {
+    if (benchmarkCandidates.length === 0) return null;
+
+    return (
+      <div className="surface-ghost p-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <div className="cp-subtle-label">Ammonia cracking benchmark</div>
+            <div className="cp-heading-lg mt-2">Load a literature-guided catalyst route</div>
+            <p className="mt-2 text-sm leading-7 text-slate-600">
+              These presets inject an ammonia decomposition candidate with current price basis, route mapping, and
+              evidence-aware sourcing into the calculator.
+            </p>
+          </div>
+          {selectedBenchmark ? <span className="cp-chip">Applied: {selectedBenchmark.title}</span> : null}
+        </div>
+
+        <div className="mt-4 grid gap-3 xl:grid-cols-3">
+          {benchmarkCandidates.map((candidate) => {
+            const active = selectedBenchmark?.slug === candidate.slug;
+            return (
+              <button
+                key={candidate.slug}
+                onClick={() => applyBenchmarkCandidate(candidate)}
+                className={`rounded-[24px] border px-4 py-4 text-left transition ${
+                  active
+                    ? 'border-emerald-200 bg-emerald-50/80'
+                    : 'border-slate-900/8 bg-white/64 hover:bg-white/88'
+                }`}
+              >
+                <div className="cp-subtle-label">{candidate.archetype}</div>
+                <div className="mt-2 font-display text-[1.35rem] leading-[1.02] text-slate-950">
+                  {candidate.title}
+                </div>
+                <div className="mt-2 text-sm leading-6 text-slate-600">{candidate.screening_summary}</div>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <span className="cp-chip">
+                    ${toDisplay(candidate.summary.landed_cost_per_lb).toFixed(2)}
+                    {fmtLabel}
+                  </span>
+                  <span className="cp-chip">{candidate.route.name}</span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
       </div>
     );
   }
@@ -299,6 +397,12 @@ export default function Calculator() {
               <div className="pb-1 text-lg text-slate-300">{latestSnapshot ? fmtLabel : ''}</div>
             </div>
             <div className="mt-2 text-sm text-slate-300">{latestSnapshot ? `Generated ${latestGenerated} with ${latestSnapshot.selectedSupportName ?? 'support'} as the current basis.` : 'No result board created yet. The first successful estimate will open it automatically.'}</div>
+            {latestSnapshot?.benchmarkCandidate ? (
+              <div className="mt-3 flex flex-wrap gap-2">
+                <span className="cp-chip-dark">{latestSnapshot.benchmarkCandidate.title}</span>
+                <span className="cp-chip-dark">{latestSnapshot.benchmarkCandidate.route.name}</span>
+              </div>
+            ) : null}
             <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
               <MetricTile label="Current scale" value={scale.label} detail={`${orderSize} tons / ${scale.rate}`} dark />
               <MetricTile label="Selected steps" value={String(steps.length)} detail={steps.length > 0 ? `${formatStepLabel(steps[0])}${steps.length > 1 ? ` +${steps.length - 1}` : ''}` : 'Choose at least one'} dark />
@@ -353,6 +457,8 @@ export default function Calculator() {
               <MetricTile label="Current scale" value={scale.label} detail={`${orderSize} tons / ${scale.rate}`} />
             </div>
 
+            {renderBenchmarkBoard()}
+
             <div className="space-y-3.5">
               {renderRows('active_metal')}
               {renderRows('promoter')}
@@ -370,6 +476,13 @@ export default function Calculator() {
 
             <div className="space-y-4 border-t border-slate-900/8 pt-4">
               <div><div className="cp-subtle-label">Step Method</div><h2 className="cp-heading-xl mt-2">Map the lab procedure to industrial process steps</h2><p className="cp-body-copy mt-2 max-w-2xl">Choose the common manufacturing steps that best approximate the lab synthesis, and let order size set the small, medium, or large campaign basis.</p></div>
+              {selectedBenchmark ? (
+                <div className="rounded-[24px] border border-emerald-200 bg-emerald-50/80 px-4 py-4 text-sm text-emerald-900">
+                  <div className="cp-subtle-label !text-emerald-700">Applied route</div>
+                  <div className="mt-2 font-semibold">{selectedBenchmark.route.name}</div>
+                  <div className="mt-2 leading-6">{selectedBenchmark.screening_summary}</div>
+                </div>
+              ) : null}
               <div className="surface-ghost p-3.5">
                 <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
                   <div><div className="cp-subtle-label">Order size</div><div className="mt-3 flex flex-wrap items-center gap-3"><input type="number" min="1" step="1" value={orderSize} onChange={(event) => setOrderSize(Math.max(1, Number(event.target.value)))} className="input-base w-32 text-center font-mono" /><span className="text-sm text-slate-500">tons per campaign</span><span className={`rounded-full border px-3 py-1 text-xs font-semibold ${scale.classes}`}>{scale.label} / {scale.rate}</span></div></div>
