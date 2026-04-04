@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   calculateCost,
+  fetchBenchmarkFamilies,
   fetchDecisionBenchmark,
   fetchPrices,
   refreshPrices as refreshPriceFeed,
+  type BenchmarkFamilySummary,
   type ComponentInput,
   type CostInput,
   type DecisionCandidate,
@@ -124,6 +126,7 @@ export default function Calculator() {
   const [steps, setSteps] = useState<string[]>(() => storedDraft?.steps?.length ? storedDraft.steps : DEFAULT_STEPS);
   const [orderSize, setOrderSize] = useState<number>(() => storedDraft?.orderSize ?? 20);
   const [benchmarkCandidates, setBenchmarkCandidates] = useState<DecisionCandidate[]>([]);
+  const [benchmarkFamily, setBenchmarkFamily] = useState<BenchmarkFamilySummary | null>(null);
   const [selectedBenchmark, setSelectedBenchmark] = useState<CalculatorBenchmarkPreset | null>(() => storedDraft?.benchmarkCandidate ?? null);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -166,9 +169,18 @@ export default function Calculator() {
   }, []);
 
   useEffect(() => {
-    fetchDecisionBenchmark('ammonia-cracking', 'balanced')
-      .then((payload) => setBenchmarkCandidates(payload.candidates))
-      .catch(() => {});
+    async function loadBenchmarkReferences() {
+      try {
+        const familyPayload = await fetchBenchmarkFamilies();
+        const family = familyPayload.families[0];
+        if (!family) return;
+        setBenchmarkFamily(family);
+        const payload = await fetchDecisionBenchmark(family.family, 'balanced');
+        setBenchmarkCandidates(payload.candidates);
+      } catch {}
+    }
+
+    void loadBenchmarkReferences();
   }, []);
 
   useEffect(() => {
@@ -296,14 +308,18 @@ export default function Calculator() {
       <div className="surface-ghost p-4">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <div className="cp-subtle-label">Ammonia cracking benchmark</div>
-            <div className="cp-heading-lg mt-2">Load a literature-guided catalyst route</div>
+            <div className="cp-subtle-label">Optional reference routes</div>
+            <div className="cp-heading-lg mt-2">Load a literature-backed starting recipe</div>
             <p className="mt-2 text-sm leading-7 text-slate-600">
-              These presets inject an ammonia decomposition candidate with current price basis, route mapping, and
-              evidence-aware sourcing into the calculator.
+              Use published catalyst families as sanity checks or starting points, then keep editing freely. The
+              calculator itself remains reaction-agnostic, so you can ignore this panel and build any catalyst from
+              scratch.
             </p>
           </div>
-          {selectedBenchmark ? <span className="cp-chip">Applied: {selectedBenchmark.title}</span> : null}
+          <div className="flex flex-wrap gap-2">
+            {benchmarkFamily ? <span className="cp-chip">Family: {benchmarkFamily.title}</span> : null}
+            {selectedBenchmark ? <span className="cp-chip">Loaded: {selectedBenchmark.title}</span> : null}
+          </div>
         </div>
 
         <div className="mt-4 grid gap-3 xl:grid-cols-3">
@@ -478,7 +494,7 @@ export default function Calculator() {
               <div><div className="cp-subtle-label">Step Method</div><h2 className="cp-heading-xl mt-2">Map the lab procedure to industrial process steps</h2><p className="cp-body-copy mt-2 max-w-2xl">Choose the common manufacturing steps that best approximate the lab synthesis, and let order size set the small, medium, or large campaign basis.</p></div>
               {selectedBenchmark ? (
                 <div className="rounded-[24px] border border-emerald-200 bg-emerald-50/80 px-4 py-4 text-sm text-emerald-900">
-                  <div className="cp-subtle-label !text-emerald-700">Applied route</div>
+                  <div className="cp-subtle-label !text-emerald-700">Loaded reference route</div>
                   <div className="mt-2 font-semibold">{selectedBenchmark.route.name}</div>
                   <div className="mt-2 leading-6">{selectedBenchmark.screening_summary}</div>
                 </div>

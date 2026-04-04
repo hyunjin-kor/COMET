@@ -1,8 +1,8 @@
 {
   "family": "ammonia-cracking",
-  "title": "Ammonia cracking benchmark harness",
+  "title": "Ammonia decomposition reference family",
   "reaction": "2 NH3 -> N2 + 3 H2",
-  "objective": "Rank benchmark ammonia-decomposition catalysts with live metal feeds, transparent procurement anchors, and route-confidence weighting.",
+  "objective": "Optional literature-backed reference family for sanity-checking catalyst economics against a specific reaction window. CatPrice itself remains reaction-agnostic and uses these routes as starting points, not as the product boundary.",
   "decision_profiles": {
     "balanced": {
       "label": "Balanced",
