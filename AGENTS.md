@@ -8,8 +8,8 @@
 ## 0. 프로젝트 정체성
 
 - **이름**: CatPrice (촉매 비용을 "crack"해서 분석한다는 의미)
-- **한줄 설명**: 실시간 금속 시세 기반 촉매 제조원가 추정 오픈소스 도구
-- **라이선스**: MIT
+- **한줄 설명**: 실시간 금속 시세 기반 촉매 제조원가 추정 데스크톱 도구
+- **라이선스**: All rights reserved
 - **핵심 차별점**: CatCost 방법론 기반이지만, 실시간 시세 자동 반영 + 현대적 웹/데스크탑 UI
 - **학술 인용**: Baddour et al. 2018, Van Allsburg et al. 2022
 
@@ -86,7 +86,7 @@ Docs:      MkDocs Material
 catprice/
 ├── AGENTS.md                          ← 이 파일 (Codex 마스터 가이드)
 ├── README.md
-├── LICENSE                            (MIT)
+├── LICENSE                            (All rights reserved)
 ├── pyproject.toml                     (Python 의존성, ruff, pytest 설정)
 ├── docker-compose.yml
 ├── .github/

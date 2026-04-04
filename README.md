@@ -157,4 +157,4 @@ Current reference-family anchors included in the benchmark library:
 
 ## License
 
-All rights reserved.
+Source-available, all rights reserved. See `LICENSE`.

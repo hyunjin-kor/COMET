@@ -19,11 +19,40 @@ const BACKEND_URL  = `http://${BACKEND_HOST}:${BACKEND_PORT}`;
 const HEALTH_URL   = `${BACKEND_URL}/api/health`;
 const MAX_WAIT_MS  = 30_000;    // 30 seconds max startup wait
 const POLL_INTERVAL_MS = 500;
+const ALLOWED_EXTERNAL_HOSTS = new Set([
+  'github.com',
+  'sigmaaldrich.com',
+  'nature.com',
+  'pubmed.ncbi.nlm.nih.gov',
+  'naos-be.zcu.cz',
+  'metals.dev',
+  'metalpriceapi.com',
+  'bls.gov',
+]);
 
 // ─── State ────────────────────────────────────────────────────────────────────
 let mainWindow = null;
 let backendProcess = null;
 let splashWindow = null;
+
+function isAllowedExternalUrl(urlString) {
+  try {
+    const parsed = new URL(urlString);
+    if (parsed.protocol !== 'https:') {
+      return false;
+    }
+
+    const hostname = parsed.hostname.toLowerCase();
+    for (const allowedHost of ALLOWED_EXTERNAL_HOSTS) {
+      if (hostname === allowedHost || hostname.endsWith(`.${allowedHost}`)) {
+        return true;
+      }
+    }
+    return false;
+  } catch (_error) {
+    return false;
+  }
+}
 
 function sendWindowState() {
   if (!mainWindow || mainWindow.isDestroyed()) return;
@@ -355,7 +384,11 @@ function createSplashWindow() {
     resizable: false,
     skipTaskbar: true,
     backgroundColor: '#091321',
-    webPreferences: { nodeIntegration: false },
+    webPreferences: {
+      contextIsolation: true,
+      nodeIntegration: false,
+      sandbox: true,
+    },
   });
 
   const splashHTML = `
@@ -673,7 +706,11 @@ p{color:#7099cc;font-size:14px;max-width:500px;text-align:center}
 
   // Open external links in default browser
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    if (url.startsWith('http')) shell.openExternal(url);
+    if (isAllowedExternalUrl(url)) {
+      shell.openExternal(url);
+    } else {
+      debugLog(`Blocked external navigation to ${url}`);
+    }
     return { action: 'deny' };
   });
 }

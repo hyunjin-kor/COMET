@@ -1,6 +1,6 @@
 # CatPrice — Real-Time Catalyst Cost Estimator
 
-> 촉매 조성을 입력하면 실시간 금속 시세 기반으로 제조원가를 산출하는 오픈소스 도구
+> 촉매 조성을 입력하면 실시간 금속 시세 기반으로 제조원가를 산출하는 데스크톱 도구
 
 ## 1. 프로젝트 개요
 
@@ -21,8 +21,8 @@ CatCost Step Method 방법론 기반 + **실시간 금속 시세 API 연동** + 
 - CatCost가 못하는 것(실시간 시세, 현대 UI)을 보완
 - CatCost 논문(Baddour 2018, Van Allsburg 2022)을 학술적으로 인용
 
-### 1.4 오픈소스
-- License: MIT
+### 1.4 공개 저장소 운영
+- License: All rights reserved
 - GitHub public repository
 - Zenodo DOI (학술 인용용)
 
@@ -263,7 +263,7 @@ CatCost처럼 내장 라이브러리 제공 + 사용자 추가 가능.
 ```
 catprice/
 ├── README.md
-├── LICENSE (MIT)
+├── LICENSE (All rights reserved)
 ├── pyproject.toml
 ├── docker-compose.yml
 │
