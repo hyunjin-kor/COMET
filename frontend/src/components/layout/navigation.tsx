@@ -64,7 +64,7 @@ export type NavigationItem = {
 export const navigationItems: NavigationItem[] = [
   { to: '/', label: 'Calculator', Icon: CalculatorIcon },
   { to: '/prices', label: 'Market Board', Icon: PricesIcon },
-  { to: '/compare', label: 'Compare', Icon: CompareIcon },
+  { to: '/decision', label: 'Decision Board', Icon: CompareIcon },
   { to: '/uncertainty', label: 'Uncertainty', Icon: UncertaintyIcon },
   { to: '/library', label: 'Library', Icon: LibraryIcon },
 ];

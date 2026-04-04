@@ -48,6 +48,26 @@ function Assert-ProcessRunning {
     return $processes
 }
 
+function Wait-ForMainWindow {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Name,
+        [int]$TimeoutSeconds = 15
+    )
+
+    $deadline = (Get-Date).AddSeconds($TimeoutSeconds)
+    while ((Get-Date) -lt $deadline) {
+        $processes = @(Get-Process -Name $Name -ErrorAction SilentlyContinue)
+        $count = @($processes | Where-Object { $_.MainWindowHandle -ne 0 }).Count
+        if ($count -gt 0) {
+            return $count
+        }
+        Start-Sleep -Milliseconds 500
+    }
+
+    return 0
+}
+
 Set-Location $projectRoot
 
 if (-not (Test-Path $packagedExe)) {
@@ -64,7 +84,7 @@ $health = Wait-ForHttpOk -Url $healthUrl -TimeoutSeconds $TimeoutSeconds
 $healthData = $health.Content | ConvertFrom-Json
 
 $processes = @(Assert-ProcessRunning -Name "CatPrice")
-$windowCount = @($processes | Where-Object { $_.MainWindowTitle }).Count
+$windowCount = Wait-ForMainWindow -Name "CatPrice"
 
 Write-Host "[CatPrice] Re-launching app to verify single-instance recovery..."
 Start-Process -FilePath $packagedExe | Out-Null

@@ -5,6 +5,7 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import Session, select
 
+from backend.core.price_evidence import describe_price_evidence
 from backend.core.price_fetcher import fetch_history, get_reference_prices
 from backend.database import get_session
 from backend.models.metal_price import MetalPrice
@@ -44,6 +45,7 @@ def _serialize_price_row(
     fetched_at: str | None,
 ) -> dict:
     source_type = _source_type_from_source(source)
+    evidence = describe_price_evidence(source=source, fetched_at=fetched_at)
     return {
         "symbol": symbol,
         "name": name,
@@ -53,6 +55,7 @@ def _serialize_price_row(
         "source_type": source_type,
         "is_live": source_type == "live",
         "fetched_at": fetched_at,
+        "evidence": evidence,
     }
 
 

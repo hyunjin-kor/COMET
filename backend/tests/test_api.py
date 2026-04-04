@@ -70,6 +70,8 @@ class TestPrices:
         assert "Ni" in symbols
         assert all("source_type" in p for p in data)
         assert all(p["source_type"] in {"live", "indexed"} for p in data)
+        assert all("evidence" in p for p in data)
+        assert all("confidence_score" in p["evidence"] for p in data)
 
     def test_get_single_price(self, client):
         resp = client.get("/api/prices/Pt")
@@ -78,6 +80,7 @@ class TestPrices:
         assert data["symbol"] == "Pt"
         assert data["price"] > 0
         assert data["source_type"] in {"live", "indexed"}
+        assert data["evidence"]["tier"]
 
     def test_get_unknown_metal(self, client):
         resp = client.get("/api/prices/Xx")
@@ -121,3 +124,21 @@ class TestMaterials:
         assert resp.status_code == 200
         data = resp.json()
         assert any(step["key"] == "mixer_slurry" for step in data)
+
+
+class TestDecision:
+    def test_list_benchmark_families(self, client):
+        resp = client.get("/api/decision/benchmarks")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["families"]
+        assert data["families"][0]["family"] == "ammonia-cracking"
+
+    def test_get_ammonia_cracking_benchmark(self, client):
+        resp = client.get("/api/decision/benchmarks/ammonia-cracking")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["winner"] is not None
+        assert len(data["candidates"]) >= 3
+        assert data["decision_profile"]["id"] == "balanced"
+        assert all("scores" in candidate for candidate in data["candidates"])
