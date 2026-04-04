@@ -14,11 +14,11 @@
 </p>
 
 <p align="center">
-  <code>Windows desktop</code>
-  <code>Electron shell</code>
-  <code>Local FastAPI sidecar</code>
-  <code>React renderer</code>
-  <code>SQLite</code>
+  <code>Windows app</code>
+  <code>Benchmark ranking</code>
+  <code>Market evidence</code>
+  <code>Result board</code>
+  <code>Installer download</code>
 </p>
 
 CatPrice is built to feel like shipped desktop software rather than a spreadsheet wrapper. It keeps the CatCost methodology, separates editing from result reading, makes price-source states explicit, and packages the workflow into a local Windows app without relying on public server deployment.
@@ -76,6 +76,20 @@ Public catalog anchors are also attached for transparent procurement reference, 
 | Price clarity | `LIVE`, `INDEXED`, and `MANUAL` states plus evidence confidence and freshness |
 | Local architecture | Electron shell, local FastAPI sidecar, React renderer, SQLite persistence |
 
+## Download
+
+Download the packaged Windows app from [GitHub Releases](https://github.com/hyunjin-kor/CatPrice/releases).
+
+Recommended asset:
+
+- `CatPrice Setup 1.0.1.exe`
+
+Portable asset:
+
+- `CatPrice-win-unpacked.zip`
+
+CatPrice is distributed as a desktop app. The public repository does not require a public server deployment to use the product.
+
 ## What It Does
 
 - Estimates catalyst selling cost with the CatCost Step Method
@@ -119,21 +133,6 @@ npm run smoke:desktop
 ```
 
 This checks desktop launch, backend readiness, the prices endpoint, a sample calculate request, and re-launch behavior.
-
-## Local Desktop Development
-
-```bash
-npm install
-npm run dev
-```
-
-This starts:
-
-- the FastAPI sidecar on `127.0.0.1:8765`
-- the Vite renderer on `http://localhost:5173`
-- the Electron desktop shell
-
-The browser URL is only a local renderer development service for the Electron shell. CatPrice is not intended for public server deployment.
 
 ## Optional API Keys
 
