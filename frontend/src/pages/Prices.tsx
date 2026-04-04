@@ -10,6 +10,8 @@ import {
   YAxis,
 } from 'recharts';
 import { apiUrl, fetchPrices, type MetalPrice } from '../lib/api';
+import { LB_PER_KG, type Unit } from '../lib/unit-conversion';
+import { useUnit } from '../lib/use-unit';
 
 type HistoryPoint = { date: string; price: number; open: number; high: number; low: number };
 type Period = '1mo' | '3mo' | '6mo' | '1y' | '2y' | '5y';
@@ -47,11 +49,23 @@ const METAL_COLORS: Record<string, string> = {
   Fe: '#ff908d',
 };
 
-function fmtPrice(price: number | null) {
+function convertTrackedPrice(price: number, rawUnit: string, displayUnit: Unit) {
+  if (rawUnit === '$/lb') return displayUnit === 'kg' ? price * LB_PER_KG : price;
+  if (rawUnit === '$/kg') return displayUnit === 'lb' ? price / LB_PER_KG : price;
+  return price;
+}
+
+function displayTrackedUnit(rawUnit: string, displayUnit: Unit) {
+  if (rawUnit === '$/lb' || rawUnit === '$/kg') return `$/${displayUnit}`;
+  return rawUnit;
+}
+
+function fmtPrice(price: number | null, rawUnit: string, displayUnit: Unit) {
   if (price == null) return 'N/A';
-  if (price >= 1000) return `$${price.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
-  if (price >= 100) return `$${price.toLocaleString('en-US', { maximumFractionDigits: 1 })}`;
-  return `$${price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 })}`;
+  const converted = convertTrackedPrice(price, rawUnit, displayUnit);
+  if (converted >= 1000) return `$${converted.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
+  if (converted >= 100) return `$${converted.toLocaleString('en-US', { maximumFractionDigits: 1 })}`;
+  return `$${converted.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 })}`;
 }
 
 function sourceDescription(row: MetalPrice) {
@@ -77,6 +91,7 @@ function SourceBadge({ sourceType }: { sourceType: MetalPrice['source_type'] }) 
 }
 
 export default function Prices() {
+  const { unit } = useUnit();
   const [prices, setPrices] = useState<(MetalPrice & { is_live?: boolean })[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -130,6 +145,16 @@ export default function Prices() {
 
   const priceMap = Object.fromEntries(prices.map((row) => [row.symbol, row]));
   const selectedRow = selected ? priceMap[selected] : null;
+  const displayHistory = selectedRow
+    ? history.map((point) => ({
+        ...point,
+        price: convertTrackedPrice(point.price, selectedRow.unit, unit),
+        open: convertTrackedPrice(point.open, selectedRow.unit, unit),
+        high: convertTrackedPrice(point.high, selectedRow.unit, unit),
+        low: convertTrackedPrice(point.low, selectedRow.unit, unit),
+      }))
+    : history;
+  const selectedDisplayUnit = selectedRow ? displayTrackedUnit(selectedRow.unit, unit) : '';
   const pctChange = history.length >= 2 ? ((history[history.length - 1].price - history[0].price) / history[0].price) * 100 : null;
   const isUp = pctChange != null && pctChange >= 0;
 
@@ -201,8 +226,8 @@ export default function Prices() {
                           <SourceBadge sourceType={row.source_type} />
 
                           <div className="text-left sm:text-right">
-                            <div className="text-lg font-display text-slate-950">{fmtPrice(row.price)}</div>
-                            <div className="text-xs text-slate-500">{row.unit}</div>
+                            <div className="text-lg font-display text-slate-950">{fmtPrice(row.price, row.unit, unit)}</div>
+                            <div className="text-xs text-slate-500">{displayTrackedUnit(row.unit, unit)}</div>
                           </div>
                         </button>
                       );
@@ -256,7 +281,7 @@ export default function Prices() {
                   <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#78f2d0] border-t-transparent" />
                   Loading history...
                 </div>
-              ) : history.length === 0 ? (
+              ) : displayHistory.length === 0 ? (
                 <div className="flex h-[320px] flex-col items-center justify-center gap-2 rounded-[28px] border border-dashed border-white/10 bg-white/4 text-center">
                   <div className="font-display text-2xl text-white">No stored price history</div>
                   <div className="max-w-md text-sm leading-7 text-slate-400">
@@ -268,7 +293,7 @@ export default function Prices() {
                 <>
                   <div className="h-[320px]">
                     <ResponsiveContainer width="100%" height="100%">
-                      <AreaChart data={history} margin={{ top: 8, right: 16, bottom: 0, left: 0 }}>
+                      <AreaChart data={displayHistory} margin={{ top: 8, right: 16, bottom: 0, left: 0 }}>
                         <defs>
                           <linearGradient id="priceFill" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="5%" stopColor={METAL_COLORS[selected || 'Pt'] || '#78f2d0'} stopOpacity={0.3} />
@@ -296,7 +321,7 @@ export default function Prices() {
                           width={72}
                         />
                         <Tooltip
-                          formatter={(value) => [`$${Number(value).toLocaleString('en-US')}`, selectedRow?.unit ?? '']}
+                          formatter={(value) => [`$${Number(value).toLocaleString('en-US')}`, selectedDisplayUnit]}
                           labelFormatter={(value) =>
                             new Date(value).toLocaleDateString('en-US', {
                               year: 'numeric',
@@ -312,7 +337,7 @@ export default function Prices() {
                             fontSize: 12,
                           }}
                         />
-                        {history.length > 0 ? <ReferenceLine y={history[0].price} stroke="rgba(255,255,255,0.12)" strokeDasharray="4 4" /> : null}
+                        {displayHistory.length > 0 ? <ReferenceLine y={displayHistory[0].price} stroke="rgba(255,255,255,0.12)" strokeDasharray="4 4" /> : null}
                         <Area
                           type="monotone"
                           dataKey="price"
@@ -329,20 +354,20 @@ export default function Prices() {
                   <div className="mt-5 grid gap-3 sm:grid-cols-3">
                     <div className="cp-metric-tile-dark">
                       <div className="cp-subtle-label !text-slate-400">Current</div>
-                      <div className="mt-2 text-xl font-display text-white">{fmtPrice(history[history.length - 1].price)}</div>
-                      <div className="mt-1 text-xs leading-5 text-slate-400">{selectedRow?.unit ?? ''}</div>
+                      <div className="mt-2 text-xl font-display text-white">{fmtPrice(displayHistory[displayHistory.length - 1].price, selectedRow?.unit ?? '$/lb', unit)}</div>
+                      <div className="mt-1 text-xs leading-5 text-slate-400">{selectedDisplayUnit}</div>
                     </div>
                     <div className="cp-metric-tile-dark">
                       <div className="cp-subtle-label !text-slate-400">Period high</div>
                       <div className="mt-2 text-xl font-display text-white">
-                        {fmtPrice(Math.max(...history.map((point) => point.high ?? point.price)))}
+                        {fmtPrice(Math.max(...displayHistory.map((point) => point.high ?? point.price)), selectedRow?.unit ?? '$/lb', unit)}
                       </div>
                       <div className="mt-1 text-xs leading-5 text-slate-400">Maximum observed value</div>
                     </div>
                     <div className="cp-metric-tile-dark">
                       <div className="cp-subtle-label !text-slate-400">Period low</div>
                       <div className="mt-2 text-xl font-display text-white">
-                        {fmtPrice(Math.min(...history.map((point) => point.low ?? point.price)))}
+                        {fmtPrice(Math.min(...displayHistory.map((point) => point.low ?? point.price)), selectedRow?.unit ?? '$/lb', unit)}
                       </div>
                       <div className="mt-1 text-xs leading-5 text-slate-400">{historySource || 'Stored metal price series'}</div>
                     </div>

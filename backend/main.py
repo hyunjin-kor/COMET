@@ -2,7 +2,7 @@
 
 import logging
 from contextlib import asynccontextmanager
-from datetime import datetime
+from datetime import datetime, timezone
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from fastapi import FastAPI, HTTPException, Request
@@ -15,7 +15,7 @@ from backend.services.price_scheduler import collect_prices
 
 logger = logging.getLogger(__name__)
 
-scheduler = AsyncIOScheduler()
+scheduler = AsyncIOScheduler(timezone=timezone.utc)
 _last_price_update: datetime | None = None
 
 
@@ -37,7 +37,7 @@ def _is_local_request(host: str | None) -> bool:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Create DB tables, fetch prices on startup, then schedule hourly updates."""
+    """Create DB tables, fetch prices on startup, then schedule daily updates."""
     create_db_and_tables()
 
     # Fetch prices immediately on startup without blocking the Electron shell.
@@ -47,12 +47,17 @@ async def lifespan(app: FastAPI):
 
     scheduler.add_job(
         _scheduled_price_update,
-        "interval",
-        hours=1,
-        id="hourly_price_update",
+        "cron",
+        hour=settings.price_update_hour,
+        minute=0,
+        id="daily_price_update",
+        replace_existing=True,
     )
     scheduler.start()
-    logger.info("Price scheduler started (hourly refresh + immediate fetch on startup)")
+    logger.info(
+        "Price scheduler started (daily refresh at %02d:00 UTC + immediate fetch on startup)",
+        settings.price_update_hour,
+    )
 
     yield
 
