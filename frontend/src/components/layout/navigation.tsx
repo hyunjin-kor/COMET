@@ -64,7 +64,7 @@ export type NavigationItem = {
 export const navigationItems: NavigationItem[] = [
   { to: '/', label: 'Calculator', Icon: CalculatorIcon },
   { to: '/prices', label: 'Market Board', Icon: PricesIcon },
-  { to: '/decision', label: 'Decision Board', Icon: CompareIcon },
+  { to: '/benchmarks', label: 'Benchmarks', Icon: CompareIcon },
   { to: '/uncertainty', label: 'Uncertainty', Icon: UncertaintyIcon },
   { to: '/library', label: 'Library', Icon: LibraryIcon },
 ];
@@ -72,6 +72,17 @@ export const navigationItems: NavigationItem[] = [
 export function isNavigationPathActive(pathname: string, to: string): boolean {
   if (to === '/') {
     return pathname === '/' || pathname.startsWith('/calculator/');
+  }
+
+  if (to === '/benchmarks') {
+    return (
+      pathname === '/benchmarks' ||
+      pathname.startsWith('/benchmarks/') ||
+      pathname === '/compare' ||
+      pathname.startsWith('/compare/') ||
+      pathname === '/decision' ||
+      pathname.startsWith('/decision/')
+    );
   }
 
   return pathname === to || pathname.startsWith(`${to}/`);

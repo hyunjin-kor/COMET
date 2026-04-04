@@ -1,4 +1,4 @@
-"""Benchmark-driven decision engine for catalyst screening."""
+"""Benchmark-driven decision engine for optional catalyst reference families."""
 
 from __future__ import annotations
 
@@ -17,24 +17,30 @@ from backend.paths import data_dir
 
 
 @lru_cache(maxsize=1)
-def _load_catalog() -> dict[str, Any]:
-    with open(data_dir() / "ammonia_cracking_benchmark.json", encoding="utf-8") as handle:
-        return json.load(handle)
+def _load_catalogs() -> dict[str, dict[str, Any]]:
+    catalogs: dict[str, dict[str, Any]] = {}
+    for path in sorted(data_dir().glob("*_benchmark.json")):
+        with open(path, encoding="utf-8") as handle:
+            catalog = json.load(handle)
+        catalogs[catalog["family"]] = catalog
+    return catalogs
 
 
 def list_benchmark_families() -> list[dict[str, Any]]:
-    """Return the benchmark families available to the UI."""
+    """Return the optional reference families available to the UI."""
 
-    catalog = _load_catalog()
-    return [
-        {
-            "family": catalog["family"],
-            "title": catalog["title"],
-            "reaction": catalog["reaction"],
-            "objective": catalog["objective"],
-            "candidate_count": len(catalog["candidates"]),
-        }
-    ]
+    families: list[dict[str, Any]] = []
+    for catalog in _load_catalogs().values():
+        families.append(
+            {
+                "family": catalog["family"],
+                "title": catalog["title"],
+                "reaction": catalog["reaction"],
+                "objective": catalog["objective"],
+                "candidate_count": len(catalog["candidates"]),
+            }
+        )
+    return families
 
 
 def _normalize_price_per_lb(price: float, unit: str) -> float:
@@ -224,10 +230,10 @@ def evaluate_benchmark_family(
     family: str = "ammonia-cracking",
     profile: str = "balanced",
 ) -> dict[str, Any]:
-    """Evaluate one benchmark family with the current price basis."""
+    """Evaluate one optional reference family with the current price basis."""
 
-    catalog = _load_catalog()
-    if family != catalog["family"]:
+    catalog = _load_catalogs().get(family)
+    if catalog is None:
         raise KeyError(f"Unknown benchmark family: {family}")
 
     profile_config = catalog["decision_profiles"].get(profile)

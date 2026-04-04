@@ -168,7 +168,7 @@ export default function CalculatorResult() {
 
           {snapshot.benchmarkCandidate ? (
             <div className="mt-4 rounded-[24px] border border-emerald-200 bg-emerald-50/80 p-4">
-              <div className="cp-subtle-label !text-emerald-700">Benchmark context</div>
+              <div className="cp-subtle-label !text-emerald-700">Reference route context</div>
               <div className="mt-2 cp-heading-sm">{snapshot.benchmarkCandidate.title}</div>
               <div className="mt-2 text-sm leading-6 text-emerald-900">{snapshot.benchmarkCandidate.screening_summary}</div>
               <div className="mt-3 flex flex-wrap gap-2">

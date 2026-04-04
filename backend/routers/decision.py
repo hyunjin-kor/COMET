@@ -1,4 +1,4 @@
-"""Decision-board APIs for benchmark catalyst screening."""
+"""APIs for optional benchmark reference families."""
 
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ router = APIRouter(prefix="/api/decision", tags=["decision"])
 
 @router.get("/benchmarks")
 def get_benchmark_families():
-    """List benchmark families available to the desktop app."""
+    """List optional benchmark reference families available to the desktop app."""
 
     return {"families": list_benchmark_families()}
 
@@ -24,7 +24,7 @@ def get_benchmark_family(
     profile: str = Query(default="balanced", pattern="^(balanced|cost-first|evidence-first)$"),
     session: Session = Depends(get_session),
 ):
-    """Evaluate one benchmark family with the selected decision profile."""
+    """Evaluate one optional benchmark family with the selected decision profile."""
 
     try:
         return evaluate_benchmark_family(session=session, family=family, profile=profile)

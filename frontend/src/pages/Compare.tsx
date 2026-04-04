@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
+  fetchBenchmarkFamilies,
   fetchDecisionBenchmark,
+  type BenchmarkFamilySummary,
   type DecisionBenchmark,
   type DecisionCandidate,
 } from '../lib/api';
@@ -83,26 +85,51 @@ export default function Compare() {
   const navigate = useNavigate();
   const { toDisplay, fmtLabel } = useUnit();
   const [profile, setProfile] = useState<DecisionProfile>('balanced');
+  const [families, setFamilies] = useState<BenchmarkFamilySummary[]>([]);
+  const [family, setFamily] = useState('');
   const [benchmark, setBenchmark] = useState<DecisionBenchmark | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [activeSlug, setActiveSlug] = useState<string | null>(null);
 
   useEffect(() => {
+    fetchBenchmarkFamilies()
+      .then((payload) => {
+        if (payload.families.length === 0) {
+          setError('No benchmark families are available.');
+          setLoading(false);
+          return;
+        }
+        setFamilies(payload.families);
+        setFamily((current) => current || payload.families[0]?.family || '');
+      })
+      .catch((caughtError: unknown) => {
+        setError(caughtError instanceof Error ? caughtError.message : 'Failed to load benchmark library');
+        setLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (!family) return;
+
     setLoading(true);
     setError('');
-    fetchDecisionBenchmark('ammonia-cracking', profile)
+    fetchDecisionBenchmark(family, profile)
       .then((payload) => {
         setBenchmark(payload);
         setActiveSlug((current) => current ?? payload.winner?.slug ?? payload.candidates[0]?.slug ?? null);
       })
       .catch((caughtError: unknown) => {
-        setError(caughtError instanceof Error ? caughtError.message : 'Failed to load decision board');
+        setError(caughtError instanceof Error ? caughtError.message : 'Failed to load benchmark library');
       })
       .finally(() => setLoading(false));
-  }, [profile]);
+  }, [family, profile]);
 
   const candidates = benchmark?.candidates ?? [];
+  const activeFamily = useMemo(
+    () => families.find((item) => item.family === family) ?? null,
+    [families, family],
+  );
   const activeCandidate = useMemo(
     () => candidates.find((candidate) => candidate.slug === activeSlug) ?? benchmark?.winner ?? null,
     [activeSlug, benchmark?.winner, candidates],
@@ -123,7 +150,7 @@ export default function Compare() {
     return (
       <div className="surface-card flex items-center gap-3 px-5 py-6 text-slate-600">
         <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#78f2d0] border-t-transparent" />
-        Loading ammonia cracking benchmark board...
+        Loading benchmark library...
       </div>
     );
   }
@@ -131,10 +158,10 @@ export default function Compare() {
   if (error || !benchmark || !activeCandidate) {
     return (
       <section className="surface-card cp-enter overflow-hidden p-6 sm:p-7">
-        <span className="section-kicker">Decision Board</span>
-        <h1 className="cp-heading-xl mt-4">Benchmark board is unavailable.</h1>
+        <span className="section-kicker">Benchmark Library</span>
+        <h1 className="cp-heading-xl mt-4">Benchmark library is unavailable.</h1>
         <p className="cp-body-copy mt-3 max-w-xl">
-          {error || 'The ammonia cracking benchmark did not return any candidate data.'}
+          {error || 'The selected reference family did not return any candidate data.'}
         </p>
       </section>
     );
@@ -158,20 +185,24 @@ export default function Compare() {
           <div className="surface-ink relative overflow-hidden p-5 sm:p-6">
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(120,242,208,0.22),transparent_0_32%),radial-gradient(circle_at_bottom_right,rgba(239,195,108,0.14),transparent_0_28%)]" />
             <div className="relative">
-              <div className="cp-subtle-label !text-slate-400">Benchmark Harness</div>
+              <div className="cp-subtle-label !text-slate-400">Benchmark Library</div>
               <h1 className="mt-3 font-display text-[clamp(2rem,4vw,3.5rem)] leading-[0.94] text-white">
-                {benchmark.title}
+                Optional reference routes for catalyst screening.
               </h1>
               <div className="mt-3 flex flex-wrap gap-2">
-                <span className="cp-chip-dark">{benchmark.reaction}</span>
+                {activeFamily ? <span className="cp-chip-dark">{activeFamily.title}</span> : null}
+                {benchmark.reaction ? <span className="cp-chip-dark">{benchmark.reaction}</span> : null}
                 <span className="cp-chip-dark">{benchmark.decision_profile.label}</span>
                 <span className="cp-chip-dark">Updated {updatedAt}</span>
               </div>
-              <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">{benchmark.objective}</p>
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">
+                {benchmark.objective} Use this screen for optional literature-backed sanity checks, then load any route
+                into the calculator and continue editing without reaction-specific lock-in.
+              </p>
 
               {winner ? (
                 <div className="mt-6 rounded-[26px] border border-white/10 bg-white/6 p-4">
-                  <div className="cp-subtle-label !text-slate-400">Current winner</div>
+                  <div className="cp-subtle-label !text-slate-400">Current reference winner</div>
                   <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                     <div>
                       <div className="text-2xl font-display text-white">{winner.title}</div>
@@ -207,7 +238,29 @@ export default function Compare() {
 
           <div className="space-y-3">
             <div className="surface-ghost p-4">
-              <div className="cp-subtle-label">Decision profile</div>
+              <div className="cp-subtle-label">Reference family</div>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {families.map((option) => (
+                  <button
+                    key={option.family}
+                    onClick={() => setFamily(option.family)}
+                    className={`rounded-[18px] border px-3 py-2 text-left text-sm transition ${
+                      option.family === family
+                        ? 'border-teal-200 bg-teal-50 text-teal-700'
+                        : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
+                    }`}
+                  >
+                    <div className="font-semibold">{option.title}</div>
+                    <div className="mt-1 text-xs leading-5 text-slate-500">
+                      {option.candidate_count} routes available
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="surface-ghost p-4">
+              <div className="cp-subtle-label">Ranking profile</div>
               <div className="mt-3 flex flex-wrap gap-2">
                 {PROFILE_OPTIONS.map((option) => (
                   <button
@@ -256,8 +309,8 @@ export default function Compare() {
         <section className="surface-card p-4">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <div className="cp-subtle-label">Ranked candidates</div>
-              <div className="cp-heading-lg mt-2">Which route is most economic right now?</div>
+              <div className="cp-subtle-label">Reference routes</div>
+              <div className="cp-heading-lg mt-2">How do these routes compare right now?</div>
             </div>
             <span className="cp-chip">{candidates.length} candidates</span>
           </div>
@@ -335,13 +388,13 @@ export default function Compare() {
         <section className="surface-card p-4">
           <div className="flex flex-col gap-3 border-b border-slate-900/8 pb-4 sm:flex-row sm:items-start sm:justify-between">
             <div className="min-w-0">
-              <div className="cp-subtle-label">Selected candidate</div>
+              <div className="cp-subtle-label">Selected reference route</div>
               <div className="cp-heading-lg mt-2">{activeCandidate.title}</div>
               <div className="mt-1 text-sm text-slate-500">{activeCandidate.archetype}</div>
             </div>
 
             <button onClick={() => loadIntoCalculator(activeCandidate)} className="cp-button-primary">
-              Load into calculator
+              Load as starting point
             </button>
           </div>
 
@@ -452,7 +505,7 @@ export default function Compare() {
 
             <div className="space-y-4">
               <div className="surface-ghost p-4">
-                <div className="cp-subtle-label">Scoring readout</div>
+                <div className="cp-subtle-label">Ranking readout</div>
                 <div className="mt-4 space-y-3">
                   {(
                     [
@@ -480,7 +533,7 @@ export default function Compare() {
               </div>
 
               <div className="surface-ghost p-4">
-                <div className="cp-subtle-label">Decision notes</div>
+                <div className="cp-subtle-label">Reference notes</div>
                 <div className="mt-3 space-y-2">
                   {activeCandidate.decision_notes.map((note) => (
                     <div key={note} className="rounded-[18px] border border-slate-900/8 bg-white/64 px-3 py-2 text-sm leading-6 text-slate-700">
@@ -491,7 +544,7 @@ export default function Compare() {
               </div>
 
               <div className="surface-ghost p-4">
-                <div className="cp-subtle-label">Literature + catalog anchors</div>
+                <div className="cp-subtle-label">Evidence anchors</div>
                 <div className="mt-3 space-y-3">
                   {activeCandidate.literature_basis.map((item) => (
                     <a
