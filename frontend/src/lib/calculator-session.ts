@@ -48,6 +48,10 @@ function canUseStorage(): boolean {
   return typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
 }
 
+function canUseSessionStorage(): boolean {
+  return typeof window !== 'undefined' && typeof window.sessionStorage !== 'undefined';
+}
+
 function readJson<T>(key: string): T | null {
   if (!canUseStorage()) return null;
 
@@ -64,6 +68,22 @@ function writeJson<T>(key: string, value: T): void {
   window.localStorage.setItem(key, JSON.stringify(value));
 }
 
+function readSessionJson<T>(key: string): T | null {
+  if (!canUseSessionStorage()) return null;
+
+  try {
+    const raw = window.sessionStorage.getItem(key);
+    return raw ? (JSON.parse(raw) as T) : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeSessionJson<T>(key: string, value: T): void {
+  if (!canUseSessionStorage()) return;
+  window.sessionStorage.setItem(key, JSON.stringify(value));
+}
+
 export function loadCalculatorDraft(): CalculatorDraft | null {
   return readJson<CalculatorDraft>(DRAFT_KEY);
 }
@@ -73,9 +93,13 @@ export function saveCalculatorDraft(draft: CalculatorDraft): void {
 }
 
 export function loadCalculatorResultSnapshot(): CalculatorResultSnapshot | null {
-  return readJson<CalculatorResultSnapshot>(RESULT_KEY);
+  if (canUseStorage()) {
+    // Clear legacy persistent results so restarting the desktop app starts clean.
+    window.localStorage.removeItem(RESULT_KEY);
+  }
+  return readSessionJson<CalculatorResultSnapshot>(RESULT_KEY);
 }
 
 export function saveCalculatorResultSnapshot(snapshot: CalculatorResultSnapshot): void {
-  writeJson(RESULT_KEY, snapshot);
+  writeSessionJson(RESULT_KEY, snapshot);
 }
