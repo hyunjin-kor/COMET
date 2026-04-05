@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
+import { WorkspaceSectionFooter, WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
 import {
   type ApplicationFamily,
   type CatalystDomain,
@@ -698,7 +698,7 @@ export default function Calculator() {
             <div className="cp-subtle-label">Reference routes</div>
             <div className="cp-heading-lg mt-2">Start from a published route if useful</div>
             <p className="mt-2 text-sm leading-7 text-slate-600">
-              Use literature-backed routes as starting points, or ignore this panel and build the case from scratch.
+              Use literature-backed routes as starting points, or ignore this panel and estimate from scratch.
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -998,7 +998,7 @@ export default function Calculator() {
           <div>
             <span className="section-kicker">Latest Estimate</span>
             <h2 className="cp-heading-lg mt-3">Review the last estimate without leaving this draft.</h2>
-            <p className="mt-2 max-w-[30rem] text-sm leading-7 text-slate-600">Build here, read on the estimate board, then jump back into the same draft.</p>
+            <p className="mt-2 max-w-[30rem] text-sm leading-7 text-slate-600">Estimate here, read on the estimate board, then jump back into the same draft.</p>
           </div>
           <button onClick={() => navigate('/calculator/result')} disabled={!latestSnapshot} className="cp-button-secondary px-4 py-2.5 text-xs">Open estimate board</button>
         </div>
@@ -1168,8 +1168,8 @@ export default function Calculator() {
         <div className="space-y-5">
           <div className="flex flex-col gap-4 border-b border-slate-900/8 pb-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <div className="cp-subtle-label">Build Workspace</div>
-              <h2 className="cp-heading-xl mt-2">Build a catalyst cost case</h2>
+              <div className="cp-subtle-label">Cost Estimate</div>
+              <h2 className="cp-heading-xl mt-2">Estimate catalyst cost</h2>
               <p className="cp-body-copy mt-2 max-w-2xl">
                 {catalystDomain === 'electrocatalyst'
                   ? 'Pick the electrode stack, then map the fabrication route and sourcing basis.'
@@ -1190,7 +1190,7 @@ export default function Calculator() {
         </div>
       </section>
 
-      <WorkspaceSectionNav sections={BUILD_SECTIONS} activeSectionId={sectionState.activeSectionId} activeIndex={sectionState.activeIndex} onSelect={sectionState.setActiveSection} onPrevious={sectionState.goPrevious} onNext={sectionState.goNext} canGoPrevious={sectionState.canGoPrevious} canGoNext={sectionState.canGoNext} />
+      <WorkspaceSectionNav sections={BUILD_SECTIONS} activeSectionId={sectionState.activeSectionId} activeIndex={sectionState.activeIndex} onSelect={sectionState.setActiveSection} />
 
       {sectionState.activeSection.id === 'setup' ? renderSetupSection() : null}
       {sectionState.activeSection.id === 'inputs' ? renderInputsSection() : null}
@@ -1209,6 +1209,16 @@ export default function Calculator() {
           {renderLaunchPanel()}
         </div>
       ) : null}
+
+      <WorkspaceSectionFooter
+        activeSection={sectionState.activeSection}
+        activeIndex={sectionState.activeIndex}
+        totalSections={BUILD_SECTIONS.length}
+        onPrevious={sectionState.goPrevious}
+        onNext={sectionState.goNext}
+        canGoPrevious={sectionState.canGoPrevious}
+        canGoNext={sectionState.canGoNext}
+      />
     </div>
   );
 }

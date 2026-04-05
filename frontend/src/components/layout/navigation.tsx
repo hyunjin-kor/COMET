@@ -62,7 +62,7 @@ export type NavigationItem = {
 };
 
 export const navigationItems: NavigationItem[] = [
-  { to: '/', label: 'Build', Icon: CalculatorIcon },
+  { to: '/', label: 'Cost Estimate', Icon: CalculatorIcon },
   { to: '/prices', label: 'Metal Feed', Icon: PricesIcon },
   { to: '/benchmarks', label: 'Reference Routes', Icon: CompareIcon },
   { to: '/uncertainty', label: 'Risk Range', Icon: UncertaintyIcon },

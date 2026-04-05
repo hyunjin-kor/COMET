@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
+import { WorkspaceSectionFooter, WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
 import {
   fetchBenchmarkFamilies,
   fetchDecisionBenchmark,
@@ -187,14 +187,14 @@ export default function Compare() {
 
   return (
     <div className="space-y-4">
-      <WorkspaceSectionNav sections={REFERENCE_SECTIONS} activeSectionId={sectionState.activeSectionId} activeIndex={sectionState.activeIndex} onSelect={sectionState.setActiveSection} onPrevious={sectionState.goPrevious} onNext={sectionState.goNext} canGoPrevious={sectionState.canGoPrevious} canGoNext={sectionState.canGoNext} />
+      <WorkspaceSectionNav sections={REFERENCE_SECTIONS} activeSectionId={sectionState.activeSectionId} activeIndex={sectionState.activeIndex} onSelect={sectionState.setActiveSection} />
 
       {sectionState.activeSection.id === 'overview' ? (
         <section className="surface-card cp-enter overflow-hidden p-5 sm:p-6">
           <div className="grid gap-4 xl:grid-cols-[minmax(0,1.1fr)_minmax(330px,0.9fr)]">
             <div className="surface-ink overflow-hidden p-5 sm:p-6">
               <div className="cp-subtle-label !text-slate-400">Reference Routes</div>
-              <h1 className="mt-3 font-display text-[clamp(2rem,4vw,3.5rem)] leading-[0.94] text-white">Compare published routes before you build.</h1>
+              <h1 className="mt-3 font-display text-[clamp(2rem,4vw,3.5rem)] leading-[0.94] text-white">Compare published routes before you estimate.</h1>
               <div className="mt-3 flex flex-wrap gap-2">
                 {activeFamily ? <span className="cp-chip-dark">{activeFamily.title}</span> : null}
                 {benchmark.reaction ? <span className="cp-chip-dark">{benchmark.reaction}</span> : null}
@@ -299,6 +299,16 @@ export default function Compare() {
           </div>
         </section>
       ) : null}
+
+      <WorkspaceSectionFooter
+        activeSection={sectionState.activeSection}
+        activeIndex={sectionState.activeIndex}
+        totalSections={REFERENCE_SECTIONS.length}
+        onPrevious={sectionState.goPrevious}
+        onNext={sectionState.goNext}
+        canGoPrevious={sectionState.canGoPrevious}
+        canGoNext={sectionState.canGoNext}
+      />
     </div>
   );
 }

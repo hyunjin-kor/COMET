@@ -28,15 +28,15 @@ CatPrice is built to feel like shipped desktop software rather than a spreadshee
 | Stage | Screen | What you do | What CatPrice gives back |
 | --- | --- | --- | --- |
 | 1. Track the market | `Metal Feed` | Review live, indexed, and manual price bases with confidence and freshness metadata | A transparent sourcing basis for the catalyst recipe |
-| 2. Build the recipe | `Build` | Enter active metals, promoters, support, pricing overrides, order size, and process steps | A catalyst manufacturing estimate grounded in current feed data |
+| 2. Estimate the cost | `Cost Estimate` | Enter active metals, promoters, support, pricing overrides, order size, and process steps | A catalyst manufacturing estimate grounded in current feed data |
 | 3. Sanity-check with references | `Reference Routes` | Review optional literature-backed route families and load one as a starting point if useful | A fast reference path without locking the app to one reaction family |
 | 4. Review the output | `Estimate Board` | Open the final output on a dedicated reading surface | A clean result board optimized for interpretation instead of editing |
-| 5. Iterate quickly | `Back to build` | Return to the build workspace, adjust pricing or steps, and rerun | The draft stays in place so scenario work remains fast |
+| 5. Iterate quickly | `Back to cost estimate` | Return to the cost estimate workspace, adjust pricing or steps, and rerun | The draft stays in place so scenario work remains fast |
 
 ## Screen Roles
 
 - `Metal Feed` shows where each quote came from, how fresh it is, and how much confidence to place in it.
-- `Build` is the main editing surface for composition, support basis, feed selection, and Step Method setup.
+- `Cost Estimate` is the main editing surface for composition, support basis, feed selection, and Step Method setup.
 - `Reference Routes` is an optional reference library for literature-backed catalyst families and route scoring.
 - `Estimate Board` is the reading surface for selling price, contribution structure, and component-level ledger review.
 
@@ -70,7 +70,7 @@ Download the packaged Windows app from [GitHub Releases](https://github.com/hyun
 
 Recommended asset:
 
-- `CatPrice Setup 1.1.2.exe`
+- `CatPrice Setup 1.1.3.exe`
 
 Portable asset:
 
@@ -83,7 +83,7 @@ CatPrice is distributed as a desktop app. The public repository does not require
 - Estimates catalyst selling cost with the CatCost Step Method
 - Tracks metal inputs with `LIVE`, `INDEXED`, and `MANUAL` price states
 - Annotates market feeds with price-evidence confidence, freshness, and acquisition mode
-- Loads thermocatalyst and electrocatalyst reference families into the build workspace as editable starting points
+- Loads thermocatalyst and electrocatalyst reference families into the cost estimate workspace as editable starting points
 - Attaches source-linked family literature banks built from high-confidence journal references and public vendor pages
 - Opens the final estimate on a dedicated result board for review
 - Runs Monte Carlo uncertainty analysis
@@ -104,7 +104,7 @@ npm run build
 
 Main outputs:
 
-- `dist-electron\CatPrice Setup 1.1.2.exe`
+- `dist-electron\CatPrice Setup 1.1.3.exe`
 - `dist-electron\win-unpacked\CatPrice.exe`
 
 Before rebuilding desktop artifacts, CatPrice stops old desktop processes automatically. You can also stop them manually:
