@@ -25,7 +25,7 @@ const PROFILE_OPTIONS = [
 
 const REFERENCE_SECTIONS: WorkspaceSection[] = [
   { id: 'overview', label: 'Overview', summary: 'Choose family and ranking logic.' },
-  { id: 'routes', label: 'Routes', summary: 'Scan the current route stack.' },
+  { id: 'routes', label: 'Candidates', summary: 'Scan the current route stack.' },
   { id: 'detail', label: 'Detail', summary: 'Read the selected route deeply.' },
 ];
 
@@ -112,7 +112,7 @@ export default function Compare() {
         setFamily((current) => current || payload.families[0]?.family || '');
       })
       .catch((caughtError: unknown) => {
-        setError(caughtError instanceof Error ? caughtError.message : 'Failed to load reference routes');
+        setError(caughtError instanceof Error ? caughtError.message : 'Failed to load literature benchmarks');
         setLoading(false);
       });
   }, []);
@@ -127,7 +127,7 @@ export default function Compare() {
         setActiveSlug((current) => current ?? payload.winner?.slug ?? payload.candidates[0]?.slug ?? null);
       })
       .catch((caughtError: unknown) => {
-        setError(caughtError instanceof Error ? caughtError.message : 'Failed to load reference routes');
+        setError(caughtError instanceof Error ? caughtError.message : 'Failed to load literature benchmarks');
       })
       .finally(() => setLoading(false));
   }, [family, profile]);
@@ -171,15 +171,15 @@ export default function Compare() {
         : null,
       benchmarkCandidate: toBenchmarkPreset(candidate),
     });
-    navigate('/');
+    navigate('/?estimate=composition');
   }
 
   if (loading) {
-    return <div className="surface-card flex items-center gap-3 px-5 py-6 text-slate-600"><span className="h-4 w-4 animate-spin rounded-full border-2 border-[#78f2d0] border-t-transparent" />Loading reference routes...</div>;
+    return <div className="surface-card flex items-center gap-3 px-5 py-6 text-slate-600"><span className="h-4 w-4 animate-spin rounded-full border-2 border-[#78f2d0] border-t-transparent" />Loading literature benchmarks...</div>;
   }
 
   if (error || !benchmark || !activeCandidate) {
-    return <section className="surface-card cp-enter overflow-hidden p-6 sm:p-7"><span className="section-kicker">Reference Routes</span><h1 className="cp-heading-xl mt-4">Reference routes are unavailable.</h1><p className="cp-body-copy mt-3 max-w-xl">{error || 'The selected reference family did not return any candidate data.'}</p></section>;
+    return <section className="surface-card cp-enter overflow-hidden p-6 sm:p-7"><span className="section-kicker">Literature Benchmarks</span><h1 className="cp-heading-xl mt-4">Literature benchmarks are unavailable.</h1><p className="cp-body-copy mt-3 max-w-xl">{error || 'The selected benchmark family did not return any candidate data.'}</p></section>;
   }
 
   const winner = benchmark.winner;
@@ -193,7 +193,7 @@ export default function Compare() {
         <section className="surface-card cp-enter overflow-hidden p-5 sm:p-6">
           <div className="grid gap-4 xl:grid-cols-[minmax(0,1.1fr)_minmax(330px,0.9fr)]">
             <div className="surface-ink overflow-hidden p-5 sm:p-6">
-              <div className="cp-subtle-label !text-slate-400">Reference Routes</div>
+              <div className="cp-subtle-label !text-slate-400">Literature Benchmarks</div>
               <h1 className="mt-3 font-display text-[clamp(2rem,4vw,3.5rem)] leading-[0.94] text-white">Compare published routes before you estimate.</h1>
               <div className="mt-3 flex flex-wrap gap-2">
                 {activeFamily ? <span className="cp-chip-dark">{activeFamily.title}</span> : null}
@@ -215,7 +215,7 @@ export default function Compare() {
 
             <div className="space-y-3">
               <div className="surface-ghost p-4">
-                <div className="cp-subtle-label">Reference family</div>
+                <div className="cp-subtle-label">Benchmark family</div>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {families.map((option) => (
                     <button key={option.family} onClick={() => setFamily(option.family)} className={`rounded-[18px] border px-3 py-2 text-left text-sm transition ${option.family === family ? 'border-teal-200 bg-teal-50 text-teal-700' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}>
@@ -243,7 +243,7 @@ export default function Compare() {
 
       {sectionState.activeSection.id === 'routes' ? (
         <section className="surface-card p-4">
-          <div className="flex items-start justify-between gap-3"><div><div className="cp-subtle-label">Reference routes</div><div className="cp-heading-lg mt-2">How do these routes compare right now?</div></div><span className="cp-chip">{candidates.length} candidates</span></div>
+          <div className="flex items-start justify-between gap-3"><div><div className="cp-subtle-label">Published routes</div><div className="cp-heading-lg mt-2">How do these routes compare right now?</div></div><span className="cp-chip">{candidates.length} candidates</span></div>
           <div className="mt-4 space-y-3">
             {candidates.map((candidate, index) => (
               <button key={candidate.slug} onClick={() => { setActiveSlug(candidate.slug); sectionState.setActiveSection('detail'); }} className={`w-full rounded-[24px] border px-4 py-4 text-left transition ${activeCandidate.slug === candidate.slug ? 'border-emerald-200 bg-emerald-50/80' : 'border-slate-900/8 bg-white/64 hover:bg-white/88'}`}>
@@ -264,7 +264,7 @@ export default function Compare() {
         <section className="surface-card p-4">
           <div className="flex flex-col gap-3 border-b border-slate-900/8 pb-4 sm:flex-row sm:items-start sm:justify-between">
             <div className="min-w-0"><div className="cp-subtle-label">Selected reference route</div><div className="cp-heading-lg mt-2">{activeCandidate.title}</div><div className="mt-1 text-sm text-slate-500">{activeCandidate.archetype}</div><div className="mt-2 flex flex-wrap gap-2"><span className="cp-chip">{catalystDomainLabel(activeCandidate.catalyst_domain)}</span><span className="cp-chip">{applicationFamilyLabel(activeCandidate.application_family)}</span></div></div>
-            <button onClick={() => loadIntoCalculator(activeCandidate)} className="cp-button-primary">Load as starting point</button>
+            <button onClick={() => loadIntoCalculator(activeCandidate)} className="cp-button-primary">Load into cost estimate</button>
           </div>
           <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
             <MetricTile label={activeCandidate.summary.economics_basis_label} value={benchmarkCostValue(activeCandidate)} detail={benchmarkCostDetail(activeCandidate)} />

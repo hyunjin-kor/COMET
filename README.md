@@ -9,36 +9,36 @@
 <h1 align="center">CatPrice</h1>
 
 <p align="center">
-  <strong>Desktop-first catalyst manufacturing cost estimator with live metal feeds, transparent price evidence, and packaged Windows delivery.</strong><br />
-  CatCost-based economics, market-aware feed inputs, route-aware manufacturing steps, and a dedicated result board for readable desktop review.
+  <strong>Desktop-first catalyst manufacturing cost estimator with live metal prices, transparent price evidence, and packaged Windows delivery.</strong><br />
+  CatCost-based economics, market-aware price inputs, manufacturing-aware step logic, and a dedicated result screen for readable desktop review.
 </p>
 
 <p align="center">
   <code>Windows app</code>
   <code>CatCost workflow</code>
   <code>Market evidence</code>
-  <code>Result board</code>
+  <code>Result screen</code>
   <code>Installer download</code>
 </p>
 
-CatPrice is built to feel like shipped desktop software rather than a spreadsheet wrapper. The core workflow is reaction-agnostic: define a catalyst recipe, map the manufacturing route, sync current metal prices, and read a clean selling-cost estimate on a separate result board. Optional benchmark families can be loaded as reference starting points, but they do not define the product scope.
+CatPrice is built to feel like shipped desktop software rather than a spreadsheet wrapper. The core workflow is reaction-agnostic: choose catalyst type, define composition, set the manufacturing method, sync current metal prices, and read a clean selling-cost estimate on a separate result screen. Optional literature benchmarks can still be loaded as reference starting points, but they do not define the product scope.
 
 ## Workflow Framework
 
 | Stage | Screen | What you do | What CatPrice gives back |
 | --- | --- | --- | --- |
-| 1. Track the market | `Metal Feed` | Review live, indexed, and manual price bases with confidence and freshness metadata | A transparent sourcing basis for the catalyst recipe |
-| 2. Estimate the cost | `Cost Estimate` | Enter active metals, promoters, support, pricing overrides, order size, and process steps | A catalyst manufacturing estimate grounded in current feed data |
-| 3. Sanity-check with references | `Reference Routes` | Review optional literature-backed route families and load one as a starting point if useful | A fast reference path without locking the app to one reaction family |
-| 4. Review the output | `Estimate Board` | Open the final output on a dedicated reading surface | A clean result board optimized for interpretation instead of editing |
+| 1. Track the market | `Live Metal Prices` | Review live, indexed, and manual price bases with confidence and freshness metadata | A transparent sourcing basis for the catalyst recipe |
+| 2. Estimate the cost | `Cost Estimate` | Move through `Catalyst Type -> Composition -> Manufacturing -> Result` and run the estimate | A catalyst manufacturing estimate grounded in current price data |
+| 3. Check published benchmarks | `Literature Benchmarks` | Review optional literature-backed catalyst families and load one as a starting point if useful | A fast reference path without forcing the main workflow |
+| 4. Review the output | `Result` | Open the final output on a dedicated reading surface | A clean result screen optimized for interpretation instead of editing |
 | 5. Iterate quickly | `Back to cost estimate` | Return to the cost estimate workspace, adjust pricing or steps, and rerun | The draft stays in place so scenario work remains fast |
 
 ## Screen Roles
 
-- `Metal Feed` shows where each quote came from, how fresh it is, and how much confidence to place in it.
+- `Live Metal Prices` shows where each quote came from, how fresh it is, and how much confidence to place in it.
 - `Cost Estimate` is the main editing surface for composition, support basis, feed selection, and Step Method setup.
-- `Reference Routes` is an optional reference library for literature-backed catalyst families and route scoring.
-- `Estimate Board` is the reading surface for selling price, contribution structure, and component-level ledger review.
+- `Literature Benchmarks` is an optional reference library for literature-backed catalyst families and route scoring.
+- `Result` is the reading surface for selling price, contribution structure, and component-level source review.
 
 ## Product Highlights
 
@@ -47,7 +47,7 @@ CatPrice is built to feel like shipped desktop software rather than a spreadshee
 | Core estimator | Reaction-agnostic catalyst manufacturing cost estimation |
 | Price clarity | `LIVE`, `INDEXED`, and `MANUAL` states plus evidence confidence and freshness |
 | Workflow | Step-based workspace navigation with back/forward movement instead of long scroll stacks |
-| Route logic | Step Method, route extras, indexed escalation, and optional reference routes |
+| Manufacturing logic | Step Method, manufacturing extras, indexed escalation, and optional literature benchmarks |
 | Research support | Literature-backed thermocatalyst and electrocatalyst benchmark families with explicit source banks |
 | Desktop release | Installer + unpacked app outputs for a clean Windows release path |
 
@@ -70,7 +70,7 @@ Download the packaged Windows app from [GitHub Releases](https://github.com/hyun
 
 Recommended asset:
 
-- `CatPrice Setup 1.1.3.exe`
+- `CatPrice Setup 1.1.4.exe`
 
 Portable asset:
 
@@ -85,7 +85,7 @@ CatPrice is distributed as a desktop app. The public repository does not require
 - Annotates market feeds with price-evidence confidence, freshness, and acquisition mode
 - Loads thermocatalyst and electrocatalyst reference families into the cost estimate workspace as editable starting points
 - Attaches source-linked family literature banks built from high-confidence journal references and public vendor pages
-- Opens the final estimate on a dedicated result board for review
+- Opens the final estimate on a dedicated result screen for review
 - Runs Monte Carlo uncertainty analysis
 - Applies ChemPPI and CEPCI escalation
 - Includes material, step, and process template libraries
@@ -104,7 +104,7 @@ npm run build
 
 Main outputs:
 
-- `dist-electron\CatPrice Setup 1.1.3.exe`
+- `dist-electron\CatPrice Setup 1.1.4.exe`
 - `dist-electron\win-unpacked\CatPrice.exe`
 
 Before rebuilding desktop artifacts, CatPrice stops old desktop processes automatically. You can also stop them manually:

@@ -51,8 +51,8 @@ const METAL_COLORS: Record<string, string> = {
 };
 
 const FEED_SECTIONS: WorkspaceSection[] = [
-  { id: 'quotes', label: 'Quotes', summary: 'Choose the metal feed to inspect.' },
-  { id: 'trend', label: 'Trend', summary: 'Read history, evidence, and freshness.' },
+  { id: 'quotes', label: 'Prices', summary: 'Choose the metal price to inspect.' },
+  { id: 'history', label: 'History', summary: 'Read source quality, freshness, and trend.' },
 ];
 
 function convertTrackedPrice(price: number, rawUnit: string, displayUnit: Unit) {
@@ -178,7 +178,7 @@ export default function Prices() {
     return (
       <div className="surface-card flex items-center gap-3 px-5 py-6 text-slate-600">
         <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#78f2d0] border-t-transparent" />
-        Loading metal feed...
+        Loading live metal prices...
       </div>
     );
   }
@@ -188,16 +188,16 @@ export default function Prices() {
       <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.06s' }}>
         <div className="mb-5 flex flex-col gap-4 border-b border-slate-900/8 pb-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <div className="cp-subtle-label">Metal Feed</div>
-            <h2 className="cp-heading-xl mt-2">Read live and indexed metal quotes</h2>
+            <div className="cp-subtle-label">Live Metal Prices</div>
+            <h2 className="cp-heading-xl mt-2">Track live and indexed metal prices</h2>
             <p className="cp-body-copy mt-2 max-w-2xl">
-              Scan price status, quote basis, and trend direction without leaving the sourcing workflow.
+              Read current quotes, source basis, and trend history without leaving the desktop workflow.
             </p>
           </div>
 
           <button onClick={handleRefresh} disabled={refreshing} className="cp-button-secondary">
             <span className={`mr-2 inline-flex h-4 w-4 rounded-full border-2 border-current border-t-transparent ${refreshing ? 'animate-spin' : ''}`} />
-            {refreshing ? 'Refreshing feed' : 'Refresh feed'}
+            {refreshing ? 'Updating prices' : 'Update live prices'}
           </button>
         </div>
 
@@ -222,7 +222,7 @@ export default function Prices() {
                         key={row.symbol}
                         onClick={() => {
                           setSelected(row.symbol);
-                          setActiveSection('trend');
+                          setActiveSection('history');
                         }}
                         className={`grid w-full gap-3 px-4 py-3 text-left transition sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-center ${
                           active ? 'bg-emerald-50/75' : 'bg-transparent hover:bg-white/80'
@@ -309,7 +309,7 @@ export default function Prices() {
               <div className="flex h-[320px] flex-col items-center justify-center gap-2 rounded-[28px] border border-dashed border-white/10 bg-white/4 text-center">
                 <div className="font-display text-2xl text-white">No stored price history</div>
                 <div className="max-w-md text-sm leading-7 text-slate-400">
-                  Refresh the feed or choose a symbol that already has stored history.
+                  Update live prices or choose a symbol that already has stored history.
                 </div>
               </div>
             ) : (
@@ -431,7 +431,7 @@ export default function Prices() {
         activeIndex={activeIndex}
         onSelect={setActiveSection}
       />
-      {activeSection.id === 'quotes' ? renderQuotes() : renderTrend()}
+      {activeSection.id === 'quotes' ? renderQuotes() : activeSection.id === 'history' ? renderTrend() : null}
       <WorkspaceSectionFooter
         activeSection={activeSection}
         activeIndex={activeIndex}
