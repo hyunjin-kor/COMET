@@ -1,7 +1,7 @@
 import { useLayoutEffect, useState } from 'react';
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 import { useNavigate } from 'react-router-dom';
-import { WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
+import { WorkspaceSectionFooter, WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
 import { loadCalculatorResultSnapshot } from '../lib/calculator-session';
 import { useUnit } from '../lib/use-unit';
 
@@ -64,9 +64,9 @@ export default function CalculatorResult() {
       <section className="surface-card cp-enter overflow-hidden p-6 sm:p-7">
         <span className="section-kicker">Estimate Board</span>
         <h1 className="cp-heading-xl mt-4">No saved estimate board is available yet.</h1>
-        <p className="cp-body-copy mt-3 max-w-xl">Run an estimate from the build workspace first. The estimate board will then stay available for quick review.</p>
+        <p className="cp-body-copy mt-3 max-w-xl">Run an estimate from the cost estimate workspace first. The estimate board will then stay available for quick review.</p>
         <div className="mt-5">
-          <button onClick={goBackToCalculator} className="cp-button-primary">Back to build</button>
+          <button onClick={goBackToCalculator} className="cp-button-primary">Back to cost estimate</button>
         </div>
       </section>
     );
@@ -99,9 +99,9 @@ export default function CalculatorResult() {
           <div className="max-w-3xl">
             <span className="section-kicker">Estimate Board</span>
             <h1 className="cp-heading-xl mt-4">Read the estimate on a dedicated board.</h1>
-            <p className="cp-body-copy mt-3 max-w-2xl">Inputs stay in the build workspace. This board is for reading cost, route, and source evidence without editing noise.</p>
+            <p className="cp-body-copy mt-3 max-w-2xl">Inputs stay in the cost estimate workspace. This board is for reading cost, route, and source evidence without editing noise.</p>
           </div>
-          <button onClick={goBackToCalculator} className="cp-button-primary">Back to build</button>
+          <button onClick={goBackToCalculator} className="cp-button-primary">Back to cost estimate</button>
         </div>
 
         <div className="mt-5 grid gap-4 xl:grid-cols-[minmax(0,1.18fr)_minmax(340px,0.82fr)]">
@@ -139,10 +139,6 @@ export default function CalculatorResult() {
         activeSectionId={sectionState.activeSectionId}
         activeIndex={sectionState.activeIndex}
         onSelect={sectionState.setActiveSection}
-        onPrevious={sectionState.goPrevious}
-        onNext={sectionState.goNext}
-        canGoPrevious={sectionState.canGoPrevious}
-        canGoNext={sectionState.canGoNext}
       />
 
       {sectionState.activeSection.id === 'summary' && result.warnings?.length ? (
@@ -385,6 +381,16 @@ export default function CalculatorResult() {
           ) : null}
         </section>
       ) : null}
+
+      <WorkspaceSectionFooter
+        activeSection={sectionState.activeSection}
+        activeIndex={sectionState.activeIndex}
+        totalSections={RESULT_SECTIONS.length}
+        onPrevious={sectionState.goPrevious}
+        onNext={sectionState.goNext}
+        canGoPrevious={sectionState.canGoPrevious}
+        canGoNext={sectionState.canGoNext}
+      />
     </div>
   );
 }

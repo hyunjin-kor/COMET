@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { useState } from 'react';
 import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import { WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
+import { WorkspaceSectionFooter, WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
 import { apiUrl } from '../lib/api';
 import { useUnit } from '../lib/use-unit';
 
@@ -138,10 +138,6 @@ export default function Uncertainty() {
         activeSectionId={activeSectionId}
         activeIndex={activeIndex}
         onSelect={setActiveSection}
-        onPrevious={goPrevious}
-        onNext={goNext}
-        canGoPrevious={canGoPrevious}
-        canGoNext={canGoNext}
       />
 
       {activeSection.id === 'inputs' ? (
@@ -335,6 +331,16 @@ export default function Uncertainty() {
           )}
         </section>
       )}
+
+      <WorkspaceSectionFooter
+        activeSection={activeSection}
+        activeIndex={activeIndex}
+        totalSections={RISK_SECTIONS.length}
+        onPrevious={goPrevious}
+        onNext={goNext}
+        canGoPrevious={canGoPrevious}
+        canGoNext={canGoNext}
+      />
     </div>
   );
 }

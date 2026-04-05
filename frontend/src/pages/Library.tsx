@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
+import { WorkspaceSectionFooter, WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
 import {
   type CatalystDomain,
   fetchMaterials,
@@ -201,10 +201,6 @@ export default function Library() {
             activeSectionId={sectionState.activeSectionId}
             activeIndex={sectionState.activeIndex}
             onSelect={sectionState.setActiveSection}
-            onPrevious={sectionState.goPrevious}
-            onNext={sectionState.goNext}
-            canGoPrevious={sectionState.canGoPrevious}
-            canGoNext={sectionState.canGoNext}
           />
         </div>
 
@@ -486,6 +482,18 @@ export default function Library() {
             </div>
           </div>
         )}
+
+        <div className="mt-5">
+          <WorkspaceSectionFooter
+            activeSection={sectionState.activeSection}
+            activeIndex={sectionState.activeIndex}
+            totalSections={LIBRARY_SECTIONS.length}
+            onPrevious={sectionState.goPrevious}
+            onNext={sectionState.goNext}
+            canGoPrevious={sectionState.canGoPrevious}
+            canGoNext={sectionState.canGoNext}
+          />
+        </div>
       </section>
     </div>
   );

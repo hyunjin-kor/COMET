@@ -9,7 +9,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
+import { WorkspaceSectionFooter, WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
 import { apiUrl, fetchPrices, type MetalPrice } from '../lib/api';
 import { LB_PER_KG, type Unit } from '../lib/unit-conversion';
 import { useUnit } from '../lib/use-unit';
@@ -430,12 +430,17 @@ export default function Prices() {
         activeSectionId={activeSectionId}
         activeIndex={activeIndex}
         onSelect={setActiveSection}
+      />
+      {activeSection.id === 'quotes' ? renderQuotes() : renderTrend()}
+      <WorkspaceSectionFooter
+        activeSection={activeSection}
+        activeIndex={activeIndex}
+        totalSections={FEED_SECTIONS.length}
         onPrevious={goPrevious}
         onNext={goNext}
         canGoPrevious={canGoPrevious}
         canGoNext={canGoNext}
       />
-      {activeSection.id === 'quotes' ? renderQuotes() : renderTrend()}
     </div>
   );
 }

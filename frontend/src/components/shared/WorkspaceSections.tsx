@@ -54,10 +54,6 @@ type WorkspaceSectionNavProps = {
   activeSectionId: string;
   activeIndex: number;
   onSelect: (id: string) => void;
-  onPrevious: () => void;
-  onNext: () => void;
-  canGoPrevious: boolean;
-  canGoNext: boolean;
 };
 
 export function WorkspaceSectionNav({
@@ -65,36 +61,13 @@ export function WorkspaceSectionNav({
   activeSectionId,
   activeIndex,
   onSelect,
-  onPrevious,
-  onNext,
-  canGoPrevious,
-  canGoNext,
 }: WorkspaceSectionNavProps) {
   return (
     <section className="surface-card-soft px-4 py-4">
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-        <div>
-          <div className="cp-subtle-label">Workspace Steps</div>
-          <div className="mt-2 text-sm text-slate-600">
-            Step {activeIndex + 1} of {sections.length}
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <button
-            onClick={onPrevious}
-            disabled={!canGoPrevious}
-            className="cp-button-secondary px-3 py-2 text-xs disabled:opacity-35"
-          >
-            Back
-          </button>
-          <button
-            onClick={onNext}
-            disabled={!canGoNext}
-            className="cp-button-secondary px-3 py-2 text-xs disabled:opacity-35"
-          >
-            Next
-          </button>
+      <div>
+        <div className="cp-subtle-label">Workspace Steps</div>
+        <div className="mt-2 text-sm text-slate-600">
+          Step {activeIndex + 1} of {sections.length}
         </div>
       </div>
 
@@ -121,6 +94,57 @@ export function WorkspaceSectionNav({
             </button>
           );
         })}
+      </div>
+    </section>
+  );
+}
+
+type WorkspaceSectionFooterProps = {
+  activeSection: WorkspaceSection;
+  activeIndex: number;
+  totalSections: number;
+  onPrevious: () => void;
+  onNext: () => void;
+  canGoPrevious: boolean;
+  canGoNext: boolean;
+};
+
+export function WorkspaceSectionFooter({
+  activeSection,
+  activeIndex,
+  totalSections,
+  onPrevious,
+  onNext,
+  canGoPrevious,
+  canGoNext,
+}: WorkspaceSectionFooterProps) {
+  return (
+    <section className="surface-card-soft px-4 py-4">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <div className="cp-subtle-label">Step Navigation</div>
+          <div className="mt-2 font-semibold text-slate-950">{activeSection.label}</div>
+          <div className="mt-1 text-xs leading-5 text-slate-500">
+            Step {activeIndex + 1} of {totalSections}. {activeSection.summary}
+          </div>
+        </div>
+
+        <div className="flex w-full gap-2 sm:w-auto">
+          <button
+            onClick={onPrevious}
+            disabled={!canGoPrevious}
+            className="cp-button-secondary flex-1 px-4 py-2.5 text-sm disabled:opacity-35 sm:flex-none"
+          >
+            Back
+          </button>
+          <button
+            onClick={onNext}
+            disabled={!canGoNext}
+            className="cp-button-primary flex-1 px-4 py-2.5 text-sm disabled:opacity-35 sm:flex-none"
+          >
+            Next
+          </button>
+        </div>
       </div>
     </section>
   );
