@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
 import {
   type CatalystDomain,
   fetchMaterials,
@@ -25,6 +26,11 @@ const DOMAIN_OPTIONS: Array<{ value: '' | CatalystDomain; label: string }> = [
   { value: 'electrocatalyst', label: 'Electrocatalyst' },
   { value: 'general', label: 'General' },
   { value: 'both', label: 'Both' },
+];
+const LIBRARY_SECTIONS: WorkspaceSection[] = [
+  { id: 'materials', label: 'Materials', summary: 'Source rows with quote and trust metadata.' },
+  { id: 'steps', label: 'Steps', summary: 'Hourly step rates by campaign scale.' },
+  { id: 'templates', label: 'Templates', summary: 'Route templates and processing stages.' },
 ];
 
 function categoryTone(category: string) {
@@ -114,7 +120,8 @@ function sourceLinkLabel(material: MaterialItem) {
 }
 
 export default function Library() {
-  const [tab, setTab] = useState<Tab>('materials');
+  const sectionState = useWorkspaceSections(LIBRARY_SECTIONS, 'library');
+  const tab = sectionState.activeSection.id as Tab;
   const [materials, setMaterials] = useState<MaterialItem[]>([]);
   const [templates, setTemplates] = useState<ProcessTemplate[]>([]);
   const [steps, setSteps] = useState<StepLibraryItem[]>([]);
@@ -185,22 +192,20 @@ export default function Library() {
               Move between material sources, process steps, and route templates from one place, with clear domain and application filters.
             </p>
           </div>
+          <span className="cp-chip">{tab}</span>
+        </div>
 
-          <div className="cp-toolbar">
-            {(['materials', 'steps', 'templates'] as Tab[]).map((value) => (
-              <button
-                key={value}
-                onClick={() => setTab(value)}
-                className={`rounded-[18px] px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] transition ${
-                  tab === value
-                    ? 'bg-slate-950 text-white shadow-[0_12px_24px_rgba(15,23,42,0.18)]'
-                    : 'text-slate-500 hover:bg-white hover:text-slate-800'
-                }`}
-              >
-                {value}
-              </button>
-            ))}
-          </div>
+        <div className="mt-5">
+          <WorkspaceSectionNav
+            sections={LIBRARY_SECTIONS}
+            activeSectionId={sectionState.activeSectionId}
+            activeIndex={sectionState.activeIndex}
+            onSelect={sectionState.setActiveSection}
+            onPrevious={sectionState.goPrevious}
+            onNext={sectionState.goNext}
+            canGoPrevious={sectionState.canGoPrevious}
+            canGoNext={sectionState.canGoNext}
+          />
         </div>
 
         {tab === 'materials' && (

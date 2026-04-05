@@ -46,7 +46,7 @@ CatPrice is built to feel like shipped desktop software rather than a spreadshee
 | --- | --- |
 | Core estimator | Reaction-agnostic catalyst manufacturing cost estimation |
 | Price clarity | `LIVE`, `INDEXED`, and `MANUAL` states plus evidence confidence and freshness |
-| Workflow | Separate build and estimate-board surfaces for better readability |
+| Workflow | Step-based workspace navigation with back/forward movement instead of long scroll stacks |
 | Route logic | Step Method, route extras, indexed escalation, and optional reference routes |
 | Research support | Literature-backed thermocatalyst and electrocatalyst benchmark families with explicit source banks |
 | Desktop release | Installer + unpacked app outputs for a clean Windows release path |
@@ -70,7 +70,7 @@ Download the packaged Windows app from [GitHub Releases](https://github.com/hyun
 
 Recommended asset:
 
-- `CatPrice Setup 1.1.1.exe`
+- `CatPrice Setup 1.1.2.exe`
 
 Portable asset:
 
@@ -104,7 +104,7 @@ npm run build
 
 Main outputs:
 
-- `dist-electron\CatPrice Setup 1.1.1.exe`
+- `dist-electron\CatPrice Setup 1.1.2.exe`
 - `dist-electron\win-unpacked\CatPrice.exe`
 
 Before rebuilding desktop artifacts, CatPrice stops old desktop processes automatically. You can also stop them manually:

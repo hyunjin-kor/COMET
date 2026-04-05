@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { useState } from 'react';
 import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
 import { apiUrl } from '../lib/api';
 import { useUnit } from '../lib/use-unit';
 
@@ -19,6 +20,10 @@ interface MCResult {
 }
 
 const KNOWN_METALS = ['Ni', 'Co', 'Pt', 'Pd', 'Rh', 'Ru', 'Cu', 'Fe', 'Mo', 'W'];
+const RISK_SECTIONS: WorkspaceSection[] = [
+  { id: 'inputs', label: 'Inputs', summary: 'Set the baseline and sampling size.' },
+  { id: 'results', label: 'Results', summary: 'Read percentile bands and spread.' },
+];
 
 function StatTile({ label, value, detail }: { label: string; value: string; detail: string }) {
   return (
@@ -62,6 +67,16 @@ function FieldBlock({
 
 export default function Uncertainty() {
   const { toDisplay, toInternal, fmtLabel } = useUnit();
+  const {
+    activeSection,
+    activeSectionId,
+    activeIndex,
+    canGoNext,
+    canGoPrevious,
+    goNext,
+    goPrevious,
+    setActiveSection,
+  } = useWorkspaceSections(RISK_SECTIONS, 'risk');
   const [result, setResult] = useState<MCResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -108,6 +123,7 @@ export default function Uncertainty() {
 
       if (!response.ok) throw new Error((await response.json()).detail);
       setResult(await response.json());
+      setActiveSection('results');
     } catch (caughtError: unknown) {
       setError(caughtError instanceof Error ? caughtError.message : 'Analysis failed');
     } finally {
@@ -117,7 +133,18 @@ export default function Uncertainty() {
 
   return (
     <div className="space-y-4">
-      <div className="grid gap-4 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+      <WorkspaceSectionNav
+        sections={RISK_SECTIONS}
+        activeSectionId={activeSectionId}
+        activeIndex={activeIndex}
+        onSelect={setActiveSection}
+        onPrevious={goPrevious}
+        onNext={goNext}
+        canGoPrevious={canGoPrevious}
+        canGoNext={canGoNext}
+      />
+
+      {activeSection.id === 'inputs' ? (
         <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.06s' }}>
           <div className="border-b border-slate-900/8 pb-5">
             <div className="cp-subtle-label">Risk Range</div>
@@ -218,7 +245,7 @@ export default function Uncertainty() {
 
           {error && <div className="mt-4 rounded-[24px] border border-red-200 bg-red-50 px-4 py-4 text-sm text-red-700">{error}</div>}
         </section>
-
+      ) : (
         <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.1s' }}>
           {!result ? (
             <div className="flex min-h-[520px] flex-col justify-between">
@@ -307,7 +334,7 @@ export default function Uncertainty() {
             </>
           )}
         </section>
-      </div>
+      )}
     </div>
   );
 }
