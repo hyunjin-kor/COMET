@@ -14,6 +14,9 @@ class Estimate(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     name: str = Field(index=True)
     description: str = ""
+    catalyst_domain: str = Field(default="thermal", index=True)
+    application_family: str = Field(default="general", index=True)
+    calculation_model: str = Field(default="catcost_step", index=True)
     metal_symbol: str = ""
     metal_loading_wt_pct: float = 0.0
     support_name: str = ""

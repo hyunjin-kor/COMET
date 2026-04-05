@@ -1,0 +1,51 @@
+{
+  "id": "pem_electrolyzer_ccm",
+  "name": "PEM Electrolyzer CCM Route",
+  "description": "PEM electrolyzer catalyst-coated membrane workflow for IrOx/Pt-family electrodes using membrane pretreatment, ink dispersion, coating, drying, and activation proxies.",
+  "category": "Electrocatalyst / PEM Electrolyzer",
+  "catalyst_domain": "electrocatalyst",
+  "application_family": "electrolyzer",
+  "manufacturing_mode": "ccm",
+  "example_catalysts": [
+    "IrO2 anode",
+    "Pt/C cathode",
+    "PtIr alloy catalyst"
+  ],
+  "preprocess": [
+    "Membrane acid pretreatment",
+    "Substrate preparation",
+    "Catalyst powder staging"
+  ],
+  "synthesis": [
+    "Ionomer ink homogenization",
+    "Ultrasonic dispersion",
+    "CCM coating pass",
+    "Electrode drying below 100 C"
+  ],
+  "postprocess": [
+    "Hot press lamination",
+    "Electrochemical break-in"
+  ],
+  "quality_gates": [
+    "Ir loading verification",
+    "Adhesion after dry-down",
+    "Activation voltage check"
+  ],
+  "steps": [
+    "membrane_pretreatment",
+    "substrate_pretreatment",
+    "ionomer_ink_homogenization",
+    "ultrasonic_dispersion",
+    "ccm_coating_pass",
+    "electrode_drying_low_temp",
+    "hot_press_lamination",
+    "electrochemical_break_in"
+  ],
+  "route_note": "Electrolyzer-specific roll-to-roll manufacturing remains approximated by CatCost proxy steps, but the material stack is separated from thermocatalyst workflows.",
+  "source": "Fuel Cell Store IrOx catalyst, PFSA membrane, and PFSA ionomer product pages",
+  "reference_urls": [
+    "https://www.fuelcellstore.com/iridium-oxide-high-surface-area-and-high-performance-3161610",
+    "https://www.fuelcellstore.com/pfsa-d50r-eptfe-reinforced-proton-exchange-membrane-87010026",
+    "https://www.fuelcellstore.com/pfsa-dispersion-d5-758000100"
+  ]
+}

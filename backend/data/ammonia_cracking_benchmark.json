@@ -1,6 +1,8 @@
 {
   "family": "ammonia-cracking",
   "title": "Ammonia decomposition reference family",
+  "catalyst_domain": "thermal",
+  "application_family": "general",
   "reaction": "2 NH3 -> N2 + 3 H2",
   "objective": "Optional literature-backed reference family for sanity-checking catalyst economics against a specific reaction window. CatPrice itself remains reaction-agnostic and uses these routes as starting points, not as the product boundary.",
   "decision_profiles": {
@@ -37,25 +39,39 @@
   },
   "citations": [
     {
-      "id": "economic-screening-2026",
-      "label": "Cleaner Energy Systems 2026",
-      "url": "https://naos-be.zcu.cz/server/api/core/bitstreams/ee92fa23-ea1c-42b4-ad67-e0230bce7552/content",
+      "id": "patched-ni-fe-ncomms-2015",
+      "label": "Nature Communications 2015",
+      "url": "https://doi.org/10.1038/ncomms9619",
       "kind": "literature",
-      "note": "Economic analysis summary comparing Ru, Ni, and Co ammonia-decomposition catalysts under matched conditions."
+      "note": "Patched bimetallic Ni-Fe surfaces identified as effective, scalable non-noble architectures for ammonia decomposition."
+    },
+    {
+      "id": "hea-ammonia-ncomms-2019",
+      "label": "Nature Communications 2019",
+      "url": "https://doi.org/10.1038/s41467-019-11848-9",
+      "kind": "literature",
+      "note": "High-entropy alloy catalyst family for ammonia decomposition highlighting non-noble route-design latitude and composition effects."
     },
     {
       "id": "ru-mgo-nature-2023",
       "label": "Nature Communications 2023",
-      "url": "https://www.nature.com/articles/s41467-023-36339-w",
+      "url": "https://doi.org/10.1038/s41467-023-36339-w",
       "kind": "literature",
       "note": "Ru ensembles on MgO(111) reported as a high-activity ammonia-decomposition architecture."
     },
     {
-      "id": "ni-mgo-ceo2-2025",
-      "label": "PubMed 2025",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/41452228/",
+      "id": "gan-ru-ncomms-2024",
+      "label": "Nature Communications 2024",
+      "url": "https://doi.org/10.1038/s41467-024-51810-y",
       "kind": "literature",
-      "note": "Ni_xMg_1-xO/CeO2 interface catalyst highlighted for efficient ammonia decomposition without noble metal loading."
+      "note": "Ruthenium-on-gallium-nitride architecture showing strong low-temperature ammonia-decomposition activity and durability."
+    },
+    {
+      "id": "ni-ceo2x-ncomms-2025",
+      "label": "Nature Communications 2025",
+      "url": "https://doi.org/10.1038/s41467-025-66325-3",
+      "kind": "literature",
+      "note": "Photothermal Ni-CeO2-x/CNT catalyst showing how Ni-ceria interfacial design can recover low-temperature ammonia-decomposition activity without noble-metal loading."
     },
     {
       "id": "sigma-ni-nitrate",
@@ -269,7 +285,8 @@
       "screening_exactness": 60,
       "temperature_window_c": [550, 700],
       "literature_basis_ids": [
-        "economic-screening-2026",
+        "patched-ni-fe-ncomms-2015",
+        "hea-ammonia-ncomms-2019",
         "sigma-ni-nitrate",
         "sigma-alumina"
       ],
@@ -322,8 +339,8 @@
       "screening_exactness": 67,
       "temperature_window_c": [475, 650],
       "literature_basis_ids": [
-        "economic-screening-2026",
-        "ni-mgo-ceo2-2025",
+        "hea-ammonia-ncomms-2019",
+        "ni-ceo2x-ncomms-2025",
         "sigma-ni-nitrate",
         "sigma-ceo2",
         "sigma-mgo"
@@ -392,8 +409,8 @@
       "screening_exactness": 84,
       "temperature_window_c": [400, 575],
       "literature_basis_ids": [
-        "economic-screening-2026",
         "ru-mgo-nature-2023",
+        "gan-ru-ncomms-2024",
         "sigma-ru-chloride",
         "sigma-mgo"
       ],

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from backend.core.constants import LB_PER_KG, TROY_OZ_PER_LB
+from backend.core.electrocatalyst import calculate_electrode_layer_cost
 from backend.core.materials_calc import calculate_materials_cost_multi
 from backend.core.price_escalation import get_escalation_factor
 from backend.core.spent_catalyst import calculate_metal_recovery_value
@@ -20,6 +21,8 @@ def estimate_catalyst_cost(
     precursor_metal_fraction: float = 1.0,
     precursor_markup: float = 1.0,
     steps: list[str] | None = None,
+    catalyst_domain: str = "thermal",
+    application_family: str = "general",
     order_size_tons: float = 10.0,
     ga_overhead_pct: float = 0.05,
     sard_pct: float = 0.05,
@@ -28,6 +31,9 @@ def estimate_catalyst_cost(
     include_spent_value: bool = False,
     reactor_type: str = "fixed",
     catalyst_bulk_density: float = 50.0,
+    electrode_input: dict | None = None,
+    route_summary: dict | None = None,
+    resolved_materials: list[dict] | None = None,
 ) -> dict:
     """Run a full catalyst cost estimation.
 
@@ -83,14 +89,25 @@ def estimate_catalyst_cost(
             "precursor_markup": precursor_markup,
         }
 
-    active_metals = [component for component in components if component["role"] == "active_metal"]
+    active_metals = [
+        component
+        for component in components
+        if component["role"] in {"active_metal", "active_catalyst"}
+    ]
     supports = [component for component in components if component["role"] == "support"]
     if not active_metals:
-        raise ValueError("At least one active_metal component is required")
-    if not supports:
+        raise ValueError("At least one active_metal or active_catalyst component is required")
+    if catalyst_domain != "electrocatalyst" and not supports:
         raise ValueError("At least one support component is required")
 
     materials = calculate_materials_cost_multi(components)
+    warnings: list[str] = []
+
+    if catalyst_domain == "electrocatalyst" and electrode_input is None:
+        warnings.append(
+            "Electrocatalyst mode is separated from thermocatalyst records, but no electrode-layer "
+            "adjunct inputs were supplied for ionomer, membrane, or substrate costs."
+        )
 
     try:
         chemppi_factor = get_escalation_factor(basis_year, target_year, "chemppi")
@@ -110,10 +127,11 @@ def estimate_catalyst_cost(
     )
 
     spent_result = None
+    electrode_model = None
     net_cost_per_lb = step_result["estimated_price_per_lb"]
     total_wt = sum(float(component["wt_pct"]) for component in components)
 
-    if include_spent_value:
+    if include_spent_value and supports and any(component["role"] == "active_metal" for component in active_metals):
         primary = max(active_metals, key=lambda component: float(component["wt_pct"]))
         metal_loading_frac = float(primary["wt_pct"]) / total_wt
 
@@ -131,6 +149,36 @@ def estimate_catalyst_cost(
         except Exception:
             spent_result = None
 
+    if (
+        catalyst_domain == "electrocatalyst"
+        and electrode_input is not None
+        and electrode_input.get("catalyst_price_per_lb", 0) > 0
+    ):
+        primary_component = max(active_metals, key=lambda component: float(component["wt_pct"]))
+        electrode_model = calculate_electrode_layer_cost(
+            catalyst_price_per_lb=float(electrode_input["catalyst_price_per_lb"]),
+            active_area_cm2=float(electrode_input.get("active_area_cm2", 25.0)),
+            catalyst_loading_mg_cm2=float(electrode_input.get("catalyst_loading_mg_cm2", 0.5)),
+            ionomer_to_catalyst_ratio=float(electrode_input.get("ionomer_to_catalyst_ratio", 0.0)),
+            ionomer_price_per_ml=float(electrode_input.get("ionomer_price_per_ml", 0.0)),
+            ionomer_price_per_kg_solids=float(electrode_input.get("ionomer_price_per_kg_solids", 0.0)),
+            ionomer_density_g_ml=float(electrode_input.get("ionomer_density_g_ml", 0.94)),
+            ionomer_solids_fraction=float(electrode_input.get("ionomer_solids_fraction", 0.05)),
+            substrate_cost_per_cm2=float(electrode_input.get("substrate_cost_per_cm2", 0.0)),
+            membrane_cost_per_cm2=float(electrode_input.get("membrane_cost_per_cm2", 0.0)),
+            application_family=electrode_input.get("application_family", application_family),
+        )
+        warnings.append(
+            "Electrocatalyst results now include area-based catalyst, ionomer, membrane, and substrate "
+            "costs, but roll-to-roll line throughput, yield losses, and stack assembly remain CatCost proxy estimates."
+        )
+        if primary_component["role"] == "active_catalyst":
+            composition = primary_component["name"]
+        else:
+            composition = primary_component["name"]
+    else:
+        composition = None
+
     metals_label = "+".join(
         f"{float(component['wt_pct']) / total_wt * 100:.1f}% {component['name']}"
         for component in active_metals
@@ -138,10 +186,14 @@ def estimate_catalyst_cost(
     promoters_label = "+".join(
         component["name"] for component in components if component["role"] == "promoter"
     )
-    support_label = supports[0]["name"]
-    composition = f"{metals_label}/{support_label}"
-    if promoters_label:
-        composition = f"{metals_label}+{promoters_label}/{support_label}"
+    support_label = supports[0]["name"] if supports else ""
+    if composition is None:
+        if support_label:
+            composition = f"{metals_label}/{support_label}"
+            if promoters_label:
+                composition = f"{metals_label}+{promoters_label}/{support_label}"
+        else:
+            composition = metals_label if not promoters_label else f"{metals_label}+{promoters_label}"
 
     estimated = step_result["estimated_price_per_lb"]
 
@@ -149,6 +201,8 @@ def estimate_catalyst_cost(
         "input_summary": {
             **legacy_input_summary,
             "composition": composition,
+            "catalyst_domain": catalyst_domain,
+            "application_family": application_family,
             "n_components": len(components),
             "order_size_tons": order_size_tons,
             "basis_year": basis_year,
@@ -158,6 +212,10 @@ def estimate_catalyst_cost(
         "materials": materials,
         "step_method": step_result,
         "spent_catalyst": spent_result,
+        "electrode_model": electrode_model,
+        "route_summary": route_summary,
+        "resolved_materials": resolved_materials or [],
+        "warnings": warnings,
         "summary": {
             "estimated_price_per_lb": round(estimated, 4),
             "estimated_price_per_kg": round(estimated * LB_PER_KG, 4),
@@ -181,6 +239,8 @@ def estimate_catalyst_cost_simple(
     support_name: str,
     support_price_per_lb: float,
     steps: list[str] | None = None,
+    catalyst_domain: str = "thermal",
+    application_family: str = "general",
     order_size_tons: float = 10.0,
     precursor_markup: float = 1.0,
     ga_overhead_pct: float = 0.05,
@@ -199,6 +259,8 @@ def estimate_catalyst_cost_simple(
         support_price_per_lb=support_price_per_lb,
         precursor_markup=precursor_markup,
         steps=steps,
+        catalyst_domain=catalyst_domain,
+        application_family=application_family,
         order_size_tons=order_size_tons,
         ga_overhead_pct=ga_overhead_pct,
         sard_pct=sard_pct,

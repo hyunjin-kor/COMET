@@ -33,8 +33,17 @@ STEP_COSTS: dict[str, dict[str, float | None]] = {
     "mill":                      {"small": 50,  "medium": 100, "large": 200},
     "mixer_dry_blender":         {"small": 50,  "medium": 100, "large": 200},
     "mixer_slurry":              {"small": 75,  "medium": 100, "large": 200},
+    "membrane_pretreatment":     {"small": 30,  "medium": 60,  "large": 200},
+    "substrate_pretreatment":    {"small": 30,  "medium": 60,  "large": 200},
+    "ion_exchange_conversion":   {"small": 30,  "medium": 60,  "large": 200},
+    "ionomer_ink_homogenization":{"small": 75,  "medium": 100, "large": 200},
+    "ultrasonic_dispersion":     {"small": 75,  "medium": 100, "large": 200},
+    "ccm_coating_pass":          {"small": 75,  "medium": 100, "large": 200},
+    "electrode_drying_low_temp": {"small": 75,  "medium": 100, "large": 200},
+    "hot_press_lamination":      {"small": 100, "medium": 200, "large": 425},
     "reactor_simple":            {"small": 30,  "medium": 60,  "large": 200},
     "reactor_multistep":         {"small": 100, "medium": 175, "large": 600},
+    "electrochemical_break_in":  {"small": 30,  "medium": 60,  "large": 200},
     "scrubber_nox":              {"small": 35,  "medium": 75,  "large": 200},
 }
 

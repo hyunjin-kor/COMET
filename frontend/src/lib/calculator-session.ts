@@ -1,6 +1,6 @@
-import type { CostResult, DecisionCandidate } from './api';
+import type { ApplicationFamily, CostResult, DecisionCandidate } from './api';
 
-export type CalculatorRole = 'active_metal' | 'promoter' | 'support';
+export type CalculatorRole = 'active_metal' | 'active_catalyst' | 'promoter' | 'support';
 export type CalculatorSourceType = 'live' | 'indexed' | 'manual';
 
 export interface CalculatorRow {
@@ -16,8 +16,20 @@ export interface CalculatorRow {
 export interface CalculatorDraft {
   rows: CalculatorRow[];
   steps: string[];
+  catalystDomain: 'thermal' | 'electrocatalyst';
+  applicationFamily?: ApplicationFamily;
   orderSize: number;
   pricesUpdatedAt: string | null;
+  electrocatalystConfig?: {
+    catalystMaterialKey: string;
+    ionomerMaterialKey: string;
+    membraneMaterialKey: string;
+    substrateMaterialKey: string;
+    activeAreaCm2: number;
+    catalystLoadingMgCm2: number;
+    ionomerToCatalystRatio: number;
+    templateId: string;
+  } | null;
   benchmarkCandidate?: CalculatorBenchmarkPreset | null;
 }
 
@@ -38,7 +50,7 @@ export interface CalculatorResultSnapshot {
 
 export type CalculatorBenchmarkPreset = Pick<
   DecisionCandidate,
-  'slug' | 'title' | 'archetype' | 'screening_basis' | 'screening_summary' | 'route' | 'scores' | 'decision_notes'
+  'slug' | 'title' | 'archetype' | 'screening_basis' | 'screening_summary' | 'catalyst_domain' | 'application_family' | 'route' | 'scores' | 'decision_notes'
 >;
 
 const DRAFT_KEY = 'catprice_calculator_draft';

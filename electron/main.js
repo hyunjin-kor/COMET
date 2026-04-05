@@ -21,8 +21,13 @@ const MAX_WAIT_MS  = 30_000;    // 30 seconds max startup wait
 const POLL_INTERVAL_MS = 500;
 const ALLOWED_EXTERNAL_HOSTS = new Set([
   'github.com',
+  'doi.org',
   'sigmaaldrich.com',
   'nature.com',
+  'pubs.acs.org',
+  'science.org',
+  'onlinelibrary.wiley.com',
+  'sciencedirect.com',
   'pubmed.ncbi.nlm.nih.gov',
   'naos-be.zcu.cz',
   'metals.dev',

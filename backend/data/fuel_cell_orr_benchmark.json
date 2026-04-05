@@ -1,0 +1,426 @@
+{
+  "family": "fuel-cell-orr",
+  "title": "Fuel-cell ORR cathode reference family",
+  "catalyst_domain": "electrocatalyst",
+  "application_family": "fuel_cell",
+  "reaction": "O2 + 4H+ + 4e- -> 2 H2O",
+  "objective": "Optional literature-backed electrocatalyst family for PEM fuel-cell cathode screening. These routes are reference starting points for ORR catalyst cost, route maturity, and evidence quality, not hard product boundaries.",
+  "decision_profiles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Balance economics, source confidence, route confidence, and performance.",
+      "weights": {
+        "economics": 0.4,
+        "evidence": 0.22,
+        "route": 0.18,
+        "performance": 0.2
+      }
+    },
+    "cost-first": {
+      "label": "Cost-first",
+      "description": "Bias ranking toward current catalyst cost while preserving route and evidence guardrails.",
+      "weights": {
+        "economics": 0.55,
+        "evidence": 0.15,
+        "route": 0.1,
+        "performance": 0.2
+      }
+    },
+    "evidence-first": {
+      "label": "Evidence-first",
+      "description": "Reward stronger literature confidence and better route reproducibility.",
+      "weights": {
+        "economics": 0.3,
+        "evidence": 0.35,
+        "route": 0.15,
+        "performance": 0.2
+      }
+    }
+  },
+  "citations": [
+    {
+      "id": "debe-nature-2012",
+      "label": "Nature 2012",
+      "url": "https://doi.org/10.1038/nature11115",
+      "kind": "literature",
+      "note": "Seminal benchmark review on electrocatalyst routes and cost/performance constraints for automotive fuel cells."
+    },
+    {
+      "id": "fen-c-natcatal-2019",
+      "label": "Nature Catalysis 2019",
+      "url": "https://www.nature.com/articles/s41929-019-0237-3",
+      "kind": "literature",
+      "note": "Dense-active-site Fe-N-C cathode route meeting early PEMFC PGM-free activity targets."
+    },
+    {
+      "id": "fen-c-nenergy-2022",
+      "label": "Nature Energy 2022",
+      "url": "https://www.nature.com/articles/s41560-022-01062-1",
+      "kind": "literature",
+      "note": "Durable Fe-N-C route with nitrogen-carbon coating and long steady-state PEMFC operation."
+    },
+    {
+      "id": "fen-c-ncomms-2024-mono",
+      "label": "Nature Communications 2024",
+      "url": "https://www.nature.com/articles/s41467-024-47817-0",
+      "kind": "literature",
+      "note": "Monosymmetric Fe-N4 site engineering for durable PEMFC cathodes."
+    },
+    {
+      "id": "fen-c-ncomms-2024-br",
+      "label": "Nature Communications 2024",
+      "url": "https://www.nature.com/articles/s41467-024-51858-w",
+      "kind": "literature",
+      "note": "Trace-bromide Fe-NC electrocatalyst reaching high PEMFC power density at low PGM-free cost basis."
+    },
+    {
+      "id": "ptco-ncomms-2025-bonds",
+      "label": "Nature Communications 2025",
+      "url": "https://www.nature.com/articles/s41467-025-60171-z",
+      "kind": "literature",
+      "note": "Pt intermetallic alloy route with improved ORR durability through quasi-covalent bond-network regulation."
+    },
+    {
+      "id": "ptco-ncomms-2025-single-site",
+      "label": "Nature Communications 2025",
+      "url": "https://www.nature.com/articles/s41467-025-65122-2",
+      "kind": "literature",
+      "note": "Anti-dissolution Pt/Co interfacial design for durable PEMFC cathode catalysts."
+    },
+    {
+      "id": "pt-support-ncomms-2025",
+      "label": "Nature Communications 2025",
+      "url": "https://www.nature.com/articles/s41467-025-66813-6",
+      "kind": "literature",
+      "note": "Support and ionomer-distribution engineering showing how carbon support treatment materially changes PEMFC cathode utilization."
+    },
+    {
+      "id": "fcs-pt20-vulcan",
+      "label": "Fuel Cell Store XT 20% Pt/C",
+      "url": "https://www.fuelcellstore.com/XT-Pt-20-XC-72R-Grade-S",
+      "kind": "catalog",
+      "note": "Public Pt/C powder quote used as a transparent vendor-lab procurement anchor."
+    },
+    {
+      "id": "sigma-cobalt-nitrate",
+      "label": "Sigma-Aldrich 239267",
+      "url": "https://www.sigmaaldrich.com/US/en/product/sigald/239267",
+      "kind": "catalog",
+      "note": "Public cobalt nitrate quote used as a transparent precursor anchor for Pt-Co route screening."
+    }
+  ],
+  "catalog_quotes": [
+    {
+      "id": "fcs-pt20-vulcan",
+      "supplier": "Fuel Cell Store",
+      "material": "XT 20% Platinum on Vulcan XC-72R Grade S",
+      "sku": "XT-Pt-20-XC-72R-Grade-S",
+      "pack_size": "1 g",
+      "price_usd": 110.0,
+      "normalized_price_per_lb": 49895.16,
+      "url": "https://www.fuelcellstore.com/XT-Pt-20-XC-72R-Grade-S",
+      "note": "Public lab-scale Pt/C anchor. Commercial screening in CatPrice still follows live Pt feed plus route assumptions."
+    },
+    {
+      "id": "sigma-cobalt-nitrate",
+      "supplier": "Sigma-Aldrich",
+      "material": "Cobalt(II) nitrate hexahydrate",
+      "sku": "239267-100G",
+      "pack_size": "100 g",
+      "price_usd": 103.0,
+      "normalized_price_per_lb": 467.2,
+      "url": "https://www.sigmaaldrich.com/US/en/product/sigald/239267",
+      "note": "Transparent precursor anchor for Co-containing cathode routes."
+    }
+  ],
+  "route_templates": [
+    {
+      "id": "pem-pt-carbon-ccm",
+      "name": "PFSA Pt/C CCM cathode route",
+      "calculator_template_id": "pem_fuel_cell_ccm",
+      "manufacturing_mode": "Commercial Pt/C ink to CCM route",
+      "preprocess": [
+        "Membrane acid pretreatment and hydration",
+        "Carbon support wetting and PFSA staging",
+        "Pt/C powder balance check"
+      ],
+      "synthesis": [
+        "Ionomer ink homogenization",
+        "Ultrasonic dispersion",
+        "CCM coating pass"
+      ],
+      "postprocess": [
+        "Low-temperature drying",
+        "Hot-press lamination",
+        "Electrochemical break-in"
+      ],
+      "quality_gates": [
+        "Pt loading verification",
+        "Catalyst-layer crack inspection",
+        "MEA resistance and H2-air polarization check"
+      ],
+      "steps": [
+        "membrane_pretreatment",
+        "ionomer_ink_homogenization",
+        "ultrasonic_dispersion",
+        "ccm_coating_pass",
+        "electrode_drying_low_temp",
+        "hot_press_lamination",
+        "electrochemical_break_in"
+      ],
+      "non_step_cost_per_lb": 0.55,
+      "route_confidence": 89,
+      "route_note": "Closest route to commercial PEMFC cathode manufacturing and the most defensible baseline for price screening."
+    },
+    {
+      "id": "pem-ptco-alloy-ccm",
+      "name": "Pt-Co alloy cathode route",
+      "calculator_template_id": "pem_fuel_cell_ccm",
+      "manufacturing_mode": "Alloyed Pt-Co cathode with post-alloy conditioning",
+      "preprocess": [
+        "Pt and Co precursor balance",
+        "Support pre-wet and slurry solids check",
+        "Alloying hold recipe setup"
+      ],
+      "synthesis": [
+        "Multistep alloy deposition or co-reduction",
+        "Intermediate filtration / wash",
+        "CCM coating pass"
+      ],
+      "postprocess": [
+        "Thermal ordering or decomposition hold",
+        "Low-temperature drying",
+        "Hot-press lamination and break-in"
+      ],
+      "quality_gates": [
+        "Alloy ordering proxy",
+        "Transition-metal retention check",
+        "MEA mass-activity verification"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "reactor_multistep",
+        "filter_rotary_vacuum",
+        "dryer_rotary_100_300C",
+        "ionomer_ink_homogenization",
+        "ccm_coating_pass",
+        "electrode_drying_low_temp",
+        "hot_press_lamination",
+        "electrochemical_break_in"
+      ],
+      "non_step_cost_per_lb": 0.88,
+      "route_confidence": 77,
+      "route_note": "Higher-performing PEMFC cathode route, but alloy ordering, Co retention, and post-treatment discipline add route overhead."
+    },
+    {
+      "id": "pem-fen-c-ccm",
+      "name": "Fe-N-C PGM-free cathode route",
+      "calculator_template_id": "pem_fuel_cell_ccm",
+      "manufacturing_mode": "Pyrolyzed Fe-N-C cathode with CCM finishing",
+      "preprocess": [
+        "Fe and N-precursor batching",
+        "Carbon host and porogen balancing",
+        "Pyrolysis atmosphere setup"
+      ],
+      "synthesis": [
+        "Multistep precursor assembly",
+        "High-temperature pyrolysis and acid wash",
+        "Ionomer ink homogenization and CCM coating"
+      ],
+      "postprocess": [
+        "Secondary heat-treatment / stabilization",
+        "Low-temperature drying",
+        "MEA break-in and durability screening"
+      ],
+      "quality_gates": [
+        "Active-site density proxy",
+        "Peroxide / durability screen",
+        "PEMFC cathode power-density check"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "reactor_multistep",
+        "filter_rotary_vacuum",
+        "kiln_continuous_indirect",
+        "mill",
+        "ionomer_ink_homogenization",
+        "ccm_coating_pass",
+        "electrode_drying_low_temp",
+        "hot_press_lamination",
+        "electrochemical_break_in"
+      ],
+      "non_step_cost_per_lb": 1.12,
+      "route_confidence": 68,
+      "route_note": "Best noble-metal avoidance route in the family, but pyrolysis, acid wash, and durability control keep the route less mature than Pt-based baselines."
+    }
+  ],
+  "candidates": [
+    {
+      "slug": "ptc-baseline-cathode",
+      "title": "Pt/C baseline cathode",
+      "archetype": "Commercial benchmark",
+      "screening_basis": "market_plus_vendor_anchor",
+      "summary": "Commercial Pt/C PEMFC cathode baseline used as the benchmark cost anchor.",
+      "route_template_id": "pem-pt-carbon-ccm",
+      "order_size_tons": 20,
+      "performance_index": 72,
+      "manufacturing_readiness": 93,
+      "screening_exactness": 84,
+      "temperature_window_c": [60, 95],
+      "literature_basis_ids": [
+        "debe-nature-2012",
+        "pt-support-ncomms-2025",
+        "fcs-pt20-vulcan"
+      ],
+      "catalog_quote_ids": [
+        "fcs-pt20-vulcan"
+      ],
+      "decision_notes": [
+        "Most transferable PEMFC cathode basis and the clearest commercial comparison point.",
+        "Economics remain dominated by live Pt price exposure even when route maturity is high."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Pt",
+          "wt_pct": 20.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Pt",
+            "precursor_markup": 1.05,
+            "note": "Live Pt feed with a mild precursor/conversion markup for commercial Pt/C screening."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Carbon",
+          "wt_pct": 80.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.5,
+            "evidence_label": "Carbon support screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 68,
+            "transparency": "derived_index",
+            "note": "Carbon support retained on an engineering proxy basis while catalog Pt/C powder quotes remain visible as anchors."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "ptco-intermetallic-cathode",
+      "title": "Pt-Co intermetallic cathode",
+      "archetype": "Performance premium",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Pt-alloy route that trades extra route discipline for stronger ORR activity and Pt utilization.",
+      "route_template_id": "pem-ptco-alloy-ccm",
+      "order_size_tons": 20,
+      "performance_index": 93,
+      "manufacturing_readiness": 80,
+      "screening_exactness": 79,
+      "temperature_window_c": [60, 95],
+      "literature_basis_ids": [
+        "debe-nature-2012",
+        "ptco-ncomms-2025-bonds",
+        "ptco-ncomms-2025-single-site",
+        "sigma-cobalt-nitrate"
+      ],
+      "catalog_quote_ids": [
+        "sigma-cobalt-nitrate"
+      ],
+      "decision_notes": [
+        "Best fit when PEMFC cathode performance is worth extra alloying and transition-metal retention discipline.",
+        "Still expensive because Pt remains the dominant cost driver, but the route can justify higher utilization targets."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Pt",
+          "wt_pct": 20.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Pt",
+            "precursor_markup": 1.07,
+            "note": "Live Pt feed for Pt-Co alloy cathode screening."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "Co",
+          "wt_pct": 10.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Co",
+            "precursor_markup": 1.12,
+            "note": "Live Co feed with precursor markup to represent ordered Pt-Co cathode manufacture."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Carbon",
+          "wt_pct": 70.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.5,
+            "evidence_label": "Carbon support screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 68,
+            "transparency": "derived_index",
+            "note": "Carbon support kept on an engineering basis to avoid vendor-lab distortion in the support term."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "fen-c-pgmfree-cathode",
+      "title": "Fe-N-C PGM-free cathode",
+      "archetype": "Non-noble route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "PGM-free PEMFC cathode route that chases ORR activity through Fe-N-C site engineering rather than Pt loading.",
+      "route_template_id": "pem-fen-c-ccm",
+      "order_size_tons": 20,
+      "performance_index": 85,
+      "manufacturing_readiness": 65,
+      "screening_exactness": 70,
+      "temperature_window_c": [60, 95],
+      "literature_basis_ids": [
+        "fen-c-natcatal-2019",
+        "fen-c-nenergy-2022",
+        "fen-c-ncomms-2024-mono",
+        "fen-c-ncomms-2024-br"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "The strongest noble-metal-avoidance route in this family, but durability and process reproducibility still lag Pt-based cathodes.",
+        "Economics are attractive because metal exposure is low, yet route complexity is dominated by pyrolysis and post-treatment control."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Fe",
+          "wt_pct": 2.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Fe",
+            "precursor_markup": 1.25,
+            "note": "Live Fe feed with precursor markup as a simple cost anchor for Fe-N-C manufacture."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Carbon",
+          "wt_pct": 98.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.6,
+            "evidence_label": "Carbon host screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 66,
+            "transparency": "derived_index",
+            "note": "Carbon host and nitrogen-source costs are grouped into a conservative proxy while the route premium captures pyrolysis and acid-wash overhead."
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "id": "dmfc_gde_route",
+  "name": "DMFC Anode GDE / CCM Route",
+  "description": "Direct-methanol fuel-cell electrode route centered on PtRu catalyst ink preparation, coating, drying, and post-assembly activation proxies.",
+  "category": "Electrocatalyst / DMFC",
+  "catalyst_domain": "electrocatalyst",
+  "application_family": "direct_methanol_fuel_cell",
+  "manufacturing_mode": "gde_or_ccm",
+  "example_catalysts": [
+    "PtRu/C anode",
+    "Pt/C cathode"
+  ],
+  "preprocess": [
+    "Substrate pretreatment",
+    "Membrane conditioning",
+    "Methanol-compatible ink staging"
+  ],
+  "synthesis": [
+    "Ionomer ink homogenization",
+    "Ultrasonic dispersion",
+    "CCM coating pass",
+    "Electrode drying below 100 C"
+  ],
+  "postprocess": [
+    "Hot press lamination",
+    "Electrochemical break-in"
+  ],
+  "quality_gates": [
+    "PtRu loading check",
+    "Methanol crossover screening",
+    "Open-circuit conditioning"
+  ],
+  "steps": [
+    "substrate_pretreatment",
+    "membrane_pretreatment",
+    "ionomer_ink_homogenization",
+    "ultrasonic_dispersion",
+    "ccm_coating_pass",
+    "electrode_drying_low_temp",
+    "hot_press_lamination",
+    "electrochemical_break_in"
+  ],
+  "route_note": "The route uses electrocatalyst proxy steps so PtRu-specific anode workflows are represented separately from PEM H2/air templates.",
+  "source": "Fuel Cell Store PtRu catalyst and PFSA ionomer product pages",
+  "reference_urls": [
+    "https://www.fuelcellstore.com/60-ptru-xc72r",
+    "https://www.fuelcellstore.com/pfsa-dispersion-d5-758000100"
+  ]
+}

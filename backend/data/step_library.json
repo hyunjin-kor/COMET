@@ -8,7 +8,7 @@
     "medium_tons_per_day": 10,
     "large_tons_per_day": 150
   },
-  "total_count": 21,
+  "total_count": 30,
   "steps": [
     {
       "name": "Ball forming unit",
@@ -173,6 +173,78 @@
       "basis": "$/hr, mid-2017"
     },
     {
+      "name": "Membrane pretreatment (CatCost proxy)",
+      "key": "membrane_pretreatment",
+      "cost_small": 30.0,
+      "cost_medium": 60.0,
+      "cost_large": 200.0,
+      "note": "Proxy mapped to reactor_simple for acid wash, rinse, and soak conditioning.",
+      "basis": "$/hr, mid-2017 proxy"
+    },
+    {
+      "name": "Substrate pretreatment (CatCost proxy)",
+      "key": "substrate_pretreatment",
+      "cost_small": 30.0,
+      "cost_medium": 60.0,
+      "cost_large": 200.0,
+      "note": "Proxy mapped to reactor_simple for wetting, cleaning, and surface prep.",
+      "basis": "$/hr, mid-2017 proxy"
+    },
+    {
+      "name": "Ion-exchange conversion (CatCost proxy)",
+      "key": "ion_exchange_conversion",
+      "cost_small": 30.0,
+      "cost_medium": 60.0,
+      "cost_large": 200.0,
+      "note": "Proxy mapped to reactor_simple for chloride, carbonate, or hydroxide-form conversion soaks.",
+      "basis": "$/hr, mid-2017 proxy"
+    },
+    {
+      "name": "Ionomer ink homogenization (CatCost proxy)",
+      "key": "ionomer_ink_homogenization",
+      "cost_small": 75.0,
+      "cost_medium": 100.0,
+      "cost_large": 200.0,
+      "note": "Proxy mapped to mixer_slurry for catalyst-ink blending and recirculation.",
+      "basis": "$/hr, mid-2017 proxy"
+    },
+    {
+      "name": "Ultrasonic dispersion (CatCost proxy)",
+      "key": "ultrasonic_dispersion",
+      "cost_small": 75.0,
+      "cost_medium": 100.0,
+      "cost_large": 200.0,
+      "note": "Proxy mapped to mixer_slurry for deagglomeration and ink conditioning.",
+      "basis": "$/hr, mid-2017 proxy"
+    },
+    {
+      "name": "CCM coating pass (CatCost proxy)",
+      "key": "ccm_coating_pass",
+      "cost_small": 75.0,
+      "cost_medium": 100.0,
+      "cost_large": 200.0,
+      "note": "Proxy mapped to incipient_wetness for liquid deposition per coating pass.",
+      "basis": "$/hr, mid-2017 proxy"
+    },
+    {
+      "name": "Electrode drying, low temperature (CatCost proxy)",
+      "key": "electrode_drying_low_temp",
+      "cost_small": 75.0,
+      "cost_medium": 100.0,
+      "cost_large": 200.0,
+      "note": "Proxy mapped to dryer_rotary_40_100C for coated-layer drying below 100 C.",
+      "basis": "$/hr, mid-2017 proxy"
+    },
+    {
+      "name": "Hot press lamination (CatCost proxy)",
+      "key": "hot_press_lamination",
+      "cost_small": 100.0,
+      "cost_medium": 200.0,
+      "cost_large": 425.0,
+      "note": "Proxy mapped to extruder_with_feeder for lamination/press consolidation.",
+      "basis": "$/hr, mid-2017 proxy"
+    },
+    {
       "name": "Reactor, simple (mixing)",
       "key": "reactor_simple",
       "cost_small": 30.0,
@@ -189,6 +261,15 @@
       "cost_large": 600.0,
       "note": "-",
       "basis": "$/hr, mid-2017"
+    },
+    {
+      "name": "Electrochemical break-in (CatCost proxy)",
+      "key": "electrochemical_break_in",
+      "cost_small": 30.0,
+      "cost_medium": 60.0,
+      "cost_large": 200.0,
+      "note": "Proxy mapped to reactor_simple for activation, wet-up, and conditioning.",
+      "basis": "$/hr, mid-2017 proxy"
     },
     {
       "name": "Scrubber, NOx",
