@@ -27,17 +27,17 @@ CatPrice is built to feel like shipped desktop software rather than a spreadshee
 
 | Stage | Screen | What you do | What CatPrice gives back |
 | --- | --- | --- | --- |
-| 1. Track the market | `Market Board` | Review live, indexed, and manual price bases with confidence and freshness metadata | A transparent sourcing basis for the catalyst recipe |
-| 2. Build the recipe | `Calculator` | Enter active metals, promoters, support, pricing overrides, order size, and process steps | A catalyst manufacturing estimate grounded in current feed data |
-| 3. Sanity-check with references | `Benchmarks` | Review optional literature-backed route families and load one as a starting point if useful | A fast reference path without locking the app to one reaction family |
+| 1. Track the market | `Metal Feed` | Review live, indexed, and manual price bases with confidence and freshness metadata | A transparent sourcing basis for the catalyst recipe |
+| 2. Build the recipe | `Build` | Enter active metals, promoters, support, pricing overrides, order size, and process steps | A catalyst manufacturing estimate grounded in current feed data |
+| 3. Sanity-check with references | `Reference Routes` | Review optional literature-backed route families and load one as a starting point if useful | A fast reference path without locking the app to one reaction family |
 | 4. Review the output | `Estimate Board` | Open the final output on a dedicated reading surface | A clean result board optimized for interpretation instead of editing |
-| 5. Iterate quickly | `Back to inputs` | Return to the calculator, adjust pricing or steps, and rerun | The draft stays in place so scenario work remains fast |
+| 5. Iterate quickly | `Back to build` | Return to the build workspace, adjust pricing or steps, and rerun | The draft stays in place so scenario work remains fast |
 
 ## Screen Roles
 
-- `Market Board` shows where each quote came from, how fresh it is, and how much confidence to place in it.
-- `Calculator` is the main editing surface for composition, support basis, feed selection, and Step Method setup.
-- `Benchmarks` is an optional reference library for literature-backed catalyst families and route scoring.
+- `Metal Feed` shows where each quote came from, how fresh it is, and how much confidence to place in it.
+- `Build` is the main editing surface for composition, support basis, feed selection, and Step Method setup.
+- `Reference Routes` is an optional reference library for literature-backed catalyst families and route scoring.
 - `Estimate Board` is the reading surface for selling price, contribution structure, and component-level ledger review.
 
 ## Product Highlights
@@ -46,7 +46,7 @@ CatPrice is built to feel like shipped desktop software rather than a spreadshee
 | --- | --- |
 | Core estimator | Reaction-agnostic catalyst manufacturing cost estimation |
 | Price clarity | `LIVE`, `INDEXED`, and `MANUAL` states plus evidence confidence and freshness |
-| Workflow | Separate calculator and estimate-board surfaces for better readability |
+| Workflow | Separate build and estimate-board surfaces for better readability |
 | Route logic | Step Method, route extras, indexed escalation, and optional reference routes |
 | Research support | Literature-backed thermocatalyst and electrocatalyst benchmark families with explicit source banks |
 | Desktop release | Installer + unpacked app outputs for a clean Windows release path |
@@ -83,7 +83,7 @@ CatPrice is distributed as a desktop app. The public repository does not require
 - Estimates catalyst selling cost with the CatCost Step Method
 - Tracks metal inputs with `LIVE`, `INDEXED`, and `MANUAL` price states
 - Annotates market feeds with price-evidence confidence, freshness, and acquisition mode
-- Loads thermocatalyst and electrocatalyst reference families into the calculator as editable starting points
+- Loads thermocatalyst and electrocatalyst reference families into the build workspace as editable starting points
 - Attaches source-linked family literature banks built from high-confidence journal references and public vendor pages
 - Opens the final estimate on a dedicated result board for review
 - Runs Monte Carlo uncertainty analysis

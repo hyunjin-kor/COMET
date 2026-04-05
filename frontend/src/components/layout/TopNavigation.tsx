@@ -106,7 +106,7 @@ export default function TopNavigation() {
 
               <div className="min-w-0">
                 <div className="font-display text-[1.45rem] leading-none text-slate-950">CatPrice</div>
-                <div className="mt-0.5 text-xs text-slate-500">Catalyst cost workspace</div>
+                <div className="mt-0.5 text-xs text-slate-500">Evidence-first catalyst costing</div>
               </div>
             </div>
 
@@ -140,7 +140,7 @@ export default function TopNavigation() {
                 <NavLink
                   key={item.to}
                   to={item.to}
-                  className={`group flex min-w-[148px] items-center gap-3 rounded-[18px] border px-3.5 py-2.5 transition ${
+                  className={`group flex min-w-[164px] items-center gap-3 rounded-[18px] border px-3.5 py-2.5 transition ${
                     isActive
                       ? 'border-teal-300/55 bg-[linear-gradient(135deg,rgba(124,241,208,0.22),rgba(255,255,255,0.94))] shadow-[0_10px_24px_rgba(23,34,51,0.07)]'
                       : 'border-slate-300/70 bg-white/74 hover:border-slate-400/70 hover:bg-white'

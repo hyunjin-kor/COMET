@@ -4,9 +4,9 @@
   color-scheme: light;
   --font-display: "Segoe UI Variable Display", "Segoe UI", "Noto Sans KR", "Malgun Gothic", sans-serif;
   --font-body: "Segoe UI Variable Text", "Segoe UI", "Noto Sans KR", "Malgun Gothic", sans-serif;
-  --bg-base: #f6f1e8;
-  --bg-soft: #fbf8f2;
-  --bg-muted: #ede5d8;
+  --bg-base: #f4efe6;
+  --bg-soft: #faf7f1;
+  --bg-muted: #ebe4d8;
   --ink-strong: #142033;
   --ink: #26344a;
   --ink-soft: #66748b;
@@ -29,10 +29,9 @@ body {
   color: var(--ink-strong);
   font-family: var(--font-body);
   background:
-    radial-gradient(circle at 12% 14%, rgba(120, 242, 208, 0.22), transparent 0 24%),
-    radial-gradient(circle at 84% 8%, rgba(239, 195, 108, 0.18), transparent 0 24%),
-    radial-gradient(circle at 92% 86%, rgba(136, 168, 255, 0.14), transparent 0 24%),
-    linear-gradient(180deg, #fbf7f1 0%, #f5efe5 54%, #f7f2ea 100%);
+    radial-gradient(circle at 10% 12%, rgba(120, 242, 208, 0.14), transparent 0 22%),
+    radial-gradient(circle at 88% 10%, rgba(239, 195, 108, 0.12), transparent 0 20%),
+    linear-gradient(180deg, #fbf8f3 0%, #f4eee4 56%, #f7f2ea 100%);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -42,24 +41,12 @@ body::before {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  opacity: 0.32;
+  opacity: 0.16;
   background-image:
     linear-gradient(rgba(98, 116, 139, 0.11) 1px, transparent 1px),
     linear-gradient(90deg, rgba(98, 116, 139, 0.11) 1px, transparent 1px);
-  background-size: 112px 112px;
-  mask-image: radial-gradient(circle at center, black 24%, transparent 86%);
-}
-
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 22% 28%, rgba(255, 255, 255, 0.75), transparent 0 26%),
-    radial-gradient(circle at 72% 72%, rgba(255, 255, 255, 0.34), transparent 0 20%);
-  mix-blend-mode: screen;
-  opacity: 0.65;
+  background-size: 128px 128px;
+  mask-image: radial-gradient(circle at center, black 18%, transparent 88%);
 }
 
 #root {
@@ -133,34 +120,34 @@ textarea {
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(circle at 8% 72%, rgba(120, 242, 208, 0.18), transparent 0 18%),
-    radial-gradient(circle at 80% 18%, rgba(239, 195, 108, 0.16), transparent 0 18%);
-  filter: blur(16px);
-  opacity: 0.9;
+    radial-gradient(circle at 10% 72%, rgba(120, 242, 208, 0.12), transparent 0 18%),
+    radial-gradient(circle at 82% 18%, rgba(239, 195, 108, 0.1), transparent 0 18%);
+  filter: blur(24px);
+  opacity: 0.78;
 }
 
 .surface-card {
-  @apply rounded-[32px] border border-slate-900/8 bg-[rgba(255,251,245,0.78)]
-         shadow-[0_28px_90px_rgba(23,34,51,0.10)] backdrop-blur-2xl;
+  @apply rounded-[28px] border border-slate-900/8 bg-[rgba(255,251,245,0.84)]
+         shadow-[0_18px_52px_rgba(23,34,51,0.08)] backdrop-blur-xl;
 }
 
 .surface-card-soft {
-  @apply rounded-[28px] border border-slate-900/8 bg-[rgba(255,255,255,0.58)]
-         shadow-[0_12px_34px_rgba(23,34,51,0.06)] backdrop-blur-xl;
+  @apply rounded-[24px] border border-slate-900/8 bg-[rgba(255,255,255,0.72)]
+         shadow-[0_10px_28px_rgba(23,34,51,0.05)] backdrop-blur-xl;
 }
 
 .surface-ink {
-  @apply rounded-[30px] border border-white/10 bg-[linear-gradient(150deg,#081221,#112138_52%,#0b1320)]
-         text-white shadow-[0_28px_80px_rgba(7,18,33,0.32)];
+  @apply rounded-[26px] border border-white/10 bg-[linear-gradient(150deg,#081221,#112138_52%,#0b1320)]
+         text-white shadow-[0_22px_56px_rgba(7,18,33,0.24)];
 }
 
 .surface-rail {
-  @apply rounded-[32px] border border-white/12 bg-[linear-gradient(180deg,#0d1726,#101c30_54%,#0b1522)]
-         text-white shadow-[0_28px_80px_rgba(9,19,33,0.34)];
+  @apply rounded-[28px] border border-white/12 bg-[linear-gradient(180deg,#0d1726,#101c30_54%,#0b1522)]
+         text-white shadow-[0_22px_56px_rgba(9,19,33,0.26)];
 }
 
 .surface-ghost {
-  @apply rounded-[26px] border border-slate-900/8 bg-[rgba(255,255,255,0.34)] backdrop-blur-lg;
+  @apply rounded-[22px] border border-slate-900/8 bg-[rgba(255,255,255,0.46)] backdrop-blur-lg;
 }
 
 .input-base {
@@ -207,15 +194,15 @@ textarea {
 }
 
 .cp-metric-tile {
-  @apply rounded-[22px] border border-slate-900/8 bg-white/66 p-3.5 shadow-[0_10px_28px_rgba(23,34,51,0.05)] backdrop-blur-xl;
+  @apply rounded-[18px] border border-slate-900/8 bg-white/72 p-3.5 shadow-[0_8px_20px_rgba(23,34,51,0.04)] backdrop-blur-xl;
 }
 
 .cp-metric-tile-dark {
-  @apply rounded-[22px] border border-white/10 bg-white/6 p-3.5 backdrop-blur-xl;
+  @apply rounded-[18px] border border-white/10 bg-white/6 p-3.5 backdrop-blur-xl;
 }
 
 .cp-toolbar {
-  @apply flex flex-wrap items-center gap-2 rounded-[24px] border border-slate-900/8 bg-white/58 p-2 backdrop-blur-xl;
+  @apply flex flex-wrap items-center gap-2 rounded-[18px] border border-slate-900/8 bg-white/66 p-1.5 backdrop-blur-xl;
 }
 
 .cp-enter {

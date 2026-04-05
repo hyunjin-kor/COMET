@@ -23,6 +23,8 @@ const ALLOWED_EXTERNAL_HOSTS = new Set([
   'github.com',
   'doi.org',
   'sigmaaldrich.com',
+  'fuelcellstore.com',
+  'energy.gov',
   'nature.com',
   'pubs.acs.org',
   'science.org',

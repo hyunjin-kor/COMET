@@ -169,6 +169,21 @@ function priceScopeLabel(scope?: string) {
   }
 }
 
+function pricingBasisDisplay(value?: string) {
+  if (!value) return 'basis not stated';
+  return value.replace(/_/g, ' ');
+}
+
+function materialSourceTrust(material: MaterialItem) {
+  if (material.reference_url) {
+    if (material.price_scope === 'literature_high_volume') return 'Public literature source';
+    if (material.price_scope === 'vendor_lab') return 'Direct vendor source';
+    return 'Public source linked';
+  }
+  if (material.price_scope === 'historical_bulk') return 'No public permalink';
+  return 'Link not stored';
+}
+
 function materialQuoteLabel(material?: MaterialItem | null) {
   if (!material?.price_unit || material.price == null) return 'Price not available';
   const formatted = material.price < 1 ? material.price.toFixed(4) : material.price.toFixed(2);
@@ -670,12 +685,10 @@ export default function Calculator() {
       <div className="surface-ghost p-4">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <div className="cp-subtle-label">Optional reference routes</div>
-            <div className="cp-heading-lg mt-2">Load a literature-backed starting recipe</div>
+            <div className="cp-subtle-label">Reference routes</div>
+            <div className="cp-heading-lg mt-2">Start from a published route if useful</div>
             <p className="mt-2 text-sm leading-7 text-slate-600">
-              Use published catalyst families as sanity checks or starting points, then keep editing freely. The
-              calculator itself remains reaction-agnostic, so you can ignore this panel and build any catalyst from
-              scratch.
+              Use literature-backed routes as starting points, or ignore this panel and build the case from scratch.
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -726,11 +739,27 @@ export default function Calculator() {
         <div className="mt-2 font-semibold text-slate-950">{material?.name ?? fallback}</div>
         <div className="mt-1 text-sm text-slate-600">{material ? materialQuoteLabel(material) : 'Select a library record to lock pricing.'}</div>
         {material ? (
-          <div className="mt-2 text-xs leading-6 text-slate-500">
-            {priceScopeLabel(material.price_scope)} / {material.pricing_basis}
-            {material.quote_year ? ` / ${material.quote_year}` : ''}
-            {material.quote_source ? ` / ${material.quote_source}` : ''}
-            {material.reference_url ? ' / source-linked' : ''}
+          <div className="mt-2 space-y-2">
+            <div className="text-xs leading-6 text-slate-500">
+              {priceScopeLabel(material.price_scope)} / {pricingBasisDisplay(material.pricing_basis)}
+              {material.quote_year ? ` / ${material.quote_year}` : ''}
+              {material.quote_source ? ` / ${material.quote_source}` : ''}
+            </div>
+            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] ${
+              material.reference_url ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : 'border-amber-200 bg-amber-50 text-amber-700'
+            }`}>
+              {materialSourceTrust(material)}
+            </span>
+            {material.reference_url ? (
+              <a
+                href={material.reference_url}
+                target="_blank"
+                rel="noreferrer"
+                className="block text-xs text-sky-700 underline underline-offset-2"
+              >
+                Open source
+              </a>
+            ) : null}
           </div>
         ) : null}
       </div>
@@ -743,16 +772,13 @@ export default function Calculator() {
         <div className="surface-ghost p-4">
           <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_320px] xl:items-start">
             <div>
-              <div className="cp-subtle-label">Electrocatalyst Workflow</div>
-              <div className="cp-heading-lg mt-2">Separate catalyst powder, ionomer, membrane, and GDL inputs.</div>
+              <div className="cp-subtle-label">Electrode stack</div>
+              <div className="cp-heading-lg mt-2">Choose stack inputs once, then price the route.</div>
               <p className="mt-2 text-sm leading-7 text-slate-600">
-                This path is library-backed. Prices come from Fuel Cell Store, Sigma-Aldrich, and clearly labeled literature
-                proxies, and the route template controls which pre-treatment, coating, drying, and post-treatment steps are
-                fed into the process-cost model.
+                This path is library-backed. Catalyst powder, ionomer, membrane, and substrate each keep their own source record.
               </p>
               <p className="mt-2 text-xs leading-6 text-slate-500">
-                Recommended defaults prefer literature high-volume records when they exist for ionomer, membrane, and GDL inputs,
-                while catalyst powders fall back to the best available sourced vendor proxy.
+                Defaults prefer higher-confidence literature or sourced vendor rows when they exist.
               </p>
             </div>
             <div className="rounded-[24px] border border-slate-900/8 bg-white/72 p-4">
@@ -919,9 +945,9 @@ export default function Calculator() {
 
   function renderRows(role: 'active_metal' | 'promoter') {
     const items = rows.filter((row) => row.role === role);
-    const copy = role === 'active_metal'
-      ? { title: 'Active metals', description: 'These rows drive live feed mapping and the primary catalyst cost basis.', accent: 'bg-[#78f2d0]', button: 'Add active metal', placeholder: 'At least one active metal is required.' }
-      : { title: 'Promoters', description: 'Optional promoter metals or additives that influence recipe cost.', accent: 'bg-[#88a8ff]', button: 'Add promoter', placeholder: 'No promoters added yet.' };
+      const copy = role === 'active_metal'
+      ? { title: 'Active metals', description: 'These rows define the core cost basis and feed mapping.', accent: 'bg-[#78f2d0]', button: 'Add active metal', placeholder: 'At least one active metal is required.' }
+      : { title: 'Promoters', description: 'Optional additives that change recipe cost and route choice.', accent: 'bg-[#88a8ff]', button: 'Add promoter', placeholder: 'No promoters added yet.' };
 
     return (
       <div className="space-y-3">
@@ -960,11 +986,11 @@ export default function Calculator() {
       <section className="surface-card cp-enter self-start overflow-hidden px-4 py-4 sm:px-5 xl:sticky xl:top-4">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <span className="section-kicker">Result Board</span>
-            <h2 className="cp-heading-lg mt-3">Review outputs on a separate board.</h2>
-            <p className="mt-2 max-w-[30rem] text-sm leading-7 text-slate-600">Keep inputs here, move reading and review to the result board, then jump back without losing the current recipe draft.</p>
+            <span className="section-kicker">Latest Estimate</span>
+            <h2 className="cp-heading-lg mt-3">Review the last estimate without leaving this draft.</h2>
+            <p className="mt-2 max-w-[30rem] text-sm leading-7 text-slate-600">Build here, read on the estimate board, then jump back into the same draft.</p>
           </div>
-          <button onClick={() => navigate('/calculator/result')} disabled={!latestSnapshot} className="cp-button-secondary px-4 py-2.5 text-xs">Open latest</button>
+          <button onClick={() => navigate('/calculator/result')} disabled={!latestSnapshot} className="cp-button-secondary px-4 py-2.5 text-xs">Open estimate board</button>
         </div>
 
         <div className="mt-4 space-y-3">
@@ -974,7 +1000,7 @@ export default function Calculator() {
               <div className="font-display text-[clamp(2.25rem,4vw,3.9rem)] leading-none text-white">{latestSnapshot ? `$${toDisplay(latestSnapshot.result.summary.estimated_price_per_lb).toFixed(2)}` : 'Pending'}</div>
               <div className="pb-1 text-lg text-slate-300">{latestSnapshot ? fmtLabel : ''}</div>
             </div>
-            <div className="mt-2 text-sm text-slate-300">{latestSnapshot ? `Generated ${latestGenerated} with ${latestSnapshot.selectedSupportName ?? 'support'} as the current basis.` : 'No result board created yet. The first successful estimate will open it automatically.'}</div>
+            <div className="mt-2 text-sm text-slate-300">{latestSnapshot ? `Generated ${latestGenerated} with ${latestSnapshot.selectedSupportName ?? 'support'} as the current basis.` : 'No estimate board yet. The first successful run will create one automatically.'}</div>
             {latestSnapshot?.benchmarkCandidate ? (
               <div className="mt-3 flex flex-wrap gap-2">
                 <span className="cp-chip-dark">{latestSnapshot.benchmarkCandidate.title}</span>
@@ -995,7 +1021,7 @@ export default function Calculator() {
           </div>
 
           <div className="rounded-[24px] border border-slate-900/8 bg-white/56 px-4 py-3 text-xs leading-6 text-slate-600">
-            The result board is optimized for reading, not editing. Run a calculation here, review the board there, and return to this screen when you want to change materials or process steps.
+            The estimate board is optimized for reading. Return here when you want to change materials, sourcing, or process steps.
           </div>
         </div>
       </section>
@@ -1023,12 +1049,12 @@ export default function Calculator() {
           <div className="space-y-6">
             <div className="flex flex-col gap-4 border-b border-slate-900/8 pb-4 lg:flex-row lg:items-end lg:justify-between">
               <div>
-                <div className="cp-subtle-label">Synthesis Inputs</div>
-                <h2 className="cp-heading-xl mt-2">Enter catalyst composition and material pricing</h2>
+                <div className="cp-subtle-label">Build Workspace</div>
+                <h2 className="cp-heading-xl mt-2">Build a catalyst cost case</h2>
                 <p className="cp-body-copy mt-2 max-w-2xl">
                   {catalystDomain === 'electrocatalyst'
-                    ? 'Choose a sourced catalyst powder, ionomer, membrane, and substrate stack, then map the pre-treatment and coating workflow to the proxy process-cost basis.'
-                    : 'Use metal loading, support choice, and raw-material pricing as the starting synthesis inputs, then switch any row back to manual pricing when you need a procurement scenario.'}
+                    ? 'Pick the electrode stack, then map the fabrication route and sourcing basis.'
+                    : 'Set actives, promoters, support, and sourcing basis first, then choose the process route.'}
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-2">
@@ -1038,20 +1064,20 @@ export default function Calculator() {
             </div>
 
             <div className="grid gap-2.5 md:grid-cols-3">
-              <MetricTile label="Tracked metals" value={String(liveFeedCount + indexedFeedCount)} detail={`${liveFeedCount} live / ${indexedFeedCount} indexed`} />
-              <MetricTile label="Process steps" value={String(steps.length)} detail={steps.length > 0 ? 'Active process path' : 'Select at least one step'} />
-              <MetricTile label="Current scale" value={scale.label} detail={`${orderSize} tons / ${scale.rate}`} />
+              <MetricTile label="Tracked feeds" value={String(liveFeedCount + indexedFeedCount)} detail={`${liveFeedCount} live / ${indexedFeedCount} indexed`} />
+              <MetricTile label="Route steps" value={String(steps.length)} detail={steps.length > 0 ? 'Selected process path' : 'Select at least one step'} />
+              <MetricTile label="Campaign scale" value={scale.label} detail={`${orderSize} tons / ${scale.rate}`} />
             </div>
 
             <div className="surface-ghost p-3.5">
               <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
                 <div>
-                  <div className="cp-subtle-label">Catalyst Domain</div>
+                  <div className="cp-subtle-label">Mode</div>
                   <div className="cp-heading-sm mt-2">{catalystDomainLabel(catalystDomain)}</div>
                   <p className="mt-2 text-xs leading-6 text-slate-500">
                     {catalystDomain === 'electrocatalyst'
-                      ? 'Electrocatalyst mode uses a distinct library and route workflow. The result board will show both the CatCost proxy powder price and the area-based electrode stack cost.'
-                      : 'Thermocatalyst stays aligned with the CatCost-style composition-plus-step workflow for supported catalyst manufacturing.'}
+                      ? 'Electrocatalyst mode separates powder, ionomer, membrane, and substrate with route-aware stack costing.'
+                      : 'Thermocatalyst mode stays aligned with the CatCost-style composition plus process workflow.'}
                   </p>
                 </div>
                 <div className="cp-toolbar">
@@ -1080,7 +1106,7 @@ export default function Calculator() {
                   {renderRows('active_metal')}
                   {renderRows('promoter')}
                   <div className="surface-ghost p-3.5">
-                    <div><div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#efc36c]" /><h3 className="cp-heading-sm">Support</h3></div><p className="mt-1 text-xs leading-5 text-slate-500">Support loading closes the balance automatically after actives and promoters are set.</p></div>
+                    <div><div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#efc36c]" /><h3 className="cp-heading-sm">Support</h3></div><p className="mt-1 text-xs leading-5 text-slate-500">Support share closes the mass balance automatically.</p></div>
                     {rows.filter((row) => row.role === 'support').map((row) => (
                       <div key={row.id} className="mt-3.5 flex flex-wrap items-center gap-3">
                         <select value={row.name} onChange={(event) => { const support = SUPPORT_OPTIONS.find((item) => item.name === event.target.value); updateRow(row.id, { name: event.target.value, price_per_lb: support?.price ?? row.price_per_lb, source_type: 'manual', source: 'Manual support default' }); }} className="input-base min-w-[180px] flex-[1.3_1_260px] pr-10">{SUPPORT_OPTIONS.map((support) => <option key={support.name} value={support.name}>{support.name} / {support.note}</option>)}</select>
@@ -1094,7 +1120,7 @@ export default function Calculator() {
             )}
 
             <div className="space-y-4 border-t border-slate-900/8 pt-4">
-              <div><div className="cp-subtle-label">Step Method</div><h2 className="cp-heading-xl mt-2">{catalystDomain === 'electrocatalyst' ? 'Map electrode fabrication to process-cost proxies' : 'Map the lab procedure to industrial process steps'}</h2><p className="cp-body-copy mt-2 max-w-2xl">{catalystDomain === 'electrocatalyst' ? 'Route templates add membrane conditioning, ink homogenization, coating, drying, lamination, and break-in steps. You can still override the step selection manually below.' : 'Choose the common manufacturing steps that best approximate the lab synthesis, and let order size set the small, medium, or large campaign basis.'}</p></div>
+              <div><div className="cp-subtle-label">Process Route</div><h2 className="cp-heading-xl mt-2">{catalystDomain === 'electrocatalyst' ? 'Choose the fabrication steps' : 'Choose the process steps'}</h2><p className="cp-body-copy mt-2 max-w-2xl">{catalystDomain === 'electrocatalyst' ? 'Templates add conditioning, coating, drying, lamination, and break-in steps. You can still override them below.' : 'Pick the industrial steps that best approximate the lab route, then let order size set the campaign basis.'}</p></div>
               {selectedBenchmark ? (
                 <div className="rounded-[24px] border border-emerald-200 bg-emerald-50/80 px-4 py-4 text-sm text-emerald-900">
                   <div className="cp-subtle-label !text-emerald-700">Loaded reference route</div>
@@ -1131,8 +1157,8 @@ export default function Calculator() {
 
             <div className={`rounded-[24px] border px-4 py-4 text-sm ${isValid ? 'border-emerald-200 bg-emerald-50 text-emerald-800' : 'border-amber-200 bg-amber-50 text-amber-800'}`}>{validationMessage}</div>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <button onClick={handleCalculate} disabled={loading || !isValid || steps.length === 0} className="cp-button-primary min-w-[250px]">{loading ? <><span className="mr-2 inline-flex h-4 w-4 animate-spin rounded-full border-2 border-slate-950 border-t-transparent" />Calculating board</> : 'Calculate and open result board'}</button>
-              <div className="text-xs leading-6 text-slate-500">The result board opens as a separate screen with full output readability and a direct path back to the inputs.</div>
+              <button onClick={handleCalculate} disabled={loading || !isValid || steps.length === 0} className="cp-button-primary min-w-[250px]">{loading ? <><span className="mr-2 inline-flex h-4 w-4 animate-spin rounded-full border-2 border-slate-950 border-t-transparent" />Running estimate</> : 'Run estimate and open board'}</button>
+              <div className="text-xs leading-6 text-slate-500">The estimate board opens as a separate reading surface and keeps this draft intact.</div>
             </div>
             {error ? <div className="rounded-[24px] border border-red-200 bg-red-50 px-4 py-4 text-sm text-red-700"><span className="font-semibold">Calculation failed.</span> {error}</div> : null}
           </div>

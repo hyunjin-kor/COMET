@@ -82,6 +82,37 @@ function priceScopeLabel(scope: string) {
   return 'Historical Bulk';
 }
 
+function pricingBasisLabel(basis: string) {
+  if (!basis) return 'basis not stated';
+  return basis.replace(/_/g, ' ');
+}
+
+function sourceTrustLabel(material: MaterialItem) {
+  if (material.reference_url) {
+    if (material.price_scope === 'literature_high_volume') return 'Public literature source';
+    if (material.price_scope === 'vendor_lab') return 'Direct vendor source';
+    return 'Public source linked';
+  }
+  if (material.price_scope === 'historical_bulk') return 'No public permalink';
+  return 'Link not stored';
+}
+
+function sourceTrustTone(material: MaterialItem) {
+  if (material.reference_url) return 'border-emerald-200 bg-emerald-50 text-emerald-700';
+  if (material.price_scope === 'historical_bulk') return 'border-amber-200 bg-amber-50 text-amber-700';
+  return 'border-slate-200 bg-white text-slate-600';
+}
+
+function sourceLinkLabel(material: MaterialItem) {
+  if (material.quote_source) return material.quote_source;
+  if (!material.reference_url) return 'Source not stated';
+  try {
+    return new URL(material.reference_url).hostname.replace(/^www\./, '');
+  } catch {
+    return 'Source link';
+  }
+}
+
 export default function Library() {
   const [tab, setTab] = useState<Tab>('materials');
   const [materials, setMaterials] = useState<MaterialItem[]>([]);
@@ -148,11 +179,10 @@ export default function Library() {
       <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.06s' }}>
         <div className="flex flex-col gap-4 border-b border-slate-900/8 pb-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <div className="cp-subtle-label">Library Mode</div>
-            <h2 className="cp-heading-xl mt-2">Libraries and templates</h2>
+            <div className="cp-subtle-label">Source Library</div>
+            <h2 className="cp-heading-xl mt-2">Materials, sources, and route templates</h2>
             <p className="cp-body-copy mt-2 max-w-2xl">
-              Switch between the Materials Library, Step Library, and template process paths from the same panel, with
-              a separate catalyst-domain view for thermocatalyst and electrocatalyst work.
+              Move between material sources, process steps, and route templates from one place, with clear domain and application filters.
             </p>
           </div>
 
@@ -238,13 +268,16 @@ export default function Library() {
             </div>
 
             <div className="mt-5 overflow-hidden rounded-[28px] border border-slate-900/8 bg-white/58 backdrop-blur-xl">
-              <div className="grid grid-cols-[minmax(0,1.45fr)_130px_130px_150px_240px_150px] gap-3 border-b border-slate-900/8 bg-white/46 px-5 py-3 text-[11px] uppercase tracking-[0.18em] text-slate-500">
+              <div className="border-b border-slate-900/8 bg-slate-50/80 px-5 py-3 text-xs leading-6 text-slate-600">
+                Public URLs open directly when available. Historical bulk rows remain visible, but many do not have a stable public permalink.
+              </div>
+              <div className="grid grid-cols-[minmax(0,1.35fr)_120px_120px_150px_220px_minmax(0,210px)] gap-3 border-b border-slate-900/8 bg-white/46 px-5 py-3 text-[11px] uppercase tracking-[0.18em] text-slate-500">
                 <span>Material</span>
                 <span>Domain</span>
                 <span>Application</span>
                 <span>Category</span>
                 <span>Quote</span>
-                <span>Source</span>
+                <span>Source & trust</span>
               </div>
 
               {loading ? (
@@ -254,7 +287,7 @@ export default function Library() {
               ) : (
                 <div className="max-h-[62vh] divide-y divide-slate-900/8 overflow-auto">
                   {materials.map((material) => (
-                    <div key={material.id} className="grid grid-cols-[minmax(0,1.45fr)_130px_130px_150px_240px_150px] gap-3 px-5 py-3 text-sm">
+                    <div key={material.id} className="grid grid-cols-[minmax(0,1.35fr)_120px_120px_150px_220px_minmax(0,210px)] gap-3 px-5 py-3 text-sm">
                       <div className="min-w-0">
                         <div className="truncate font-semibold text-slate-950">{material.name}</div>
                         <div className="truncate text-xs text-slate-500">{material.symbol || material.formula || 'No symbol'}</div>
@@ -281,22 +314,45 @@ export default function Library() {
                         <div className="font-mono text-slate-700">{formatRawPrice(material)}</div>
                         <div className="mt-1 truncate text-xs text-slate-500">{formatPack(material)}</div>
                         <div className="mt-1 truncate text-xs text-slate-500">
-                          {priceScopeLabel(material.price_scope)} / {material.pricing_basis || 'basis not stated'}
+                          {priceScopeLabel(material.price_scope)} / {pricingBasisLabel(material.pricing_basis)}
                           {material.quote_year ? ` / ${material.quote_year}` : ''}
                         </div>
                       </div>
                       <div className="min-w-0 text-slate-500">
-                        <div className="truncate">{material.quote_source || 'N/A'}</div>
                         {material.reference_url ? (
                           <a
                             href={material.reference_url}
                             target="_blank"
                             rel="noreferrer"
-                            className="mt-1 inline-flex text-xs text-sky-700 underline underline-offset-2"
+                            className="truncate font-medium text-slate-900 underline decoration-slate-300 underline-offset-4 transition hover:text-sky-700"
+                            title={material.reference_url}
                           >
-                            Source link
+                            {sourceLinkLabel(material)}
                           </a>
-                        ) : null}
+                        ) : (
+                          <div className="truncate font-medium text-slate-700">{material.quote_source || 'Source not stated'}</div>
+                        )}
+                        <div className="mt-2">
+                          <span className={`inline-flex rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] ${sourceTrustTone(material)}`}>
+                            {sourceTrustLabel(material)}
+                          </span>
+                        </div>
+                        {material.reference_url ? (
+                          <a
+                            href={material.reference_url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="mt-2 inline-flex text-xs text-sky-700 underline underline-offset-2"
+                          >
+                            Open source
+                          </a>
+                        ) : (
+                          <div className="mt-2 text-xs leading-5 text-slate-500">
+                            {material.price_scope === 'historical_bulk'
+                              ? 'Archive-derived bulk row without a stable public product page.'
+                              : 'No public source URL stored for this row.'}
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}

@@ -162,7 +162,7 @@ export default function Prices() {
     return (
       <div className="surface-card flex items-center gap-3 px-5 py-6 text-slate-600">
         <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#78f2d0] border-t-transparent" />
-        Loading market board...
+        Loading metal feed...
       </div>
     );
   }
@@ -173,16 +173,16 @@ export default function Prices() {
         <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.06s' }}>
           <div className="mb-5 flex flex-col gap-4 border-b border-slate-900/8 pb-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <div className="cp-subtle-label">Quote Board</div>
-              <h2 className="cp-heading-xl mt-2">Metals reference board</h2>
+              <div className="cp-subtle-label">Metal Feed</div>
+              <h2 className="cp-heading-xl mt-2">Read live and indexed metal quotes</h2>
               <p className="cp-body-copy mt-2 max-w-2xl">
-                Grouped view for PGM, precious, and industrial metals with clear provenance for each live or indexed reference.
+                Scan price status, quote basis, and trend direction without leaving the sourcing workflow.
               </p>
             </div>
 
             <button onClick={handleRefresh} disabled={refreshing} className="cp-button-secondary">
               <span className={`mr-2 inline-flex h-4 w-4 rounded-full border-2 border-current border-t-transparent ${refreshing ? 'animate-spin' : ''}`} />
-              {refreshing ? 'Refreshing feed' : 'Refresh quotes'}
+              {refreshing ? 'Refreshing feed' : 'Refresh feed'}
             </button>
           </div>
 
@@ -245,7 +245,7 @@ export default function Prices() {
           <div className="surface-ink overflow-hidden p-5">
             <div className="flex flex-col gap-4 border-b border-white/10 pb-5 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <div className="cp-subtle-label !text-slate-400">Selected Trend</div>
+                <div className="cp-subtle-label !text-slate-400">Selected Metal</div>
                 <h2 className="font-display mt-2 text-[clamp(1.75rem,2.4vw,2.35rem)] leading-[1.0] text-white">{selectedRow?.name ?? 'Choose a metal'}</h2>
                 <div className="mt-2 flex flex-wrap items-center gap-2">
                   {selectedRow ? <SourceBadge sourceType={selectedRow.source_type} /> : null}
@@ -287,8 +287,7 @@ export default function Prices() {
                 <div className="flex h-[320px] flex-col items-center justify-center gap-2 rounded-[28px] border border-dashed border-white/10 bg-white/4 text-center">
                   <div className="font-display text-2xl text-white">No stored price history</div>
                   <div className="max-w-md text-sm leading-7 text-slate-400">
-                    Select a symbol with available history or refresh the feed once the backend has stored trend data
-                    for this metal.
+                    Refresh the feed or choose a symbol that already has stored history.
                   </div>
                 </div>
               ) : (
