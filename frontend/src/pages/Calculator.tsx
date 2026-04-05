@@ -5,16 +5,12 @@ import {
   type ApplicationFamily,
   type CatalystDomain,
   calculateCost,
-  fetchBenchmarkFamilies,
-  fetchDecisionBenchmark,
   fetchMaterials,
   fetchPrices,
   fetchTemplates,
   refreshPrices as refreshPriceFeed,
-  type BenchmarkFamilySummary,
   type ComponentInput,
   type CostInput,
-  type DecisionCandidate,
   type MaterialItem,
   type MetalPrice,
   type ProcessTemplate,
@@ -85,12 +81,11 @@ const ELECTRO_APPLICATION_OPTIONS: Array<{ value: ApplicationFamily; label: stri
   { value: 'direct_methanol_fuel_cell', label: 'DMFC', detail: 'PtRu-centered methanol oxidation routes.' },
   { value: 'general', label: 'General', detail: 'Use when the application family is still undecided.' },
 ];
-const BUILD_SECTIONS: WorkspaceSection[] = [
-  { id: 'setup', label: 'Setup', summary: 'Choose mode and check feed status.' },
-  { id: 'inputs', label: 'Inputs', summary: 'Define recipe or electrode stack.' },
-  { id: 'references', label: 'References', summary: 'Load a published starting route if needed.' },
-  { id: 'route', label: 'Route', summary: 'Set campaign size and process steps.' },
-  { id: 'review', label: 'Review', summary: 'Validate the case and run the estimate.' },
+const ESTIMATE_SECTIONS: WorkspaceSection[] = [
+  { id: 'type', label: 'Catalyst Type', summary: 'Choose thermocatalyst or electrocatalyst.' },
+  { id: 'composition', label: 'Composition', summary: 'Set recipe rows or the electrode stack.' },
+  { id: 'manufacturing', label: 'Manufacturing', summary: 'Set campaign scale and manufacturing steps.' },
+  { id: 'result', label: 'Result', summary: 'Run the estimate and open the result screen.' },
 ];
 
 type SourceType = CalculatorRow['source_type'];
@@ -115,35 +110,10 @@ function uid() {
 const toPerLb = (price: number, unit: string) => unit === '$/troy_oz' ? price * TROY_OZ_PER_LB : unit === '$/kg' ? price / 2.20462 : price;
 const getScale = (tons: number): Scale => (tons < 5 ? 'small' : tons < 70 ? 'medium' : 'large');
 const sourceTypeLabel = (sourceType: SourceType) => sourceType === 'live' ? 'Live' : sourceType === 'indexed' ? 'Indexed' : 'Manual';
-const toBenchmarkPreset = (candidate: DecisionCandidate): CalculatorBenchmarkPreset => ({
-  slug: candidate.slug,
-  title: candidate.title,
-  archetype: candidate.archetype,
-  screening_basis: candidate.screening_basis,
-  screening_summary: candidate.screening_summary,
-  catalyst_domain: candidate.catalyst_domain,
-  application_family: candidate.application_family,
-  route: candidate.route,
-  scores: candidate.scores,
-  decision_notes: candidate.decision_notes,
-});
 const defaultRows = (): CalculatorRow[] => [
   { id: uid(), role: 'active_metal', name: 'Ni', wt_pct: 20, price_per_lb: 0, source_type: 'manual', source: 'Manual input' },
   { id: uid(), role: 'support', name: 'Al2O3', wt_pct: 80, price_per_lb: 0.5, source_type: 'manual', source: 'Manual support default' },
 ];
-const rowsFromCandidate = (candidate: DecisionCandidate): CalculatorRow[] =>
-  candidate.components.map((component) => ({
-    id: uid(),
-    role: component.role as CalculatorRow['role'],
-    name: component.name,
-    wt_pct: component.wt_pct,
-    price_per_lb: component.price_per_lb,
-    source_type:
-      component.source_type === 'live' || component.source_type === 'indexed'
-        ? component.source_type
-        : 'manual',
-    source: component.pricing_note || component.source,
-  }));
 const sourceTone = (sourceType: SourceType) => sourceType === 'live' ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : sourceType === 'indexed' ? 'border-amber-200 bg-amber-50 text-amber-700' : 'border-slate-200 bg-white text-slate-600';
 const priceTone = (sourceType: SourceType) => sourceType === 'live' ? 'border-emerald-200 bg-emerald-50/70 text-emerald-800' : sourceType === 'indexed' ? 'border-amber-200 bg-amber-50/70 text-amber-800' : '';
 const scaleMeta = (scale: Scale) => scale === 'small' ? { label: 'Small', rate: '1 t/day', classes: 'border-violet-200 bg-violet-50 text-violet-700' } : scale === 'medium' ? { label: 'Medium', rate: '10 t/day', classes: 'border-sky-200 bg-sky-50 text-sky-700' } : { label: 'Large', rate: '150 t/day', classes: 'border-teal-200 bg-teal-50 text-teal-700' };
@@ -280,7 +250,7 @@ function MetricTile({ label, value, detail, dark = false }: { label: string; val
 export default function Calculator() {
   const navigate = useNavigate();
   const { toDisplay, toInternal, fmtLabel } = useUnit();
-  const sectionState = useWorkspaceSections(BUILD_SECTIONS, 'build');
+  const sectionState = useWorkspaceSections(ESTIMATE_SECTIONS, 'estimate');
   const storedDraft = loadCalculatorDraft();
   const [rows, setRows] = useState<CalculatorRow[]>(() => storedDraft?.rows?.length ? storedDraft.rows : defaultRows());
   const [steps, setSteps] = useState<string[]>(() => storedDraft?.steps?.length ? storedDraft.steps : DEFAULT_STEPS);
@@ -288,9 +258,7 @@ export default function Calculator() {
   const [applicationFamily, setApplicationFamily] = useState<ApplicationFamily>(() => storedDraft?.applicationFamily ?? 'fuel_cell');
   const [electrocatalystConfig, setElectrocatalystConfig] = useState<ElectrocatalystDraft>(() => storedDraft?.electrocatalystConfig ?? defaultElectrocatalystConfig());
   const [orderSize, setOrderSize] = useState<number>(() => storedDraft?.orderSize ?? 20);
-  const [benchmarkCandidates, setBenchmarkCandidates] = useState<DecisionCandidate[]>([]);
-  const [benchmarkFamily, setBenchmarkFamily] = useState<BenchmarkFamilySummary | null>(null);
-  const [selectedBenchmark, setSelectedBenchmark] = useState<CalculatorBenchmarkPreset | null>(() => storedDraft?.benchmarkCandidate ?? null);
+  const [selectedBenchmark] = useState<CalculatorBenchmarkPreset | null>(() => storedDraft?.benchmarkCandidate ?? null);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState('');
@@ -335,32 +303,6 @@ export default function Calculator() {
 
     void loadPrices();
   }, []);
-
-  useEffect(() => {
-    async function loadBenchmarkReferences() {
-      try {
-        const familyPayload = await fetchBenchmarkFamilies();
-        const family =
-          familyPayload.families.find((item) => {
-            if (catalystDomain === 'electrocatalyst') {
-              return (
-                item.catalyst_domain === 'electrocatalyst'
-                && (item.application_family === applicationFamily || item.application_family === 'general')
-              );
-            }
-            return item.catalyst_domain === 'thermal';
-          })
-          ?? familyPayload.families.find((item) => item.catalyst_domain === catalystDomain)
-          ?? familyPayload.families[0];
-        if (!family) return;
-        setBenchmarkFamily(family);
-        const payload = await fetchDecisionBenchmark(family.family, 'balanced');
-        setBenchmarkCandidates(payload.candidates);
-      } catch {}
-    }
-
-    void loadBenchmarkReferences();
-  }, [applicationFamily, catalystDomain]);
 
   useEffect(() => {
     async function loadElectrocatalystReferences() {
@@ -635,7 +577,7 @@ export default function Calculator() {
     const className = `inline-flex items-center gap-2 rounded-full border px-3 py-2 text-xs font-semibold transition ${sourceTone(row.source_type)}`;
     const content = <><span className={`h-2 w-2 rounded-full ${dotClass}`} /><span>{sourceTypeLabel(row.source_type)}</span></>;
     if (!feed) return <span className={`${className} cursor-default`} title={row.source}>{content}</span>;
-    const title = row.source_type === 'manual' ? `Manual input. Switch to ${sourceTypeLabel(feed.source_type)} feed from ${feed.source}.` : `${row.source}. Switch back to manual input.`;
+    const title = row.source_type === 'manual' ? `Manual input. Switch to ${sourceTypeLabel(feed.source_type)} pricing from ${feed.source}.` : `${row.source}. Switch back to manual input.`;
     return <button onClick={() => toggleRowSource(row.id)} title={title} className={className}>{content}</button>;
   }
 
@@ -646,98 +588,6 @@ export default function Calculator() {
         <span className="text-xs text-slate-500">$</span>
         <input type="number" step="0.01" min="0" value={toDisplay(row.price_per_lb).toFixed(2)} readOnly={locked} onChange={(event) => !locked && updateRow(row.id, { price_per_lb: toInternal(Number(event.target.value)) })} className={`input-base w-32 text-right font-mono ${priceTone(row.source_type)} ${locked ? 'cursor-not-allowed' : ''}`} />
         <span className="text-xs text-slate-500">{fmtLabel}</span>
-      </div>
-    );
-  }
-
-  function applyBenchmarkCandidate(candidate: DecisionCandidate) {
-    setRows(rowsFromCandidate(candidate));
-    setSteps(candidate.route.steps);
-    setCatalystDomain(candidate.catalyst_domain);
-    setApplicationFamily(candidate.application_family);
-    if (candidate.catalyst_domain === 'electrocatalyst') {
-      const defaults = candidate.electrode_defaults;
-      setElectrocatalystConfig((previous) => ({
-        ...previous,
-        catalystMaterialKey: defaults?.catalyst_material_key ?? previous.catalystMaterialKey,
-        ionomerMaterialKey: defaults?.ionomer_material_key ?? previous.ionomerMaterialKey,
-        membraneMaterialKey: defaults?.membrane_material_key ?? previous.membraneMaterialKey,
-        substrateMaterialKey: defaults?.substrate_material_key ?? previous.substrateMaterialKey,
-        activeAreaCm2: defaults?.active_area_cm2 ?? previous.activeAreaCm2,
-        catalystLoadingMgCm2: defaults?.catalyst_loading_mg_cm2 ?? previous.catalystLoadingMgCm2,
-        ionomerToCatalystRatio: defaults?.ionomer_to_catalyst_ratio ?? previous.ionomerToCatalystRatio,
-        templateId: candidate.route.calculator_template_id ?? previous.templateId ?? 'pem_fuel_cell_ccm',
-      }));
-    }
-    setOrderSize(Number(candidate.estimate.input_summary.order_size_tons ?? 20));
-    setSelectedBenchmark(toBenchmarkPreset(candidate));
-    sectionState.setActiveSection('route');
-  }
-
-  function benchmarkCostValue(candidate: DecisionCandidate) {
-    if (candidate.summary.economics_basis_unit === '$/cm2') {
-      return `$${candidate.summary.economics_basis_value.toFixed(2)}`;
-    }
-    return `$${toDisplay(candidate.summary.economics_basis_value).toFixed(2)}`;
-  }
-
-  function benchmarkCostDetail(candidate: DecisionCandidate) {
-    if (candidate.summary.economics_basis_unit === '$/cm2') {
-      return '/cm2';
-    }
-    return fmtLabel;
-  }
-
-  function renderBenchmarkBoard() {
-    if (benchmarkCandidates.length === 0) return null;
-
-    return (
-      <div className="surface-ghost p-4">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-          <div>
-            <div className="cp-subtle-label">Reference routes</div>
-            <div className="cp-heading-lg mt-2">Start from a published route if useful</div>
-            <p className="mt-2 text-sm leading-7 text-slate-600">
-              Use literature-backed routes as starting points, or ignore this panel and estimate from scratch.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {benchmarkFamily ? <span className="cp-chip">Family: {benchmarkFamily.title}</span> : null}
-            {benchmarkFamily ? <span className="cp-chip">{catalystDomainLabel(benchmarkFamily.catalyst_domain)}</span> : null}
-            {selectedBenchmark ? <span className="cp-chip">Loaded: {selectedBenchmark.title}</span> : null}
-          </div>
-        </div>
-
-        <div className="mt-4 grid gap-3 xl:grid-cols-3">
-          {benchmarkCandidates.map((candidate) => {
-            const active = selectedBenchmark?.slug === candidate.slug;
-            return (
-              <button
-                key={candidate.slug}
-                onClick={() => applyBenchmarkCandidate(candidate)}
-                className={`rounded-[24px] border px-4 py-4 text-left transition ${
-                  active
-                    ? 'border-emerald-200 bg-emerald-50/80'
-                    : 'border-slate-900/8 bg-white/64 hover:bg-white/88'
-                }`}
-              >
-                <div className="cp-subtle-label">{candidate.archetype}</div>
-                <div className="mt-2 font-display text-[1.35rem] leading-[1.02] text-slate-950">
-                  {candidate.title}
-                </div>
-                <div className="mt-2 text-sm leading-6 text-slate-600">{candidate.screening_summary}</div>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  <span className="cp-chip">
-                    {benchmarkCostValue(candidate)}
-                    {benchmarkCostDetail(candidate)}
-                  </span>
-                  <span className="cp-chip">{catalystDomainLabel(candidate.catalyst_domain)}</span>
-                  <span className="cp-chip">{candidate.route.name}</span>
-                </div>
-              </button>
-            );
-          })}
-        </div>
       </div>
     );
   }
@@ -783,9 +633,9 @@ export default function Calculator() {
           <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_320px] xl:items-start">
             <div>
               <div className="cp-subtle-label">Electrode stack</div>
-              <div className="cp-heading-lg mt-2">Choose stack inputs once, then price the route.</div>
+              <div className="cp-heading-lg mt-2">Set the stack first, then price the manufacturing method.</div>
               <p className="mt-2 text-sm leading-7 text-slate-600">
-                This path is library-backed. Catalyst powder, ionomer, membrane, and substrate each keep their own source record.
+                Catalyst powder, ionomer, membrane, and substrate each keep their own source record.
               </p>
               <p className="mt-2 text-xs leading-6 text-slate-500">
                 Defaults prefer higher-confidence literature or sourced vendor rows when they exist.
@@ -919,7 +769,7 @@ export default function Calculator() {
 
         {activeElectroTemplate ? (
           <div className="rounded-[24px] border border-emerald-200 bg-emerald-50/80 p-4">
-            <div className="cp-subtle-label !text-emerald-700">Selected route</div>
+            <div className="cp-subtle-label !text-emerald-700">Selected manufacturing template</div>
             <div className="mt-2 cp-heading-sm">{activeElectroTemplate.name}</div>
             <div className="mt-2 text-sm leading-6 text-emerald-900">{activeElectroTemplate.description}</div>
             <div className="mt-3 flex flex-wrap gap-2">
@@ -956,8 +806,8 @@ export default function Calculator() {
   function renderRows(role: 'active_metal' | 'promoter') {
     const items = rows.filter((row) => row.role === role);
       const copy = role === 'active_metal'
-      ? { title: 'Active metals', description: 'These rows define the core cost basis and feed mapping.', accent: 'bg-[#78f2d0]', button: 'Add active metal', placeholder: 'At least one active metal is required.' }
-      : { title: 'Promoters', description: 'Optional additives that change recipe cost and route choice.', accent: 'bg-[#88a8ff]', button: 'Add promoter', placeholder: 'No promoters added yet.' };
+      ? { title: 'Active metals', description: 'These rows define the core cost basis and live price mapping.', accent: 'bg-[#78f2d0]', button: 'Add active metal', placeholder: 'At least one active metal is required.' }
+      : { title: 'Promoters', description: 'Optional additives that change recipe cost and manufacturing choice.', accent: 'bg-[#88a8ff]', button: 'Add promoter', placeholder: 'No promoters added yet.' };
 
     return (
       <div className="space-y-3">
@@ -996,21 +846,21 @@ export default function Calculator() {
       <section className="surface-card cp-enter self-start overflow-hidden px-4 py-4 sm:px-5 xl:sticky xl:top-4">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <span className="section-kicker">Latest Estimate</span>
-            <h2 className="cp-heading-lg mt-3">Review the last estimate without leaving this draft.</h2>
-            <p className="mt-2 max-w-[30rem] text-sm leading-7 text-slate-600">Estimate here, read on the estimate board, then jump back into the same draft.</p>
+            <span className="section-kicker">Latest Result</span>
+            <h2 className="cp-heading-lg mt-3">Read the latest result without leaving this draft.</h2>
+            <p className="mt-2 max-w-[30rem] text-sm leading-7 text-slate-600">Run the estimate here, review the result separately, then come back to the same draft.</p>
           </div>
-          <button onClick={() => navigate('/calculator/result')} disabled={!latestSnapshot} className="cp-button-secondary px-4 py-2.5 text-xs">Open estimate board</button>
+          <button onClick={() => navigate('/calculator/result')} disabled={!latestSnapshot} className="cp-button-secondary px-4 py-2.5 text-xs">Open result</button>
         </div>
 
         <div className="mt-4 space-y-3">
           <div className="surface-ink overflow-hidden p-4">
-            <div className="cp-subtle-label !text-slate-400">Latest board</div>
+            <div className="cp-subtle-label !text-slate-400">Latest result</div>
             <div className="mt-3 flex flex-wrap items-end gap-3">
               <div className="font-display text-[clamp(2.25rem,4vw,3.9rem)] leading-none text-white">{latestSnapshot ? `$${toDisplay(latestSnapshot.result.summary.estimated_price_per_lb).toFixed(2)}` : 'Pending'}</div>
               <div className="pb-1 text-lg text-slate-300">{latestSnapshot ? fmtLabel : ''}</div>
             </div>
-            <div className="mt-2 text-sm text-slate-300">{latestSnapshot ? `Generated ${latestGenerated} with ${latestSnapshot.selectedSupportName ?? 'support'} as the current basis.` : 'No estimate board yet. The first successful run will create one automatically.'}</div>
+            <div className="mt-2 text-sm text-slate-300">{latestSnapshot ? `Generated ${latestGenerated} with ${latestSnapshot.selectedSupportName ?? 'support'} as the current basis.` : 'No result yet. The first successful estimate will appear here automatically.'}</div>
             {latestSnapshot?.benchmarkCandidate ? (
               <div className="mt-3 flex flex-wrap gap-2">
                 <span className="cp-chip-dark">{latestSnapshot.benchmarkCandidate.title}</span>
@@ -1020,18 +870,18 @@ export default function Calculator() {
             <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
               <MetricTile label="Current scale" value={scale.label} detail={`${orderSize} tons / ${scale.rate}`} dark />
               <MetricTile label="Selected steps" value={String(steps.length)} detail={steps.length > 0 ? `${formatStepLabel(steps[0])}${steps.length > 1 ? ` +${steps.length - 1}` : ''}` : 'Choose at least one'} dark />
-              <MetricTile label="Tracked feeds" value={String(liveFeedCount + indexedFeedCount)} detail={`${liveFeedCount} live / ${indexedFeedCount} indexed`} dark />
+              <MetricTile label="Price sources" value={String(liveFeedCount + indexedFeedCount)} detail={`${liveFeedCount} live / ${indexedFeedCount} indexed`} dark />
               <MetricTile label="Recipe load" value={`${nonSupportWt.toFixed(1)} wt%`} detail={`Support closes at ${supportWtPct.toFixed(1)} wt%`} dark />
             </div>
           </div>
 
           <div className="grid gap-2.5 sm:grid-cols-2">
-            <MetricTile label="Support" value={selectedSupport?.name ?? 'Pending'} detail={selectedSupport ? `${selectedSupport.source_type === 'manual' ? 'Manual' : 'Feed-linked'} pricing` : 'Support pending'} />
-            <MetricTile label="Feed sync" value={pricesUpdatedAt ? pricesUpdatedAt.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }) : 'Pending'} detail="Latest price fetch on this screen" />
+            <MetricTile label="Support" value={selectedSupport?.name ?? 'Pending'} detail={selectedSupport ? `${selectedSupport.source_type === 'manual' ? 'Manual' : 'Price-linked'} pricing` : 'Support pending'} />
+            <MetricTile label="Price sync" value={pricesUpdatedAt ? pricesUpdatedAt.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }) : 'Pending'} detail="Latest live price update on this screen" />
           </div>
 
           <div className="rounded-[24px] border border-slate-900/8 bg-white/56 px-4 py-3 text-xs leading-6 text-slate-600">
-            The estimate board is optimized for reading. Return here when you want to change materials, sourcing, or process steps.
+            The result screen is optimized for reading. Return here when you want to change materials, price sources, or manufacturing steps.
           </div>
         </div>
       </section>
@@ -1043,12 +893,12 @@ export default function Calculator() {
       <div className="surface-ghost p-3.5">
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div>
-            <div className="cp-subtle-label">Mode</div>
+            <div className="cp-subtle-label">Catalyst type</div>
             <div className="cp-heading-sm mt-2">{catalystDomainLabel(catalystDomain)}</div>
             <p className="mt-2 text-xs leading-6 text-slate-500">
               {catalystDomain === 'electrocatalyst'
-                ? 'Electrocatalyst mode separates powder, ionomer, membrane, and substrate with route-aware stack costing.'
-                : 'Thermocatalyst mode stays aligned with the CatCost-style composition plus process workflow.'}
+                ? 'Electrocatalyst separates powder, ionomer, membrane, and substrate in one manufacturing estimate.'
+                : 'Thermocatalyst keeps bulk composition, support basis, and manufacturing steps in one estimate.'}
             </p>
           </div>
           <div className="cp-toolbar">
@@ -1057,7 +907,7 @@ export default function Calculator() {
                 key={value}
                 onClick={() => {
                   setCatalystDomain(value);
-                  sectionState.setActiveSection('inputs');
+                  sectionState.setActiveSection('composition');
                 }}
                 className={`rounded-[16px] px-3 py-2 text-xs font-semibold transition ${
                   catalystDomain === value ? 'bg-slate-950 text-white' : 'text-slate-600 hover:bg-white hover:text-slate-900'
@@ -1098,24 +948,13 @@ export default function Calculator() {
     );
   }
 
-  function renderReferenceSection() {
-    if (benchmarkCandidates.length === 0) {
-      return (
-        <div className="surface-ghost p-4 text-sm text-slate-500">
-          No reference routes are available for the current domain and application family.
-        </div>
-      );
-    }
-    return renderBenchmarkBoard();
-  }
-
-  function renderRouteSection() {
+  function renderManufacturingSection() {
     return (
       <div className="space-y-4">
-        <div><div className="cp-subtle-label">Process Route</div><h2 className="cp-heading-xl mt-2">{catalystDomain === 'electrocatalyst' ? 'Choose the fabrication steps' : 'Choose the process steps'}</h2><p className="cp-body-copy mt-2 max-w-2xl">{catalystDomain === 'electrocatalyst' ? 'Templates add conditioning, coating, drying, lamination, and break-in steps. You can still override them below.' : 'Pick the industrial steps that best approximate the lab route, then let order size set the campaign basis.'}</p></div>
+        <div><div className="cp-subtle-label">Manufacturing</div><h2 className="cp-heading-xl mt-2">{catalystDomain === 'electrocatalyst' ? 'Choose the manufacturing method' : 'Choose the manufacturing method'}</h2><p className="cp-body-copy mt-2 max-w-2xl">{catalystDomain === 'electrocatalyst' ? 'Templates add pretreatment, coating, drying, lamination, and break-in steps. You can still adjust the steps below.' : 'Pick the industrial steps that best approximate the synthesis method, then let campaign size set the scale basis.'}</p></div>
         {selectedBenchmark ? (
           <div className="rounded-[24px] border border-emerald-200 bg-emerald-50/80 px-4 py-4 text-sm text-emerald-900">
-            <div className="cp-subtle-label !text-emerald-700">Loaded reference route</div>
+            <div className="cp-subtle-label !text-emerald-700">Loaded reference baseline</div>
             <div className="mt-2 font-semibold">{selectedBenchmark.route.name}</div>
             <div className="mt-2 leading-6">{selectedBenchmark.screening_summary}</div>
             <div className="mt-3 flex flex-wrap gap-2">
@@ -1152,7 +991,7 @@ export default function Calculator() {
   const validationMessage = catalystDomain === 'electrocatalyst'
     ? isValid
       ? `Electrocatalyst stack is ready: ${selectedCatalystMaterial?.name ?? 'catalyst'}, ${selectedIonomerMaterial?.name ?? 'ionomer'}, ${selectedMembraneMaterial?.name ?? 'membrane'}, and ${selectedSubstrateMaterial?.name ?? 'GDL'} are all sourced from the library.`
-      : 'Select catalyst powder, ionomer, membrane, substrate / GDL, and a route template before running the estimate.'
+      : 'Select catalyst powder, ionomer, membrane, substrate / GDL, and a manufacturing template before running the estimate.'
     : isValid
       ? `Recipe balance is valid: ${nonSupportWt.toFixed(1)} wt% actives and promoters, ${supportWtPct.toFixed(1)} wt% support.`
       : activeMetalCount === 0
@@ -1169,40 +1008,39 @@ export default function Calculator() {
           <div className="flex flex-col gap-4 border-b border-slate-900/8 pb-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <div className="cp-subtle-label">Cost Estimate</div>
-              <h2 className="cp-heading-xl mt-2">Estimate catalyst cost</h2>
+              <h2 className="cp-heading-xl mt-2">Estimate catalyst manufacturing cost</h2>
               <p className="cp-body-copy mt-2 max-w-2xl">
                 {catalystDomain === 'electrocatalyst'
-                  ? 'Pick the electrode stack, then map the fabrication route and sourcing basis.'
-                  : 'Set actives, promoters, support, and sourcing basis first, then choose the process route.'}
+                  ? 'Choose the electrode stack, then set manufacturing steps and campaign scale.'
+                  : 'Set catalyst composition and price sources first, then choose the manufacturing method.'}
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="cp-chip">{pricesUpdatedAt ? `Feed synced ${pricesUpdatedAt.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}` : 'Feed status pending'}</span>
-              <button onClick={syncPrices} disabled={refreshing} className="cp-button-secondary"><span className={`mr-2 inline-flex h-4 w-4 rounded-full border-2 border-current border-t-transparent ${refreshing ? 'animate-spin' : ''}`} />{refreshing ? 'Refreshing feed' : 'Refresh feed'}</button>
+              <span className="cp-chip">{pricesUpdatedAt ? `Prices synced ${pricesUpdatedAt.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}` : 'Live price sync pending'}</span>
+              <button onClick={syncPrices} disabled={refreshing} className="cp-button-secondary"><span className={`mr-2 inline-flex h-4 w-4 rounded-full border-2 border-current border-t-transparent ${refreshing ? 'animate-spin' : ''}`} />{refreshing ? 'Updating prices' : 'Update live prices'}</button>
             </div>
           </div>
 
           <div className="grid gap-2.5 md:grid-cols-3">
-            <MetricTile label="Tracked feeds" value={String(liveFeedCount + indexedFeedCount)} detail={`${liveFeedCount} live / ${indexedFeedCount} indexed`} />
-            <MetricTile label="Route steps" value={String(steps.length)} detail={steps.length > 0 ? 'Selected process path' : 'Select at least one step'} />
+            <MetricTile label="Price sources" value={String(liveFeedCount + indexedFeedCount)} detail={`${liveFeedCount} live / ${indexedFeedCount} indexed`} />
+            <MetricTile label="Manufacturing steps" value={String(steps.length)} detail={steps.length > 0 ? 'Selected manufacturing path' : 'Select at least one step'} />
             <MetricTile label="Campaign scale" value={scale.label} detail={`${orderSize} tons / ${scale.rate}`} />
           </div>
         </div>
       </section>
 
-      <WorkspaceSectionNav sections={BUILD_SECTIONS} activeSectionId={sectionState.activeSectionId} activeIndex={sectionState.activeIndex} onSelect={sectionState.setActiveSection} />
+      <WorkspaceSectionNav sections={ESTIMATE_SECTIONS} activeSectionId={sectionState.activeSectionId} activeIndex={sectionState.activeIndex} onSelect={sectionState.setActiveSection} />
 
-      {sectionState.activeSection.id === 'setup' ? renderSetupSection() : null}
-      {sectionState.activeSection.id === 'inputs' ? renderInputsSection() : null}
-      {sectionState.activeSection.id === 'references' ? renderReferenceSection() : null}
-      {sectionState.activeSection.id === 'route' ? renderRouteSection() : null}
-      {sectionState.activeSection.id === 'review' ? (
+      {sectionState.activeSection.id === 'type' ? renderSetupSection() : null}
+      {sectionState.activeSection.id === 'composition' ? renderInputsSection() : null}
+      {sectionState.activeSection.id === 'manufacturing' ? renderManufacturingSection() : null}
+      {sectionState.activeSection.id === 'result' ? (
         <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(340px,0.84fr)]">
           <section className="surface-card p-4">
             <div className={`rounded-[24px] border px-4 py-4 text-sm ${isValid ? 'border-emerald-200 bg-emerald-50 text-emerald-800' : 'border-amber-200 bg-amber-50 text-amber-800'}`}>{validationMessage}</div>
             <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <button onClick={handleCalculate} disabled={loading || !isValid || steps.length === 0} className="cp-button-primary min-w-[250px]">{loading ? <><span className="mr-2 inline-flex h-4 w-4 animate-spin rounded-full border-2 border-slate-950 border-t-transparent" />Running estimate</> : 'Run estimate and open board'}</button>
-              <div className="text-xs leading-6 text-slate-500">The estimate board opens as a separate reading surface and keeps this draft intact.</div>
+              <button onClick={handleCalculate} disabled={loading || !isValid || steps.length === 0} className="cp-button-primary min-w-[250px]">{loading ? <><span className="mr-2 inline-flex h-4 w-4 animate-spin rounded-full border-2 border-slate-950 border-t-transparent" />Running estimate</> : 'Run estimate'}</button>
+              <div className="text-xs leading-6 text-slate-500">The result screen opens separately and keeps this draft intact.</div>
             </div>
             {error ? <div className="mt-4 rounded-[24px] border border-red-200 bg-red-50 px-4 py-4 text-sm text-red-700"><span className="font-semibold">Calculation failed.</span> {error}</div> : null}
           </section>
@@ -1213,7 +1051,7 @@ export default function Calculator() {
       <WorkspaceSectionFooter
         activeSection={sectionState.activeSection}
         activeIndex={sectionState.activeIndex}
-        totalSections={BUILD_SECTIONS.length}
+        totalSections={ESTIMATE_SECTIONS.length}
         onPrevious={sectionState.goPrevious}
         onNext={sectionState.goNext}
         canGoPrevious={sectionState.canGoPrevious}

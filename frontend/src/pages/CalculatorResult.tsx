@@ -7,9 +7,9 @@ import { useUnit } from '../lib/use-unit';
 
 const CHART_COLORS = ['#78f2d0', '#88a8ff', '#efc36c', '#f3a08d', '#c5b7ff', '#8de0ff'];
 const RESULT_SECTIONS: WorkspaceSection[] = [
-  { id: 'summary', label: 'Summary', summary: 'Headline price and board status.' },
-  { id: 'route', label: 'Route', summary: 'Cost structure and route context.' },
-  { id: 'ledger', label: 'Ledger', summary: 'Component and source records.' },
+  { id: 'summary', label: 'Summary', summary: 'Headline price and result status.' },
+  { id: 'manufacturing', label: 'Manufacturing', summary: 'Cost structure and manufacturing context.' },
+  { id: 'sources', label: 'Sources', summary: 'Component and source records.' },
 ];
 
 function sourceRecordLabel(priceScope: string, hasLink: boolean) {
@@ -41,7 +41,7 @@ function MetricTile({ label, value, detail, dark = false }: { label: string; val
 export default function CalculatorResult() {
   const navigate = useNavigate();
   const { unit, toDisplay, fmtLabel, catLabel } = useUnit();
-  const sectionState = useWorkspaceSections(RESULT_SECTIONS, 'board');
+  const sectionState = useWorkspaceSections(RESULT_SECTIONS, 'result');
   const [snapshot] = useState(() => loadCalculatorResultSnapshot());
 
   useLayoutEffect(() => {
@@ -62,9 +62,9 @@ export default function CalculatorResult() {
   if (!snapshot) {
     return (
       <section className="surface-card cp-enter overflow-hidden p-6 sm:p-7">
-        <span className="section-kicker">Estimate Board</span>
-        <h1 className="cp-heading-xl mt-4">No saved estimate board is available yet.</h1>
-        <p className="cp-body-copy mt-3 max-w-xl">Run an estimate from the cost estimate workspace first. The estimate board will then stay available for quick review.</p>
+        <span className="section-kicker">Result</span>
+        <h1 className="cp-heading-xl mt-4">No saved result is available yet.</h1>
+        <p className="cp-body-copy mt-3 max-w-xl">Run an estimate from the cost estimate workspace first. The result will then stay available for quick review.</p>
         <div className="mt-5">
           <button onClick={goBackToCalculator} className="cp-button-primary">Back to cost estimate</button>
         </div>
@@ -97,9 +97,9 @@ export default function CalculatorResult() {
       <section className="surface-card cp-enter overflow-hidden p-5 sm:p-6">
         <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
           <div className="max-w-3xl">
-            <span className="section-kicker">Estimate Board</span>
-            <h1 className="cp-heading-xl mt-4">Read the estimate on a dedicated board.</h1>
-            <p className="cp-body-copy mt-3 max-w-2xl">Inputs stay in the cost estimate workspace. This board is for reading cost, route, and source evidence without editing noise.</p>
+            <span className="section-kicker">Result</span>
+            <h1 className="cp-heading-xl mt-4">Read the latest result on a dedicated screen.</h1>
+            <p className="cp-body-copy mt-3 max-w-2xl">Inputs stay in the cost estimate workspace. This screen is for reading cost, manufacturing, and source evidence without editing noise.</p>
           </div>
           <button onClick={goBackToCalculator} className="cp-button-primary">Back to cost estimate</button>
         </div>
@@ -119,7 +119,7 @@ export default function CalculatorResult() {
                 <span className="cp-chip-dark">Generated {generatedAt}</span>
                 <span className="cp-chip-dark">{catalystDomain}</span>
                 <span className="cp-chip-dark">{snapshot.selectedSupportName ?? 'Support pending'}</span>
-                <span className="cp-chip-dark">{snapshot.stepLabels.length} process steps</span>
+                <span className="cp-chip-dark">{snapshot.stepLabels.length} manufacturing steps</span>
                 {snapshot.benchmarkCandidate ? <span className="cp-chip-dark">{snapshot.benchmarkCandidate.title}</span> : null}
               </div>
             </div>
@@ -129,7 +129,7 @@ export default function CalculatorResult() {
             <MetricTile label="Scale" value={result.step_method.scale} detail={`${snapshot.orderSize} tons per order`} />
             <MetricTile label="Campaign" value={`${Number(result.step_method.campaign_days).toFixed(1)} d`} detail={`${snapshot.stepLabels.length} selected steps`} />
             <MetricTile label="Margin" value={`${Number(result.step_method.margin_pct).toFixed(1)}%`} detail="Selling margin contribution" />
-            <MetricTile label="Tracked feeds" value={String(snapshot.liveFeedCount + snapshot.indexedFeedCount)} detail={`${snapshot.liveFeedCount} live / ${snapshot.indexedFeedCount} indexed`} />
+            <MetricTile label="Price sources" value={String(snapshot.liveFeedCount + snapshot.indexedFeedCount)} detail={`${snapshot.liveFeedCount} live / ${snapshot.indexedFeedCount} indexed`} />
           </div>
         </div>
       </section>
@@ -186,11 +186,11 @@ export default function CalculatorResult() {
         </section>
       ) : null}
 
-      {sectionState.activeSection.id === 'route' ? (
+      {sectionState.activeSection.id === 'manufacturing' ? (
         <section className="surface-card p-4">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
-              <div className="cp-subtle-label">Basis + Structure</div>
+              <div className="cp-subtle-label">Manufacturing + Cost</div>
               <div className="cp-heading-lg mt-2">Read the estimate at a glance</div>
             </div>
             <span className="cp-chip">{result.materials.components.length} materials</span>
@@ -200,12 +200,12 @@ export default function CalculatorResult() {
             <MetricTile label="Active metals" value={String(snapshot.activeMetalCount)} detail="Named active inputs" />
             <MetricTile label="Recipe load" value={`${snapshot.nonSupportWt.toFixed(1)} wt%`} detail={`Support closes at ${snapshot.supportWtPct.toFixed(1)} wt%`} />
             <MetricTile label="Support" value={snapshot.selectedSupportName ?? 'Pending'} detail="Current support basis" />
-            <MetricTile label="Process path" value={String(snapshot.stepLabels.length)} detail="Selected manufacturing steps" />
+            <MetricTile label="Manufacturing steps" value={String(snapshot.stepLabels.length)} detail="Selected manufacturing steps" />
           </div>
 
           <div className="mt-4 grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(240px,0.88fr)]">
             <div className="rounded-[24px] border border-slate-900/8 bg-white/58 p-4">
-              <div className="cp-subtle-label">Cost Structure</div>
+            <div className="cp-subtle-label">Cost Structure</div>
               <div className="cp-heading-lg mt-2">Materials vs processing</div>
               <div className="mt-4 space-y-3">
                 {summaryRows.map((item, index) => (
@@ -240,7 +240,7 @@ export default function CalculatorResult() {
           </div>
 
           <div className="mt-4 border-t border-slate-900/8 pt-4">
-            <div className="cp-subtle-label">Process Path</div>
+            <div className="cp-subtle-label">Manufacturing Steps</div>
             <div className="mt-3 flex flex-wrap gap-2">
               {snapshot.stepLabels.map((label) => <span key={label} className="cp-chip">{label}</span>)}
             </div>
@@ -248,7 +248,7 @@ export default function CalculatorResult() {
 
           {snapshot.benchmarkCandidate ? (
             <div className="mt-4 rounded-[24px] border border-emerald-200 bg-emerald-50/80 p-4">
-              <div className="cp-subtle-label !text-emerald-700">Reference route context</div>
+              <div className="cp-subtle-label !text-emerald-700">Reference baseline</div>
               <div className="mt-2 cp-heading-sm">{snapshot.benchmarkCandidate.title}</div>
               <div className="mt-2 text-sm leading-6 text-emerald-900">{snapshot.benchmarkCandidate.screening_summary}</div>
               <div className="mt-3 flex flex-wrap gap-2">
@@ -262,7 +262,7 @@ export default function CalculatorResult() {
 
           {routeSummary ? (
             <div className="mt-4 rounded-[24px] border border-sky-200 bg-sky-50/75 p-4">
-              <div className="cp-subtle-label !text-sky-700">Manufacturing route</div>
+              <div className="cp-subtle-label !text-sky-700">Manufacturing method</div>
               <div className="mt-2 cp-heading-sm">{routeSummary.name}</div>
               <div className="mt-2 text-sm leading-6 text-sky-900">
                 {routeSummary.route_note || 'Template-driven route metadata is attached to this estimate.'}
@@ -296,12 +296,12 @@ export default function CalculatorResult() {
         </section>
       ) : null}
 
-      {sectionState.activeSection.id === 'ledger' ? (
+      {sectionState.activeSection.id === 'sources' ? (
         <section className="surface-card p-4">
           <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div className="min-w-0">
-              <div className="cp-subtle-label">Material Ledger</div>
-              <div className="cp-heading-lg mt-2">Catalyst component ledger</div>
+              <div className="cp-subtle-label">Sources</div>
+              <div className="cp-heading-lg mt-2">Catalyst component sources</div>
               <div className="mt-1 text-xs leading-6 text-slate-500">Per-component loading, source cost, and contribution inside the selling-price estimate.</div>
             </div>
             <span className="cp-chip shrink-0">{snapshot.selectedSupportName ?? 'Support'}</span>
