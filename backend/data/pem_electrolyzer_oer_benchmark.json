@@ -1,0 +1,503 @@
+{
+  "family": "pem-electrolyzer-oer",
+  "title": "PEM electrolyzer OER reference family",
+  "catalyst_domain": "electrocatalyst",
+  "application_family": "electrolyzer",
+  "reaction": "2 H2O -> O2 + 4 H+ + 4 e-",
+  "objective": "Optional literature-backed PEM electrolyzer anode family for screening Ir- and Ru-based acidic OER routes with explicit membrane, ionomer, and PTL defaults. These candidates are reference starting points for route maturity, source quality, and current stack cost pressure rather than hard product definitions.",
+  "decision_profiles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Balance current stack economics, evidence quality, route maturity, and reported performance.",
+      "weights": {
+        "economics": 0.42,
+        "evidence": 0.22,
+        "route": 0.16,
+        "performance": 0.2
+      }
+    },
+    "cost-first": {
+      "label": "Cost-first",
+      "description": "Bias ranking toward lower current electrode-layer cost while preserving route and evidence guardrails.",
+      "weights": {
+        "economics": 0.58,
+        "evidence": 0.14,
+        "route": 0.08,
+        "performance": 0.2
+      }
+    },
+    "evidence-first": {
+      "label": "Evidence-first",
+      "description": "Reward stronger literature support and better route reproducibility for PEM anode screening.",
+      "weights": {
+        "economics": 0.3,
+        "evidence": 0.34,
+        "route": 0.16,
+        "performance": 0.2
+      }
+    }
+  },
+  "citations": [
+    {
+      "id": "taox-iro2-ncomms-2023",
+      "label": "Nature Communications 2023",
+      "url": "https://www.nature.com/articles/s41467-023-40912-8",
+      "kind": "literature",
+      "note": "TaOx/IrO2 heterojunction route on conductive diboride support demonstrating PEMWE operation around 0.15 mgIr cm-2."
+    },
+    {
+      "id": "ionomerfree-pte-ncomms-2023",
+      "label": "Nature Communications 2023",
+      "url": "https://www.nature.com/articles/s41467-023-40375-x",
+      "kind": "literature",
+      "note": "Ionomer-free porous-transport-electrode route showing sub-0.1 mgIr cm-2 operation and easier recyclability."
+    },
+    {
+      "id": "ir-o-mn-ncomms-2025",
+      "label": "Nature Communications 2025",
+      "url": "https://www.nature.com/articles/s41467-024-54646-8",
+      "kind": "literature",
+      "note": "Ir-O-Mn porous nanosheet route reported at 0.2 mgIr cm-2 with high mass activity and 300 h PEMWE operation."
+    },
+    {
+      "id": "support-free-irhy-ncomms-2025",
+      "label": "Nature Communications 2025",
+      "url": "https://www.nature.com/articles/s41467-025-58019-7",
+      "kind": "literature",
+      "note": "Support-free iridium hydroxide route reaching less than 1.75 V at 4 A cm-2 with 0.375 mgIr cm-2 loading."
+    },
+    {
+      "id": "support-tuned-ir-ncomms-2025",
+      "label": "Nature Communications 2025",
+      "url": "https://www.nature.com/articles/s41467-025-63541-9",
+      "kind": "literature",
+      "note": "TiOx@Ti-supported iridium reconstruction route that shifts acidic OER toward a more durable crystalline IrO2 phase."
+    },
+    {
+      "id": "tunnel-irox-ncomms-2025",
+      "label": "Nature Communications 2025",
+      "url": "https://www.nature.com/articles/s41467-025-62861-0",
+      "kind": "literature",
+      "note": "Tunnel-structured IrOx route emphasizing catalytic-efficiency gains in PEM water electrolyzers."
+    },
+    {
+      "id": "ru-nb-mn-ncomms-2025",
+      "label": "Nature Communications 2025",
+      "url": "https://www.nature.com/articles/s41467-025-59710-5",
+      "kind": "literature",
+      "note": "Nb and Mn co-doped RuO2 route sustaining PEM water splitting under high current with a 1000 h device test."
+    },
+    {
+      "id": "co-ruo2-natcatal-2026",
+      "label": "Nature Catalysis 2026",
+      "url": "https://www.nature.com/articles/s41929-025-01456-w",
+      "kind": "literature",
+      "note": "Co-RuO2-enabled PEM electrolyzer route showing durable reverse-osmosis-water operation at 1 A cm-2."
+    },
+    {
+      "id": "rutio-mesoporous-ncomms-2026",
+      "label": "Nature Communications 2026",
+      "url": "https://www.nature.com/articles/s41467-026-70502-3",
+      "kind": "literature",
+      "note": "Mesoporous Ru-Ti-O solid-solution route reporting 0.4 mgRu cm-2 and more than 450 h at 1 A cm-2."
+    },
+    {
+      "id": "fcs-iridium-oxide",
+      "label": "Fuel Cell Store XT Iridium Oxide",
+      "url": "https://www.fuelcellstore.com/iridium-oxide-high-surface-area-and-high-performance-3161610",
+      "kind": "catalog",
+      "note": "Public IrO2 powder quote used as a transparent procurement anchor."
+    },
+    {
+      "id": "fcs-ruthenium-oxide",
+      "label": "Fuel Cell Store XT Ruthenium Oxide",
+      "url": "https://www.fuelcellstore.com/fce-ruo2-140-160",
+      "kind": "catalog",
+      "note": "Public RuO2 powder quote used as the low-cost acidic OER anchor."
+    },
+    {
+      "id": "fcs-pfsa-d5",
+      "label": "Fuel Cell Store PFSA D5",
+      "url": "https://www.fuelcellstore.com/pfsa-dispersion-d5-758000100",
+      "kind": "catalog",
+      "note": "Public PFSA ionomer dispersion quote used for PEM anode ink defaults."
+    },
+    {
+      "id": "fcs-pfsa-d50r",
+      "label": "Fuel Cell Store PFSA D50-R",
+      "url": "https://www.fuelcellstore.com/pfsa-d50r-eptfe-reinforced-proton-exchange-membrane-87010026",
+      "kind": "catalog",
+      "note": "Public reinforced PFSA membrane quote used for PEM stack defaults."
+    },
+    {
+      "id": "fcs-ti-ptl",
+      "label": "Fuel Cell Store Titanium PTL",
+      "url": "https://www.fuelcellstore.com/ultra-thin-titanium-porous-transfer-layer",
+      "kind": "catalog",
+      "note": "Public titanium porous transfer layer quote used as a PEM anode PTL anchor."
+    },
+    {
+      "id": "fcs-titanium-frit",
+      "label": "Fuel Cell Store Titanium Frit",
+      "url": "https://www.fuelcellstore.com/titanium-frit",
+      "kind": "catalog",
+      "note": "Public titanium frit quote used for interface-engineered PEM anode routes."
+    }
+  ],
+  "catalog_quotes": [
+    {
+      "id": "fcs-iridium-oxide",
+      "supplier": "Fuel Cell Store",
+      "material": "XT Iridium Oxide Grade S",
+      "sku": "3161610",
+      "pack_size": "1 g",
+      "price_usd": 415.0,
+      "normalized_price_per_lb": 188240.8336,
+      "url": "https://www.fuelcellstore.com/iridium-oxide-high-surface-area-and-high-performance-3161610",
+      "note": "Public lab-scale IrO2 powder anchor."
+    },
+    {
+      "id": "fcs-ruthenium-oxide",
+      "supplier": "Fuel Cell Store",
+      "material": "XT Ruthenium Oxide Grade S",
+      "sku": "FCE-RuO2-140-160",
+      "pack_size": "1 g",
+      "price_usd": 295.0,
+      "normalized_price_per_lb": 133809.7492,
+      "url": "https://www.fuelcellstore.com/fce-ruo2-140-160",
+      "note": "Public lab-scale RuO2 powder anchor."
+    },
+    {
+      "id": "fcs-pfsa-d5",
+      "supplier": "Fuel Cell Store",
+      "material": "PFSA Dispersion (D5, 5%)",
+      "sku": "758000100",
+      "pack_size": "25 mL",
+      "price_usd": 49.0,
+      "normalized_price_per_lb": 0.0,
+      "url": "https://www.fuelcellstore.com/pfsa-dispersion-d5-758000100",
+      "note": "Public PFSA ionomer dispersion anchor for PEM electrode defaults."
+    },
+    {
+      "id": "fcs-pfsa-d50r",
+      "supplier": "Fuel Cell Store",
+      "material": "PFSA D50-R ePTFE Reinforced Proton Exchange Membrane",
+      "sku": "87010026",
+      "pack_size": "10 x 10 cm",
+      "price_usd": 29.0,
+      "normalized_price_per_lb": 0.0,
+      "url": "https://www.fuelcellstore.com/pfsa-d50r-eptfe-reinforced-proton-exchange-membrane-87010026",
+      "note": "Public reinforced PFSA membrane anchor for PEM stack defaults."
+    },
+    {
+      "id": "fcs-ti-ptl",
+      "supplier": "Fuel Cell Store",
+      "material": "Ultra-thin Titanium Porous Transfer Layer",
+      "sku": "Ultra-thin Titanium Porous Transfer Layer",
+      "pack_size": "5 x 5 cm",
+      "price_usd": 60.0,
+      "normalized_price_per_lb": 0.0,
+      "url": "https://www.fuelcellstore.com/ultra-thin-titanium-porous-transfer-layer",
+      "note": "Public titanium PTL anchor for PEM anode routes."
+    },
+    {
+      "id": "fcs-titanium-frit",
+      "supplier": "Fuel Cell Store",
+      "material": "Titanium Frit",
+      "sku": "Titanium Frit",
+      "pack_size": "5 x 5 cm",
+      "price_usd": 56.0,
+      "normalized_price_per_lb": 0.0,
+      "url": "https://www.fuelcellstore.com/titanium-frit",
+      "note": "Public titanium frit anchor for interface-engineered PEM anode routes."
+    }
+  ],
+  "route_templates": [
+    {
+      "id": "pem-irox-standard-ccm",
+      "name": "Standard IrOx PEM anode route",
+      "calculator_template_id": "pem_electrolyzer_ccm",
+      "manufacturing_mode": "PFSA-bound PEM anode ink to membrane / PTL route",
+      "preprocess": [
+        "Membrane acid pretreatment and hydration",
+        "Titanium PTL rinse and dry-down",
+        "IrOx powder staging and solids check"
+      ],
+      "synthesis": [
+        "PFSA ionomer ink homogenization",
+        "Ultrasonic dispersion",
+        "CCM or PTL coating pass"
+      ],
+      "postprocess": [
+        "Low-temperature drying",
+        "Hot-press lamination",
+        "Electrochemical activation"
+      ],
+      "quality_gates": [
+        "Ir loading verification",
+        "Catalyst-layer adhesion check",
+        "Activation-voltage screen"
+      ],
+      "steps": [
+        "membrane_pretreatment",
+        "substrate_pretreatment",
+        "ionomer_ink_homogenization",
+        "ultrasonic_dispersion",
+        "ccm_coating_pass",
+        "electrode_drying_low_temp",
+        "hot_press_lamination",
+        "electrochemical_break_in"
+      ],
+      "non_step_cost_per_lb": 0.72,
+      "route_confidence": 90,
+      "route_note": "Closest public-facing proxy to conventional PEMWE anode manufacturing using purchased IrOx powder, PFSA binder, reinforced membrane, and titanium PTL."
+    },
+    {
+      "id": "pem-low-ir-interface-ccm",
+      "name": "Interface-engineered low-Ir PEM route",
+      "calculator_template_id": "pem_electrolyzer_ccm",
+      "manufacturing_mode": "Low-loading supported or interface-engineered Ir route",
+      "preprocess": [
+        "Membrane acid pretreatment and hydration",
+        "Titanium interface conditioning",
+        "Low-Ir solids and porosity balancing"
+      ],
+      "synthesis": [
+        "Support-assisted Ir deposition or reconstruction setup",
+        "Ultrasonic dispersion",
+        "Low-loading coating pass"
+      ],
+      "postprocess": [
+        "Low-temperature drying",
+        "Short activation hold",
+        "Performance conditioning on PEMWE hardware"
+      ],
+      "quality_gates": [
+        "Low-Ir loading verification",
+        "PTL / catalyst interfacial contact check",
+        "1 A cm-2 voltage screen"
+      ],
+      "steps": [
+        "membrane_pretreatment",
+        "substrate_pretreatment",
+        "reactor_multistep",
+        "ionomer_ink_homogenization",
+        "ultrasonic_dispersion",
+        "ccm_coating_pass",
+        "electrode_drying_low_temp",
+        "electrochemical_break_in"
+      ],
+      "non_step_cost_per_lb": 1.18,
+      "route_confidence": 78,
+      "route_note": "Support and interface engineering can cut Ir loading sharply, but the route depends on tighter PTL control and less mature reconstruction windows than the standard IrOx baseline."
+    },
+    {
+      "id": "pem-ru-rich-acidic-ccm",
+      "name": "Ru-rich acidic OER route",
+      "calculator_template_id": "pem_electrolyzer_ccm",
+      "manufacturing_mode": "Ru-rich mixed-oxide acidic anode route",
+      "preprocess": [
+        "Acid-stable precursor balance",
+        "Titanium frit conditioning",
+        "Mixed-oxide slurry solids check"
+      ],
+      "synthesis": [
+        "Multistep mixed-oxide assembly or co-doping",
+        "Intermediate filtration / wash",
+        "CCM or PTL coating pass"
+      ],
+      "postprocess": [
+        "Stabilization drying",
+        "Activation hold under acidic bias",
+        "Durability screening at elevated current"
+      ],
+      "quality_gates": [
+        "Ru retention proxy",
+        "Accelerated-durability pre-screen",
+        "High-current PEMWE hold test"
+      ],
+      "steps": [
+        "membrane_pretreatment",
+        "substrate_pretreatment",
+        "reactor_multistep",
+        "filter_rotary_vacuum",
+        "dryer_rotary_100_300C",
+        "ionomer_ink_homogenization",
+        "ccm_coating_pass",
+        "electrode_drying_low_temp",
+        "electrochemical_break_in"
+      ],
+      "non_step_cost_per_lb": 1.24,
+      "route_confidence": 70,
+      "route_note": "Ru-rich acidic OER routes can relieve noble-metal cost pressure, but stability control and impurity tolerance remain less mature than Ir-dominant PEM anodes."
+    }
+  ],
+  "candidates": [
+    {
+      "slug": "pem-irox-baseline",
+      "title": "IrO2 PEM anode baseline",
+      "archetype": "Commercial anchor",
+      "screening_basis": "vendor_stack_anchor",
+      "summary": "Conventional IrOx + PFSA + reinforced membrane + titanium PTL route used as the transparent PEMWE baseline.",
+      "route_template_id": "pem-irox-standard-ccm",
+      "order_size_tons": 20,
+      "performance_index": 78,
+      "manufacturing_readiness": 93,
+      "screening_exactness": 86,
+      "temperature_window_c": [55, 80],
+      "literature_basis_ids": [
+        "taox-iro2-ncomms-2023",
+        "support-free-irhy-ncomms-2025",
+        "ionomerfree-pte-ncomms-2023",
+        "fcs-iridium-oxide",
+        "fcs-ti-ptl"
+      ],
+      "catalog_quote_ids": [
+        "fcs-iridium-oxide",
+        "fcs-pfsa-d5",
+        "fcs-pfsa-d50r",
+        "fcs-ti-ptl"
+      ],
+      "electrode_defaults": {
+        "application_family": "electrolyzer",
+        "catalyst_material_key": "fcs:xt-iridium-oxide-s",
+        "ionomer_material_key": "fcs:pfsa-d5",
+        "membrane_material_key": "fcs:pfsa-d50r",
+        "substrate_material_key": "fcs:ti-ptl-ultrathin",
+        "active_area_cm2": 25,
+        "catalyst_loading_mg_cm2": 1.5,
+        "ionomer_to_catalyst_ratio": 0.25
+      },
+      "decision_notes": [
+        "Most defensible PEM electrolyzer starting point because every layer in the stack is anchored to public catalog data or top-journal route references.",
+        "Economics are still dominated by scarce Ir powder and titanium-side hardware, so this route is the right control case rather than the cost winner."
+      ],
+      "components": [
+        {
+          "role": "active_catalyst",
+          "name": "IrO2",
+          "wt_pct": 100,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 188240.83355,
+            "evidence_label": "Fuel Cell Store XT Iridium Oxide Grade S",
+            "evidence_tier": "vendor_public",
+            "confidence_score": 74,
+            "transparency": "public_list_price",
+            "note": "Public IrO2 powder quote used as a transparent PEM anode procurement anchor."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "pem-low-ir-interface",
+      "title": "Low-Ir interface-engineered PEM route",
+      "archetype": "Low-iridium performance route",
+      "screening_basis": "literature_low_loading_plus_vendor_stack",
+      "summary": "Support and interface engineering route that targets PEMWE-grade performance while pushing Ir loading toward the 0.1-0.2 mg cm-2 band.",
+      "route_template_id": "pem-low-ir-interface-ccm",
+      "order_size_tons": 20,
+      "performance_index": 91,
+      "manufacturing_readiness": 80,
+      "screening_exactness": 82,
+      "temperature_window_c": [55, 80],
+      "literature_basis_ids": [
+        "taox-iro2-ncomms-2023",
+        "ir-o-mn-ncomms-2025",
+        "support-tuned-ir-ncomms-2025",
+        "tunnel-irox-ncomms-2025",
+        "ionomerfree-pte-ncomms-2023"
+      ],
+      "catalog_quote_ids": [
+        "fcs-iridium-oxide",
+        "fcs-pfsa-d5",
+        "fcs-pfsa-d50r",
+        "fcs-titanium-frit"
+      ],
+      "electrode_defaults": {
+        "application_family": "electrolyzer",
+        "catalyst_material_key": "fcs:xt-iridium-oxide-s",
+        "ionomer_material_key": "fcs:pfsa-d5",
+        "membrane_material_key": "fcs:pfsa-d50r",
+        "substrate_material_key": "fcs:titanium-frit",
+        "active_area_cm2": 25,
+        "catalyst_loading_mg_cm2": 0.2,
+        "ionomer_to_catalyst_ratio": 0.12
+      },
+      "decision_notes": [
+        "This is the strongest low-Ir screening route now that the family explicitly prices membrane, ionomer, and titanium-side hardware instead of only powder mass.",
+        "Route discipline is tighter than the baseline because low-Ir utilization depends on interfacial contact, reconstruction control, and narrow loading windows."
+      ],
+      "components": [
+        {
+          "role": "active_catalyst",
+          "name": "IrO2",
+          "wt_pct": 100,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 188240.83355,
+            "evidence_label": "Fuel Cell Store XT Iridium Oxide Grade S",
+            "evidence_tier": "vendor_public",
+            "confidence_score": 74,
+            "transparency": "public_list_price",
+            "note": "IrO2 powder retained as the transparent purchased catalyst anchor while literature references justify much lower deployed loading."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "pem-ru-rich-acidic",
+      "title": "Ru-rich acidic OER route",
+      "archetype": "Lower-noble-cost experimental route",
+      "screening_basis": "ru_based_cost_pressure_relief",
+      "summary": "Ru-rich acidic OER route used to test whether newer stabilization strategies can offset lower catalyst price with acceptable durability risk.",
+      "route_template_id": "pem-ru-rich-acidic-ccm",
+      "order_size_tons": 20,
+      "performance_index": 84,
+      "manufacturing_readiness": 70,
+      "screening_exactness": 77,
+      "temperature_window_c": [50, 80],
+      "literature_basis_ids": [
+        "ru-nb-mn-ncomms-2025",
+        "co-ruo2-natcatal-2026",
+        "rutio-mesoporous-ncomms-2026"
+      ],
+      "catalog_quote_ids": [
+        "fcs-ruthenium-oxide",
+        "fcs-pfsa-d5",
+        "fcs-pfsa-d50r",
+        "fcs-titanium-frit"
+      ],
+      "electrode_defaults": {
+        "application_family": "electrolyzer",
+        "catalyst_material_key": "fcs:xt-ruthenium-oxide-s",
+        "ionomer_material_key": "fcs:pfsa-d5",
+        "membrane_material_key": "fcs:pfsa-d50r",
+        "substrate_material_key": "fcs:titanium-frit",
+        "active_area_cm2": 25,
+        "catalyst_loading_mg_cm2": 0.4,
+        "ionomer_to_catalyst_ratio": 0.18
+      },
+      "decision_notes": [
+        "This is the current price-pressure relief route because RuO2 is materially cheaper than IrO2 in the library, and the benchmark now reflects that directly in electrode-layer costing.",
+        "Use it as a scenario route, not the default procurement basis, because acidic durability and impurity tolerance still lag the best Ir-focused PEMWE routes."
+      ],
+      "components": [
+        {
+          "role": "active_catalyst",
+          "name": "RuO2",
+          "wt_pct": 100,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 133809.74915,
+            "evidence_label": "Fuel Cell Store XT Ruthenium Oxide Grade S",
+            "evidence_tier": "vendor_public",
+            "confidence_score": 72,
+            "transparency": "public_list_price",
+            "note": "Public RuO2 powder quote used as the transparent low-cost acidic OER anchor."
+          }
+        }
+      ]
+    }
+  ]
+}

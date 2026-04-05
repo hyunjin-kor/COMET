@@ -148,7 +148,22 @@ export default function Compare() {
     [activeSlug, benchmark?.winner, candidates],
   );
 
+  function benchmarkCostValue(candidate: DecisionCandidate) {
+    if (candidate.summary.economics_basis_unit === '$/cm2') {
+      return `$${candidate.summary.economics_basis_value.toFixed(2)}`;
+    }
+    return `$${toDisplay(candidate.summary.economics_basis_value).toFixed(2)}`;
+  }
+
+  function benchmarkCostDetail(candidate: DecisionCandidate) {
+    if (candidate.summary.economics_basis_unit === '$/cm2') {
+      return '/cm2';
+    }
+    return fmtLabel;
+  }
+
   function loadIntoCalculator(candidate: DecisionCandidate) {
+    const defaults = candidate.electrode_defaults;
     saveCalculatorDraft({
       rows: toCalculatorRows(candidate),
       steps: candidate.route.steps,
@@ -158,13 +173,13 @@ export default function Compare() {
       pricesUpdatedAt: benchmark?.price_basis_updated_at ?? null,
       electrocatalystConfig: candidate.catalyst_domain === 'electrocatalyst'
         ? {
-            catalystMaterialKey: '',
-            ionomerMaterialKey: '',
-            membraneMaterialKey: '',
-            substrateMaterialKey: '',
-            activeAreaCm2: 25,
-            catalystLoadingMgCm2: 0.3,
-            ionomerToCatalystRatio: 0.8,
+            catalystMaterialKey: defaults?.catalyst_material_key ?? '',
+            ionomerMaterialKey: defaults?.ionomer_material_key ?? '',
+            membraneMaterialKey: defaults?.membrane_material_key ?? '',
+            substrateMaterialKey: defaults?.substrate_material_key ?? '',
+            activeAreaCm2: defaults?.active_area_cm2 ?? 25,
+            catalystLoadingMgCm2: defaults?.catalyst_loading_mg_cm2 ?? 0.3,
+            ionomerToCatalystRatio: defaults?.ionomer_to_catalyst_ratio ?? 0.8,
             templateId: candidate.route.calculator_template_id ?? 'pem_fuel_cell_ccm',
           }
         : null,
@@ -239,9 +254,9 @@ export default function Compare() {
                     </div>
                     <div className="text-left sm:text-right">
                       <div className="text-3xl font-display text-white">
-                        ${toDisplay(winner.summary.landed_cost_per_lb).toFixed(2)}
+                        {benchmarkCostValue(winner)}
                       </div>
-                      <div className="mt-1 text-sm text-slate-300">{fmtLabel}</div>
+                      <div className="mt-1 text-sm text-slate-300">{benchmarkCostDetail(winner)}</div>
                     </div>
                   </div>
                   <div className="mt-4 grid gap-3 sm:grid-cols-3">
@@ -376,11 +391,11 @@ export default function Compare() {
 
                     <div className="grid shrink-0 gap-2 text-right sm:min-w-[150px]">
                       <div>
-                        <div className="cp-subtle-label">Landed</div>
+                        <div className="cp-subtle-label">{candidate.summary.economics_basis_label}</div>
                         <div className="mt-2 text-2xl font-display text-slate-950">
-                          ${toDisplay(candidate.summary.landed_cost_per_lb).toFixed(2)}
+                          {benchmarkCostValue(candidate)}
                         </div>
-                        <div className="text-xs text-slate-500">{fmtLabel}</div>
+                        <div className="text-xs text-slate-500">{benchmarkCostDetail(candidate)}</div>
                       </div>
                       <div className={`text-sm font-semibold ${scoreTone(candidate.scores.total)}`}>
                         Score {candidate.scores.total.toFixed(1)}
@@ -436,9 +451,9 @@ export default function Compare() {
 
           <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
             <MetricTile
-              label="Landed cost"
-              value={`$${toDisplay(activeCandidate.summary.landed_cost_per_lb).toFixed(2)}`}
-              detail={fmtLabel}
+              label={activeCandidate.summary.economics_basis_label}
+              value={benchmarkCostValue(activeCandidate)}
+              detail={benchmarkCostDetail(activeCandidate)}
             />
             <MetricTile
               label="Materials"

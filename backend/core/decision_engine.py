@@ -10,6 +10,7 @@ from sqlmodel import Session, select
 
 from backend.core.constants import LB_PER_KG, TROY_OZ_PER_LB
 from backend.core.cost_engine import estimate_catalyst_cost
+from backend.core.material_pricing import resolve_electrode_materials
 from backend.core.price_evidence import build_fixed_evidence, describe_price_evidence
 from backend.core.price_fetcher import get_reference_prices
 from backend.models.metal_price import MetalPrice
@@ -204,12 +205,30 @@ def _route_score(candidate: dict[str, Any], route: dict[str, Any]) -> float:
 def _economic_scores(candidates: list[dict[str, Any]]) -> None:
     if not candidates:
         return
-    costs = [float(item["summary"]["landed_cost_per_lb"]) for item in candidates]
+
+    units = {
+        str(item["summary"].get("economics_basis_unit") or "$/lb")
+        for item in candidates
+    }
+    use_basis = len(units) == 1 and all(
+        item["summary"].get("economics_basis_value") is not None
+        for item in candidates
+    )
+    costs = [
+        float(item["summary"]["economics_basis_value"])
+        if use_basis
+        else float(item["summary"]["landed_cost_per_lb"])
+        for item in candidates
+    ]
     high = max(costs)
     low = min(costs)
     spread = high - low
     for item in candidates:
-        price = float(item["summary"]["landed_cost_per_lb"])
+        price = (
+            float(item["summary"]["economics_basis_value"])
+            if use_basis
+            else float(item["summary"]["landed_cost_per_lb"])
+        )
         if spread <= 1e-9:
             item["scores"]["economics"] = 100.0
         else:
@@ -256,6 +275,7 @@ def evaluate_benchmark_family(
         route = route_map[candidate["route_template_id"]]
         candidate_domain = candidate.get("catalyst_domain", family_domain)
         candidate_application = candidate.get("application_family", family_application)
+        raw_electrode_defaults = candidate.get("electrode_defaults")
 
         component_inputs: list[dict[str, Any]] = []
         component_meta: list[dict[str, Any]] = []
@@ -268,12 +288,35 @@ def evaluate_benchmark_family(
             if evidence_update:
                 latest_update = max(latest_update or evidence_update, evidence_update)
 
+        electrode_payload = None
+        if candidate_domain == "electrocatalyst" and raw_electrode_defaults is not None:
+            electrode_payload, _ = resolve_electrode_materials(
+                session,
+                raw_electrode_defaults,
+            )
+            if electrode_payload is not None:
+                electrode_payload["application_family"] = candidate_application
+                if "catalyst_price_per_lb" not in electrode_payload:
+                    primary_component = next(
+                        (
+                            component
+                            for component in component_inputs
+                            if component["role"] in {"active_catalyst", "active_metal"}
+                        ),
+                        None,
+                    )
+                    if primary_component is not None:
+                        electrode_payload["catalyst_price_per_lb"] = float(
+                            primary_component["price_per_lb"]
+                        )
+
         estimate = estimate_catalyst_cost(
             components=component_inputs,
             steps=route["steps"],
             catalyst_domain=candidate_domain,
             application_family=candidate_application,
             order_size_tons=float(candidate["order_size_tons"]),
+            electrode_input=electrode_payload,
         )
         enriched_components = _component_cost_shares(
             breakdown=estimate["materials"]["components"],
@@ -288,6 +331,14 @@ def evaluate_benchmark_family(
         weighted_evidence = _weighted_evidence_score(enriched_components)
         route_score = _route_score(candidate, route)
         dominant_driver = max(enriched_components, key=lambda item: float(item["cost_per_lb_cat"]))
+        electrode_model = estimate.get("electrode_model")
+        economics_basis_value = landed_cost_per_lb
+        economics_basis_unit = "$/lb"
+        economics_basis_label = "Landed catalyst"
+        if electrode_model is not None:
+            economics_basis_value = float(electrode_model["cost_per_cm2_usd"])
+            economics_basis_unit = "$/cm2"
+            economics_basis_label = "Electrode layer"
 
         candidate_result = {
             "slug": candidate["slug"],
@@ -307,6 +358,15 @@ def evaluate_benchmark_family(
                 "scale": estimate["step_method"]["scale"],
                 "temperature_window_c": candidate["temperature_window_c"],
                 "dominant_cost_driver": dominant_driver["name"],
+                "electrode_cost_per_cm2": round(float(electrode_model["cost_per_cm2_usd"]), 6)
+                if electrode_model is not None
+                else None,
+                "electrode_cost_per_m2": round(float(electrode_model["cost_per_m2_usd"]), 2)
+                if electrode_model is not None
+                else None,
+                "economics_basis_value": round(economics_basis_value, 6),
+                "economics_basis_unit": economics_basis_unit,
+                "economics_basis_label": economics_basis_label,
             },
             "scores": {
                 "economics": 0.0,
@@ -333,6 +393,7 @@ def evaluate_benchmark_family(
                 "indexed_component_count": sum(1 for item in enriched_components if item["source_type"] == "indexed"),
             },
             "components": enriched_components,
+            "electrode_defaults": raw_electrode_defaults,
             "decision_notes": candidate["decision_notes"],
             "literature_basis": [citation_map[citation_id] for citation_id in candidate["literature_basis_ids"]],
             "catalog_quotes": [quote_map[quote_id] for quote_id in candidate["catalog_quote_ids"]],

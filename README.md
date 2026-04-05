@@ -53,14 +53,16 @@ CatPrice is built to feel like shipped desktop software rather than a spreadshee
 
 ## Included Reference Families
 
-CatPrice currently ships two optional benchmark reference families:
+CatPrice currently ships three optional benchmark reference families:
 
 - `Ammonia decomposition reference family`
   Thermocatalyst routes including `Ni/gamma-Al2O3 baseline`, `Ni-MgO/CeO2 interface`, and `Ru/MgO premium`.
 - `Fuel-cell ORR cathode reference family`
   Electrocatalyst routes including `Pt/C baseline cathode`, `Pt-Co intermetallic cathode`, and `Fe-N-C PGM-free cathode`.
+- `PEM electrolyzer OER reference family`
+  Electrocatalyst routes including `IrO2 PEM anode baseline`, `Low-Ir interface-engineered PEM route`, and `Ru-rich acidic OER route`.
 
-Both families expose candidate-level evidence anchors plus a larger family literature bank in the Compare screen. The benchmark library now distinguishes `Thermocatalyst` and `Electrocatalyst` routes explicitly, and benchmark presets load the matching calculator mode.
+All families expose candidate-level evidence anchors plus a larger family literature bank in the Compare screen. The benchmark library distinguishes `Thermocatalyst` and `Electrocatalyst` routes explicitly, electrocatalyst presets now push stack defaults into the calculator, and full-stack electrocatalyst families can rank on area-based electrode cost instead of powder-only cost.
 
 ## Download
 
@@ -68,7 +70,7 @@ Download the packaged Windows app from [GitHub Releases](https://github.com/hyun
 
 Recommended asset:
 
-- `CatPrice Setup 1.1.0.exe`
+- `CatPrice Setup 1.1.1.exe`
 
 Portable asset:
 
@@ -102,7 +104,7 @@ npm run build
 
 Main outputs:
 
-- `dist-electron\CatPrice Setup 1.1.0.exe`
+- `dist-electron\CatPrice Setup 1.1.1.exe`
 - `dist-electron\win-unpacked\CatPrice.exe`
 
 Before rebuilding desktop artifacts, CatPrice stops old desktop processes automatically. You can also stop them manually:
@@ -158,6 +160,9 @@ Current benchmark-library anchors now include top-journal thermocatalyst and ele
 - [Nature Catalysis 2019 on Fe-N-C cathodes for PEM fuel cells](https://www.nature.com/articles/s41929-019-0237-3)
 - [Nature Energy 2022 on durable Fe-N-C PEMFC cathodes](https://www.nature.com/articles/s41560-022-01062-1)
 - [Nature Communications 2025 on durable Pt/Co cathode design](https://www.nature.com/articles/s41467-025-65122-2)
+- [Nature Communications 2023 on low-iridium TaOx/IrO2 PEM electrolyzer anodes](https://www.nature.com/articles/s41467-023-40912-8)
+- [Nature Communications 2023 on ionomer-free porous-transport electrodes for PEM water electrolysis](https://www.nature.com/articles/s41467-023-40375-x)
+- [Nature Catalysis 2026 on Co-RuO2-enabled PEM electrolysis](https://www.nature.com/articles/s41929-025-01456-w)
 
 ## License
 

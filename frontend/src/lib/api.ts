@@ -341,6 +341,11 @@ export interface DecisionCandidate {
     scale: string;
     temperature_window_c: [number, number];
     dominant_cost_driver: string;
+    electrode_cost_per_cm2?: number | null;
+    electrode_cost_per_m2?: number | null;
+    economics_basis_value: number;
+    economics_basis_unit: string;
+    economics_basis_label: string;
   };
   scores: {
     economics: number;
@@ -367,6 +372,7 @@ export interface DecisionCandidate {
     indexed_component_count: number;
   };
   components: DecisionComponent[];
+  electrode_defaults?: ElectrodeCostInput | null;
   decision_notes: string[];
   literature_basis: DecisionCitation[];
   catalog_quotes: CatalogQuote[];

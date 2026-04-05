@@ -68,6 +68,24 @@ function Wait-ForMainWindow {
     return 0
 }
 
+function Assert-PortFree {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Url
+    )
+
+    try {
+        $response = Invoke-WebRequest -Uri $Url -UseBasicParsing -TimeoutSec 2
+        if ($response.StatusCode -eq 200) {
+            throw "A backend is already responding on $Url before the smoke test starts. Stop the external server and rerun the packaged smoke test."
+        }
+    } catch {
+        if ($_.Exception.Message -like "A backend is already responding*") {
+            throw
+        }
+    }
+}
+
 Set-Location $projectRoot
 
 if (-not (Test-Path $packagedExe)) {
@@ -76,6 +94,7 @@ if (-not (Test-Path $packagedExe)) {
 
 & (Join-Path $PSScriptRoot "stop_catprice_processes.ps1") -Quiet
 Remove-Item $logPath -ErrorAction SilentlyContinue
+Assert-PortFree -Url $healthUrl
 
 Write-Host "[CatPrice] Launching packaged desktop app..."
 Start-Process -FilePath $packagedExe | Out-Null
@@ -116,6 +135,11 @@ if (-not (Test-Path $logPath)) {
 }
 
 $logTail = Get-Content $logPath | Select-Object -Last 20
+$packagedBackendStart = $logTail | Where-Object { $_ -match "Starting packaged backend sidecar" }
+$reusedBackend = $logTail | Where-Object { $_ -match "Reusing existing backend server" }
+if (-not $packagedBackendStart -and $reusedBackend) {
+    throw "Smoke test reused an existing backend instead of launching the packaged sidecar."
+}
 $relaunchLogged = $logTail | Where-Object { $_ -match "Received second-instance event|Showing main window \(second-instance\)|Showing splash window for second-instance" }
 if (-not $relaunchLogged) {
     throw "Second-instance recovery was not recorded in the launcher log."
