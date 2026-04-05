@@ -192,6 +192,58 @@ function preferredScopeRank(material: MaterialItem) {
   }
 }
 
+function electrocatalystTemplateRank(
+  material: MaterialItem,
+  category: string,
+  applicationFamily: ApplicationFamily,
+  templateId: string,
+) {
+  const text = `${material.name} ${material.formula ?? ''} ${material.symbol ?? ''}`.toLowerCase();
+  const symbol = (material.symbol ?? '').toLowerCase();
+  const exactFamilyRank =
+    material.application_family === applicationFamily
+      ? 0
+      : material.application_family === 'general'
+        ? 1
+        : 2;
+
+  if (applicationFamily !== 'electrolyzer') {
+    return exactFamilyRank;
+  }
+
+  const isPemElectrolyzer = templateId === 'pem_electrolyzer_ccm';
+  const isPfsa = text.includes('pfsa') || text.includes('aquivion');
+  const isAem = text.includes('aem') || text.includes('piperion') || text.includes('sustainion') || text.includes('pdt');
+  const isTitanium = text.includes('titanium') || text.includes('ptl') || text.includes('frit');
+  const isNickel = text.includes('nickel');
+  const isCarbon = text.includes('carbon');
+
+  if (category === 'Ionomer' || category === 'Membrane') {
+    if (isPemElectrolyzer) return isPfsa ? 0 : isAem ? 1 : 2;
+    return isAem ? 0 : isPfsa ? 1 : 2;
+  }
+
+  if (category === 'Gas Diffusion Layer') {
+    if (isPemElectrolyzer) return isTitanium ? 0 : isCarbon ? 1 : isNickel ? 2 : 3;
+    return isNickel ? 0 : isCarbon ? 1 : isTitanium ? 2 : 3;
+  }
+
+  if (category === 'Electrocatalyst Powder') {
+    if (isPemElectrolyzer) {
+      if (symbol === 'ir') return 0;
+      if (symbol === 'ru') return 1;
+      if (symbol === 'ptir') return 2;
+      return 3;
+    }
+    if (symbol === 'ni') return 0;
+    if (symbol === 'ag') return 1;
+    if (symbol === 'ir' || symbol === 'ru') return 2;
+    return 3;
+  }
+
+  return exactFamilyRank;
+}
+
 function MetricTile({ label, value, detail, dark = false }: { label: string; value: string; detail: string; dark?: boolean }) {
   return (
     <div className={dark ? 'cp-metric-tile-dark' : 'cp-metric-tile'}>
@@ -264,7 +316,18 @@ export default function Calculator() {
     async function loadBenchmarkReferences() {
       try {
         const familyPayload = await fetchBenchmarkFamilies();
-        const family = familyPayload.families[0];
+        const family =
+          familyPayload.families.find((item) => {
+            if (catalystDomain === 'electrocatalyst') {
+              return (
+                item.catalyst_domain === 'electrocatalyst'
+                && (item.application_family === applicationFamily || item.application_family === 'general')
+              );
+            }
+            return item.catalyst_domain === 'thermal';
+          })
+          ?? familyPayload.families.find((item) => item.catalyst_domain === catalystDomain)
+          ?? familyPayload.families[0];
         if (!family) return;
         setBenchmarkFamily(family);
         const payload = await fetchDecisionBenchmark(family.family, 'balanced');
@@ -273,7 +336,7 @@ export default function Calculator() {
     }
 
     void loadBenchmarkReferences();
-  }, []);
+  }, [applicationFamily, catalystDomain]);
 
   useEffect(() => {
     async function loadElectrocatalystReferences() {
@@ -311,17 +374,32 @@ export default function Calculator() {
   useEffect(() => {
     if (catalystDomain !== 'electrocatalyst' || electroMaterials.length === 0) return;
 
-    const pickPreferredKey = (options: MaterialItem[]) => {
+    const compareElectroPreference = (left: MaterialItem, right: MaterialItem, category: string) => {
+      const templateDelta =
+        electrocatalystTemplateRank(left, category, applicationFamily, electrocatalystConfig.templateId)
+        - electrocatalystTemplateRank(right, category, applicationFamily, electrocatalystConfig.templateId);
+      if (templateDelta !== 0) return templateDelta;
+      const scopeDelta = preferredScopeRank(left) - preferredScopeRank(right);
+      if (scopeDelta !== 0) return scopeDelta;
+      const leftPrice = left.price ?? Number.POSITIVE_INFINITY;
+      const rightPrice = right.price ?? Number.POSITIVE_INFINITY;
+      if (leftPrice !== rightPrice) return leftPrice - rightPrice;
+      return left.name.localeCompare(right.name);
+    };
+
+    const pickPreferredKey = (options: MaterialItem[], category: string) => {
       if (options.length === 0) return '';
-      const preferred = [...options].sort((left, right) => {
-        const scopeDelta = preferredScopeRank(left) - preferredScopeRank(right);
-        if (scopeDelta !== 0) return scopeDelta;
-        const leftPrice = left.price ?? Number.POSITIVE_INFINITY;
-        const rightPrice = right.price ?? Number.POSITIVE_INFINITY;
-        if (leftPrice !== rightPrice) return leftPrice - rightPrice;
-        return left.name.localeCompare(right.name);
-      });
+      const preferred = [...options].sort((left, right) => compareElectroPreference(left, right, category));
       return String(preferred[0]?.id ?? '');
+    };
+
+    const shouldReplaceSelection = (currentKey: string, options: MaterialItem[], category: string) => {
+      const preferredKey = pickPreferredKey(options, category);
+      if (!currentKey) return preferredKey;
+      const current = options.find((material) => String(material.id) === currentKey);
+      const preferred = options.find((material) => String(material.id) === preferredKey);
+      if (!current || !preferred) return preferredKey;
+      return compareElectroPreference(current, preferred, category) > 0 ? preferredKey : '';
     };
 
     const catalystOptions = electroMaterials.filter((material) => material.category === 'Electrocatalyst Powder');
@@ -330,17 +408,37 @@ export default function Calculator() {
     const substrateRows = electroMaterials.filter((material) => material.category === 'Gas Diffusion Layer');
 
     const nextPatch: Partial<ElectrocatalystDraft> = {};
-    if (!catalystOptions.some((material) => String(material.id) === electrocatalystConfig.catalystMaterialKey)) {
-      nextPatch.catalystMaterialKey = pickPreferredKey(catalystOptions);
+    const catalystPreferred = shouldReplaceSelection(
+      electrocatalystConfig.catalystMaterialKey,
+      catalystOptions,
+      'Electrocatalyst Powder',
+    );
+    if (catalystPreferred) {
+      nextPatch.catalystMaterialKey = catalystPreferred;
     }
-    if (!ionomerRows.some((material) => String(material.id) === electrocatalystConfig.ionomerMaterialKey)) {
-      nextPatch.ionomerMaterialKey = pickPreferredKey(ionomerRows);
+    const ionomerPreferred = shouldReplaceSelection(
+      electrocatalystConfig.ionomerMaterialKey,
+      ionomerRows,
+      'Ionomer',
+    );
+    if (ionomerPreferred) {
+      nextPatch.ionomerMaterialKey = ionomerPreferred;
     }
-    if (!membraneRows.some((material) => String(material.id) === electrocatalystConfig.membraneMaterialKey)) {
-      nextPatch.membraneMaterialKey = pickPreferredKey(membraneRows);
+    const membranePreferred = shouldReplaceSelection(
+      electrocatalystConfig.membraneMaterialKey,
+      membraneRows,
+      'Membrane',
+    );
+    if (membranePreferred) {
+      nextPatch.membraneMaterialKey = membranePreferred;
     }
-    if (!substrateRows.some((material) => String(material.id) === electrocatalystConfig.substrateMaterialKey)) {
-      nextPatch.substrateMaterialKey = pickPreferredKey(substrateRows);
+    const substratePreferred = shouldReplaceSelection(
+      electrocatalystConfig.substrateMaterialKey,
+      substrateRows,
+      'Gas Diffusion Layer',
+    );
+    if (substratePreferred) {
+      nextPatch.substrateMaterialKey = substratePreferred;
     }
     if (electroTemplates.length > 0 && !electroTemplates.some((template) => template.id === electrocatalystConfig.templateId)) {
       nextPatch.templateId = electroTemplates[0]?.id ?? electrocatalystConfig.templateId;
@@ -534,13 +632,35 @@ export default function Calculator() {
     setCatalystDomain(candidate.catalyst_domain);
     setApplicationFamily(candidate.application_family);
     if (candidate.catalyst_domain === 'electrocatalyst') {
+      const defaults = candidate.electrode_defaults;
       setElectrocatalystConfig((previous) => ({
         ...previous,
+        catalystMaterialKey: defaults?.catalyst_material_key ?? previous.catalystMaterialKey,
+        ionomerMaterialKey: defaults?.ionomer_material_key ?? previous.ionomerMaterialKey,
+        membraneMaterialKey: defaults?.membrane_material_key ?? previous.membraneMaterialKey,
+        substrateMaterialKey: defaults?.substrate_material_key ?? previous.substrateMaterialKey,
+        activeAreaCm2: defaults?.active_area_cm2 ?? previous.activeAreaCm2,
+        catalystLoadingMgCm2: defaults?.catalyst_loading_mg_cm2 ?? previous.catalystLoadingMgCm2,
+        ionomerToCatalystRatio: defaults?.ionomer_to_catalyst_ratio ?? previous.ionomerToCatalystRatio,
         templateId: candidate.route.calculator_template_id ?? previous.templateId ?? 'pem_fuel_cell_ccm',
       }));
     }
     setOrderSize(Number(candidate.estimate.input_summary.order_size_tons ?? 20));
     setSelectedBenchmark(toBenchmarkPreset(candidate));
+  }
+
+  function benchmarkCostValue(candidate: DecisionCandidate) {
+    if (candidate.summary.economics_basis_unit === '$/cm2') {
+      return `$${candidate.summary.economics_basis_value.toFixed(2)}`;
+    }
+    return `$${toDisplay(candidate.summary.economics_basis_value).toFixed(2)}`;
+  }
+
+  function benchmarkCostDetail(candidate: DecisionCandidate) {
+    if (candidate.summary.economics_basis_unit === '$/cm2') {
+      return '/cm2';
+    }
+    return fmtLabel;
   }
 
   function renderBenchmarkBoard() {
@@ -585,8 +705,8 @@ export default function Calculator() {
                 <div className="mt-2 text-sm leading-6 text-slate-600">{candidate.screening_summary}</div>
                 <div className="mt-3 flex flex-wrap gap-2">
                   <span className="cp-chip">
-                    ${toDisplay(candidate.summary.landed_cost_per_lb).toFixed(2)}
-                    {fmtLabel}
+                    {benchmarkCostValue(candidate)}
+                    {benchmarkCostDetail(candidate)}
                   </span>
                   <span className="cp-chip">{catalystDomainLabel(candidate.catalyst_domain)}</span>
                   <span className="cp-chip">{candidate.route.name}</span>

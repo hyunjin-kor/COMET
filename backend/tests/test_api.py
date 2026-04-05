@@ -326,6 +326,7 @@ class TestDecision:
         families = {item["family"] for item in data["families"]}
         assert "ammonia-cracking" in families
         assert "fuel-cell-orr" in families
+        assert "pem-electrolyzer-oer" in families
         assert all("catalyst_domain" in item for item in data["families"])
 
     def test_get_ammonia_cracking_benchmark(self, client):
@@ -348,3 +349,15 @@ class TestDecision:
         assert len(data["candidates"]) >= 3
         assert all(candidate["catalyst_domain"] == "electrocatalyst" for candidate in data["candidates"])
         assert any(candidate["route"]["calculator_template_id"] == "pem_fuel_cell_ccm" for candidate in data["candidates"])
+
+    def test_get_pem_electrolyzer_oer_benchmark(self, client):
+        resp = client.get("/api/decision/benchmarks/pem-electrolyzer-oer")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["winner"] is not None
+        assert data["catalyst_domain"] == "electrocatalyst"
+        assert data["application_family"] == "electrolyzer"
+        assert len(data["candidates"]) >= 3
+        assert all(candidate["route"]["calculator_template_id"] == "pem_electrolyzer_ccm" for candidate in data["candidates"])
+        assert all(candidate["summary"]["economics_basis_unit"] == "$/cm2" for candidate in data["candidates"])
+        assert all(candidate["electrode_defaults"]["substrate_material_key"] for candidate in data["candidates"])
