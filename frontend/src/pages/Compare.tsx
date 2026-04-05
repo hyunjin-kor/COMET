@@ -117,7 +117,7 @@ export default function Compare() {
         setFamily((current) => current || payload.families[0]?.family || '');
       })
       .catch((caughtError: unknown) => {
-        setError(caughtError instanceof Error ? caughtError.message : 'Failed to load benchmark library');
+        setError(caughtError instanceof Error ? caughtError.message : 'Failed to load reference routes');
         setLoading(false);
       });
   }, []);
@@ -133,7 +133,7 @@ export default function Compare() {
         setActiveSlug((current) => current ?? payload.winner?.slug ?? payload.candidates[0]?.slug ?? null);
       })
       .catch((caughtError: unknown) => {
-        setError(caughtError instanceof Error ? caughtError.message : 'Failed to load benchmark library');
+        setError(caughtError instanceof Error ? caughtError.message : 'Failed to load reference routes');
       })
       .finally(() => setLoading(false));
   }, [family, profile]);
@@ -192,7 +192,7 @@ export default function Compare() {
     return (
       <div className="surface-card flex items-center gap-3 px-5 py-6 text-slate-600">
         <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#78f2d0] border-t-transparent" />
-        Loading benchmark library...
+        Loading reference routes...
       </div>
     );
   }
@@ -200,8 +200,8 @@ export default function Compare() {
   if (error || !benchmark || !activeCandidate) {
     return (
       <section className="surface-card cp-enter overflow-hidden p-6 sm:p-7">
-        <span className="section-kicker">Benchmark Library</span>
-        <h1 className="cp-heading-xl mt-4">Benchmark library is unavailable.</h1>
+        <span className="section-kicker">Reference Routes</span>
+        <h1 className="cp-heading-xl mt-4">Reference routes are unavailable.</h1>
         <p className="cp-body-copy mt-3 max-w-xl">
           {error || 'The selected reference family did not return any candidate data.'}
         </p>
@@ -227,9 +227,9 @@ export default function Compare() {
           <div className="surface-ink relative overflow-hidden p-5 sm:p-6">
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(120,242,208,0.22),transparent_0_32%),radial-gradient(circle_at_bottom_right,rgba(239,195,108,0.14),transparent_0_28%)]" />
             <div className="relative">
-              <div className="cp-subtle-label !text-slate-400">Benchmark Library</div>
+              <div className="cp-subtle-label !text-slate-400">Reference Routes</div>
               <h1 className="mt-3 font-display text-[clamp(2rem,4vw,3.5rem)] leading-[0.94] text-white">
-                Optional reference routes for catalyst screening.
+                Compare published routes before you build.
               </h1>
               <div className="mt-3 flex flex-wrap gap-2">
                 {activeFamily ? <span className="cp-chip-dark">{activeFamily.title}</span> : null}
@@ -240,13 +240,13 @@ export default function Compare() {
                 <span className="cp-chip-dark">Updated {updatedAt}</span>
               </div>
               <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">
-                {benchmark.objective} Use this screen for optional literature-backed sanity checks, then load any route
-                into the calculator and continue editing without reaction-specific lock-in.
+                {benchmark.objective} Use this screen to compare literature-backed routes, then load one into the build
+                workspace and keep editing.
               </p>
 
               {winner ? (
                 <div className="mt-6 rounded-[26px] border border-white/10 bg-white/6 p-4">
-                  <div className="cp-subtle-label !text-slate-400">Current reference winner</div>
+                  <div className="cp-subtle-label !text-slate-400">Current top route</div>
                   <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                     <div>
                       <div className="text-2xl font-display text-white">{winner.title}</div>

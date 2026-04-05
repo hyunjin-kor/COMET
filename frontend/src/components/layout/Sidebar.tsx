@@ -9,22 +9,26 @@ export default function Sidebar() {
 
   return (
     <aside className="hidden lg:block">
-      <div className="surface-rail sticky top-[50px] overflow-hidden p-3.5">
+      <div className="surface-rail sticky top-[50px] overflow-hidden p-3">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(120,242,208,0.16),transparent_0_34%),radial-gradient(circle_at_bottom_right,rgba(239,195,108,0.10),transparent_0_24%)]" />
 
         <div className="relative flex flex-col gap-4">
           <div className="flex items-center gap-3 border-b border-white/10 pb-4">
-            <div className="flex h-11 w-11 items-center justify-center rounded-[18px] border border-white/10 bg-white/8">
+            <div className="flex h-11 w-11 items-center justify-center rounded-[16px] border border-white/10 bg-white/8">
               <BrandMark className="h-8 w-8" />
             </div>
 
             <div className="min-w-0">
               <div className="font-display text-[1.45rem] leading-none text-white">CatPrice</div>
-              <div className="mt-1 text-xs text-slate-400">Catalyst cost workspace</div>
+              <div className="mt-1 text-xs text-slate-400">Evidence-first catalyst costing</div>
             </div>
           </div>
 
-          <nav className="space-y-2">
+          <div>
+            <div className="cp-subtle-label !text-slate-400">Workflow</div>
+          </div>
+
+          <nav className="space-y-1.5">
             {navigationItems.map((item) => {
               const isActive = isNavigationPathActive(location.pathname, item.to);
 
@@ -32,7 +36,7 @@ export default function Sidebar() {
                 <NavLink
                   key={item.to}
                   to={item.to}
-                  className={`group flex items-center gap-3 rounded-[20px] border px-3 py-3 transition ${
+                  className={`group flex items-center gap-3 rounded-[18px] border px-3 py-3 transition ${
                     isActive
                       ? 'border-[#7cf1d0]/20 bg-[linear-gradient(135deg,rgba(124,241,208,0.18),rgba(255,255,255,0.06))] shadow-[0_16px_34px_rgba(0,0,0,0.14)]'
                       : 'border-white/8 bg-white/[0.03] hover:border-white/14 hover:bg-white/[0.05]'
@@ -55,7 +59,7 @@ export default function Sidebar() {
           </nav>
 
           <div className="border-t border-white/10 pt-4">
-            <div className="cp-subtle-label !text-slate-400">Unit</div>
+            <div className="cp-subtle-label !text-slate-400">Display Unit</div>
 
             <button
               onClick={toggle}

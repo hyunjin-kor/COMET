@@ -62,11 +62,11 @@ export type NavigationItem = {
 };
 
 export const navigationItems: NavigationItem[] = [
-  { to: '/', label: 'Calculator', Icon: CalculatorIcon },
-  { to: '/prices', label: 'Market Board', Icon: PricesIcon },
-  { to: '/benchmarks', label: 'Benchmarks', Icon: CompareIcon },
-  { to: '/uncertainty', label: 'Uncertainty', Icon: UncertaintyIcon },
-  { to: '/library', label: 'Library', Icon: LibraryIcon },
+  { to: '/', label: 'Build', Icon: CalculatorIcon },
+  { to: '/prices', label: 'Metal Feed', Icon: PricesIcon },
+  { to: '/benchmarks', label: 'Reference Routes', Icon: CompareIcon },
+  { to: '/uncertainty', label: 'Risk Range', Icon: UncertaintyIcon },
+  { to: '/library', label: 'Source Library', Icon: LibraryIcon },
 ];
 
 export function isNavigationPathActive(pathname: string, to: string): boolean {

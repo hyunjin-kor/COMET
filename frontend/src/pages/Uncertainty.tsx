@@ -120,10 +120,10 @@ export default function Uncertainty() {
       <div className="grid gap-4 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
         <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.06s' }}>
           <div className="border-b border-slate-900/8 pb-5">
-            <div className="cp-subtle-label">Scenario Inputs</div>
-            <h2 className="cp-heading-xl mt-2">Uncertainty inputs</h2>
+            <div className="cp-subtle-label">Risk Range</div>
+            <h2 className="cp-heading-xl mt-2">Stress-test the estimate</h2>
             <p className="cp-body-copy mt-2 max-w-2xl">
-              Choose a metal and baseline assumptions, then sample the uncertainty envelope for the estimate inputs that matter most.
+              Set a baseline and generate a cost range for the inputs that move the estimate the most.
             </p>
           </div>
 
@@ -185,17 +185,17 @@ export default function Uncertainty() {
             <div className="cp-metric-tile">
               <div className="cp-subtle-label">Metal price band</div>
               <div className="mt-2 text-lg font-semibold text-slate-950">+/- 30%</div>
-              <div className="mt-1 text-xs leading-5 text-slate-500">Uniform sampling range</div>
+              <div className="mt-1 text-xs leading-5 text-slate-500">Applied around the baseline metal quote</div>
             </div>
             <div className="cp-metric-tile">
               <div className="cp-subtle-label">Support price band</div>
               <div className="mt-2 text-lg font-semibold text-slate-950">+/- 20%</div>
-              <div className="mt-1 text-xs leading-5 text-slate-500">Fixed envelope in API payload</div>
+              <div className="mt-1 text-xs leading-5 text-slate-500">Support cost sensitivity window</div>
             </div>
             <div className="cp-metric-tile">
               <div className="cp-subtle-label">Campaign size band</div>
               <div className="mt-2 text-lg font-semibold text-slate-950">+/- 20%</div>
-              <div className="mt-1 text-xs leading-5 text-slate-500">Applied to order-size sampling</div>
+              <div className="mt-1 text-xs leading-5 text-slate-500">Order-size sensitivity window</div>
             </div>
           </div>
 
@@ -204,15 +204,15 @@ export default function Uncertainty() {
               {loading ? (
                 <>
                   <span className="mr-2 inline-flex h-4 w-4 animate-spin rounded-full border-2 border-slate-950 border-t-transparent" />
-                  Running simulation
+                  Running range check
                 </>
               ) : (
-                `Run Monte Carlo (${nSim.toLocaleString('en-US')})`
+                `Run range check (${nSim.toLocaleString('en-US')})`
               )}
             </button>
 
             <div className="text-xs leading-6 text-slate-500">
-              Percentile bands and the distribution sketch update on the right after the sampling run completes.
+              Percentile bands update on the right after the sampling run completes.
             </div>
           </div>
 
@@ -223,12 +223,12 @@ export default function Uncertainty() {
           {!result ? (
             <div className="flex min-h-[520px] flex-col justify-between">
               <div>
-                <span className="section-kicker">Distribution Output</span>
+                <span className="section-kicker">Range Output</span>
                 <h2 className="cp-heading-xl mt-4">
-                  Run the analysis to reveal the estimate envelope.
+                  Run the check to reveal the cost range.
                 </h2>
                 <p className="cp-body-copy mt-3 max-w-xl">
-                  This panel shows percentile bands, distribution shape, and simulation success counts after the backend finishes sampling.
+                  This panel shows percentile bands, distribution shape, and simulation success counts after sampling.
                 </p>
               </div>
 
@@ -259,7 +259,7 @@ export default function Uncertainty() {
 
               <div className="mt-5 rounded-[28px] border border-slate-900/8 bg-white/62 p-5 backdrop-blur-xl">
                 <div className="cp-subtle-label">Distribution Sketch</div>
-                <div className="cp-heading-lg mt-2">Percentile-weighted shape</div>
+                <div className="cp-heading-lg mt-2">Percentile-weighted spread</div>
 
                 <div className="mt-5 h-[280px]">
                   <ResponsiveContainer width="100%" height="100%">

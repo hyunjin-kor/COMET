@@ -6,6 +6,22 @@ import { useUnit } from '../lib/use-unit';
 
 const CHART_COLORS = ['#78f2d0', '#88a8ff', '#efc36c', '#f3a08d', '#c5b7ff', '#8de0ff'];
 
+function sourceRecordLabel(priceScope: string, hasLink: boolean) {
+  if (hasLink) {
+    if (priceScope === 'literature_high_volume') return 'Public literature source';
+    if (priceScope === 'vendor_lab') return 'Direct vendor source';
+    return 'Public source linked';
+  }
+  if (priceScope === 'historical_bulk') return 'No public permalink';
+  return 'Link not stored';
+}
+
+function sourceRecordTone(priceScope: string, hasLink: boolean) {
+  if (hasLink) return 'border-emerald-200 bg-emerald-50 text-emerald-700';
+  if (priceScope === 'historical_bulk') return 'border-amber-200 bg-amber-50 text-amber-700';
+  return 'border-slate-200 bg-white text-slate-600';
+}
+
 function MetricTile({ label, value, detail, dark = false }: { label: string; value: string; detail: string; dark?: boolean }) {
   return (
     <div className={dark ? 'cp-metric-tile-dark' : 'cp-metric-tile'}>
@@ -40,10 +56,10 @@ export default function CalculatorResult() {
     return (
       <section className="surface-card cp-enter overflow-hidden p-6 sm:p-7">
         <span className="section-kicker">Estimate Board</span>
-        <h1 className="cp-heading-xl mt-4">No saved result board is available yet.</h1>
-        <p className="cp-body-copy mt-3 max-w-xl">Run a calculation from the calculator page first. The result board will then open as its own review surface and stay available for quick return.</p>
+        <h1 className="cp-heading-xl mt-4">No saved estimate board is available yet.</h1>
+        <p className="cp-body-copy mt-3 max-w-xl">Run an estimate from the build workspace first. The estimate board will then stay available for quick review.</p>
         <div className="mt-5">
-          <button onClick={goBackToCalculator} className="cp-button-primary">Back to inputs</button>
+          <button onClick={goBackToCalculator} className="cp-button-primary">Back to build</button>
         </div>
       </section>
     );
@@ -75,10 +91,10 @@ export default function CalculatorResult() {
         <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
           <div className="max-w-3xl">
             <span className="section-kicker">Estimate Board</span>
-            <h1 className="cp-heading-xl mt-4">Read the estimate on a dedicated result board.</h1>
-            <p className="cp-body-copy mt-3 max-w-2xl">Inputs stay on the calculator screen. This board is reserved for price reading, contribution review, and a clean path back to editing.</p>
+            <h1 className="cp-heading-xl mt-4">Read the estimate on a dedicated board.</h1>
+            <p className="cp-body-copy mt-3 max-w-2xl">Inputs stay in the build workspace. This board is for reading cost, route, and source evidence without editing noise.</p>
           </div>
-          <button onClick={goBackToCalculator} className="cp-button-primary">Back to inputs</button>
+          <button onClick={goBackToCalculator} className="cp-button-primary">Back to build</button>
         </div>
 
         <div className="mt-5 grid gap-4 xl:grid-cols-[minmax(0,1.18fr)_minmax(340px,0.82fr)]">
@@ -324,13 +340,24 @@ export default function CalculatorResult() {
                           ${material.price.toFixed(material.price < 1 ? 4 : 2)} {material.price_unit}
                         </div>
                         <div className="mt-1 text-xs text-slate-500">{material.quote_source}{material.quote_year ? ` / ${material.quote_year}` : ''}</div>
+                        <div className="mt-2">
+                          <span className={`inline-flex rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] ${sourceRecordTone(material.price_scope, Boolean(material.reference_url))}`}>
+                            {sourceRecordLabel(material.price_scope, Boolean(material.reference_url))}
+                          </span>
+                        </div>
                       </div>
                     </div>
                     {material.reference_url ? (
                       <a href={material.reference_url} target="_blank" rel="noreferrer" className="mt-2 inline-flex text-xs text-sky-700 underline underline-offset-2">
-                        Source link
+                        Open source
                       </a>
-                    ) : null}
+                    ) : (
+                      <div className="mt-2 text-xs leading-5 text-slate-500">
+                        {material.price_scope === 'historical_bulk'
+                          ? 'Historical bulk row without a stable public permalink.'
+                          : 'No public source URL stored for this row.'}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
