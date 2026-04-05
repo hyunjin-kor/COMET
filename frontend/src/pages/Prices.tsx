@@ -9,6 +9,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import { WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
 import { apiUrl, fetchPrices, type MetalPrice } from '../lib/api';
 import { LB_PER_KG, type Unit } from '../lib/unit-conversion';
 import { useUnit } from '../lib/use-unit';
@@ -48,6 +49,11 @@ const METAL_COLORS: Record<string, string> = {
   W: '#aba39a',
   Fe: '#ff908d',
 };
+
+const FEED_SECTIONS: WorkspaceSection[] = [
+  { id: 'quotes', label: 'Quotes', summary: 'Choose the metal feed to inspect.' },
+  { id: 'trend', label: 'Trend', summary: 'Read history, evidence, and freshness.' },
+];
 
 function convertTrackedPrice(price: number, rawUnit: string, displayUnit: Unit) {
   if (rawUnit === '$/lb') return displayUnit === 'kg' ? price * LB_PER_KG : price;
@@ -92,6 +98,16 @@ function SourceBadge({ sourceType }: { sourceType: MetalPrice['source_type'] }) 
 
 export default function Prices() {
   const { unit } = useUnit();
+  const {
+    activeSection,
+    activeSectionId,
+    activeIndex,
+    canGoNext,
+    canGoPrevious,
+    goNext,
+    goPrevious,
+    setActiveSection,
+  } = useWorkspaceSections(FEED_SECTIONS, 'feed');
   const [prices, setPrices] = useState<(MetalPrice & { is_live?: boolean })[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -167,238 +183,259 @@ export default function Prices() {
     );
   }
 
-  return (
-    <div className="space-y-4">
-      <div className="grid gap-4 xl:grid-cols-[minmax(0,0.94fr)_minmax(0,1.06fr)]">
-        <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.06s' }}>
-          <div className="mb-5 flex flex-col gap-4 border-b border-slate-900/8 pb-5 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <div className="cp-subtle-label">Metal Feed</div>
-              <h2 className="cp-heading-xl mt-2">Read live and indexed metal quotes</h2>
-              <p className="cp-body-copy mt-2 max-w-2xl">
-                Scan price status, quote basis, and trend direction without leaving the sourcing workflow.
-              </p>
-            </div>
-
-            <button onClick={handleRefresh} disabled={refreshing} className="cp-button-secondary">
-              <span className={`mr-2 inline-flex h-4 w-4 rounded-full border-2 border-current border-t-transparent ${refreshing ? 'animate-spin' : ''}`} />
-              {refreshing ? 'Refreshing feed' : 'Refresh feed'}
-            </button>
+  function renderQuotes() {
+    return (
+      <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.06s' }}>
+        <div className="mb-5 flex flex-col gap-4 border-b border-slate-900/8 pb-5 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <div className="cp-subtle-label">Metal Feed</div>
+            <h2 className="cp-heading-xl mt-2">Read live and indexed metal quotes</h2>
+            <p className="cp-body-copy mt-2 max-w-2xl">
+              Scan price status, quote basis, and trend direction without leaving the sourcing workflow.
+            </p>
           </div>
 
-          <div className="space-y-4">
-            {GROUP_ORDER.map((groupKey) => {
-              const group = GROUPS[groupKey];
-              const rows = group.symbols.map((symbol) => priceMap[symbol]).filter(Boolean);
-              if (!rows.length) return null;
+          <button onClick={handleRefresh} disabled={refreshing} className="cp-button-secondary">
+            <span className={`mr-2 inline-flex h-4 w-4 rounded-full border-2 border-current border-t-transparent ${refreshing ? 'animate-spin' : ''}`} />
+            {refreshing ? 'Refreshing feed' : 'Refresh feed'}
+          </button>
+        </div>
 
-              return (
-                <div key={groupKey} className="surface-ghost overflow-hidden p-4">
-                  <div className="mb-3 flex items-center justify-between gap-3">
-                    <div className="cp-subtle-label">{group.title}</div>
-                    <span className="cp-chip">{rows.length} symbols</span>
-                  </div>
+        <div className="space-y-4">
+          {GROUP_ORDER.map((groupKey) => {
+            const group = GROUPS[groupKey];
+            const rows = group.symbols.map((symbol) => priceMap[symbol]).filter(Boolean);
+            if (!rows.length) return null;
 
-                  <div className="divide-y divide-slate-900/8 overflow-hidden rounded-[24px] border border-slate-900/8 bg-white/56">
-                    {rows.map((row) => {
-                      const active = selected === row.symbol;
-                      return (
-                        <button
-                          key={row.symbol}
-                          onClick={() => setSelected(row.symbol)}
-                          className={`grid w-full gap-3 px-4 py-3 text-left transition sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-center ${
-                            active ? 'bg-emerald-50/75' : 'bg-transparent hover:bg-white/80'
-                          }`}
-                        >
-                          <div className="flex min-w-0 items-center gap-3">
-                            <span
-                              className="flex h-10 w-10 items-center justify-center rounded-[18px] text-sm font-semibold text-slate-950"
-                              style={{ backgroundColor: METAL_COLORS[row.symbol] || '#78f2d0' }}
-                            >
-                              {row.symbol}
-                            </span>
-                            <div className="min-w-0">
-                              <div className="truncate font-semibold text-slate-950">{row.name}</div>
-                              <div className="truncate text-xs text-slate-500">
-                                {sourceDescription(row)} · {row.evidence.label}
-                              </div>
+            return (
+              <div key={groupKey} className="surface-ghost overflow-hidden p-4">
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <div className="cp-subtle-label">{group.title}</div>
+                  <span className="cp-chip">{rows.length} symbols</span>
+                </div>
+
+                <div className="divide-y divide-slate-900/8 overflow-hidden rounded-[24px] border border-slate-900/8 bg-white/56">
+                  {rows.map((row) => {
+                    const active = selected === row.symbol;
+                    return (
+                      <button
+                        key={row.symbol}
+                        onClick={() => {
+                          setSelected(row.symbol);
+                          setActiveSection('trend');
+                        }}
+                        className={`grid w-full gap-3 px-4 py-3 text-left transition sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-center ${
+                          active ? 'bg-emerald-50/75' : 'bg-transparent hover:bg-white/80'
+                        }`}
+                      >
+                        <div className="flex min-w-0 items-center gap-3">
+                          <span
+                            className="flex h-10 w-10 items-center justify-center rounded-[18px] text-sm font-semibold text-slate-950"
+                            style={{ backgroundColor: METAL_COLORS[row.symbol] || '#78f2d0' }}
+                          >
+                            {row.symbol}
+                          </span>
+                          <div className="min-w-0">
+                            <div className="truncate font-semibold text-slate-950">{row.name}</div>
+                            <div className="truncate text-xs text-slate-500">
+                              {sourceDescription(row)} / {row.evidence.label}
                             </div>
                           </div>
+                        </div>
 
-                          <SourceBadge sourceType={row.source_type} />
+                        <SourceBadge sourceType={row.source_type} />
 
-                          <div className="text-left sm:text-right">
-                            <div className="text-lg font-display text-slate-950">{fmtPrice(row.price, row.unit, unit)}</div>
-                            <div className="text-xs text-slate-500">{displayTrackedUnit(row.unit, unit)}</div>
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-
-        <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.1s' }}>
-          <div className="surface-ink overflow-hidden p-5">
-            <div className="flex flex-col gap-4 border-b border-white/10 pb-5 sm:flex-row sm:items-end sm:justify-between">
-              <div>
-                <div className="cp-subtle-label !text-slate-400">Selected Metal</div>
-                <h2 className="font-display mt-2 text-[clamp(1.75rem,2.4vw,2.35rem)] leading-[1.0] text-white">{selectedRow?.name ?? 'Choose a metal'}</h2>
-                <div className="mt-2 flex flex-wrap items-center gap-2">
-                  {selectedRow ? <SourceBadge sourceType={selectedRow.source_type} /> : null}
-                  {pctChange != null ? (
-                    <span
-                      className={`rounded-full border px-3 py-1 text-xs font-semibold ${
-                        isUp ? 'border-emerald-300/30 bg-emerald-400/10 text-emerald-100' : 'border-rose-300/30 bg-rose-400/10 text-rose-100'
-                      }`}
-                    >
-                      {isUp ? '+' : '-'}
-                      {Math.abs(pctChange).toFixed(1)}%
-                    </span>
-                  ) : null}
+                        <div className="text-left sm:text-right">
+                          <div className="text-lg font-display text-slate-950">{fmtPrice(row.price, row.unit, unit)}</div>
+                          <div className="text-xs text-slate-500">{displayTrackedUnit(row.unit, unit)}</div>
+                        </div>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
+            );
+          })}
+        </div>
+      </section>
+    );
+  }
 
-              <div className="flex gap-2 rounded-[18px] border border-white/10 bg-white/6 p-1">
-                {(Object.keys(PERIOD_LABELS) as Period[]).map((value) => (
-                  <button
-                    key={value}
-                    onClick={() => setPeriod(value)}
-                    className={`rounded-[16px] px-3 py-2 text-xs font-semibold transition ${
-                      period === value ? 'bg-[#78f2d0] text-slate-950' : 'text-slate-300 hover:bg-white/8'
+  function renderTrend() {
+    return (
+      <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.1s' }}>
+        <div className="surface-ink overflow-hidden p-5">
+          <div className="flex flex-col gap-4 border-b border-white/10 pb-5 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <div className="cp-subtle-label !text-slate-400">Selected Metal</div>
+              <h2 className="font-display mt-2 text-[clamp(1.75rem,2.4vw,2.35rem)] leading-[1.0] text-white">{selectedRow?.name ?? 'Choose a metal'}</h2>
+              <div className="mt-2 flex flex-wrap items-center gap-2">
+                {selectedRow ? <SourceBadge sourceType={selectedRow.source_type} /> : null}
+                {pctChange != null ? (
+                  <span
+                    className={`rounded-full border px-3 py-1 text-xs font-semibold ${
+                      isUp ? 'border-emerald-300/30 bg-emerald-400/10 text-emerald-100' : 'border-rose-300/30 bg-rose-400/10 text-rose-100'
                     }`}
                   >
-                    {PERIOD_LABELS[value]}
-                  </button>
-                ))}
+                    {isUp ? '+' : '-'}
+                    {Math.abs(pctChange).toFixed(1)}%
+                  </span>
+                ) : null}
               </div>
             </div>
 
-            <div className="mt-5">
-              {histLoading ? (
-                <div className="flex h-[320px] items-center justify-center gap-3 text-slate-300">
-                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#78f2d0] border-t-transparent" />
-                  Loading history...
-                </div>
-              ) : displayHistory.length === 0 ? (
-                <div className="flex h-[320px] flex-col items-center justify-center gap-2 rounded-[28px] border border-dashed border-white/10 bg-white/4 text-center">
-                  <div className="font-display text-2xl text-white">No stored price history</div>
-                  <div className="max-w-md text-sm leading-7 text-slate-400">
-                    Refresh the feed or choose a symbol that already has stored history.
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <div className="h-[320px]">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <AreaChart data={displayHistory} margin={{ top: 8, right: 16, bottom: 0, left: 0 }}>
-                        <defs>
-                          <linearGradient id="priceFill" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor={METAL_COLORS[selected || 'Pt'] || '#78f2d0'} stopOpacity={0.3} />
-                            <stop offset="95%" stopColor={METAL_COLORS[selected || 'Pt'] || '#78f2d0'} stopOpacity={0} />
-                          </linearGradient>
-                        </defs>
-                        <CartesianGrid stroke="rgba(255,255,255,0.08)" vertical={false} />
-                        <XAxis
-                          dataKey="date"
-                          tick={{ fill: '#94a3b8', fontSize: 11 }}
-                          axisLine={false}
-                          tickLine={false}
-                          tickFormatter={(value) =>
-                            new Date(value).toLocaleDateString(
-                              'en-US',
-                              period === '1mo' ? { month: 'short', day: 'numeric' } : { year: '2-digit', month: 'short' },
-                            )
-                          }
-                        />
-                        <YAxis
-                          tick={{ fill: '#94a3b8', fontSize: 11 }}
-                          axisLine={false}
-                          tickLine={false}
-                          tickFormatter={(value) => `$${Number(value).toLocaleString('en-US')}`}
-                          width={72}
-                        />
-                        <Tooltip
-                          formatter={(value) => [`$${Number(value).toLocaleString('en-US')}`, selectedDisplayUnit]}
-                          labelFormatter={(value) =>
-                            new Date(value).toLocaleDateString('en-US', {
-                              year: 'numeric',
-                              month: 'long',
-                              day: 'numeric',
-                            })
-                          }
-                          contentStyle={{
-                            borderRadius: 18,
-                            border: '1px solid rgba(255,255,255,0.10)',
-                            background: '#0b1522',
-                            color: '#e2e8f0',
-                            fontSize: 12,
-                          }}
-                        />
-                        {displayHistory.length > 0 ? <ReferenceLine y={displayHistory[0].price} stroke="rgba(255,255,255,0.12)" strokeDasharray="4 4" /> : null}
-                        <Area
-                          type="monotone"
-                          dataKey="price"
-                          stroke={METAL_COLORS[selected || 'Pt'] || '#78f2d0'}
-                          strokeWidth={2.2}
-                          fill="url(#priceFill)"
-                          dot={false}
-                          activeDot={{ r: 4 }}
-                        />
-                      </AreaChart>
-                    </ResponsiveContainer>
-                  </div>
-
-                  <div className="mt-5 grid gap-3 sm:grid-cols-3">
-                    <div className="cp-metric-tile-dark">
-                      <div className="cp-subtle-label !text-slate-400">Current</div>
-                      <div className="mt-2 text-xl font-display text-white">{fmtPrice(displayHistory[displayHistory.length - 1].price, selectedRow?.unit ?? '$/lb', unit)}</div>
-                      <div className="mt-1 text-xs leading-5 text-slate-400">{selectedDisplayUnit}</div>
-                    </div>
-                    <div className="cp-metric-tile-dark">
-                      <div className="cp-subtle-label !text-slate-400">Period high</div>
-                      <div className="mt-2 text-xl font-display text-white">
-                        {fmtPrice(Math.max(...displayHistory.map((point) => point.high ?? point.price)), selectedRow?.unit ?? '$/lb', unit)}
-                      </div>
-                      <div className="mt-1 text-xs leading-5 text-slate-400">Maximum observed value</div>
-                    </div>
-                    <div className="cp-metric-tile-dark">
-                      <div className="cp-subtle-label !text-slate-400">Period low</div>
-                      <div className="mt-2 text-xl font-display text-white">
-                        {fmtPrice(Math.min(...displayHistory.map((point) => point.low ?? point.price)), selectedRow?.unit ?? '$/lb', unit)}
-                      </div>
-                      <div className="mt-1 text-xs leading-5 text-slate-400">{historySource || 'Stored metal price series'}</div>
-                    </div>
-                  </div>
-
-                  {selectedRow ? (
-                    <div className="mt-4 grid gap-3 sm:grid-cols-3">
-                      <div className="rounded-[22px] border border-white/10 bg-white/6 p-3">
-                        <div className="cp-subtle-label !text-slate-400">Evidence tier</div>
-                        <div className="mt-2 text-sm font-semibold text-white">{selectedRow.evidence.label}</div>
-                        <div className="mt-1 text-xs leading-5 text-slate-400">{selectedRow.evidence.note}</div>
-                      </div>
-                      <div className="rounded-[22px] border border-white/10 bg-white/6 p-3">
-                        <div className="cp-subtle-label !text-slate-400">Confidence</div>
-                        <div className="mt-2 text-sm font-semibold text-white">{selectedRow.evidence.confidence_score}</div>
-                        <div className="mt-1 text-xs leading-5 text-slate-400">{selectedRow.evidence.transparency}</div>
-                      </div>
-                      <div className="rounded-[22px] border border-white/10 bg-white/6 p-3">
-                        <div className="cp-subtle-label !text-slate-400">Freshness</div>
-                        <div className="mt-2 text-sm font-semibold text-white">{selectedRow.evidence.freshness_status}</div>
-                        <div className="mt-1 text-xs leading-5 text-slate-400">{selectedRow.evidence.acquisition_mode}</div>
-                      </div>
-                    </div>
-                  ) : null}
-                </>
-              )}
+            <div className="flex gap-2 rounded-[18px] border border-white/10 bg-white/6 p-1">
+              {(Object.keys(PERIOD_LABELS) as Period[]).map((value) => (
+                <button
+                  key={value}
+                  onClick={() => setPeriod(value)}
+                  className={`rounded-[16px] px-3 py-2 text-xs font-semibold transition ${
+                    period === value ? 'bg-[#78f2d0] text-slate-950' : 'text-slate-300 hover:bg-white/8'
+                  }`}
+                >
+                  {PERIOD_LABELS[value]}
+                </button>
+              ))}
             </div>
           </div>
-        </section>
-      </div>
+
+          <div className="mt-5">
+            {histLoading ? (
+              <div className="flex h-[320px] items-center justify-center gap-3 text-slate-300">
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#78f2d0] border-t-transparent" />
+                Loading history...
+              </div>
+            ) : displayHistory.length === 0 ? (
+              <div className="flex h-[320px] flex-col items-center justify-center gap-2 rounded-[28px] border border-dashed border-white/10 bg-white/4 text-center">
+                <div className="font-display text-2xl text-white">No stored price history</div>
+                <div className="max-w-md text-sm leading-7 text-slate-400">
+                  Refresh the feed or choose a symbol that already has stored history.
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="h-[320px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={displayHistory} margin={{ top: 8, right: 16, bottom: 0, left: 0 }}>
+                      <defs>
+                        <linearGradient id="priceFill" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor={METAL_COLORS[selected || 'Pt'] || '#78f2d0'} stopOpacity={0.3} />
+                          <stop offset="95%" stopColor={METAL_COLORS[selected || 'Pt'] || '#78f2d0'} stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid stroke="rgba(255,255,255,0.08)" vertical={false} />
+                      <XAxis
+                        dataKey="date"
+                        tick={{ fill: '#94a3b8', fontSize: 11 }}
+                        axisLine={false}
+                        tickLine={false}
+                        tickFormatter={(value) =>
+                          new Date(value).toLocaleDateString(
+                            'en-US',
+                            period === '1mo' ? { month: 'short', day: 'numeric' } : { year: '2-digit', month: 'short' },
+                          )
+                        }
+                      />
+                      <YAxis
+                        tick={{ fill: '#94a3b8', fontSize: 11 }}
+                        axisLine={false}
+                        tickLine={false}
+                        tickFormatter={(value) => `$${Number(value).toLocaleString('en-US')}`}
+                        width={72}
+                      />
+                      <Tooltip
+                        formatter={(value) => [`$${Number(value).toLocaleString('en-US')}`, selectedDisplayUnit]}
+                        labelFormatter={(value) =>
+                          new Date(value).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                          })
+                        }
+                        contentStyle={{
+                          borderRadius: 18,
+                          border: '1px solid rgba(255,255,255,0.10)',
+                          background: '#0b1522',
+                          color: '#e2e8f0',
+                          fontSize: 12,
+                        }}
+                      />
+                      {displayHistory.length > 0 ? <ReferenceLine y={displayHistory[0].price} stroke="rgba(255,255,255,0.12)" strokeDasharray="4 4" /> : null}
+                      <Area
+                        type="monotone"
+                        dataKey="price"
+                        stroke={METAL_COLORS[selected || 'Pt'] || '#78f2d0'}
+                        strokeWidth={2.2}
+                        fill="url(#priceFill)"
+                        dot={false}
+                        activeDot={{ r: 4 }}
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+
+                <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                  <div className="cp-metric-tile-dark">
+                    <div className="cp-subtle-label !text-slate-400">Current</div>
+                    <div className="mt-2 text-xl font-display text-white">{fmtPrice(displayHistory[displayHistory.length - 1].price, selectedRow?.unit ?? '$/lb', unit)}</div>
+                    <div className="mt-1 text-xs leading-5 text-slate-400">{selectedDisplayUnit}</div>
+                  </div>
+                  <div className="cp-metric-tile-dark">
+                    <div className="cp-subtle-label !text-slate-400">Period high</div>
+                    <div className="mt-2 text-xl font-display text-white">
+                      {fmtPrice(Math.max(...displayHistory.map((point) => point.high ?? point.price)), selectedRow?.unit ?? '$/lb', unit)}
+                    </div>
+                    <div className="mt-1 text-xs leading-5 text-slate-400">Maximum observed value</div>
+                  </div>
+                  <div className="cp-metric-tile-dark">
+                    <div className="cp-subtle-label !text-slate-400">Period low</div>
+                    <div className="mt-2 text-xl font-display text-white">
+                      {fmtPrice(Math.min(...displayHistory.map((point) => point.low ?? point.price)), selectedRow?.unit ?? '$/lb', unit)}
+                    </div>
+                    <div className="mt-1 text-xs leading-5 text-slate-400">{historySource || 'Stored metal price series'}</div>
+                  </div>
+                </div>
+
+                {selectedRow ? (
+                  <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                    <div className="rounded-[22px] border border-white/10 bg-white/6 p-3">
+                      <div className="cp-subtle-label !text-slate-400">Evidence tier</div>
+                      <div className="mt-2 text-sm font-semibold text-white">{selectedRow.evidence.label}</div>
+                      <div className="mt-1 text-xs leading-5 text-slate-400">{selectedRow.evidence.note}</div>
+                    </div>
+                    <div className="rounded-[22px] border border-white/10 bg-white/6 p-3">
+                      <div className="cp-subtle-label !text-slate-400">Confidence</div>
+                      <div className="mt-2 text-sm font-semibold text-white">{selectedRow.evidence.confidence_score}</div>
+                      <div className="mt-1 text-xs leading-5 text-slate-400">{selectedRow.evidence.transparency}</div>
+                    </div>
+                    <div className="rounded-[22px] border border-white/10 bg-white/6 p-3">
+                      <div className="cp-subtle-label !text-slate-400">Freshness</div>
+                      <div className="mt-2 text-sm font-semibold text-white">{selectedRow.evidence.freshness_status}</div>
+                      <div className="mt-1 text-xs leading-5 text-slate-400">{selectedRow.evidence.acquisition_mode}</div>
+                    </div>
+                  </div>
+                ) : null}
+              </>
+            )}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      <WorkspaceSectionNav
+        sections={FEED_SECTIONS}
+        activeSectionId={activeSectionId}
+        activeIndex={activeIndex}
+        onSelect={setActiveSection}
+        onPrevious={goPrevious}
+        onNext={goNext}
+        canGoPrevious={canGoPrevious}
+        canGoNext={canGoNext}
+      />
+      {activeSection.id === 'quotes' ? renderQuotes() : renderTrend()}
     </div>
   );
 }

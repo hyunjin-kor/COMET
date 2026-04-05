@@ -1,10 +1,16 @@
 import { useLayoutEffect, useState } from 'react';
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 import { useNavigate } from 'react-router-dom';
+import { WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
 import { loadCalculatorResultSnapshot } from '../lib/calculator-session';
 import { useUnit } from '../lib/use-unit';
 
 const CHART_COLORS = ['#78f2d0', '#88a8ff', '#efc36c', '#f3a08d', '#c5b7ff', '#8de0ff'];
+const RESULT_SECTIONS: WorkspaceSection[] = [
+  { id: 'summary', label: 'Summary', summary: 'Headline price and board status.' },
+  { id: 'route', label: 'Route', summary: 'Cost structure and route context.' },
+  { id: 'ledger', label: 'Ledger', summary: 'Component and source records.' },
+];
 
 function sourceRecordLabel(priceScope: string, hasLink: boolean) {
   if (hasLink) {
@@ -35,6 +41,7 @@ function MetricTile({ label, value, detail, dark = false }: { label: string; val
 export default function CalculatorResult() {
   const navigate = useNavigate();
   const { unit, toDisplay, fmtLabel, catLabel } = useUnit();
+  const sectionState = useWorkspaceSections(RESULT_SECTIONS, 'board');
   const [snapshot] = useState(() => loadCalculatorResultSnapshot());
 
   useLayoutEffect(() => {
@@ -127,7 +134,18 @@ export default function CalculatorResult() {
         </div>
       </section>
 
-      {result.warnings?.length ? (
+      <WorkspaceSectionNav
+        sections={RESULT_SECTIONS}
+        activeSectionId={sectionState.activeSectionId}
+        activeIndex={sectionState.activeIndex}
+        onSelect={sectionState.setActiveSection}
+        onPrevious={sectionState.goPrevious}
+        onNext={sectionState.goNext}
+        canGoPrevious={sectionState.canGoPrevious}
+        canGoNext={sectionState.canGoNext}
+      />
+
+      {sectionState.activeSection.id === 'summary' && result.warnings?.length ? (
         <section className="surface-card border border-amber-200 bg-amber-50/70 p-4 text-sm text-amber-900">
           <div className="cp-subtle-label !text-amber-700">Model Scope</div>
           <div className="mt-2 space-y-2">
@@ -138,7 +156,7 @@ export default function CalculatorResult() {
         </section>
       ) : null}
 
-      {electrodeModel ? (
+      {sectionState.activeSection.id === 'summary' && electrodeModel ? (
         <section className="surface-card p-4">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
@@ -172,7 +190,7 @@ export default function CalculatorResult() {
         </section>
       ) : null}
 
-      <div className="grid gap-4 xl:grid-cols-[minmax(360px,0.84fr)_minmax(0,1.16fr)]">
+      {sectionState.activeSection.id === 'route' ? (
         <section className="surface-card p-4">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
@@ -280,7 +298,9 @@ export default function CalculatorResult() {
             </div>
           ) : null}
         </section>
+      ) : null}
 
+      {sectionState.activeSection.id === 'ledger' ? (
         <section className="surface-card p-4">
           <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div className="min-w-0">
@@ -364,7 +384,7 @@ export default function CalculatorResult() {
             </div>
           ) : null}
         </section>
-      </div>
+      ) : null}
     </div>
   );
 }

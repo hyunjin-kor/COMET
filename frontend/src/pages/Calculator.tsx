@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
 import {
   type ApplicationFamily,
   type CatalystDomain,
@@ -83,6 +84,13 @@ const ELECTRO_APPLICATION_OPTIONS: Array<{ value: ApplicationFamily; label: stri
   { value: 'electrolyzer', label: 'Electrolyzer', detail: 'PEM water electrolysis catalyst and membrane routes.' },
   { value: 'direct_methanol_fuel_cell', label: 'DMFC', detail: 'PtRu-centered methanol oxidation routes.' },
   { value: 'general', label: 'General', detail: 'Use when the application family is still undecided.' },
+];
+const BUILD_SECTIONS: WorkspaceSection[] = [
+  { id: 'setup', label: 'Setup', summary: 'Choose mode and check feed status.' },
+  { id: 'inputs', label: 'Inputs', summary: 'Define recipe or electrode stack.' },
+  { id: 'references', label: 'References', summary: 'Load a published starting route if needed.' },
+  { id: 'route', label: 'Route', summary: 'Set campaign size and process steps.' },
+  { id: 'review', label: 'Review', summary: 'Validate the case and run the estimate.' },
 ];
 
 type SourceType = CalculatorRow['source_type'];
@@ -272,6 +280,7 @@ function MetricTile({ label, value, detail, dark = false }: { label: string; val
 export default function Calculator() {
   const navigate = useNavigate();
   const { toDisplay, toInternal, fmtLabel } = useUnit();
+  const sectionState = useWorkspaceSections(BUILD_SECTIONS, 'build');
   const storedDraft = loadCalculatorDraft();
   const [rows, setRows] = useState<CalculatorRow[]>(() => storedDraft?.rows?.length ? storedDraft.rows : defaultRows());
   const [steps, setSteps] = useState<string[]>(() => storedDraft?.steps?.length ? storedDraft.steps : DEFAULT_STEPS);
@@ -662,6 +671,7 @@ export default function Calculator() {
     }
     setOrderSize(Number(candidate.estimate.input_summary.order_size_tons ?? 20));
     setSelectedBenchmark(toBenchmarkPreset(candidate));
+    sectionState.setActiveSection('route');
   }
 
   function benchmarkCostValue(candidate: DecisionCandidate) {
@@ -1028,6 +1038,117 @@ export default function Calculator() {
     );
   }
 
+  function renderSetupSection() {
+    return (
+      <div className="surface-ghost p-3.5">
+        <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+          <div>
+            <div className="cp-subtle-label">Mode</div>
+            <div className="cp-heading-sm mt-2">{catalystDomainLabel(catalystDomain)}</div>
+            <p className="mt-2 text-xs leading-6 text-slate-500">
+              {catalystDomain === 'electrocatalyst'
+                ? 'Electrocatalyst mode separates powder, ionomer, membrane, and substrate with route-aware stack costing.'
+                : 'Thermocatalyst mode stays aligned with the CatCost-style composition plus process workflow.'}
+            </p>
+          </div>
+          <div className="cp-toolbar">
+            {(['thermal', 'electrocatalyst'] as const).map((value) => (
+              <button
+                key={value}
+                onClick={() => {
+                  setCatalystDomain(value);
+                  sectionState.setActiveSection('inputs');
+                }}
+                className={`rounded-[16px] px-3 py-2 text-xs font-semibold transition ${
+                  catalystDomain === value ? 'bg-slate-950 text-white' : 'text-slate-600 hover:bg-white hover:text-slate-900'
+                }`}
+              >
+                {catalystDomainLabel(value)}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  function renderInputsSection() {
+    if (catalystDomain === 'electrocatalyst') {
+      return renderElectrocatalystPanel();
+    }
+
+    return (
+      <div className="space-y-3.5">
+        {renderRows('active_metal')}
+        {renderRows('promoter')}
+        <div className="surface-ghost p-3.5">
+          <div>
+            <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#efc36c]" /><h3 className="cp-heading-sm">Support</h3></div>
+            <p className="mt-1 text-xs leading-5 text-slate-500">Support share closes the mass balance automatically.</p>
+          </div>
+          {rows.filter((row) => row.role === 'support').map((row) => (
+            <div key={row.id} className="mt-3.5 flex flex-wrap items-center gap-3">
+              <select value={row.name} onChange={(event) => { const support = SUPPORT_OPTIONS.find((item) => item.name === event.target.value); updateRow(row.id, { name: event.target.value, price_per_lb: support?.price ?? row.price_per_lb, source_type: 'manual', source: 'Manual support default' }); }} className="input-base min-w-[180px] flex-[1.3_1_260px] pr-10">{SUPPORT_OPTIONS.map((support) => <option key={support.name} value={support.name}>{support.name} / {support.note}</option>)}</select>
+              <div className="input-base flex min-w-[170px] flex-none items-center justify-between gap-3 bg-white/76"><span className="text-xs text-slate-500">Auto share</span><span className="font-mono text-slate-950">{supportWtPct.toFixed(1)} wt%</span></div>
+              {priceField(row)}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  function renderReferenceSection() {
+    if (benchmarkCandidates.length === 0) {
+      return (
+        <div className="surface-ghost p-4 text-sm text-slate-500">
+          No reference routes are available for the current domain and application family.
+        </div>
+      );
+    }
+    return renderBenchmarkBoard();
+  }
+
+  function renderRouteSection() {
+    return (
+      <div className="space-y-4">
+        <div><div className="cp-subtle-label">Process Route</div><h2 className="cp-heading-xl mt-2">{catalystDomain === 'electrocatalyst' ? 'Choose the fabrication steps' : 'Choose the process steps'}</h2><p className="cp-body-copy mt-2 max-w-2xl">{catalystDomain === 'electrocatalyst' ? 'Templates add conditioning, coating, drying, lamination, and break-in steps. You can still override them below.' : 'Pick the industrial steps that best approximate the lab route, then let order size set the campaign basis.'}</p></div>
+        {selectedBenchmark ? (
+          <div className="rounded-[24px] border border-emerald-200 bg-emerald-50/80 px-4 py-4 text-sm text-emerald-900">
+            <div className="cp-subtle-label !text-emerald-700">Loaded reference route</div>
+            <div className="mt-2 font-semibold">{selectedBenchmark.route.name}</div>
+            <div className="mt-2 leading-6">{selectedBenchmark.screening_summary}</div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <span className="cp-chip">{catalystDomainLabel(selectedBenchmark.catalyst_domain)}</span>
+              <span className="cp-chip">{applicationFamilyLabel(selectedBenchmark.application_family)}</span>
+            </div>
+          </div>
+        ) : null}
+        <div className="surface-ghost p-3.5">
+          <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+            <div><div className="cp-subtle-label">Order size</div><div className="mt-3 flex flex-wrap items-center gap-3"><input type="number" min="1" step="1" value={orderSize} onChange={(event) => setOrderSize(Math.max(1, Number(event.target.value)))} className="input-base w-32 text-center font-mono" /><span className="text-sm text-slate-500">tons per campaign</span><span className={`rounded-full border px-3 py-1 text-xs font-semibold ${scale.classes}`}>{scale.label} / {scale.rate}</span></div></div>
+            <div className="cp-toolbar">{QUICK_ORDER_SIZES.map((size) => <button key={size} onClick={() => setOrderSize(size)} className={`rounded-[16px] px-3 py-2 text-xs font-semibold transition ${orderSize === size ? 'bg-slate-950 text-white' : 'text-slate-600 hover:bg-white hover:text-slate-900'}`}>{size} tons</button>)}</div>
+          </div>
+        </div>
+        <div className="grid gap-3 lg:grid-cols-2 xl:grid-cols-3">
+          {STEP_CATEGORIES.map((category) => (
+            <div key={category} className="surface-ghost p-3.5">
+              <div className="cp-subtle-label">{category}</div>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {ALL_STEPS.filter((step) => step.category === category).map((step) => {
+                  const available = (step.scales as readonly Scale[]).includes(currentScale);
+                  const checked = steps.includes(step.key);
+                  const availabilityLabel = step.scales.length === 3 ? null : step.scales.map((item) => item[0].toUpperCase()).join('/');
+                  return <button key={step.key} onClick={() => available && toggleStep(step.key)} disabled={!available} title={available ? step.label : `Not available at ${scale.label.toLowerCase()} scale`} className={`rounded-[16px] border px-3 py-2 text-left text-sm transition ${!available ? 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400' : checked ? 'border-teal-200 bg-teal-50 text-teal-700' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}><div className="font-medium">{step.label}</div>{availabilityLabel ? <div className="mt-1 text-[10px] uppercase tracking-[0.18em] text-slate-400">{availabilityLabel}</div> : null}</button>;
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   const validationMessage = catalystDomain === 'electrocatalyst'
     ? isValid
       ? `Electrocatalyst stack is ready: ${selectedCatalystMaterial?.name ?? 'catalyst'}, ${selectedIonomerMaterial?.name ?? 'ionomer'}, ${selectedMembraneMaterial?.name ?? 'membrane'}, and ${selectedSubstrateMaterial?.name ?? 'GDL'} are all sourced from the library.`
@@ -1043,129 +1164,51 @@ export default function Calculator() {
   return (
     <div className="space-y-3">
       <datalist id="known-metal-options">{KNOWN_METALS.map((metal) => <option key={metal} value={metal} />)}</datalist>
-
-      <div className="grid gap-4 xl:grid-cols-[minmax(0,1.16fr)_minmax(340px,0.84fr)]">
-        <section className="surface-card cp-enter overflow-hidden px-4 py-4 sm:px-5" style={{ animationDelay: '0.06s' }}>
-          <div className="space-y-6">
-            <div className="flex flex-col gap-4 border-b border-slate-900/8 pb-4 lg:flex-row lg:items-end lg:justify-between">
-              <div>
-                <div className="cp-subtle-label">Build Workspace</div>
-                <h2 className="cp-heading-xl mt-2">Build a catalyst cost case</h2>
-                <p className="cp-body-copy mt-2 max-w-2xl">
-                  {catalystDomain === 'electrocatalyst'
-                    ? 'Pick the electrode stack, then map the fabrication route and sourcing basis.'
-                    : 'Set actives, promoters, support, and sourcing basis first, then choose the process route.'}
-                </p>
-              </div>
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="cp-chip">{pricesUpdatedAt ? `Feed synced ${pricesUpdatedAt.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}` : 'Feed status pending'}</span>
-                <button onClick={syncPrices} disabled={refreshing} className="cp-button-secondary"><span className={`mr-2 inline-flex h-4 w-4 rounded-full border-2 border-current border-t-transparent ${refreshing ? 'animate-spin' : ''}`} />{refreshing ? 'Refreshing feed' : 'Refresh feed'}</button>
-              </div>
+      <section className="surface-card cp-enter overflow-hidden px-4 py-4 sm:px-5" style={{ animationDelay: '0.06s' }}>
+        <div className="space-y-5">
+          <div className="flex flex-col gap-4 border-b border-slate-900/8 pb-4 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <div className="cp-subtle-label">Build Workspace</div>
+              <h2 className="cp-heading-xl mt-2">Build a catalyst cost case</h2>
+              <p className="cp-body-copy mt-2 max-w-2xl">
+                {catalystDomain === 'electrocatalyst'
+                  ? 'Pick the electrode stack, then map the fabrication route and sourcing basis.'
+                  : 'Set actives, promoters, support, and sourcing basis first, then choose the process route.'}
+              </p>
             </div>
-
-            <div className="grid gap-2.5 md:grid-cols-3">
-              <MetricTile label="Tracked feeds" value={String(liveFeedCount + indexedFeedCount)} detail={`${liveFeedCount} live / ${indexedFeedCount} indexed`} />
-              <MetricTile label="Route steps" value={String(steps.length)} detail={steps.length > 0 ? 'Selected process path' : 'Select at least one step'} />
-              <MetricTile label="Campaign scale" value={scale.label} detail={`${orderSize} tons / ${scale.rate}`} />
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="cp-chip">{pricesUpdatedAt ? `Feed synced ${pricesUpdatedAt.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}` : 'Feed status pending'}</span>
+              <button onClick={syncPrices} disabled={refreshing} className="cp-button-secondary"><span className={`mr-2 inline-flex h-4 w-4 rounded-full border-2 border-current border-t-transparent ${refreshing ? 'animate-spin' : ''}`} />{refreshing ? 'Refreshing feed' : 'Refresh feed'}</button>
             </div>
+          </div>
 
-            <div className="surface-ghost p-3.5">
-              <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-                <div>
-                  <div className="cp-subtle-label">Mode</div>
-                  <div className="cp-heading-sm mt-2">{catalystDomainLabel(catalystDomain)}</div>
-                  <p className="mt-2 text-xs leading-6 text-slate-500">
-                    {catalystDomain === 'electrocatalyst'
-                      ? 'Electrocatalyst mode separates powder, ionomer, membrane, and substrate with route-aware stack costing.'
-                      : 'Thermocatalyst mode stays aligned with the CatCost-style composition plus process workflow.'}
-                  </p>
-                </div>
-                <div className="cp-toolbar">
-                  {(['thermal', 'electrocatalyst'] as const).map((value) => (
-                    <button
-                      key={value}
-                      onClick={() => setCatalystDomain(value)}
-                      className={`rounded-[16px] px-3 py-2 text-xs font-semibold transition ${
-                        catalystDomain === value
-                          ? 'bg-slate-950 text-white'
-                          : 'text-slate-600 hover:bg-white hover:text-slate-900'
-                      }`}
-                    >
-                      {catalystDomainLabel(value)}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
+          <div className="grid gap-2.5 md:grid-cols-3">
+            <MetricTile label="Tracked feeds" value={String(liveFeedCount + indexedFeedCount)} detail={`${liveFeedCount} live / ${indexedFeedCount} indexed`} />
+            <MetricTile label="Route steps" value={String(steps.length)} detail={steps.length > 0 ? 'Selected process path' : 'Select at least one step'} />
+            <MetricTile label="Campaign scale" value={scale.label} detail={`${orderSize} tons / ${scale.rate}`} />
+          </div>
+        </div>
+      </section>
 
-            {catalystDomain === 'electrocatalyst' ? renderElectrocatalystPanel() : (
-              <>
-                {renderBenchmarkBoard()}
+      <WorkspaceSectionNav sections={BUILD_SECTIONS} activeSectionId={sectionState.activeSectionId} activeIndex={sectionState.activeIndex} onSelect={sectionState.setActiveSection} onPrevious={sectionState.goPrevious} onNext={sectionState.goNext} canGoPrevious={sectionState.canGoPrevious} canGoNext={sectionState.canGoNext} />
 
-                <div className="space-y-3.5">
-                  {renderRows('active_metal')}
-                  {renderRows('promoter')}
-                  <div className="surface-ghost p-3.5">
-                    <div><div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#efc36c]" /><h3 className="cp-heading-sm">Support</h3></div><p className="mt-1 text-xs leading-5 text-slate-500">Support share closes the mass balance automatically.</p></div>
-                    {rows.filter((row) => row.role === 'support').map((row) => (
-                      <div key={row.id} className="mt-3.5 flex flex-wrap items-center gap-3">
-                        <select value={row.name} onChange={(event) => { const support = SUPPORT_OPTIONS.find((item) => item.name === event.target.value); updateRow(row.id, { name: event.target.value, price_per_lb: support?.price ?? row.price_per_lb, source_type: 'manual', source: 'Manual support default' }); }} className="input-base min-w-[180px] flex-[1.3_1_260px] pr-10">{SUPPORT_OPTIONS.map((support) => <option key={support.name} value={support.name}>{support.name} / {support.note}</option>)}</select>
-                        <div className="input-base flex min-w-[170px] flex-none items-center justify-between gap-3 bg-white/76"><span className="text-xs text-slate-500">Auto share</span><span className="font-mono text-slate-950">{supportWtPct.toFixed(1)} wt%</span></div>
-                        {priceField(row)}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </>
-            )}
-
-            <div className="space-y-4 border-t border-slate-900/8 pt-4">
-              <div><div className="cp-subtle-label">Process Route</div><h2 className="cp-heading-xl mt-2">{catalystDomain === 'electrocatalyst' ? 'Choose the fabrication steps' : 'Choose the process steps'}</h2><p className="cp-body-copy mt-2 max-w-2xl">{catalystDomain === 'electrocatalyst' ? 'Templates add conditioning, coating, drying, lamination, and break-in steps. You can still override them below.' : 'Pick the industrial steps that best approximate the lab route, then let order size set the campaign basis.'}</p></div>
-              {selectedBenchmark ? (
-                <div className="rounded-[24px] border border-emerald-200 bg-emerald-50/80 px-4 py-4 text-sm text-emerald-900">
-                  <div className="cp-subtle-label !text-emerald-700">Loaded reference route</div>
-                  <div className="mt-2 font-semibold">{selectedBenchmark.route.name}</div>
-                  <div className="mt-2 leading-6">{selectedBenchmark.screening_summary}</div>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    <span className="cp-chip">{catalystDomainLabel(selectedBenchmark.catalyst_domain)}</span>
-                    <span className="cp-chip">{applicationFamilyLabel(selectedBenchmark.application_family)}</span>
-                  </div>
-                </div>
-              ) : null}
-              <div className="surface-ghost p-3.5">
-                <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-                  <div><div className="cp-subtle-label">Order size</div><div className="mt-3 flex flex-wrap items-center gap-3"><input type="number" min="1" step="1" value={orderSize} onChange={(event) => setOrderSize(Math.max(1, Number(event.target.value)))} className="input-base w-32 text-center font-mono" /><span className="text-sm text-slate-500">tons per campaign</span><span className={`rounded-full border px-3 py-1 text-xs font-semibold ${scale.classes}`}>{scale.label} / {scale.rate}</span></div></div>
-                  <div className="cp-toolbar">{QUICK_ORDER_SIZES.map((size) => <button key={size} onClick={() => setOrderSize(size)} className={`rounded-[16px] px-3 py-2 text-xs font-semibold transition ${orderSize === size ? 'bg-slate-950 text-white' : 'text-slate-600 hover:bg-white hover:text-slate-900'}`}>{size} tons</button>)}</div>
-                </div>
-              </div>
-              <div className="grid gap-3 lg:grid-cols-2 xl:grid-cols-3">
-                {STEP_CATEGORIES.map((category) => (
-                  <div key={category} className="surface-ghost p-3.5">
-                    <div className="cp-subtle-label">{category}</div>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {ALL_STEPS.filter((step) => step.category === category).map((step) => {
-                        const available = (step.scales as readonly Scale[]).includes(currentScale);
-                        const checked = steps.includes(step.key);
-                        const availabilityLabel = step.scales.length === 3 ? null : step.scales.map((item) => item[0].toUpperCase()).join('/');
-                        return <button key={step.key} onClick={() => available && toggleStep(step.key)} disabled={!available} title={available ? step.label : `Not available at ${scale.label.toLowerCase()} scale`} className={`rounded-[16px] border px-3 py-2 text-left text-sm transition ${!available ? 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400' : checked ? 'border-teal-200 bg-teal-50 text-teal-700' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}><div className="font-medium">{step.label}</div>{availabilityLabel ? <div className="mt-1 text-[10px] uppercase tracking-[0.18em] text-slate-400">{availabilityLabel}</div> : null}</button>;
-                      })}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
+      {sectionState.activeSection.id === 'setup' ? renderSetupSection() : null}
+      {sectionState.activeSection.id === 'inputs' ? renderInputsSection() : null}
+      {sectionState.activeSection.id === 'references' ? renderReferenceSection() : null}
+      {sectionState.activeSection.id === 'route' ? renderRouteSection() : null}
+      {sectionState.activeSection.id === 'review' ? (
+        <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(340px,0.84fr)]">
+          <section className="surface-card p-4">
             <div className={`rounded-[24px] border px-4 py-4 text-sm ${isValid ? 'border-emerald-200 bg-emerald-50 text-emerald-800' : 'border-amber-200 bg-amber-50 text-amber-800'}`}>{validationMessage}</div>
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
               <button onClick={handleCalculate} disabled={loading || !isValid || steps.length === 0} className="cp-button-primary min-w-[250px]">{loading ? <><span className="mr-2 inline-flex h-4 w-4 animate-spin rounded-full border-2 border-slate-950 border-t-transparent" />Running estimate</> : 'Run estimate and open board'}</button>
               <div className="text-xs leading-6 text-slate-500">The estimate board opens as a separate reading surface and keeps this draft intact.</div>
             </div>
-            {error ? <div className="rounded-[24px] border border-red-200 bg-red-50 px-4 py-4 text-sm text-red-700"><span className="font-semibold">Calculation failed.</span> {error}</div> : null}
-          </div>
-        </section>
-
-        {renderLaunchPanel()}
-      </div>
+            {error ? <div className="mt-4 rounded-[24px] border border-red-200 bg-red-50 px-4 py-4 text-sm text-red-700"><span className="font-semibold">Calculation failed.</span> {error}</div> : null}
+          </section>
+          {renderLaunchPanel()}
+        </div>
+      ) : null}
     </div>
   );
 }
