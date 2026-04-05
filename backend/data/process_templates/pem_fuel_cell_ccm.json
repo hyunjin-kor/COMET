@@ -1,0 +1,51 @@
+{
+  "id": "pem_fuel_cell_ccm",
+  "name": "PEM Fuel Cell CCM / MEA Route",
+  "description": "PEM fuel-cell catalyst-coated membrane workflow with membrane pretreatment, catalyst-ink homogenization, CCM coating, low-temperature drying, and lamination/break-in proxies.",
+  "category": "Electrocatalyst / PEM Fuel Cell",
+  "catalyst_domain": "electrocatalyst",
+  "application_family": "fuel_cell",
+  "manufacturing_mode": "ccm",
+  "example_catalysts": [
+    "20 wt% Pt/C cathode",
+    "40 wt% Pt/C cathode",
+    "Pt black anode"
+  ],
+  "preprocess": [
+    "Membrane acid pretreatment",
+    "Substrate cutting and wetting",
+    "Ink solvent and solids staging"
+  ],
+  "synthesis": [
+    "Ionomer ink homogenization",
+    "Ultrasonic dispersion",
+    "CCM coating pass",
+    "Electrode drying below 100 C"
+  ],
+  "postprocess": [
+    "Hot press lamination",
+    "Electrochemical break-in"
+  ],
+  "quality_gates": [
+    "Catalyst loading check",
+    "Coating uniformity",
+    "Area-specific resistance"
+  ],
+  "steps": [
+    "membrane_pretreatment",
+    "substrate_pretreatment",
+    "ionomer_ink_homogenization",
+    "ultrasonic_dispersion",
+    "ccm_coating_pass",
+    "electrode_drying_low_temp",
+    "hot_press_lamination",
+    "electrochemical_break_in"
+  ],
+  "route_note": "CatCost has no native CCM coating steps, so the route uses explicit proxy mappings in the step library.",
+  "source": "Fuel Cell Store PFSA membrane and ionomer product pages, plus common PEM MEA conditioning practice",
+  "reference_urls": [
+    "https://www.fuelcellstore.com/pfsa-d50u-proton-exchange-membrane-87010020",
+    "https://www.fuelcellstore.com/pfsa-dispersion-d5-758000100",
+    "https://www.fuelcellstore.com/hydrogen-air-mea"
+  ]
+}

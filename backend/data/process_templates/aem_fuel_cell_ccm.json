@@ -1,0 +1,52 @@
+{
+  "id": "aem_fuel_cell_ccm",
+  "name": "AEM Fuel Cell CCM / GDE Route",
+  "description": "Anion-exchange membrane fuel-cell route with alkaline-form membrane conversion, catalyst-ink deposition, low-temperature drying, lamination, and break-in proxies.",
+  "category": "Electrocatalyst / AEM Fuel Cell",
+  "catalyst_domain": "electrocatalyst",
+  "application_family": "fuel_cell",
+  "manufacturing_mode": "ccm_or_gde",
+  "example_catalysts": [
+    "Ag/C oxygen-reduction cathode",
+    "PtRu black anode",
+    "Pt/C benchmark cathode"
+  ],
+  "preprocess": [
+    "Membrane hydration and ion-exchange conversion",
+    "Substrate wetting and cutting",
+    "Alkaline-stable ionomer staging"
+  ],
+  "synthesis": [
+    "Ionomer ink homogenization",
+    "Ultrasonic dispersion",
+    "CCM or GDE coating pass",
+    "Electrode drying below 100 C"
+  ],
+  "postprocess": [
+    "Hot press lamination",
+    "Electrochemical break-in"
+  ],
+  "quality_gates": [
+    "OH-form conductivity check",
+    "Coating adhesion after wet-up",
+    "Area-specific resistance"
+  ],
+  "steps": [
+    "membrane_pretreatment",
+    "substrate_pretreatment",
+    "ion_exchange_conversion",
+    "ionomer_ink_homogenization",
+    "ultrasonic_dispersion",
+    "ccm_coating_pass",
+    "electrode_drying_low_temp",
+    "hot_press_lamination",
+    "electrochemical_break_in"
+  ],
+  "route_note": "AEM routes add an explicit ion-exchange conversion soak so alkaline membrane conditioning affects the proxy process-cost total.",
+  "source": "Fuel Cell Store PiperION and Sustainion AEM product pages plus common hydroxide-form conditioning practice",
+  "reference_urls": [
+    "https://www.fuelcellstore.com/versogen-piperion-aem-self-supporting-40um-73800014",
+    "https://www.fuelcellstore.com/versogen-piperion-dispersion-5wt-74820000",
+    "https://www.fuelcellstore.com/sustainion-xa-9-ionomer-ethanol"
+  ]
+}

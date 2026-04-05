@@ -48,17 +48,19 @@ CatPrice is built to feel like shipped desktop software rather than a spreadshee
 | Price clarity | `LIVE`, `INDEXED`, and `MANUAL` states plus evidence confidence and freshness |
 | Workflow | Separate calculator and estimate-board surfaces for better readability |
 | Route logic | Step Method, route extras, indexed escalation, and optional reference routes |
-| Research support | Literature-backed benchmark families that can be loaded as editable starting points |
+| Research support | Literature-backed thermocatalyst and electrocatalyst benchmark families with explicit source banks |
 | Desktop release | Installer + unpacked app outputs for a clean Windows release path |
 
-## Included Reference Family
+## Included Reference Families
 
-CatPrice currently ships one optional benchmark reference family:
+CatPrice currently ships two optional benchmark reference families:
 
 - `Ammonia decomposition reference family`
-  Includes `Ni/gamma-Al2O3 baseline`, `Ni-MgO/CeO2 interface`, and `Ru/MgO premium` as literature-backed starting routes for sanity-checking catalyst economics under one reaction window.
+  Thermocatalyst routes including `Ni/gamma-Al2O3 baseline`, `Ni-MgO/CeO2 interface`, and `Ru/MgO premium`.
+- `Fuel-cell ORR cathode reference family`
+  Electrocatalyst routes including `Pt/C baseline cathode`, `Pt-Co intermetallic cathode`, and `Fe-N-C PGM-free cathode`.
 
-These routes are examples, not the product boundary. Additional families can be added without changing the main calculator workflow.
+Both families expose candidate-level evidence anchors plus a larger family literature bank in the Compare screen. The benchmark library now distinguishes `Thermocatalyst` and `Electrocatalyst` routes explicitly, and benchmark presets load the matching calculator mode.
 
 ## Download
 
@@ -66,7 +68,7 @@ Download the packaged Windows app from [GitHub Releases](https://github.com/hyun
 
 Recommended asset:
 
-- `CatPrice Setup 1.0.1.exe`
+- `CatPrice Setup 1.1.0.exe`
 
 Portable asset:
 
@@ -79,7 +81,8 @@ CatPrice is distributed as a desktop app. The public repository does not require
 - Estimates catalyst selling cost with the CatCost Step Method
 - Tracks metal inputs with `LIVE`, `INDEXED`, and `MANUAL` price states
 - Annotates market feeds with price-evidence confidence, freshness, and acquisition mode
-- Loads optional reference families into the calculator as editable starting points
+- Loads thermocatalyst and electrocatalyst reference families into the calculator as editable starting points
+- Attaches source-linked family literature banks built from high-confidence journal references and public vendor pages
 - Opens the final estimate on a dedicated result board for review
 - Runs Monte Carlo uncertainty analysis
 - Applies ChemPPI and CEPCI escalation
@@ -99,7 +102,7 @@ npm run build
 
 Main outputs:
 
-- `dist-electron\CatPrice Setup 1.0.1.exe`
+- `dist-electron\CatPrice Setup 1.1.0.exe`
 - `dist-electron\win-unpacked\CatPrice.exe`
 
 Before rebuilding desktop artifacts, CatPrice stops old desktop processes automatically. You can also stop them manually:
@@ -147,13 +150,14 @@ npm run smoke:desktop
 >
 > Van Allsburg, K. M., et al. (2022). Early-stage evaluation of catalyst manufacturing cost and environmental impact using CatCost. Nature Catalysis.
 
-Current reference-family anchors included in the benchmark library:
+Current benchmark-library anchors now include top-journal thermocatalyst and electrocatalyst references such as:
 
-- [Cleaner Energy Systems 2026 ammonia decomposition economic analysis](https://naos-be.zcu.cz/server/api/core/bitstreams/ee92fa23-ea1c-42b4-ad67-e0230bce7552/content)
-- [Nature Communications 2023 on Ru ensembles for ammonia decomposition](https://www.nature.com/articles/s41467-023-36339-w)
-- [PubMed 2025 on Ni_xMg_1-xO/CeO2 catalyst design](https://pubmed.ncbi.nlm.nih.gov/41452228/)
-- [Sigma-Aldrich nickel nitrate catalog page](https://www.sigmaaldrich.com/US/en/product/aldrich/203874)
-- [Sigma-Aldrich ruthenium chloride catalog page](https://www.sigmaaldrich.com/US/en/product/aldrich/206229)
+- [Nature Communications 2023 on Ru ensembles for ammonia decomposition](https://doi.org/10.1038/s41467-023-36339-w)
+- [Nature Communications 2025 on Ni-CeO2-x photothermal ammonia decomposition](https://doi.org/10.1038/s41467-025-66325-3)
+- [Nature 2012 on electrocatalyst approaches and challenges for automotive fuel cells](https://doi.org/10.1038/nature11115)
+- [Nature Catalysis 2019 on Fe-N-C cathodes for PEM fuel cells](https://www.nature.com/articles/s41929-019-0237-3)
+- [Nature Energy 2022 on durable Fe-N-C PEMFC cathodes](https://www.nature.com/articles/s41560-022-01062-1)
+- [Nature Communications 2025 on durable Pt/Co cathode design](https://www.nature.com/articles/s41467-025-65122-2)
 
 ## License
 

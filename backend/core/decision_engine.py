@@ -37,6 +37,9 @@ def list_benchmark_families() -> list[dict[str, Any]]:
                 "title": catalog["title"],
                 "reaction": catalog["reaction"],
                 "objective": catalog["objective"],
+                "catalyst_domain": catalog.get("catalyst_domain", "thermal"),
+                "application_family": catalog.get("application_family", "general"),
+                "citation_count": len(catalog.get("citations", [])),
                 "candidate_count": len(catalog["candidates"]),
             }
         )
@@ -244,11 +247,15 @@ def evaluate_benchmark_family(
     quote_map = {item["id"]: item for item in catalog["catalog_quotes"]}
     citation_map = {item["id"]: item for item in catalog["citations"]}
     latest_prices = _latest_price_map(session)
+    family_domain = catalog.get("catalyst_domain", "thermal")
+    family_application = catalog.get("application_family", "general")
 
     candidates: list[dict[str, Any]] = []
     latest_update = None
     for candidate in catalog["candidates"]:
         route = route_map[candidate["route_template_id"]]
+        candidate_domain = candidate.get("catalyst_domain", family_domain)
+        candidate_application = candidate.get("application_family", family_application)
 
         component_inputs: list[dict[str, Any]] = []
         component_meta: list[dict[str, Any]] = []
@@ -264,6 +271,8 @@ def evaluate_benchmark_family(
         estimate = estimate_catalyst_cost(
             components=component_inputs,
             steps=route["steps"],
+            catalyst_domain=candidate_domain,
+            application_family=candidate_application,
             order_size_tons=float(candidate["order_size_tons"]),
         )
         enriched_components = _component_cost_shares(
@@ -286,6 +295,8 @@ def evaluate_benchmark_family(
             "archetype": candidate["archetype"],
             "screening_basis": candidate["screening_basis"],
             "screening_summary": candidate["summary"],
+            "catalyst_domain": candidate_domain,
+            "application_family": candidate_application,
             "summary": {
                 "base_estimated_price_per_lb": round(float(estimate["summary"]["estimated_price_per_lb"]), 4),
                 "landed_cost_per_lb": round(landed_cost_per_lb, 4),
@@ -307,6 +318,7 @@ def evaluate_benchmark_family(
             "route": {
                 "name": route["name"],
                 "manufacturing_mode": route["manufacturing_mode"],
+                "calculator_template_id": route.get("calculator_template_id"),
                 "preprocess": route["preprocess"],
                 "synthesis": route["synthesis"],
                 "postprocess": route["postprocess"],
@@ -343,6 +355,8 @@ def evaluate_benchmark_family(
         "title": catalog["title"],
         "reaction": catalog["reaction"],
         "objective": catalog["objective"],
+        "catalyst_domain": family_domain,
+        "application_family": family_application,
         "decision_profile": {
             "id": profile,
             "label": profile_config["label"],

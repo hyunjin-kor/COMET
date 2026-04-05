@@ -7,9 +7,10 @@ from datetime import datetime, timezone
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from sqlmodel import Session
 
 from backend.config import settings
-from backend.database import create_db_and_tables
+from backend.database import create_db_and_tables, engine, sync_material_library
 from backend.routers import calculator, catcost_import, compare, decision, materials, prices, uncertainty
 from backend.services.price_scheduler import collect_prices
 
@@ -39,6 +40,8 @@ def _is_local_request(host: str | None) -> bool:
 async def lifespan(app: FastAPI):
     """Create DB tables, fetch prices on startup, then schedule daily updates."""
     create_db_and_tables()
+    with Session(engine) as session:
+        sync_material_library(session, force=True)
 
     # Fetch prices immediately on startup without blocking the Electron shell.
     import asyncio
@@ -67,7 +70,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="CatPrice API",
     description="Loopback API sidecar for the CatPrice desktop app",
-    version="1.0.1",
+    version="1.1.0",
     lifespan=lifespan,
 )
 
@@ -93,7 +96,7 @@ def health():
     """Server health check."""
     return {
         "status": "ok",
-        "version": "1.0.1",
+        "version": "1.1.0",
         "last_price_update": _last_price_update.isoformat() if _last_price_update else None,
         "scheduler_running": scheduler.running,
     }

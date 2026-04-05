@@ -43,6 +43,17 @@ function sourceTone(sourceType: string) {
   return 'border-slate-200 bg-white text-slate-600';
 }
 
+function catalystDomainLabel(domain: 'thermal' | 'electrocatalyst') {
+  return domain === 'electrocatalyst' ? 'Electrocatalyst' : 'Thermocatalyst';
+}
+
+function applicationFamilyLabel(value: string) {
+  if (value === 'fuel_cell') return 'Fuel Cell';
+  if (value === 'electrolyzer') return 'Electrolyzer';
+  if (value === 'direct_methanol_fuel_cell') return 'DMFC';
+  return 'General';
+}
+
 function toBenchmarkPreset(candidate: DecisionCandidate): CalculatorBenchmarkPreset {
   return {
     slug: candidate.slug,
@@ -50,6 +61,8 @@ function toBenchmarkPreset(candidate: DecisionCandidate): CalculatorBenchmarkPre
     archetype: candidate.archetype,
     screening_basis: candidate.screening_basis,
     screening_summary: candidate.screening_summary,
+    catalyst_domain: candidate.catalyst_domain,
+    application_family: candidate.application_family,
     route: candidate.route,
     scores: candidate.scores,
     decision_notes: candidate.decision_notes,
@@ -139,8 +152,22 @@ export default function Compare() {
     saveCalculatorDraft({
       rows: toCalculatorRows(candidate),
       steps: candidate.route.steps,
+      catalystDomain: candidate.catalyst_domain,
+      applicationFamily: candidate.application_family,
       orderSize: Number(candidate.estimate.input_summary.order_size_tons ?? 20),
       pricesUpdatedAt: benchmark?.price_basis_updated_at ?? null,
+      electrocatalystConfig: candidate.catalyst_domain === 'electrocatalyst'
+        ? {
+            catalystMaterialKey: '',
+            ionomerMaterialKey: '',
+            membraneMaterialKey: '',
+            substrateMaterialKey: '',
+            activeAreaCm2: 25,
+            catalystLoadingMgCm2: 0.3,
+            ionomerToCatalystRatio: 0.8,
+            templateId: candidate.route.calculator_template_id ?? 'pem_fuel_cell_ccm',
+          }
+        : null,
       benchmarkCandidate: toBenchmarkPreset(candidate),
     });
     navigate('/');
@@ -192,6 +219,8 @@ export default function Compare() {
               <div className="mt-3 flex flex-wrap gap-2">
                 {activeFamily ? <span className="cp-chip-dark">{activeFamily.title}</span> : null}
                 {benchmark.reaction ? <span className="cp-chip-dark">{benchmark.reaction}</span> : null}
+                <span className="cp-chip-dark">{catalystDomainLabel(benchmark.catalyst_domain)}</span>
+                <span className="cp-chip-dark">{applicationFamilyLabel(benchmark.application_family)}</span>
                 <span className="cp-chip-dark">{benchmark.decision_profile.label}</span>
                 <span className="cp-chip-dark">Updated {updatedAt}</span>
               </div>
@@ -252,7 +281,10 @@ export default function Compare() {
                   >
                     <div className="font-semibold">{option.title}</div>
                     <div className="mt-1 text-xs leading-5 text-slate-500">
-                      {option.candidate_count} routes available
+                      {catalystDomainLabel(option.catalyst_domain)} / {applicationFamilyLabel(option.application_family)}
+                    </div>
+                    <div className="mt-1 text-xs leading-5 text-slate-500">
+                      {option.candidate_count} routes, {option.citation_count} references
                     </div>
                   </button>
                 ))}
@@ -391,6 +423,10 @@ export default function Compare() {
               <div className="cp-subtle-label">Selected reference route</div>
               <div className="cp-heading-lg mt-2">{activeCandidate.title}</div>
               <div className="mt-1 text-sm text-slate-500">{activeCandidate.archetype}</div>
+              <div className="mt-2 flex flex-wrap gap-2">
+                <span className="cp-chip">{catalystDomainLabel(activeCandidate.catalyst_domain)}</span>
+                <span className="cp-chip">{applicationFamilyLabel(activeCandidate.application_family)}</span>
+              </div>
             </div>
 
             <button onClick={() => loadIntoCalculator(activeCandidate)} className="cp-button-primary">
@@ -577,6 +613,30 @@ export default function Compare() {
                         <span className="cp-chip">${quote.normalized_price_per_lb.toFixed(0)}/lb normalized</span>
                       </div>
                       <div className="mt-2 text-sm leading-6 text-slate-600">{quote.note}</div>
+                    </a>
+                  ))}
+                </div>
+              </div>
+
+              <div className="surface-ghost p-4">
+                <div className="cp-subtle-label">Family literature bank</div>
+                <div className="mt-2 text-xs leading-6 text-slate-500">
+                  High-confidence references attached to the active family. Candidate cards use subsets of this bank.
+                </div>
+                <div className="mt-3 space-y-3">
+                  {benchmark.citations.map((item) => (
+                    <a
+                      key={item.id}
+                      href={item.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="block rounded-[18px] border border-slate-900/8 bg-white/64 px-3 py-3 transition hover:bg-white"
+                    >
+                      <div className="flex flex-wrap items-center gap-2">
+                        <div className="font-semibold text-slate-950">{item.label}</div>
+                        <span className="cp-chip">{item.kind}</span>
+                      </div>
+                      <div className="mt-2 text-sm leading-6 text-slate-600">{item.note}</div>
                     </a>
                   ))}
                 </div>

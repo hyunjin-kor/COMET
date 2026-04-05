@@ -54,6 +54,10 @@ export default function CalculatorResult() {
   const altLabel = unit === 'kg' ? '/lb' : '/kg';
   const generatedAt = new Date(snapshot.generatedAt).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
   const composition = typeof result.input_summary.composition === 'string' ? result.input_summary.composition : 'Catalyst estimate';
+  const catalystDomain = result.input_summary.catalyst_domain === 'electrocatalyst' ? 'Electrocatalyst' : 'Thermocatalyst';
+  const routeSummary = result.route_summary ?? null;
+  const electrodeModel = result.electrode_model ?? null;
+  const resolvedMaterials = result.resolved_materials ?? [];
   const summaryRows = [
     { label: 'Materials', share: result.summary.materials_pct, value: `$${toDisplay(result.materials.total_materials_cost_per_lb).toFixed(3)}${fmtLabel}` },
     { label: 'Processing', share: result.summary.processing_pct, value: `$${toDisplay(Number(result.step_method.processing_cost_per_lb)).toFixed(3)}${fmtLabel}` },
@@ -90,6 +94,7 @@ export default function CalculatorResult() {
               <div className="mt-3 text-sm text-slate-300">Alternate view: ${altPrice.toFixed(2)}{altLabel}</div>
               <div className="mt-5 flex flex-wrap gap-2">
                 <span className="cp-chip-dark">Generated {generatedAt}</span>
+                <span className="cp-chip-dark">{catalystDomain}</span>
                 <span className="cp-chip-dark">{snapshot.selectedSupportName ?? 'Support pending'}</span>
                 <span className="cp-chip-dark">{snapshot.stepLabels.length} process steps</span>
                 {snapshot.benchmarkCandidate ? <span className="cp-chip-dark">{snapshot.benchmarkCandidate.title}</span> : null}
@@ -105,6 +110,51 @@ export default function CalculatorResult() {
           </div>
         </div>
       </section>
+
+      {result.warnings?.length ? (
+        <section className="surface-card border border-amber-200 bg-amber-50/70 p-4 text-sm text-amber-900">
+          <div className="cp-subtle-label !text-amber-700">Model Scope</div>
+          <div className="mt-2 space-y-2">
+            {result.warnings.map((warning) => (
+              <p key={warning} className="leading-6">{warning}</p>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      {electrodeModel ? (
+        <section className="surface-card p-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <div className="cp-subtle-label">Electrode Stack</div>
+              <div className="cp-heading-lg mt-2">Area-based electrocatalyst cost model</div>
+              <div className="mt-1 text-xs leading-6 text-slate-500">
+                Catalyst powder, ionomer, membrane, and substrate are costed on an active-area basis and shown alongside the CatCost powder estimate.
+              </div>
+            </div>
+            <span className="cp-chip">{electrodeModel.application_family}</span>
+          </div>
+
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            <MetricTile label="Active area" value={`${electrodeModel.active_area_cm2.toFixed(1)} cm2`} detail="Per modeled electrode / CCM" />
+            <MetricTile label="Catalyst loading" value={`${electrodeModel.catalyst_loading_mg_cm2.toFixed(2)} mg/cm2`} detail="Dry catalyst powder loading" />
+            <MetricTile label="Electrode total" value={`$${electrodeModel.total_cost_usd.toFixed(2)}`} detail="For selected active area" />
+            <MetricTile label="Stack cost density" value={`$${electrodeModel.cost_per_cm2_usd.toFixed(3)}/cm2`} detail={`$${electrodeModel.cost_per_m2_usd.toFixed(2)}/m2`} />
+          </div>
+
+          <div className="mt-4 grid gap-3 xl:grid-cols-4">
+            {electrodeModel.breakdown.map((item) => (
+              <div key={item.label} className="rounded-[22px] border border-slate-900/8 bg-white/60 p-4">
+                <div className="cp-subtle-label">{item.label}</div>
+                <div className="mt-2 font-display text-[1.6rem] text-slate-950">${item.cost_usd.toFixed(3)}</div>
+                <div className="mt-1 text-xs leading-6 text-slate-500">
+                  {item.label === 'Ionomer' ? `Pricing mode: ${electrodeModel.ionomer_pricing_mode}` : 'Included in active-area model'}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       <div className="grid gap-4 xl:grid-cols-[minmax(360px,0.84fr)_minmax(0,1.16fr)]">
         <section className="surface-card p-4">
@@ -174,7 +224,42 @@ export default function CalculatorResult() {
               <div className="mt-3 flex flex-wrap gap-2">
                 <span className="cp-chip">{snapshot.benchmarkCandidate.archetype}</span>
                 <span className="cp-chip">{snapshot.benchmarkCandidate.route.name}</span>
+                <span className="cp-chip">{snapshot.benchmarkCandidate.catalyst_domain === 'electrocatalyst' ? 'Electrocatalyst' : 'Thermocatalyst'}</span>
                 <span className="cp-chip">Evidence {snapshot.benchmarkCandidate.scores.evidence.toFixed(1)}</span>
+              </div>
+            </div>
+          ) : null}
+
+          {routeSummary ? (
+            <div className="mt-4 rounded-[24px] border border-sky-200 bg-sky-50/75 p-4">
+              <div className="cp-subtle-label !text-sky-700">Manufacturing route</div>
+              <div className="mt-2 cp-heading-sm">{routeSummary.name}</div>
+              <div className="mt-2 text-sm leading-6 text-sky-900">
+                {routeSummary.route_note || 'Template-driven route metadata is attached to this estimate.'}
+              </div>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <span className="cp-chip">{routeSummary.manufacturing_mode}</span>
+                <span className="cp-chip">{routeSummary.application_family}</span>
+              </div>
+              <div className="mt-4 grid gap-3 lg:grid-cols-3">
+                <div>
+                  <div className="cp-subtle-label !text-sky-700">Pre-treatment</div>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {routeSummary.preprocess.map((item) => <span key={item} className="cp-chip">{item}</span>)}
+                  </div>
+                </div>
+                <div>
+                  <div className="cp-subtle-label !text-sky-700">Synthesis</div>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {routeSummary.synthesis.map((item) => <span key={item} className="cp-chip">{item}</span>)}
+                  </div>
+                </div>
+                <div>
+                  <div className="cp-subtle-label !text-sky-700">Post-treatment</div>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {routeSummary.postprocess.map((item) => <span key={item} className="cp-chip">{item}</span>)}
+                  </div>
+                </div>
               </div>
             </div>
           ) : null}
@@ -220,6 +305,37 @@ export default function CalculatorResult() {
             <div className="flex items-center justify-between gap-3 text-sm"><span className="text-slate-600">Total material cost</span><span className="font-semibold text-slate-950">${toDisplay(result.materials.total_materials_cost_per_lb).toFixed(4)}{catLabel}</span></div>
             <div className="mt-2 text-xs leading-6 text-slate-500">CatCost step basis with backend escalation and margin treatment applied in the calculation engine.</div>
           </div>
+
+          {resolvedMaterials.length > 0 ? (
+            <div className="mt-4 rounded-[22px] border border-slate-900/8 bg-white/60 p-4">
+              <div className="cp-subtle-label">Source Records</div>
+              <div className="mt-3 grid gap-3">
+                {resolvedMaterials.map((material) => (
+                  <div key={`${material.used_for}-${material.material_key}`} className="rounded-[18px] border border-slate-200 bg-white px-4 py-3">
+                    <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                      <div className="min-w-0">
+                        <div className="font-semibold text-slate-950">{material.name}</div>
+                        <div className="mt-1 text-xs text-slate-500">
+                          {material.used_for} / {material.price_scope} / {material.pricing_basis}
+                        </div>
+                      </div>
+                      <div className="text-left sm:text-right">
+                        <div className="font-mono text-slate-900">
+                          ${material.price.toFixed(material.price < 1 ? 4 : 2)} {material.price_unit}
+                        </div>
+                        <div className="mt-1 text-xs text-slate-500">{material.quote_source}{material.quote_year ? ` / ${material.quote_year}` : ''}</div>
+                      </div>
+                    </div>
+                    {material.reference_url ? (
+                      <a href={material.reference_url} target="_blank" rel="noreferrer" className="mt-2 inline-flex text-xs text-sky-700 underline underline-offset-2">
+                        Source link
+                      </a>
+                    ) : null}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : null}
         </section>
       </div>
     </div>

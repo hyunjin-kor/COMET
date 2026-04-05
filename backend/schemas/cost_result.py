@@ -3,10 +3,19 @@
 from pydantic import BaseModel
 
 
+class MaterialComponentResult(BaseModel):
+    role: str
+    name: str
+    wt_pct: float
+    wt_frac: float
+    price_per_lb: float
+    precursor_markup: float
+    cost_per_lb_cat: float
+    cost_pct: float
+
+
 class MaterialsCostResult(BaseModel):
-    metal_precursor_cost_per_lb: float
-    support_cost_per_lb: float
-    solvent_cost_per_lb: float
+    components: list[MaterialComponentResult]
     total_materials_cost_per_lb: float
 
 
@@ -55,9 +64,47 @@ class CostSummary(BaseModel):
     processing_pct: float
 
 
+class ElectrodeLayerResult(BaseModel):
+    application_family: str
+    active_area_cm2: float
+    catalyst_loading_mg_cm2: float
+    catalyst_mass_g: float
+    catalyst_cost_usd: float
+    ionomer_to_catalyst_ratio: float
+    ionomer_pricing_mode: str
+    ionomer_solids_mass_g: float
+    ionomer_dispersion_volume_ml: float
+    ionomer_cost_usd: float
+    substrate_cost_usd: float
+    membrane_cost_usd: float
+    total_cost_usd: float
+    cost_per_cm2_usd: float
+    cost_per_m2_usd: float
+    breakdown: list[dict]
+
+
+class ProcessRouteSummary(BaseModel):
+    template_id: str
+    name: str
+    catalyst_domain: str
+    application_family: str
+    manufacturing_mode: str
+    preprocess: list[str]
+    synthesis: list[str]
+    postprocess: list[str]
+    quality_gates: list[str]
+    steps: list[str]
+    route_note: str
+    source: str
+    reference_urls: list[str]
+
+
 class CostCalculationResponse(BaseModel):
     input_summary: dict
     materials: MaterialsCostResult
     step_method: StepMethodResult
     spent_catalyst: SpentCatalystResult | None = None
+    electrode_model: ElectrodeLayerResult | None = None
+    route_summary: ProcessRouteSummary | None = None
+    resolved_materials: list[dict] = []
     summary: CostSummary

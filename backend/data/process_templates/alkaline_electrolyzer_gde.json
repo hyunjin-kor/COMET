@@ -1,0 +1,52 @@
+{
+  "id": "alkaline_electrolyzer_gde",
+  "name": "Alkaline Electrolyzer Electrode Route",
+  "description": "Alkaline or anion-exchange electrolyzer route with membrane conversion, ionomer dispersion handling, coating, drying, and activation proxies.",
+  "category": "Electrocatalyst / Alkaline Electrolyzer",
+  "catalyst_domain": "electrocatalyst",
+  "application_family": "electrolyzer",
+  "manufacturing_mode": "gde_or_ccm",
+  "example_catalysts": [
+    "Ni/C hydrogen-evolution catalyst",
+    "IrO2 oxygen-evolution catalyst",
+    "PtIr alloy benchmark catalyst"
+  ],
+  "preprocess": [
+    "Membrane hydration and ion-exchange conversion",
+    "Substrate preparation",
+    "Alkaline-stable binder staging"
+  ],
+  "synthesis": [
+    "Ionomer ink homogenization",
+    "Ultrasonic dispersion",
+    "CCM or GDE coating pass",
+    "Electrode drying below 100 C"
+  ],
+  "postprocess": [
+    "Hot press lamination",
+    "Electrochemical break-in"
+  ],
+  "quality_gates": [
+    "Catalyst loading verification",
+    "Hydroxide-form conductivity check",
+    "Activation voltage check"
+  ],
+  "steps": [
+    "membrane_pretreatment",
+    "substrate_pretreatment",
+    "ion_exchange_conversion",
+    "ionomer_ink_homogenization",
+    "ultrasonic_dispersion",
+    "ccm_coating_pass",
+    "electrode_drying_low_temp",
+    "hot_press_lamination",
+    "electrochemical_break_in"
+  ],
+  "route_note": "The alkaline route adds ion-exchange conversion and wet conditioning so membrane-form preparation is priced separately from PEM templates.",
+  "source": "Fuel Cell Store Sustainion, PiperION, and PDT AEM product pages with common alkaline-electrolyzer electrode conditioning practice",
+  "reference_urls": [
+    "https://www.fuelcellstore.com/sustainion-x37-50-grade-rt-membrane",
+    "https://www.fuelcellstore.com/pdt-50-eptfe-reinforced-aem-78010057",
+    "https://www.fuelcellstore.com/sustainion-xa-9-ionomer-ethanol"
+  ]
+}
