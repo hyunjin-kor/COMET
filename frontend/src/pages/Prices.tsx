@@ -11,7 +11,7 @@ import {
 } from 'recharts';
 import { WorkspaceSectionFooter, WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
 import { apiUrl, fetchPrices, type MetalPrice } from '../lib/api';
-import { LB_PER_KG, type Unit } from '../lib/unit-conversion';
+import { LB_PER_KG, TROY_OZ_PER_KG, TROY_OZ_PER_LB, type Unit } from '../lib/unit-conversion';
 import { useUnit } from '../lib/use-unit';
 
 type HistoryPoint = { date: string; price: number; open: number; high: number; low: number };
@@ -58,11 +58,12 @@ const FEED_SECTIONS: WorkspaceSection[] = [
 function convertTrackedPrice(price: number, rawUnit: string, displayUnit: Unit) {
   if (rawUnit === '$/lb') return displayUnit === 'kg' ? price * LB_PER_KG : price;
   if (rawUnit === '$/kg') return displayUnit === 'lb' ? price / LB_PER_KG : price;
+  if (rawUnit === '$/troy_oz') return displayUnit === 'kg' ? price * TROY_OZ_PER_KG : price * TROY_OZ_PER_LB;
   return price;
 }
 
 function displayTrackedUnit(rawUnit: string, displayUnit: Unit) {
-  if (rawUnit === '$/lb' || rawUnit === '$/kg') return `$/${displayUnit}`;
+  if (rawUnit === '$/lb' || rawUnit === '$/kg' || rawUnit === '$/troy_oz') return `$/${displayUnit}`;
   return rawUnit;
 }
 

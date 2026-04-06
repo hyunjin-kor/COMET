@@ -10,12 +10,12 @@
 
 <p align="center">
   <strong>Desktop-first catalyst cost estimator with live metal prices, transparent price evidence, and packaged Windows delivery.</strong><br />
-  CatCost-based economics, market-aware price inputs, preparation-aware step logic, and a dedicated result screen for readable desktop review.
+  Literature-referenced catalyst-cost economics, market-aware price inputs, preparation-aware step logic, and a dedicated result screen for readable desktop review.
 </p>
 
 <p align="center">
   <code>Windows app</code>
-  <code>CatCost workflow</code>
+  <code>Independent implementation</code>
   <code>Market evidence</code>
   <code>Result screen</code>
   <code>Installer download</code>
@@ -36,7 +36,7 @@ CatPrice is built to feel like shipped desktop software rather than a spreadshee
 ## Screen Roles
 
 - `Live Metal Prices` shows where each quote came from, how fresh it is, and how much confidence to place in it.
-- `Cost Estimate` is the main editing surface for composition, support basis, feed selection, and Step Method setup.
+- `Cost Estimate` is the main editing surface for composition, support basis, feed selection, and preparation-step setup.
 - `Literature Benchmarks` is an optional reference library for literature-backed catalyst families and route scoring.
 - `Result` is the reading surface for selling price, contribution structure, and component-level source review.
 
@@ -80,7 +80,7 @@ CatPrice is distributed as a desktop app. The public repository does not require
 
 ## What It Does
 
-- Estimates catalyst selling cost with the CatCost Step Method
+- Estimates catalyst selling cost with a step-based preparation cost model referenced to published catalyst-cost literature
 - Tracks metal inputs with `LIVE`, `INDEXED`, and `MANUAL` price states
 - Annotates market feeds with price-evidence confidence, freshness, and acquisition mode
 - Loads thermocatalyst and electrocatalyst reference families into the cost estimate workspace as editable starting points
@@ -146,13 +146,16 @@ npm run build
 npm run smoke:desktop
 ```
 
-## Academic Basis
+## References
 
-> Baddour, F. G., et al. (2018). Journal of the American Chemical Society.
->
-> Van Allsburg, K. M., et al. (2022). Early-stage evaluation of catalyst manufacturing cost and environmental impact using CatCost. Nature Catalysis.
+CatPrice is an independent repository and desktop application. The codebase, interface, packaged app, source-linked library, benchmark structure, and release workflow shown here were built for this project. The papers below are cited as method or benchmark references, not reused product assets.
 
-Current benchmark-library anchors now include top-journal thermocatalyst and electrocatalyst references such as:
+Method references:
+
+- Baddour, F. G., et al. (2018). Journal of the American Chemical Society.
+- Van Allsburg, K. M., et al. (2022). Early-stage evaluation of catalyst manufacturing cost and environmental impact using CatCost. Nature Catalysis.
+
+Selected benchmark references:
 
 - [Nature Communications 2023 on Ru ensembles for ammonia decomposition](https://doi.org/10.1038/s41467-023-36339-w)
 - [Nature Communications 2025 on Ni-CeO2-x photothermal ammonia decomposition](https://doi.org/10.1038/s41467-025-66325-3)
