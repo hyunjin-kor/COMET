@@ -930,7 +930,6 @@ export default function Calculator() {
                 key={value}
                 onClick={() => {
                   setCatalystDomain(value);
-                  sectionState.setActiveSection('composition');
                 }}
                 className={`rounded-[16px] px-3 py-2 text-xs font-semibold transition ${
                   catalystDomain === value ? 'bg-slate-950 text-white' : 'text-slate-600 hover:bg-white hover:text-slate-900'
