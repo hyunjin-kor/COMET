@@ -119,6 +119,16 @@ function sourceLinkLabel(material: MaterialItem) {
   }
 }
 
+function LibraryMetricTile({ label, value, detail }: { label: string; value: string; detail: string }) {
+  return (
+    <div className="rounded-[22px] border border-slate-900/8 bg-white/58 p-4">
+      <div className="cp-subtle-label">{label}</div>
+      <div className="mt-2 text-2xl font-display text-slate-950">{value}</div>
+      <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div>
+    </div>
+  );
+}
+
 export default function Library() {
   const sectionState = useWorkspaceSections(LIBRARY_SECTIONS, 'library');
   const tab = sectionState.activeSection.id as Tab;
@@ -131,6 +141,11 @@ export default function Library() {
   const [catalystDomain, setCatalystDomain] = useState<'' | CatalystDomain>('');
   const [applicationFamily, setApplicationFamily] = useState('');
   const [loading, setLoading] = useState(true);
+  const publicLinkCount = materials.filter((material) => Boolean(material.reference_url)).length;
+  const electrocatalystCount = materials.filter((material) => material.catalyst_domain === 'electrocatalyst').length;
+  const historicalOnlyCount = materials.filter(
+    (material) => material.price_scope === 'historical_bulk' && !material.reference_url,
+  ).length;
 
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(search), 300);
@@ -266,6 +281,13 @@ export default function Library() {
                   </select>
                 </div>
               </label>
+            </div>
+
+            <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+              <LibraryMetricTile label="Filtered rows" value={String(materials.length)} detail="Material rows visible under the current filters." />
+              <LibraryMetricTile label="Public links" value={String(publicLinkCount)} detail="Rows that open a source page directly." />
+              <LibraryMetricTile label="Electrocatalyst rows" value={String(electrocatalystCount)} detail="Rows tagged for electrocatalyst workflows." />
+              <LibraryMetricTile label="Archive-only rows" value={String(historicalOnlyCount)} detail="Historical bulk rows without a stable public URL." />
             </div>
 
             <div className="mt-5 overflow-hidden rounded-[28px] border border-slate-900/8 bg-white/58 backdrop-blur-xl">

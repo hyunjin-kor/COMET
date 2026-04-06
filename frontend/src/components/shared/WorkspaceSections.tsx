@@ -65,7 +65,7 @@ export function WorkspaceSectionNav({
   return (
     <section className="surface-card-soft px-4 py-4">
       <div>
-        <div className="cp-subtle-label">Sections</div>
+        <div className="cp-subtle-label">Workflow</div>
         <div className="mt-2 text-sm text-slate-600">
           Section {activeIndex + 1} of {sections.length}
         </div>
@@ -122,7 +122,7 @@ export function WorkspaceSectionFooter({
     <section className="surface-card-soft px-4 py-4">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <div className="cp-subtle-label">Continue</div>
+          <div className="cp-subtle-label">Step Navigation</div>
           <div className="mt-2 font-semibold text-slate-950">{activeSection.label}</div>
           <div className="mt-1 text-xs leading-5 text-slate-500">
             Section {activeIndex + 1} of {totalSections}. {activeSection.summary}
