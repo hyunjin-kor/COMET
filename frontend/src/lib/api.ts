@@ -7,6 +7,43 @@ export function apiUrl(path: string): string {
   return `${API_ROOT}${path}`;
 }
 
+function formatApiErrorDetail(detail: unknown): string {
+  if (typeof detail === 'string' && detail.trim()) {
+    return detail;
+  }
+
+  if (Array.isArray(detail)) {
+    const messages = detail
+      .map((item) => {
+        if (item && typeof item === 'object') {
+          const record = item as Record<string, unknown>;
+          const msg = typeof record.msg === 'string' ? record.msg : '';
+          const loc = Array.isArray(record.loc)
+            ? record.loc.filter((part) => part !== 'body').map(String).join(' -> ')
+            : '';
+          if (loc && msg) return `${loc}: ${msg}`;
+          if (msg) return msg;
+        }
+        return formatApiErrorDetail(item);
+      })
+      .filter(Boolean);
+
+    return messages.join(' | ');
+  }
+
+  if (detail && typeof detail === 'object') {
+    const record = detail as Record<string, unknown>;
+    if ('detail' in record) {
+      return formatApiErrorDetail(record.detail);
+    }
+    if (typeof record.msg === 'string' && record.msg.trim()) {
+      return record.msg;
+    }
+  }
+
+  return '';
+}
+
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(apiUrl(path), {
     headers: { 'Content-Type': 'application/json' },
@@ -14,7 +51,7 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({ detail: res.statusText }));
-    throw new Error(err.detail || res.statusText);
+    throw new Error(formatApiErrorDetail(err.detail ?? err) || res.statusText);
   }
   return res.json();
 }

@@ -38,6 +38,21 @@ class TestCalculator:
         })
         assert resp.status_code == 422
 
+    def test_calculate_rejects_zero_weight_component_with_structured_detail(self, client):
+        resp = client.post("/api/calculate", json={
+            "components": [
+                {"role": "active_metal", "name": "Ni", "wt_pct": 12.0, "price_per_lb": 7.50},
+                {"role": "promoter", "name": "", "wt_pct": 0.0, "price_per_lb": 0.0},
+                {"role": "support", "name": "Al2O3", "wt_pct": 88.0, "price_per_lb": 0.50},
+            ],
+            "steps": ["mixer_slurry", "incipient_wetness"],
+            "order_size_tons": 10.0,
+        })
+        assert resp.status_code == 422
+        payload = resp.json()
+        assert isinstance(payload["detail"], list)
+        assert payload["detail"][0]["loc"][-1] == "wt_pct"
+
     def test_calculate_quick(self, client):
         resp = client.post("/api/calculate/quick", json={
             "metal_symbol": "Pt",

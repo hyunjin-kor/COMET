@@ -9,8 +9,8 @@
 <h1 align="center">CatPrice</h1>
 
 <p align="center">
-  <strong>Desktop-first catalyst manufacturing cost estimator with live metal prices, transparent price evidence, and packaged Windows delivery.</strong><br />
-  CatCost-based economics, market-aware price inputs, manufacturing-aware step logic, and a dedicated result screen for readable desktop review.
+  <strong>Desktop-first catalyst cost estimator with live metal prices, transparent price evidence, and packaged Windows delivery.</strong><br />
+  CatCost-based economics, market-aware price inputs, preparation-aware step logic, and a dedicated result screen for readable desktop review.
 </p>
 
 <p align="center">
@@ -21,14 +21,14 @@
   <code>Installer download</code>
 </p>
 
-CatPrice is built to feel like shipped desktop software rather than a spreadsheet wrapper. The core workflow is reaction-agnostic: choose catalyst type, define composition, set the manufacturing method, sync current metal prices, and read a clean selling-cost estimate on a separate result screen. Optional literature benchmarks can still be loaded as reference starting points, but they do not define the product scope.
+CatPrice is built to feel like shipped desktop software rather than a spreadsheet wrapper. The core workflow is reaction-agnostic: choose catalyst type, define composition, set the preparation method, sync current metal prices, and read a clean selling-cost estimate on a separate result screen. Optional literature benchmarks can still be loaded as reference starting points, but they do not define the product scope.
 
 ## Workflow Framework
 
 | Stage | Screen | What you do | What CatPrice gives back |
 | --- | --- | --- | --- |
 | 1. Track the market | `Live Metal Prices` | Review live, indexed, and manual price bases with confidence and freshness metadata | A transparent sourcing basis for the catalyst recipe |
-| 2. Estimate the cost | `Cost Estimate` | Move through `Catalyst Type -> Composition -> Manufacturing -> Result` and run the estimate | A catalyst manufacturing estimate grounded in current price data |
+| 2. Estimate the cost | `Cost Estimate` | Move through `Catalyst Type -> Composition -> Preparation Method -> Result` and run the estimate | A catalyst preparation estimate grounded in current price data |
 | 3. Check published benchmarks | `Literature Benchmarks` | Review optional literature-backed catalyst families and load one as a starting point if useful | A fast reference path without forcing the main workflow |
 | 4. Review the output | `Result` | Open the final output on a dedicated reading surface | A clean result screen optimized for interpretation instead of editing |
 | 5. Iterate quickly | `Back to cost estimate` | Return to the cost estimate workspace, adjust pricing or steps, and rerun | The draft stays in place so scenario work remains fast |
@@ -44,10 +44,10 @@ CatPrice is built to feel like shipped desktop software rather than a spreadshee
 
 | Area | What CatPrice emphasizes |
 | --- | --- |
-| Core estimator | Reaction-agnostic catalyst manufacturing cost estimation |
+| Core estimator | Reaction-agnostic catalyst preparation cost estimation |
 | Price clarity | `LIVE`, `INDEXED`, and `MANUAL` states plus evidence confidence and freshness |
 | Workflow | Step-based workspace navigation with back/forward movement instead of long scroll stacks |
-| Manufacturing logic | Step Method, manufacturing extras, indexed escalation, and optional literature benchmarks |
+| Preparation logic | Step Method, preparation extras, indexed escalation, and optional literature benchmarks |
 | Research support | Literature-backed thermocatalyst and electrocatalyst benchmark families with explicit source banks |
 | Desktop release | Installer + unpacked app outputs for a clean Windows release path |
 
@@ -93,7 +93,7 @@ CatPrice is distributed as a desktop app. The public repository does not require
 
 ## App Mark
 
-The mark combines a catalyst chamber silhouette, internal particles, and an upward signal line. It is meant to read as catalyst manufacturing and market-aware pricing in a single desktop icon.
+The mark combines a catalyst chamber silhouette, internal particles, and an upward signal line. It is meant to read as catalyst preparation and market-aware pricing in a single desktop icon.
 
 ## Desktop Release
 
