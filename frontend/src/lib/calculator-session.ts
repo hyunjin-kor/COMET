@@ -64,22 +64,6 @@ function canUseSessionStorage(): boolean {
   return typeof window !== 'undefined' && typeof window.sessionStorage !== 'undefined';
 }
 
-function readJson<T>(key: string): T | null {
-  if (!canUseStorage()) return null;
-
-  try {
-    const raw = window.localStorage.getItem(key);
-    return raw ? (JSON.parse(raw) as T) : null;
-  } catch {
-    return null;
-  }
-}
-
-function writeJson<T>(key: string, value: T): void {
-  if (!canUseStorage()) return;
-  window.localStorage.setItem(key, JSON.stringify(value));
-}
-
 function readSessionJson<T>(key: string): T | null {
   if (!canUseSessionStorage()) return null;
 
@@ -97,11 +81,15 @@ function writeSessionJson<T>(key: string, value: T): void {
 }
 
 export function loadCalculatorDraft(): CalculatorDraft | null {
-  return readJson<CalculatorDraft>(DRAFT_KEY);
+  if (canUseStorage()) {
+    // Clear legacy persistent drafts so reopening the desktop app starts clean.
+    window.localStorage.removeItem(DRAFT_KEY);
+  }
+  return readSessionJson<CalculatorDraft>(DRAFT_KEY);
 }
 
 export function saveCalculatorDraft(draft: CalculatorDraft): void {
-  writeJson(DRAFT_KEY, draft);
+  writeSessionJson(DRAFT_KEY, draft);
 }
 
 export function loadCalculatorResultSnapshot(): CalculatorResultSnapshot | null {
