@@ -275,7 +275,7 @@ export default function Compare() {
           <div className="mt-4 grid gap-4 xl:grid-cols-[minmax(0,1.02fr)_minmax(320px,0.98fr)]">
             <div className="space-y-4">
               <div className="surface-ghost p-4">
-                <div className="cp-subtle-label">Manufacturing route</div>
+                <div className="cp-subtle-label">Preparation method</div>
                 <div className="mt-2 cp-heading-sm">{activeCandidate.route.name}</div>
                 <div className="mt-2 text-sm leading-7 text-slate-600">{activeCandidate.route.route_note}</div>
                 <div className="mt-3 flex flex-wrap gap-2"><span className="cp-chip">{activeCandidate.route.manufacturing_mode}</span><span className="cp-chip">{activeCandidate.summary.temperature_window_c[0]}-{activeCandidate.summary.temperature_window_c[1]} C</span><span className="cp-chip">{activeCandidate.summary.scale} scale</span></div>

@@ -8,7 +8,7 @@ import { useUnit } from '../lib/use-unit';
 const CHART_COLORS = ['#78f2d0', '#88a8ff', '#efc36c', '#f3a08d', '#c5b7ff', '#8de0ff'];
 const RESULT_SECTIONS: WorkspaceSection[] = [
   { id: 'summary', label: 'Summary', summary: 'Headline price and result status.' },
-  { id: 'manufacturing', label: 'Manufacturing', summary: 'Cost structure and manufacturing context.' },
+  { id: 'manufacturing', label: 'Preparation Method', summary: 'Cost structure and preparation context.' },
   { id: 'sources', label: 'Sources', summary: 'Component and source records.' },
 ];
 
@@ -99,7 +99,7 @@ export default function CalculatorResult() {
           <div className="max-w-3xl">
             <span className="section-kicker">Result</span>
             <h1 className="cp-heading-xl mt-4">Read the latest result on a dedicated screen.</h1>
-            <p className="cp-body-copy mt-3 max-w-2xl">Inputs stay in the cost estimate workspace. This screen is for reading cost, manufacturing, and source evidence without editing noise.</p>
+            <p className="cp-body-copy mt-3 max-w-2xl">Inputs stay in the cost estimate workspace. This screen is for reading cost, preparation, and source evidence without editing noise.</p>
           </div>
           <button onClick={goBackToCalculator} className="cp-button-primary">Back to cost estimate</button>
         </div>
@@ -119,7 +119,7 @@ export default function CalculatorResult() {
                 <span className="cp-chip-dark">Generated {generatedAt}</span>
                 <span className="cp-chip-dark">{catalystDomain}</span>
                 <span className="cp-chip-dark">{snapshot.selectedSupportName ?? 'Support pending'}</span>
-                <span className="cp-chip-dark">{snapshot.stepLabels.length} manufacturing steps</span>
+                <span className="cp-chip-dark">{snapshot.stepLabels.length} preparation steps</span>
                 {snapshot.benchmarkCandidate ? <span className="cp-chip-dark">{snapshot.benchmarkCandidate.title}</span> : null}
               </div>
             </div>
@@ -190,7 +190,7 @@ export default function CalculatorResult() {
         <section className="surface-card p-4">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
-              <div className="cp-subtle-label">Manufacturing + Cost</div>
+              <div className="cp-subtle-label">Preparation Method + Cost</div>
               <div className="cp-heading-lg mt-2">Read the estimate at a glance</div>
             </div>
             <span className="cp-chip">{result.materials.components.length} materials</span>
@@ -200,7 +200,7 @@ export default function CalculatorResult() {
             <MetricTile label="Active metals" value={String(snapshot.activeMetalCount)} detail="Named active inputs" />
             <MetricTile label="Recipe load" value={`${snapshot.nonSupportWt.toFixed(1)} wt%`} detail={`Support closes at ${snapshot.supportWtPct.toFixed(1)} wt%`} />
             <MetricTile label="Support" value={snapshot.selectedSupportName ?? 'Pending'} detail="Current support basis" />
-            <MetricTile label="Manufacturing steps" value={String(snapshot.stepLabels.length)} detail="Selected manufacturing steps" />
+            <MetricTile label="Preparation steps" value={String(snapshot.stepLabels.length)} detail="Selected preparation steps" />
           </div>
 
           <div className="mt-4 grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(240px,0.88fr)]">
@@ -240,7 +240,7 @@ export default function CalculatorResult() {
           </div>
 
           <div className="mt-4 border-t border-slate-900/8 pt-4">
-            <div className="cp-subtle-label">Manufacturing Steps</div>
+            <div className="cp-subtle-label">Preparation Steps</div>
             <div className="mt-3 flex flex-wrap gap-2">
               {snapshot.stepLabels.map((label) => <span key={label} className="cp-chip">{label}</span>)}
             </div>
@@ -262,7 +262,7 @@ export default function CalculatorResult() {
 
           {routeSummary ? (
             <div className="mt-4 rounded-[24px] border border-sky-200 bg-sky-50/75 p-4">
-              <div className="cp-subtle-label !text-sky-700">Manufacturing method</div>
+              <div className="cp-subtle-label !text-sky-700">Preparation method</div>
               <div className="mt-2 cp-heading-sm">{routeSummary.name}</div>
               <div className="mt-2 text-sm leading-6 text-sky-900">
                 {routeSummary.route_note || 'Template-driven route metadata is attached to this estimate.'}

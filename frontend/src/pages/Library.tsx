@@ -435,7 +435,7 @@ export default function Library() {
                   <p className="mt-3 text-sm leading-7 text-slate-600">{template.description}</p>
 
                   {template.manufacturing_mode ? (
-                    <div className="mt-3 text-xs text-slate-500">Mode: {template.manufacturing_mode}</div>
+                    <div className="mt-3 text-xs text-slate-500">Preparation method: {template.manufacturing_mode}</div>
                   ) : null}
 
                   {template.example_catalysts.length > 0 && (

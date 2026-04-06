@@ -84,7 +84,7 @@ const ELECTRO_APPLICATION_OPTIONS: Array<{ value: ApplicationFamily; label: stri
 const ESTIMATE_SECTIONS: WorkspaceSection[] = [
   { id: 'type', label: 'Catalyst Type', summary: 'Choose thermocatalyst or electrocatalyst.' },
   { id: 'composition', label: 'Composition', summary: 'Set recipe rows or the electrode stack.' },
-  { id: 'manufacturing', label: 'Manufacturing', summary: 'Set campaign scale and manufacturing steps.' },
+  { id: 'manufacturing', label: 'Preparation Method', summary: 'Set campaign scale and preparation steps.' },
   { id: 'result', label: 'Result', summary: 'Run the estimate and open the result screen.' },
 ];
 
@@ -129,6 +129,20 @@ const defaultElectrocatalystConfig = (): ElectrocatalystDraft => ({
   ionomerToCatalystRatio: 0.8,
   templateId: 'pem_fuel_cell_ccm',
 });
+
+function hasNamedRow(row: CalculatorRow) {
+  return row.name.trim().length > 0;
+}
+
+function isCompletedThermalRow(row: CalculatorRow) {
+  return hasNamedRow(row) && row.wt_pct > 0;
+}
+
+function isIncompleteThermalRow(row: CalculatorRow) {
+  const hasName = hasNamedRow(row);
+  const hasWeight = row.wt_pct > 0;
+  return hasName !== hasWeight;
+}
 
 function applicationFamilyLabel(value: ApplicationFamily) {
   return ELECTRO_APPLICATION_OPTIONS.find((option) => option.value === value)?.label ?? value;
@@ -469,13 +483,16 @@ export default function Calculator() {
   });
   const removeRow = (id: string) => setRows((previous) => previous.filter((row) => row.id !== id));
   const toggleStep = (stepKey: string) => setSteps((previous) => previous.includes(stepKey) ? previous.filter((item) => item !== stepKey) : [...previous, stepKey]);
-  const nonSupportWt = rows.filter((row) => row.role !== 'support').reduce((sum, row) => sum + row.wt_pct, 0);
+  const thermalDraftRows = rows.filter((row) => row.role !== 'support');
+  const completedThermalRows = thermalDraftRows.filter(isCompletedThermalRow);
+  const incompleteThermalRows = thermalDraftRows.filter(isIncompleteThermalRow);
+  const nonSupportWt = completedThermalRows.reduce((sum, row) => sum + row.wt_pct, 0);
   const supportWtPct = Math.max(0, 100 - nonSupportWt);
   const selectedSupport = rows.find((row) => row.role === 'support');
   const liveFeedCount = Object.values(liveMap).filter((feed) => feed.source_type === 'live').length;
   const indexedFeedCount = Object.values(liveMap).filter((feed) => feed.source_type === 'indexed').length;
-  const activeMetalCount = rows.filter((row) => row.role === 'active_metal' && row.name.trim()).length;
-  const isThermalValid = activeMetalCount > 0 && nonSupportWt > 0 && nonSupportWt <= 100;
+  const activeMetalCount = completedThermalRows.filter((row) => row.role === 'active_metal').length;
+  const isThermalValid = activeMetalCount > 0 && nonSupportWt > 0 && nonSupportWt < 100 && incompleteThermalRows.length === 0;
   const isElectroValid = Boolean(
     electrocatalystConfig.catalystMaterialKey
       && electrocatalystConfig.ionomerMaterialKey
@@ -533,7 +550,7 @@ export default function Calculator() {
         supportName = supportRow.name;
 
         const components: ComponentInput[] = [
-          ...rows.filter((row) => row.role !== 'support').map((row) => ({ role: row.role, name: row.name, wt_pct: row.wt_pct, price_per_lb: row.price_per_lb })),
+          ...completedThermalRows.map((row) => ({ role: row.role, name: row.name, wt_pct: row.wt_pct, price_per_lb: row.price_per_lb })),
           { role: 'support', name: supportRow.name, wt_pct: supportWtPct, price_per_lb: supportRow.price_per_lb },
         ];
         input = {
@@ -565,7 +582,13 @@ export default function Calculator() {
       setLatestSnapshot(snapshot);
       navigate('/calculator/result');
     } catch (caughtError: unknown) {
-      setError(caughtError instanceof Error ? caughtError.message : String(caughtError));
+      setError(
+        caughtError instanceof Error
+          ? caughtError.message
+          : typeof caughtError === 'string'
+            ? caughtError
+            : 'Unexpected calculation error. Review the composition rows and try again.',
+      );
     } finally {
       setLoading(false);
     }
@@ -633,7 +656,7 @@ export default function Calculator() {
           <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_320px] xl:items-start">
             <div>
               <div className="cp-subtle-label">Electrode stack</div>
-              <div className="cp-heading-lg mt-2">Set the stack first, then price the manufacturing method.</div>
+              <div className="cp-heading-lg mt-2">Set the stack first, then price the preparation method.</div>
               <p className="mt-2 text-sm leading-7 text-slate-600">
                 Catalyst powder, ionomer, membrane, and substrate each keep their own source record.
               </p>
@@ -747,7 +770,7 @@ export default function Calculator() {
               </label>
 
               <label className="block sm:col-span-2">
-                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Manufacturing template</div>
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Preparation template</div>
                 <select value={electrocatalystConfig.templateId} onChange={(event) => updateElectroConfig({ templateId: event.target.value })} className="input-base mt-2">
                   {electroTemplates.map((template) => (
                     <option key={template.id} value={template.id}>
@@ -769,7 +792,7 @@ export default function Calculator() {
 
         {activeElectroTemplate ? (
           <div className="rounded-[24px] border border-emerald-200 bg-emerald-50/80 p-4">
-            <div className="cp-subtle-label !text-emerald-700">Selected manufacturing template</div>
+            <div className="cp-subtle-label !text-emerald-700">Selected preparation template</div>
             <div className="mt-2 cp-heading-sm">{activeElectroTemplate.name}</div>
             <div className="mt-2 text-sm leading-6 text-emerald-900">{activeElectroTemplate.description}</div>
             <div className="mt-3 flex flex-wrap gap-2">
@@ -807,7 +830,7 @@ export default function Calculator() {
     const items = rows.filter((row) => row.role === role);
       const copy = role === 'active_metal'
       ? { title: 'Active metals', description: 'These rows define the core cost basis and live price mapping.', accent: 'bg-[#78f2d0]', button: 'Add active metal', placeholder: 'At least one active metal is required.' }
-      : { title: 'Promoters', description: 'Optional additives that change recipe cost and manufacturing choice.', accent: 'bg-[#88a8ff]', button: 'Add promoter', placeholder: 'No promoters added yet.' };
+      : { title: 'Promoters', description: 'Optional additives that change recipe cost and preparation choice.', accent: 'bg-[#88a8ff]', button: 'Add promoter', placeholder: 'No promoters added yet.' };
 
     return (
       <div className="space-y-3">
@@ -881,7 +904,7 @@ export default function Calculator() {
           </div>
 
           <div className="rounded-[24px] border border-slate-900/8 bg-white/56 px-4 py-3 text-xs leading-6 text-slate-600">
-            The result screen is optimized for reading. Return here when you want to change materials, price sources, or manufacturing steps.
+            The result screen is optimized for reading. Return here when you want to change materials, price sources, or preparation steps.
           </div>
         </div>
       </section>
@@ -897,8 +920,8 @@ export default function Calculator() {
             <div className="cp-heading-sm mt-2">{catalystDomainLabel(catalystDomain)}</div>
             <p className="mt-2 text-xs leading-6 text-slate-500">
               {catalystDomain === 'electrocatalyst'
-                ? 'Electrocatalyst separates powder, ionomer, membrane, and substrate in one manufacturing estimate.'
-                : 'Thermocatalyst keeps bulk composition, support basis, and manufacturing steps in one estimate.'}
+                ? 'Electrocatalyst separates powder, ionomer, membrane, and substrate in one preparation estimate.'
+                : 'Thermocatalyst keeps bulk composition, support basis, and preparation steps in one estimate.'}
             </p>
           </div>
           <div className="cp-toolbar">
@@ -951,7 +974,7 @@ export default function Calculator() {
   function renderManufacturingSection() {
     return (
       <div className="space-y-4">
-        <div><div className="cp-subtle-label">Manufacturing</div><h2 className="cp-heading-xl mt-2">{catalystDomain === 'electrocatalyst' ? 'Choose the manufacturing method' : 'Choose the manufacturing method'}</h2><p className="cp-body-copy mt-2 max-w-2xl">{catalystDomain === 'electrocatalyst' ? 'Templates add pretreatment, coating, drying, lamination, and break-in steps. You can still adjust the steps below.' : 'Pick the industrial steps that best approximate the synthesis method, then let campaign size set the scale basis.'}</p></div>
+        <div><div className="cp-subtle-label">Preparation Method</div><h2 className="cp-heading-xl mt-2">{catalystDomain === 'electrocatalyst' ? 'Choose the preparation method' : 'Choose the preparation method'}</h2><p className="cp-body-copy mt-2 max-w-2xl">{catalystDomain === 'electrocatalyst' ? 'Templates add pretreatment, coating, drying, lamination, and break-in steps. You can still adjust the steps below.' : 'Pick the industrial steps that best approximate the synthesis method, then let campaign size set the scale basis.'}</p></div>
         {selectedBenchmark ? (
           <div className="rounded-[24px] border border-emerald-200 bg-emerald-50/80 px-4 py-4 text-sm text-emerald-900">
             <div className="cp-subtle-label !text-emerald-700">Loaded reference baseline</div>
@@ -991,13 +1014,15 @@ export default function Calculator() {
   const validationMessage = catalystDomain === 'electrocatalyst'
     ? isValid
       ? `Electrocatalyst stack is ready: ${selectedCatalystMaterial?.name ?? 'catalyst'}, ${selectedIonomerMaterial?.name ?? 'ionomer'}, ${selectedMembraneMaterial?.name ?? 'membrane'}, and ${selectedSubstrateMaterial?.name ?? 'GDL'} are all sourced from the library.`
-      : 'Select catalyst powder, ionomer, membrane, substrate / GDL, and a manufacturing template before running the estimate.'
+      : 'Select catalyst powder, ionomer, membrane, substrate / GDL, and a preparation template before running the estimate.'
     : isValid
       ? `Recipe balance is valid: ${nonSupportWt.toFixed(1)} wt% actives and promoters, ${supportWtPct.toFixed(1)} wt% support.`
-      : activeMetalCount === 0
+      : incompleteThermalRows.length > 0
+        ? `Complete or remove ${incompleteThermalRows.length} unfinished composition row${incompleteThermalRows.length > 1 ? 's' : ''} before running the estimate.`
+        : activeMetalCount === 0
         ? 'Add at least one active metal before running the estimate.'
-        : nonSupportWt > 100
-          ? 'Active metals and promoters exceed 100 wt%.'
+        : nonSupportWt >= 100
+          ? 'Active metals and promoters must stay below 100 wt% so support remains positive.'
           : 'Enter a valid non-zero loading for the active portion of the recipe.';
 
   return (
@@ -1008,11 +1033,11 @@ export default function Calculator() {
           <div className="flex flex-col gap-4 border-b border-slate-900/8 pb-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <div className="cp-subtle-label">Cost Estimate</div>
-              <h2 className="cp-heading-xl mt-2">Estimate catalyst manufacturing cost</h2>
+              <h2 className="cp-heading-xl mt-2">Estimate catalyst preparation cost</h2>
               <p className="cp-body-copy mt-2 max-w-2xl">
                 {catalystDomain === 'electrocatalyst'
-                  ? 'Choose the electrode stack, then set manufacturing steps and campaign scale.'
-                  : 'Set catalyst composition and price sources first, then choose the manufacturing method.'}
+                  ? 'Choose the electrode stack, then set preparation steps and campaign scale.'
+                  : 'Set catalyst composition and price sources first, then choose the preparation method.'}
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
@@ -1023,7 +1048,7 @@ export default function Calculator() {
 
           <div className="grid gap-2.5 md:grid-cols-3">
             <MetricTile label="Price sources" value={String(liveFeedCount + indexedFeedCount)} detail={`${liveFeedCount} live / ${indexedFeedCount} indexed`} />
-            <MetricTile label="Manufacturing steps" value={String(steps.length)} detail={steps.length > 0 ? 'Selected manufacturing path' : 'Select at least one step'} />
+            <MetricTile label="Preparation steps" value={String(steps.length)} detail={steps.length > 0 ? 'Selected preparation path' : 'Select at least one step'} />
             <MetricTile label="Campaign scale" value={scale.label} detail={`${orderSize} tons / ${scale.rate}`} />
           </div>
         </div>
