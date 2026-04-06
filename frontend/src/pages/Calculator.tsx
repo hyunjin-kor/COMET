@@ -1032,16 +1032,33 @@ export default function Calculator() {
           <div className="flex flex-col gap-4 border-b border-slate-900/8 pb-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <div className="cp-subtle-label">Cost Estimate</div>
-              <h2 className="cp-heading-xl mt-2">Estimate catalyst preparation cost</h2>
+              <h2 className="cp-heading-xl mt-2">Build an evidence-backed catalyst estimate</h2>
               <p className="cp-body-copy mt-2 max-w-2xl">
                 {catalystDomain === 'electrocatalyst'
-                  ? 'Choose the electrode stack, then set preparation steps and campaign scale.'
-                  : 'Set catalyst composition and price sources first, then choose the preparation method.'}
+                  ? 'Choose the electrode stack, then set the preparation method and campaign scale.'
+                  : 'Set catalyst composition and price sources first, then lock the preparation method.'}
               </p>
             </div>
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="cp-chip">{pricesUpdatedAt ? `Prices synced ${pricesUpdatedAt.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}` : 'Live price sync pending'}</span>
-              <button onClick={syncPrices} disabled={refreshing} className="cp-button-secondary"><span className={`mr-2 inline-flex h-4 w-4 rounded-full border-2 border-current border-t-transparent ${refreshing ? 'animate-spin' : ''}`} />{refreshing ? 'Updating prices' : 'Update live prices'}</button>
+            <div className="flex min-w-[280px] flex-col gap-2 rounded-[22px] border border-slate-200 bg-white/76 px-4 py-3 lg:items-end">
+              <div className="cp-subtle-label">Quote Basis</div>
+              <div className="text-right">
+                <div className="text-sm font-semibold text-slate-950">
+                  {refreshing ? 'Refreshing price basis' : pricesUpdatedAt ? 'Price basis ready' : 'Price basis pending'}
+                </div>
+                <div className="mt-1 text-xs leading-5 text-slate-500">
+                  {pricesUpdatedAt
+                    ? `${liveFeedCount} live and ${indexedFeedCount} indexed rows synced ${pricesUpdatedAt.toLocaleTimeString('en-US', {
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        hour12: true,
+                      })}`
+                    : 'The estimate can still run from indexed and manual rows before a live refresh.'}
+                </div>
+              </div>
+              <button onClick={syncPrices} disabled={refreshing} className="cp-button-secondary">
+                <span className={`mr-2 inline-flex h-4 w-4 rounded-full border-2 border-current border-t-transparent ${refreshing ? 'animate-spin' : ''}`} />
+                {refreshing ? 'Refreshing now' : 'Refresh price basis'}
+              </button>
             </div>
           </div>
 

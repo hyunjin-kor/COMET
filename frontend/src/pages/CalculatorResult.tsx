@@ -2,6 +2,7 @@ import { useLayoutEffect, useState } from 'react';
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 import { useNavigate } from 'react-router-dom';
 import { WorkspaceSectionFooter, WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
+import type { CostResult } from '../lib/api';
 import { loadCalculatorResultSnapshot } from '../lib/calculator-session';
 import { useUnit } from '../lib/use-unit';
 
@@ -26,6 +27,31 @@ function sourceRecordTone(priceScope: string, hasLink: boolean) {
   if (hasLink) return 'border-emerald-200 bg-emerald-50 text-emerald-700';
   if (priceScope === 'historical_bulk') return 'border-amber-200 bg-amber-50 text-amber-700';
   return 'border-slate-200 bg-white text-slate-600';
+}
+
+function formatResolvedPack(material: NonNullable<CostResult['resolved_materials']>[number]) {
+  if (!material.pack_quantity || !material.pack_unit) return 'Pack not stated';
+  return `${material.pack_quantity} ${material.pack_unit} pack`;
+}
+
+function formatResolvedNormalization(
+  material: NonNullable<CostResult['resolved_materials']>[number],
+  toDisplay: (value: number) => number,
+  fmtLabel: string,
+) {
+  if (typeof material.normalized_price_per_lb === 'number') {
+    return `$${toDisplay(material.normalized_price_per_lb).toFixed(3)}${fmtLabel}`;
+  }
+  if (typeof material.normalized_price_per_cm2 === 'number') {
+    return `$${material.normalized_price_per_cm2.toFixed(4)}/cm2`;
+  }
+  if (typeof material.normalized_price_per_ml === 'number') {
+    return `$${material.normalized_price_per_ml.toFixed(4)}/mL`;
+  }
+  if (typeof material.normalized_price_per_kg_solids === 'number') {
+    return `$${material.normalized_price_per_kg_solids.toFixed(2)}/kg solids`;
+  }
+  return 'Not stored';
 }
 
 function MetricTile({ label, value, detail, dark = false }: { label: string; value: string; detail: string; dark?: boolean }) {
@@ -81,6 +107,15 @@ export default function CalculatorResult() {
   const routeSummary = result.route_summary ?? null;
   const electrodeModel = result.electrode_model ?? null;
   const resolvedMaterials = result.resolved_materials ?? [];
+  const publicSourceCount = resolvedMaterials.filter((material) => Boolean(material.reference_url)).length;
+  const historicalOnlyCount = resolvedMaterials.filter(
+    (material) => material.price_scope === 'historical_bulk' && !material.reference_url,
+  ).length;
+  const latestQuoteYear = resolvedMaterials.reduce<number | null>(
+    (latest, material) => (material.quote_year && (!latest || material.quote_year > latest) ? material.quote_year : latest),
+    null,
+  );
+  const routeReferenceCount = routeSummary?.reference_urls?.length ?? 0;
   const summaryRows = [
     { label: 'Materials', share: result.summary.materials_pct, value: `$${toDisplay(result.materials.total_materials_cost_per_lb).toFixed(3)}${fmtLabel}` },
     { label: 'Processing', share: result.summary.processing_pct, value: `$${toDisplay(Number(result.step_method.processing_cost_per_lb)).toFixed(3)}${fmtLabel}` },
@@ -140,6 +175,36 @@ export default function CalculatorResult() {
         activeIndex={sectionState.activeIndex}
         onSelect={sectionState.setActiveSection}
       />
+
+      {sectionState.activeSection.id === 'summary' ? (
+        <section className="surface-card p-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <div className="cp-subtle-label">Why This Estimate</div>
+              <div className="cp-heading-lg mt-2">Read the evidence basis before you trust the number.</div>
+              <div className="mt-1 text-xs leading-6 text-slate-500">
+                The result ties together live feeds, indexed library rows, route metadata, and public source links when they are available.
+              </div>
+            </div>
+            <span className="cp-chip">{snapshot.benchmarkCandidate ? 'Benchmark-loaded starting point' : 'Direct workspace build'}</span>
+          </div>
+
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            <MetricTile
+              label="Public links"
+              value={resolvedMaterials.length ? `${publicSourceCount}/${resolvedMaterials.length}` : '0'}
+              detail="Resolved source rows with a public URL."
+            />
+            <MetricTile label="Live inputs" value={String(snapshot.liveFeedCount)} detail="Rows backed by current market feeds." />
+            <MetricTile label="Indexed inputs" value={String(snapshot.indexedFeedCount)} detail="Rows still usable without a live quote." />
+            <MetricTile
+              label="Latest quote year"
+              value={latestQuoteYear ? String(latestQuoteYear) : 'N/A'}
+              detail={`${routeReferenceCount} route references and ${historicalOnlyCount} archive-only rows.`}
+            />
+          </div>
+        </section>
+      ) : null}
 
       {sectionState.activeSection.id === 'summary' && result.warnings?.length ? (
         <section className="surface-card border border-amber-200 bg-amber-50/70 p-4 text-sm text-amber-900">
@@ -302,7 +367,7 @@ export default function CalculatorResult() {
             <div className="min-w-0">
               <div className="cp-subtle-label">Sources</div>
               <div className="cp-heading-lg mt-2">Catalyst component sources</div>
-              <div className="mt-1 text-xs leading-6 text-slate-500">Per-component loading, source cost, and contribution inside the selling-price estimate.</div>
+              <div className="mt-1 text-xs leading-6 text-slate-500">Per-component loading, raw quote, normalization basis, and contribution inside the selling-price estimate.</div>
             </div>
             <span className="cp-chip shrink-0">{snapshot.selectedSupportName ?? 'Support'}</span>
           </div>
@@ -361,6 +426,22 @@ export default function CalculatorResult() {
                             {sourceRecordLabel(material.price_scope, Boolean(material.reference_url))}
                           </span>
                         </div>
+                      </div>
+                    </div>
+                    <div className="mt-3 grid gap-2.5 sm:grid-cols-3">
+                      <div className="rounded-[16px] border border-slate-200 bg-slate-50/80 px-3 py-2.5">
+                        <div className="cp-subtle-label">Pack Basis</div>
+                        <div className="mt-1 text-sm font-semibold text-slate-900">{formatResolvedPack(material)}</div>
+                      </div>
+                      <div className="rounded-[16px] border border-slate-200 bg-slate-50/80 px-3 py-2.5">
+                        <div className="cp-subtle-label">Normalization</div>
+                        <div className="mt-1 text-sm font-semibold text-slate-900">
+                          {formatResolvedNormalization(material, toDisplay, fmtLabel)}
+                        </div>
+                      </div>
+                      <div className="rounded-[16px] border border-slate-200 bg-slate-50/80 px-3 py-2.5">
+                        <div className="cp-subtle-label">Pricing Basis</div>
+                        <div className="mt-1 text-sm font-semibold text-slate-900">{material.pricing_basis.replace(/_/g, ' ')}</div>
                       </div>
                     </div>
                     {material.reference_url ? (

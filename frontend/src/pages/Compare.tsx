@@ -194,7 +194,7 @@ export default function Compare() {
           <div className="grid gap-4 xl:grid-cols-[minmax(0,1.1fr)_minmax(330px,0.9fr)]">
             <div className="surface-ink overflow-hidden p-5 sm:p-6">
               <div className="cp-subtle-label !text-slate-400">Literature Benchmarks</div>
-              <h1 className="mt-3 font-display text-[clamp(2rem,4vw,3.5rem)] leading-[0.94] text-white">Compare published routes before you estimate.</h1>
+              <h1 className="mt-3 font-display text-[clamp(2rem,4vw,3.5rem)] leading-[0.94] text-white">Screen published routes before you change the workspace.</h1>
               <div className="mt-3 flex flex-wrap gap-2">
                 {activeFamily ? <span className="cp-chip-dark">{activeFamily.title}</span> : null}
                 {benchmark.reaction ? <span className="cp-chip-dark">{benchmark.reaction}</span> : null}
@@ -205,10 +205,11 @@ export default function Compare() {
               </div>
               <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">{benchmark.objective}</p>
               {winner ? (
-                <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
                   <div className="cp-metric-tile-dark"><div className="cp-subtle-label !text-slate-400">Top route</div><div className="mt-2 text-xl font-display text-white">{winner.title}</div></div>
                   <div className="cp-metric-tile-dark"><div className="cp-subtle-label !text-slate-400">{winner.summary.economics_basis_label}</div><div className="mt-2 text-xl font-display text-white">{benchmarkCostValue(winner)}</div><div className="mt-1 text-xs text-slate-400">{benchmarkCostDetail(winner)}</div></div>
                   <div className="cp-metric-tile-dark"><div className="cp-subtle-label !text-slate-400">Evidence</div><div className="mt-2 text-xl font-display text-white">{winner.scores.evidence.toFixed(1)}</div></div>
+                  <div className="cp-metric-tile-dark"><div className="cp-subtle-label !text-slate-400">Family bank</div><div className="mt-2 text-xl font-display text-white">{benchmark.citations.length}</div><div className="mt-1 text-xs text-slate-400">Public benchmark links in the active family</div></div>
                 </div>
               ) : null}
             </div>
@@ -234,6 +235,9 @@ export default function Compare() {
                       <div className="mt-1 text-xs leading-5 text-slate-500">{option.note}</div>
                     </button>
                   ))}
+                </div>
+                <div className="mt-3 text-xs leading-6 text-slate-500">
+                  Profiles change ranking logic only. Candidate records, evidence anchors, and family-bank links remain visible in every mode.
                 </div>
               </div>
             </div>
@@ -271,6 +275,12 @@ export default function Compare() {
             <MetricTile label="Materials" value={`$${toDisplay(activeCandidate.summary.materials_cost_per_lb).toFixed(2)}`} detail="Raw material stack" />
             <MetricTile label="Processing" value={`$${toDisplay(activeCandidate.summary.processing_cost_per_lb).toFixed(2)}`} detail="Step-method operations" />
             <MetricTile label="Route extras" value={`$${toDisplay(activeCandidate.summary.route_extra_cost_per_lb).toFixed(2)}`} detail="QA + activation + route overhead" />
+          </div>
+          <div className="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+            <MetricTile label="Evidence anchors" value={String(activeCandidate.literature_basis.length)} detail="Direct links supporting the selected route." />
+            <MetricTile label="Family bank" value={String(benchmark.citations.length)} detail="Higher-level references visible across the family." />
+            <MetricTile label="Screening basis" value={activeCandidate.screening_basis} detail="How this route is framed in the benchmark set." />
+            <MetricTile label="Decision profile" value={benchmark.decision_profile.label} detail="Current weighting logic for ranking." />
           </div>
           <div className="mt-4 grid gap-4 xl:grid-cols-[minmax(0,1.02fr)_minmax(320px,0.98fr)]">
             <div className="space-y-4">

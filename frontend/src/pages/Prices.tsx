@@ -10,7 +10,7 @@ import {
   YAxis,
 } from 'recharts';
 import { WorkspaceSectionFooter, WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
-import { apiUrl, fetchPrices, type MetalPrice } from '../lib/api';
+import { apiUrl, fetchPrices, refreshPrices, type MetalPrice } from '../lib/api';
 import { LB_PER_KG, TROY_OZ_PER_KG, TROY_OZ_PER_LB, type Unit } from '../lib/unit-conversion';
 import { useUnit } from '../lib/use-unit';
 
@@ -67,6 +67,20 @@ function displayTrackedUnit(rawUnit: string, displayUnit: Unit) {
   return rawUnit;
 }
 
+function formatSyncStamp(value: string | null) {
+  if (!value) return 'Awaiting live refresh';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return 'Awaiting live refresh';
+
+  return date.toLocaleString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+  });
+}
+
 function fmtPrice(price: number | null, rawUnit: string, displayUnit: Unit) {
   if (price == null) return 'N/A';
   const converted = convertTrackedPrice(price, rawUnit, displayUnit);
@@ -94,6 +108,16 @@ function SourceBadge({ sourceType }: { sourceType: MetalPrice['source_type'] }) 
       <span className={`h-2 w-2 rounded-full ${badge.dot}`} />
       {badge.label}
     </span>
+  );
+}
+
+function StatusTile({ label, value, detail }: { label: string; value: string; detail: string }) {
+  return (
+    <div className="rounded-[22px] border border-slate-900/8 bg-white/58 p-4">
+      <div className="cp-subtle-label">{label}</div>
+      <div className="mt-2 text-2xl font-display text-slate-950">{value}</div>
+      <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div>
+    </div>
   );
 }
 
@@ -153,7 +177,7 @@ export default function Prices() {
     setRefreshing(true);
 
     try {
-      await fetch(apiUrl('/prices/refresh'), { method: 'POST' });
+      await refreshPrices();
       load();
     } finally {
       setRefreshing(false);
@@ -174,6 +198,17 @@ export default function Prices() {
   const selectedDisplayUnit = selectedRow ? displayTrackedUnit(selectedRow.unit, unit) : '';
   const pctChange = history.length >= 2 ? ((history[history.length - 1].price - history[0].price) / history[0].price) * 100 : null;
   const isUp = pctChange != null && pctChange >= 0;
+  const latestFetchedAt = prices
+    .map((row) => row.fetched_at)
+    .filter((value): value is string => Boolean(value))
+    .sort()
+    .at(-1) ?? null;
+  const liveQuoteCount = prices.filter((row) => row.source_type === 'live').length;
+  const indexedQuoteCount = prices.filter((row) => row.source_type === 'indexed').length;
+  const manualQuoteCount = prices.filter((row) => row.source_type === 'manual').length;
+  const reviewFlagCount = prices.filter(
+    (row) => row.evidence.freshness_status.toLowerCase() !== 'fresh' || row.evidence.confidence_score < 75,
+  ).length;
 
   if (loading) {
     return (
@@ -196,10 +231,30 @@ export default function Prices() {
             </p>
           </div>
 
-          <button onClick={handleRefresh} disabled={refreshing} className="cp-button-secondary">
-            <span className={`mr-2 inline-flex h-4 w-4 rounded-full border-2 border-current border-t-transparent ${refreshing ? 'animate-spin' : ''}`} />
-            {refreshing ? 'Updating prices' : 'Update live prices'}
-          </button>
+          <div className="flex min-w-[280px] flex-col gap-2 rounded-[22px] border border-slate-200 bg-white/76 px-4 py-3 sm:items-end">
+            <div className="cp-subtle-label">Quote Status</div>
+            <div className="text-right">
+              <div className="text-sm font-semibold text-slate-950">
+                {refreshing ? 'Refreshing live quotes' : latestFetchedAt ? 'Live quotes loaded' : 'Stored pricing basis'}
+              </div>
+              <div className="mt-1 text-xs leading-5 text-slate-500">
+                {latestFetchedAt
+                  ? `${liveQuoteCount} live symbols synced ${formatSyncStamp(latestFetchedAt)}`
+                  : 'Indexed and manual prices are available even before a live refresh.'}
+              </div>
+            </div>
+            <button onClick={handleRefresh} disabled={refreshing} className="cp-button-secondary px-4 py-2.5 text-sm">
+              <span className={`mr-2 inline-flex h-4 w-4 rounded-full border-2 border-current border-t-transparent ${refreshing ? 'animate-spin' : ''}`} />
+              {refreshing ? 'Refreshing now' : 'Refresh quotes'}
+            </button>
+          </div>
+        </div>
+
+        <div className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <StatusTile label="Tracked symbols" value={String(prices.length)} detail="Metals visible in the desktop feed." />
+          <StatusTile label="Live coverage" value={`${liveQuoteCount}/${prices.length}`} detail="Symbols backed by current live sources." />
+          <StatusTile label="Fallback rows" value={String(indexedQuoteCount + manualQuoteCount)} detail={`${indexedQuoteCount} indexed and ${manualQuoteCount} manual rows remain usable.`} />
+          <StatusTile label="Needs review" value={String(reviewFlagCount)} detail="Freshness or confidence flags worth checking." />
         </div>
 
         <div className="space-y-4">
@@ -310,7 +365,7 @@ export default function Prices() {
               <div className="flex h-[320px] flex-col items-center justify-center gap-2 rounded-[28px] border border-dashed border-white/10 bg-white/4 text-center">
                 <div className="font-display text-2xl text-white">No stored price history</div>
                 <div className="max-w-md text-sm leading-7 text-slate-400">
-                  Update live prices or choose a symbol that already has stored history.
+                  Refresh quotes or choose a symbol that already has stored history.
                 </div>
               </div>
             ) : (

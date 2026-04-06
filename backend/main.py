@@ -70,7 +70,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="CatPrice API",
     description="Loopback API sidecar for the CatPrice desktop app",
-    version="1.1.5",
+    version="1.1.6",
     lifespan=lifespan,
 )
 
@@ -96,7 +96,7 @@ def health():
     """Server health check."""
     return {
         "status": "ok",
-        "version": "1.1.5",
+        "version": "1.1.6",
         "last_price_update": _last_price_update.isoformat() if _last_price_update else None,
         "scheduler_running": scheduler.running,
     }

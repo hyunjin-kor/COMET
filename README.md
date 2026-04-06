@@ -40,15 +40,29 @@ CatPrice is built to feel like shipped desktop software rather than a spreadshee
 - `Literature Benchmarks` is an optional reference library for literature-backed catalyst families and route scoring.
 - `Result` is the reading surface for selling price, contribution structure, and component-level source review.
 
+## Product Principles
+
+- `Quiet desktop workflow`
+  The app keeps editing, screening, and reading on separate surfaces so long scientific sessions do not collapse into one scrolling page.
+- `Evidence-first review`
+  Estimates are paired with source type, freshness, quote year, pack basis, and public links whenever a stable source URL exists.
+- `Structured preparation methods`
+  Preparation is handled as a named workflow with preprocess, synthesis, and postprocess stages instead of a loose free-text note.
+- `Transparent price normalization`
+  Vendor packs, literature rows, indexed references, and live metal feeds are normalized into the estimate and surfaced again in the result screen.
+- `Reference routes without product lock-in`
+  Literature benchmarks are optional screening tools and starting points, not required inputs for the main estimate flow.
+
 ## Product Highlights
 
 | Area | What CatPrice emphasizes |
 | --- | --- |
-| Core estimator | Reaction-agnostic catalyst preparation cost estimation |
-| Price clarity | `LIVE`, `INDEXED`, and `MANUAL` states plus evidence confidence and freshness |
+| Core estimator | Reaction-agnostic catalyst preparation cost estimation with a dedicated reading surface |
+| Price clarity | `LIVE`, `INDEXED`, and `MANUAL` states plus evidence confidence, freshness, quote year, and pack basis |
 | Workflow | Step-based workspace navigation with back/forward movement instead of long scroll stacks |
-| Preparation logic | Step Method, preparation extras, indexed escalation, and optional literature benchmarks |
-| Research support | Literature-backed thermocatalyst and electrocatalyst benchmark families with explicit source banks |
+| Preparation logic | Step Method, preparation extras, indexed escalation, and named preparation templates |
+| Research support | Literature-backed thermocatalyst and electrocatalyst benchmark families with explicit anchor links and family banks |
+| Operational trust | Quote-status panels, source-library trust labels, and result-side source records |
 | Desktop release | Installer + unpacked app outputs for a clean Windows release path |
 
 ## Included Reference Families
@@ -70,7 +84,7 @@ Download the packaged Windows app from [GitHub Releases](https://github.com/hyun
 
 Recommended asset:
 
-- `CatPrice Setup 1.1.5.exe`
+- `CatPrice Setup 1.1.6.exe`
 
 Portable asset:
 
@@ -86,6 +100,7 @@ CatPrice is distributed as a desktop app. The public repository does not require
 - Loads thermocatalyst and electrocatalyst reference families into the cost estimate workspace as editable starting points
 - Attaches source-linked family literature banks built from high-confidence journal references and public vendor pages
 - Opens the final estimate on a dedicated result screen for review
+- Re-states the estimate basis through source records, normalization details, and route metadata on the result screen
 - Runs Monte Carlo uncertainty analysis
 - Applies ChemPPI and CEPCI escalation
 - Includes material, step, and process template libraries
@@ -104,7 +119,7 @@ npm run build
 
 Main outputs:
 
-- `dist-electron\CatPrice Setup 1.1.5.exe`
+- `dist-electron\CatPrice Setup 1.1.6.exe`
 - `dist-electron\win-unpacked\CatPrice.exe`
 
 Before rebuilding desktop artifacts, CatPrice stops old desktop processes automatically. You can also stop them manually:
