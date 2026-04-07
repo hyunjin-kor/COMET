@@ -261,6 +261,18 @@ function MetricTile({ label, value, detail, dark = false }: { label: string; val
   );
 }
 
+function CompactValueRow({ label, value, detail }: { label: string; value: string; detail?: string }) {
+  return (
+    <div className="cp-data-row">
+      <div>
+        <div className="cp-subtle-label">{label}</div>
+        {detail ? <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div> : null}
+      </div>
+      <div className="text-right text-sm font-semibold text-slate-950">{value}</div>
+    </div>
+  );
+}
+
 export default function Calculator() {
   const navigate = useNavigate();
   const { toDisplay, toInternal, fmtLabel } = useUnit();
@@ -488,7 +500,6 @@ export default function Calculator() {
   const incompleteThermalRows = thermalDraftRows.filter(isIncompleteThermalRow);
   const nonSupportWt = completedThermalRows.reduce((sum, row) => sum + row.wt_pct, 0);
   const supportWtPct = Math.max(0, 100 - nonSupportWt);
-  const selectedSupport = rows.find((row) => row.role === 'support');
   const liveFeedCount = Object.values(liveMap).filter((feed) => feed.source_type === 'live').length;
   const indexedFeedCount = Object.values(liveMap).filter((feed) => feed.source_type === 'indexed').length;
   const activeMetalCount = completedThermalRows.filter((row) => row.role === 'active_metal').length;
@@ -863,51 +874,162 @@ export default function Calculator() {
     );
   }
 
-  function renderLaunchPanel() {
-    const latestGenerated = latestSnapshot ? new Date(latestSnapshot.generatedAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }) : null;
+  function renderLatestResultCard() {
+    const latestGenerated = latestSnapshot
+      ? new Date(latestSnapshot.generatedAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })
+      : null;
+
     return (
-      <section className="surface-card cp-enter self-start overflow-hidden px-4 py-4 sm:px-5 xl:sticky xl:top-4">
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div>
-            <span className="section-kicker">Latest Result</span>
-            <h2 className="cp-heading-lg mt-3">Read the latest result without leaving this draft.</h2>
-            <p className="mt-2 max-w-[30rem] text-sm leading-7 text-slate-600">Run the estimate here, review the result separately, then come back to the same draft.</p>
+      <section className="surface-ink overflow-hidden p-4">
+        <div className="cp-subtle-label !text-slate-400">Latest Result</div>
+        <div className="mt-3 flex flex-wrap items-end gap-3">
+          <div className="font-display text-[clamp(2.2rem,4vw,3.7rem)] leading-none text-white">
+            {latestSnapshot ? `$${toDisplay(latestSnapshot.result.summary.estimated_price_per_lb).toFixed(2)}` : 'Pending'}
           </div>
-          <button onClick={() => navigate('/calculator/result')} disabled={!latestSnapshot} className="cp-button-secondary px-4 py-2.5 text-xs">Open result</button>
+          <div className="pb-1 text-lg text-slate-300">{latestSnapshot ? fmtLabel : ''}</div>
         </div>
-
-        <div className="mt-4 space-y-3">
-          <div className="surface-ink overflow-hidden p-4">
-            <div className="cp-subtle-label !text-slate-400">Latest result</div>
-            <div className="mt-3 flex flex-wrap items-end gap-3">
-              <div className="font-display text-[clamp(2.25rem,4vw,3.9rem)] leading-none text-white">{latestSnapshot ? `$${toDisplay(latestSnapshot.result.summary.estimated_price_per_lb).toFixed(2)}` : 'Pending'}</div>
-              <div className="pb-1 text-lg text-slate-300">{latestSnapshot ? fmtLabel : ''}</div>
-            </div>
-            <div className="mt-2 text-sm text-slate-300">{latestSnapshot ? `Generated ${latestGenerated} with ${latestSnapshot.selectedSupportName ?? 'support'} as the current basis.` : 'No result yet. The first successful estimate will appear here automatically.'}</div>
-            {latestSnapshot?.benchmarkCandidate ? (
-              <div className="mt-3 flex flex-wrap gap-2">
-                <span className="cp-chip-dark">{latestSnapshot.benchmarkCandidate.title}</span>
-                <span className="cp-chip-dark">{latestSnapshot.benchmarkCandidate.route.name}</span>
-              </div>
-            ) : null}
-            <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
-              <MetricTile label="Current scale" value={scale.label} detail={`${orderSize} tons / ${scale.rate}`} dark />
-              <MetricTile label="Selected steps" value={String(steps.length)} detail={steps.length > 0 ? `${formatStepLabel(steps[0])}${steps.length > 1 ? ` +${steps.length - 1}` : ''}` : 'Choose at least one'} dark />
-              <MetricTile label="Price sources" value={String(liveFeedCount + indexedFeedCount)} detail={`${liveFeedCount} live / ${indexedFeedCount} indexed`} dark />
-              <MetricTile label="Recipe load" value={`${nonSupportWt.toFixed(1)} wt%`} detail={`Support closes at ${supportWtPct.toFixed(1)} wt%`} dark />
-            </div>
+        <div className="mt-2 text-sm text-slate-300">
+          {latestSnapshot
+            ? `Generated ${latestGenerated} with ${latestSnapshot.selectedSupportName ?? 'support'} as the active basis.`
+            : 'No result yet. The first successful estimate appears here automatically.'}
+        </div>
+        {latestSnapshot?.benchmarkCandidate ? (
+          <div className="mt-3 flex flex-wrap gap-2">
+            <span className="cp-chip-dark">{latestSnapshot.benchmarkCandidate.title}</span>
+            <span className="cp-chip-dark">{latestSnapshot.benchmarkCandidate.route.name}</span>
           </div>
-
-          <div className="grid gap-2.5 sm:grid-cols-2">
-            <MetricTile label="Support" value={selectedSupport?.name ?? 'Pending'} detail={selectedSupport ? `${selectedSupport.source_type === 'manual' ? 'Manual' : 'Price-linked'} pricing` : 'Support pending'} />
-            <MetricTile label="Price sync" value={pricesUpdatedAt ? pricesUpdatedAt.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }) : 'Pending'} detail="Latest live price update on this screen" />
-          </div>
-
-          <div className="rounded-[24px] border border-slate-900/8 bg-white/56 px-4 py-3 text-xs leading-6 text-slate-600">
-            The result screen is optimized for reading. Return here when you want to change materials, price sources, or preparation steps.
-          </div>
+        ) : null}
+        <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
+          <MetricTile label="Current scale" value={scale.label} detail={`${orderSize} tons / ${scale.rate}`} dark />
+          <MetricTile
+            label="Selected steps"
+            value={String(steps.length)}
+            detail={steps.length > 0 ? `${formatStepLabel(steps[0])}${steps.length > 1 ? ` +${steps.length - 1}` : ''}` : 'Choose at least one'}
+            dark
+          />
+          <MetricTile label="Price sources" value={String(liveFeedCount + indexedFeedCount)} detail={`${liveFeedCount} live / ${indexedFeedCount} indexed`} dark />
+          <MetricTile
+            label="Recipe load"
+            value={catalystDomain === 'electrocatalyst' ? `${electrocatalystConfig.catalystLoadingMgCm2.toFixed(2)} mg/cm2` : `${nonSupportWt.toFixed(1)} wt%`}
+            detail={catalystDomain === 'electrocatalyst' ? 'Catalyst loading basis' : `Support closes at ${supportWtPct.toFixed(1)} wt%`}
+            dark
+          />
         </div>
       </section>
+    );
+  }
+
+  function renderEstimateEvidenceRail() {
+    const evidenceRows = catalystDomain === 'electrocatalyst'
+      ? [
+          { label: 'Catalyst powder', value: selectedCatalystMaterial?.name ?? 'Pending', detail: selectedCatalystMaterial ? materialQuoteLabel(selectedCatalystMaterial) : 'Choose a library record.' },
+          { label: 'Ionomer', value: selectedIonomerMaterial?.name ?? 'Pending', detail: selectedIonomerMaterial ? materialQuoteLabel(selectedIonomerMaterial) : 'Choose a library record.' },
+          { label: 'Membrane', value: selectedMembraneMaterial?.name ?? 'Pending', detail: selectedMembraneMaterial ? materialQuoteLabel(selectedMembraneMaterial) : 'Choose a library record.' },
+          { label: 'Substrate / GDL', value: selectedSubstrateMaterial?.name ?? 'Pending', detail: selectedSubstrateMaterial ? materialQuoteLabel(selectedSubstrateMaterial) : 'Choose a library record.' },
+        ]
+      : rows
+          .filter((row) => row.name.trim().length > 0)
+          .map((row) => ({
+            label: row.role === 'support' ? 'Support' : row.role === 'promoter' ? 'Promoter' : 'Active metal',
+            value: row.name,
+            detail: `${row.wt_pct.toFixed(1)} wt% / ${sourceTypeLabel(row.source_type)}`,
+          }));
+    const manualOverrideCount = catalystDomain === 'electrocatalyst'
+      ? 0
+      : rows.filter((row) => row.source_type === 'manual' && row.name.trim().length > 0).length;
+
+    return (
+      <div className="cp-inspector-rail">
+        <section className="cp-rail-panel">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <div className="cp-subtle-label">Evidence Surface</div>
+              <div className="mt-2 text-lg font-semibold text-slate-950">Keep the pricing basis visible while you edit.</div>
+            </div>
+            <button onClick={syncPrices} disabled={refreshing} className="cp-button-secondary px-3 py-2 text-xs">
+              <span className={`mr-2 inline-flex h-3.5 w-3.5 rounded-full border-2 border-current border-t-transparent ${refreshing ? 'animate-spin' : ''}`} />
+              {refreshing ? 'Refreshing' : 'Refresh'}
+            </button>
+          </div>
+          <div className="mt-4 space-y-1">
+            <CompactValueRow
+              label="Quote basis"
+              value={refreshing ? 'Refreshing' : pricesUpdatedAt ? 'Ready' : 'Pending'}
+              detail={pricesUpdatedAt
+                ? `${liveFeedCount} live and ${indexedFeedCount} indexed rows synced ${pricesUpdatedAt.toLocaleTimeString('en-US', {
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    hour12: true,
+                  })}`
+                : 'The estimate can run from indexed and manual rows before a refresh.'}
+            />
+            <CompactValueRow label="Manual overrides" value={String(manualOverrideCount)} detail="Rows still detached from live or indexed pricing." />
+            <CompactValueRow label="Campaign basis" value={`${orderSize} tons`} detail={`${scale.label} scale / ${scale.rate}`} />
+          </div>
+        </section>
+
+        <section className="cp-rail-panel">
+          <div className="cp-subtle-label">Input Surface</div>
+          <div className="mt-2 text-lg font-semibold text-slate-950">
+            {catalystDomain === 'electrocatalyst' ? 'Electrode stack' : 'Catalyst recipe'}
+          </div>
+          <div className="mt-3 space-y-2">
+            {evidenceRows.length > 0 ? (
+              evidenceRows.map((item) => (
+                <div key={`${item.label}-${item.value}`} className="rounded-[18px] border border-slate-900/8 bg-white/72 px-3 py-3">
+                  <div className="cp-subtle-label">{item.label}</div>
+                  <div className="mt-1 text-sm font-semibold text-slate-950">{item.value}</div>
+                  <div className="mt-1 text-xs leading-5 text-slate-500">{item.detail}</div>
+                </div>
+              ))
+            ) : (
+              <div className="rounded-[18px] border border-dashed border-slate-300 bg-white/62 px-3 py-3 text-sm text-slate-500">
+                No input records are populated yet.
+              </div>
+            )}
+          </div>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <span className="cp-chip">{catalystDomainLabel(catalystDomain)}</span>
+            {catalystDomain === 'electrocatalyst' ? <span className="cp-chip">{applicationFamilyLabel(applicationFamily)}</span> : null}
+            {selectedBenchmark ? <span className="cp-chip">{selectedBenchmark.title}</span> : null}
+          </div>
+        </section>
+
+        {(selectedBenchmark || activeElectroTemplate) ? (
+          <section className="cp-rail-panel">
+            <div className="cp-subtle-label">Method Surface</div>
+            <div className="mt-2 text-lg font-semibold text-slate-950">
+              {activeElectroTemplate?.name ?? selectedBenchmark?.route.name ?? 'Preparation basis'}
+            </div>
+            <div className="mt-2 text-xs leading-6 text-slate-500">
+              {activeElectroTemplate?.description ?? selectedBenchmark?.screening_summary ?? 'Preparation metadata is attached to the active case.'}
+            </div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {activeElectroTemplate?.manufacturing_mode ? <span className="cp-chip">{activeElectroTemplate.manufacturing_mode}</span> : null}
+              {selectedBenchmark ? <span className="cp-chip">Evidence {selectedBenchmark.scores.evidence.toFixed(1)}</span> : null}
+              <span className="cp-chip">{steps.length} steps</span>
+            </div>
+          </section>
+        ) : null}
+
+        <div className="space-y-4">
+          {renderLatestResultCard()}
+          <section className="cp-rail-panel">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <div className="cp-subtle-label">Result Surface</div>
+                <div className="mt-2 text-lg font-semibold text-slate-950">Read the latest result separately.</div>
+              </div>
+              <button onClick={() => navigate('/calculator/result')} disabled={!latestSnapshot} className="cp-button-secondary px-3 py-2 text-xs">
+                Open
+              </button>
+            </div>
+            <div className="mt-2 text-xs leading-6 text-slate-500">
+              The result screen stays optimized for reading. This workspace stays optimized for editing.
+            </div>
+          </section>
+        </div>
+      </div>
     );
   }
 
@@ -1024,45 +1146,48 @@ export default function Calculator() {
           ? 'Active metals and promoters must stay below 100 wt% so support remains positive.'
           : 'Enter a valid non-zero loading for the active portion of the recipe.';
 
+  const activeWorkspaceSection = sectionState.activeSection.id === 'type'
+    ? renderSetupSection()
+    : sectionState.activeSection.id === 'composition'
+      ? renderInputsSection()
+      : sectionState.activeSection.id === 'manufacturing'
+        ? renderManufacturingSection()
+        : (
+          <section className="surface-card p-4">
+            <div className={`rounded-[24px] border px-4 py-4 text-sm ${isValid ? 'border-emerald-200 bg-emerald-50 text-emerald-800' : 'border-amber-200 bg-amber-50 text-amber-800'}`}>{validationMessage}</div>
+            <div className="mt-4 grid gap-3 sm:grid-cols-3">
+              <MetricTile label="Catalyst type" value={catalystDomainLabel(catalystDomain)} detail="Current case basis" />
+              <MetricTile label="Preparation steps" value={String(steps.length)} detail={steps.length > 0 ? 'Ready for execution' : 'Choose at least one step'} />
+              <MetricTile label="Campaign basis" value={`${orderSize} tons`} detail={`${scale.label} / ${scale.rate}`} />
+            </div>
+            <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <button onClick={handleCalculate} disabled={loading || !isValid || steps.length === 0} className="cp-button-primary min-w-[250px]">{loading ? <><span className="mr-2 inline-flex h-4 w-4 animate-spin rounded-full border-2 border-slate-950 border-t-transparent" />Running estimate</> : 'Run estimate'}</button>
+              <div className="text-xs leading-6 text-slate-500">The result screen opens separately and keeps this draft intact.</div>
+            </div>
+            {error ? <div className="mt-4 rounded-[24px] border border-red-200 bg-red-50 px-4 py-4 text-sm text-red-700"><span className="font-semibold">Calculation failed.</span> {error}</div> : null}
+          </section>
+        );
+
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       <datalist id="known-metal-options">{KNOWN_METALS.map((metal) => <option key={metal} value={metal} />)}</datalist>
       <section className="surface-card cp-enter overflow-hidden px-4 py-4 sm:px-5" style={{ animationDelay: '0.06s' }}>
         <div className="space-y-5">
           <div className="flex flex-col gap-4 border-b border-slate-900/8 pb-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <div className="cp-subtle-label">Cost Estimate</div>
-              <h2 className="cp-heading-xl mt-2">Build an evidence-backed catalyst estimate</h2>
+              <h2 className="cp-heading-xl mt-2">Design the case, keep the evidence visible, then read the result separately.</h2>
               <p className="cp-body-copy mt-2 max-w-2xl">
                 {catalystDomain === 'electrocatalyst'
-                  ? 'Choose the electrode stack, then set the preparation method and campaign scale.'
-                  : 'Set catalyst composition and price sources first, then lock the preparation method.'}
+                  ? 'The edit surface defines the electrode stack. The rail keeps source evidence and the latest result visible without interrupting the case.'
+                  : 'The edit surface defines the recipe. The rail keeps price provenance and the latest result visible while you work.'}
               </p>
             </div>
-            <div className="flex min-w-[280px] flex-col gap-2 rounded-[22px] border border-slate-200 bg-white/76 px-4 py-3 lg:items-end">
-              <div className="cp-subtle-label">Quote Basis</div>
-              <div className="text-right">
-                <div className="text-sm font-semibold text-slate-950">
-                  {refreshing ? 'Refreshing price basis' : pricesUpdatedAt ? 'Price basis ready' : 'Price basis pending'}
-                </div>
-                <div className="mt-1 text-xs leading-5 text-slate-500">
-                  {pricesUpdatedAt
-                    ? `${liveFeedCount} live and ${indexedFeedCount} indexed rows synced ${pricesUpdatedAt.toLocaleTimeString('en-US', {
-                        hour: 'numeric',
-                        minute: '2-digit',
-                        hour12: true,
-                      })}`
-                    : 'The estimate can still run from indexed and manual rows before a live refresh.'}
-                </div>
-              </div>
-              <button onClick={syncPrices} disabled={refreshing} className="cp-button-secondary">
-                <span className={`mr-2 inline-flex h-4 w-4 rounded-full border-2 border-current border-t-transparent ${refreshing ? 'animate-spin' : ''}`} />
-                {refreshing ? 'Refreshing now' : 'Refresh price basis'}
-              </button>
-            </div>
+            <span className="cp-chip">{sectionState.activeSection.label}</span>
           </div>
 
-          <div className="grid gap-2.5 md:grid-cols-3">
+          <div className="grid gap-2.5 md:grid-cols-4">
+            <MetricTile label="Active workspace" value={sectionState.activeSection.label} detail={sectionState.activeSection.summary} />
             <MetricTile label="Price sources" value={String(liveFeedCount + indexedFeedCount)} detail={`${liveFeedCount} live / ${indexedFeedCount} indexed`} />
             <MetricTile label="Preparation steps" value={String(steps.length)} detail={steps.length > 0 ? 'Selected preparation path' : 'Select at least one step'} />
             <MetricTile label="Campaign scale" value={scale.label} detail={`${orderSize} tons / ${scale.rate}`} />
@@ -1072,22 +1197,10 @@ export default function Calculator() {
 
       <WorkspaceSectionNav sections={ESTIMATE_SECTIONS} activeSectionId={sectionState.activeSectionId} activeIndex={sectionState.activeIndex} onSelect={sectionState.setActiveSection} />
 
-      {sectionState.activeSection.id === 'type' ? renderSetupSection() : null}
-      {sectionState.activeSection.id === 'composition' ? renderInputsSection() : null}
-      {sectionState.activeSection.id === 'manufacturing' ? renderManufacturingSection() : null}
-      {sectionState.activeSection.id === 'result' ? (
-        <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(340px,0.84fr)]">
-          <section className="surface-card p-4">
-            <div className={`rounded-[24px] border px-4 py-4 text-sm ${isValid ? 'border-emerald-200 bg-emerald-50 text-emerald-800' : 'border-amber-200 bg-amber-50 text-amber-800'}`}>{validationMessage}</div>
-            <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <button onClick={handleCalculate} disabled={loading || !isValid || steps.length === 0} className="cp-button-primary min-w-[250px]">{loading ? <><span className="mr-2 inline-flex h-4 w-4 animate-spin rounded-full border-2 border-slate-950 border-t-transparent" />Running estimate</> : 'Run estimate'}</button>
-              <div className="text-xs leading-6 text-slate-500">The result screen opens separately and keeps this draft intact.</div>
-            </div>
-            {error ? <div className="mt-4 rounded-[24px] border border-red-200 bg-red-50 px-4 py-4 text-sm text-red-700"><span className="font-semibold">Calculation failed.</span> {error}</div> : null}
-          </section>
-          {renderLaunchPanel()}
-        </div>
-      ) : null}
+      <div className="cp-split-workspace">
+        <div className="space-y-4">{activeWorkspaceSection}</div>
+        <div>{renderEstimateEvidenceRail()}</div>
+      </div>
 
       <WorkspaceSectionFooter
         activeSection={sectionState.activeSection}

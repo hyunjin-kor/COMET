@@ -121,6 +121,18 @@ function StatusTile({ label, value, detail }: { label: string; value: string; de
   );
 }
 
+function InspectorRow({ label, value, detail }: { label: string; value: string; detail?: string }) {
+  return (
+    <div className="cp-data-row">
+      <div>
+        <div className="cp-subtle-label">{label}</div>
+        {detail ? <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div> : null}
+      </div>
+      <div className="text-right text-sm font-semibold text-slate-950">{value}</div>
+    </div>
+  );
+}
+
 export default function Prices() {
   const { unit } = useUnit();
   const {
@@ -219,108 +231,205 @@ export default function Prices() {
     );
   }
 
+  function renderQuotesInspector() {
+    if (!selectedRow) {
+      return (
+        <div className="cp-inspector-rail">
+          <section className="cp-rail-panel">
+            <div className="cp-subtle-label">Evidence Surface</div>
+            <div className="mt-2 text-lg font-semibold text-slate-950">Choose a tracked symbol.</div>
+            <div className="mt-2 text-xs leading-6 text-slate-500">The inspector keeps source quality, freshness, and normalization context visible.</div>
+          </section>
+        </div>
+      );
+    }
+
+    return (
+      <div className="cp-inspector-rail">
+        <section className="surface-ink overflow-hidden p-4">
+          <div className="cp-subtle-label !text-slate-400">Selected Quote</div>
+          <div className="mt-2 text-sm text-slate-300">{selectedRow.name}</div>
+          <div className="mt-3 flex items-end gap-3">
+            <div className="font-display text-[clamp(2.2rem,4vw,3.7rem)] leading-none text-white">
+              {fmtPrice(selectedRow.price, selectedRow.unit, unit)}
+            </div>
+            <div className="pb-1 text-sm text-slate-300">{displayTrackedUnit(selectedRow.unit, unit)}</div>
+          </div>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <SourceBadge sourceType={selectedRow.source_type} />
+            <span className="cp-chip-dark">{selectedRow.evidence.label}</span>
+          </div>
+          <button onClick={() => setActiveSection('history')} className="cp-button-ink mt-4 px-3 py-2 text-xs">
+            Open trend view
+          </button>
+        </section>
+
+        <section className="cp-rail-panel">
+          <div className="cp-subtle-label">Source Basis</div>
+          <div className="mt-2 text-lg font-semibold text-slate-950">Inspect trust before you read the number.</div>
+          <div className="mt-3 space-y-1">
+            <InspectorRow label="Acquisition" value={selectedRow.evidence.acquisition_mode} detail={sourceDescription(selectedRow)} />
+            <InspectorRow label="Confidence" value={String(selectedRow.evidence.confidence_score)} detail={selectedRow.evidence.transparency} />
+            <InspectorRow label="Freshness" value={selectedRow.evidence.freshness_status} detail={selectedRow.evidence.note} />
+            <InspectorRow label="Target window" value={selectedRow.evidence.freshness_target_hours != null ? `${selectedRow.evidence.freshness_target_hours} h` : 'N/A'} detail="Expected refresh horizon for this source type." />
+          </div>
+        </section>
+
+        <section className="cp-rail-panel">
+          <div className="cp-subtle-label">Feed Coverage</div>
+          <div className="mt-3 grid gap-2 sm:grid-cols-2 xl:grid-cols-1">
+            <StatusTile label="Tracked symbols" value={String(prices.length)} detail="Metals visible in the desktop feed." />
+            <StatusTile label="Needs review" value={String(reviewFlagCount)} detail="Freshness or confidence flags worth checking." />
+          </div>
+        </section>
+      </div>
+    );
+  }
+
   function renderQuotes() {
     return (
-      <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.06s' }}>
-        <div className="mb-5 flex flex-col gap-4 border-b border-slate-900/8 pb-5 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <div className="cp-subtle-label">Live Metal Prices</div>
-            <h2 className="cp-heading-xl mt-2">Track live and indexed metal prices</h2>
-            <p className="cp-body-copy mt-2 max-w-2xl">
-              Read current quotes, source basis, and trend history without leaving the desktop workflow.
-            </p>
-          </div>
-
-          <div className="flex min-w-[280px] flex-col gap-2 rounded-[22px] border border-slate-200 bg-white/76 px-4 py-3 sm:items-end">
-            <div className="cp-subtle-label">Quote Status</div>
-            <div className="text-right">
-              <div className="text-sm font-semibold text-slate-950">
-                {refreshing ? 'Refreshing live quotes' : latestFetchedAt ? 'Live quotes loaded' : 'Stored pricing basis'}
-              </div>
-              <div className="mt-1 text-xs leading-5 text-slate-500">
-                {latestFetchedAt
-                  ? `${liveQuoteCount} live symbols synced ${formatSyncStamp(latestFetchedAt)}`
-                  : 'Indexed and manual prices are available even before a live refresh.'}
-              </div>
+      <div className="cp-split-workspace">
+        <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.06s' }}>
+          <div className="mb-5 flex flex-col gap-4 border-b border-slate-900/8 pb-5 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <div className="cp-subtle-label">Live Metal Prices</div>
+              <h2 className="cp-heading-xl mt-2">Track quotes on the left and inspect trust on the right.</h2>
+              <p className="cp-body-copy mt-2 max-w-2xl">
+                The directory stays optimized for scanning. The rail stays optimized for reading evidence, freshness, and source quality.
+              </p>
             </div>
-            <button onClick={handleRefresh} disabled={refreshing} className="cp-button-secondary px-4 py-2.5 text-sm">
-              <span className={`mr-2 inline-flex h-4 w-4 rounded-full border-2 border-current border-t-transparent ${refreshing ? 'animate-spin' : ''}`} />
-              {refreshing ? 'Refreshing now' : 'Refresh quotes'}
-            </button>
-          </div>
-        </div>
 
-        <div className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          <StatusTile label="Tracked symbols" value={String(prices.length)} detail="Metals visible in the desktop feed." />
-          <StatusTile label="Live coverage" value={`${liveQuoteCount}/${prices.length}`} detail="Symbols backed by current live sources." />
-          <StatusTile label="Fallback rows" value={String(indexedQuoteCount + manualQuoteCount)} detail={`${indexedQuoteCount} indexed and ${manualQuoteCount} manual rows remain usable.`} />
-          <StatusTile label="Needs review" value={String(reviewFlagCount)} detail="Freshness or confidence flags worth checking." />
-        </div>
-
-        <div className="space-y-4">
-          {GROUP_ORDER.map((groupKey) => {
-            const group = GROUPS[groupKey];
-            const rows = group.symbols.map((symbol) => priceMap[symbol]).filter(Boolean);
-            if (!rows.length) return null;
-
-            return (
-              <div key={groupKey} className="surface-ghost overflow-hidden p-4">
-                <div className="mb-3 flex items-center justify-between gap-3">
-                  <div className="cp-subtle-label">{group.title}</div>
-                  <span className="cp-chip">{rows.length} symbols</span>
+            <div className="flex min-w-[280px] flex-col gap-2 rounded-[22px] border border-slate-200 bg-white/76 px-4 py-3 sm:items-end">
+              <div className="cp-subtle-label">Quote Status</div>
+              <div className="text-right">
+                <div className="text-sm font-semibold text-slate-950">
+                  {refreshing ? 'Refreshing live quotes' : latestFetchedAt ? 'Live quotes loaded' : 'Stored pricing basis'}
                 </div>
+                <div className="mt-1 text-xs leading-5 text-slate-500">
+                  {latestFetchedAt
+                    ? `${liveQuoteCount} live symbols synced ${formatSyncStamp(latestFetchedAt)}`
+                    : 'Indexed and manual prices are available even before a live refresh.'}
+                </div>
+              </div>
+              <button onClick={handleRefresh} disabled={refreshing} className="cp-button-secondary px-4 py-2.5 text-sm">
+                <span className={`mr-2 inline-flex h-4 w-4 rounded-full border-2 border-current border-t-transparent ${refreshing ? 'animate-spin' : ''}`} />
+                {refreshing ? 'Refreshing now' : 'Refresh quotes'}
+              </button>
+            </div>
+          </div>
 
-                <div className="divide-y divide-slate-900/8 overflow-hidden rounded-[24px] border border-slate-900/8 bg-white/56">
-                  {rows.map((row) => {
-                    const active = selected === row.symbol;
-                    return (
-                      <button
-                        key={row.symbol}
-                        onClick={() => {
-                          setSelected(row.symbol);
-                          setActiveSection('history');
-                        }}
-                        className={`grid w-full gap-3 px-4 py-3 text-left transition sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-center ${
-                          active ? 'bg-emerald-50/75' : 'bg-transparent hover:bg-white/80'
-                        }`}
-                      >
-                        <div className="flex min-w-0 items-center gap-3">
-                          <span
-                            className="flex h-10 w-10 items-center justify-center rounded-[18px] text-sm font-semibold text-slate-950"
-                            style={{ backgroundColor: METAL_COLORS[row.symbol] || '#78f2d0' }}
-                          >
-                            {row.symbol}
-                          </span>
-                          <div className="min-w-0">
-                            <div className="truncate font-semibold text-slate-950">{row.name}</div>
-                            <div className="truncate text-xs text-slate-500">
-                              {sourceDescription(row)} / {row.evidence.label}
+          <div className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            <StatusTile label="Tracked symbols" value={String(prices.length)} detail="Metals visible in the desktop feed." />
+            <StatusTile label="Live coverage" value={`${liveQuoteCount}/${prices.length}`} detail="Symbols backed by current live sources." />
+            <StatusTile label="Fallback rows" value={String(indexedQuoteCount + manualQuoteCount)} detail={`${indexedQuoteCount} indexed and ${manualQuoteCount} manual rows remain usable.`} />
+            <StatusTile label="Needs review" value={String(reviewFlagCount)} detail="Freshness or confidence flags worth checking." />
+          </div>
+
+          <div className="space-y-4">
+            {GROUP_ORDER.map((groupKey) => {
+              const group = GROUPS[groupKey];
+              const rows = group.symbols.map((symbol) => priceMap[symbol]).filter(Boolean);
+              if (!rows.length) return null;
+
+              return (
+                <div key={groupKey} className="surface-ghost overflow-hidden p-4">
+                  <div className="mb-3 flex items-center justify-between gap-3">
+                    <div className="cp-subtle-label">{group.title}</div>
+                    <span className="cp-chip">{rows.length} symbols</span>
+                  </div>
+
+                  <div className="space-y-2">
+                    {rows.map((row) => {
+                      const active = selected === row.symbol;
+                      return (
+                        <button
+                          key={row.symbol}
+                          onClick={() => {
+                            setSelected(row.symbol);
+                          }}
+                          className={`grid w-full gap-3 px-4 py-3 text-left transition sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-center ${active ? 'cp-list-row cp-list-row-active' : 'cp-list-row'}`}
+                        >
+                          <div className="flex min-w-0 items-center gap-3">
+                            <span
+                              className="flex h-10 w-10 items-center justify-center rounded-[18px] text-sm font-semibold text-slate-950"
+                              style={{ backgroundColor: METAL_COLORS[row.symbol] || '#78f2d0' }}
+                            >
+                              {row.symbol}
+                            </span>
+                            <div className="min-w-0">
+                              <div className="truncate font-semibold text-slate-950">{row.name}</div>
+                              <div className="truncate text-xs text-slate-500">
+                                {sourceDescription(row)} / {row.evidence.label}
+                              </div>
                             </div>
                           </div>
-                        </div>
 
-                        <SourceBadge sourceType={row.source_type} />
+                          <SourceBadge sourceType={row.source_type} />
 
-                        <div className="text-left sm:text-right">
-                          <div className="text-lg font-display text-slate-950">{fmtPrice(row.price, row.unit, unit)}</div>
-                          <div className="text-xs text-slate-500">{displayTrackedUnit(row.unit, unit)}</div>
-                        </div>
-                      </button>
-                    );
-                  })}
+                          <div className="text-left sm:text-right">
+                            <div className="text-lg font-display text-slate-950">{fmtPrice(row.price, row.unit, unit)}</div>
+                            <div className="text-xs text-slate-500">{displayTrackedUnit(row.unit, unit)}</div>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
+        </section>
+        <div>{renderQuotesInspector()}</div>
+      </div>
+    );
+  }
+
+  function renderHistoryRail() {
+    if (!selectedRow) {
+      return (
+        <div className="cp-inspector-rail">
+          <section className="cp-rail-panel">
+            <div className="cp-subtle-label">Evidence Surface</div>
+            <div className="mt-2 text-lg font-semibold text-slate-950">Choose a symbol to inspect its history.</div>
+          </section>
         </div>
-      </section>
+      );
+    }
+
+    const currentValue = displayHistory.length > 0 ? displayHistory[displayHistory.length - 1].price : null;
+    const periodHigh = displayHistory.length > 0 ? Math.max(...displayHistory.map((point) => point.high ?? point.price)) : null;
+    const periodLow = displayHistory.length > 0 ? Math.min(...displayHistory.map((point) => point.low ?? point.price)) : null;
+
+    return (
+      <div className="cp-inspector-rail">
+        <section className="cp-rail-panel">
+          <div className="cp-subtle-label">Trend Evidence</div>
+          <div className="mt-2 text-lg font-semibold text-slate-950">{selectedRow.name}</div>
+          <div className="mt-3 space-y-1">
+            <InspectorRow label="Current" value={currentValue != null ? fmtPrice(currentValue, selectedRow.unit, unit) : 'N/A'} detail={displayTrackedUnit(selectedRow.unit, unit)} />
+            <InspectorRow label="Period high" value={periodHigh != null ? fmtPrice(periodHigh, selectedRow.unit, unit) : 'N/A'} />
+            <InspectorRow label="Period low" value={periodLow != null ? fmtPrice(periodLow, selectedRow.unit, unit) : 'N/A'} detail={historySource || 'Stored metal price series'} />
+            <InspectorRow label="Direction" value={pctChange != null ? `${pctChange >= 0 ? '+' : ''}${pctChange.toFixed(1)}%` : 'N/A'} detail={`${PERIOD_LABELS[period]} window`} />
+          </div>
+        </section>
+
+        <section className="cp-rail-panel">
+          <div className="cp-subtle-label">Source Audit</div>
+          <div className="mt-3 space-y-1">
+            <InspectorRow label="Evidence tier" value={selectedRow.evidence.label} detail={selectedRow.evidence.note} />
+            <InspectorRow label="Transparency" value={selectedRow.evidence.transparency} detail={selectedRow.evidence.acquisition_mode} />
+            <InspectorRow label="Freshness" value={selectedRow.evidence.freshness_status} detail={selectedRow.evidence.age_hours != null ? `${selectedRow.evidence.age_hours.toFixed(1)} h old` : 'Age not stored'} />
+          </div>
+        </section>
+      </div>
     );
   }
 
   function renderTrend() {
     return (
-      <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.1s' }}>
-        <div className="surface-ink overflow-hidden p-5">
+      <div className="cp-split-workspace">
+        <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.1s' }}>
+          <div className="surface-ink overflow-hidden p-5">
           <div className="flex flex-col gap-4 border-b border-white/10 pb-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <div className="cp-subtle-label !text-slate-400">Selected Metal</div>
@@ -474,8 +583,10 @@ export default function Prices() {
               </>
             )}
           </div>
-        </div>
-      </section>
+          </div>
+        </section>
+        <div>{renderHistoryRail()}</div>
+      </div>
     );
   }
 
