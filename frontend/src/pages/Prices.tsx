@@ -293,9 +293,9 @@ export default function Prices() {
           <div className="mb-5 flex flex-col gap-4 border-b border-slate-900/8 pb-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <div className="cp-subtle-label">Live Metal Prices</div>
-              <h2 className="cp-heading-xl mt-2">Track quotes on the left and inspect trust on the right.</h2>
+              <h2 className="cp-heading-xl mt-2">Monitor live and indexed metal price basis.</h2>
               <p className="cp-body-copy mt-2 max-w-2xl">
-                The directory stays optimized for scanning. The rail stays optimized for reading evidence, freshness, and source quality.
+                Scan the tracked symbols first, then inspect evidence, freshness, and source quality for the selected metal.
               </p>
             </div>
 

@@ -62,35 +62,46 @@ export function WorkspaceSectionNav({
   activeIndex,
   onSelect,
 }: WorkspaceSectionNavProps) {
+  const activeSection = sections[activeIndex] ?? sections[0];
+
   return (
-    <section className="surface-card-soft px-4 py-4">
-      <div>
-        <div className="cp-subtle-label">Workflow</div>
-        <div className="mt-2 text-sm text-slate-600">
-          Section {activeIndex + 1} of {sections.length}
+    <section className="surface-card-soft px-4 py-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <div className="cp-subtle-label">Workflow</div>
+          <div className="mt-2 text-sm font-medium text-slate-700">
+            Step {activeIndex + 1} of {sections.length}
+          </div>
+        </div>
+        <div className="text-xs leading-6 text-slate-500">
+          {activeSection?.summary}
         </div>
       </div>
 
-      <div className="mt-4 grid gap-2 lg:grid-cols-[repeat(auto-fit,minmax(180px,1fr))]">
+      <div className="mt-4 grid gap-2 lg:grid-cols-[repeat(auto-fit,minmax(150px,1fr))]">
         {sections.map((section, index) => {
           const active = section.id === activeSectionId;
           return (
             <button
               key={section.id}
               onClick={() => onSelect(section.id)}
-              className={`rounded-[18px] border px-3 py-3 text-left transition ${
+              className={`rounded-[16px] border px-3 py-3 text-left transition ${
                 active
-                  ? 'border-slate-950 bg-slate-950 text-white'
-                  : 'border-slate-200 bg-white/82 text-slate-700 hover:border-slate-300'
+                  ? 'border-slate-950 bg-white text-slate-950 shadow-[0_6px_16px_rgba(15,23,42,0.06)]'
+                  : 'border-slate-200/90 bg-transparent text-slate-500 hover:border-slate-300 hover:bg-white/72'
               }`}
             >
-              <div className={`text-[11px] font-semibold uppercase tracking-[0.18em] ${active ? 'text-slate-300' : 'text-slate-400'}`}>
-                {String(index + 1).padStart(2, '0')}
+              <div className="flex items-center gap-2">
+                <span
+                  className={`inline-flex h-6 min-w-6 items-center justify-center rounded-full px-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] ${
+                    active ? 'bg-slate-950 text-white' : 'bg-slate-100 text-slate-500'
+                  }`}
+                >
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <div className="font-semibold">{section.label}</div>
               </div>
-              <div className="mt-2 font-semibold">{section.label}</div>
-              <div className={`mt-1 text-xs leading-5 ${active ? 'text-slate-300' : 'text-slate-500'}`}>
-                {section.summary}
-              </div>
+              {active ? <div className="mt-2 text-xs leading-5 text-slate-500">{section.summary}</div> : null}
             </button>
           );
         })}
@@ -119,13 +130,13 @@ export function WorkspaceSectionFooter({
   canGoNext,
 }: WorkspaceSectionFooterProps) {
   return (
-    <section className="surface-card-soft px-4 py-4">
+    <section className="surface-card-soft px-4 py-3">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <div className="cp-subtle-label">Step Navigation</div>
+          <div className="cp-subtle-label">Continue</div>
           <div className="mt-2 font-semibold text-slate-950">{activeSection.label}</div>
           <div className="mt-1 text-xs leading-5 text-slate-500">
-            Section {activeIndex + 1} of {totalSections}. {activeSection.summary}
+            Step {activeIndex + 1} of {totalSections}. {activeSection.summary}
           </div>
         </div>
 

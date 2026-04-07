@@ -112,7 +112,7 @@ const getScale = (tons: number): Scale => (tons < 5 ? 'small' : tons < 70 ? 'med
 const sourceTypeLabel = (sourceType: SourceType) => sourceType === 'live' ? 'Live' : sourceType === 'indexed' ? 'Indexed' : 'Manual';
 const defaultRows = (): CalculatorRow[] => [
   { id: uid(), role: 'active_metal', name: 'Ni', wt_pct: 20, price_per_lb: 0, source_type: 'manual', source: 'Manual input' },
-  { id: uid(), role: 'support', name: 'Al2O3', wt_pct: 80, price_per_lb: 0.5, source_type: 'manual', source: 'Manual support default' },
+  defaultSupportRow(),
 ];
 const sourceTone = (sourceType: SourceType) => sourceType === 'live' ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : sourceType === 'indexed' ? 'border-amber-200 bg-amber-50 text-amber-700' : 'border-slate-200 bg-white text-slate-600';
 const priceTone = (sourceType: SourceType) => sourceType === 'live' ? 'border-emerald-200 bg-emerald-50/70 text-emerald-800' : sourceType === 'indexed' ? 'border-amber-200 bg-amber-50/70 text-amber-800' : '';
@@ -129,6 +129,26 @@ const defaultElectrocatalystConfig = (): ElectrocatalystDraft => ({
   ionomerToCatalystRatio: 0.8,
   templateId: 'pem_fuel_cell_ccm',
 });
+
+function defaultSupportRow(): CalculatorRow {
+  return {
+    id: uid(),
+    role: 'support',
+    name: 'Al2O3',
+    wt_pct: 80,
+    price_per_lb: 0.5,
+    source_type: 'manual',
+    source: 'Manual support default',
+  };
+}
+
+function ensureThermalRows(rows: CalculatorRow[]) {
+  const thermalRows = rows.filter((row) => row.role === 'active_metal' || row.role === 'promoter' || row.role === 'support');
+  const hasActiveMetal = thermalRows.some((row) => row.role === 'active_metal');
+  if (!hasActiveMetal) return defaultRows();
+  if (!thermalRows.some((row) => row.role === 'support')) return [...thermalRows, defaultSupportRow()];
+  return thermalRows;
+}
 
 function hasNamedRow(row: CalculatorRow) {
   return row.name.trim().length > 0;
@@ -284,6 +304,9 @@ export default function Calculator() {
   const [applicationFamily, setApplicationFamily] = useState<ApplicationFamily>(() => storedDraft?.applicationFamily ?? 'fuel_cell');
   const [electrocatalystConfig, setElectrocatalystConfig] = useState<ElectrocatalystDraft>(() => storedDraft?.electrocatalystConfig ?? defaultElectrocatalystConfig());
   const [orderSize, setOrderSize] = useState<number>(() => storedDraft?.orderSize ?? 20);
+  const [includeSpentValue, setIncludeSpentValue] = useState<boolean>(() => storedDraft?.includeSpentValue ?? false);
+  const [reactorType, setReactorType] = useState<'fixed' | 'slurry'>(() => storedDraft?.reactorType ?? 'fixed');
+  const [catalystBulkDensity, setCatalystBulkDensity] = useState<number>(() => storedDraft?.catalystBulkDensity ?? 50);
   const [selectedBenchmark] = useState<CalculatorBenchmarkPreset | null>(() => storedDraft?.benchmarkCandidate ?? null);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -304,10 +327,25 @@ export default function Calculator() {
       applicationFamily,
       orderSize,
       pricesUpdatedAt: pricesUpdatedAt ? pricesUpdatedAt.toISOString() : null,
+      includeSpentValue,
+      reactorType,
+      catalystBulkDensity,
       electrocatalystConfig,
       benchmarkCandidate: selectedBenchmark,
     });
-  }, [applicationFamily, catalystDomain, electrocatalystConfig, orderSize, pricesUpdatedAt, rows, selectedBenchmark, steps]);
+  }, [
+    applicationFamily,
+    catalystBulkDensity,
+    catalystDomain,
+    electrocatalystConfig,
+    includeSpentValue,
+    orderSize,
+    pricesUpdatedAt,
+    reactorType,
+    rows,
+    selectedBenchmark,
+    steps,
+  ]);
 
   useEffect(() => {
     setSteps((previous) => previous.filter((key) => {
@@ -474,7 +512,11 @@ export default function Calculator() {
     }
   }
 
-  const activeElectroTemplate = electroTemplates.find((template) => template.id === electrocatalystConfig.templateId) ?? null;
+  const activeBenchmark = selectedBenchmark?.catalyst_domain === catalystDomain ? selectedBenchmark : null;
+  const activeElectroTemplate =
+    catalystDomain === 'electrocatalyst'
+      ? electroTemplates.find((template) => template.id === electrocatalystConfig.templateId) ?? null
+      : null;
   const electroMaterialMap = new Map(electroMaterials.map((material) => [String(material.id), material]));
   const catalystPowders = electroMaterials.filter((material) => material.category === 'Electrocatalyst Powder');
   const ionomerOptions = electroMaterials.filter((material) => material.category === 'Ionomer');
@@ -484,6 +526,29 @@ export default function Calculator() {
   const selectedIonomerMaterial = electroMaterialMap.get(electrocatalystConfig.ionomerMaterialKey) ?? null;
   const selectedMembraneMaterial = electroMaterialMap.get(electrocatalystConfig.membraneMaterialKey) ?? null;
   const selectedSubstrateMaterial = electroMaterialMap.get(electrocatalystConfig.substrateMaterialKey) ?? null;
+
+  function handleCatalystDomainChange(nextDomain: 'thermal' | 'electrocatalyst') {
+    if (nextDomain === catalystDomain) return;
+    setCatalystDomain(nextDomain);
+    setError('');
+
+    if (nextDomain === 'thermal') {
+      setRows((previous) => ensureThermalRows(previous));
+      const thermalBenchmarkSteps =
+        selectedBenchmark?.catalyst_domain === 'thermal'
+          ? selectedBenchmark.route.steps
+          : DEFAULT_STEPS.filter((key) => {
+              const step = ALL_STEPS.find((item) => item.key === key);
+              return step ? (step.scales as readonly Scale[]).includes(currentScale) : false;
+            });
+      setSteps(thermalBenchmarkSteps);
+      return;
+    }
+
+    if (selectedBenchmark?.catalyst_domain === 'electrocatalyst') {
+      setApplicationFamily(selectedBenchmark.application_family);
+    }
+  }
 
   const updateRow = (id: string, patch: Partial<CalculatorRow>) => setRows((previous) => previous.map((row) => row.id === id ? { ...row, ...patch } : row));
   const onMaterialChange = (id: string, name: string) => updateRow(id, { name, price_per_lb: liveMap[name]?.price_per_lb ?? 0, source_type: liveMap[name]?.source_type ?? 'manual', source: liveMap[name]?.source ?? 'Manual input' });
@@ -512,6 +577,14 @@ export default function Calculator() {
       && activeElectroTemplate,
   );
   const isValid = catalystDomain === 'electrocatalyst' ? isElectroValid : isThermalValid;
+  const latestSnapshotForCurrentCase = latestSnapshot
+    && latestSnapshot.result.input_summary.catalyst_domain === catalystDomain
+    && (
+      catalystDomain !== 'electrocatalyst'
+      || latestSnapshot.result.input_summary.application_family === applicationFamily
+    )
+      ? latestSnapshot
+      : null;
 
   function toggleRowSource(id: string) {
     setRows((previous) => previous.map((row) => {
@@ -570,6 +643,9 @@ export default function Calculator() {
           catalyst_domain: catalystDomain,
           application_family: applicationFamily,
           order_size_tons: orderSize,
+          include_spent_value: includeSpentValue,
+          reactor_type: reactorType,
+          catalyst_bulk_density: catalystBulkDensity,
         };
       }
 
@@ -874,205 +950,196 @@ export default function Calculator() {
     );
   }
 
-  function renderLatestResultCard() {
-    const latestGenerated = latestSnapshot
-      ? new Date(latestSnapshot.generatedAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })
+  function renderWorkspaceSummary() {
+    const latestGenerated = latestSnapshotForCurrentCase
+      ? new Date(latestSnapshotForCurrentCase.generatedAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })
       : null;
+    const manualOverrideCount = catalystDomain === 'electrocatalyst'
+      ? 0
+      : rows.filter((row) => row.source_type === 'manual' && row.name.trim().length > 0).length;
+    const recipeSummary = catalystDomain === 'electrocatalyst'
+      ? `${selectedCatalystMaterial?.name ?? 'Catalyst'}, ${selectedIonomerMaterial?.name ?? 'Ionomer'}, ${selectedMembraneMaterial?.name ?? 'Membrane'}`
+      : `${activeMetalCount} active metal${activeMetalCount === 1 ? '' : 's'} / ${supportWtPct.toFixed(1)} wt% support`;
+    const preparationSummary =
+      catalystDomain === 'electrocatalyst'
+        ? activeElectroTemplate?.name ?? 'Select a preparation template'
+        : activeBenchmark?.route.name ?? 'Manual step selection';
+    const recoverySummary = catalystDomain === 'thermal'
+      ? includeSpentValue
+        ? `Recovery proxy on / ${reactorType} bed / ${catalystBulkDensity.toFixed(1)} lb/ft3`
+        : 'Recovery proxy off'
+      : applicationFamilyLabel(applicationFamily);
 
     return (
-      <section className="surface-ink overflow-hidden p-4">
-        <div className="cp-subtle-label !text-slate-400">Latest Result</div>
-        <div className="mt-3 flex flex-wrap items-end gap-3">
-          <div className="font-display text-[clamp(2.2rem,4vw,3.7rem)] leading-none text-white">
-            {latestSnapshot ? `$${toDisplay(latestSnapshot.result.summary.estimated_price_per_lb).toFixed(2)}` : 'Pending'}
+      <section className="surface-card p-4">
+        <div className="grid gap-3 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)]">
+          <div className="rounded-[22px] border border-slate-900/8 bg-white/62 p-4">
+            <div className="flex items-start justify-between gap-3">
+              <div className="cp-subtle-label">Price basis</div>
+              <button onClick={syncPrices} disabled={refreshing} className="cp-button-secondary px-3 py-2 text-xs">
+                <span className={`mr-2 inline-flex h-3.5 w-3.5 rounded-full border-2 border-current border-t-transparent ${refreshing ? 'animate-spin' : ''}`} />
+                {refreshing ? 'Refreshing' : 'Refresh'}
+              </button>
+            </div>
+            <div className="mt-3 space-y-1">
+              <CompactValueRow
+                label="Status"
+                value={refreshing ? 'Refreshing' : pricesUpdatedAt ? 'Ready' : 'Pending'}
+                detail={pricesUpdatedAt
+                  ? `${liveFeedCount} live / ${indexedFeedCount} indexed rows synced ${pricesUpdatedAt.toLocaleTimeString('en-US', {
+                      hour: 'numeric',
+                      minute: '2-digit',
+                      hour12: true,
+                    })}`
+                  : 'Indexed and manual rows stay usable before the next live refresh.'}
+              />
+              <CompactValueRow label="Manual overrides" value={String(manualOverrideCount)} detail="Rows still detached from tracked feeds." />
+            </div>
           </div>
-          <div className="pb-1 text-lg text-slate-300">{latestSnapshot ? fmtLabel : ''}</div>
-        </div>
-        <div className="mt-2 text-sm text-slate-300">
-          {latestSnapshot
-            ? `Generated ${latestGenerated} with ${latestSnapshot.selectedSupportName ?? 'support'} as the active basis.`
-            : 'No result yet. The first successful estimate appears here automatically.'}
-        </div>
-        {latestSnapshot?.benchmarkCandidate ? (
-          <div className="mt-3 flex flex-wrap gap-2">
-            <span className="cp-chip-dark">{latestSnapshot.benchmarkCandidate.title}</span>
-            <span className="cp-chip-dark">{latestSnapshot.benchmarkCandidate.route.name}</span>
+
+          <div className="rounded-[22px] border border-slate-900/8 bg-white/62 p-4">
+            <div className="cp-subtle-label">Current case</div>
+            <div className="mt-2 text-base font-semibold text-slate-950">{catalystDomainLabel(catalystDomain)}</div>
+            <div className="mt-2 text-sm leading-6 text-slate-600">{recipeSummary}</div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <span className="cp-chip">{catalystDomainLabel(catalystDomain)}</span>
+              {catalystDomain === 'electrocatalyst' ? <span className="cp-chip">{applicationFamilyLabel(applicationFamily)}</span> : null}
+              {activeBenchmark ? <span className="cp-chip">{activeBenchmark.title}</span> : null}
+            </div>
           </div>
-        ) : null}
-        <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
-          <MetricTile label="Current scale" value={scale.label} detail={`${orderSize} tons / ${scale.rate}`} dark />
-          <MetricTile
-            label="Selected steps"
-            value={String(steps.length)}
-            detail={steps.length > 0 ? `${formatStepLabel(steps[0])}${steps.length > 1 ? ` +${steps.length - 1}` : ''}` : 'Choose at least one'}
-            dark
-          />
-          <MetricTile label="Price sources" value={String(liveFeedCount + indexedFeedCount)} detail={`${liveFeedCount} live / ${indexedFeedCount} indexed`} dark />
-          <MetricTile
-            label="Recipe load"
-            value={catalystDomain === 'electrocatalyst' ? `${electrocatalystConfig.catalystLoadingMgCm2.toFixed(2)} mg/cm2` : `${nonSupportWt.toFixed(1)} wt%`}
-            detail={catalystDomain === 'electrocatalyst' ? 'Catalyst loading basis' : `Support closes at ${supportWtPct.toFixed(1)} wt%`}
-            dark
-          />
+
+          <div className="rounded-[22px] border border-slate-900/8 bg-white/62 p-4">
+            <div className="cp-subtle-label">Preparation basis</div>
+            <div className="mt-2 text-base font-semibold text-slate-950">{preparationSummary}</div>
+            <div className="mt-2 space-y-1">
+              <CompactValueRow label="Campaign" value={`${orderSize} tons`} detail={`${scale.label} scale / ${scale.rate}`} />
+              <CompactValueRow
+                label="Steps"
+                value={String(steps.length)}
+                detail={steps.length > 0 ? `${formatStepLabel(steps[0])}${steps.length > 1 ? ` +${steps.length - 1}` : ''}` : 'Choose at least one step'}
+              />
+              <CompactValueRow
+                label={catalystDomain === 'thermal' ? 'Recovery' : 'Family'}
+                value={recoverySummary}
+                detail={
+                  catalystDomain === 'thermal'
+                    ? 'Optional spent catalyst value proxy for recovery-sensitive screening.'
+                    : 'Electrode stack family currently selected.'
+                }
+              />
+            </div>
+          </div>
+
+          <div className="rounded-[22px] border border-slate-900/8 bg-[linear-gradient(180deg,#0f172a,#18253b)] p-4 text-white shadow-[0_14px_34px_rgba(15,23,42,0.14)]">
+            <div className="flex items-start justify-between gap-3">
+              <div className="cp-subtle-label !text-slate-400">Latest result</div>
+              <button onClick={() => navigate('/calculator/result')} disabled={!latestSnapshotForCurrentCase} className="cp-button-ink px-3 py-2 text-xs">
+                Open
+              </button>
+            </div>
+            <div className="mt-3 flex items-end gap-2">
+              <div className="font-display text-[2.35rem] leading-none text-white">
+                {latestSnapshotForCurrentCase ? `$${toDisplay(latestSnapshotForCurrentCase.result.summary.estimated_price_per_lb).toFixed(2)}` : 'Pending'}
+              </div>
+              <div className="pb-1 text-sm text-slate-300">{latestSnapshotForCurrentCase ? fmtLabel : ''}</div>
+            </div>
+            <div className="mt-2 text-xs leading-6 text-slate-300">
+              {latestSnapshotForCurrentCase
+                ? `Generated ${latestGenerated}. ${latestSnapshotForCurrentCase.selectedSupportName ?? 'Support'} remained the active basis.`
+                : 'No matching result for this workflow yet. Run the estimate once to populate this summary.'}
+            </div>
+          </div>
         </div>
       </section>
     );
   }
 
-  function renderEstimateEvidenceRail() {
-    const evidenceRows = catalystDomain === 'electrocatalyst'
-      ? [
-          { label: 'Catalyst powder', value: selectedCatalystMaterial?.name ?? 'Pending', detail: selectedCatalystMaterial ? materialQuoteLabel(selectedCatalystMaterial) : 'Choose a library record.' },
-          { label: 'Ionomer', value: selectedIonomerMaterial?.name ?? 'Pending', detail: selectedIonomerMaterial ? materialQuoteLabel(selectedIonomerMaterial) : 'Choose a library record.' },
-          { label: 'Membrane', value: selectedMembraneMaterial?.name ?? 'Pending', detail: selectedMembraneMaterial ? materialQuoteLabel(selectedMembraneMaterial) : 'Choose a library record.' },
-          { label: 'Substrate / GDL', value: selectedSubstrateMaterial?.name ?? 'Pending', detail: selectedSubstrateMaterial ? materialQuoteLabel(selectedSubstrateMaterial) : 'Choose a library record.' },
-        ]
-      : rows
-          .filter((row) => row.name.trim().length > 0)
-          .map((row) => ({
-            label: row.role === 'support' ? 'Support' : row.role === 'promoter' ? 'Promoter' : 'Active metal',
-            value: row.name,
-            detail: `${row.wt_pct.toFixed(1)} wt% / ${sourceTypeLabel(row.source_type)}`,
-          }));
-    const manualOverrideCount = catalystDomain === 'electrocatalyst'
-      ? 0
-      : rows.filter((row) => row.source_type === 'manual' && row.name.trim().length > 0).length;
-
-    return (
-      <div className="cp-inspector-rail">
-        <section className="cp-rail-panel">
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <div className="cp-subtle-label">Evidence Surface</div>
-              <div className="mt-2 text-lg font-semibold text-slate-950">Keep the pricing basis visible while you edit.</div>
-            </div>
-            <button onClick={syncPrices} disabled={refreshing} className="cp-button-secondary px-3 py-2 text-xs">
-              <span className={`mr-2 inline-flex h-3.5 w-3.5 rounded-full border-2 border-current border-t-transparent ${refreshing ? 'animate-spin' : ''}`} />
-              {refreshing ? 'Refreshing' : 'Refresh'}
-            </button>
-          </div>
-          <div className="mt-4 space-y-1">
-            <CompactValueRow
-              label="Quote basis"
-              value={refreshing ? 'Refreshing' : pricesUpdatedAt ? 'Ready' : 'Pending'}
-              detail={pricesUpdatedAt
-                ? `${liveFeedCount} live and ${indexedFeedCount} indexed rows synced ${pricesUpdatedAt.toLocaleTimeString('en-US', {
-                    hour: 'numeric',
-                    minute: '2-digit',
-                    hour12: true,
-                  })}`
-                : 'The estimate can run from indexed and manual rows before a refresh.'}
-            />
-            <CompactValueRow label="Manual overrides" value={String(manualOverrideCount)} detail="Rows still detached from live or indexed pricing." />
-            <CompactValueRow label="Campaign basis" value={`${orderSize} tons`} detail={`${scale.label} scale / ${scale.rate}`} />
-          </div>
-        </section>
-
-        <section className="cp-rail-panel">
-          <div className="cp-subtle-label">Input Surface</div>
-          <div className="mt-2 text-lg font-semibold text-slate-950">
-            {catalystDomain === 'electrocatalyst' ? 'Electrode stack' : 'Catalyst recipe'}
-          </div>
-          <div className="mt-3 space-y-2">
-            {evidenceRows.length > 0 ? (
-              evidenceRows.map((item) => (
-                <div key={`${item.label}-${item.value}`} className="rounded-[18px] border border-slate-900/8 bg-white/72 px-3 py-3">
-                  <div className="cp-subtle-label">{item.label}</div>
-                  <div className="mt-1 text-sm font-semibold text-slate-950">{item.value}</div>
-                  <div className="mt-1 text-xs leading-5 text-slate-500">{item.detail}</div>
-                </div>
-              ))
-            ) : (
-              <div className="rounded-[18px] border border-dashed border-slate-300 bg-white/62 px-3 py-3 text-sm text-slate-500">
-                No input records are populated yet.
-              </div>
-            )}
-          </div>
-          <div className="mt-3 flex flex-wrap gap-2">
-            <span className="cp-chip">{catalystDomainLabel(catalystDomain)}</span>
-            {catalystDomain === 'electrocatalyst' ? <span className="cp-chip">{applicationFamilyLabel(applicationFamily)}</span> : null}
-            {selectedBenchmark ? <span className="cp-chip">{selectedBenchmark.title}</span> : null}
-          </div>
-        </section>
-
-        {(selectedBenchmark || activeElectroTemplate) ? (
-          <section className="cp-rail-panel">
-            <div className="cp-subtle-label">Method Surface</div>
-            <div className="mt-2 text-lg font-semibold text-slate-950">
-              {activeElectroTemplate?.name ?? selectedBenchmark?.route.name ?? 'Preparation basis'}
-            </div>
-            <div className="mt-2 text-xs leading-6 text-slate-500">
-              {activeElectroTemplate?.description ?? selectedBenchmark?.screening_summary ?? 'Preparation metadata is attached to the active case.'}
-            </div>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {activeElectroTemplate?.manufacturing_mode ? <span className="cp-chip">{activeElectroTemplate.manufacturing_mode}</span> : null}
-              {selectedBenchmark ? <span className="cp-chip">Evidence {selectedBenchmark.scores.evidence.toFixed(1)}</span> : null}
-              <span className="cp-chip">{steps.length} steps</span>
-            </div>
-          </section>
-        ) : null}
-
-        <div className="space-y-4">
-          {renderLatestResultCard()}
-          <section className="cp-rail-panel">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <div className="cp-subtle-label">Result Surface</div>
-                <div className="mt-2 text-lg font-semibold text-slate-950">Read the latest result separately.</div>
-              </div>
-              <button onClick={() => navigate('/calculator/result')} disabled={!latestSnapshot} className="cp-button-secondary px-3 py-2 text-xs">
-                Open
-              </button>
-            </div>
-            <div className="mt-2 text-xs leading-6 text-slate-500">
-              The result screen stays optimized for reading. This workspace stays optimized for editing.
-            </div>
-          </section>
-        </div>
-      </div>
-    );
-  }
-
   function renderSetupSection() {
     return (
-      <div className="surface-ghost p-3.5">
-        <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-          <div>
-            <div className="cp-subtle-label">Catalyst type</div>
-            <div className="cp-heading-sm mt-2">{catalystDomainLabel(catalystDomain)}</div>
-            <p className="mt-2 text-xs leading-6 text-slate-500">
-              {catalystDomain === 'electrocatalyst'
-                ? 'Electrocatalyst separates powder, ionomer, membrane, and substrate in one preparation estimate.'
-                : 'Thermocatalyst keeps bulk composition, support basis, and preparation steps in one estimate.'}
-            </p>
-          </div>
-          <div className="cp-toolbar">
-            {(['thermal', 'electrocatalyst'] as const).map((value) => (
+      <section className="surface-card p-5">
+        <div>
+          <div className="cp-subtle-label">Catalyst type</div>
+          <h2 className="cp-heading-lg mt-2">Choose the workflow before you edit the recipe.</h2>
+          <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-600">
+            Thermocatalyst keeps bulk composition and support balance together. Electrocatalyst separates catalyst powder, ionomer, membrane, and substrate.
+          </p>
+        </div>
+
+        <div className="mt-5 grid gap-3 lg:grid-cols-2">
+          {([
+            {
+              value: 'thermal' as const,
+              title: 'Thermocatalyst',
+              note: 'Use bulk composition, support share, and plant-style preparation steps in one estimate.',
+              detail: 'Best for supported metal catalysts, mixed oxides, zeolites, and reforming or cracking routes.',
+            },
+            {
+              value: 'electrocatalyst' as const,
+              title: 'Electrocatalyst',
+              note: 'Split the electrode stack into catalyst powder, ionomer, membrane, and substrate.',
+              detail: 'Best for PEMFC, PEMWE, DMFC, and other electrode-preparation workflows.',
+            },
+          ]).map((option) => {
+            const active = catalystDomain === option.value;
+            return (
               <button
-                key={value}
-                onClick={() => {
-                  setCatalystDomain(value);
-                }}
-                className={`rounded-[16px] px-3 py-2 text-xs font-semibold transition ${
-                  catalystDomain === value ? 'bg-slate-950 text-white' : 'text-slate-600 hover:bg-white hover:text-slate-900'
+                key={option.value}
+                onClick={() => handleCatalystDomainChange(option.value)}
+                className={`rounded-[22px] border px-4 py-4 text-left transition ${
+                  active
+                    ? 'border-slate-950 bg-white shadow-[0_10px_24px_rgba(15,23,42,0.06)]'
+                    : 'border-slate-200 bg-white/70 hover:border-slate-300 hover:bg-white'
                 }`}
               >
-                {catalystDomainLabel(value)}
+                <div className="flex items-center justify-between gap-3">
+                  <div className="cp-heading-sm">{option.title}</div>
+                  <span className={`inline-flex h-6 min-w-6 items-center justify-center rounded-full px-2 text-[10px] font-semibold uppercase tracking-[0.16em] ${
+                    active ? 'bg-slate-950 text-white' : 'bg-slate-100 text-slate-500'
+                  }`}>
+                    {active ? 'On' : 'Off'}
+                  </span>
+                </div>
+                <div className="mt-3 text-sm leading-6 text-slate-700">{option.note}</div>
+                <div className="mt-2 text-xs leading-6 text-slate-500">{option.detail}</div>
               </button>
-            ))}
-          </div>
+            );
+          })}
         </div>
-      </div>
+
+        <div className="mt-4 rounded-[20px] border border-slate-200 bg-slate-50/80 px-4 py-3 text-sm leading-6 text-slate-600">
+          Changing workflow does not auto-advance. Review the selected mode, then move with <span className="font-semibold text-slate-950">Next</span>.
+        </div>
+      </section>
     );
   }
 
   function renderInputsSection() {
     if (catalystDomain === 'electrocatalyst') {
-      return renderElectrocatalystPanel();
+      return (
+        <section className="surface-card p-5">
+          <div>
+            <div className="cp-subtle-label">Composition</div>
+            <h2 className="cp-heading-lg mt-2">Build the electrode stack.</h2>
+            <p className="mt-2 text-sm leading-7 text-slate-600">
+              Choose the stored material records first, then tune the geometric inputs used for area-based costing.
+            </p>
+          </div>
+          <div className="mt-5">{renderElectrocatalystPanel()}</div>
+        </section>
+      );
     }
 
     return (
-      <div className="space-y-3.5">
+      <section className="surface-card p-5">
+        <div>
+          <div className="cp-subtle-label">Composition</div>
+          <h2 className="cp-heading-lg mt-2">Define the catalyst recipe.</h2>
+          <p className="mt-2 text-sm leading-7 text-slate-600">
+            Keep active metals and promoters explicit. Support share closes automatically so the mass basis stays readable.
+          </p>
+        </div>
+
+        <div className="mt-5 space-y-3.5">
         {renderRows('active_metal')}
         {renderRows('promoter')}
         <div className="surface-ghost p-3.5">
@@ -1088,22 +1155,33 @@ export default function Calculator() {
             </div>
           ))}
         </div>
-      </div>
+        </div>
+      </section>
     );
   }
 
   function renderManufacturingSection() {
     return (
-      <div className="space-y-4">
-        <div><div className="cp-subtle-label">Preparation Method</div><h2 className="cp-heading-xl mt-2">{catalystDomain === 'electrocatalyst' ? 'Choose the preparation method' : 'Choose the preparation method'}</h2><p className="cp-body-copy mt-2 max-w-2xl">{catalystDomain === 'electrocatalyst' ? 'Templates add pretreatment, coating, drying, lamination, and break-in steps. You can still adjust the steps below.' : 'Pick the industrial steps that best approximate the synthesis method, then let campaign size set the scale basis.'}</p></div>
-        {selectedBenchmark ? (
+      <section className="surface-card p-5">
+        <div>
+          <div className="cp-subtle-label">Preparation method</div>
+          <h2 className="cp-heading-lg mt-2">Choose the preparation basis.</h2>
+          <p className="mt-2 text-sm leading-7 text-slate-600">
+            {catalystDomain === 'electrocatalyst'
+              ? 'Templates add pretreatment, coating, drying, lamination, and break-in steps. Adjust them if the lab route differs.'
+              : 'Pick the industrial steps that best approximate the synthesis route, then let campaign size set the scale basis.'}
+          </p>
+        </div>
+
+        <div className="mt-5 space-y-4">
+        {activeBenchmark ? (
           <div className="rounded-[24px] border border-emerald-200 bg-emerald-50/80 px-4 py-4 text-sm text-emerald-900">
             <div className="cp-subtle-label !text-emerald-700">Loaded reference baseline</div>
-            <div className="mt-2 font-semibold">{selectedBenchmark.route.name}</div>
-            <div className="mt-2 leading-6">{selectedBenchmark.screening_summary}</div>
+            <div className="mt-2 font-semibold">{activeBenchmark.route.name}</div>
+            <div className="mt-2 leading-6">{activeBenchmark.screening_summary}</div>
             <div className="mt-3 flex flex-wrap gap-2">
-              <span className="cp-chip">{catalystDomainLabel(selectedBenchmark.catalyst_domain)}</span>
-              <span className="cp-chip">{applicationFamilyLabel(selectedBenchmark.application_family)}</span>
+              <span className="cp-chip">{catalystDomainLabel(activeBenchmark.catalyst_domain)}</span>
+              <span className="cp-chip">{applicationFamilyLabel(activeBenchmark.application_family)}</span>
             </div>
           </div>
         ) : null}
@@ -1128,7 +1206,70 @@ export default function Calculator() {
             </div>
           ))}
         </div>
-      </div>
+        {catalystDomain === 'thermal' ? (
+          <div className="rounded-[24px] border border-slate-900/8 bg-white/72 p-4">
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+              <div className="max-w-2xl">
+                <div className="cp-subtle-label">Recovery scenario</div>
+                <div className="cp-heading-sm mt-2">Optional spent catalyst value proxy</div>
+                <p className="mt-2 text-sm leading-7 text-slate-600">
+                  Use this when the catalyst contains recoverable metal and end-of-life value matters to the screening decision.
+                </p>
+                <p className="mt-2 text-xs leading-6 text-slate-500">
+                  Current engine includes support loss, reactor-type loss, refining loss, and recovery cost. Full deactivation and regeneration-cycle modeling is not yet included.
+                </p>
+              </div>
+              <button
+                onClick={() => setIncludeSpentValue((previous) => !previous)}
+                className={`rounded-[18px] border px-4 py-2.5 text-sm font-semibold transition ${
+                  includeSpentValue
+                    ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
+                    : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
+                }`}
+              >
+                {includeSpentValue ? 'Recovery on' : 'Recovery off'}
+              </button>
+            </div>
+
+            <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              <label className="block">
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Reactor type</div>
+                <select
+                  value={reactorType}
+                  onChange={(event) => setReactorType(event.target.value as 'fixed' | 'slurry')}
+                  className="input-base mt-2"
+                >
+                  <option value="fixed">Fixed bed</option>
+                  <option value="slurry">Slurry</option>
+                </select>
+              </label>
+
+              <label className="block">
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Bulk density</div>
+                <div className="mt-2 flex items-center gap-2">
+                  <input
+                    type="number"
+                    min="1"
+                    step="0.1"
+                    value={catalystBulkDensity}
+                    onChange={(event) => setCatalystBulkDensity(Math.max(1, Number(event.target.value) || 1))}
+                    className="input-base w-full text-right font-mono"
+                  />
+                  <span className="text-xs text-slate-500">lb/ft3</span>
+                </div>
+              </label>
+
+              <div className="rounded-[18px] border border-slate-200 bg-slate-50/80 px-4 py-3">
+                <div className="cp-subtle-label">Screening use</div>
+                <div className="mt-2 text-sm leading-6 text-slate-700">
+                  Best for Pt, Pd, Rh, Ru, Ir, Ni, and Co routes where salvage value changes the commercial basis.
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : null}
+        </div>
+      </section>
     );
   }
 
@@ -1176,31 +1317,23 @@ export default function Calculator() {
           <div className="flex flex-col gap-4 border-b border-slate-900/8 pb-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <div className="cp-subtle-label">Cost Estimate</div>
-              <h2 className="cp-heading-xl mt-2">Design the case, keep the evidence visible, then read the result separately.</h2>
+              <h2 className="cp-heading-xl mt-2">Estimate catalyst preparation cost with traceable inputs.</h2>
               <p className="cp-body-copy mt-2 max-w-2xl">
                 {catalystDomain === 'electrocatalyst'
-                  ? 'The edit surface defines the electrode stack. The rail keeps source evidence and the latest result visible without interrupting the case.'
-                  : 'The edit surface defines the recipe. The rail keeps price provenance and the latest result visible while you work.'}
+                  ? 'Move in order: choose workflow, build the stack, set the preparation basis, then run the result.'
+                  : 'Move in order: choose workflow, define the recipe, set the preparation basis, then run the result.'}
               </p>
             </div>
             <span className="cp-chip">{sectionState.activeSection.label}</span>
-          </div>
-
-          <div className="grid gap-2.5 md:grid-cols-4">
-            <MetricTile label="Active workspace" value={sectionState.activeSection.label} detail={sectionState.activeSection.summary} />
-            <MetricTile label="Price sources" value={String(liveFeedCount + indexedFeedCount)} detail={`${liveFeedCount} live / ${indexedFeedCount} indexed`} />
-            <MetricTile label="Preparation steps" value={String(steps.length)} detail={steps.length > 0 ? 'Selected preparation path' : 'Select at least one step'} />
-            <MetricTile label="Campaign scale" value={scale.label} detail={`${orderSize} tons / ${scale.rate}`} />
           </div>
         </div>
       </section>
 
       <WorkspaceSectionNav sections={ESTIMATE_SECTIONS} activeSectionId={sectionState.activeSectionId} activeIndex={sectionState.activeIndex} onSelect={sectionState.setActiveSection} />
 
-      <div className="cp-split-workspace">
-        <div className="space-y-4">{activeWorkspaceSection}</div>
-        <div>{renderEstimateEvidenceRail()}</div>
-      </div>
+      {renderWorkspaceSummary()}
+
+      <div className="space-y-4">{activeWorkspaceSection}</div>
 
       <WorkspaceSectionFooter
         activeSection={sectionState.activeSection}

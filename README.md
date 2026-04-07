@@ -25,6 +25,29 @@ CatPrice is a desktop application for people who want to compare changing raw-ma
 
 The workflow is reaction-agnostic: choose catalyst type, define composition, set the preparation method, sync current metal prices, and read a clean selling-cost estimate. Optional literature benchmarks can still be loaded as reference starting points, but the main product is the estimator itself, not the benchmark library.
 
+## Research Workflow Alignment
+
+The current product is tuned for catalyst researchers who need a defensible early estimate, not a black-box number. The implementation now makes four things explicit:
+
+- `workflow split`
+  Thermocatalyst and electrocatalyst cases stay separated so bulk supported catalysts do not inherit PEM/MEA route language.
+- `source-linked pricing`
+  Live feeds, indexed rows, vendor rows, and literature rows carry quote basis, year, scope, and public links when those links exist.
+- `recovery-aware thermal screening`
+  Thermocatalyst runs can include an optional spent-catalyst recovery proxy using reactor type and bulk density.
+- `clear model scope`
+  The app states what is estimated directly and what still remains outside the current engine.
+
+## Implemented Now vs Planned Next
+
+| Area | Implemented in CatPrice | Still planned, not claimed as done |
+| --- | --- | --- |
+| Research workflow | Thermocatalyst/electrocatalyst split, preparation templates, result-side evidence review | Structure-editor-first entry surface |
+| Chemistry basis | Explicit composition rows, support closure, electrocatalyst area model | RDKit/ChemPy validation microservice |
+| Lifecycle economics | Optional spent catalyst recovery proxy | Deactivation kinetics and regeneration-cycle economics |
+| Complexity penalty | Route steps, campaign scale, evidence scope | SCScore-style synthesis complexity penalty |
+| Validation | Backend pytest suite, desktop smoke test, data validation script | Chemistry-specific assertion harness and formalized AI output verification |
+
 In practice, CatPrice helps answer questions like:
 
 - How does a change in metal price affect the estimated catalyst cost?
@@ -110,10 +133,21 @@ CatPrice is distributed as a desktop app. The public repository does not require
 - Attaches source-linked family literature banks built from high-confidence journal references and public vendor pages
 - Opens the final estimate on a dedicated result screen for review
 - Re-states the estimate basis through source records, normalization details, and route metadata on the result screen
+- Adds an optional spent-catalyst recovery proxy to thermocatalyst screening runs
 - Runs Monte Carlo uncertainty analysis
 - Applies ChemPPI and CEPCI escalation
 - Includes material, step, and process template libraries
 - Ships as a packaged Windows desktop app through Electron
+
+## Validation and Harness Engineering
+
+CatPrice does not rely on UI polish alone. The current repository validates the engine through:
+
+- `pytest` coverage for the calculation engine and API
+- `desktop smoke` checks for launch, health, prices, and sample calculation behavior
+- `data validation` scripts for library consistency
+
+The long-term direction is stricter still: chemistry-aware assertion checks, richer route validation, and AI-assisted development constrained by executable test and validation layers. Those extensions are part of the roadmap, but they are not presented as already complete.
 
 ## App Mark
 

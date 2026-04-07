@@ -240,9 +240,9 @@ export default function Library() {
         <div className="flex flex-col gap-4 border-b border-slate-900/8 pb-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <div className="cp-subtle-label">Source Library</div>
-            <h2 className="cp-heading-xl mt-2">Materials, sources, and route templates</h2>
+            <h2 className="cp-heading-xl mt-2">Inspect material sources, step rates, and route templates.</h2>
             <p className="cp-body-copy mt-2 max-w-2xl">
-              Move between material sources, process steps, and route templates from one place, with clear domain and application filters.
+              Keep quote basis, route structure, and domain filters in one library so the costing workflow stays auditable.
             </p>
           </div>
           <span className="cp-chip">{tab}</span>

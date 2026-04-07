@@ -8,21 +8,56 @@ Base URL:
 ## Calculator
 
 ### POST /api/calculate
-Full catalyst cost estimation using Step Method.
+Full catalyst cost estimation using the current multi-component request shape.
 
-**Request Body:**
+**Thermocatalyst example:**
 ```json
 {
-  "metal_symbol": "Ni",
-  "metal_price": 7.50,
-  "metal_price_unit": "$/lb",
-  "metal_loading_wt_pct": 15.0,
-  "support_name": "Al2O3",
-  "support_price_per_lb": 0.50,
+  "catalyst_domain": "thermal",
+  "application_family": "general",
+  "components": [
+    { "role": "active_metal", "name": "Ni", "wt_pct": 20.0, "price_per_lb": 7.5 },
+    { "role": "support", "name": "Al2O3", "wt_pct": 80.0, "price_per_lb": 0.5 }
+  ],
   "steps": ["mixer_slurry", "incipient_wetness", "dryer_rotary_100_300C"],
-  "order_size_tons": 20.0
+  "order_size_tons": 20.0,
+  "include_spent_value": true,
+  "reactor_type": "fixed",
+  "catalyst_bulk_density": 50.0
 }
 ```
+
+**Electrocatalyst example:**
+```json
+{
+  "catalyst_domain": "electrocatalyst",
+  "application_family": "fuel_cell",
+  "template_id": "pem_fuel_cell_ccm",
+  "components": [
+    { "role": "active_catalyst", "material_key": "fcs:ptc-20-vulcan", "wt_pct": 100.0 }
+  ],
+  "steps": ["membrane_pretreatment", "ionomer_ink_homogenization", "ccm_coating_pass", "electrode_drying_low_temp", "hot_press_lamination", "electrochemical_break_in"],
+  "order_size_tons": 20.0,
+  "electrode_input": {
+    "application_family": "fuel_cell",
+    "catalyst_material_key": "fcs:ptc-20-vulcan",
+    "ionomer_material_key": "fcs:nafion-d2020",
+    "membrane_material_key": "fcs:nafion-117",
+    "substrate_material_key": "fcs:carbon-paper-gdl",
+    "active_area_cm2": 25.0,
+    "catalyst_loading_mg_cm2": 0.5,
+    "ionomer_to_catalyst_ratio": 0.8
+  }
+}
+```
+
+**Notable response fields:**
+
+- `summary`: estimated and net cost
+- `step_method`: campaign basis and cost split
+- `spent_catalyst`: returned when recovery screening is enabled
+- `electrode_model`: returned for electrocatalyst area-based runs
+- `resolved_materials`: source rows, quote basis, and normalization metadata
 
 ### POST /api/calculate/quick
 Simplified calculation with minimal inputs.

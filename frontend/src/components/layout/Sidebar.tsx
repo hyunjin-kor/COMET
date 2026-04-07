@@ -9,7 +9,7 @@ export default function Sidebar() {
 
   return (
     <aside className="hidden lg:block">
-      <div className="surface-rail sticky top-[50px] overflow-hidden p-3">
+      <div className="surface-rail sticky top-[40px] overflow-hidden p-3">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(120,242,208,0.16),transparent_0_34%),radial-gradient(circle_at_bottom_right,rgba(239,195,108,0.10),transparent_0_24%)]" />
 
         <div className="relative flex flex-col gap-4">
@@ -20,7 +20,7 @@ export default function Sidebar() {
 
             <div className="min-w-0">
               <div className="font-display text-[1.45rem] leading-none text-white">CatPrice</div>
-              <div className="mt-1 text-xs text-slate-400">Evidence-first catalyst costing</div>
+              <div className="mt-1 text-xs text-slate-400">Catalyst cost workspace</div>
             </div>
           </div>
 
@@ -38,14 +38,14 @@ export default function Sidebar() {
                   to={item.to}
                   className={`group flex items-center gap-3 rounded-[18px] border px-3 py-3 transition ${
                     isActive
-                      ? 'border-[#7cf1d0]/20 bg-[linear-gradient(135deg,rgba(124,241,208,0.18),rgba(255,255,255,0.06))] shadow-[0_16px_34px_rgba(0,0,0,0.14)]'
-                      : 'border-white/8 bg-white/[0.03] hover:border-white/14 hover:bg-white/[0.05]'
+                      ? 'border-[#7cf1d0]/18 bg-[linear-gradient(135deg,rgba(124,241,208,0.14),rgba(255,255,255,0.06))] shadow-[0_12px_26px_rgba(0,0,0,0.12)]'
+                      : 'border-white/8 bg-white/[0.025] hover:border-white/14 hover:bg-white/[0.05]'
                   }`}
                 >
                   <div
                     className={`flex h-10 w-10 flex-none items-center justify-center rounded-[16px] border transition ${
                       isActive
-                        ? 'border-[#7cf1d0]/28 bg-[#7cf1d0]/14 text-[#bdfae7]'
+                        ? 'border-[#7cf1d0]/22 bg-[#7cf1d0]/12 text-[#c7fbeb]'
                         : 'border-white/10 bg-white/6 text-slate-300 group-hover:text-white'
                     }`}
                   >
