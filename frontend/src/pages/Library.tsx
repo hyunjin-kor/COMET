@@ -109,22 +109,24 @@ function sourceTrustTone(material: MaterialItem) {
   return 'border-slate-200 bg-white text-slate-600';
 }
 
-function sourceLinkLabel(material: MaterialItem) {
-  if (material.quote_source) return material.quote_source;
-  if (!material.reference_url) return 'Source not stated';
-  try {
-    return new URL(material.reference_url).hostname.replace(/^www\./, '');
-  } catch {
-    return 'Source link';
-  }
-}
-
 function LibraryMetricTile({ label, value, detail }: { label: string; value: string; detail: string }) {
   return (
     <div className="rounded-[22px] border border-slate-900/8 bg-white/58 p-4">
       <div className="cp-subtle-label">{label}</div>
       <div className="mt-2 text-2xl font-display text-slate-950">{value}</div>
       <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div>
+    </div>
+  );
+}
+
+function InspectorRow({ label, value, detail }: { label: string; value: string; detail?: string }) {
+  return (
+    <div className="cp-data-row">
+      <div>
+        <div className="cp-subtle-label">{label}</div>
+        {detail ? <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div> : null}
+      </div>
+      <div className="text-right text-sm font-semibold text-slate-950">{value}</div>
     </div>
   );
 }
@@ -141,11 +143,17 @@ export default function Library() {
   const [catalystDomain, setCatalystDomain] = useState<'' | CatalystDomain>('');
   const [applicationFamily, setApplicationFamily] = useState('');
   const [loading, setLoading] = useState(true);
+  const [selectedMaterialId, setSelectedMaterialId] = useState<string | null>(null);
+  const [selectedStepKey, setSelectedStepKey] = useState<string | null>(null);
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
   const publicLinkCount = materials.filter((material) => Boolean(material.reference_url)).length;
   const electrocatalystCount = materials.filter((material) => material.catalyst_domain === 'electrocatalyst').length;
   const historicalOnlyCount = materials.filter(
     (material) => material.price_scope === 'historical_bulk' && !material.reference_url,
   ).length;
+  const selectedMaterial = materials.find((material) => String(material.id) === selectedMaterialId) ?? materials[0] ?? null;
+  const selectedStep = steps.find((step) => step.key === selectedStepKey) ?? steps[0] ?? null;
+  const selectedTemplate = templates.find((template) => template.id === selectedTemplateId) ?? templates[0] ?? null;
 
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(search), 300);
@@ -195,6 +203,36 @@ export default function Library() {
       cancelled = true;
     };
   }, [tab, category, debouncedSearch, catalystDomain, applicationFamily]);
+
+  useEffect(() => {
+    if (materials.length === 0) {
+      setSelectedMaterialId(null);
+      return;
+    }
+    if (!selectedMaterialId || !materials.some((material) => String(material.id) === selectedMaterialId)) {
+      setSelectedMaterialId(String(materials[0].id));
+    }
+  }, [materials, selectedMaterialId]);
+
+  useEffect(() => {
+    if (steps.length === 0) {
+      setSelectedStepKey(null);
+      return;
+    }
+    if (!selectedStepKey || !steps.some((step) => step.key === selectedStepKey)) {
+      setSelectedStepKey(steps[0].key);
+    }
+  }, [selectedStepKey, steps]);
+
+  useEffect(() => {
+    if (templates.length === 0) {
+      setSelectedTemplateId(null);
+      return;
+    }
+    if (!selectedTemplateId || !templates.some((template) => template.id === selectedTemplateId)) {
+      setSelectedTemplateId(templates[0].id);
+    }
+  }, [selectedTemplateId, templates]);
 
   return (
     <div className="space-y-4">
@@ -290,126 +328,142 @@ export default function Library() {
               <LibraryMetricTile label="Archive-only rows" value={String(historicalOnlyCount)} detail="Historical bulk rows without a stable public URL." />
             </div>
 
-            <div className="mt-5 overflow-hidden rounded-[28px] border border-slate-900/8 bg-white/58 backdrop-blur-xl">
-              <div className="border-b border-slate-900/8 bg-slate-50/80 px-5 py-3 text-xs leading-6 text-slate-600">
-                Public URLs open directly when available. Historical bulk rows remain visible, but many do not have a stable public permalink.
-              </div>
-              <div className="grid grid-cols-[minmax(0,1.35fr)_120px_120px_150px_220px_minmax(0,210px)] gap-3 border-b border-slate-900/8 bg-white/46 px-5 py-3 text-[11px] uppercase tracking-[0.18em] text-slate-500">
-                <span>Material</span>
-                <span>Domain</span>
-                <span>Application</span>
-                <span>Category</span>
-                <span>Quote</span>
-                <span>Source & trust</span>
+            <div className="cp-split-workspace mt-5">
+              <div className="overflow-hidden rounded-[28px] border border-slate-900/8 bg-white/58 backdrop-blur-xl">
+                <div className="border-b border-slate-900/8 bg-slate-50/80 px-5 py-3 text-xs leading-6 text-slate-600">
+                  Public URLs open directly when available. Historical bulk rows remain visible, but many do not have a stable public permalink.
+                </div>
+
+                {loading ? (
+                  <div className="px-5 py-8 text-sm text-slate-500">Loading materials...</div>
+                ) : materials.length === 0 ? (
+                  <div className="px-5 py-8 text-sm text-slate-500">No materials match the current filters.</div>
+                ) : (
+                  <div className="max-h-[68vh] space-y-2 overflow-auto px-4 py-4">
+                    {materials.map((material) => {
+                      const active = selectedMaterial?.id === material.id;
+                      return (
+                        <div
+                          key={material.id}
+                          onClick={() => setSelectedMaterialId(String(material.id))}
+                          className={`${active ? 'cp-list-row cp-list-row-active' : 'cp-list-row'} cursor-pointer`}
+                        >
+                          <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+                            <div className="min-w-0">
+                              <div className="truncate font-semibold text-slate-950">{material.name}</div>
+                              <div className="truncate text-xs text-slate-500">{material.symbol || material.formula || 'No symbol'}</div>
+                              {material.notes ? <div className="mt-1 text-xs leading-5 text-slate-500">{material.notes}</div> : null}
+                            </div>
+                            <div className="text-left lg:text-right">
+                              <div className="font-mono text-slate-900">{formatRawPrice(material)}</div>
+                              <div className="mt-1 text-xs text-slate-500">{formatPack(material)}</div>
+                            </div>
+                          </div>
+                          <div className="mt-3 flex flex-wrap gap-2">
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${domainTone(material.catalyst_domain)}`}>{domainLabel(material.catalyst_domain)}</span>
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${applicationTone(material.application_family)}`}>{applicationLabel(material.application_family)}</span>
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${categoryTone(material.category)}`}>{material.category || 'Uncategorised'}</span>
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] ${sourceTrustTone(material)}`}>{sourceTrustLabel(material)}</span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
 
-              {loading ? (
-                <div className="px-5 py-8 text-sm text-slate-500">Loading materials...</div>
-              ) : materials.length === 0 ? (
-                <div className="px-5 py-8 text-sm text-slate-500">No materials match the current filters.</div>
-              ) : (
-                <div className="max-h-[62vh] divide-y divide-slate-900/8 overflow-auto">
-                  {materials.map((material) => (
-                    <div key={material.id} className="grid grid-cols-[minmax(0,1.35fr)_120px_120px_150px_220px_minmax(0,210px)] gap-3 px-5 py-3 text-sm">
-                      <div className="min-w-0">
-                        <div className="truncate font-semibold text-slate-950">{material.name}</div>
-                        <div className="truncate text-xs text-slate-500">{material.symbol || material.formula || 'No symbol'}</div>
-                        {material.notes ? (
-                          <div className="mt-1 text-xs leading-5 text-slate-500">{material.notes}</div>
-                        ) : null}
+              <div className="cp-inspector-rail">
+                <section className="cp-rail-panel">
+                  <div className="cp-subtle-label">Source Detail</div>
+                  <div className="mt-2 text-lg font-semibold text-slate-950">{selectedMaterial?.name ?? 'Choose a material row'}</div>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {selectedMaterial ? <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${domainTone(selectedMaterial.catalyst_domain)}`}>{domainLabel(selectedMaterial.catalyst_domain)}</span> : null}
+                    {selectedMaterial ? <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${applicationTone(selectedMaterial.application_family)}`}>{applicationLabel(selectedMaterial.application_family)}</span> : null}
+                    {selectedMaterial ? <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${categoryTone(selectedMaterial.category)}`}>{selectedMaterial.category || 'Uncategorised'}</span> : null}
+                  </div>
+                  {selectedMaterial ? (
+                    <>
+                      <div className="mt-4 space-y-1">
+                        <InspectorRow label="Quote" value={formatRawPrice(selectedMaterial)} detail={formatPack(selectedMaterial)} />
+                        <InspectorRow label="Scope" value={priceScopeLabel(selectedMaterial.price_scope)} detail={pricingBasisLabel(selectedMaterial.pricing_basis)} />
+                        <InspectorRow label="Quote year" value={selectedMaterial.quote_year ? String(selectedMaterial.quote_year) : 'N/A'} detail={selectedMaterial.quote_source || 'Source not stated'} />
+                        <InspectorRow label="Trust" value={sourceTrustLabel(selectedMaterial)} detail={selectedMaterial.reference_url ? 'Public URL available.' : 'Public URL not stored.'} />
                       </div>
-                      <div>
-                        <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${domainTone(material.catalyst_domain)}`}>
-                          {domainLabel(material.catalyst_domain)}
-                        </span>
-                      </div>
-                      <div>
-                        <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${applicationTone(material.application_family)}`}>
-                          {applicationLabel(material.application_family)}
-                        </span>
-                      </div>
-                      <div>
-                        <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${categoryTone(material.category)}`}>
-                          {material.category || 'Uncategorised'}
-                        </span>
-                      </div>
-                      <div className="min-w-0">
-                        <div className="font-mono text-slate-700">{formatRawPrice(material)}</div>
-                        <div className="mt-1 truncate text-xs text-slate-500">{formatPack(material)}</div>
-                        <div className="mt-1 truncate text-xs text-slate-500">
-                          {priceScopeLabel(material.price_scope)} / {pricingBasisLabel(material.pricing_basis)}
-                          {material.quote_year ? ` / ${material.quote_year}` : ''}
+                      {selectedMaterial.notes ? (
+                        <div className="mt-3 rounded-[18px] border border-slate-900/8 bg-white/72 px-3 py-3 text-xs leading-6 text-slate-600">
+                          {selectedMaterial.notes}
                         </div>
-                      </div>
-                      <div className="min-w-0 text-slate-500">
-                        {material.reference_url ? (
-                          <a
-                            href={material.reference_url}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="truncate font-medium text-slate-900 underline decoration-slate-300 underline-offset-4 transition hover:text-sky-700"
-                            title={material.reference_url}
-                          >
-                            {sourceLinkLabel(material)}
-                          </a>
-                        ) : (
-                          <div className="truncate font-medium text-slate-700">{material.quote_source || 'Source not stated'}</div>
-                        )}
-                        <div className="mt-2">
-                          <span className={`inline-flex rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] ${sourceTrustTone(material)}`}>
-                            {sourceTrustLabel(material)}
-                          </span>
-                        </div>
-                        {material.reference_url ? (
-                          <a
-                            href={material.reference_url}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="mt-2 inline-flex text-xs text-sky-700 underline underline-offset-2"
-                          >
-                            Open source
-                          </a>
-                        ) : (
-                          <div className="mt-2 text-xs leading-5 text-slate-500">
-                            {material.price_scope === 'historical_bulk'
-                              ? 'Archive-derived bulk row without a stable public product page.'
-                              : 'No public source URL stored for this row.'}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+                      ) : null}
+                      {selectedMaterial.reference_url ? (
+                        <a href={selectedMaterial.reference_url} target="_blank" rel="noreferrer" className="cp-button-secondary mt-3 w-full px-3 py-2 text-xs">
+                          Open source
+                        </a>
+                      ) : null}
+                    </>
+                  ) : (
+                    <div className="mt-3 text-xs leading-6 text-slate-500">Choose a row from the record list to inspect its source basis here.</div>
+                  )}
+                </section>
+              </div>
             </div>
           </>
         )}
 
         {tab === 'steps' && (
-          <div className="mt-5 overflow-hidden rounded-[28px] border border-slate-900/8 bg-white/58 backdrop-blur-xl">
-            <div className="grid grid-cols-[minmax(0,1.3fr)_120px_120px_120px_minmax(0,1fr)] gap-3 border-b border-slate-900/8 bg-white/46 px-5 py-3 text-[11px] uppercase tracking-[0.18em] text-slate-500">
-              <span>Step</span>
-              <span className="text-right">Small</span>
-              <span className="text-right">Medium</span>
-              <span className="text-right">Large</span>
-              <span>Note</span>
+          <div className="cp-split-workspace mt-5">
+            <div className="overflow-hidden rounded-[28px] border border-slate-900/8 bg-white/58 backdrop-blur-xl">
+              {loading ? (
+                <div className="px-5 py-8 text-sm text-slate-500">Loading step rates...</div>
+              ) : (
+                <div className="max-h-[68vh] space-y-2 overflow-auto px-4 py-4">
+                  {steps.map((step) => {
+                    const active = selectedStep?.key === step.key;
+                    return (
+                      <button
+                        key={step.key}
+                        onClick={() => setSelectedStepKey(step.key)}
+                        className={`${active ? 'cp-list-row cp-list-row-active' : 'cp-list-row'} w-full text-left`}
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <div className="font-semibold text-slate-950">{step.name}</div>
+                            <div className="mt-1 text-xs text-slate-500">{step.basis}</div>
+                          </div>
+                          <span className="cp-chip">{step.key}</span>
+                        </div>
+                        <div className="mt-3 grid gap-2 sm:grid-cols-3">
+                          <div className="rounded-[16px] border border-slate-900/8 bg-white/72 px-3 py-2 text-xs text-slate-600">Small: {step.cost_small != null ? `$${step.cost_small}/hr` : 'N/A'}</div>
+                          <div className="rounded-[16px] border border-slate-900/8 bg-white/72 px-3 py-2 text-xs text-slate-600">Medium: {step.cost_medium != null ? `$${step.cost_medium}/hr` : 'N/A'}</div>
+                          <div className="rounded-[16px] border border-slate-900/8 bg-white/72 px-3 py-2 text-xs text-slate-600">Large: {step.cost_large != null ? `$${step.cost_large}/hr` : 'N/A'}</div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
-            {loading ? (
-              <div className="px-5 py-8 text-sm text-slate-500">Loading step rates...</div>
-            ) : (
-              <div className="max-h-[62vh] divide-y divide-slate-900/8 overflow-auto">
-                {steps.map((step) => (
-                  <div key={step.key} className="grid grid-cols-[minmax(0,1.3fr)_120px_120px_120px_minmax(0,1fr)] gap-3 px-5 py-3 text-sm">
-                    <div className="font-semibold text-slate-950">{step.name}</div>
-                    <div className="text-right font-mono text-slate-700">{step.cost_small != null ? `$${step.cost_small}/hr` : 'N/A'}</div>
-                    <div className="text-right font-mono text-slate-700">{step.cost_medium != null ? `$${step.cost_medium}/hr` : 'N/A'}</div>
-                    <div className="text-right font-mono text-slate-700">{step.cost_large != null ? `$${step.cost_large}/hr` : 'N/A'}</div>
-                    <div className="text-slate-500">{step.note || 'N/A'}</div>
-                  </div>
-                ))}
-              </div>
-            )}
+            <div className="cp-inspector-rail">
+              <section className="cp-rail-panel">
+                <div className="cp-subtle-label">Step Detail</div>
+                <div className="mt-2 text-lg font-semibold text-slate-950">{selectedStep?.name ?? 'Choose a step row'}</div>
+                {selectedStep ? (
+                  <>
+                    <div className="mt-3 space-y-1">
+                      <InspectorRow label="Small" value={selectedStep.cost_small != null ? `$${selectedStep.cost_small}/hr` : 'N/A'} />
+                      <InspectorRow label="Medium" value={selectedStep.cost_medium != null ? `$${selectedStep.cost_medium}/hr` : 'N/A'} />
+                      <InspectorRow label="Large" value={selectedStep.cost_large != null ? `$${selectedStep.cost_large}/hr` : 'N/A'} />
+                      <InspectorRow label="Basis" value={selectedStep.basis || 'N/A'} detail={selectedStep.key} />
+                    </div>
+                    <div className="mt-3 rounded-[18px] border border-slate-900/8 bg-white/72 px-3 py-3 text-xs leading-6 text-slate-600">
+                      {selectedStep.note || 'No additional note stored for this step.'}
+                    </div>
+                  </>
+                ) : (
+                  <div className="mt-3 text-xs leading-6 text-slate-500">Choose a step to inspect the hourly-rate basis here.</div>
+                )}
+              </section>
+            </div>
           </div>
         )}
 
@@ -434,73 +488,67 @@ export default function Library() {
               </label>
             </div>
 
-            <div className="grid gap-4 lg:grid-cols-2">
-            {loading ? (
-              <div className="text-sm text-slate-500">Loading templates...</div>
-            ) : (
-              templates.map((template) => (
-                <article key={template.id} className="surface-ghost p-5">
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <div className="cp-subtle-label">{template.category || 'Template'}</div>
-                      <h3 className="cp-heading-lg mt-2">{template.name}</h3>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${domainTone(template.catalyst_domain)}`}>
-                        {domainLabel(template.catalyst_domain)}
-                      </span>
-                      <span className="cp-chip">{template.steps.length} steps</span>
-                      {template.application_family ? <span className="cp-chip">{applicationLabel(template.application_family)}</span> : null}
-                    </div>
-                  </div>
-
-                  <p className="mt-3 text-sm leading-7 text-slate-600">{template.description}</p>
-
-                  {template.manufacturing_mode ? (
-                    <div className="mt-3 text-xs text-slate-500">Preparation method: {template.manufacturing_mode}</div>
-                  ) : null}
-
-                  {template.example_catalysts.length > 0 && (
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {template.example_catalysts.map((value) => (
-                        <span key={value} className="cp-chip">
-                          {value}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {template.steps.map((step, index) => (
-                      <span
-                        key={`${template.id}-${step}-${index}`}
-                        className="rounded-full border border-slate-200 bg-white/80 px-3 py-1 text-xs text-slate-600"
+            <div className="cp-split-workspace">
+              <div className="space-y-3">
+                {loading ? (
+                  <div className="text-sm text-slate-500">Loading templates...</div>
+                ) : (
+                  templates.map((template) => {
+                    const active = selectedTemplate?.id === template.id;
+                    return (
+                      <button
+                        key={template.id}
+                        onClick={() => setSelectedTemplateId(template.id)}
+                        className={`${active ? 'cp-list-row cp-list-row-active' : 'cp-list-row'} w-full text-left`}
                       >
-                        {step}
-                      </span>
-                    ))}
-                  </div>
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <div className="cp-subtle-label">{template.category || 'Template'}</div>
+                            <div className="cp-heading-sm mt-2">{template.name}</div>
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${domainTone(template.catalyst_domain)}`}>{domainLabel(template.catalyst_domain)}</span>
+                            <span className="cp-chip">{template.steps.length} steps</span>
+                          </div>
+                        </div>
+                        <div className="mt-3 text-sm leading-7 text-slate-600">{template.description}</div>
+                      </button>
+                    );
+                  })
+                )}
+              </div>
 
-                  {template.preprocess?.length ? (
-                    <div className="mt-4">
-                      <div className="cp-subtle-label">Pre-treatment</div>
-                      <div className="mt-2 flex flex-wrap gap-2">
-                        {template.preprocess.map((value) => <span key={value} className="cp-chip">{value}</span>)}
+              <div className="cp-inspector-rail">
+                <section className="cp-rail-panel">
+                  <div className="cp-subtle-label">Route Audit</div>
+                  <div className="mt-2 text-lg font-semibold text-slate-950">{selectedTemplate?.name ?? 'Choose a template'}</div>
+                  {selectedTemplate ? (
+                    <>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${domainTone(selectedTemplate.catalyst_domain)}`}>{domainLabel(selectedTemplate.catalyst_domain)}</span>
+                        {selectedTemplate.application_family ? <span className="cp-chip">{applicationLabel(selectedTemplate.application_family)}</span> : null}
+                        {selectedTemplate.manufacturing_mode ? <span className="cp-chip">{selectedTemplate.manufacturing_mode}</span> : null}
                       </div>
-                    </div>
-                  ) : null}
-
-                  {template.postprocess?.length ? (
-                    <div className="mt-4">
-                      <div className="cp-subtle-label">Post-treatment</div>
-                      <div className="mt-2 flex flex-wrap gap-2">
-                        {template.postprocess.map((value) => <span key={value} className="cp-chip">{value}</span>)}
+                      <div className="mt-3 space-y-1">
+                        <InspectorRow label="Steps" value={String(selectedTemplate.steps.length)} detail={selectedTemplate.source || 'Source not stated'} />
+                        <InspectorRow label="Examples" value={selectedTemplate.example_catalysts.length ? String(selectedTemplate.example_catalysts.length) : '0'} detail="Stored catalyst examples in this route." />
                       </div>
-                    </div>
-                  ) : null}
-                </article>
-              ))
-            )}
+                      <div className="mt-3 rounded-[18px] border border-slate-900/8 bg-white/72 px-3 py-3 text-xs leading-6 text-slate-600">
+                        {selectedTemplate.route_note || selectedTemplate.description}
+                      </div>
+                      {(selectedTemplate.preprocess?.length || selectedTemplate.synthesis?.length || selectedTemplate.postprocess?.length) ? (
+                        <div className="mt-3 space-y-3">
+                          {selectedTemplate.preprocess?.length ? <div><div className="cp-subtle-label">Pre-treatment</div><div className="mt-2 flex flex-wrap gap-2">{selectedTemplate.preprocess.map((value) => <span key={value} className="cp-chip">{value}</span>)}</div></div> : null}
+                          {selectedTemplate.synthesis?.length ? <div><div className="cp-subtle-label">Synthesis</div><div className="mt-2 flex flex-wrap gap-2">{selectedTemplate.synthesis.map((value) => <span key={value} className="cp-chip">{value}</span>)}</div></div> : null}
+                          {selectedTemplate.postprocess?.length ? <div><div className="cp-subtle-label">Post-treatment</div><div className="mt-2 flex flex-wrap gap-2">{selectedTemplate.postprocess.map((value) => <span key={value} className="cp-chip">{value}</span>)}</div></div> : null}
+                        </div>
+                      ) : null}
+                    </>
+                  ) : (
+                    <div className="mt-3 text-xs leading-6 text-slate-500">Choose a route template to inspect its preparation stages and audit fields here.</div>
+                  )}
+                </section>
+              </div>
             </div>
           </div>
         )}
