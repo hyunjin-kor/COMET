@@ -9,8 +9,8 @@
 <h1 align="center">CatPrice</h1>
 
 <p align="center">
-  <strong>Desktop-first catalyst cost estimator with live metal prices, transparent price evidence, and packaged Windows delivery.</strong><br />
-  Literature-referenced catalyst-cost economics, market-aware price inputs, preparation-aware step logic, and a dedicated result screen for readable desktop review.
+  <strong>Desktop software for comparing live raw-material price trends and estimating catalyst manufacturing cost.</strong><br />
+  Track changing metal prices, build catalyst recipes, choose preparation routes, and review a clear desktop estimate of what it could cost to make the catalyst.
 </p>
 
 <p align="center">
@@ -21,7 +21,16 @@
   <code>Installer download</code>
 </p>
 
-CatPrice is built to feel like shipped desktop software rather than a spreadsheet wrapper. The core workflow is reaction-agnostic: choose catalyst type, define composition, set the preparation method, sync current metal prices, and read a clean selling-cost estimate on a separate result screen. Optional literature benchmarks can still be loaded as reference starting points, but they do not define the product scope.
+CatPrice is a desktop application for people who want to compare changing raw-material prices and estimate how much it may cost to manufacture a catalyst. Instead of working through scattered spreadsheets, you can track live metal prices, assemble a catalyst recipe, choose a preparation method, and review the estimated cost on a dedicated result screen.
+
+The workflow is reaction-agnostic: choose catalyst type, define composition, set the preparation method, sync current metal prices, and read a clean selling-cost estimate. Optional literature benchmarks can still be loaded as reference starting points, but the main product is the estimator itself, not the benchmark library.
+
+In practice, CatPrice helps answer questions like:
+
+- How does a change in metal price affect the estimated catalyst cost?
+- Which composition or loading makes the route more expensive?
+- How much does the preparation method change the final estimate?
+- What is the evidence source behind each price used in the estimate?
 
 ## Workflow Framework
 
