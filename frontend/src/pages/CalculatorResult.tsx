@@ -146,6 +146,7 @@ export default function CalculatorResult() {
     result.input_summary.catalyst_domain === 'electrocatalyst' ? 'Electrocatalyst' : 'Thermocatalyst';
   const routeSummary = result.route_summary ?? null;
   const electrodeModel = result.electrode_model ?? null;
+  const spentCatalyst = result.spent_catalyst ?? null;
   const resolvedMaterials = result.resolved_materials ?? [];
   const publicSourceCount = resolvedMaterials.filter((material) => Boolean(material.reference_url)).length;
   const historicalOnlyCount = resolvedMaterials.filter(
@@ -220,97 +221,86 @@ export default function CalculatorResult() {
     { name: 'G&A + margin', value: Math.max(0, 100 - result.summary.materials_pct - result.summary.processing_pct) },
   ];
 
-  function renderEvidenceRail() {
+  function renderResultOverview() {
     return (
-      <div className="cp-inspector-rail">
-        <section className="surface-rail overflow-hidden p-4">
-          <div className="cp-subtle-label !text-slate-400">Evidence Rail</div>
-          <div className="mt-2 text-sm text-slate-300">{composition}</div>
-          <div className="mt-4 flex items-end gap-3">
-            <div className="font-display text-[clamp(2.3rem,4vw,4rem)] leading-none text-white">
-              ${toDisplay(result.summary.estimated_price_per_lb).toFixed(2)}
+      <section className="surface-card p-4">
+        <div className="grid gap-3 xl:grid-cols-[minmax(0,1.15fr)_repeat(3,minmax(0,1fr))]">
+          <div className="rounded-[22px] border border-slate-900/8 bg-[linear-gradient(180deg,#0f172a,#142033)] p-4 text-white shadow-[0_18px_40px_rgba(15,23,42,0.16)]">
+            <div className="cp-subtle-label !text-slate-400">Final result</div>
+            <div className="mt-2 text-sm text-slate-300">{composition}</div>
+            <div className="mt-4 flex items-end gap-3">
+              <div className="font-display text-[clamp(2.5rem,4vw,4.4rem)] leading-none text-white">
+                ${toDisplay(result.summary.estimated_price_per_lb).toFixed(2)}
+              </div>
+              <div className="pb-1 text-base text-slate-300">{fmtLabel}</div>
             </div>
-            <div className="pb-1 text-sm text-slate-300">{fmtLabel}</div>
-          </div>
-          <div className="mt-2 text-xs leading-6 text-slate-400">
-            Alternate view: ${altPrice.toFixed(2)}
-            {altLabel}
-          </div>
-          <div className="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-1">
-            <MetricTile
-              dark
-              label="Scope"
-              value={catalystDomain}
-              detail={`${snapshotState.orderSize} tons per order / ${result.step_method.scale} campaign`}
-            />
-            <MetricTile
-              dark
-              label="Source rows"
-              value={`${publicSourceCount}/${resolvedMaterials.length || 0}`}
-              detail={`${snapshotState.liveFeedCount} live and ${snapshotState.indexedFeedCount} indexed rows in the draft`}
-            />
-          </div>
-          <div className="mt-4 flex flex-wrap gap-2">
-            <span className="cp-chip-dark">Generated {generatedAt}</span>
-            <span className="cp-chip-dark">{snapshotState.selectedSupportName ?? 'Support pending'}</span>
-            <span className="cp-chip-dark">{snapshotState.stepLabels.length} preparation steps</span>
-            {snapshotState.benchmarkCandidate ? <span className="cp-chip-dark">{snapshotState.benchmarkCandidate.title}</span> : null}
-          </div>
-        </section>
-
-        <section className="cp-rail-panel">
-          <div className="cp-subtle-label">Cost Ledger</div>
-          <div className="mt-2 text-lg font-semibold text-slate-950">Read how the price was assembled.</div>
-          <div className="mt-3 space-y-1">
-            {ledgerRows.map((row) => (
-              <RailRow key={row.label} label={row.label} value={row.value} detail={row.detail} />
-            ))}
-            <RailRow
-              label="Final result"
-              value={`$${toDisplay(result.summary.estimated_price_per_lb).toFixed(2)}${fmtLabel}`}
-              detail={`Net cost $${toDisplay(result.summary.net_cost_per_lb).toFixed(2)}${fmtLabel}`}
-            />
-          </div>
-        </section>
-
-        <section className="cp-rail-panel">
-          <div className="cp-subtle-label">Route Audit</div>
-          <div className="mt-2 text-lg font-semibold text-slate-950">
-            {routeSummary?.name ?? snapshotState.benchmarkCandidate?.route.name ?? 'Direct workspace route'}
-          </div>
-          <div className="mt-3 space-y-1">
-            <RailRow
-              label="Preparation basis"
-              value={routeSummary?.manufacturing_mode ?? 'Manual selection'}
-              detail={routeSummary?.application_family ?? snapshotState.benchmarkCandidate?.application_family ?? catalystDomain}
-            />
-            <RailRow
-              label="Steps"
-              value={String(snapshotState.stepLabels.length)}
-              detail={snapshotState.stepLabels.length ? snapshotState.stepLabels.join(', ') : 'No step labels stored'}
-            />
-            <RailRow
-              label="References"
-              value={String(routeReferenceCount)}
-              detail={
-                routeReferenceCount
-                  ? `${routeReferenceCount} public route references stored`
-                  : 'No route reference URL stored'
-              }
-            />
-            <RailRow
-              label="Latest quote year"
-              value={latestQuoteYear ? String(latestQuoteYear) : 'N/A'}
-              detail={`${historicalOnlyCount} archive-only material rows`}
-            />
-          </div>
-          {result.warnings?.length ? (
-            <div className="mt-3 rounded-[18px] border border-amber-200 bg-amber-50/80 px-3 py-3 text-xs leading-6 text-amber-900">
-              {result.warnings[0]}
+            <div className="mt-2 text-xs leading-6 text-slate-300">
+              Net cost ${toDisplay(result.summary.net_cost_per_lb).toFixed(2)}
+              {fmtLabel} before selling margin treatment. Alternate view ${altPrice.toFixed(2)}
+              {altLabel}.
             </div>
-          ) : null}
-        </section>
-      </div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <span className="cp-chip-dark">{catalystDomain}</span>
+              <span className="cp-chip-dark">{result.step_method.scale} campaign</span>
+              <span className="cp-chip-dark">{generatedAt}</span>
+            </div>
+          </div>
+
+          <div className="rounded-[22px] border border-slate-900/8 bg-white/62 p-4">
+            <div className="cp-subtle-label">Cost ledger</div>
+            <div className="mt-3 space-y-1">
+              {ledgerRows.map((row) => (
+                <RailRow key={row.label} label={row.label} value={row.value} detail={row.detail} />
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-[22px] border border-slate-900/8 bg-white/62 p-4">
+            <div className="cp-subtle-label">Evidence</div>
+            <div className="mt-3 space-y-1">
+              <RailRow
+                label="Public links"
+                value={`${publicSourceCount}/${resolvedMaterials.length || 0}`}
+                detail={`${snapshotState.liveFeedCount} live / ${snapshotState.indexedFeedCount} indexed rows in the draft`}
+              />
+              <RailRow
+                label="Latest quote year"
+                value={latestQuoteYear ? String(latestQuoteYear) : 'N/A'}
+                detail={`${historicalOnlyCount} archive-only material rows`}
+              />
+              <RailRow
+                label="Route references"
+                value={String(routeReferenceCount)}
+                detail={routeReferenceCount ? 'Public route links stored' : 'No route link stored'}
+              />
+            </div>
+          </div>
+
+          <div className="rounded-[22px] border border-slate-900/8 bg-white/62 p-4">
+            <div className="cp-subtle-label">Preparation basis</div>
+            <div className="mt-2 text-base font-semibold text-slate-950">
+              {routeSummary?.name ?? snapshotState.benchmarkCandidate?.route.name ?? 'Direct workspace route'}
+            </div>
+            <div className="mt-3 space-y-1">
+              <RailRow
+                label="Campaign"
+                value={`${snapshotState.orderSize} tons`}
+                detail={`${result.step_method.scale} scale / ${Number(result.step_method.campaign_days).toFixed(1)} days`}
+              />
+              <RailRow
+                label="Steps"
+                value={String(snapshotState.stepLabels.length)}
+                detail={snapshotState.stepLabels.length ? snapshotState.stepLabels.join(', ') : 'No step labels stored'}
+              />
+              <RailRow
+                label="Mode"
+                value={routeSummary?.manufacturing_mode ?? 'Manual selection'}
+                detail={routeSummary?.application_family ?? snapshotState.benchmarkCandidate?.application_family ?? catalystDomain}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
     );
   }
 
@@ -320,9 +310,9 @@ export default function CalculatorResult() {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <div className="cp-subtle-label">Result</div>
-            <div className="cp-heading-lg mt-2">Read the latest estimate without editing noise.</div>
+            <div className="cp-heading-lg mt-2">Read the final estimate, route basis, and evidence together.</div>
             <div className="mt-1 text-xs leading-6 text-slate-500">
-              Inputs stay in the cost estimate workspace. This screen is optimized for reading scope, evidence, and the final selling price.
+              Inputs stay in the cost estimate workspace. This screen is optimized for review, not editing.
             </div>
           </div>
           <button onClick={goBackToCalculator} className="cp-button-secondary px-4 py-2.5 text-sm">
@@ -394,6 +384,44 @@ export default function CalculatorResult() {
               <MetricTile label="Catalyst loading" value={`${electrodeModel.catalyst_loading_mg_cm2.toFixed(2)} mg/cm2`} detail="Dry catalyst loading" />
               <MetricTile label="Electrode total" value={`$${electrodeModel.total_cost_usd.toFixed(2)}`} detail="For selected active area" />
               <MetricTile label="Stack density" value={`$${electrodeModel.cost_per_cm2_usd.toFixed(3)}/cm2`} detail={`$${electrodeModel.cost_per_m2_usd.toFixed(2)}/m2`} />
+            </div>
+          </div>
+        ) : null}
+
+        {spentCatalyst ? (
+          <div className="mt-4 rounded-[24px] border border-emerald-200 bg-emerald-50/80 p-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <div className="cp-subtle-label !text-emerald-700">Recovery scenario</div>
+                <div className="cp-heading-sm mt-2">Spent catalyst value was included in the net-cost basis.</div>
+                <div className="mt-1 text-xs leading-6 text-emerald-900">
+                  This is an end-of-life recovery proxy. It is useful for early screening, but it does not yet model deactivation kinetics or regeneration frequency.
+                </div>
+              </div>
+              <span className="cp-chip">{spentCatalyst.metal_symbol}</span>
+            </div>
+
+            <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+              <MetricTile
+                label="Gross metal value"
+                value={`$${toDisplay(spentCatalyst.V_metal_per_lb).toFixed(2)}`}
+                detail={`Per${catLabel}`}
+              />
+              <MetricTile
+                label="Recovery cost"
+                value={`$${toDisplay(spentCatalyst.C_recovery_per_lb).toFixed(2)}`}
+                detail={`Per${catLabel}`}
+              />
+              <MetricTile
+                label="Reclaimed value"
+                value={`$${toDisplay(spentCatalyst.V_reclaimed_per_lb).toFixed(2)}`}
+                detail={`Per${catLabel}`}
+              />
+              <MetricTile
+                label="Loss basis"
+                value={`${(spentCatalyst.loss_use_pct * 100).toFixed(1)}% / ${(spentCatalyst.loss_refining_pct * 100).toFixed(1)}%`}
+                detail="Use loss / refining loss"
+              />
             </div>
           </div>
         ) : null}
@@ -550,6 +578,15 @@ export default function CalculatorResult() {
                   ))}
                 </div>
               </div>
+            </div>
+          </div>
+        ) : null}
+
+        {spentCatalyst ? (
+          <div className="mt-4 rounded-[24px] border border-emerald-200 bg-emerald-50/80 p-4">
+            <div className="cp-subtle-label !text-emerald-700">Lifecycle proxy</div>
+            <div className="mt-2 text-sm leading-6 text-emerald-900">
+              Net cost includes spent catalyst recovery for {spentCatalyst.metal_symbol}. The model uses support and reactor-type loss assumptions from the CatCost-style recovery proxy, not a full deactivation-regeneration cycle.
             </div>
           </div>
         ) : null}
@@ -726,9 +763,9 @@ export default function CalculatorResult() {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <span className="section-kicker">Result</span>
-            <h1 className="cp-heading-xl mt-4">Keep the result separate from the editing workspace.</h1>
+            <h1 className="cp-heading-xl mt-4">Read the estimate, route basis, and evidence in one place.</h1>
             <p className="cp-body-copy mt-3 max-w-2xl">
-              This screen keeps the estimate, evidence, and preparation context visible at the same time, without sending you back through the input flow.
+              This screen is for reading. Cost structure, preparation basis, and source records stay grouped without the editing workspace.
             </p>
           </div>
           <button onClick={goBackToCalculator} className="cp-button-primary">
@@ -737,32 +774,28 @@ export default function CalculatorResult() {
         </div>
       </section>
 
-      <div className="cp-split-workspace">
-        <div className="space-y-4">
-          <WorkspaceSectionNav
-            sections={RESULT_SECTIONS}
-            activeSectionId={sectionState.activeSectionId}
-            activeIndex={sectionState.activeIndex}
-            onSelect={sectionState.setActiveSection}
-          />
+      {renderResultOverview()}
 
-          {sectionState.activeSection.id === 'summary' ? renderSummarySection() : null}
-          {sectionState.activeSection.id === 'manufacturing' ? renderManufacturingSection() : null}
-          {sectionState.activeSection.id === 'sources' ? renderSourcesSection() : null}
+      <WorkspaceSectionNav
+        sections={RESULT_SECTIONS}
+        activeSectionId={sectionState.activeSectionId}
+        activeIndex={sectionState.activeIndex}
+        onSelect={sectionState.setActiveSection}
+      />
 
-          <WorkspaceSectionFooter
-            activeSection={sectionState.activeSection}
-            activeIndex={sectionState.activeIndex}
-            totalSections={RESULT_SECTIONS.length}
-            onPrevious={sectionState.goPrevious}
-            onNext={sectionState.goNext}
-            canGoPrevious={sectionState.canGoPrevious}
-            canGoNext={sectionState.canGoNext}
-          />
-        </div>
+      {sectionState.activeSection.id === 'summary' ? renderSummarySection() : null}
+      {sectionState.activeSection.id === 'manufacturing' ? renderManufacturingSection() : null}
+      {sectionState.activeSection.id === 'sources' ? renderSourcesSection() : null}
 
-        <div>{renderEvidenceRail()}</div>
-      </div>
+      <WorkspaceSectionFooter
+        activeSection={sectionState.activeSection}
+        activeIndex={sectionState.activeIndex}
+        totalSections={RESULT_SECTIONS.length}
+        onPrevious={sectionState.goPrevious}
+        onNext={sectionState.goNext}
+        canGoPrevious={sectionState.canGoPrevious}
+        canGoNext={sectionState.canGoNext}
+      />
     </div>
   );
 }

@@ -194,7 +194,7 @@ export default function Compare() {
           <div className="grid gap-4 xl:grid-cols-[minmax(0,1.1fr)_minmax(330px,0.9fr)]">
             <div className="surface-ink overflow-hidden p-5 sm:p-6">
               <div className="cp-subtle-label !text-slate-400">Literature Benchmarks</div>
-              <h1 className="mt-3 font-display text-[clamp(2rem,4vw,3.5rem)] leading-[0.94] text-white">Screen published routes before you change the workspace.</h1>
+              <h1 className="mt-3 font-display text-[clamp(2rem,4vw,3.5rem)] leading-[0.94] text-white">Screen published routes before you edit the cost case.</h1>
               <div className="mt-3 flex flex-wrap gap-2">
                 {activeFamily ? <span className="cp-chip-dark">{activeFamily.title}</span> : null}
                 {benchmark.reaction ? <span className="cp-chip-dark">{benchmark.reaction}</span> : null}
@@ -237,7 +237,7 @@ export default function Compare() {
                   ))}
                 </div>
                 <div className="mt-3 text-xs leading-6 text-slate-500">
-                  Profiles change ranking logic only. Candidate records, evidence anchors, and family-bank links remain visible in every mode.
+                  Profiles change weighting only. Candidate records and source links stay fixed.
                 </div>
               </div>
             </div>

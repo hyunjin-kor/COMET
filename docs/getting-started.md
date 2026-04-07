@@ -22,7 +22,7 @@ dist-electron\
 
 Primary outputs:
 
-- `dist-electron\CatPrice Setup 1.0.1.exe`
+- `dist-electron\CatPrice Setup 1.1.6.exe`
 - `dist-electron\win-unpacked\CatPrice.exe`
 
 Before rebuilding, you can stop any running desktop instance with:

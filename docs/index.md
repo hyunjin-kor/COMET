@@ -6,9 +6,13 @@ CatPrice is a desktop-only catalyst cost tool. The application is packaged and d
 
 - desktop packaging and installation
 - catalyst composition costing
+- thermocatalyst versus electrocatalyst workflow separation
 - local-only calculation workflow
 - live and indexed metal pricing
+- source-linked evidence review
+- optional spent catalyst recovery screening
 - uncertainty and comparison analysis
+- test and smoke-harness validation
 
 ## Local Development
 

@@ -163,6 +163,15 @@ export interface CostResult {
     source: string;
     reference_urls: string[];
   } | null;
+  spent_catalyst?: {
+    metal_symbol: string;
+    metal_loading_lb_per_lb: number;
+    loss_use_pct: number;
+    loss_refining_pct: number;
+    V_metal_per_lb: number;
+    C_recovery_per_lb: number;
+    V_reclaimed_per_lb: number;
+  } | null;
   resolved_materials?: Array<{
     material_key: string;
     used_for: string;

@@ -20,6 +20,9 @@ export interface CalculatorDraft {
   applicationFamily?: ApplicationFamily;
   orderSize: number;
   pricesUpdatedAt: string | null;
+  includeSpentValue?: boolean;
+  reactorType?: 'fixed' | 'slurry';
+  catalystBulkDensity?: number;
   electrocatalystConfig?: {
     catalystMaterialKey: string;
     ionomerMaterialKey: string;
