@@ -5,6 +5,7 @@ import {
   type ApplicationFamily,
   type CatalystDomain,
   calculateCost,
+  fetchThermalCompositionOptions,
   fetchMaterials,
   fetchPrices,
   fetchTemplates,
@@ -14,6 +15,8 @@ import {
   type MaterialItem,
   type MetalPrice,
   type ProcessTemplate,
+  type ThermalCompositionOption,
+  type ThermalCompositionOptions,
 } from '../lib/api';
 import {
   loadCalculatorDraft,
@@ -27,21 +30,9 @@ import {
 import { useUnit } from '../lib/use-unit';
 
 const TROY_OZ_PER_LB = 14.5833;
-const KNOWN_METALS = ['Pt', 'Pd', 'Rh', 'Ru', 'Ir', 'Ni', 'Co', 'Cu', 'Fe', 'Mo', 'W', 'Au', 'Ag', 'Al'];
+const THERMAL_WT_TOLERANCE = 0.05;
 const QUICK_ORDER_SIZES = [2, 20, 200];
 const DEFAULT_STEPS = ['mixer_slurry', 'incipient_wetness', 'dryer_rotary_100_300C'];
-const SUPPORT_OPTIONS = [
-  { name: 'Al2O3', price: 0.5, note: 'Alumina, default refinery support' },
-  { name: 'SiO2', price: 0.3, note: 'Silica support' },
-  { name: 'TiO2', price: 1.2, note: 'Titania support' },
-  { name: 'Carbon', price: 1.5, note: 'Activated carbon' },
-  { name: 'ZSM-5', price: 3, note: 'Zeolite, MFI family' },
-  { name: 'USY', price: 2.5, note: 'FCC-grade zeolite' },
-  { name: 'CeO2', price: 2, note: 'Ceria support' },
-  { name: 'MgO', price: 0.4, note: 'Magnesia support' },
-  { name: 'ZrO2', price: 5, note: 'Zirconia support' },
-  { name: 'SiO2-Al2O3', price: 0.8, note: 'Silica-alumina blend' },
-] as const;
 const ALL_STEPS = [
   { key: 'mixer_dry_blender', label: 'Dry Blender', category: 'Mixing', scales: ['small', 'medium', 'large'] },
   { key: 'mixer_slurry', label: 'Slurry Mixer', category: 'Mixing', scales: ['small', 'medium', 'large'] },
@@ -91,6 +82,21 @@ const ESTIMATE_SECTIONS: WorkspaceSection[] = [
 type SourceType = CalculatorRow['source_type'];
 type Scale = 'small' | 'medium' | 'large';
 type FeedPrice = { price_per_lb: number; source_type: Exclude<SourceType, 'manual'>; source: string };
+type ThermalSelectionOption = {
+  selection_key: string;
+  material_key?: string | null;
+  name: string;
+  display_name: string;
+  label: string;
+  symbol: string | null;
+  formula: string | null;
+  category: string;
+  price_per_lb: number;
+  price_scope?: string | null;
+  source_type: SourceType;
+  source: string;
+  option_kind: 'live' | 'library';
+};
 type ElectrocatalystDraft = {
   catalystMaterialKey: string;
   ionomerMaterialKey: string;
@@ -110,10 +116,6 @@ function uid() {
 const toPerLb = (price: number, unit: string) => unit === '$/troy_oz' ? price * TROY_OZ_PER_LB : unit === '$/kg' ? price / 2.20462 : price;
 const getScale = (tons: number): Scale => (tons < 5 ? 'small' : tons < 70 ? 'medium' : 'large');
 const sourceTypeLabel = (sourceType: SourceType) => sourceType === 'live' ? 'Live' : sourceType === 'indexed' ? 'Indexed' : 'Manual';
-const defaultRows = (): CalculatorRow[] => [
-  { id: uid(), role: 'active_metal', name: 'Ni', wt_pct: 20, price_per_lb: 0, source_type: 'manual', source: 'Manual input' },
-  defaultSupportRow(),
-];
 const sourceTone = (sourceType: SourceType) => sourceType === 'live' ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : sourceType === 'indexed' ? 'border-amber-200 bg-amber-50 text-amber-700' : 'border-slate-200 bg-white text-slate-600';
 const priceTone = (sourceType: SourceType) => sourceType === 'live' ? 'border-emerald-200 bg-emerald-50/70 text-emerald-800' : sourceType === 'indexed' ? 'border-amber-200 bg-amber-50/70 text-amber-800' : '';
 const scaleMeta = (scale: Scale) => scale === 'small' ? { label: 'Small', rate: '1 t/day', classes: 'border-violet-200 bg-violet-50 text-violet-700' } : scale === 'medium' ? { label: 'Medium', rate: '10 t/day', classes: 'border-sky-200 bg-sky-50 text-sky-700' } : { label: 'Large', rate: '150 t/day', classes: 'border-teal-200 bg-teal-50 text-teal-700' };
@@ -130,24 +132,201 @@ const defaultElectrocatalystConfig = (): ElectrocatalystDraft => ({
   templateId: 'pem_fuel_cell_ccm',
 });
 
-function defaultSupportRow(): CalculatorRow {
+function createBlankRow(role: CalculatorRow['role'], wtPct = 0): CalculatorRow {
   return {
     id: uid(),
-    role: 'support',
-    name: 'Al2O3',
-    wt_pct: 80,
-    price_per_lb: 0.5,
+    role,
+    name: '',
+    material_key: null,
+    symbol: null,
+    selection_key: null,
+    wt_pct: wtPct,
+    price_per_lb: 0,
     source_type: 'manual',
-    source: 'Manual support default',
+    source: 'Manual input',
   };
 }
 
-function ensureThermalRows(rows: CalculatorRow[]) {
+function buildLiveMetalOption(price: MetalPrice): ThermalSelectionOption {
+  return {
+    selection_key: `live:${price.symbol}`,
+    material_key: null,
+    name: price.symbol,
+    display_name: price.symbol,
+    label: `${price.symbol} | ${price.name} | ${price.source}`,
+    symbol: price.symbol,
+    formula: price.symbol,
+    category: 'Live metal price',
+    price_per_lb: toPerLb(price.price, price.unit),
+    price_scope: 'live',
+    source_type: price.source_type,
+    source: price.source,
+    option_kind: 'live',
+  };
+}
+
+function buildLibraryThermalOption(option: ThermalCompositionOption): ThermalSelectionOption {
+  return {
+    selection_key: option.selection_key,
+    material_key: option.material_key,
+    name: option.name,
+    display_name: option.display_name,
+    label: option.label,
+    symbol: option.symbol,
+    formula: option.formula,
+    category: option.category,
+    price_per_lb: option.price_per_lb,
+    price_scope: option.price_scope,
+    source_type: option.source_type,
+    source: option.quote_source || 'Library',
+    option_kind: 'library',
+  };
+}
+
+function thermalScopeRank(scope?: string | null) {
+  switch (scope) {
+    case 'live':
+      return 0;
+    case 'literature_high_volume':
+      return 1;
+    case 'historical_bulk':
+      return 2;
+    case 'vendor_lab':
+      return 3;
+    default:
+      return 4;
+  }
+}
+
+function preferThermalOption(next: ThermalSelectionOption, current: ThermalSelectionOption) {
+  const scopeDelta = thermalScopeRank(next.price_scope) - thermalScopeRank(current.price_scope);
+  if (scopeDelta !== 0) return scopeDelta < 0;
+  const nextDisplay = next.display_name.toLowerCase();
+  const currentDisplay = current.display_name.toLowerCase();
+  if (nextDisplay !== currentDisplay) return nextDisplay < currentDisplay;
+  return next.name.toLowerCase() < current.name.toLowerCase();
+}
+
+function dedupeThermalOptions(options: ThermalSelectionOption[]) {
+  const unique = new Map<string, ThermalSelectionOption>();
+  for (const option of options) {
+    const key = option.display_name.trim().toLowerCase();
+    const current = unique.get(key);
+    if (!current || preferThermalOption(option, current)) {
+      unique.set(key, option);
+    }
+  }
+  return [...unique.values()].sort((left, right) => left.display_name.localeCompare(right.display_name));
+}
+
+function compactThermalOptionLabel(option: ThermalSelectionOption) {
+  return option.display_name;
+}
+
+function selectedStepKeysForCategory(category: string, activeSteps: string[]) {
+  const categoryKeys = new Set<string>(
+    ALL_STEPS.filter((step) => step.category === category).map((step) => step.key),
+  );
+  return activeSteps.filter((stepKey) => categoryKeys.has(stepKey));
+}
+
+function createRowFromOption(
+  role: 'active_metal' | 'promoter' | 'support',
+  option: ThermalSelectionOption,
+  wtPct: number,
+): CalculatorRow {
+  return {
+    id: uid(),
+    role,
+    name: option.display_name,
+    material_key: option.material_key ?? null,
+    symbol: option.symbol,
+    selection_key: option.selection_key,
+    wt_pct: wtPct,
+    price_per_lb: option.price_per_lb,
+    source_type: option.source_type,
+    source: option.source,
+  };
+}
+
+function applyOptionToRow(
+  row: CalculatorRow,
+  option: ThermalSelectionOption,
+  preserveManualPrice = false,
+): CalculatorRow {
+  return {
+    ...row,
+    name: option.display_name,
+    material_key: option.material_key ?? null,
+    symbol: option.symbol,
+    selection_key: option.selection_key,
+    price_per_lb: preserveManualPrice ? row.price_per_lb : option.price_per_lb,
+    source_type: preserveManualPrice ? 'manual' : option.source_type,
+    source: preserveManualPrice ? 'Manual input' : option.source,
+  };
+}
+
+function defaultSupportOption(options: ThermalSelectionOption[]): ThermalSelectionOption | null {
+  return options.find((option) => option.display_name === 'Al2O3')
+    ?? options.find((option) => option.name.toLowerCase().includes('alumina'))
+    ?? options[0]
+    ?? null;
+}
+
+function defaultRows(
+  liveOptions: ThermalSelectionOption[] = [],
+  supportOptions: ThermalSelectionOption[] = [],
+): CalculatorRow[] {
+  const liveNi = liveOptions.find((option) => option.display_name === 'Ni') ?? liveOptions[0] ?? null;
+  const support = defaultSupportOption(supportOptions);
+  return [
+    liveNi ? createRowFromOption('active_metal', liveNi, 20) : createBlankRow('active_metal', 20),
+    support ? createRowFromOption('support', support, 80) : createBlankRow('support', 80),
+  ];
+}
+
+function matchesOption(row: CalculatorRow, option: ThermalSelectionOption) {
+  const rowName = row.name.trim().toLowerCase();
+  return (
+    (row.selection_key && row.selection_key === option.selection_key)
+    || (row.material_key && row.material_key === option.material_key)
+    || (!!rowName && [option.display_name, option.name, option.symbol ?? '', option.formula ?? '']
+      .filter(Boolean)
+      .some((value) => value.trim().toLowerCase() === rowName))
+  );
+}
+
+function ensureThermalRows(
+  rows: CalculatorRow[],
+  liveOptions: ThermalSelectionOption[] = [],
+  supportOptions: ThermalSelectionOption[] = [],
+) {
   const thermalRows = rows.filter((row) => row.role === 'active_metal' || row.role === 'promoter' || row.role === 'support');
-  const hasActiveMetal = thermalRows.some((row) => row.role === 'active_metal');
-  if (!hasActiveMetal) return defaultRows();
-  if (!thermalRows.some((row) => row.role === 'support')) return [...thermalRows, defaultSupportRow()];
-  return thermalRows;
+  const hydratedRows = thermalRows.map((row) => {
+    const options = row.role === 'support' ? supportOptions : liveOptions;
+    const option = options.find((candidate) => matchesOption(row, candidate));
+    if (!option) return row;
+    return applyOptionToRow(row, option, row.source_type === 'manual' && row.price_per_lb > 0);
+  });
+  const hasActiveMetal = hydratedRows.some((row) => row.role === 'active_metal');
+  const supportCount = hydratedRows.filter((row) => row.role === 'support').length;
+  const hasNamedSupport = hydratedRows.some((row) => row.role === 'support' && hasNamedRow(row));
+  if (!hasActiveMetal) return defaultRows(liveOptions, supportOptions);
+  if (supportCount === 0) {
+    const support = defaultSupportOption(supportOptions);
+    return [...hydratedRows, support ? createRowFromOption('support', support, 80) : createBlankRow('support', 80)];
+  }
+  if (!hasNamedSupport) {
+    const support = defaultSupportOption(supportOptions);
+    if (!support) return hydratedRows;
+    let filled = false;
+    return hydratedRows.map((row) => {
+      if (row.role !== 'support' || filled) return row;
+      filled = true;
+      return applyOptionToRow(row, support);
+    });
+  }
+  return hydratedRows;
 }
 
 function hasNamedRow(row: CalculatorRow) {
@@ -202,8 +381,11 @@ function materialQuoteLabel(material?: MaterialItem | null) {
   return `$${formatted} ${material.price_unit}`;
 }
 
-function materialOptionLabel(material: MaterialItem) {
-  return `${material.name} [${priceScopeLabel(material.price_scope)} | ${materialQuoteLabel(material)}]`;
+function calculatorMaterialLabel(material: MaterialItem) {
+  if (material.formula && !material.name.includes(material.formula)) {
+    return `${material.name} (${material.formula})`;
+  }
+  return material.name;
 }
 
 function preferredScopeRank(material: MaterialItem) {
@@ -311,7 +493,9 @@ export default function Calculator() {
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState('');
+  const [livePriceRows, setLivePriceRows] = useState<MetalPrice[]>([]);
   const [liveMap, setLiveMap] = useState<Record<string, FeedPrice>>({});
+  const [thermalOptions, setThermalOptions] = useState<ThermalCompositionOptions | null>(null);
   const [electroMaterials, setElectroMaterials] = useState<MaterialItem[]>([]);
   const [electroTemplates, setElectroTemplates] = useState<ProcessTemplate[]>([]);
   const [latestSnapshot, setLatestSnapshot] = useState<CalculatorResultSnapshot | null>(() => loadCalculatorResultSnapshot());
@@ -359,13 +543,52 @@ export default function Calculator() {
       try {
         const prices = await fetchPrices();
         const map = toFeedMap(prices);
+        const nextLiveOptions = prices.map(buildLiveMetalOption);
+        const nextActiveOptions = dedupeThermalOptions([
+          ...nextLiveOptions,
+          ...((thermalOptions?.active_metal_options ?? []).map(buildLibraryThermalOption)),
+        ]);
+        const nextSupportOptions = dedupeThermalOptions((thermalOptions?.support_options ?? []).map(buildLibraryThermalOption));
+        setLivePriceRows(prices);
         setLiveMap(map);
         setPricesUpdatedAt(new Date());
-        setRows((previous) => previous.map((row) => row.role === 'support' || !map[row.name] ? row : { ...row, price_per_lb: map[row.name].price_per_lb, source_type: map[row.name].source_type, source: map[row.name].source }));
+        setRows((previous) => ensureThermalRows(
+          previous.map((row) => {
+            if (row.role === 'support') return row;
+            const liveKey = row.symbol ? `live:${row.symbol}` : `live:${row.name}`;
+            const liveOption = nextLiveOptions.find((option) => option.selection_key === liveKey);
+            if (!liveOption || row.source_type === 'manual') return row;
+            return applyOptionToRow(row, liveOption);
+          }),
+          nextActiveOptions,
+          nextSupportOptions,
+        ));
       } catch {}
     }
 
     void loadPrices();
+  }, []);
+
+  useEffect(() => {
+    async function loadThermalOptions() {
+      try {
+        const payload = await fetchThermalCompositionOptions();
+        setThermalOptions(payload);
+        const nextLiveOptions = livePriceRows.map(buildLiveMetalOption);
+        const nextActiveOptions = dedupeThermalOptions([...nextLiveOptions, ...payload.active_metal_options.map(buildLibraryThermalOption)]);
+        const nextSupportOptions = dedupeThermalOptions(payload.support_options.map(buildLibraryThermalOption));
+        setRows((previous) => ensureThermalRows(previous, nextActiveOptions, nextSupportOptions));
+      } catch {
+        setThermalOptions({
+          max_components: 4,
+          active_metal_options: [],
+          promoter_options: [],
+          support_options: [],
+        });
+      }
+    }
+
+    void loadThermalOptions();
   }, []);
 
   useEffect(() => {
@@ -488,10 +711,6 @@ export default function Calculator() {
     electrocatalystConfig.templateId,
   ]);
 
-  useEffect(() => {
-    setRows((previous) => previous.map((row) => row.role === 'support' || row.source_type === 'manual' || !liveMap[row.name] ? row : { ...row, price_per_lb: liveMap[row.name].price_per_lb, source_type: liveMap[row.name].source_type, source: liveMap[row.name].source }));
-  }, [liveMap]);
-
   function toFeedMap(prices: MetalPrice[]) {
     const map: Record<string, FeedPrice> = {};
     for (const price of prices) {
@@ -505,7 +724,21 @@ export default function Calculator() {
     setRefreshing(true);
     try {
       await refreshPriceFeed();
-      setLiveMap(toFeedMap(await fetchPrices()));
+      const prices = await fetchPrices();
+      const map = toFeedMap(prices);
+      const nextLiveOptions = prices.map(buildLiveMetalOption);
+      setLivePriceRows(prices);
+      setLiveMap(map);
+      setRows((previous) => ensureThermalRows(
+        previous.map((row) => {
+          if (row.role === 'support' || row.source_type === 'manual') return row;
+          const liveKey = row.symbol ? `live:${row.symbol}` : `live:${row.name}`;
+          const liveOption = nextLiveOptions.find((option) => option.selection_key === liveKey);
+          return liveOption ? applyOptionToRow(row, liveOption) : row;
+        }),
+        [...nextLiveOptions, ...activeMetalLibraryOptions],
+        supportSelectionOptions,
+      ));
       setPricesUpdatedAt(new Date());
     } finally {
       setRefreshing(false);
@@ -517,6 +750,16 @@ export default function Calculator() {
     catalystDomain === 'electrocatalyst'
       ? electroTemplates.find((template) => template.id === electrocatalystConfig.templateId) ?? null
       : null;
+  const liveMetalOptions = livePriceRows.map(buildLiveMetalOption);
+  const activeMetalLibraryOptions = (thermalOptions?.active_metal_options ?? []).map(buildLibraryThermalOption);
+  const promoterLibraryOptions = (thermalOptions?.promoter_options ?? []).map(buildLibraryThermalOption);
+  const supportSelectionOptions = dedupeThermalOptions((thermalOptions?.support_options ?? []).map(buildLibraryThermalOption));
+  const activeMetalOptions = dedupeThermalOptions([...liveMetalOptions, ...activeMetalLibraryOptions]);
+  const promoterOptions = dedupeThermalOptions([...liveMetalOptions, ...promoterLibraryOptions]);
+  const thermalOptionMap = new Map<string, ThermalSelectionOption>(
+    [...activeMetalOptions, ...promoterOptions, ...supportSelectionOptions].map((option) => [option.selection_key, option]),
+  );
+  const maxThermalComponents = thermalOptions?.max_components ?? 4;
   const electroMaterialMap = new Map(electroMaterials.map((material) => [String(material.id), material]));
   const catalystPowders = electroMaterials.filter((material) => material.category === 'Electrocatalyst Powder');
   const ionomerOptions = electroMaterials.filter((material) => material.category === 'Ionomer');
@@ -533,7 +776,7 @@ export default function Calculator() {
     setError('');
 
     if (nextDomain === 'thermal') {
-      setRows((previous) => ensureThermalRows(previous));
+      setRows((previous) => ensureThermalRows(previous, activeMetalOptions, supportSelectionOptions));
       const thermalBenchmarkSteps =
         selectedBenchmark?.catalyst_domain === 'thermal'
           ? selectedBenchmark.route.steps
@@ -551,24 +794,65 @@ export default function Calculator() {
   }
 
   const updateRow = (id: string, patch: Partial<CalculatorRow>) => setRows((previous) => previous.map((row) => row.id === id ? { ...row, ...patch } : row));
-  const onMaterialChange = (id: string, name: string) => updateRow(id, { name, price_per_lb: liveMap[name]?.price_per_lb ?? 0, source_type: liveMap[name]?.source_type ?? 'manual', source: liveMap[name]?.source ?? 'Manual input' });
+  const findThermalOption = (selectionKey: string | null | undefined) => selectionKey ? (thermalOptionMap.get(selectionKey) ?? null) : null;
+  const selectThermalOption = (
+    rowId: string,
+    selectionKey: string,
+  ) => {
+    const option = findThermalOption(selectionKey);
+    if (!option) return;
+    setRows((previous) => previous.map((row) => {
+      if (row.id !== rowId) return row;
+      return applyOptionToRow(row, option);
+    }));
+  };
   const updateElectroConfig = (patch: Partial<ElectrocatalystDraft>) => setElectrocatalystConfig((previous) => ({ ...previous, ...patch }));
-  const addRow = (role: 'active_metal' | 'promoter') => setRows((previous) => {
-    const row: CalculatorRow = { id: uid(), role, name: '', wt_pct: 0, price_per_lb: 0, source_type: 'manual', source: 'Manual input' };
+  const addRow = (role: 'active_metal' | 'promoter' | 'support') => setRows((previous) => {
+    if (previous.length >= maxThermalComponents) return previous;
+    const row = createBlankRow(role, role === 'support' ? 0 : 5);
     const supportIndex = previous.findIndex((item) => item.role === 'support');
-    return supportIndex === -1 ? [...previous, row] : [...previous.slice(0, supportIndex), row, ...previous.slice(supportIndex)];
+    if (role === 'support' || supportIndex === -1) return [...previous, row];
+    return [...previous.slice(0, supportIndex), row, ...previous.slice(supportIndex)];
   });
-  const removeRow = (id: string) => setRows((previous) => previous.filter((row) => row.id !== id));
+  const removeRow = (id: string) => setRows((previous) => {
+    const target = previous.find((row) => row.id === id);
+    if (!target) return previous;
+    if (target.role === 'support' && previous.filter((row) => row.role === 'support').length === 1) {
+      return previous;
+    }
+    return previous.filter((row) => row.id !== id);
+  });
   const toggleStep = (stepKey: string) => setSteps((previous) => previous.includes(stepKey) ? previous.filter((item) => item !== stepKey) : [...previous, stepKey]);
-  const thermalDraftRows = rows.filter((row) => row.role !== 'support');
-  const completedThermalRows = thermalDraftRows.filter(isCompletedThermalRow);
-  const incompleteThermalRows = thermalDraftRows.filter(isIncompleteThermalRow);
-  const nonSupportWt = completedThermalRows.reduce((sum, row) => sum + row.wt_pct, 0);
-  const supportWtPct = Math.max(0, 100 - nonSupportWt);
+  const thermalRows = rows.filter((row) => row.role === 'active_metal' || row.role === 'promoter' || row.role === 'support');
+  const supportRows = thermalRows.filter((row) => row.role === 'support');
+  const nonSupportRows = thermalRows.filter((row) => row.role !== 'support');
+  const supportIsSplit = supportRows.length > 1;
+  const completedNonSupportRows = nonSupportRows.filter(isCompletedThermalRow);
+  const nonSupportWt = completedNonSupportRows.reduce((sum, row) => sum + row.wt_pct, 0);
+  const explicitSupportWt = supportRows.reduce((sum, row) => sum + (isCompletedThermalRow(row) ? row.wt_pct : 0), 0);
+  const supportWtPct = supportIsSplit ? explicitSupportWt : Math.max(0, 100 - nonSupportWt);
+  const totalThermalWt = supportIsSplit ? nonSupportWt + explicitSupportWt : nonSupportWt + supportWtPct;
+  const incompleteThermalRows = thermalRows.filter((row) => {
+    if (row.role === 'support' && !supportIsSplit) {
+      return !hasNamedRow(row);
+    }
+    return isIncompleteThermalRow(row);
+  });
   const liveFeedCount = Object.values(liveMap).filter((feed) => feed.source_type === 'live').length;
   const indexedFeedCount = Object.values(liveMap).filter((feed) => feed.source_type === 'indexed').length;
-  const activeMetalCount = completedThermalRows.filter((row) => row.role === 'active_metal').length;
-  const isThermalValid = activeMetalCount > 0 && nonSupportWt > 0 && nonSupportWt < 100 && incompleteThermalRows.length === 0;
+  const activeMetalCount = completedNonSupportRows.filter((row) => row.role === 'active_metal').length;
+  const hasSupport = supportRows.some(hasNamedRow);
+  const isThermalValid = (
+    activeMetalCount > 0
+    && hasSupport
+    && thermalRows.length <= maxThermalComponents
+    && incompleteThermalRows.length === 0
+    && (
+      supportIsSplit
+        ? explicitSupportWt > 0 && Math.abs(totalThermalWt - 100) <= THERMAL_WT_TOLERANCE
+        : nonSupportWt > 0 && nonSupportWt < 100
+    )
+  );
   const isElectroValid = Boolean(
     electrocatalystConfig.catalystMaterialKey
       && electrocatalystConfig.ionomerMaterialKey
@@ -576,13 +860,19 @@ export default function Calculator() {
       && electrocatalystConfig.substrateMaterialKey
       && activeElectroTemplate,
   );
-  const thermalValidationMessage = incompleteThermalRows.length > 0
-    ? `Complete or remove ${incompleteThermalRows.length} unfinished composition row${incompleteThermalRows.length > 1 ? 's' : ''} before continuing.`
-    : activeMetalCount === 0
-      ? 'Add at least one active metal before continuing.'
-      : nonSupportWt >= 100
-        ? 'Active metals and promoters must stay below 100 wt% so support remains positive.'
-        : 'Enter a valid non-zero loading for the active portion of the recipe.';
+  const thermalValidationMessage = thermalRows.length > maxThermalComponents
+    ? `Thermal workflow is capped at ${maxThermalComponents} total components including promoted supports.`
+    : incompleteThermalRows.length > 0
+      ? `Complete or remove ${incompleteThermalRows.length} unfinished composition row${incompleteThermalRows.length > 1 ? 's' : ''} before continuing.`
+      : activeMetalCount === 0
+        ? 'Add at least one active metal before continuing.'
+        : !hasSupport
+          ? 'Add at least one support before continuing.'
+          : supportIsSplit
+            ? `When more than one support is used, the full recipe must sum to 100 wt%. Current total: ${totalThermalWt.toFixed(1)} wt%.`
+            : nonSupportWt >= 100
+              ? 'Active metals and promoters must stay below 100 wt% so support remains positive.'
+              : 'Enter a valid non-zero loading for the active portion of the recipe.';
   const electrocatalystValidationMessage = 'Select catalyst powder, ionomer, membrane, substrate / GDL, and a preparation template before continuing.';
   const isCompositionSectionValid = catalystDomain === 'electrocatalyst' ? isElectroValid : isThermalValid;
   const isManufacturingSectionValid = isCompositionSectionValid && steps.length > 0;
@@ -632,9 +922,11 @@ export default function Calculator() {
   function toggleRowSource(id: string) {
     setRows((previous) => previous.map((row) => {
       if (row.id !== id) return row;
-      const feed = liveMap[row.name];
-      if (!feed) return row;
-      return row.source_type === 'manual' ? { ...row, price_per_lb: feed.price_per_lb, source_type: feed.source_type, source: feed.source } : { ...row, source_type: 'manual', source: 'Manual input' };
+      const option = findThermalOption(row.selection_key);
+      if (!option || option.source_type === 'manual') return row;
+      return row.source_type === 'manual'
+        ? applyOptionToRow(row, option)
+        : { ...row, source_type: 'manual', source: 'Manual input' };
     }));
   }
 
@@ -672,13 +964,24 @@ export default function Calculator() {
           },
         };
       } else {
-        const supportRow = rows.find((row) => row.role === 'support');
-        if (!supportRow) throw new Error('Support is required.');
-        supportName = supportRow.name;
+        const completedSupportRows = supportRows.filter((row) => supportIsSplit ? isCompletedThermalRow(row) : hasNamedRow(row));
+        supportName = completedSupportRows.map((row) => row.name).join(' + ') || null;
 
         const components: ComponentInput[] = [
-          ...completedThermalRows.map((row) => ({ role: row.role, name: row.name, wt_pct: row.wt_pct, price_per_lb: row.price_per_lb })),
-          { role: 'support', name: supportRow.name, wt_pct: supportWtPct, price_per_lb: supportRow.price_per_lb },
+          ...completedNonSupportRows.map((row) => ({
+            role: row.role,
+            name: row.name,
+            material_key: row.source_type === 'manual' ? undefined : row.material_key ?? undefined,
+            wt_pct: row.wt_pct,
+            price_per_lb: row.source_type === 'manual' || !row.material_key ? row.price_per_lb : undefined,
+          })),
+          ...completedSupportRows.map((row, index) => ({
+            role: 'support' as const,
+            name: row.name,
+            material_key: row.source_type === 'manual' ? undefined : row.material_key ?? undefined,
+            wt_pct: supportIsSplit ? row.wt_pct : index === 0 ? supportWtPct : 0,
+            price_per_lb: row.source_type === 'manual' || !row.material_key ? row.price_per_lb : undefined,
+          })).filter((row) => row.wt_pct > 0),
         ];
         input = {
           components,
@@ -725,12 +1028,12 @@ export default function Calculator() {
   }
 
   function sourceChip(row: CalculatorRow) {
-    const feed = liveMap[row.name];
+    const option = findThermalOption(row.selection_key);
     const dotClass = row.source_type === 'live' ? 'bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.32)]' : row.source_type === 'indexed' ? 'bg-amber-500' : 'bg-slate-500';
     const className = `inline-flex items-center gap-2 rounded-full border px-3 py-2 text-xs font-semibold transition ${sourceTone(row.source_type)}`;
     const content = <><span className={`h-2 w-2 rounded-full ${dotClass}`} /><span>{sourceTypeLabel(row.source_type)}</span></>;
-    if (!feed) return <span className={`${className} cursor-default`} title={row.source}>{content}</span>;
-    const title = row.source_type === 'manual' ? `Manual input. Switch to ${sourceTypeLabel(feed.source_type)} pricing from ${feed.source}.` : `${row.source}. Switch back to manual input.`;
+    if (!option || option.source_type === 'manual') return <span className={`${className} cursor-default`} title={row.source}>{content}</span>;
+    const title = row.source_type === 'manual' ? `Manual input. Switch to ${sourceTypeLabel(option.source_type)} pricing from ${option.source}.` : `${row.source}. Switch back to manual input.`;
     return <button onClick={() => toggleRowSource(row.id)} title={title} className={className}>{content}</button>;
   }
 
@@ -828,7 +1131,7 @@ export default function Calculator() {
                   <option value="">Select catalyst powder</option>
                   {catalystPowders.map((material) => (
                     <option key={String(material.id)} value={String(material.id)}>
-                      {materialOptionLabel(material)}
+                      {calculatorMaterialLabel(material)}
                     </option>
                   ))}
                 </select>
@@ -840,7 +1143,7 @@ export default function Calculator() {
                   <option value="">Select ionomer</option>
                   {ionomerOptions.map((material) => (
                     <option key={String(material.id)} value={String(material.id)}>
-                      {materialOptionLabel(material)}
+                      {calculatorMaterialLabel(material)}
                     </option>
                   ))}
                 </select>
@@ -852,7 +1155,7 @@ export default function Calculator() {
                   <option value="">Select membrane</option>
                   {membraneOptions.map((material) => (
                     <option key={String(material.id)} value={String(material.id)}>
-                      {materialOptionLabel(material)}
+                      {calculatorMaterialLabel(material)}
                     </option>
                   ))}
                 </select>
@@ -864,7 +1167,7 @@ export default function Calculator() {
                   <option value="">Select substrate / GDL</option>
                   {substrateOptions.map((material) => (
                     <option key={String(material.id)} value={String(material.id)}>
-                      {materialOptionLabel(material)}
+                      {calculatorMaterialLabel(material)}
                     </option>
                   ))}
                 </select>
@@ -958,9 +1261,10 @@ export default function Calculator() {
 
   function renderRows(role: 'active_metal' | 'promoter') {
     const items = rows.filter((row) => row.role === role);
-      const copy = role === 'active_metal'
-      ? { title: 'Active metals', description: 'These rows define the core cost basis and live price mapping.', accent: 'bg-[#78f2d0]', button: 'Add active metal', placeholder: 'At least one active metal is required.' }
-      : { title: 'Promoters', description: 'Optional additives that change recipe cost and preparation choice.', accent: 'bg-[#88a8ff]', button: 'Add promoter', placeholder: 'No promoters added yet.' };
+    const selectionOptions = role === 'active_metal' ? activeMetalOptions : promoterOptions;
+    const copy = role === 'active_metal'
+      ? { title: 'Active metals', description: 'Pick live metal feeds or library-backed precursor rows.', accent: 'bg-[#78f2d0]', button: 'Add active metal', placeholder: 'At least one active metal is required.' }
+      : { title: 'Promoters', description: 'Optional promoter rows use the same DB-backed thermal material bank.', accent: 'bg-[#88a8ff]', button: 'Add promoter', placeholder: 'No promoters added yet.' };
 
     return (
       <div className="space-y-3">
@@ -969,22 +1273,23 @@ export default function Calculator() {
             <div className="flex items-center gap-2"><span className={`h-2.5 w-2.5 rounded-full ${copy.accent}`} /><h3 className="cp-heading-sm">{copy.title}</h3></div>
             <p className="mt-1 text-xs leading-6 text-slate-500">{copy.description}</p>
           </div>
-          <button onClick={() => addRow(role)} className="cp-button-secondary px-3 py-2 text-xs">{copy.button}</button>
+          <button onClick={() => addRow(role)} disabled={thermalRows.length >= maxThermalComponents} className="cp-button-secondary px-3 py-2 text-xs disabled:cursor-not-allowed disabled:opacity-45">{copy.button}</button>
         </div>
         {items.length === 0 ? <div className="rounded-[24px] border border-dashed border-slate-300 bg-white/44 px-4 py-4 text-sm text-slate-500">{copy.placeholder}</div> : (
           <div className="space-y-3">
             {items.map((row) => (
               <div key={row.id} className="surface-ghost p-4">
                 <div className="flex flex-wrap items-center gap-3">
-                  {role === 'active_metal'
-                    ? <select value={row.name} onChange={(event) => onMaterialChange(row.id, event.target.value)} className="input-base min-w-[160px] flex-[1.4_1_220px] pr-10"><option value="">Select metal</option>{KNOWN_METALS.map((metal) => <option key={metal} value={metal}>{metal}</option>)}</select>
-                    : <input type="text" list="known-metal-options" value={row.name} onChange={(event) => onMaterialChange(row.id, event.target.value)} placeholder="e.g. Re, K, Sn, Ce" className="input-base min-w-[160px] flex-[1.4_1_220px]" />}
+                  <select value={row.selection_key ?? ''} onChange={(event) => selectThermalOption(row.id, event.target.value)} className="input-base min-w-[220px] flex-[1.6_1_320px] pr-10">
+                    <option value="">{role === 'active_metal' ? 'Select active metal or precursor' : 'Select promoter material'}</option>
+                    {selectionOptions.map((option) => <option key={option.selection_key} value={option.selection_key}>{compactThermalOptionLabel(option)}</option>)}
+                  </select>
                   <div className="flex flex-none items-center gap-2"><input type="number" step="0.1" min="0" max="100" value={row.wt_pct} onChange={(event) => updateRow(row.id, { wt_pct: Number(event.target.value) })} className="input-base w-28 text-right font-mono" /><span className="text-xs text-slate-500">wt%</span></div>
                   {sourceChip(row)}
                   {priceField(row)}
                   <button onClick={() => removeRow(row.id)} className="flex h-10 w-10 flex-none items-center justify-center rounded-[18px] border border-slate-300 bg-white/74 text-slate-400 transition hover:border-red-300 hover:bg-red-50 hover:text-red-700" aria-label="Remove row">x</button>
                 </div>
-                <div className="mt-3 text-xs text-slate-500">{row.source}</div>
+                <div className="mt-3 text-xs text-slate-500">{row.name || 'Select a material record.'}</div>
               </div>
             ))}
           </div>
@@ -1002,7 +1307,7 @@ export default function Calculator() {
       : rows.filter((row) => row.source_type === 'manual' && row.name.trim().length > 0).length;
     const recipeSummary = catalystDomain === 'electrocatalyst'
       ? `${selectedCatalystMaterial?.name ?? 'Catalyst'}, ${selectedIonomerMaterial?.name ?? 'Ionomer'}, ${selectedMembraneMaterial?.name ?? 'Membrane'}`
-      : `${activeMetalCount} active metal${activeMetalCount === 1 ? '' : 's'} / ${supportWtPct.toFixed(1)} wt% support`;
+      : `${activeMetalCount} active metal${activeMetalCount === 1 ? '' : 's'} / ${supportRows.length} support row${supportRows.length === 1 ? '' : 's'} / ${supportWtPct.toFixed(1)} wt% support`;
     const preparationSummary =
       catalystDomain === 'electrocatalyst'
         ? activeElectroTemplate?.name ?? 'Select a preparation template'
@@ -1183,7 +1488,7 @@ export default function Calculator() {
           <div className="cp-subtle-label">Composition</div>
           <h2 className="cp-heading-lg mt-2">Define the catalyst recipe.</h2>
           <p className="mt-2 text-sm leading-7 text-slate-600">
-            Keep active metals and promoters explicit. Support share closes automatically so the mass basis stays readable.
+            Keep active metals and promoters explicit. A single support row auto-balances the recipe, and multiple support rows enable promoted-support formulations up to four total components.
           </p>
         </div>
         {!isThermalValid ? (
@@ -1196,17 +1501,43 @@ export default function Calculator() {
         {renderRows('active_metal')}
         {renderRows('promoter')}
         <div className="surface-ghost p-3.5">
-          <div>
-            <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#efc36c]" /><h3 className="cp-heading-sm">Support</h3></div>
-            <p className="mt-1 text-xs leading-5 text-slate-500">Support share closes the mass balance automatically.</p>
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#efc36c]" /><h3 className="cp-heading-sm">Support</h3></div>
+              <p className="mt-1 text-xs leading-5 text-slate-500">
+                {supportIsSplit
+                  ? 'Promoted support is on. Enter each support wt% explicitly so the total recipe closes at 100 wt%.'
+                  : 'Single-support mode stays auto-balanced. Add a second support to split the support bed explicitly.'}
+              </p>
+            </div>
+            <button onClick={() => addRow('support')} disabled={thermalRows.length >= maxThermalComponents} className="cp-button-secondary px-3 py-2 text-xs disabled:cursor-not-allowed disabled:opacity-45">Add support</button>
           </div>
-          {rows.filter((row) => row.role === 'support').map((row) => (
-            <div key={row.id} className="mt-3.5 flex flex-wrap items-center gap-3">
-              <select value={row.name} onChange={(event) => { const support = SUPPORT_OPTIONS.find((item) => item.name === event.target.value); updateRow(row.id, { name: event.target.value, price_per_lb: support?.price ?? row.price_per_lb, source_type: 'manual', source: 'Manual support default' }); }} className="input-base min-w-[180px] flex-[1.3_1_260px] pr-10">{SUPPORT_OPTIONS.map((support) => <option key={support.name} value={support.name}>{support.name} / {support.note}</option>)}</select>
-              <div className="input-base flex min-w-[170px] flex-none items-center justify-between gap-3 bg-white/76"><span className="text-xs text-slate-500">Auto share</span><span className="font-mono text-slate-950">{supportWtPct.toFixed(1)} wt%</span></div>
-              {priceField(row)}
+          {supportRows.map((row) => (
+            <div key={row.id} className="mt-3.5">
+              <div className="flex flex-wrap items-center gap-3">
+                <select value={row.selection_key ?? ''} onChange={(event) => selectThermalOption(row.id, event.target.value)} className="input-base min-w-[220px] flex-[1.5_1_320px] pr-10">
+                  <option value="">Select support</option>
+                  {supportSelectionOptions.map((support) => <option key={support.selection_key} value={support.selection_key}>{compactThermalOptionLabel(support)}</option>)}
+                </select>
+                {supportIsSplit ? (
+                  <div className="flex flex-none items-center gap-2">
+                    <input type="number" step="0.1" min="0" max="100" value={row.wt_pct} onChange={(event) => updateRow(row.id, { wt_pct: Number(event.target.value) })} className="input-base w-28 text-right font-mono" />
+                    <span className="text-xs text-slate-500">wt%</span>
+                  </div>
+                ) : (
+                  <div className="input-base flex min-w-[170px] flex-none items-center justify-between gap-3 bg-white/76"><span className="text-xs text-slate-500">Auto share</span><span className="font-mono text-slate-950">{supportWtPct.toFixed(1)} wt%</span></div>
+                )}
+                {sourceChip(row)}
+                {priceField(row)}
+                {supportRows.length > 1 ? <button onClick={() => removeRow(row.id)} className="flex h-10 w-10 flex-none items-center justify-center rounded-[18px] border border-slate-300 bg-white/74 text-slate-400 transition hover:border-red-300 hover:bg-red-50 hover:text-red-700" aria-label="Remove support">x</button> : null}
+              </div>
+              <div className="mt-3 text-xs text-slate-500">{row.name || 'Select a support record.'}</div>
             </div>
           ))}
+          <div className="mt-3 rounded-[18px] border border-slate-200 bg-white/76 px-4 py-3 text-xs leading-6 text-slate-600">
+            Total components: <span className="font-semibold text-slate-950">{thermalRows.length}</span> / {maxThermalComponents}.
+            {supportIsSplit ? ` Current recipe total: ${totalThermalWt.toFixed(1)} wt%.` : ` Support closes automatically at ${supportWtPct.toFixed(1)} wt%.`}
+          </div>
         </div>
         </div>
       </section>
@@ -1214,6 +1545,10 @@ export default function Calculator() {
   }
 
   function renderManufacturingSection() {
+    const selectedCategoryCount = STEP_CATEGORIES.filter(
+      (category) => selectedStepKeysForCategory(category, steps).length > 0,
+    ).length;
+
     return (
       <section className="surface-card p-5">
         <div>
@@ -1227,6 +1562,31 @@ export default function Calculator() {
         </div>
 
         <div className="mt-5 space-y-4">
+        <div className="grid gap-3 lg:grid-cols-3">
+          <div className="rounded-[20px] border border-slate-200 bg-white/82 px-4 py-3">
+            <div className="cp-subtle-label">Selection mode</div>
+            <div className="mt-2 text-sm font-semibold text-slate-950">Choose all operations that apply</div>
+            <div className="mt-1 text-xs leading-6 text-slate-500">
+              This screen builds a full route, not a one-choice wizard.
+            </div>
+          </div>
+          <div className="rounded-[20px] border border-slate-200 bg-white/82 px-4 py-3">
+            <div className="cp-subtle-label">Bucket logic</div>
+            <div className="mt-2 text-sm font-semibold text-slate-950">One bucket can hold multiple steps</div>
+            <div className="mt-1 text-xs leading-6 text-slate-500">
+              Saved thermal and electrochemical templates often stack several operations inside the same bucket.
+            </div>
+          </div>
+          <div className="rounded-[20px] border border-teal-200 bg-teal-50/80 px-4 py-3">
+            <div className="cp-subtle-label !text-teal-700">Current route</div>
+            <div className="mt-2 text-sm font-semibold text-slate-950">
+              {steps.length} selected step{steps.length === 1 ? '' : 's'} across {selectedCategoryCount} bucket{selectedCategoryCount === 1 ? '' : 's'}
+            </div>
+            <div className="mt-1 text-xs leading-6 text-slate-500">
+              Add or remove operations until the route matches the actual lab or pilot workflow.
+            </div>
+          </div>
+        </div>
         {activeBenchmark ? (
           <div className="rounded-[24px] border border-emerald-200 bg-emerald-50/80 px-4 py-4 text-sm text-emerald-900">
             <div className="cp-subtle-label !text-emerald-700">Loaded reference baseline</div>
@@ -1245,19 +1605,41 @@ export default function Calculator() {
           </div>
         </div>
         <div className="grid gap-3 lg:grid-cols-2 xl:grid-cols-3">
-          {STEP_CATEGORIES.map((category) => (
-            <div key={category} className="surface-ghost p-3.5">
-              <div className="cp-subtle-label">{category}</div>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {ALL_STEPS.filter((step) => step.category === category).map((step) => {
-                  const available = (step.scales as readonly Scale[]).includes(currentScale);
-                  const checked = steps.includes(step.key);
-                  const availabilityLabel = step.scales.length === 3 ? null : step.scales.map((item) => item[0].toUpperCase()).join('/');
-                  return <button key={step.key} onClick={() => available && toggleStep(step.key)} disabled={!available} title={available ? step.label : `Not available at ${scale.label.toLowerCase()} scale`} className={`rounded-[16px] border px-3 py-2 text-left text-sm transition ${!available ? 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400' : checked ? 'border-teal-200 bg-teal-50 text-teal-700' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}><div className="font-medium">{step.label}</div>{availabilityLabel ? <div className="mt-1 text-[10px] uppercase tracking-[0.18em] text-slate-400">{availabilityLabel}</div> : null}</button>;
-                })}
+          {STEP_CATEGORIES.map((category) => {
+            const selectedInCategory = selectedStepKeysForCategory(category, steps);
+            return (
+              <div key={category} className="surface-ghost p-3.5">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="cp-subtle-label">{category}</div>
+                  <div className={`rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] ${
+                    selectedInCategory.length > 0
+                      ? 'border-teal-200 bg-teal-50 text-teal-700'
+                      : 'border-slate-200 bg-white text-slate-400'
+                  }`}>
+                    {selectedInCategory.length} selected
+                  </div>
+                </div>
+                <div className="mt-2 text-xs leading-6 text-slate-500">Choose all operations that apply within this bucket.</div>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {ALL_STEPS.filter((step) => step.category === category).map((step) => {
+                    const available = (step.scales as readonly Scale[]).includes(currentScale);
+                    const checked = steps.includes(step.key);
+                    const availabilityLabel = step.scales.length === 3 ? null : step.scales.map((item) => item[0].toUpperCase()).join('/');
+                    return <button key={step.key} onClick={() => available && toggleStep(step.key)} disabled={!available} title={available ? step.label : `Not available at ${scale.label.toLowerCase()} scale`} className={`rounded-[16px] border px-3 py-2 text-left text-sm transition ${!available ? 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400' : checked ? 'border-teal-200 bg-teal-50 text-teal-700' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}><div className="flex items-center justify-between gap-3"><div className="font-medium">{step.label}</div>{checked ? <span className="rounded-full border border-teal-200 bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-teal-700">On</span> : null}</div>{availabilityLabel ? <div className="mt-1 text-[10px] uppercase tracking-[0.18em] text-slate-400">{availabilityLabel}</div> : null}</button>;
+                  })}
+                </div>
+                {selectedInCategory.length > 0 ? (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {selectedInCategory.map((stepKey) => (
+                      <span key={stepKey} className="rounded-full border border-slate-200 bg-white px-2.5 py-1 text-xs text-slate-600">
+                        {formatStepLabel(stepKey)}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
         {catalystDomain === 'thermal' ? (
           <div className="rounded-[24px] border border-slate-900/8 bg-white/72 p-4">
@@ -1358,7 +1740,6 @@ export default function Calculator() {
 
   return (
     <div className="space-y-4">
-      <datalist id="known-metal-options">{KNOWN_METALS.map((metal) => <option key={metal} value={metal} />)}</datalist>
       <section className="surface-card cp-enter overflow-hidden px-4 py-4 sm:px-5" style={{ animationDelay: '0.06s' }}>
         <div className="space-y-5">
           <div className="flex flex-col gap-4 border-b border-slate-900/8 pb-4 lg:flex-row lg:items-end lg:justify-between">

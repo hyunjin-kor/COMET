@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import or_
 from sqlmodel import Session, select
 
+from backend.core.material_pricing import mass_price_to_per_lb
 from backend.database import ensure_material_library_seeded, get_session
 from backend.models.material import Material
 from backend.paths import data_dir
@@ -13,6 +14,27 @@ from backend.paths import data_dir
 router = APIRouter(prefix="/api/materials", tags=["materials"])
 
 _DATA_DIR = data_dir()
+_THERMAL_DOMAIN_MARKERS = {"thermal", "general", "both"}
+_SUPPORT_TOKENS = (
+    "support",
+    "alumina",
+    "al2o3",
+    "silica",
+    "sio2",
+    "titania",
+    "tio2",
+    "ceria",
+    "ceo2",
+    "magnesia",
+    "mgo",
+    "zirconia",
+    "zro2",
+    "zeolite",
+    "zsm-5",
+    "usy",
+    "silica-alumina",
+    "carbon black",
+)
 
 
 def _material_to_response(material: Material) -> dict:
@@ -48,6 +70,134 @@ def _template_domain(template: dict) -> str:
     """Return the template catalyst-domain marker."""
 
     return template.get("catalyst_domain", "thermal")
+
+
+def _is_thermal_material(material: Material) -> bool:
+    """Return whether a material row can be used in the thermal workflow."""
+
+    return (material.catalyst_domain or "thermal").strip().lower() in _THERMAL_DOMAIN_MARKERS
+
+
+def _is_support_material(material: Material) -> bool:
+    """Classify support-like materials used for thermal catalyst carriers."""
+
+    haystack = " ".join(
+        filter(None, [material.name, material.formula, material.category])
+    ).lower()
+    category = (material.category or "").lower()
+    return "support" in category or any(token in haystack for token in _SUPPORT_TOKENS)
+
+
+def _is_active_or_promoter_material(material: Material) -> bool:
+    """Classify thermal active/promoter candidates from the library."""
+
+    if not _is_thermal_material(material) or _is_support_material(material):
+        return False
+
+    category = (material.category or "").lower()
+    if "solvent" in category:
+        return False
+
+    # Keep genuine catalyst precursors and metal rows. This avoids flooding the
+    # composition selector with generic solvents while still surfacing the broad
+    # thermal library beyond the previously hardcoded list.
+    return bool(material.symbol) or category != "chemical"
+
+
+def _normalized_per_lb(material: Material) -> float | None:
+    """Normalize the stored material quote into USD per pound when possible."""
+
+    try:
+        return round(mass_price_to_per_lb(material.price or 0.0, material.price_unit), 6)
+    except ValueError:
+        return None
+
+
+def _composition_option(material: Material) -> dict | None:
+    """Serialize a material row for the thermal composition selector."""
+
+    normalized_price = _normalized_per_lb(material)
+    if normalized_price is None:
+        return None
+
+    display_name = material.formula or material.name
+    source_type = "manual" if material.is_custom else "indexed"
+    return {
+        "material_key": material.library_key or str(material.id),
+        "name": material.name,
+        "display_name": display_name,
+        "symbol": material.symbol,
+        "formula": material.formula,
+        "category": material.category,
+        "price_per_lb": normalized_price,
+        "price_unit": material.price_unit,
+        "price_scope": material.price_scope,
+        "quote_source": material.source,
+        "quote_year": material.quote_year,
+        "reference_url": material.reference_url,
+        "source_type": source_type,
+        "selection_key": f"library:{material.library_key or material.id}",
+        "label": (
+            f"{display_name} | {material.category}"
+            + (f" | {material.source}" if material.source else "")
+        ),
+    }
+
+
+@router.get("/composition-options")
+def list_composition_options(
+    catalyst_domain: str = Query(default="thermal"),
+    session: Session = Depends(get_session),
+):
+    """Return DB-backed composition choices for the thermal catalyst workspace."""
+
+    if catalyst_domain.strip().lower() != "thermal":
+        return {
+            "max_components": 4,
+            "active_metal_options": [],
+            "promoter_options": [],
+            "support_options": [],
+        }
+
+    ensure_material_library_seeded(session)
+    materials = session.exec(select(Material).order_by(Material.name)).all()
+    thermal_rows = [material for material in materials if _is_thermal_material(material)]
+
+    active_materials = [
+        option
+        for material in thermal_rows
+        if _is_active_or_promoter_material(material)
+        for option in [_composition_option(material)]
+        if option is not None
+    ]
+    support_materials = [
+        option
+        for material in thermal_rows
+        if _is_support_material(material)
+        for option in [_composition_option(material)]
+        if option is not None
+    ]
+
+    active_materials.sort(
+        key=lambda item: (
+            item["display_name"].lower() != item["name"].lower(),
+            item["display_name"].lower(),
+            item["name"].lower(),
+        )
+    )
+    support_materials.sort(
+        key=lambda item: (
+            item["display_name"].lower(),
+            item["name"].lower(),
+        )
+    )
+
+    return {
+        "max_components": 4,
+        "active_metal_options": active_materials,
+        "promoter_options": active_materials,
+        "support_options": support_materials,
+    }
 
 
 @router.get("")

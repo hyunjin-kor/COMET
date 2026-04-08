@@ -113,6 +113,16 @@ def material_snapshot(material: Material, *, used_for: str) -> dict:
     }
 
 
+def component_engine_name(material: Material, role: str) -> str:
+    """Choose a concise calculation-facing label for a resolved library row."""
+
+    if role == "support":
+        return material.formula or material.name
+    if role in {"active_metal", "promoter"}:
+        return material.symbol or material.formula or material.name
+    return material.formula or material.symbol or material.name
+
+
 def resolve_component_input(session: Session, component: dict) -> tuple[dict, dict | None]:
     """Resolve a component row against the library when a material key is provided."""
 
@@ -127,7 +137,7 @@ def resolve_component_input(session: Session, component: dict) -> tuple[dict, di
     material = resolve_library_material(session, str(material_key))
     resolved = dict(component)
     resolved["material_key"] = material.library_key or str(material.id)
-    resolved["name"] = material.name
+    resolved["name"] = component_engine_name(material, str(component.get("role", "")))
     resolved["price_per_lb"] = round(mass_price_to_per_lb(material.price or 0.0, material.price_unit), 6)
 
     snapshot = material_snapshot(material, used_for=f"component:{component.get('role', 'component')}")

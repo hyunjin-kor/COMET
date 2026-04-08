@@ -7,6 +7,9 @@ export interface CalculatorRow {
   id: string;
   role: CalculatorRole;
   name: string;
+  material_key?: string | null;
+  symbol?: string | null;
+  selection_key?: string | null;
   wt_pct: number;
   price_per_lb: number;
   source_type: CalculatorSourceType;

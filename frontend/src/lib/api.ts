@@ -267,15 +267,45 @@ export const fetchMaterials = (
   q?: string,
   catalystDomain?: CatalystDomain,
   applicationFamily?: string,
+  limit?: number,
 ) => {
   const params = new URLSearchParams();
   if (category) params.set('category', category);
   if (q) params.set('q', q);
   if (catalystDomain) params.set('catalyst_domain', catalystDomain);
   if (applicationFamily) params.set('application_family', applicationFamily);
+  if (limit) params.set('limit', String(limit));
   const qs = params.toString();
   return request<MaterialItem[]>(`/materials${qs ? `?${qs}` : ''}`);
 };
+
+export interface ThermalCompositionOption {
+  material_key: string;
+  name: string;
+  display_name: string;
+  symbol: string | null;
+  formula: string | null;
+  category: string;
+  price_per_lb: number;
+  price_unit: string;
+  price_scope: string;
+  quote_source: string;
+  quote_year: number | null;
+  reference_url: string;
+  source_type: 'indexed' | 'manual';
+  selection_key: string;
+  label: string;
+}
+
+export interface ThermalCompositionOptions {
+  max_components: number;
+  active_metal_options: ThermalCompositionOption[];
+  promoter_options: ThermalCompositionOption[];
+  support_options: ThermalCompositionOption[];
+}
+
+export const fetchThermalCompositionOptions = () =>
+  request<ThermalCompositionOptions>('/materials/composition-options?catalyst_domain=thermal');
 
 // Templates
 export interface ProcessTemplate {

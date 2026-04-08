@@ -169,6 +169,40 @@ class TestCalculator:
         assert data["electrode_model"]["cost_per_cm2_usd"] > 0
         assert any(item["material_key"] == "fcs:piperion-aem40" for item in data["resolved_materials"])
 
+    def test_calculate_quaternary_thermal_recipe_with_promoted_support(self, client):
+        resp = client.post("/api/calculate", json={
+            "catalyst_domain": "thermal",
+            "order_size_tons": 20.0,
+            "steps": ["mixer_slurry", "incipient_wetness", "dryer_rotary_100_300C"],
+            "components": [
+                {"role": "active_metal", "name": "Ni", "wt_pct": 15.0, "price_per_lb": 16.83},
+                {"role": "promoter", "material_key": "sigma:431346", "wt_pct": 5.0},
+                {"role": "support", "material_key": "lit:usgs-alumina-2025", "wt_pct": 40.0},
+                {"role": "support", "material_key": "lit:usgs-ceria-2025", "wt_pct": 40.0},
+            ],
+        })
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["summary"]["estimated_price_per_lb"] > 0
+        assert data["input_summary"]["n_components"] == 4
+        assert "/Al2O3+CeO2" in data["input_summary"]["composition"]
+
+    def test_calculate_rejects_more_than_four_thermal_components(self, client):
+        resp = client.post("/api/calculate", json={
+            "catalyst_domain": "thermal",
+            "order_size_tons": 20.0,
+            "steps": ["mixer_slurry", "incipient_wetness", "dryer_rotary_100_300C"],
+            "components": [
+                {"role": "active_metal", "name": "Ni", "wt_pct": 10.0, "price_per_lb": 16.83},
+                {"role": "active_metal", "name": "Co", "wt_pct": 10.0, "price_per_lb": 14.25},
+                {"role": "promoter", "name": "Mo", "wt_pct": 5.0, "price_per_lb": 24.5},
+                {"role": "support", "material_key": "lit:usgs-alumina-2025", "wt_pct": 35.0},
+                {"role": "support", "material_key": "lit:usgs-ceria-2025", "wt_pct": 40.0},
+            ],
+        })
+        assert resp.status_code == 422
+        assert "at most four total components" in resp.text
+
 
 class TestPrices:
     def test_get_all_prices(self, client):
@@ -255,6 +289,17 @@ class TestMaterials:
         data = resp.json()
         assert len(data) >= 3
         assert any(item["catalyst_domain"] == "electrocatalyst" for item in data)
+
+    def test_list_thermal_composition_options(self, client):
+        resp = client.get("/api/materials/composition-options?catalyst_domain=thermal")
+        assert resp.status_code == 200
+        payload = resp.json()
+        assert payload["max_components"] == 4
+        assert payload["active_metal_options"]
+        assert payload["promoter_options"]
+        assert payload["support_options"]
+        assert any(item["material_key"] for item in payload["support_options"])
+        assert any(item["display_name"] == "Al2O3" for item in payload["support_options"])
 
     def test_curated_material_price_metadata_is_exposed(self, client):
         resp = client.get("/api/materials?q=Sigma 244074")
