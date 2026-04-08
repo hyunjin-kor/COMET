@@ -133,6 +133,7 @@ def estimate_catalyst_cost(
 
     if include_spent_value and supports and any(component["role"] == "active_metal" for component in active_metals):
         primary = max(active_metals, key=lambda component: float(component["wt_pct"]))
+        primary_support = max(supports, key=lambda component: float(component["wt_pct"]))
         metal_loading_frac = float(primary["wt_pct"]) / total_wt
 
         try:
@@ -140,7 +141,7 @@ def estimate_catalyst_cost(
                 metal_symbol=primary["name"],
                 metal_loading=metal_loading_frac,
                 metal_spot_price=float(primary["price_per_lb"]),
-                support=supports[0]["name"],
+                support=primary_support["name"],
                 reactor_type=reactor_type,
                 catalyst_bulk_density=catalyst_bulk_density,
             )
@@ -186,7 +187,7 @@ def estimate_catalyst_cost(
     promoters_label = "+".join(
         component["name"] for component in components if component["role"] == "promoter"
     )
-    support_label = supports[0]["name"] if supports else ""
+    support_label = "+".join(component["name"] for component in supports)
     if composition is None:
         if support_label:
             composition = f"{metals_label}/{support_label}"

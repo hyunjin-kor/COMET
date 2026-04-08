@@ -201,6 +201,7 @@ def save_estimate(
     ]
     supports = [component for component in resolved_components if component["role"] == "support"]
     primary_active = active[0] if active else {"name": req.metal_symbol or "unknown", "wt_pct": 0.0}
+    primary_support = max(supports, key=lambda component: float(component["wt_pct"])) if supports else {"name": ""}
 
     estimate = Estimate(
         name=name,
@@ -213,7 +214,7 @@ def save_estimate(
         ),
         metal_symbol=str(primary_active["name"]),
         metal_loading_wt_pct=float(primary_active["wt_pct"]),
-        support_name=str(supports[0]["name"]) if supports else "",
+        support_name=str(primary_support["name"]) if supports else "",
         order_size_tons=req.order_size_tons,
         estimated_price_per_lb=result["summary"]["estimated_price_per_lb"],
         input_json=json.dumps(req.model_dump()),
