@@ -401,7 +401,7 @@ async function main() {
   {
     const page = await preparePage(context, draftSnapshot, resultSnapshot, '/library?library=materials');
     await page.waitForSelector('text=Inspect material sources, step rates, and route templates.');
-    await captureSelectorBox(page, '.cp-split-workspace > div:first-child', 'screen-source-library.png');
+    await captureSelectorSliceFromText(page, 'main > div > div.min-w-0.pb-2', 'Search', 'screen-source-library.png', 940);
     await page.close();
   }
 
