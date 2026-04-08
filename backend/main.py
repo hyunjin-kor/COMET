@@ -25,7 +25,7 @@ async def _scheduled_price_update() -> None:
     global _last_price_update
     try:
         await collect_prices()
-        _last_price_update = datetime.utcnow()
+        _last_price_update = datetime.now(timezone.utc)
         logger.info("Scheduled price update completed")
     except Exception as exc:  # pragma: no cover - defensive logging
         logger.error("Scheduled price update failed: %s", exc)
@@ -111,7 +111,7 @@ async def refresh_prices(request: Request):
 
     global _last_price_update
     prices_data = await collect_prices()
-    _last_price_update = datetime.utcnow()
+    _last_price_update = datetime.now(timezone.utc)
     return {
         "status": "ok",
         "prices_fetched": len(prices_data),
