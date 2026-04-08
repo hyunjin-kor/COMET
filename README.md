@@ -1,8 +1,4 @@
 <p align="center">
-  <img src="./docs/assets/readme-hero.png" alt="CatPrice desktop app screenshot" width="100%" />
-</p>
-
-<p align="center">
   <img src="./frontend/public/app-icon.svg" width="110" alt="CatPrice app icon" />
 </p>
 
@@ -77,7 +73,7 @@ In practice, CatPrice helps answer questions like:
 
 ## Representative Screens
 
-The README hero above shows the current `Result` surface from the desktop build. The captures below focus on one core task per screen so the feature surface stays readable on GitHub. These assets are regenerated from the running desktop stack with `scripts/capture_readme_screens.mjs`.
+The captures below focus on one core task per screen so the feature surface stays readable on GitHub. These assets are regenerated from the running desktop stack with `scripts/capture_readme_screens.mjs`.
 
 ### Cost Estimate
 
