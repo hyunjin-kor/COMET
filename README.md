@@ -77,20 +77,55 @@ In practice, CatPrice helps answer questions like:
 
 ## Representative Screens
 
-The README hero above shows the current `Result` surface from the desktop build. Representative screens for the main features are shown below.
-These assets are regenerated from the running desktop stack with `scripts/capture_readme_screens.mjs`.
+The README hero above shows the current `Result` surface from the desktop build. The captures below focus on one core task per screen so the feature surface stays readable on GitHub. These assets are regenerated from the running desktop stack with `scripts/capture_readme_screens.mjs`.
 
-| Cost Estimate | Live Metal Prices |
-| --- | --- |
-| <img src="./docs/assets/screen-cost-estimate.png" alt="Cost Estimate screen" width="100%" /> | <img src="./docs/assets/screen-live-metal-prices.png" alt="Live Metal Prices screen" width="100%" /> |
+### Cost Estimate
 
-| Literature Benchmarks | Source Library |
-| --- | --- |
-| <img src="./docs/assets/screen-literature-benchmarks.png" alt="Literature Benchmarks screen" width="100%" /> | <img src="./docs/assets/screen-source-library.png" alt="Source Library screen" width="100%" /> |
+Recipe definition with explicit active metals, promoters, support balance, and preparation-ready inputs.
 
-| Uncertainty Range | Result |
-| --- | --- |
-| <img src="./docs/assets/screen-uncertainty-range.png" alt="Uncertainty Range screen" width="100%" /> | <img src="./docs/assets/screen-result.png" alt="Result screen" width="100%" /> |
+<p>
+  <img src="./docs/assets/screen-cost-estimate.png" alt="Cost Estimate composition screen" width="100%" />
+</p>
+
+### Live Metal Prices
+
+Trend-focused market view with the selected metal history, period controls, and current quote context.
+
+<p>
+  <img src="./docs/assets/screen-live-metal-prices.png" alt="Live Metal Prices trend screen" width="100%" />
+</p>
+
+### Literature Benchmarks
+
+Candidate-to-candidate route comparison for catalyst families, with landed cost and score-based screening.
+
+<p>
+  <img src="./docs/assets/screen-literature-benchmarks.png" alt="Literature Benchmarks candidate comparison screen" width="100%" />
+</p>
+
+### Source Library
+
+Database-facing material records with quote rows, domains, applications, and stored source metadata.
+
+<p>
+  <img src="./docs/assets/screen-source-library.png" alt="Source Library material database screen" width="100%" />
+</p>
+
+### Estimate Range
+
+Monte Carlo spread around the same current cost case, without rebuilding a separate input form.
+
+<p>
+  <img src="./docs/assets/screen-estimate-range.png" alt="Estimate Range screen" width="100%" />
+</p>
+
+### Result
+
+Preparation-side readout showing cost structure, material share, and route-level interpretation after the run.
+
+<p>
+  <img src="./docs/assets/screen-result.png" alt="Result preparation and breakdown screen" width="100%" />
+</p>
 
 ## Repository Highlights
 

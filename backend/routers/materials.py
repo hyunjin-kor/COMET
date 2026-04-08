@@ -1,6 +1,7 @@
 """Materials library API endpoints."""
 
 import json
+import re
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import or_
@@ -34,6 +35,49 @@ _SUPPORT_TOKENS = (
     "usy",
     "silica-alumina",
     "carbon black",
+)
+_ELEMENT_NAME_TO_SYMBOL = {
+    "aluminium": "Al",
+    "aluminum": "Al",
+    "cobalt": "Co",
+    "copper": "Cu",
+    "cuprous": "Cu",
+    "cupric": "Cu",
+    "cerium": "Ce",
+    "ceria": "Ce",
+    "iron": "Fe",
+    "ferric": "Fe",
+    "ferrous": "Fe",
+    "indium": "In",
+    "iridium": "Ir",
+    "lanthanum": "La",
+    "magnesium": "Mg",
+    "manganese": "Mn",
+    "molybdenum": "Mo",
+    "molybdate": "Mo",
+    "nickel": "Ni",
+    "palladium": "Pd",
+    "platinum": "Pt",
+    "rhodium": "Rh",
+    "ruthenium": "Ru",
+    "silver": "Ag",
+    "tungsten": "W",
+    "tungstate": "W",
+    "metatungstate": "W",
+    "zinc": "Zn",
+}
+_SUPPORT_IDENTITY_RULES = (
+    (("silica-alumina", "sio2-al2o3"), "SiO2-Al2O3"),
+    (("al2o3", "alumina", "aluminum oxide", "aluminium oxide"), "Al2O3"),
+    (("ceo2", "ceria", "cerium oxide"), "CeO2"),
+    (("tio2", "titania", "titanium dioxide"), "TiO2"),
+    (("mgo", "magnesia", "magnesium oxide"), "MgO"),
+    (("zro2", "zirconia", "zirconium oxide"), "ZrO2"),
+    (("sio2", "silica"), "SiO2"),
+    (("carbon black", "activated carbon", "carbon support", "graphitic carbon"), "Carbon"),
+    (("zsm-5",), "ZSM-5"),
+    (("usy",), "USY"),
+    (("beta zeolite", "zeolite beta"), "Beta zeolite"),
 )
 
 
@@ -113,14 +157,58 @@ def _normalized_per_lb(material: Material) -> float | None:
         return None
 
 
-def _composition_option(material: Material) -> dict | None:
+def _infer_symbol(material: Material) -> str | None:
+    """Infer a concise elemental identity from the stored material row."""
+
+    if material.symbol:
+        symbol = material.symbol.strip()
+        if symbol:
+            return symbol
+
+    haystack = " ".join(filter(None, [material.name, material.formula])).lower()
+    for token, symbol in _ELEMENT_NAME_TO_SYMBOL.items():
+        if re.search(rf"\b{re.escape(token)}\b", haystack):
+            return symbol
+    return None
+
+
+def _matches_identity_token(haystack: str, token: str) -> bool:
+    """Match canonical identity tokens without over-matching precursor text."""
+
+    return re.search(
+        rf"(?<![A-Za-z0-9]){re.escape(token)}(?![A-Za-z0-9])",
+        haystack,
+    ) is not None
+
+
+def _canonical_support_identity(material: Material) -> str | None:
+    """Return the exact support identity exposed in the calculator selector."""
+
+    haystack = " ".join(filter(None, [material.formula, material.name, material.category])).lower()
+    for tokens, identity in _SUPPORT_IDENTITY_RULES:
+        if any(_matches_identity_token(haystack, token) for token in tokens):
+            return identity
+
+    if material.formula:
+        formula = material.formula.strip()
+        if formula:
+            return formula
+    return None
+
+
+def _canonical_active_identity(material: Material) -> str | None:
+    """Return the exact active/promoter identity exposed in the calculator selector."""
+
+    return _infer_symbol(material)
+
+
+def _composition_option(material: Material, display_name: str) -> dict | None:
     """Serialize a material row for the thermal composition selector."""
 
     normalized_price = _normalized_per_lb(material)
     if normalized_price is None:
         return None
 
-    display_name = material.formula or material.name
     source_type = "manual" if material.is_custom else "indexed"
     return {
         "material_key": material.library_key or str(material.id),
@@ -167,14 +255,18 @@ def list_composition_options(
         option
         for material in thermal_rows
         if _is_active_or_promoter_material(material)
-        for option in [_composition_option(material)]
+        for display_name in [_canonical_active_identity(material)]
+        if display_name is not None
+        for option in [_composition_option(material, display_name)]
         if option is not None
     ]
     support_materials = [
         option
         for material in thermal_rows
         if _is_support_material(material)
-        for option in [_composition_option(material)]
+        for display_name in [_canonical_support_identity(material)]
+        if display_name is not None
+        for option in [_composition_option(material, display_name)]
         if option is not None
     ]
 

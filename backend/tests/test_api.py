@@ -204,6 +204,69 @@ class TestCalculator:
         assert "at most four total components" in resp.text
 
 
+class TestUncertainty:
+    def test_uncertainty_uses_structured_thermal_calculation_input(self, client):
+        resp = client.post("/api/uncertainty", json={
+            "calculation_input": {
+                "catalyst_domain": "thermal",
+                "order_size_tons": 20.0,
+                "steps": ["mixer_slurry", "incipient_wetness", "dryer_rotary_100_300C"],
+                "components": [
+                    {"role": "active_metal", "name": "Ni", "wt_pct": 15.0, "price_per_lb": 16.83},
+                    {"role": "promoter", "material_key": "sigma:431346", "wt_pct": 5.0},
+                    {"role": "support", "material_key": "lit:usgs-alumina-2025", "wt_pct": 40.0},
+                    {"role": "support", "material_key": "lit:usgs-ceria-2025", "wt_pct": 40.0},
+                ],
+            },
+            "n_simulations": 250,
+        })
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["baseline_price_per_lb"] > 0
+        assert data["catalyst_domain"] == "thermal"
+        assert data["composition"]
+
+    def test_uncertainty_uses_electrocatalyst_calculation_input(self, client):
+        resp = client.post("/api/uncertainty", json={
+            "calculation_input": {
+                "catalyst_domain": "electrocatalyst",
+                "application_family": "fuel_cell",
+                "template_id": "pem_fuel_cell_ccm",
+                "order_size_tons": 2.0,
+                "steps": [
+                    "membrane_pretreatment",
+                    "ionomer_ink_homogenization",
+                    "ccm_coating_pass",
+                    "electrode_drying_low_temp",
+                    "hot_press_lamination",
+                ],
+                "components": [
+                    {
+                        "role": "active_catalyst",
+                        "material_key": "fcs:xt-pt20-vulcan-s",
+                        "wt_pct": 100.0,
+                    }
+                ],
+                "electrode_input": {
+                    "application_family": "fuel_cell",
+                    "catalyst_material_key": "fcs:xt-pt20-vulcan-s",
+                    "ionomer_material_key": "fcs:pfsa-d5",
+                    "membrane_material_key": "fcs:pfsa-d50u",
+                    "substrate_material_key": "fcs:w1s1011",
+                    "active_area_cm2": 25.0,
+                    "catalyst_loading_mg_cm2": 0.4,
+                    "ionomer_to_catalyst_ratio": 0.8,
+                },
+            },
+            "n_simulations": 250,
+        })
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["baseline_price_per_lb"] > 0
+        assert data["catalyst_domain"] == "electrocatalyst"
+        assert data["application_family"] == "fuel_cell"
+
+
 class TestPrices:
     def test_get_all_prices(self, client):
         resp = client.get("/api/prices")
@@ -300,6 +363,13 @@ class TestMaterials:
         assert payload["support_options"]
         assert any(item["material_key"] for item in payload["support_options"])
         assert any(item["display_name"] == "Al2O3" for item in payload["support_options"])
+        assert any(item["display_name"] == "Carbon" for item in payload["support_options"])
+        assert any(item["display_name"] == "Pt" for item in payload["active_metal_options"])
+        assert "Co(NO3)2*6H2O" not in {item["display_name"] for item in payload["active_metal_options"]}
+        assert "H2PtCl6*xH2O" not in {item["display_name"] for item in payload["active_metal_options"]}
+        assert "Sodium silicate, 41 deg. solid, 3.22-3.25 ratio bulk, c.l., t.l., frt. equald." not in {
+            item["display_name"] for item in payload["support_options"]
+        }
 
     def test_curated_material_price_metadata_is_exposed(self, client):
         resp = client.get("/api/materials?q=Sigma 244074")

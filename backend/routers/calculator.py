@@ -72,8 +72,8 @@ def _component_payload(req: CostCalculationRequest) -> list[dict]:
     return req.to_components()
 
 
-def _prepare_calculation(req: CostCalculationRequest, session: Session) -> tuple[dict, list[dict], str]:
-    """Resolve template and library-backed materials into an engine-ready payload."""
+def _prepare_calculation_context(req: CostCalculationRequest, session: Session) -> dict:
+    """Resolve template and library-backed materials into a reusable calculation context."""
 
     template = _load_template(req.template_id)
     route_summary = _template_summary(template)
@@ -112,8 +112,28 @@ def _prepare_calculation(req: CostCalculationRequest, session: Session) -> tuple
     if template and (not steps):
         steps = template.get("steps", steps)
 
-    result = estimate_catalyst_cost(
-        components=resolved_components,
+    return {
+        "resolved_components": resolved_components,
+        "application_family": application_family,
+        "electrode_payload": electrode_payload,
+        "steps": steps,
+        "route_summary": route_summary,
+        "resolved_materials": resolved_materials,
+    }
+
+
+def _estimate_from_context(
+    req: CostCalculationRequest,
+    context: dict,
+    *,
+    components: list[dict] | None = None,
+    electrode_payload: dict | None = None,
+    order_size_tons: float | None = None,
+) -> dict:
+    """Run the cost engine from a previously resolved calculation context."""
+
+    return estimate_catalyst_cost(
+        components=components if components is not None else context["resolved_components"],
         metal_symbol=req.metal_symbol,
         metal_price=req.metal_price,
         metal_price_unit=req.metal_price_unit,
@@ -122,10 +142,10 @@ def _prepare_calculation(req: CostCalculationRequest, session: Session) -> tuple
         support_price_per_lb=req.support_price_per_lb,
         precursor_metal_fraction=req.precursor_metal_fraction,
         precursor_markup=req.precursor_markup,
-        steps=steps,
+        steps=context["steps"],
         catalyst_domain=req.catalyst_domain,
-        application_family=application_family,
-        order_size_tons=req.order_size_tons,
+        application_family=context["application_family"],
+        order_size_tons=order_size_tons if order_size_tons is not None else req.order_size_tons,
         ga_overhead_pct=req.ga_overhead_pct,
         sard_pct=req.sard_pct,
         basis_year=req.basis_year,
@@ -133,11 +153,18 @@ def _prepare_calculation(req: CostCalculationRequest, session: Session) -> tuple
         include_spent_value=req.include_spent_value,
         reactor_type=req.reactor_type,
         catalyst_bulk_density=req.catalyst_bulk_density,
-        electrode_input=electrode_payload,
-        route_summary=route_summary,
-        resolved_materials=resolved_materials,
+        electrode_input=electrode_payload if electrode_payload is not None else context["electrode_payload"],
+        route_summary=context["route_summary"],
+        resolved_materials=context["resolved_materials"],
     )
-    return result, resolved_components, application_family
+
+
+def _prepare_calculation(req: CostCalculationRequest, session: Session) -> tuple[dict, list[dict], str]:
+    """Resolve template and library-backed materials into an engine-ready payload."""
+
+    context = _prepare_calculation_context(req, session)
+    result = _estimate_from_context(req, context)
+    return result, context["resolved_components"], context["application_family"]
 
 
 @router.post("/calculate")
