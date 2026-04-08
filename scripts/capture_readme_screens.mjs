@@ -384,9 +384,16 @@ async function main() {
 
   logStep('literature benchmarks');
   {
-    const page = await preparePage(context, draftSnapshot, resultSnapshot, '/benchmarks?reference=routes');
+    const page = await preparePage(context, draftSnapshot, resultSnapshot, '/benchmarks?reference=overview');
+    await page.waitForTimeout(1200);
+    await page.getByRole('button', { name: /Ammonia decomposition reference family/i }).click();
+    await waitForAppReady(page);
+    await navigateWithinApp(page, '/benchmarks?reference=routes');
     await page.waitForTimeout(1500);
-    await captureSectionByText(page, 'How do these routes compare right now?', 'screen-literature-benchmarks.png');
+    await captureSectionByText(page, 'How do these routes compare right now?', 'screen-literature-benchmarks-routes.png');
+    await navigateWithinApp(page, '/benchmarks?reference=detail');
+    await page.waitForTimeout(1200);
+    await captureSelectorTopSlice(page, 'section.surface-card.p-4', 'screen-literature-benchmarks-detail.png', 960);
     await page.close();
   }
 
