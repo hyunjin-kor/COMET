@@ -51,6 +51,18 @@ function applicationFamilyLabel(value: string) {
   return 'General';
 }
 
+function screeningBasisLabel(value: string) {
+  const labels: Record<string, string> = {
+    literature_architecture_proxy: 'Literature architecture proxy',
+    engineering_proxy: 'Engineering proxy',
+    market_plus_vendor_anchor: 'Market plus vendor anchor',
+    vendor_stack_anchor: 'Vendor stack anchor',
+    literature_low_loading_plus_vendor_stack: 'Literature low-loading plus vendor stack',
+    ru_based_cost_pressure_relief: 'Ru-based cost pressure relief',
+  };
+  return labels[value] ?? value.replace(/_/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
 function toBenchmarkPreset(candidate: DecisionCandidate): CalculatorBenchmarkPreset {
   return {
     slug: candidate.slug,
@@ -82,7 +94,9 @@ function MetricTile({ label, value, detail }: { label: string; value: string; de
   return (
     <div className="cp-metric-tile">
       <div className="cp-subtle-label">{label}</div>
-      <div className="mt-2 text-2xl font-display text-slate-950">{value}</div>
+      <div className="mt-2 text-[clamp(1.35rem,2vw,2rem)] leading-[1.08] font-display text-slate-950 [overflow-wrap:anywhere]">
+        {value}
+      </div>
       <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div>
     </div>
   );
@@ -279,7 +293,7 @@ export default function Compare() {
           <div className="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
             <MetricTile label="Evidence anchors" value={String(activeCandidate.literature_basis.length)} detail="Direct links supporting the selected route." />
             <MetricTile label="Family bank" value={String(benchmark.citations.length)} detail="Higher-level references visible across the family." />
-            <MetricTile label="Screening basis" value={activeCandidate.screening_basis} detail="How this route is framed in the benchmark set." />
+            <MetricTile label="Screening basis" value={screeningBasisLabel(activeCandidate.screening_basis)} detail="How this route is framed in the benchmark set." />
             <MetricTile label="Decision profile" value={benchmark.decision_profile.label} detail="Current weighting logic for ranking." />
           </div>
           <div className="mt-4 grid gap-4 xl:grid-cols-[minmax(0,1.02fr)_minmax(320px,0.98fr)]">

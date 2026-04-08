@@ -1,21 +1,21 @@
 # Release Notes
 
-## v1.1.9 Workflow Guardrails and GitHub Copy Update
+## v1.1.10 Benchmark Detail Fit and Desktop Refresh
 
-Date: April 8, 2026
+Date: April 9, 2026
 
-This release updates the desktop workflow guardrails and tightens the GitHub-facing project description.
+This release fixes benchmark-detail overflow in the desktop app and republishes the packaged Windows build so the desktop artifact matches the latest repository state.
 
 ### Included In This Update
 
-- Blocked forward navigation from `Composition` when thermocatalyst active-metal and promoter totals reach or exceed `100 wt%`.
-- Disabled direct section jumps into downstream estimate steps when composition or preparation inputs are not yet valid.
-- Rebuilt the packaged desktop app with the updated workflow guardrails.
-- Rewrote the GitHub-facing README and repository description so CatPrice reads as an independently developed research software project with broad thermocatalyst and electrocatalyst coverage.
+- Replaced raw benchmark `screening_basis` keys with reader-facing labels in the benchmark detail surface.
+- Added safe wrapping for long benchmark metric values so they stay inside the detail cards.
+- Rebuilt the packaged desktop app and installer so the benchmark-detail fix is present in the Windows build.
+- Updated versioned download references in the repository docs to the `1.1.10` package line.
 
 ### Validation Status
 
-The following checks passed on April 8, 2026:
+The following checks passed on April 9, 2026:
 
 ```bash
 npm run build
