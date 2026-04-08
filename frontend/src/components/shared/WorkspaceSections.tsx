@@ -54,6 +54,7 @@ type WorkspaceSectionNavProps = {
   activeSectionId: string;
   activeIndex: number;
   onSelect: (id: string) => void;
+  disabledSectionIds?: string[];
 };
 
 export function WorkspaceSectionNav({
@@ -61,6 +62,7 @@ export function WorkspaceSectionNav({
   activeSectionId,
   activeIndex,
   onSelect,
+  disabledSectionIds = [],
 }: WorkspaceSectionNavProps) {
   const activeSection = sections[activeIndex] ?? sections[0];
 
@@ -81,14 +83,18 @@ export function WorkspaceSectionNav({
       <div className="mt-4 grid gap-2 lg:grid-cols-[repeat(auto-fit,minmax(150px,1fr))]">
         {sections.map((section, index) => {
           const active = section.id === activeSectionId;
+          const disabled = !active && disabledSectionIds.includes(section.id);
           return (
             <button
               key={section.id}
-              onClick={() => onSelect(section.id)}
+              onClick={() => !disabled && onSelect(section.id)}
+              disabled={disabled}
               className={`rounded-[16px] border px-3 py-3 text-left transition ${
                 active
                   ? 'border-slate-950 bg-white text-slate-950 shadow-[0_6px_16px_rgba(15,23,42,0.06)]'
-                  : 'border-slate-200/90 bg-transparent text-slate-500 hover:border-slate-300 hover:bg-white/72'
+                  : disabled
+                    ? 'cursor-not-allowed border-slate-200/80 bg-slate-50/70 text-slate-300'
+                    : 'border-slate-200/90 bg-transparent text-slate-500 hover:border-slate-300 hover:bg-white/72'
               }`}
             >
               <div className="flex items-center gap-2">
