@@ -370,9 +370,15 @@ async function main() {
 
   logStep('live metal prices');
   {
-    const page = await preparePage(context, draftSnapshot, resultSnapshot, '/prices?feed=history');
+    const page = await preparePage(context, draftSnapshot, resultSnapshot, '/prices?feed=quotes');
+    await page.waitForSelector('text=Monitor live and indexed metal price basis.');
+    await page.locator('button').filter({ hasText: 'Platinum' }).first().click();
+    await waitForAppReady(page);
+    await captureSelectorBox(page, '.cp-split-workspace > section:first-child', 'screen-live-metal-prices-overview.png');
+    await navigateWithinApp(page, '/prices?feed=history');
     await page.waitForSelector('text=Selected Metal');
-    await captureSectionByText(page, 'Selected Metal', 'screen-live-metal-prices.png');
+    await waitForAppReady(page);
+    await captureSelectorTopSlice(page, '.cp-split-workspace', 'screen-live-metal-prices-trend.png', 820);
     await page.close();
   }
 
