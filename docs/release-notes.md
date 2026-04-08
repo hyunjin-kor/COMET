@@ -1,5 +1,29 @@
 # Release Notes
 
+## v1.1.7 Dataset and Release Sync
+
+Date: April 8, 2026
+
+This release aligns the packaged desktop app and GitHub release state with the latest repository changes.
+
+### Included In This Update
+
+- Expanded energy-transition benchmark families with additional thermal and electrocatalyst datasets.
+- Added new benchmark coverage for `CO2 methanation`, `formic acid dehydrogenation`, and `AEM electrolyzer OER`.
+- Extended benchmark and library harness tests so route templates, citation links, and candidate references are checked together.
+- Tightened GitHub-facing README and documentation copy to keep the repository description factual and project-specific.
+
+### Validation Status
+
+The following checks passed on April 8, 2026:
+
+```bash
+python -m pytest backend/tests -q
+cd frontend && npm run build
+npm run build
+npm run smoke:desktop
+```
+
 ## v1.0.1 Desktop Hardening
 
 Date: March 26, 2026
