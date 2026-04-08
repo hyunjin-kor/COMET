@@ -121,11 +121,19 @@ Move into the selected-metal trend view to read the history curve, period range,
 
 ### Literature Benchmarks
 
-Candidate-to-candidate route comparison for catalyst families, with landed cost and score-based screening.
+The `Literature Benchmarks` workspace separates route scanning from route inspection.
 
 <p>
-  <img src="./docs/assets/screen-literature-benchmarks.png" alt="Literature Benchmarks candidate comparison screen" width="100%" />
+  <img src="./docs/assets/screen-literature-benchmarks-routes.png" alt="Literature Benchmarks candidate comparison screen" width="100%" />
 </p>
+
+Start from the published-route stack to compare landed catalyst cost, total score, and route positioning across the active family.
+
+<p>
+  <img src="./docs/assets/screen-literature-benchmarks-detail.png" alt="Literature Benchmarks selected route detail screen" width="100%" />
+</p>
+
+Open the selected route detail to inspect materials, processing, route extras, evidence anchors, family-bank depth, and the preparation basis before loading that route into `Cost Estimate`.
 
 ### Source Library
 
