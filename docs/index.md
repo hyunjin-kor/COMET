@@ -1,6 +1,6 @@
 # CatPrice Documentation
 
-CatPrice is a desktop-only catalyst cost tool. The application is packaged and distributed through Electron, while the FastAPI backend runs as a local loopback sidecar inside the desktop workflow.
+CatPrice is a desktop catalyst cost application. The Electron shell, local FastAPI backend, calculation engine, and bundled datasets are all maintained in this repository.
 
 ## Focus
 
