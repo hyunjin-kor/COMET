@@ -340,7 +340,14 @@ class TestDecision:
         assert data["families"]
         families = {item["family"] for item in data["families"]}
         assert "ammonia-cracking" in families
+        assert "co2-methanol" in families
+        assert "co2-methanation" in families
+        assert "formic-acid-dehydrogenation" in families
+        assert "rwgs" in families
+        assert "dry-reforming" in families
+        assert "water-gas-shift" in families
         assert "fuel-cell-orr" in families
+        assert "aem-electrolyzer-oer" in families
         assert "pem-electrolyzer-oer" in families
         assert all("catalyst_domain" in item for item in data["families"])
 
@@ -376,3 +383,69 @@ class TestDecision:
         assert all(candidate["route"]["calculator_template_id"] == "pem_electrolyzer_ccm" for candidate in data["candidates"])
         assert all(candidate["summary"]["economics_basis_unit"] == "$/cm2" for candidate in data["candidates"])
         assert all(candidate["electrode_defaults"]["substrate_material_key"] for candidate in data["candidates"])
+
+    def test_get_co2_methanol_benchmark(self, client):
+        resp = client.get("/api/decision/benchmarks/co2-methanol")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["winner"] is not None
+        assert data["catalyst_domain"] == "thermal"
+        assert len(data["candidates"]) >= 3
+        assert any(candidate["slug"] == "cza-baseline" for candidate in data["candidates"])
+
+    def test_get_rwgs_benchmark(self, client):
+        resp = client.get("/api/decision/benchmarks/rwgs")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["winner"] is not None
+        assert data["catalyst_domain"] == "thermal"
+        assert len(data["candidates"]) >= 3
+        assert any(candidate["slug"] == "mo2n-hightemp" for candidate in data["candidates"])
+
+    def test_get_dry_reforming_benchmark(self, client):
+        resp = client.get("/api/decision/benchmarks/dry-reforming")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["winner"] is not None
+        assert data["catalyst_domain"] == "thermal"
+        assert len(data["candidates"]) >= 3
+        assert any(candidate["slug"] == "ni-single-atom-ceria" for candidate in data["candidates"])
+
+    def test_get_water_gas_shift_benchmark(self, client):
+        resp = client.get("/api/decision/benchmarks/water-gas-shift")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["winner"] is not None
+        assert data["catalyst_domain"] == "thermal"
+        assert len(data["candidates"]) >= 3
+        assert any(candidate["slug"] == "co-ceria-interface" for candidate in data["candidates"])
+
+    def test_get_co2_methanation_benchmark(self, client):
+        resp = client.get("/api/decision/benchmarks/co2-methanation")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["winner"] is not None
+        assert data["catalyst_domain"] == "thermal"
+        assert len(data["candidates"]) >= 3
+        assert any(candidate["slug"] == "ni-alumina-baseline" for candidate in data["candidates"])
+
+    def test_get_formic_acid_dehydrogenation_benchmark(self, client):
+        resp = client.get("/api/decision/benchmarks/formic-acid-dehydrogenation")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["winner"] is not None
+        assert data["catalyst_domain"] == "thermal"
+        assert len(data["candidates"]) >= 3
+        assert any(candidate["slug"] == "co-nc-nonnoble" for candidate in data["candidates"])
+
+    def test_get_aem_electrolyzer_oer_benchmark(self, client):
+        resp = client.get("/api/decision/benchmarks/aem-electrolyzer-oer")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["winner"] is not None
+        assert data["catalyst_domain"] == "electrocatalyst"
+        assert data["application_family"] == "electrolyzer"
+        assert len(data["candidates"]) >= 3
+        assert all(candidate["route"]["calculator_template_id"] == "alkaline_electrolyzer_gde" for candidate in data["candidates"])
+        assert all(candidate["summary"]["economics_basis_unit"] == "$/cm2" for candidate in data["candidates"])
+        assert all(candidate["electrode_defaults"]["membrane_material_key"] for candidate in data["candidates"])

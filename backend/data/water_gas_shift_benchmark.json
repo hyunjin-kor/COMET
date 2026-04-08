@@ -1,0 +1,350 @@
+{
+  "family": "water-gas-shift",
+  "title": "Water-gas shift reference family",
+  "catalyst_domain": "thermal",
+  "application_family": "general",
+  "reaction": "CO + H2O -> CO2 + H2",
+  "objective": "Optional literature-backed thermal-catalyst family for water-gas-shift screening. These candidates compare conventional Cu/ZnO low-temperature practice with newer oxide-interface and noble-metal routes used for cleaner hydrogen generation.",
+  "decision_profiles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Balance catalyst cost, evidence quality, route maturity, and performance.",
+      "weights": {
+        "economics": 0.45,
+        "evidence": 0.2,
+        "route": 0.2,
+        "performance": 0.15
+      }
+    },
+    "cost-first": {
+      "label": "Cost-first",
+      "description": "Bias ranking toward catalyst cost while preserving route and evidence guardrails.",
+      "weights": {
+        "economics": 0.6,
+        "evidence": 0.15,
+        "route": 0.15,
+        "performance": 0.1
+      }
+    },
+    "evidence-first": {
+      "label": "Evidence-first",
+      "description": "Reward transparent inputs and more defensible preparation routes.",
+      "weights": {
+        "economics": 0.35,
+        "evidence": 0.35,
+        "route": 0.15,
+        "performance": 0.15
+      }
+    }
+  },
+  "citations": [
+    {
+      "id": "cu-facet-wgs-ncomms-2017",
+      "label": "Nature Communications 2017",
+      "url": "https://doi.org/10.1038/s41467-017-00620-6",
+      "kind": "literature",
+      "note": "Cu-facet study identifying Cu(100)-suboxide interfaces as highly active sites for low-temperature water-gas shift."
+    },
+    {
+      "id": "pt-moc-wgs-nature-2021",
+      "label": "Nature 2021",
+      "url": "https://www.nature.com/articles/s41586-020-03130-6",
+      "kind": "literature",
+      "note": "Crowded Pt on alpha-MoC route showing very high low-temperature WGS activity and stability."
+    },
+    {
+      "id": "pt-ceria-wgs-ncomms-2021",
+      "label": "Nature Communications 2021",
+      "url": "https://doi.org/10.1038/s41467-021-21132-4",
+      "kind": "literature",
+      "note": "Dynamic active-site study of Pt/CeO2 under WGS conditions, useful for route-confidence and site-stability framing."
+    },
+    {
+      "id": "co-ceria-wgs-ncomms-2023",
+      "label": "Nature Communications 2023",
+      "url": "https://doi.org/10.1038/s41467-023-42577-9",
+      "kind": "literature",
+      "note": "CeO2-x/CoO1-x/Co dual-interface route boosting WGS reactivity without moving fully to a PGM basis."
+    },
+    {
+      "id": "pt-geometry-wgs-ncomms-2025",
+      "label": "Nature Communications 2025",
+      "url": "https://www.nature.com/articles/s41467-025-61895-8",
+      "kind": "literature",
+      "note": "Study quantifying how platinum electronic and geometric effects control WGS activity."
+    }
+  ],
+  "catalog_quotes": [],
+  "route_templates": [
+    {
+      "id": "lt-wgs-cu-zno-route",
+      "name": "Cu-ZnO low-temperature WGS route",
+      "manufacturing_mode": "Conventional low-temperature WGS catalyst",
+      "preprocess": [
+        "Copper and zinc precursor balancing",
+        "Alumina binder staging",
+        "Precipitation window setup"
+      ],
+      "synthesis": [
+        "Co-precipitation or slurry assembly",
+        "Intermediate filtration and wash",
+        "Forming or granulation"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination",
+        "Reduction / sulfide-free activation"
+      ],
+      "quality_gates": [
+        "Cu-Zn phase proxy",
+        "Low-temperature conversion screen",
+        "Steam-stability check"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "reactor_multistep",
+        "filter_rotary_vacuum",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "mill",
+        "reactor_simple"
+      ],
+      "non_step_cost_per_lb": 0.76,
+      "route_confidence": 93,
+      "route_note": "Most transferable screening basis for industrial low-temperature WGS catalyst manufacture."
+    },
+    {
+      "id": "co-ceria-wgs-route",
+      "name": "Co-CeO2 interfacial WGS route",
+      "manufacturing_mode": "Interface-engineered non-noble WGS catalyst",
+      "preprocess": [
+        "Ceria support staging",
+        "Cobalt precursor balancing",
+        "Dual-interface preparation window setup"
+      ],
+      "synthesis": [
+        "Mixed-oxide deposition or co-assembly",
+        "Wash and solids recovery",
+        "Forming or shaping"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination",
+        "Reduction / interface conditioning"
+      ],
+      "quality_gates": [
+        "Co-Ce interfacial contact proxy",
+        "Hydrogen productivity screen",
+        "Long-hold stability check"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "reactor_multistep",
+        "filter_rotary_vacuum",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple"
+      ],
+      "non_step_cost_per_lb": 0.94,
+      "route_confidence": 78,
+      "route_note": "Promising non-noble WGS route, but it depends on tighter oxide-interface control than the Cu/ZnO baseline."
+    },
+    {
+      "id": "pt-ceria-wgs-route",
+      "name": "Pt-CeO2 premium WGS route",
+      "manufacturing_mode": "Noble-metal low-temperature WGS catalyst",
+      "preprocess": [
+        "PGM inventory accounting",
+        "Ceria support activation",
+        "Low-loading deposition setup"
+      ],
+      "synthesis": [
+        "Dilute Pt deposition",
+        "Controlled drying",
+        "Active-site stabilization hold"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination",
+        "Reduction and WGS conditioning"
+      ],
+      "quality_gates": [
+        "Pt utilization proxy",
+        "Dynamic-site stability check",
+        "Low-temperature H2 productivity screen"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple"
+      ],
+      "non_step_cost_per_lb": 1.02,
+      "route_confidence": 74,
+      "route_note": "High-performance low-temperature WGS route used when hydrogen purity and colder operation justify a PGM premium."
+    }
+  ],
+  "candidates": [
+    {
+      "slug": "cu-zno-baseline",
+      "title": "Cu/ZnO/Al2O3 baseline",
+      "archetype": "Commercial benchmark",
+      "screening_basis": "engineering_proxy",
+      "summary": "Industrial low-temperature WGS basis using copper-zinc oxide with alumina support or binder.",
+      "route_template_id": "lt-wgs-cu-zno-route",
+      "order_size_tons": 20,
+      "performance_index": 79,
+      "manufacturing_readiness": 95,
+      "screening_exactness": 74,
+      "temperature_window_c": [180, 280],
+      "literature_basis_ids": [
+        "cu-facet-wgs-ncomms-2017"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Best fit when the goal is a defensible industrial WGS screening anchor with transparent copper exposure.",
+        "Route maturity is highest in the family even if the absolute activity ceiling is lower than Pt-led routes."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Cu",
+          "wt_pct": 40.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Cu",
+            "precursor_markup": 1.08,
+            "note": "Live copper feed with precursor conversion markup."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "ZnO",
+          "wt_pct": 25.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.4,
+            "evidence_label": "ZnO industrial screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 58,
+            "transparency": "derived_index",
+            "note": "ZnO term kept on an engineering proxy until a clearer public bulk oxide basis is curated."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Al2O3",
+          "wt_pct": 35.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.2676,
+            "evidence_label": "USGS industrial alumina proxy",
+            "evidence_tier": "public_index",
+            "confidence_score": 72,
+            "transparency": "public_index",
+            "note": "2025 USGS alumina import value used as a bulk support or binder proxy."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "co-ceria-interface",
+      "title": "Co-CeO2 interface route",
+      "archetype": "Non-noble performance route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Cobalt-ceria route that targets stronger low-temperature WGS reactivity through oxide-interface engineering.",
+      "route_template_id": "co-ceria-wgs-route",
+      "order_size_tons": 20,
+      "performance_index": 88,
+      "manufacturing_readiness": 78,
+      "screening_exactness": 81,
+      "temperature_window_c": [180, 260],
+      "literature_basis_ids": [
+        "co-ceria-wgs-ncomms-2023"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Strong option when non-noble pricing matters but a plain Cu/ZnO basis is too conservative on low-temperature performance.",
+        "The route premium comes from interfacial discipline and ceria handling rather than raw-metal scarcity."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Co",
+          "wt_pct": 18.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Co",
+            "precursor_markup": 1.1,
+            "note": "Live cobalt feed with precursor conversion markup."
+          }
+        },
+        {
+          "role": "support",
+          "name": "CeO2",
+          "wt_pct": 82.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.7756,
+            "evidence_label": "USGS ceria proxy",
+            "evidence_tier": "public_index",
+            "confidence_score": 74,
+            "transparency": "public_index",
+            "note": "2025 USGS cerium-oxide price used as a bulk oxygen-storage support proxy."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "pt-ceria-premium",
+      "title": "Pt/CeO2 premium",
+      "archetype": "Premium low-temperature route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Pt/CeO2 route for WGS when colder hydrogen-cleanup duty justifies a noble-metal premium.",
+      "route_template_id": "pt-ceria-wgs-route",
+      "order_size_tons": 20,
+      "performance_index": 95,
+      "manufacturing_readiness": 73,
+      "screening_exactness": 85,
+      "temperature_window_c": [120, 240],
+      "literature_basis_ids": [
+        "pt-moc-wgs-nature-2021",
+        "pt-ceria-wgs-ncomms-2021",
+        "pt-geometry-wgs-ncomms-2025"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Performance leader for colder WGS duty, but economics are directly tied to Pt exposure.",
+        "Use as a premium benchmark for hydrogen-polishing scenarios rather than a default cost anchor."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Pt",
+          "wt_pct": 2.5,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Pt",
+            "precursor_markup": 1.08,
+            "note": "Live Pt feed with mild precursor markup for low-loading deposition."
+          }
+        },
+        {
+          "role": "support",
+          "name": "CeO2",
+          "wt_pct": 97.5,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.7756,
+            "evidence_label": "USGS ceria proxy",
+            "evidence_tier": "public_index",
+            "confidence_score": 74,
+            "transparency": "public_index",
+            "note": "2025 USGS cerium-oxide price used as a bulk support proxy."
+          }
+        }
+      ]
+    }
+  ]
+}

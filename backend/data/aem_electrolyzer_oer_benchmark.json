@@ -1,0 +1,344 @@
+{
+  "family": "aem-electrolyzer-oer",
+  "title": "AEM electrolyzer OER reference family",
+  "catalyst_domain": "electrocatalyst",
+  "application_family": "electrolyzer",
+  "reaction": "4 OH- -> O2 + 2 H2O + 4 e-",
+  "objective": "Optional literature-backed electrocatalyst family for alkaline and anion-exchange-membrane electrolyzer anodes. These candidates compare scalable NiFe routes with more architecture-sensitive amorphous variants using alkaline stack defaults rather than PEM materials.",
+  "decision_profiles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Balance current stack economics, evidence quality, route maturity, and reported performance.",
+      "weights": {
+        "economics": 0.42,
+        "evidence": 0.22,
+        "route": 0.16,
+        "performance": 0.2
+      }
+    },
+    "cost-first": {
+      "label": "Cost-first",
+      "description": "Bias ranking toward current electrode cost while preserving route and evidence guardrails.",
+      "weights": {
+        "economics": 0.58,
+        "evidence": 0.14,
+        "route": 0.08,
+        "performance": 0.2
+      }
+    },
+    "evidence-first": {
+      "label": "Evidence-first",
+      "description": "Reward stronger literature support and more reproducible alkaline-electrolyzer routes.",
+      "weights": {
+        "economics": 0.3,
+        "evidence": 0.34,
+        "route": 0.16,
+        "performance": 0.2
+      }
+    }
+  },
+  "citations": [
+    {
+      "id": "flow-3d-alkaline-ncomms-2024",
+      "label": "Nature Communications 2024",
+      "url": "https://www.nature.com/articles/s41467-024-51704-z",
+      "kind": "literature",
+      "note": "Flow-engineered three-dimensional electrode architecture showing alkaline-water-electrolysis hardware implications for catalyst utilization and gas removal."
+    },
+    {
+      "id": "cr-amorphous-aemwe-ncomms-2024",
+      "label": "Nature Communications 2024",
+      "url": "https://www.nature.com/articles/s41467-024-47736-0",
+      "kind": "literature",
+      "note": "Chromium-doping strategy for amorphous NiFe electrocatalysts with improved robustness in alkaline water splitting."
+    },
+    {
+      "id": "seed-nife-aemwe-natcatal-2024",
+      "label": "Nature Catalysis 2024",
+      "url": "https://www.nature.com/articles/s41929-024-01209-1",
+      "kind": "literature",
+      "note": "Seed-assisted synthesis of NiFe electrocatalysts for efficient anion-exchange-membrane water electrolysis."
+    },
+    {
+      "id": "scalable-nife-ldh-ncomms-2025",
+      "label": "Nature Communications 2025",
+      "url": "https://www.nature.com/articles/s41467-025-61356-2",
+      "kind": "literature",
+      "note": "Scalable all-earth-abundant NiFe layered-double-hydroxide route reported for membrane-free alkaline water electrolysis and relevant anode manufacture."
+    }
+  ],
+  "catalog_quotes": [],
+  "route_templates": [
+    {
+      "id": "alkaline-nife-ldh-route",
+      "name": "NiFe-LDH alkaline anode route",
+      "calculator_template_id": "alkaline_electrolyzer_gde",
+      "manufacturing_mode": "Alkaline or AEM electrolyzer anode coating route",
+      "preprocess": [
+        "Nickel felt or porous transport substrate preparation",
+        "Membrane hydration and ion-exchange conversion",
+        "NiFe precursor staging"
+      ],
+      "synthesis": [
+        "Binder staging and ink homogenization",
+        "Ultrasonic dispersion",
+        "Electrode coating pass"
+      ],
+      "postprocess": [
+        "Low-temperature drying",
+        "Hot-press or compression assembly",
+        "Electrochemical break-in"
+      ],
+      "quality_gates": [
+        "Catalyst loading verification",
+        "Hydroxide-form conductivity check",
+        "OER activation-voltage screen"
+      ],
+      "steps": [
+        "membrane_pretreatment",
+        "substrate_pretreatment",
+        "ion_exchange_conversion",
+        "ionomer_ink_homogenization",
+        "ultrasonic_dispersion",
+        "ccm_coating_pass",
+        "electrode_drying_low_temp",
+        "hot_press_lamination",
+        "electrochemical_break_in"
+      ],
+      "non_step_cost_per_lb": 0.58,
+      "route_confidence": 86,
+      "route_note": "Most transferable non-noble alkaline-electrolyzer anode route in the family."
+    },
+    {
+      "id": "seed-assisted-nife-route",
+      "name": "Seed-assisted NiFe route",
+      "calculator_template_id": "alkaline_electrolyzer_gde",
+      "manufacturing_mode": "Seed-directed NiFe anode route",
+      "preprocess": [
+        "Substrate pretreatment",
+        "Seed-layer preparation",
+        "NiFe deposition chemistry setup"
+      ],
+      "synthesis": [
+        "Seed-assisted electrodeposition or growth",
+        "Binder or surface-conditioning hold",
+        "Electrode coating finish"
+      ],
+      "postprocess": [
+        "Drying",
+        "Ion-exchange conversion",
+        "Electrochemical break-in"
+      ],
+      "quality_gates": [
+        "Seed coverage check",
+        "Bubble release and wetting screen",
+        "Current-density validation"
+      ],
+      "steps": [
+        "membrane_pretreatment",
+        "substrate_pretreatment",
+        "ion_exchange_conversion",
+        "ionomer_ink_homogenization",
+        "ultrasonic_dispersion",
+        "ccm_coating_pass",
+        "electrode_drying_low_temp",
+        "hot_press_lamination",
+        "electrochemical_break_in"
+      ],
+      "non_step_cost_per_lb": 0.72,
+      "route_confidence": 81,
+      "route_note": "Higher-performing structured NiFe route, but seed-layer control and deposition reproducibility reduce maturity versus the plain LDH baseline."
+    },
+    {
+      "id": "cr-amorphous-nife-route",
+      "name": "Cr-doped amorphous NiFe route",
+      "calculator_template_id": "alkaline_electrolyzer_gde",
+      "manufacturing_mode": "Amorphous doped-oxide alkaline anode route",
+      "preprocess": [
+        "NiFe precursor staging",
+        "Chromium dopant balancing",
+        "Substrate surface conditioning"
+      ],
+      "synthesis": [
+        "Amorphous deposition or growth",
+        "Binder conditioning",
+        "Electrode coating finish"
+      ],
+      "postprocess": [
+        "Drying",
+        "Ion-exchange conversion",
+        "Electrochemical activation"
+      ],
+      "quality_gates": [
+        "Dopant retention proxy",
+        "Amorphous-phase stability screen",
+        "Long-hold OER voltage check"
+      ],
+      "steps": [
+        "membrane_pretreatment",
+        "substrate_pretreatment",
+        "ion_exchange_conversion",
+        "ionomer_ink_homogenization",
+        "ultrasonic_dispersion",
+        "ccm_coating_pass",
+        "electrode_drying_low_temp",
+        "hot_press_lamination",
+        "electrochemical_break_in"
+      ],
+      "non_step_cost_per_lb": 0.78,
+      "route_confidence": 74,
+      "route_note": "Robust-performance route, but dopant control and amorphous-state retention make it less reproducible than the simpler NiFe baselines."
+    }
+  ],
+  "candidates": [
+    {
+      "slug": "nife-ldh-scalable",
+      "title": "NiFe-LDH scalable anode",
+      "archetype": "Non-noble benchmark",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Scalable all-earth-abundant NiFe layered-double-hydroxide route for alkaline or AEM electrolyzer anodes.",
+      "route_template_id": "alkaline-nife-ldh-route",
+      "order_size_tons": 2,
+      "performance_index": 84,
+      "manufacturing_readiness": 86,
+      "screening_exactness": 72,
+      "temperature_window_c": [
+        40,
+        80
+      ],
+      "literature_basis_ids": [
+        "flow-3d-alkaline-ncomms-2024",
+        "scalable-nife-ldh-ncomms-2025"
+      ],
+      "catalog_quote_ids": [],
+      "electrode_defaults": {
+        "application_family": "electrolyzer",
+        "ionomer_material_key": "fcs:sustainion-xa9-25ml",
+        "membrane_material_key": "fcs:sustainion-x37-50-rt",
+        "substrate_material_key": "fcs:nickel-fiber-felt",
+        "active_area_cm2": 25,
+        "catalyst_loading_mg_cm2": 2.0,
+        "ionomer_to_catalyst_ratio": 0.15
+      },
+      "decision_notes": [
+        "Best starting point when the goal is a non-noble alkaline-electrolyzer anode with a credible scale-up story.",
+        "Economics stay favorable because the active phase avoids PGMs and the stack defaults use alkaline materials rather than PEM inputs."
+      ],
+      "components": [
+        {
+          "role": "active_catalyst",
+          "name": "NiFe-LDH",
+          "wt_pct": 100,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 8.5,
+            "evidence_label": "NiFe-LDH screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 64,
+            "transparency": "derived_proxy",
+            "note": "NiFe hydroxide catalyst cost held on a derived screening proxy using nickel and iron commodity exposure plus alkaline-anode processing overhead."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "nife-seed-assisted",
+      "title": "Seed-assisted NiFe anode",
+      "archetype": "Performance route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Seed-directed NiFe route targeting higher current density and better catalyst utilization in AEM water electrolysis.",
+      "route_template_id": "seed-assisted-nife-route",
+      "order_size_tons": 2,
+      "performance_index": 91,
+      "manufacturing_readiness": 81,
+      "screening_exactness": 75,
+      "temperature_window_c": [
+        40,
+        80
+      ],
+      "literature_basis_ids": [
+        "flow-3d-alkaline-ncomms-2024",
+        "seed-nife-aemwe-natcatal-2024"
+      ],
+      "catalog_quote_ids": [],
+      "electrode_defaults": {
+        "application_family": "electrolyzer",
+        "ionomer_material_key": "fcs:sustainion-xa9-25ml",
+        "membrane_material_key": "fcs:sustainion-x37-50-rt",
+        "substrate_material_key": "fcs:nickel-fiber-felt",
+        "active_area_cm2": 25,
+        "catalyst_loading_mg_cm2": 1.5,
+        "ionomer_to_catalyst_ratio": 0.15
+      },
+      "decision_notes": [
+        "Use this when higher anode efficiency is worth tighter deposition control.",
+        "The route improves performance but gives up some simplicity relative to the plain NiFe-LDH baseline."
+      ],
+      "components": [
+        {
+          "role": "active_catalyst",
+          "name": "Seed-assisted NiFe",
+          "wt_pct": 100,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 11.0,
+            "evidence_label": "Seed-assisted NiFe screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 63,
+            "transparency": "derived_proxy",
+            "note": "Seed-directed NiFe catalyst held on a derived screening proxy that adds structured-growth overhead to a nickel-iron catalyst basis."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "cr-doped-amorphous",
+      "title": "Cr-doped amorphous NiFe route",
+      "archetype": "Durability-biased route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Chromium-doped amorphous NiFe route emphasizing robust alkaline OER operation and long-hold stability.",
+      "route_template_id": "cr-amorphous-nife-route",
+      "order_size_tons": 2,
+      "performance_index": 88,
+      "manufacturing_readiness": 74,
+      "screening_exactness": 76,
+      "temperature_window_c": [
+        40,
+        80
+      ],
+      "literature_basis_ids": [
+        "cr-amorphous-aemwe-ncomms-2024"
+      ],
+      "catalog_quote_ids": [],
+      "electrode_defaults": {
+        "application_family": "electrolyzer",
+        "ionomer_material_key": "fcs:sustainion-xa9-25ml",
+        "membrane_material_key": "fcs:sustainion-x37-50-rt",
+        "substrate_material_key": "fcs:nickel-fiber-felt",
+        "active_area_cm2": 25,
+        "catalyst_loading_mg_cm2": 1.2,
+        "ionomer_to_catalyst_ratio": 0.15
+      },
+      "decision_notes": [
+        "Good fit when alkaline durability matters more than the lowest route complexity.",
+        "Chromium-doping and amorphous-state control raise route overhead relative to the simpler NiFe cases."
+      ],
+      "components": [
+        {
+          "role": "active_catalyst",
+          "name": "Cr-doped amorphous NiFe",
+          "wt_pct": 100,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 13.5,
+            "evidence_label": "Cr-doped NiFe screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 61,
+            "transparency": "derived_proxy",
+            "note": "Chromium-doped amorphous NiFe catalyst cost held on a derived proxy that includes dopant handling and alkaline-anode processing overhead."
+          }
+        }
+      ]
+    }
+  ]
+}

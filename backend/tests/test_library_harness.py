@@ -76,3 +76,42 @@ def test_seeded_library_contains_sigma_and_fuel_cell_store_rows(session) -> None
     assert "fcs:sustainion-xa9-25ml" in keys
     assert "fcs:ptru-gde-paper-2" in keys
     assert "fcs:ag40-vulcan" in keys
+    assert "lit:usgs-alumina-2025" in keys
+    assert "lit:usgs-ceria-2025" in keys
+    assert "lit:usgs-indium-metal-2025" in keys
+    assert "lit:dti-pem-membrane-2010" in keys
+    assert "lit:dti-pem-ionomer-2010" in keys
+    assert "lit:dti-pem-gdl-2010" in keys
+
+
+def test_benchmark_catalogs_have_traceable_routes_and_citations() -> None:
+    step_keys = {step["key"] for step in _load_json("step_library.json")["steps"]}
+
+    for path in sorted(data_dir().glob("*_benchmark.json")):
+        payload = _load_json(path.name)
+        citation_ids = {citation["id"] for citation in payload["citations"]}
+        route_ids = {route["id"] for route in payload["route_templates"]}
+
+        assert payload["family"], f"{path.name}: family should be populated"
+        assert payload["candidates"], f"{path.name}: candidates should not be empty"
+        assert payload["citations"], f"{path.name}: citations should not be empty"
+        assert payload["route_templates"], f"{path.name}: route_templates should not be empty"
+
+        for route in payload["route_templates"]:
+            assert route["name"], f"{path.name}: route name missing"
+            assert route["steps"], f"{path.name}: route {route['id']} missing steps"
+            assert set(route["steps"]).issubset(step_keys), f"{path.name}: route {route['id']} uses unknown step key"
+            assert route["preprocess"], f"{path.name}: route {route['id']} missing preprocess"
+            assert route["synthesis"], f"{path.name}: route {route['id']} missing synthesis"
+            assert route["postprocess"], f"{path.name}: route {route['id']} missing postprocess"
+            assert route["quality_gates"], f"{path.name}: route {route['id']} missing quality_gates"
+
+        for candidate in payload["candidates"]:
+            assert candidate["route_template_id"] in route_ids, (
+                f"{path.name}: candidate {candidate['slug']} references unknown route_template_id"
+            )
+            assert candidate["components"], f"{path.name}: candidate {candidate['slug']} missing components"
+            assert candidate["literature_basis_ids"], f"{path.name}: candidate {candidate['slug']} missing literature_basis_ids"
+            assert set(candidate["literature_basis_ids"]).issubset(citation_ids), (
+                f"{path.name}: candidate {candidate['slug']} references unknown citation ids"
+            )

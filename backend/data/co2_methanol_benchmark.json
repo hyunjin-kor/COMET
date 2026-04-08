@@ -1,0 +1,388 @@
+{
+  "family": "co2-methanol",
+  "title": "CO2-to-methanol reference family",
+  "catalyst_domain": "thermal",
+  "application_family": "general",
+  "reaction": "CO2 + 3 H2 -> CH3OH + H2O",
+  "objective": "Optional literature-backed thermal-catalyst family for CO2-to-methanol screening. These routes are reference starting points for cost, route maturity, and evidence quality rather than exact commercial recipes.",
+  "decision_profiles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Balance economics, evidence quality, route maturity, and reported performance.",
+      "weights": {
+        "economics": 0.45,
+        "evidence": 0.2,
+        "route": 0.2,
+        "performance": 0.15
+      }
+    },
+    "cost-first": {
+      "label": "Cost-first",
+      "description": "Bias ranking toward catalyst cost while keeping route and evidence guardrails.",
+      "weights": {
+        "economics": 0.6,
+        "evidence": 0.15,
+        "route": 0.15,
+        "performance": 0.1
+      }
+    },
+    "evidence-first": {
+      "label": "Evidence-first",
+      "description": "Reward transparent pricing anchors and more defensible preparation routes.",
+      "weights": {
+        "economics": 0.35,
+        "evidence": 0.35,
+        "route": 0.15,
+        "performance": 0.15
+      }
+    }
+  },
+  "citations": [
+    {
+      "id": "znzr-methanol-ncomms-2019",
+      "label": "Nature Communications 2019",
+      "url": "https://doi.org/10.1038/s41467-019-09072-6",
+      "kind": "literature",
+      "note": "ZnZrOx methanol route highlighting oxide-interface control and oxygen-vacancy management for selective CO2 hydrogenation."
+    },
+    {
+      "id": "ni-in2o3-ncomms-2021",
+      "label": "Nature Communications 2021",
+      "url": "https://doi.org/10.1038/s41467-021-22224-x",
+      "kind": "literature",
+      "note": "Ni-promoted indium-oxide route showing how interfacial metal promotion can raise methanol productivity."
+    },
+    {
+      "id": "in2o3-dynamics-ncomms-2022",
+      "label": "Nature Communications 2022",
+      "url": "https://doi.org/10.1038/s41467-022-30958-5",
+      "kind": "literature",
+      "note": "Operando study of structural evolution and oxygen-vacancy dynamics in In2O3 methanol catalysts."
+    },
+    {
+      "id": "pd-in2o3-zro2-ncomms-2022",
+      "label": "Nature Communications 2022",
+      "url": "https://doi.org/10.1038/s41467-022-33391-w",
+      "kind": "literature",
+      "note": "Pd-In2O3-ZrO2 catalyst architecture reported with sustained methanol selectivity under CO2 hydrogenation."
+    },
+    {
+      "id": "cu-zrox-mgo-natcatal-2024",
+      "label": "Nature Catalysis 2024",
+      "url": "https://www.nature.com/articles/s41929-024-01236-y",
+      "kind": "literature",
+      "note": "Cu/ZrOx cluster route on MgO showing strong methanol productivity without moving to a noble-metal basis."
+    },
+    {
+      "id": "inverse-in2o3-ni-ncomms-2025",
+      "label": "Nature Communications 2025",
+      "url": "https://www.nature.com/articles/s41467-025-65929-z",
+      "kind": "literature",
+      "note": "Inverse In2O3-x/Ni interfacial route showing how reconstructed In-Ni motifs can stabilize methanol-selective sites."
+    },
+    {
+      "id": "zno-nanorod-methanol-ncomms-2025",
+      "label": "Nature Communications 2025",
+      "url": "https://www.nature.com/articles/s41467-025-67625-4",
+      "kind": "literature",
+      "note": "ZnO nanorod-based methanol route emphasizing geometry-sensitive CO2 activation and oxygen-vacancy exposure."
+    }
+  ],
+  "catalog_quotes": [],
+  "route_templates": [
+    {
+      "id": "cza-co-precipitation",
+      "name": "Cu-Zn-Al co-precipitation route",
+      "manufacturing_mode": "Industrial methanol catalyst baseline",
+      "preprocess": [
+        "Copper and zinc precursor balancing",
+        "Alumina binder or support staging",
+        "pH-control window setup"
+      ],
+      "synthesis": [
+        "Co-precipitation or slurry assembly",
+        "Intermediate filtration and wash",
+        "Forming or granulation"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination",
+        "Hydrogen reduction / activation"
+      ],
+      "quality_gates": [
+        "Cu dispersion proxy",
+        "Zn-Al phase balance",
+        "Methanol selectivity spot check"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "reactor_multistep",
+        "filter_rotary_vacuum",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "mill",
+        "reactor_simple"
+      ],
+      "non_step_cost_per_lb": 0.78,
+      "route_confidence": 92,
+      "route_note": "Closest screening proxy to conventional Cu/Zn/Al methanol catalyst manufacture and the easiest basis to defend commercially."
+    },
+    {
+      "id": "cu-zrox-interface-route",
+      "name": "Cu-ZrOx interface route",
+      "manufacturing_mode": "Interface-engineered Cu methanol route",
+      "preprocess": [
+        "Copper and zirconia solids balance",
+        "Basic support conditioning",
+        "Narrow precipitation or deposition window setup"
+      ],
+      "synthesis": [
+        "Multistep deposition or interface assembly",
+        "Intermediate filtration and wash",
+        "Controlled forming"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination",
+        "Reduction / selectivity conditioning"
+      ],
+      "quality_gates": [
+        "Cu-Zr interfacial contact proxy",
+        "Basic-support coverage check",
+        "CO byproduct suppression screen"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "reactor_multistep",
+        "filter_rotary_vacuum",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "mill",
+        "reactor_simple"
+      ],
+      "non_step_cost_per_lb": 1.04,
+      "route_confidence": 76,
+      "route_note": "Higher-performance Cu route that relies on tighter interfacial control than the conventional CZA baseline."
+    },
+    {
+      "id": "in2o3-zro2-route",
+      "name": "In2O3-ZrO2 low-temperature route",
+      "manufacturing_mode": "Indium-oxide methanol catalyst route",
+      "preprocess": [
+        "Indium inventory and precursor accounting",
+        "Zirconia support staging",
+        "Low-temperature reduction window setup"
+      ],
+      "synthesis": [
+        "Mixed-oxide deposition or co-assembly",
+        "Wash and solids recovery",
+        "Granulation or pellet finishing"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination",
+        "Activation under CO2/H2 feed"
+      ],
+      "quality_gates": [
+        "Oxygen-vacancy proxy",
+        "Indium dispersion check",
+        "Methanol-vs-CO selectivity screen"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "reactor_multistep",
+        "filter_rotary_vacuum",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple"
+      ],
+      "non_step_cost_per_lb": 1.12,
+      "route_confidence": 71,
+      "route_note": "Low-temperature methanol route with strong literature momentum, but indium inventory discipline and oxide-state control keep maturity below Cu baselines."
+    }
+  ],
+  "candidates": [
+    {
+      "slug": "cza-baseline",
+      "title": "Cu/ZnO/Al2O3 baseline",
+      "archetype": "Commercial benchmark",
+      "screening_basis": "engineering_proxy",
+      "summary": "Industrial copper-zinc-alumina basis for CO2-to-methanol catalyst cost screening.",
+      "route_template_id": "cza-co-precipitation",
+      "order_size_tons": 20,
+      "performance_index": 75,
+      "manufacturing_readiness": 95,
+      "screening_exactness": 71,
+      "temperature_window_c": [220, 290],
+      "literature_basis_ids": [
+        "znzr-methanol-ncomms-2019",
+        "cu-zrox-mgo-natcatal-2024",
+        "zno-nanorod-methanol-ncomms-2025"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Best anchor for practical methanol screening because copper exposure stays visible and the route maps well onto established oxide-catalyst manufacturing.",
+        "Performance is not the family leader, but route maturity and reproducibility are the strongest."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Cu",
+          "wt_pct": 45.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Cu",
+            "precursor_markup": 1.08,
+            "note": "Live Cu feed with a mild precursor conversion markup for copper-oxide catalyst manufacture."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "ZnO",
+          "wt_pct": 25.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.4,
+            "evidence_label": "ZnO industrial screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 58,
+            "transparency": "derived_index",
+            "note": "ZnO promoter term is held on an engineering proxy because the current library has more transparent precursor quotes than bulk oxide market boards."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Al2O3",
+          "wt_pct": 30.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.2676,
+            "evidence_label": "USGS industrial alumina proxy",
+            "evidence_tier": "public_index",
+            "confidence_score": 72,
+            "transparency": "public_index",
+            "note": "2025 USGS alumina import value used as a bulk oxide support proxy."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "cu-zrox-interface",
+      "title": "Cu/ZrOx-MgO interface route",
+      "archetype": "Cu performance route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Cu route that trades extra support/interface discipline for higher methanol productivity at moderate metal cost.",
+      "route_template_id": "cu-zrox-interface-route",
+      "order_size_tons": 20,
+      "performance_index": 89,
+      "manufacturing_readiness": 72,
+      "screening_exactness": 79,
+      "temperature_window_c": [180, 260],
+      "literature_basis_ids": [
+        "cu-zrox-mgo-natcatal-2024",
+        "znzr-methanol-ncomms-2019",
+        "zno-nanorod-methanol-ncomms-2025"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Useful when Cu economics still matter but the baseline CZA route leaves too much performance on the table.",
+        "Route overhead is higher because zirconia/basic-support contact and interface stability need tighter control."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Cu",
+          "wt_pct": 14.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Cu",
+            "precursor_markup": 1.1,
+            "note": "Live Cu feed retained as the dominant traded-metal term."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "ZrOx",
+          "wt_pct": 21.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.25,
+            "evidence_label": "ZrOx screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 57,
+            "transparency": "derived_index",
+            "note": "Zirconia-side support term uses a conservative engineering proxy because a direct bulk public price was not verified in this pass."
+          }
+        },
+        {
+          "role": "support",
+          "name": "MgO",
+          "wt_pct": 65.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.45,
+            "evidence_label": "MgO engineering proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 60,
+            "transparency": "derived_index",
+            "note": "Basic support term held on a conservative engineering proxy to avoid reagent-pack distortion."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "in2o3-zro2-lowtemp",
+      "title": "In2O3-ZrO2 low-temperature route",
+      "archetype": "Selective low-temperature route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Indium-oxide route that targets high methanol selectivity at lower temperature but carries meaningful indium price pressure.",
+      "route_template_id": "in2o3-zro2-route",
+      "order_size_tons": 20,
+      "performance_index": 92,
+      "manufacturing_readiness": 68,
+      "screening_exactness": 83,
+      "temperature_window_c": [180, 250],
+      "literature_basis_ids": [
+        "ni-in2o3-ncomms-2021",
+        "in2o3-dynamics-ncomms-2022",
+        "pd-in2o3-zro2-ncomms-2022",
+        "inverse-in2o3-ni-ncomms-2025"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Best fit when methanol selectivity at lower temperature is worth paying for a scarcer oxide system.",
+        "Indium inventory and oxide-state control keep this route less mature than Cu-led baselines."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "In",
+          "wt_pct": 55.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 176.901,
+            "evidence_label": "USGS refined indium proxy",
+            "evidence_tier": "public_index",
+            "confidence_score": 76,
+            "transparency": "public_index",
+            "note": "2025 USGS refined-indium price used as the bulk indium term for indium-oxide methanol screening."
+          }
+        },
+        {
+          "role": "support",
+          "name": "ZrO2",
+          "wt_pct": 45.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.25,
+            "evidence_label": "ZrO2 screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 57,
+            "transparency": "derived_index",
+            "note": "Zirconia term remains a conservative engineering proxy pending a cleaner public bulk quote."
+          }
+        }
+      ]
+    }
+  ]
+}

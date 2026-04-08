@@ -1,0 +1,333 @@
+{
+  "family": "co2-methanation",
+  "title": "CO2 methanation reference family",
+  "catalyst_domain": "thermal",
+  "application_family": "general",
+  "reaction": "CO2 + 4 H2 -> CH4 + 2 H2O",
+  "objective": "Optional literature-backed thermal-catalyst family for Sabatier methanation screening. These candidates compare a defensible nickel baseline with lower-temperature ruthenium-led routes that matter for power-to-gas and compact methanation systems.",
+  "decision_profiles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Balance catalyst cost, evidence quality, route maturity, and reported performance.",
+      "weights": {
+        "economics": 0.45,
+        "evidence": 0.2,
+        "route": 0.2,
+        "performance": 0.15
+      }
+    },
+    "cost-first": {
+      "label": "Cost-first",
+      "description": "Bias ranking toward catalyst cost while preserving route and evidence guardrails.",
+      "weights": {
+        "economics": 0.6,
+        "evidence": 0.15,
+        "route": 0.15,
+        "performance": 0.1
+      }
+    },
+    "evidence-first": {
+      "label": "Evidence-first",
+      "description": "Reward transparent pricing anchors and more reproducible preparation routes.",
+      "weights": {
+        "economics": 0.35,
+        "evidence": 0.35,
+        "route": 0.15,
+        "performance": 0.15
+      }
+    }
+  },
+  "citations": [
+    {
+      "id": "ni-single-atom-methanation-ncomms-2019",
+      "label": "Nature Communications 2019",
+      "url": "https://doi.org/10.1038/s41467-019-10304-y",
+      "kind": "literature",
+      "note": "Selective light-absorber-assisted single-Ni-atom route demonstrating efficient low-energy CO2 methanation without moving to a noble-metal basis."
+    },
+    {
+      "id": "au-ru-ceria-methanation-natcatal-2024",
+      "label": "Nature Catalysis 2024",
+      "url": "https://doi.org/10.1038/s41929-023-00970-z",
+      "kind": "literature",
+      "note": "Au-Ru/CeO2 route linking metal-support and photothermal effects to lower-temperature CO2 methanation."
+    },
+    {
+      "id": "ru-mno-photothermal-ncomms-2024",
+      "label": "Nature Communications 2024",
+      "url": "https://www.nature.com/articles/s41467-024-45389-7",
+      "kind": "literature",
+      "note": "Ru/MnO-Mn3O4 photothermal catalyst reporting strong solar-assisted methanation performance and route-specific support engineering."
+    },
+    {
+      "id": "ru-layered-titanate-ncomms-2025",
+      "label": "Nature Communications 2025",
+      "url": "https://www.nature.com/articles/s41467-025-57954-9",
+      "kind": "literature",
+      "note": "Layered sodium titanate supported ruthenium route for ambient-pressure CO2 methanation, highlighting low-temperature activity at the cost of a noble-metal basis."
+    }
+  ],
+  "catalog_quotes": [],
+  "route_templates": [
+    {
+      "id": "ni-oxide-methanation-route",
+      "name": "Ni oxide-support methanation route",
+      "manufacturing_mode": "Conventional supported nickel methanation catalyst",
+      "preprocess": [
+        "Nickel precursor balancing",
+        "Oxide support drying and sizing",
+        "Impregnation liquor ratio setup"
+      ],
+      "synthesis": [
+        "Slurry mixing or incipient wetness loading",
+        "Aging after metal deposition"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination",
+        "Hydrogen reduction / methanation activation"
+      ],
+      "quality_gates": [
+        "Nickel loading verification",
+        "Support crush-strength screen",
+        "CH4 selectivity spot check"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple"
+      ],
+      "non_step_cost_per_lb": 0.66,
+      "route_confidence": 91,
+      "route_note": "Most defensible commercial screening route for Sabatier methanation and the easiest starting point for plant-scale reasoning."
+    },
+    {
+      "id": "ru-mno-photothermal-route",
+      "name": "Ru-MnOx photothermal methanation route",
+      "manufacturing_mode": "Photothermal noble-metal methanation catalyst",
+      "preprocess": [
+        "Ru inventory accounting",
+        "Manganese-oxide support staging",
+        "Photothermal absorber balancing"
+      ],
+      "synthesis": [
+        "Multistep deposition or co-assembly",
+        "Intermediate wash and solids recovery"
+      ],
+      "postprocess": [
+        "Drying",
+        "Thermal stabilization hold",
+        "Reduction / light-off conditioning"
+      ],
+      "quality_gates": [
+        "Ru utilization proxy",
+        "MnOx phase check",
+        "Low-temperature CH4 productivity screen"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "reactor_multistep",
+        "filter_rotary_vacuum",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple"
+      ],
+      "non_step_cost_per_lb": 1.12,
+      "route_confidence": 74,
+      "route_note": "Useful when compact low-temperature methanation matters, but noble-metal accounting and photothermal support design lower route maturity."
+    },
+    {
+      "id": "ru-layered-titanate-route",
+      "name": "Ru layered-titanate methanation route",
+      "manufacturing_mode": "Layer-confined ruthenium methanation catalyst",
+      "preprocess": [
+        "Layered titanate support conditioning",
+        "Ru precursor accounting",
+        "Nanoconfinement deposition window setup"
+      ],
+      "synthesis": [
+        "Multistep loading and wash",
+        "Controlled solids recovery"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination or decomposition hold",
+        "Reduction and low-temperature conditioning"
+      ],
+      "quality_gates": [
+        "Ru dispersion proxy",
+        "Layered-support integrity check",
+        "Ambient-pressure methanation screen"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "reactor_multistep",
+        "filter_rotary_vacuum",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple"
+      ],
+      "non_step_cost_per_lb": 1.18,
+      "route_confidence": 69,
+      "route_note": "Highest low-temperature promise in the family, but nanoconfined Ru handling and layered-support reproducibility remain less mature."
+    }
+  ],
+  "candidates": [
+    {
+      "slug": "ni-alumina-baseline",
+      "title": "Ni/Al2O3 baseline",
+      "archetype": "Commercial benchmark",
+      "screening_basis": "engineering_proxy",
+      "summary": "Conventional supported-nickel Sabatier basis for CO2 methanation screening.",
+      "route_template_id": "ni-oxide-methanation-route",
+      "order_size_tons": 20,
+      "performance_index": 76,
+      "manufacturing_readiness": 94,
+      "screening_exactness": 73,
+      "temperature_window_c": [
+        250,
+        400
+      ],
+      "literature_basis_ids": [
+        "ni-single-atom-methanation-ncomms-2019"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Best fit when a defensible non-noble commercial screening anchor matters more than the lowest possible light-off temperature.",
+        "Nickel still dominates the economic case even when advanced literature routes outperform it per active site."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Ni",
+          "wt_pct": 20.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ni",
+            "precursor_markup": 1.08,
+            "note": "Live nickel feed with precursor conversion markup."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Al2O3",
+          "wt_pct": 80.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.2676,
+            "evidence_label": "USGS industrial alumina proxy",
+            "evidence_tier": "public_index",
+            "confidence_score": 72,
+            "transparency": "public_index",
+            "note": "2025 USGS alumina import value used as a bulk oxide support proxy."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "ru-mnox-photothermal",
+      "title": "Ru/MnOx photothermal route",
+      "archetype": "Low-temperature premium route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Ruthenium on manganese-oxide family targeting lower-temperature photothermal CO2 methanation.",
+      "route_template_id": "ru-mno-photothermal-route",
+      "order_size_tons": 20,
+      "performance_index": 90,
+      "manufacturing_readiness": 76,
+      "screening_exactness": 69,
+      "temperature_window_c": [
+        150,
+        250
+      ],
+      "literature_basis_ids": [
+        "au-ru-ceria-methanation-natcatal-2024",
+        "ru-mno-photothermal-ncomms-2024"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Useful when lower reaction temperature or solar-assist compatibility matters enough to justify a noble-metal premium.",
+        "Photothermal and manganese-oxide route discipline reduce the maturity score versus the nickel baseline."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Ru",
+          "wt_pct": 5.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ru",
+            "precursor_markup": 1.1,
+            "note": "Indexed ruthenium feed with precursor conversion markup."
+          }
+        },
+        {
+          "role": "support",
+          "name": "MnOx",
+          "wt_pct": 95.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.55,
+            "evidence_label": "MnOx support screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 57,
+            "transparency": "derived_proxy",
+            "note": "Manganese-oxide support term held on an engineering proxy until a clearer public bulk oxide basis is curated."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "ru-layered-titanate",
+      "title": "Ru/layered titanate route",
+      "archetype": "Ambient-pressure premium route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Layer-confined Ru route emphasizing ambient-pressure and lower-temperature CO2 methanation.",
+      "route_template_id": "ru-layered-titanate-route",
+      "order_size_tons": 20,
+      "performance_index": 94,
+      "manufacturing_readiness": 71,
+      "screening_exactness": 70,
+      "temperature_window_c": [
+        25,
+        180
+      ],
+      "literature_basis_ids": [
+        "ru-layered-titanate-ncomms-2025"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Strong candidate when the design target is ambient-pressure or much lower-temperature methanation rather than lowest catalyst cost.",
+        "Layered titanate confinement improves the performance score but keeps route reproducibility below industrial nickel practice."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Ru",
+          "wt_pct": 5.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ru",
+            "precursor_markup": 1.1,
+            "note": "Indexed ruthenium feed with precursor conversion markup."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Na2Ti3O7",
+          "wt_pct": 95.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.68,
+            "evidence_label": "Layered titanate screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 55,
+            "transparency": "derived_proxy",
+            "note": "Layered sodium titanate support cost held on an engineering proxy until a public bulk basis is curated."
+          }
+        }
+      ]
+    }
+  ]
+}
