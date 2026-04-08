@@ -1,5 +1,29 @@
 # Release Notes
 
+## v1.1.8 Desktop Sync for Matrix Harness
+
+Date: April 8, 2026
+
+This release updates the packaged desktop app to include the latest calculation-matrix harness and backend runtime fixes already merged on `master`.
+
+### Included In This Update
+
+- Added a calculation harness that exercises frontend thermal composition choices across active-metal, promoter, support, and bimetallic matrices.
+- Added route coverage for every valid saved process template and every valid single-step / two-step preparation combination.
+- Updated UTC timestamp handling in the backend scheduler and health-report flow to remove deprecated naive UTC calls.
+- Rebuilt the Windows desktop package so the GitHub release matches the latest verified repository state.
+
+### Validation Status
+
+The following checks passed on April 8, 2026:
+
+```bash
+python -m pytest backend/tests/test_calculation_harness.py -q
+python -m pytest backend/tests -q
+npm run build
+npm run smoke:desktop
+```
+
 ## v1.1.7 Dataset and Release Sync
 
 Date: April 8, 2026

@@ -111,7 +111,7 @@ Download the packaged Windows app from [GitHub Releases](https://github.com/hyun
 
 Recommended asset:
 
-- `CatPrice Setup 1.1.7.exe`
+- `CatPrice Setup 1.1.8.exe`
 
 Portable asset:
 
@@ -157,7 +157,7 @@ npm run build
 
 Main outputs:
 
-- `dist-electron\CatPrice Setup 1.1.7.exe`
+- `dist-electron\CatPrice Setup 1.1.8.exe`
 - `dist-electron\win-unpacked\CatPrice.exe`
 
 Before rebuilding desktop artifacts, CatPrice stops old desktop processes automatically. You can also stop them manually:
