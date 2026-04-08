@@ -105,11 +105,19 @@ Open the final estimate on a separate reading surface so route basis, cost ledge
 
 ### Live Metal Prices
 
-Trend-focused market view with the selected metal history, period controls, and current quote context.
+The `Live Metal Prices` workspace separates quote monitoring from trend inspection.
 
 <p>
-  <img src="./docs/assets/screen-live-metal-prices.png" alt="Live Metal Prices trend screen" width="100%" />
+  <img src="./docs/assets/screen-live-metal-prices-overview.png" alt="Live Metal Prices overview screen" width="100%" />
 </p>
+
+Start from the tracked-symbol overview, quote-status panel, and grouped price rows before drilling into one metal.
+
+<p>
+  <img src="./docs/assets/screen-live-metal-prices-trend.png" alt="Live Metal Prices selected metal trend screen" width="100%" />
+</p>
+
+Move into the selected-metal trend view to read the history curve, period range, evidence tier, and source audit together.
 
 ### Literature Benchmarks
 
