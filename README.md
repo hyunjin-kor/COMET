@@ -137,11 +137,13 @@ Open the selected route detail to inspect materials, processing, route extras, e
 
 ### Source Library
 
-Database-facing material records with quote rows, domains, applications, and stored source metadata.
+The `Source Library` workspace is the database-facing record browser for stored quote rows, filters, public links, and per-row source detail.
 
 <p>
   <img src="./docs/assets/screen-source-library.png" alt="Source Library material database screen" width="100%" />
 </p>
+
+Search by material name, filter by category/domain/application, then inspect the selected row's quote basis, trust state, and source page from the detail rail.
 
 ### Estimate Range
 
