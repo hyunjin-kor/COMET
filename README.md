@@ -64,102 +64,59 @@ In practice, CatPrice helps answer questions like:
 | 4. Review the output | `Result` | Open the final output on a separate reading surface | A result view optimized for interpretation instead of editing |
 | 5. Iterate quickly | `Back to cost estimate` | Return to the cost estimate workspace, adjust pricing or steps, and rerun | The draft stays in place so scenario work remains fast |
 
-## Screen Roles
-
-- `Live Metal Prices` shows where each quote came from, how fresh it is, and how much confidence to place in it.
-- `Cost Estimate` is the main editing surface for composition, support basis, feed selection, and preparation-step setup across thermocatalyst and electrocatalyst cases.
-- `Literature Benchmarks` is an optional reference library for literature-backed catalyst families and route scoring across multiple reaction families.
-- `Result` is the reading surface for selling price, contribution structure, and component-level source review.
-
 ## Representative Screens
 
-The captures below focus on one core task per screen so the feature surface stays readable on GitHub. These assets are regenerated from the running desktop stack with `scripts/capture_readme_screens.mjs`.
+The captures below focus on one core task per screen. These assets are regenerated from the running desktop stack with `scripts/capture_readme_screens.mjs`.
 
 ### Cost Estimate
 
-The `Cost Estimate` workspace is structured as a four-step editing flow.
+| Catalyst Type | Composition |
+| --- | --- |
+| <img src="./docs/assets/screen-cost-estimate-type.png" alt="Cost Estimate catalyst type screen" width="100%" /> | <img src="./docs/assets/screen-cost-estimate-composition.png" alt="Cost Estimate composition screen" width="100%" /> |
+| Choose thermocatalyst or electrocatalyst before editing the recipe. | Set active metals, promoters, and support balance with explicit source-backed price states. |
 
-<p>
-  <img src="./docs/assets/screen-cost-estimate-type.png" alt="Cost Estimate catalyst type screen" width="100%" />
-</p>
-
-Select the workflow first so thermal and electrocatalyst cases stay separated before any recipe editing begins.
-
-<p>
-  <img src="./docs/assets/screen-cost-estimate-composition.png" alt="Cost Estimate composition screen" width="100%" />
-</p>
-
-Define active metals, promoters, and support balance with explicit mass fractions and source-linked price states.
-
-<p>
-  <img src="./docs/assets/screen-cost-estimate-preparation.png" alt="Cost Estimate preparation method screen" width="100%" />
-</p>
-
-Choose the preparation basis as a route, not a one-choice wizard. Each bucket can hold multiple operations when the real workflow requires it.
-
-<p>
-  <img src="./docs/assets/screen-cost-estimate-result.png" alt="Cost Estimate result handoff screen" width="100%" />
-</p>
-
-Open the final estimate on a separate reading surface so route basis, cost ledger, and evidence stay grouped after the run.
+| Preparation Method | Result handoff |
+| --- | --- |
+| <img src="./docs/assets/screen-cost-estimate-preparation.png" alt="Cost Estimate preparation method screen" width="100%" /> | <img src="./docs/assets/screen-cost-estimate-result.png" alt="Cost Estimate result handoff screen" width="100%" /> |
+| Build the route from operation buckets and campaign scale. | Run the case, then move into a dedicated result surface. |
 
 ### Live Metal Prices
 
-The `Live Metal Prices` workspace separates quote monitoring from trend inspection.
-
-<p>
-  <img src="./docs/assets/screen-live-metal-prices-overview.png" alt="Live Metal Prices overview screen" width="100%" />
-</p>
-
-Start from the tracked-symbol overview, quote-status panel, and grouped price rows before drilling into one metal.
-
-<p>
-  <img src="./docs/assets/screen-live-metal-prices-trend.png" alt="Live Metal Prices selected metal trend screen" width="100%" />
-</p>
-
-Move into the selected-metal trend view to read the history curve, period range, evidence tier, and source audit together.
+| Overview | Trend + source audit |
+| --- | --- |
+| <img src="./docs/assets/screen-live-metal-prices-overview.png" alt="Live Metal Prices overview screen" width="100%" /> | <img src="./docs/assets/screen-live-metal-prices-trend.png" alt="Live Metal Prices selected metal trend screen" width="100%" /> |
+| Scan tracked symbols, quote status, and current price basis. | Read the price curve, period range, evidence tier, and freshness for one metal. |
 
 ### Literature Benchmarks
 
-The `Literature Benchmarks` workspace separates route scanning from route inspection.
-
-<p>
-  <img src="./docs/assets/screen-literature-benchmarks-routes.png" alt="Literature Benchmarks candidate comparison screen" width="100%" />
-</p>
-
-Start from the published-route stack to compare landed catalyst cost, total score, and route positioning across the active family.
-
-<p>
-  <img src="./docs/assets/screen-literature-benchmarks-detail.png" alt="Literature Benchmarks selected route detail screen" width="100%" />
-</p>
-
-Open the selected route detail to inspect materials, processing, route extras, evidence anchors, family-bank depth, and the preparation basis before loading that route into `Cost Estimate`.
+| Published routes | Selected reference route |
+| --- | --- |
+| <img src="./docs/assets/screen-literature-benchmarks-routes.png" alt="Literature Benchmarks candidate comparison screen" width="100%" /> | <img src="./docs/assets/screen-literature-benchmarks-detail.png" alt="Literature Benchmarks selected route detail screen" width="100%" /> |
+| Compare landed cost, score, and route position across the active family. | Inspect materials, processing, evidence anchors, and route basis before loading the case. |
 
 ### Source Library
-
-The `Source Library` workspace is the database-facing record browser for stored quote rows, filters, public links, and per-row source detail.
 
 <p>
   <img src="./docs/assets/screen-source-library.png" alt="Source Library material database screen" width="100%" />
 </p>
 
-Search by material name, filter by category/domain/application, then inspect the selected row's quote basis, trust state, and source page from the detail rail.
+Search the stored rows, filter by category/domain/application, and inspect quote basis, trust state, and public source links for the selected record.
 
 ### Estimate Range
-
-Monte Carlo spread around the same current cost case, without rebuilding a separate input form.
 
 <p>
   <img src="./docs/assets/screen-estimate-range.png" alt="Estimate Range screen" width="100%" />
 </p>
 
-### Result
+Run Monte Carlo on the same current draft and read the baseline, mean, median, P5-P95 band, and percentile-weighted spread together.
 
-Preparation-side readout showing cost structure, material share, and route-level interpretation after the run.
+### Result
 
 <p>
   <img src="./docs/assets/screen-result.png" alt="Result preparation and breakdown screen" width="100%" />
 </p>
+
+Review the final estimate, cost ledger, evidence summary, and route basis on a separate reading surface.
 
 ## Repository Highlights
 

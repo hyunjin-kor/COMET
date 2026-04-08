@@ -412,7 +412,9 @@ async function main() {
     await page.getByRole('button', { name: /Run estimate range/ }).click();
     await page.waitForSelector('text=Percentile-weighted price spread');
     await waitForAppReady(page);
-    await captureSectionByText(page, 'Percentile-weighted price spread', 'screen-estimate-range.png');
+    await page.mouse.move(18, 18);
+    await page.waitForTimeout(150);
+    await captureSelectorSliceFromText(page, 'main > div > div.min-w-0.pb-2', 'Baseline', 'screen-estimate-range.png', 845);
     await page.close();
   }
 
