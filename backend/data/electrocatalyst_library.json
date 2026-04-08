@@ -1,7 +1,7 @@
 {
-  "version": "2026-04-05",
+  "version": "2026-04-08",
   "basis": "Curated electrocatalyst vendor prices and literature-backed commercial proxy values",
-  "source": "Fuel Cell Store product pages plus US DRIVE Fuel Cell Technical Team Roadmap (2017)",
+  "source": "Fuel Cell Store product pages, DOE-commissioned DTI and Strategic Analysis PEMFC cost reports, plus US DRIVE Fuel Cell Technical Team Roadmap (2017)",
   "materials": [
     {
       "library_key": "fcs:xt-pt20-vulcan-s",
@@ -843,6 +843,75 @@
       "application_family": "fuel_cell",
       "pricing_basis": "likely_value_500k_system_per_year",
       "reference_url": "https://www.energy.gov/eere/vehicles/downloads/us-drive-fuel-cell-technical-team-roadmap"
+    },
+    {
+      "library_key": "lit:dti-pem-membrane-2010",
+      "name": "PEM membrane, modeled high-volume cost (DTI 2010, 2015 technology)",
+      "formula": "reinforced PFSA membrane",
+      "category": "Membrane",
+      "price": 22.25,
+      "price_unit": "$/m2",
+      "price_scope": "literature_high_volume",
+      "source": "DOE-commissioned DTI PEMFC mass-production cost report (2010)",
+      "quote_year": 2010,
+      "notes": "Sensitivity-base membrane cost input for the 2015-technology automotive PEMFC case at 500,000 systems/year in the DTI report.",
+      "has_lab_data": false,
+      "catalyst_domain": "electrocatalyst",
+      "application_family": "fuel_cell",
+      "pricing_basis": "modeled_2015_technology_500k_system_per_year",
+      "reference_url": "https://www1.eere.energy.gov/hydrogenandfuelcells/pdfs/mass_production_cost_estimation_report.pdf"
+    },
+    {
+      "library_key": "lit:dti-pem-ionomer-2010",
+      "name": "PFSA ionomer, modeled high-volume cost (DTI 2010, 2015 technology)",
+      "formula": "PFSA ionomer",
+      "category": "Ionomer",
+      "concentration_pct": 100.0,
+      "price": 139.0,
+      "price_unit": "$/kg",
+      "price_scope": "literature_high_volume",
+      "source": "DOE-commissioned DTI PEMFC mass-production cost report (2010)",
+      "quote_year": 2010,
+      "notes": "Sensitivity-base ionomer cost input for the 2015-technology automotive PEMFC case at 500,000 systems/year in the DTI report.",
+      "has_lab_data": false,
+      "catalyst_domain": "electrocatalyst",
+      "application_family": "fuel_cell",
+      "pricing_basis": "modeled_2015_technology_500k_system_per_year",
+      "reference_url": "https://www1.eere.energy.gov/hydrogenandfuelcells/pdfs/mass_production_cost_estimation_report.pdf"
+    },
+    {
+      "library_key": "lit:dti-pem-gdl-2010",
+      "name": "PEM gas diffusion layer, modeled high-volume cost (DTI 2010, 2015 technology)",
+      "formula": "GDL",
+      "category": "Gas Diffusion Layer",
+      "price": 9.63,
+      "price_unit": "$/m2",
+      "price_scope": "literature_high_volume",
+      "source": "DOE-commissioned DTI PEMFC mass-production cost report (2010)",
+      "quote_year": 2010,
+      "notes": "Sensitivity-base macroporous GDL cost input for the 2015-technology automotive PEMFC case at 500,000 systems/year in the DTI report.",
+      "has_lab_data": false,
+      "catalyst_domain": "electrocatalyst",
+      "application_family": "fuel_cell",
+      "pricing_basis": "modeled_2015_technology_500k_system_per_year",
+      "reference_url": "https://www1.eere.energy.gov/hydrogenandfuelcells/pdfs/mass_production_cost_estimation_report.pdf"
+    },
+    {
+      "library_key": "lit:dti-eptfe-2010",
+      "name": "ePTFE membrane reinforcement, material assumption (DTI 2010)",
+      "formula": "ePTFE",
+      "category": "Membrane Reinforcement",
+      "price": 5.0,
+      "price_unit": "$/m2",
+      "price_scope": "literature_high_volume",
+      "source": "DOE-commissioned DTI PEMFC mass-production cost report (2010)",
+      "quote_year": 2010,
+      "notes": "Membrane-material assumption in the DTI report: ePTFE support held at $5/m2 across production levels.",
+      "has_lab_data": false,
+      "catalyst_domain": "electrocatalyst",
+      "application_family": "fuel_cell",
+      "pricing_basis": "assumed_component_material_cost",
+      "reference_url": "https://www1.eere.energy.gov/hydrogenandfuelcells/pdfs/mass_production_cost_estimation_report.pdf"
     }
   ]
 }

@@ -46,6 +46,20 @@
       "note": "Seminal benchmark review on electrocatalyst routes and cost/performance constraints for automotive fuel cells."
     },
     {
+      "id": "orr-review-ncomms-2021",
+      "label": "Nature Communications 2021",
+      "url": "https://www.nature.com/articles/s41467-021-25911-x",
+      "kind": "literature",
+      "note": "High-level review of PEMFC cathode catalyst and cathode-layer design tradeoffs, useful as a route-framing reference for Pt and PGM-free baselines."
+    },
+    {
+      "id": "o2-ionomer-ncomms-2021",
+      "label": "Nature Communications 2021",
+      "url": "https://www.nature.com/articles/s41467-021-25301-3",
+      "kind": "literature",
+      "note": "Oxygen-permeable ionomer study directly tying cathode-layer ionomer chemistry to PEMFC power-density and poisoning behavior."
+    },
+    {
       "id": "fen-c-natcatal-2019",
       "label": "Nature Catalysis 2019",
       "url": "https://www.nature.com/articles/s41929-019-0237-3",
@@ -74,6 +88,13 @@
       "note": "Trace-bromide Fe-NC electrocatalyst reaching high PEMFC power density at low PGM-free cost basis."
     },
     {
+      "id": "fen-c-ncomms-2022-cluster",
+      "label": "Nature Communications 2022",
+      "url": "https://www.nature.com/articles/s41467-022-30702-z",
+      "kind": "literature",
+      "note": "Iron atom-cluster interactions that improve both activity and durability in Fe-N-C PEMFC cathodes."
+    },
+    {
       "id": "ptco-ncomms-2025-bonds",
       "label": "Nature Communications 2025",
       "url": "https://www.nature.com/articles/s41467-025-60171-z",
@@ -93,6 +114,13 @@
       "url": "https://www.nature.com/articles/s41467-025-66813-6",
       "kind": "literature",
       "note": "Support and ionomer-distribution engineering showing how carbon support treatment materially changes PEMFC cathode utilization."
+    },
+    {
+      "id": "pt3fe-ncomms-2025",
+      "label": "Nature Communications 2025",
+      "url": "https://www.nature.com/articles/s41467-025-58116-7",
+      "kind": "literature",
+      "note": "Intermetallic Pt3Fe and ionomer-sandwich architecture that directly targets ionomer poisoning and transport losses in PEMFC cathodes."
     },
     {
       "id": "fcs-pt20-vulcan",
@@ -269,6 +297,8 @@
       "temperature_window_c": [60, 95],
       "literature_basis_ids": [
         "debe-nature-2012",
+        "orr-review-ncomms-2021",
+        "o2-ionomer-ncomms-2021",
         "pt-support-ncomms-2025",
         "fcs-pt20-vulcan"
       ],
@@ -321,8 +351,10 @@
       "temperature_window_c": [60, 95],
       "literature_basis_ids": [
         "debe-nature-2012",
+        "orr-review-ncomms-2021",
         "ptco-ncomms-2025-bonds",
         "ptco-ncomms-2025-single-site",
+        "pt3fe-ncomms-2025",
         "sigma-cobalt-nitrate"
       ],
       "catalog_quote_ids": [
@@ -386,6 +418,7 @@
       "literature_basis_ids": [
         "fen-c-natcatal-2019",
         "fen-c-nenergy-2022",
+        "fen-c-ncomms-2022-cluster",
         "fen-c-ncomms-2024-mono",
         "fen-c-ncomms-2024-br"
       ],

@@ -1,0 +1,335 @@
+{
+  "family": "rwgs",
+  "title": "Reverse water-gas shift reference family",
+  "catalyst_domain": "thermal",
+  "application_family": "general",
+  "reaction": "CO2 + H2 -> CO + H2O",
+  "objective": "Optional literature-backed thermal-catalyst family for RWGS screening. These candidates are meant to compare cost pressure, route maturity, and evidence quality across low-temperature noble-metal, copper-ceria, and molybdenum-nitride directions.",
+  "decision_profiles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Balance catalyst cost, literature confidence, route maturity, and performance.",
+      "weights": {
+        "economics": 0.45,
+        "evidence": 0.2,
+        "route": 0.2,
+        "performance": 0.15
+      }
+    },
+    "cost-first": {
+      "label": "Cost-first",
+      "description": "Bias ranking toward current catalyst cost while preserving evidence and route guardrails.",
+      "weights": {
+        "economics": 0.6,
+        "evidence": 0.15,
+        "route": 0.15,
+        "performance": 0.1
+      }
+    },
+    "evidence-first": {
+      "label": "Evidence-first",
+      "description": "Reward transparent inputs and more defensible preparation routes.",
+      "weights": {
+        "economics": 0.35,
+        "evidence": 0.35,
+        "route": 0.15,
+        "performance": 0.15
+      }
+    }
+  },
+  "citations": [
+    {
+      "id": "cu-ceria-rwgs-ncomms-2022",
+      "label": "Nature Communications 2022",
+      "url": "https://doi.org/10.1038/s41467-022-28476-5",
+      "kind": "literature",
+      "note": "Copper-ceria route clarifying active-phase evolution and stable low-temperature RWGS behavior."
+    },
+    {
+      "id": "pt-moox-mon2-ncomms-2022",
+      "label": "Nature Communications 2022",
+      "url": "https://doi.org/10.1038/s41467-022-33308-7",
+      "kind": "literature",
+      "note": "Pt-MoOx/gamma-Mo2N route targeting high low-temperature RWGS activity through metal-support cooperation."
+    },
+    {
+      "id": "pt-tio2-ml-ncomms-2023",
+      "label": "Nature Communications 2023",
+      "url": "https://doi.org/10.1038/s41467-023-41341-3",
+      "kind": "literature",
+      "note": "Machine-learning-guided Pt/TiO2 catalyst design for lower-temperature RWGS optimization."
+    },
+    {
+      "id": "monx-dynamic-rwgs-ncomms-2024",
+      "label": "Nature Communications 2024",
+      "url": "https://doi.org/10.1038/s41467-024-47550-8",
+      "kind": "literature",
+      "note": "Product-driven dynamic activation of molybdenum nitride routes under RWGS conditions."
+    },
+    {
+      "id": "mo2n-highenergy-ncomms-2026",
+      "label": "Nature Communications 2026",
+      "url": "https://doi.org/10.1038/s41467-026-68756-y",
+      "kind": "literature",
+      "note": "High-energy Mo2N-based catalyst route prepared through pressure processing with in situ ammonia decomposition."
+    }
+  ],
+  "catalog_quotes": [],
+  "route_templates": [
+    {
+      "id": "cu-ceria-rwgs-route",
+      "name": "Copper-ceria RWGS route",
+      "manufacturing_mode": "Supported copper on ceria-rich oxide",
+      "preprocess": [
+        "Copper precursor balancing",
+        "Ceria solids staging",
+        "Low-temperature reduction window setup"
+      ],
+      "synthesis": [
+        "Mixed-oxide slurry assembly",
+        "Deposition or co-precipitation",
+        "Intermediate filtration and wash"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination",
+        "Reduction / conditioning"
+      ],
+      "quality_gates": [
+        "Cu-Ce contact proxy",
+        "CO selectivity screen",
+        "Low-temperature stability check"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "reactor_multistep",
+        "filter_rotary_vacuum",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple"
+      ],
+      "non_step_cost_per_lb": 0.86,
+      "route_confidence": 83,
+      "route_note": "Strong non-noble RWGS basis when low-temperature activity is needed without moving fully to a PGM route."
+    },
+    {
+      "id": "pt-tio2-rwgs-route",
+      "name": "Pt-TiO2 low-temperature RWGS route",
+      "manufacturing_mode": "Noble-metal low-temperature RWGS catalyst",
+      "preprocess": [
+        "PGM inventory accounting",
+        "Titania support conditioning",
+        "Low-loading deposition setup"
+      ],
+      "synthesis": [
+        "Incipient wetness or dispersion deposition",
+        "Controlled drying",
+        "Activation scheduling"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination / decomposition hold",
+        "Reduction and RWGS conditioning"
+      ],
+      "quality_gates": [
+        "Pt utilization check",
+        "Support contact verification",
+        "Low-temperature CO productivity screen"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple"
+      ],
+      "non_step_cost_per_lb": 0.94,
+      "route_confidence": 72,
+      "route_note": "Premium low-temperature route with strong activity upside but high sensitivity to Pt exposure and low-loading execution."
+    },
+    {
+      "id": "mo2n-rwgs-route",
+      "name": "Mo2N high-temperature RWGS route",
+      "manufacturing_mode": "Molybdenum nitride thermal route",
+      "preprocess": [
+        "Molybdenum precursor balancing",
+        "Nitride-forming atmosphere setup",
+        "Support or binder staging"
+      ],
+      "synthesis": [
+        "Multistep slurry or precursor assembly",
+        "Filtration and solids recovery",
+        "Nitridation hold"
+      ],
+      "postprocess": [
+        "Drying",
+        "High-temperature nitride formation",
+        "Conditioning under RWGS feed"
+      ],
+      "quality_gates": [
+        "Nitride-phase proxy",
+        "CO selectivity at high temperature",
+        "Deactivation trend screen"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "reactor_multistep",
+        "filter_rotary_vacuum",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_direct",
+        "reactor_simple"
+      ],
+      "non_step_cost_per_lb": 1.08,
+      "route_confidence": 75,
+      "route_note": "Cost-pressure relief route for hotter RWGS windows, with route discipline focused on nitride formation and deactivation control."
+    }
+  ],
+  "candidates": [
+    {
+      "slug": "cu-ceria-baseline",
+      "title": "Cu/CeO2 baseline",
+      "archetype": "Non-noble low-temperature route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Copper-ceria basis for RWGS screening when non-noble low-temperature activity matters.",
+      "route_template_id": "cu-ceria-rwgs-route",
+      "order_size_tons": 20,
+      "performance_index": 78,
+      "manufacturing_readiness": 82,
+      "screening_exactness": 77,
+      "temperature_window_c": [350, 550],
+      "literature_basis_ids": [
+        "cu-ceria-rwgs-ncomms-2022"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Best fit when you want to stay on broadly traded metals and still push RWGS toward lower temperature.",
+        "Ceria handling adds some route overhead, but economics remain materially easier than Pt-led routes."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Cu",
+          "wt_pct": 15.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Cu",
+            "precursor_markup": 1.08,
+            "note": "Live Cu feed with a mild precursor conversion markup."
+          }
+        },
+        {
+          "role": "support",
+          "name": "CeO2",
+          "wt_pct": 85.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.7756,
+            "evidence_label": "USGS ceria proxy",
+            "evidence_tier": "public_index",
+            "confidence_score": 74,
+            "transparency": "public_index",
+            "note": "2025 USGS cerium-oxide price used as a bulk oxide support/promoter proxy."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "pt-tio2-premium",
+      "title": "Pt/TiO2 premium",
+      "archetype": "Low-temperature premium",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "PGM-assisted RWGS route when low-temperature CO productivity is worth a noble-metal premium.",
+      "route_template_id": "pt-tio2-rwgs-route",
+      "order_size_tons": 20,
+      "performance_index": 93,
+      "manufacturing_readiness": 70,
+      "screening_exactness": 81,
+      "temperature_window_c": [250, 450],
+      "literature_basis_ids": [
+        "pt-moox-mon2-ncomms-2022",
+        "pt-tio2-ml-ncomms-2023"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Performance leader for colder RWGS operation, but the economics are dominated by Pt exposure.",
+        "Most useful as a premium benchmark or when reactor thermal limits are tight."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Pt",
+          "wt_pct": 2.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Pt",
+            "precursor_markup": 1.08,
+            "note": "Live Pt feed with a mild precursor markup for low-loading deposition."
+          }
+        },
+        {
+          "role": "support",
+          "name": "TiO2",
+          "wt_pct": 98.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.8,
+            "evidence_label": "TiO2 engineering proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 60,
+            "transparency": "derived_index",
+            "note": "Titania support term kept on a conservative engineering proxy to avoid reagent-pack distortion."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "mo2n-hightemp",
+      "title": "Mo2N high-temperature route",
+      "archetype": "Non-noble high-temperature route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Molybdenum-nitride route for hotter RWGS windows where non-noble economics matter more than very low-temperature activity.",
+      "route_template_id": "mo2n-rwgs-route",
+      "order_size_tons": 20,
+      "performance_index": 84,
+      "manufacturing_readiness": 73,
+      "screening_exactness": 78,
+      "temperature_window_c": [500, 750],
+      "literature_basis_ids": [
+        "monx-dynamic-rwgs-ncomms-2024",
+        "mo2n-highenergy-ncomms-2026"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Best cost-pressure-relief route in this family when the reactor can tolerate a hotter operating window.",
+        "Nitride formation and deactivation control are the main route risks rather than raw-material cost."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Mo",
+          "wt_pct": 65.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Mo",
+            "precursor_markup": 1.12,
+            "note": "Live molybdenum feed with a modest precursor/nitridation markup."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Al2O3",
+          "wt_pct": 35.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.2676,
+            "evidence_label": "USGS industrial alumina proxy",
+            "evidence_tier": "public_index",
+            "confidence_score": 72,
+            "transparency": "public_index",
+            "note": "2025 USGS alumina import value used as a bulk support or binder proxy."
+          }
+        }
+      ]
+    }
+  ]
+}

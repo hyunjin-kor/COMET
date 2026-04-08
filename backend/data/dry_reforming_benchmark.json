@@ -1,0 +1,336 @@
+{
+  "family": "dry-reforming",
+  "title": "Methane dry reforming reference family",
+  "catalyst_domain": "thermal",
+  "application_family": "general",
+  "reaction": "CH4 + CO2 -> 2 CO + 2 H2",
+  "objective": "Optional literature-backed thermal-catalyst family for methane dry reforming screening. These routes emphasize the tradeoff between non-noble economics, coke resistance, and high-temperature route maturity.",
+  "decision_profiles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Balance catalyst cost, evidence quality, route maturity, and performance.",
+      "weights": {
+        "economics": 0.45,
+        "evidence": 0.2,
+        "route": 0.2,
+        "performance": 0.15
+      }
+    },
+    "cost-first": {
+      "label": "Cost-first",
+      "description": "Bias ranking toward current catalyst cost while preserving evidence and route guardrails.",
+      "weights": {
+        "economics": 0.6,
+        "evidence": 0.15,
+        "route": 0.15,
+        "performance": 0.1
+      }
+    },
+    "evidence-first": {
+      "label": "Evidence-first",
+      "description": "Reward transparent inputs and more defensible preparation routes.",
+      "weights": {
+        "economics": 0.35,
+        "evidence": 0.35,
+        "route": 0.15,
+        "performance": 0.15
+      }
+    }
+  },
+  "citations": [
+    {
+      "id": "ni-single-atom-drm-ncomms-2019",
+      "label": "Nature Communications 2019",
+      "url": "https://doi.org/10.1038/s41467-019-12843-w",
+      "kind": "literature",
+      "note": "Atomically dispersed nickel route demonstrating coke-resistant DRM activity on ceria-derived supports."
+    },
+    {
+      "id": "cokefree-drm-ncomms-2023",
+      "label": "Nature Communications 2023",
+      "url": "https://doi.org/10.1038/s41467-023-43277-0",
+      "kind": "literature",
+      "note": "Coke-free DRM framework emphasizing balanced elementary-step kinetics rather than only maximizing methane activation."
+    },
+    {
+      "id": "ir-ceria-drm-ncomms-2024",
+      "label": "Nature Communications 2024",
+      "url": "https://doi.org/10.1038/s41467-024-48122-6",
+      "kind": "literature",
+      "note": "Ir@CeO2-x interfacial route with strong activity and coke suppression under DRM conditions."
+    },
+    {
+      "id": "ni-zeolite-drm-ncomms-2024",
+      "label": "Nature Communications 2024",
+      "url": "https://doi.org/10.1038/s41467-024-50729-8",
+      "kind": "literature",
+      "note": "Nickel-zeolite route showing how tuned metal-support interactions materially improve DRM stability."
+    },
+    {
+      "id": "ce-exsolved-perovskite-drm-ncomms-2025",
+      "label": "Nature Communications 2025",
+      "url": "https://doi.org/10.1038/s41467-025-65619-w",
+      "kind": "literature",
+      "note": "Ce-modified Ni-exsolved perovskite route with strong CH4 and CO2 conversion plus long-term robustness."
+    }
+  ],
+  "catalog_quotes": [],
+  "route_templates": [
+    {
+      "id": "ni-single-atom-drm-route",
+      "name": "Ni single-site ceria route",
+      "manufacturing_mode": "Low-loading Ni on oxygen-storage support",
+      "preprocess": [
+        "Ceria support conditioning",
+        "Low-loading nickel inventory setup",
+        "Dispersion-target window definition"
+      ],
+      "synthesis": [
+        "Dilute deposition or anchoring step",
+        "Wash and solids recovery",
+        "Shaping or granulation"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination",
+        "Reduction / DRM conditioning"
+      ],
+      "quality_gates": [
+        "Ni dispersion proxy",
+        "Carbon-resistance screen",
+        "Syngas-ratio spot test"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "reactor_multistep",
+        "filter_rotary_vacuum",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple"
+      ],
+      "non_step_cost_per_lb": 0.98,
+      "route_confidence": 74,
+      "route_note": "High-value non-noble route when coke resistance matters more than absolute simplicity."
+    },
+    {
+      "id": "ni-zeolite-drm-route",
+      "name": "Ni-zeolite stabilized route",
+      "manufacturing_mode": "Ni on structured zeolite support",
+      "preprocess": [
+        "Zeolite support staging",
+        "Nickel precursor balancing",
+        "Acidity-window setup"
+      ],
+      "synthesis": [
+        "Impregnation or ion-exchange loading",
+        "Controlled drying",
+        "Optional forming step"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination",
+        "Reduction and DRM conditioning"
+      ],
+      "quality_gates": [
+        "Ni-zeolite interaction proxy",
+        "Carbon deposition check",
+        "Long-hold stability screen"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "mill",
+        "reactor_simple"
+      ],
+      "non_step_cost_per_lb": 0.82,
+      "route_confidence": 81,
+      "route_note": "More transferable than single-atom routes while still focusing heavily on metal-support interaction control."
+    },
+    {
+      "id": "ir-ceria-drm-route",
+      "name": "Ir-CeO2-x premium route",
+      "manufacturing_mode": "Low-loading noble-metal interfacial DRM catalyst",
+      "preprocess": [
+        "PGM inventory accounting",
+        "Ceria support activation",
+        "Low-loading interfacial deposition setup"
+      ],
+      "synthesis": [
+        "Dilute noble-metal deposition",
+        "Controlled drying",
+        "Interfacial activation hold"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination",
+        "Reduction / coke-resistance conditioning"
+      ],
+      "quality_gates": [
+        "Ir utilization proxy",
+        "Ceria oxygen-storage check",
+        "Coke-free DRM screen"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple"
+      ],
+      "non_step_cost_per_lb": 1.06,
+      "route_confidence": 69,
+      "route_note": "Premium DRM route used when activity and anti-coking performance justify noble-metal exposure."
+    }
+  ],
+  "candidates": [
+    {
+      "slug": "ni-single-atom-ceria",
+      "title": "Ni/CeO2 single-site route",
+      "archetype": "Coke-resistant non-noble route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Low-loading nickel route that uses oxygen-storage support engineering to suppress coke during DRM.",
+      "route_template_id": "ni-single-atom-drm-route",
+      "order_size_tons": 20,
+      "performance_index": 90,
+      "manufacturing_readiness": 74,
+      "screening_exactness": 84,
+      "temperature_window_c": [650, 800],
+      "literature_basis_ids": [
+        "ni-single-atom-drm-ncomms-2019",
+        "cokefree-drm-ncomms-2023"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Strong non-noble DRM route when catalyst replacement and carbon management both matter.",
+        "Single-site or highly dispersed preparation keeps route maturity below simpler Ni-supported baselines."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Ni",
+          "wt_pct": 8.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ni",
+            "precursor_markup": 1.16,
+            "note": "Live nickel feed with precursor markup for low-loading deposition."
+          }
+        },
+        {
+          "role": "support",
+          "name": "CeO2",
+          "wt_pct": 92.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.7756,
+            "evidence_label": "USGS ceria proxy",
+            "evidence_tier": "public_index",
+            "confidence_score": 74,
+            "transparency": "public_index",
+            "note": "2025 USGS cerium-oxide price used as a bulk support/promoter proxy."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "ni-zeolite-stable",
+      "title": "Ni-zeolite stabilized route",
+      "archetype": "Industrializable non-noble route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Nickel route that leans on structured support interactions rather than noble-metal loading to improve DRM stability.",
+      "route_template_id": "ni-zeolite-drm-route",
+      "order_size_tons": 20,
+      "performance_index": 83,
+      "manufacturing_readiness": 80,
+      "screening_exactness": 79,
+      "temperature_window_c": [650, 820],
+      "literature_basis_ids": [
+        "ni-zeolite-drm-ncomms-2024",
+        "cokefree-drm-ncomms-2023"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Best fit when you want a more transferable non-noble DRM route than single-site Ni while still improving stability.",
+        "Support engineering is the main route premium rather than raw-metal exposure."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Ni",
+          "wt_pct": 12.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ni",
+            "precursor_markup": 1.16,
+            "note": "Live nickel feed with precursor markup."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Zeolite",
+          "wt_pct": 88.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.65,
+            "evidence_label": "Zeolite screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 60,
+            "transparency": "derived_index",
+            "note": "Structured zeolite support term retained as a conservative engineering proxy pending a cleaner public bulk quote."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "ir-ceria-premium",
+      "title": "Ir@CeO2-x premium",
+      "archetype": "Premium anti-coking route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Low-loading iridium route for DRM when anti-coking performance is worth a noble-metal premium.",
+      "route_template_id": "ir-ceria-drm-route",
+      "order_size_tons": 20,
+      "performance_index": 95,
+      "manufacturing_readiness": 68,
+      "screening_exactness": 85,
+      "temperature_window_c": [650, 750],
+      "literature_basis_ids": [
+        "ir-ceria-drm-ncomms-2024",
+        "ce-exsolved-perovskite-drm-ncomms-2025"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Performance leader for this family, but noble-metal exposure is hard to justify unless coking limits dominate economics.",
+        "Use as a premium benchmark rather than a default procurement basis."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Ir",
+          "wt_pct": 0.6,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ir",
+            "precursor_markup": 1.1,
+            "note": "Ir reference feed with a mild precursor markup for very low-loading deposition."
+          }
+        },
+        {
+          "role": "support",
+          "name": "CeO2",
+          "wt_pct": 99.4,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.7756,
+            "evidence_label": "USGS ceria proxy",
+            "evidence_tier": "public_index",
+            "confidence_score": 74,
+            "transparency": "public_index",
+            "note": "2025 USGS cerium-oxide price used as a bulk oxygen-storage support proxy."
+          }
+        }
+      ]
+    }
+  ]
+}

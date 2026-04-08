@@ -1,0 +1,338 @@
+{
+  "family": "formic-acid-dehydrogenation",
+  "title": "Formic-acid dehydrogenation reference family",
+  "catalyst_domain": "thermal",
+  "application_family": "general",
+  "reaction": "HCOOH -> H2 + CO2",
+  "objective": "Optional literature-backed thermal-catalyst family for liquid organic hydrogen carrier screening around formic-acid dehydrogenation. These candidates compare a practical Pd/C anchor with newer non-noble and Pt-Mo ensemble routes that target faster hydrogen release or lower noble-metal intensity.",
+  "decision_profiles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Balance catalyst cost, evidence quality, route maturity, and reported performance.",
+      "weights": {
+        "economics": 0.45,
+        "evidence": 0.2,
+        "route": 0.2,
+        "performance": 0.15
+      }
+    },
+    "cost-first": {
+      "label": "Cost-first",
+      "description": "Bias ranking toward catalyst cost while preserving route and evidence guardrails.",
+      "weights": {
+        "economics": 0.6,
+        "evidence": 0.15,
+        "route": 0.15,
+        "performance": 0.1
+      }
+    },
+    "evidence-first": {
+      "label": "Evidence-first",
+      "description": "Reward transparent pricing anchors and more reproducible preparation routes.",
+      "weights": {
+        "economics": 0.35,
+        "evidence": 0.35,
+        "route": 0.15,
+        "performance": 0.15
+      }
+    }
+  },
+  "citations": [
+    {
+      "id": "ptmo-fad-ncomms-2023",
+      "label": "Nature Communications 2023",
+      "url": "https://www.nature.com/articles/s41467-023-42759-5",
+      "kind": "literature",
+      "note": "Pt-Mo ensemble catalyst reported for highly efficient gas-phase formic-acid dehydrogenation with minimal CO production."
+    },
+    {
+      "id": "pd-fad-mechanism-ncomms-2024",
+      "label": "Nature Communications 2024",
+      "url": "https://www.nature.com/articles/s41467-024-51926-1",
+      "kind": "literature",
+      "note": "Mechanistic study clarifying how palladium surfaces mediate low-temperature formic-acid dehydrogenation pathways."
+    },
+    {
+      "id": "co-fad-ncomms-2024",
+      "label": "Nature Communications 2024",
+      "url": "https://www.nature.com/articles/s41467-024-52517-w",
+      "kind": "literature",
+      "note": "Co single-atoms plus nanoparticles on N-doped carbon reported as a non-noble route for formic-acid dehydrogenation."
+    }
+  ],
+  "catalog_quotes": [],
+  "route_templates": [
+    {
+      "id": "pd-carbon-fad-route",
+      "name": "Pd/C dehydrogenation route",
+      "manufacturing_mode": "Supported Pd hydrogen-carrier catalyst",
+      "preprocess": [
+        "Carbon support drying and sizing",
+        "Pd precursor balancing",
+        "Deposition window setup"
+      ],
+      "synthesis": [
+        "Dilute impregnation or slurry deposition",
+        "Controlled hold after deposition"
+      ],
+      "postprocess": [
+        "Drying",
+        "Mild thermal decomposition",
+        "Hydrogen or formic-acid conditioning"
+      ],
+      "quality_gates": [
+        "Pd loading verification",
+        "CO selectivity screen",
+        "Low-temperature H2 release test"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple"
+      ],
+      "non_step_cost_per_lb": 0.58,
+      "route_confidence": 88,
+      "route_note": "Closest screening proxy to practical supported-Pd formic-acid dehydrogenation catalysts."
+    },
+    {
+      "id": "co-nc-fad-route",
+      "name": "Co-NC non-noble route",
+      "manufacturing_mode": "Pyrolyzed Co single-atom and nanoparticle route",
+      "preprocess": [
+        "Cobalt and nitrogen-precursor batching",
+        "Carbon host balancing",
+        "Pyrolysis atmosphere setup"
+      ],
+      "synthesis": [
+        "Precursor assembly",
+        "Pyrolysis",
+        "Acid wash and solids recovery"
+      ],
+      "postprocess": [
+        "Secondary thermal stabilization",
+        "Drying",
+        "Liquid-phase activation"
+      ],
+      "quality_gates": [
+        "Co dispersion proxy",
+        "Residual metal leaching check",
+        "Hydrogen release and CO screen"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "reactor_multistep",
+        "filter_rotary_vacuum",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple"
+      ],
+      "non_step_cost_per_lb": 0.84,
+      "route_confidence": 73,
+      "route_note": "Attractive non-noble option for hydrogen-carrier screening, but pyrolysis and acid-wash discipline reduce route maturity."
+    },
+    {
+      "id": "ptmo-fad-route",
+      "name": "Pt-Mo ensemble route",
+      "manufacturing_mode": "Pt-Mo gas-phase dehydrogenation catalyst",
+      "preprocess": [
+        "Pt and Mo precursor accounting",
+        "Support staging",
+        "Low-loading ensemble-control setup"
+      ],
+      "synthesis": [
+        "Multistep deposition",
+        "Intermediate wash or solvent swap",
+        "Controlled ensemble stabilization"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination or decomposition hold",
+        "Reduction / activation"
+      ],
+      "quality_gates": [
+        "Pt-Mo ensemble proxy",
+        "CO suppression screen",
+        "Gas-phase H2 productivity check"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "reactor_multistep",
+        "filter_rotary_vacuum",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple"
+      ],
+      "non_step_cost_per_lb": 1.02,
+      "route_confidence": 76,
+      "route_note": "High-performance premium route when cleaner gas-phase H2 release matters more than absolute catalyst cost."
+    }
+  ],
+  "candidates": [
+    {
+      "slug": "pd-carbon-baseline",
+      "title": "Pd/C baseline",
+      "archetype": "Commercial benchmark",
+      "screening_basis": "engineering_proxy",
+      "summary": "Supported palladium route used as a practical anchor for formic-acid dehydrogenation screening.",
+      "route_template_id": "pd-carbon-fad-route",
+      "order_size_tons": 5,
+      "performance_index": 80,
+      "manufacturing_readiness": 89,
+      "screening_exactness": 77,
+      "temperature_window_c": [
+        25,
+        120
+      ],
+      "literature_basis_ids": [
+        "pd-fad-mechanism-ncomms-2024"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Best fit when a familiar and defensible supported-Pd screening anchor is needed for LOHC hydrogen-release work.",
+        "Palladium keeps route maturity high, but catalyst economics remain exposed to precious-metal pricing."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Pd",
+          "wt_pct": 5.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Pd",
+            "precursor_markup": 1.08,
+            "note": "Live palladium feed with precursor conversion markup."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Carbon",
+          "wt_pct": 95.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.6,
+            "evidence_label": "Activated carbon screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 60,
+            "transparency": "derived_proxy",
+            "note": "Activated-carbon support price held on an engineering proxy for hydrogen-carrier screening."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "co-nc-nonnoble",
+      "title": "Co-SAs/NPs@NC route",
+      "archetype": "Non-noble performance route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Cobalt single-atom and nanoparticle route on N-doped carbon for lower-cost formic-acid dehydrogenation screening.",
+      "route_template_id": "co-nc-fad-route",
+      "order_size_tons": 5,
+      "performance_index": 87,
+      "manufacturing_readiness": 72,
+      "screening_exactness": 71,
+      "temperature_window_c": [
+        25,
+        100
+      ],
+      "literature_basis_ids": [
+        "co-fad-ncomms-2024"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Useful when the program goal is to avoid palladium while keeping hydrogen-release performance credible.",
+        "Pyrolysis and acid-wash complexity reduce reproducibility versus the supported-Pd baseline."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Co",
+          "wt_pct": 3.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Co",
+            "precursor_markup": 1.12,
+            "note": "Live cobalt feed with precursor conversion markup."
+          }
+        },
+        {
+          "role": "support",
+          "name": "N-doped carbon",
+          "wt_pct": 97.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.8,
+            "evidence_label": "N-doped carbon screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 58,
+            "transparency": "derived_proxy",
+            "note": "N-doped carbon host held on an engineering proxy until a cleaner public bulk basis is curated."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "ptmo-gasphase-premium",
+      "title": "Pt-Mo ensemble route",
+      "archetype": "Premium high-performance route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Pt-Mo ensemble catalyst emphasizing gas-phase hydrogen release with very low CO impurity.",
+      "route_template_id": "ptmo-fad-route",
+      "order_size_tons": 5,
+      "performance_index": 92,
+      "manufacturing_readiness": 76,
+      "screening_exactness": 74,
+      "temperature_window_c": [
+        80,
+        200
+      ],
+      "literature_basis_ids": [
+        "ptmo-fad-ncomms-2023"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Best used when gas-phase formic-acid dehydrogenation and very low CO are worth a platinum premium.",
+        "Pt and Mo ensemble control improves the performance score but keeps the route less mature than supported Pd."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Pt",
+          "wt_pct": 3.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Pt",
+            "precursor_markup": 1.05,
+            "note": "Live platinum feed with precursor conversion markup."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "Mo",
+          "wt_pct": 2.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Mo",
+            "precursor_markup": 1.1,
+            "note": "Indexed molybdenum feed with precursor conversion markup."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Carbon",
+          "wt_pct": 95.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.6,
+            "evidence_label": "Activated carbon screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 60,
+            "transparency": "derived_proxy",
+            "note": "Activated-carbon support price held on an engineering proxy for hydrogen-carrier screening."
+          }
+        }
+      ]
+    }
+  ]
+}

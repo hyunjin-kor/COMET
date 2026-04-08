@@ -53,6 +53,20 @@
       "note": "Ionomer-free porous-transport-electrode route showing sub-0.1 mgIr cm-2 operation and easier recyclability."
     },
     {
+      "id": "ru-sulfate-ncomms-2023",
+      "label": "Nature Communications 2023",
+      "url": "https://www.nature.com/articles/s41467-023-43977-7",
+      "kind": "literature",
+      "note": "Cation-anchored sulfate strategy for stabilizing RuO2 toward durable acidic OER and PEMWE translation."
+    },
+    {
+      "id": "ru-confinement-ncomms-2024",
+      "label": "Nature Communications 2024",
+      "url": "https://www.nature.com/articles/s41467-024-55747-0",
+      "kind": "literature",
+      "note": "Confinement-engineered RuO2 route aimed at suppressing Ru over-oxidation and lattice-oxygen loss in PEMWE duty."
+    },
+    {
       "id": "ir-o-mn-ncomms-2025",
       "label": "Nature Communications 2025",
       "url": "https://www.nature.com/articles/s41467-024-54646-8",
@@ -86,6 +100,20 @@
       "url": "https://www.nature.com/articles/s41467-025-59710-5",
       "kind": "literature",
       "note": "Nb and Mn co-doped RuO2 route sustaining PEM water splitting under high current with a 1000 h device test."
+    },
+    {
+      "id": "ru-hea-ncomms-2025",
+      "label": "Nature Communications 2025",
+      "url": "https://www.nature.com/articles/s41467-025-61763-5",
+      "kind": "literature",
+      "note": "High-entropy RuO2 route following a dual-site oxide path for durable acidic OER and long PEMWE operation."
+    },
+    {
+      "id": "f-ruo2-ncomms-2025",
+      "label": "Nature Communications 2025",
+      "url": "https://www.nature.com/articles/s41467-025-66475-4",
+      "kind": "literature",
+      "note": "Fluorination-induced symmetry breaking in RuO2 that shifts acidic OER toward a more durable oxygen-redox pathway."
     },
     {
       "id": "co-ruo2-natcatal-2026",
@@ -458,7 +486,11 @@
       "screening_exactness": 77,
       "temperature_window_c": [50, 80],
       "literature_basis_ids": [
+        "ru-sulfate-ncomms-2023",
+        "ru-confinement-ncomms-2024",
         "ru-nb-mn-ncomms-2025",
+        "ru-hea-ncomms-2025",
+        "f-ruo2-ncomms-2025",
         "co-ruo2-natcatal-2026",
         "rutio-mesoporous-ncomms-2026"
       ],
