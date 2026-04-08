@@ -351,6 +351,41 @@ export const checkHealth = () => request<{ status: string; version: string }>('/
 export const refreshPrices = () =>
   request<{ status: string; prices_fetched: number }>('/prices/refresh', { method: 'POST' });
 
+export interface EstimateRangeResult {
+  mean: number;
+  median: number;
+  std: number;
+  min: number;
+  max: number;
+  p5: number;
+  p25: number;
+  p75: number;
+  p95: number;
+  n_simulations: number;
+  n_successful: number;
+  unit: string;
+  baseline_price_per_lb: number;
+  baseline_price_per_kg: number;
+  composition: string;
+  catalyst_domain: Extract<CatalystDomain, 'thermal' | 'electrocatalyst'>;
+  application_family: ApplicationFamily;
+  uncertainties_applied: Record<string, [number, number]>;
+}
+
+export const runEstimateRange = (
+  calculationInput: CostInput,
+  nSimulations: number,
+  uncertainties: Record<string, [number, number]>,
+) =>
+  request<EstimateRangeResult>('/uncertainty', {
+    method: 'POST',
+    body: JSON.stringify({
+      calculation_input: calculationInput,
+      n_simulations: nSimulations,
+      uncertainties,
+    }),
+  });
+
 export interface BenchmarkFamilySummary {
   family: string;
   title: string;

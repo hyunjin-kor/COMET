@@ -1,28 +1,15 @@
 import type { ReactNode } from 'react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { WorkspaceSectionFooter, WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
-import { apiUrl } from '../lib/api';
+import { runEstimateRange, type CostInput, type EstimateRangeResult } from '../lib/api';
+import { loadCalculatorDraft, loadCalculatorResultSnapshot, type CalculatorDraft, type CalculatorRow } from '../lib/calculator-session';
 import { useUnit } from '../lib/use-unit';
 
-interface MCResult {
-  mean: number;
-  median: number;
-  std: number;
-  min: number;
-  max: number;
-  p5: number;
-  p25: number;
-  p75: number;
-  p95: number;
-  n_simulations: number;
-  n_successful: number;
-}
-
-const KNOWN_METALS = ['Ni', 'Co', 'Pt', 'Pd', 'Rh', 'Ru', 'Cu', 'Fe', 'Mo', 'W'];
-const RISK_SECTIONS: WorkspaceSection[] = [
-  { id: 'inputs', label: 'Inputs', summary: 'Set the baseline and sampling size.' },
-  { id: 'results', label: 'Results', summary: 'Read percentile bands and spread.' },
+const RANGE_SECTIONS: WorkspaceSection[] = [
+  { id: 'case', label: 'Current Case', summary: 'Use the same draft that feeds Cost Estimate.' },
+  { id: 'range', label: 'Estimate Range', summary: 'Run Monte Carlo around the same catalyst case.' },
 ];
 
 function StatTile({ label, value, detail }: { label: string; value: string; detail: string }) {
@@ -65,8 +52,126 @@ function FieldBlock({
   );
 }
 
+function bandBounds(percent: number): [number, number] {
+  const bounded = Math.max(0, percent) / 100;
+  return [Math.max(0.01, 1 - bounded), 1 + bounded];
+}
+
+function thermalRowSummary(rows: CalculatorRow[], role: 'active_metal' | 'promoter' | 'support') {
+  return rows
+    .filter((row) => row.role === role && row.name.trim().length > 0 && row.wt_pct > 0)
+    .map((row) => `${row.name} ${row.wt_pct.toFixed(1)} wt%`)
+    .join(' + ');
+}
+
+function describeDraftCase(draft: CalculatorDraft, snapshotComposition: string | null) {
+  if (draft.catalystDomain === 'electrocatalyst') {
+    return snapshotComposition || 'Current electrocatalyst stack from Cost Estimate';
+  }
+
+  const active = thermalRowSummary(draft.rows, 'active_metal');
+  const promoters = thermalRowSummary(draft.rows, 'promoter');
+  const supports = thermalRowSummary(draft.rows, 'support');
+
+  if (active && supports) {
+    return promoters ? `${active} + ${promoters} on ${supports}` : `${active} on ${supports}`;
+  }
+  return active || supports || snapshotComposition || 'Current thermal catalyst draft';
+}
+
+function buildRangeInputFromDraft(draft: CalculatorDraft): CostInput | null {
+  if (draft.catalystDomain === 'electrocatalyst') {
+    const electro = draft.electrocatalystConfig;
+    if (
+      !electro
+      || !electro.catalystMaterialKey
+      || !electro.ionomerMaterialKey
+      || !electro.membraneMaterialKey
+      || !electro.substrateMaterialKey
+    ) {
+      return null;
+    }
+
+    return {
+      catalyst_domain: 'electrocatalyst',
+      application_family: draft.applicationFamily ?? 'general',
+      template_id: electro.templateId || undefined,
+      order_size_tons: draft.orderSize,
+      steps: draft.steps,
+      components: [{
+        role: 'active_catalyst',
+        material_key: electro.catalystMaterialKey,
+        wt_pct: 100,
+        name: 'Electrocatalyst powder',
+      }],
+      electrode_input: {
+        application_family: draft.applicationFamily ?? 'general',
+        catalyst_material_key: electro.catalystMaterialKey,
+        ionomer_material_key: electro.ionomerMaterialKey,
+        membrane_material_key: electro.membraneMaterialKey,
+        substrate_material_key: electro.substrateMaterialKey,
+        active_area_cm2: electro.activeAreaCm2,
+        catalyst_loading_mg_cm2: electro.catalystLoadingMgCm2,
+        ionomer_to_catalyst_ratio: electro.ionomerToCatalystRatio,
+      },
+    };
+  }
+
+  const thermalRows = draft.rows.filter((row) =>
+    (row.role === 'active_metal' || row.role === 'promoter' || row.role === 'support')
+  );
+  const supportRows = thermalRows.filter((row) => row.role === 'support');
+  const nonSupportRows = thermalRows.filter((row) => row.role !== 'support');
+  const supportIsSplit = supportRows.length > 1;
+  const completedNonSupportRows = nonSupportRows.filter((row) => row.name.trim().length > 0 && row.wt_pct > 0);
+  const nonSupportWt = completedNonSupportRows.reduce((sum, row) => sum + row.wt_pct, 0);
+  const supportWtPct = Math.max(0, 100 - nonSupportWt);
+  const completedSupportRows = supportRows.filter((row) => supportIsSplit
+    ? row.name.trim().length > 0 && row.wt_pct > 0
+    : row.name.trim().length > 0);
+
+  if (completedNonSupportRows.length === 0 || completedSupportRows.length === 0) return null;
+  if (!supportIsSplit && supportWtPct <= 0) return null;
+  if (supportIsSplit) {
+    const totalWt = completedNonSupportRows.reduce((sum, row) => sum + row.wt_pct, 0)
+      + completedSupportRows.reduce((sum, row) => sum + row.wt_pct, 0);
+    if (Math.abs(totalWt - 100) > 0.05) return null;
+  }
+
+  const components = [
+    ...completedNonSupportRows.map((row) => ({
+      role: row.role,
+      name: row.name,
+      material_key: row.source_type === 'manual' ? undefined : row.material_key ?? undefined,
+      wt_pct: row.wt_pct,
+      price_per_lb: row.source_type === 'manual' || !row.material_key ? row.price_per_lb : undefined,
+    })),
+    ...completedSupportRows.map((row, index) => ({
+      role: 'support' as const,
+      name: row.name,
+      material_key: row.source_type === 'manual' ? undefined : row.material_key ?? undefined,
+      wt_pct: supportIsSplit ? row.wt_pct : index === 0 ? supportWtPct : 0,
+      price_per_lb: row.source_type === 'manual' || !row.material_key ? row.price_per_lb : undefined,
+    })).filter((row) => row.wt_pct > 0),
+  ];
+
+  return {
+    catalyst_domain: 'thermal',
+    application_family: draft.applicationFamily ?? 'general',
+    order_size_tons: draft.orderSize,
+    steps: draft.steps,
+    include_spent_value: draft.includeSpentValue ?? false,
+    reactor_type: draft.reactorType ?? 'fixed',
+    catalyst_bulk_density: draft.catalystBulkDensity ?? 50,
+    components,
+  };
+}
+
 export default function Uncertainty() {
-  const { toDisplay, toInternal, fmtLabel } = useUnit();
+  const navigate = useNavigate();
+  const { toDisplay, fmtLabel } = useUnit();
+  const draft = loadCalculatorDraft();
+  const latestSnapshot = loadCalculatorResultSnapshot();
   const {
     activeSection,
     activeSectionId,
@@ -76,188 +181,245 @@ export default function Uncertainty() {
     goNext,
     goPrevious,
     setActiveSection,
-  } = useWorkspaceSections(RISK_SECTIONS, 'risk');
-  const [result, setResult] = useState<MCResult | null>(null);
+  } = useWorkspaceSections(RANGE_SECTIONS, 'estimate-range');
+  const [result, setResult] = useState<EstimateRangeResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [metalSymbol, setMetalSymbol] = useState('Ni');
-  const [metalPriceInternal, setMetalPriceInternal] = useState(7.5);
-  const [loadingPct, setLoadingPct] = useState(15);
-  const [orderSize, setOrderSize] = useState(20);
   const [nSim, setNSim] = useState(1000);
+  const [activeBandPct, setActiveBandPct] = useState(30);
+  const [promoterBandPct, setPromoterBandPct] = useState(20);
+  const [supportBandPct, setSupportBandPct] = useState(20);
+  const [adjunctBandPct, setAdjunctBandPct] = useState(15);
+  const [orderBandPct, setOrderBandPct] = useState(20);
 
-  const d = (value: number) => toDisplay(value);
+  const calculationInput = draft ? buildRangeInputFromDraft(draft) : null;
+  const canRun = calculationInput !== null && draft !== null && draft.steps.length > 0;
+  const snapshotComposition =
+    latestSnapshot && draft && latestSnapshot.result.input_summary.catalyst_domain === draft.catalystDomain
+      ? String(latestSnapshot.result.input_summary.composition ?? '')
+      : null;
+  const caseSummary = draft ? describeDraftCase(draft, snapshotComposition) : 'No current Cost Estimate draft';
   const histData = result
     ? [
-        { range: `${d(result.min).toFixed(1)}-${d(result.p5).toFixed(1)}`, value: 5, fill: '#f3a08d' },
-        { range: `${d(result.p5).toFixed(1)}-${d(result.p25).toFixed(1)}`, value: 20, fill: '#efc36c' },
-        { range: `${d(result.p25).toFixed(1)}-${d(result.median).toFixed(1)}`, value: 25, fill: '#78f2d0' },
-        { range: `${d(result.median).toFixed(1)}-${d(result.p75).toFixed(1)}`, value: 25, fill: '#78f2d0' },
-        { range: `${d(result.p75).toFixed(1)}-${d(result.p95).toFixed(1)}`, value: 20, fill: '#88a8ff' },
-        { range: `${d(result.p95).toFixed(1)}-${d(result.max).toFixed(1)}`, value: 5, fill: '#efc36c' },
+        { range: `${toDisplay(result.min).toFixed(1)}-${toDisplay(result.p5).toFixed(1)}`, value: 5, fill: '#f3a08d' },
+        { range: `${toDisplay(result.p5).toFixed(1)}-${toDisplay(result.p25).toFixed(1)}`, value: 20, fill: '#efc36c' },
+        { range: `${toDisplay(result.p25).toFixed(1)}-${toDisplay(result.median).toFixed(1)}`, value: 25, fill: '#78f2d0' },
+        { range: `${toDisplay(result.median).toFixed(1)}-${toDisplay(result.p75).toFixed(1)}`, value: 25, fill: '#78f2d0' },
+        { range: `${toDisplay(result.p75).toFixed(1)}-${toDisplay(result.p95).toFixed(1)}`, value: 20, fill: '#88a8ff' },
+        { range: `${toDisplay(result.p95).toFixed(1)}-${toDisplay(result.max).toFixed(1)}`, value: 5, fill: '#efc36c' },
       ]
     : [];
 
-  const handleRun = async () => {
+  async function handleRun() {
+    if (!calculationInput || !draft) return;
     setLoading(true);
     setError('');
 
     try {
-      const response = await fetch(apiUrl('/uncertainty'), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          metal_symbol: metalSymbol,
-          metal_price: metalPriceInternal,
-          metal_price_unit: '$/lb',
-          metal_loading_wt_pct: loadingPct,
-          order_size_tons: orderSize,
-          n_simulations: nSim,
-          uncertainties: {
-            metal_price: [0.7, 1.3],
-            support_price_per_lb: [0.8, 1.2],
-            order_size_tons: [0.8, 1.2],
-          },
-        }),
+      const nextResult = await runEstimateRange(calculationInput, nSim, {
+        active_component_price: bandBounds(activeBandPct),
+        promoter_price: bandBounds(promoterBandPct),
+        support_price: bandBounds(supportBandPct),
+        electrode_adjunct_price: bandBounds(adjunctBandPct),
+        order_size_tons: bandBounds(orderBandPct),
       });
-
-      if (!response.ok) throw new Error((await response.json()).detail);
-      setResult(await response.json());
-      setActiveSection('results');
+      setResult(nextResult);
+      setActiveSection('range');
     } catch (caughtError: unknown) {
-      setError(caughtError instanceof Error ? caughtError.message : 'Analysis failed');
+      setError(caughtError instanceof Error ? caughtError.message : 'Range analysis failed');
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   return (
     <div className="space-y-4">
       <WorkspaceSectionNav
-        sections={RISK_SECTIONS}
+        sections={RANGE_SECTIONS}
         activeSectionId={activeSectionId}
         activeIndex={activeIndex}
         onSelect={setActiveSection}
       />
 
-      {activeSection.id === 'inputs' ? (
+      {activeSection.id === 'case' ? (
         <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.06s' }}>
           <div className="border-b border-slate-900/8 pb-5">
-            <div className="cp-subtle-label">Risk Range</div>
-            <h2 className="cp-heading-xl mt-2">Stress-test the estimate</h2>
+            <div className="cp-subtle-label">Estimate Range</div>
+            <h2 className="cp-heading-xl mt-2">Read the uncertainty around the same estimate case.</h2>
             <p className="cp-body-copy mt-2 max-w-2xl">
-              Set a baseline and generate a cost range for the inputs that move the estimate the most.
+              This page uses the current draft from Cost Estimate. Edit the catalyst case there, then run the range here.
             </p>
           </div>
 
-          <div className="mt-5 grid gap-4 md:grid-cols-2">
-            <FieldBlock label="Metal symbol">
-              <select value={metalSymbol} onChange={(event) => setMetalSymbol(event.target.value)} className="input-base">
-                {KNOWN_METALS.map((metal) => (
-                  <option key={metal} value={metal}>
-                    {metal}
-                  </option>
-                ))}
-              </select>
-            </FieldBlock>
-
-            <FieldBlock label="Metal price" hint={fmtLabel}>
-              <input
-                type="number"
-                step="0.01"
-                value={toDisplay(metalPriceInternal).toFixed(2)}
-                onChange={(event) => setMetalPriceInternal(toInternal(Number(event.target.value)))}
-                className="input-base font-mono"
-              />
-            </FieldBlock>
-
-            <FieldBlock label="Loading" hint="wt%">
-              <input
-                type="number"
-                step="0.5"
-                value={loadingPct}
-                onChange={(event) => setLoadingPct(Number(event.target.value))}
-                className="input-base font-mono"
-              />
-            </FieldBlock>
-
-            <FieldBlock label="Order size" hint="tons">
-              <input
-                type="number"
-                step="1"
-                value={orderSize}
-                onChange={(event) => setOrderSize(Number(event.target.value))}
-                className="input-base font-mono"
-              />
-            </FieldBlock>
-
-            <FieldBlock label="Simulation count" hint="100 to 10000">
-              <input
-                type="number"
-                step="100"
-                min="100"
-                max="10000"
-                value={nSim}
-                onChange={(event) => setNSim(Number(event.target.value))}
-                className="input-base font-mono"
-              />
-            </FieldBlock>
-          </div>
-
-          <div className="mt-5 grid gap-3 sm:grid-cols-3">
-            <div className="cp-metric-tile">
-              <div className="cp-subtle-label">Metal price band</div>
-              <div className="mt-2 text-lg font-semibold text-slate-950">+/- 30%</div>
-              <div className="mt-1 text-xs leading-5 text-slate-500">Applied around the baseline metal quote</div>
+          {!draft || !canRun ? (
+            <div className="mt-5 rounded-[24px] border border-amber-200 bg-amber-50/80 px-5 py-5 text-sm text-amber-900">
+              <div className="font-semibold">No valid Cost Estimate draft is ready.</div>
+              <div className="mt-2 leading-6">
+                Build the catalyst case first, then come back here to quantify the price range around the same workflow.
+              </div>
+              <button onClick={() => navigate('/')} className="cp-button-secondary mt-4 px-4 py-2">
+                Open Cost Estimate
+              </button>
             </div>
-            <div className="cp-metric-tile">
-              <div className="cp-subtle-label">Support price band</div>
-              <div className="mt-2 text-lg font-semibold text-slate-950">+/- 20%</div>
-              <div className="mt-1 text-xs leading-5 text-slate-500">Support cost sensitivity window</div>
-            </div>
-            <div className="cp-metric-tile">
-              <div className="cp-subtle-label">Campaign size band</div>
-              <div className="mt-2 text-lg font-semibold text-slate-950">+/- 20%</div>
-              <div className="mt-1 text-xs leading-5 text-slate-500">Order-size sensitivity window</div>
-            </div>
-          </div>
+          ) : (
+            <>
+              <div className="mt-5 grid gap-3 lg:grid-cols-3">
+                <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
+                  <div className="cp-subtle-label">Current case</div>
+                  <div className="mt-2 text-base font-semibold text-slate-950">{caseSummary}</div>
+                  <div className="mt-1 text-xs leading-6 text-slate-500">
+                    {draft.catalystDomain === 'electrocatalyst' ? 'Electrocatalyst stack' : 'Thermocatalyst recipe'}
+                  </div>
+                </div>
+                <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
+                  <div className="cp-subtle-label">Preparation basis</div>
+                  <div className="mt-2 text-base font-semibold text-slate-950">{draft.steps.length} step{draft.steps.length === 1 ? '' : 's'}</div>
+                  <div className="mt-1 text-xs leading-6 text-slate-500">{draft.steps.join(', ') || 'No steps selected'}</div>
+                </div>
+                <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
+                  <div className="cp-subtle-label">Campaign scale</div>
+                  <div className="mt-2 text-base font-semibold text-slate-950">{draft.orderSize} tons</div>
+                  <div className="mt-1 text-xs leading-6 text-slate-500">
+                    {draft.applicationFamily ?? 'general'} / {draft.catalystDomain}
+                  </div>
+                </div>
+              </div>
 
-          <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <button onClick={handleRun} disabled={loading} className="cp-button-primary min-w-[240px]">
-              {loading ? (
-                <>
-                  <span className="mr-2 inline-flex h-4 w-4 animate-spin rounded-full border-2 border-slate-950 border-t-transparent" />
-                  Running range check
-                </>
-              ) : (
-                `Run range check (${nSim.toLocaleString('en-US')})`
-              )}
-            </button>
+              <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                <FieldBlock label="Simulation count" hint="100 to 10000">
+                  <input
+                    type="number"
+                    step="100"
+                    min="100"
+                    max="10000"
+                    value={nSim}
+                    onChange={(event) => setNSim(Number(event.target.value))}
+                    className="input-base font-mono"
+                  />
+                </FieldBlock>
 
-            <div className="text-xs leading-6 text-slate-500">
-              Percentile bands update on the right after the sampling run completes.
-            </div>
-          </div>
+                <FieldBlock label={draft.catalystDomain === 'electrocatalyst' ? 'Catalyst powder band' : 'Active metal band'} hint="+/- %">
+                  <input
+                    type="number"
+                    step="1"
+                    min="0"
+                    max="100"
+                    value={activeBandPct}
+                    onChange={(event) => setActiveBandPct(Number(event.target.value))}
+                    className="input-base font-mono"
+                  />
+                </FieldBlock>
 
-          {error && <div className="mt-4 rounded-[24px] border border-red-200 bg-red-50 px-4 py-4 text-sm text-red-700">{error}</div>}
+                {draft.catalystDomain === 'thermal' ? (
+                  <>
+                    <FieldBlock label="Promoter band" hint="+/- %">
+                      <input
+                        type="number"
+                        step="1"
+                        min="0"
+                        max="100"
+                        value={promoterBandPct}
+                        onChange={(event) => setPromoterBandPct(Number(event.target.value))}
+                        className="input-base font-mono"
+                      />
+                    </FieldBlock>
+                    <FieldBlock label="Support band" hint="+/- %">
+                      <input
+                        type="number"
+                        step="1"
+                        min="0"
+                        max="100"
+                        value={supportBandPct}
+                        onChange={(event) => setSupportBandPct(Number(event.target.value))}
+                        className="input-base font-mono"
+                      />
+                    </FieldBlock>
+                  </>
+                ) : (
+                  <FieldBlock label="Ionomer / membrane / GDL band" hint="+/- %">
+                    <input
+                      type="number"
+                      step="1"
+                      min="0"
+                      max="100"
+                      value={adjunctBandPct}
+                      onChange={(event) => setAdjunctBandPct(Number(event.target.value))}
+                      className="input-base font-mono"
+                    />
+                  </FieldBlock>
+                )}
+
+                <FieldBlock label="Order size band" hint="+/- %">
+                  <input
+                    type="number"
+                    step="1"
+                    min="0"
+                    max="100"
+                    value={orderBandPct}
+                    onChange={(event) => setOrderBandPct(Number(event.target.value))}
+                    className="input-base font-mono"
+                  />
+                </FieldBlock>
+              </div>
+
+              <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                <div className="cp-metric-tile">
+                  <div className="cp-subtle-label">Baseline source</div>
+                  <div className="mt-2 text-lg font-semibold text-slate-950">Current Cost Estimate draft</div>
+                  <div className="mt-1 text-xs leading-5 text-slate-500">No separate metal-only form is used here anymore.</div>
+                </div>
+                <div className="cp-metric-tile">
+                  <div className="cp-subtle-label">What moves</div>
+                  <div className="mt-2 text-lg font-semibold text-slate-950">
+                    {draft.catalystDomain === 'electrocatalyst' ? 'Catalyst + adjunct prices' : 'Active, promoter, and support prices'}
+                  </div>
+                  <div className="mt-1 text-xs leading-5 text-slate-500">The same case is re-run under sampled price and scale perturbations.</div>
+                </div>
+                <div className="cp-metric-tile">
+                  <div className="cp-subtle-label">Interpretation</div>
+                  <div className="mt-2 text-lg font-semibold text-slate-950">Estimate spread, not a new recipe</div>
+                  <div className="mt-1 text-xs leading-5 text-slate-500">Use this to read cost confidence around the existing route.</div>
+                </div>
+              </div>
+
+              <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
+                <button onClick={handleRun} disabled={loading} className="cp-button-primary min-w-[240px]">
+                  {loading ? (
+                    <>
+                      <span className="mr-2 inline-flex h-4 w-4 animate-spin rounded-full border-2 border-slate-950 border-t-transparent" />
+                      Running estimate range
+                    </>
+                  ) : (
+                    `Run estimate range (${nSim.toLocaleString('en-US')})`
+                  )}
+                </button>
+
+                <button onClick={() => navigate('/')} className="cp-button-secondary px-4 py-2">
+                  Edit in Cost Estimate
+                </button>
+              </div>
+
+              {error ? (
+                <div className="mt-4 rounded-[24px] border border-red-200 bg-red-50 px-4 py-4 text-sm text-red-700">{error}</div>
+              ) : null}
+            </>
+          )}
         </section>
       ) : (
         <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.1s' }}>
           {!result ? (
-            <div className="flex min-h-[520px] flex-col justify-between">
+            <div className="flex min-h-[420px] flex-col justify-between">
               <div>
-                <span className="section-kicker">Range Output</span>
-                <h2 className="cp-heading-xl mt-4">
-                  Run the check to reveal the cost range.
-                </h2>
+                <span className="section-kicker">Estimate Range</span>
+                <h2 className="cp-heading-xl mt-4">Run the current case to reveal the price spread.</h2>
                 <p className="cp-body-copy mt-3 max-w-xl">
-                  This panel shows percentile bands, distribution shape, and simulation success counts after sampling.
+                  This result uses the same catalyst draft and preparation route from Cost Estimate.
                 </p>
               </div>
 
               <div className="grid gap-3 sm:grid-cols-3">
-                <StatTile label="Mean" value="Pending" detail="Average estimate" />
-                <StatTile label="Median" value="Pending" detail="50th percentile" />
+                <StatTile label="Baseline" value="Pending" detail="Current estimate" />
+                <StatTile label="Mean" value="Pending" detail="Average simulated value" />
                 <StatTile label="P5-P95" value="Pending" detail="90% interval" />
               </div>
             </div>
@@ -265,24 +427,44 @@ export default function Uncertainty() {
             <>
               <div className="surface-ink overflow-hidden p-5">
                 <div className="grid gap-3 sm:grid-cols-4">
-                  <StatTileDark label="Mean" value={`$${d(result.mean).toFixed(2)}${fmtLabel}`} detail="Average outcome" />
-                  <StatTileDark label="Median" value={`$${d(result.median).toFixed(2)}${fmtLabel}`} detail="50th percentile" />
+                  <StatTileDark label="Baseline" value={`$${toDisplay(result.baseline_price_per_lb).toFixed(2)}${fmtLabel}`} detail="Current estimate" />
+                  <StatTileDark label="Mean" value={`$${toDisplay(result.mean).toFixed(2)}${fmtLabel}`} detail="Average outcome" />
+                  <StatTileDark label="Median" value={`$${toDisplay(result.median).toFixed(2)}${fmtLabel}`} detail="50th percentile" />
                   <StatTileDark
                     label="P5-P95"
-                    value={`$${d(result.p5).toFixed(2)}-$${d(result.p95).toFixed(2)}`}
-                    detail="90% interval"
-                  />
-                  <StatTileDark
-                    label="Std dev"
-                    value={`$${d(result.std).toFixed(3)}`}
+                    value={`$${toDisplay(result.p5).toFixed(2)}-$${toDisplay(result.p95).toFixed(2)}`}
                     detail={`${result.n_successful.toLocaleString('en-US')} successful runs`}
                   />
                 </div>
               </div>
 
+              <div className="mt-5 grid gap-3 lg:grid-cols-3">
+                <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
+                  <div className="cp-subtle-label">Case</div>
+                  <div className="mt-2 text-base font-semibold text-slate-950">{result.composition}</div>
+                  <div className="mt-1 text-xs leading-6 text-slate-500">
+                    {result.catalyst_domain} / {result.application_family}
+                  </div>
+                </div>
+                <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
+                  <div className="cp-subtle-label">Range width</div>
+                  <div className="mt-2 text-base font-semibold text-slate-950">
+                    ${(toDisplay(result.p95 - result.p5)).toFixed(2)}{fmtLabel}
+                  </div>
+                  <div className="mt-1 text-xs leading-6 text-slate-500">P95 minus P5</div>
+                </div>
+                <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
+                  <div className="cp-subtle-label">Std dev</div>
+                  <div className="mt-2 text-base font-semibold text-slate-950">
+                    ${toDisplay(result.std).toFixed(2)}{fmtLabel}
+                  </div>
+                  <div className="mt-1 text-xs leading-6 text-slate-500">Distribution spread</div>
+                </div>
+              </div>
+
               <div className="mt-5 rounded-[28px] border border-slate-900/8 bg-white/62 p-5 backdrop-blur-xl">
-                <div className="cp-subtle-label">Distribution Sketch</div>
-                <div className="cp-heading-lg mt-2">Percentile-weighted spread</div>
+                <div className="cp-subtle-label">Distribution sketch</div>
+                <div className="cp-heading-lg mt-2">Percentile-weighted price spread</div>
 
                 <div className="mt-5 h-[280px]">
                   <ResponsiveContainer width="100%" height="100%">
@@ -323,7 +505,7 @@ export default function Uncertainty() {
                 ].map(([label, value]) => (
                   <div key={String(label)} className="rounded-[22px] border border-slate-900/8 bg-white/62 px-3 py-4 text-center">
                     <div className="cp-subtle-label">{label}</div>
-                    <div className="mt-2 font-mono text-sm text-slate-950">${d(Number(value)).toFixed(2)}</div>
+                    <div className="mt-2 font-mono text-sm text-slate-950">${toDisplay(Number(value)).toFixed(2)}</div>
                   </div>
                 ))}
               </div>
@@ -335,11 +517,11 @@ export default function Uncertainty() {
       <WorkspaceSectionFooter
         activeSection={activeSection}
         activeIndex={activeIndex}
-        totalSections={RISK_SECTIONS.length}
+        totalSections={RANGE_SECTIONS.length}
         onPrevious={goPrevious}
         onNext={goNext}
         canGoPrevious={canGoPrevious}
-        canGoNext={canGoNext}
+        canGoNext={activeSection.id === 'case' ? canRun : canGoNext}
       />
     </div>
   );

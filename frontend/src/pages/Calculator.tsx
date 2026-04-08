@@ -1263,7 +1263,7 @@ export default function Calculator() {
     const items = rows.filter((row) => row.role === role);
     const selectionOptions = role === 'active_metal' ? activeMetalOptions : promoterOptions;
     const copy = role === 'active_metal'
-      ? { title: 'Active metals', description: 'Pick live metal feeds or library-backed precursor rows.', accent: 'bg-[#78f2d0]', button: 'Add active metal', placeholder: 'At least one active metal is required.' }
+      ? { title: 'Active metals', description: 'Pick live metal feeds or library-backed material identities.', accent: 'bg-[#78f2d0]', button: 'Add active metal', placeholder: 'At least one active metal is required.' }
       : { title: 'Promoters', description: 'Optional promoter rows use the same DB-backed thermal material bank.', accent: 'bg-[#88a8ff]', button: 'Add promoter', placeholder: 'No promoters added yet.' };
 
     return (
