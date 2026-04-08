@@ -9,7 +9,7 @@
 <h1 align="center">CatPrice</h1>
 
 <p align="center">
-  <strong>Windows desktop application for catalyst cost estimation and raw-material price tracking.</strong>
+  <strong>Windows desktop software for catalyst cost estimation, raw-material price tracking, and source-linked benchmark analysis.</strong>
 </p>
 
 <p align="center">
@@ -20,7 +20,9 @@
   <code>Installer download</code>
 </p>
 
-CatPrice is a desktop tool I built to bring catalyst cost screening, raw-material price tracking, and literature-linked benchmark review into one local workflow. This repository contains the Electron application, the local FastAPI backend, the calculation engine, and the curated data files used by the app.
+CatPrice is an independently developed desktop application for catalyst cost screening across multiple reaction families. It combines a local calculation engine, live and indexed raw-material pricing, preparation-route costing, and source-linked benchmark datasets in one Windows workflow.
+
+This repository contains the Electron application, the local FastAPI backend, the calculation engine, and the curated data files used by the app. The software cites published methodology where appropriate, but the implementation, interface, data assembly, benchmark structure, and desktop workflow in this repository are CatPrice-specific.
 
 The workflow is reaction-agnostic: choose catalyst type, define composition, set the preparation method, sync current metal prices, and review a cost estimate. Literature benchmark families are included as optional reference datasets, not as required inputs.
 
@@ -28,6 +30,8 @@ The workflow is reaction-agnostic: choose catalyst type, define composition, set
 
 The current repository exposes the following research-facing pieces:
 
+- `broad reaction-family coverage`
+  The shipped benchmark library spans ammonia cracking, CO2 hydrogenation and methanation, RWGS, dry reforming, water-gas shift, formic acid dehydrogenation, fuel-cell ORR, and electrolyzer OER families.
 - `thermocatalyst and electrocatalyst workflows`
   Bulk supported catalysts and electrode-stack cases are handled separately.
 - `source-linked pricing`
@@ -45,7 +49,7 @@ The current repository exposes the following research-facing pieces:
 | Chemistry basis | Explicit composition rows, support closure, electrocatalyst area model | RDKit/ChemPy validation microservice |
 | Lifecycle economics | Optional spent catalyst recovery proxy | Deactivation kinetics and regeneration-cycle economics |
 | Complexity penalty | Route steps, campaign scale, evidence scope | SCScore-style synthesis complexity penalty |
-| Validation | Backend pytest suite, desktop smoke test, data validation script | Chemistry-specific assertion harness and richer route-by-route verification |
+| Validation | Backend pytest suite, desktop smoke test, data validation script, composition-step-template matrix harness | Additional reaction-specific physics models beyond the current cost-screening scope |
 
 In practice, CatPrice helps answer questions like:
 
@@ -67,8 +71,8 @@ In practice, CatPrice helps answer questions like:
 ## Screen Roles
 
 - `Live Metal Prices` shows where each quote came from, how fresh it is, and how much confidence to place in it.
-- `Cost Estimate` is the main editing surface for composition, support basis, feed selection, and preparation-step setup.
-- `Literature Benchmarks` is an optional reference library for literature-backed catalyst families and route scoring.
+- `Cost Estimate` is the main editing surface for composition, support basis, feed selection, and preparation-step setup across thermocatalyst and electrocatalyst cases.
+- `Literature Benchmarks` is an optional reference library for literature-backed catalyst families and route scoring across multiple reaction families.
 - `Result` is the reading surface for selling price, contribution structure, and component-level source review.
 
 ## Repository Highlights
@@ -111,21 +115,22 @@ Download the packaged Windows app from [GitHub Releases](https://github.com/hyun
 
 Recommended asset:
 
-- `CatPrice Setup 1.1.8.exe`
+- `CatPrice Setup 1.1.9.exe`
 
 Portable asset:
 
-- `CatPrice-win-unpacked.zip`
+- `CatPrice-win-unpacked-1.1.9.zip`
 
 CatPrice is distributed as a desktop app. The public repository does not require a public server deployment to use the product.
 
 ## What It Does
 
-- Estimates catalyst selling cost with a step-based preparation cost model referenced to published catalyst-cost literature
+- Estimates catalyst selling cost with a step-based preparation cost model grounded in published catalyst-cost methodology
 - Tracks metal inputs with `LIVE`, `INDEXED`, and `MANUAL` price states
 - Annotates market feeds with price-evidence confidence, freshness, and acquisition mode
 - Loads thermocatalyst and electrocatalyst reference families into the cost estimate workspace as editable starting points
 - Attaches source-linked family literature banks built from high-confidence journal references and public vendor pages
+- Covers multiple energy-transition reaction families while remaining usable for general catalyst screening
 - Opens the final estimate on a dedicated result screen for review
 - Re-states the estimate basis through source records, normalization details, and route metadata on the result screen
 - Adds an optional spent-catalyst recovery proxy to thermocatalyst screening runs
@@ -139,10 +144,11 @@ CatPrice is distributed as a desktop app. The public repository does not require
 The current repository validates the engine through:
 
 - `pytest` coverage for the calculation engine and API
+- `matrix harness` checks across frontend thermal composition choices, saved process templates, and valid step combinations
 - `desktop smoke` checks for launch, health, prices, and sample calculation behavior
 - `data validation` scripts for library consistency
 
-Additional chemistry-specific checks and richer route-validation rules are still planned, but they are not presented as complete.
+Additional reaction-specific physics layers are still planned, but the current cost-screening workflow is backed by automated matrix and desktop validation.
 
 ## App Mark
 
@@ -157,7 +163,7 @@ npm run build
 
 Main outputs:
 
-- `dist-electron\CatPrice Setup 1.1.8.exe`
+- `dist-electron\CatPrice Setup 1.1.9.exe`
 - `dist-electron\win-unpacked\CatPrice.exe`
 
 Before rebuilding desktop artifacts, CatPrice stops old desktop processes automatically. You can also stop them manually:
@@ -199,26 +205,16 @@ npm run build
 npm run smoke:desktop
 ```
 
-## References
+## Method Basis
 
-CatPrice is my implementation of a local catalyst-cost desktop workflow. The repository cites CatCost methodology papers and benchmark literature, but it does not redistribute CatCost source data or reuse third-party product assets as part of this repository.
+CatPrice is an independent implementation of a local catalyst-cost desktop workflow. The repository cites published costing methodology where relevant, but it does not redistribute CatCost source data or third-party product assets.
 
 Method references:
 
 - Baddour, F. G., et al. (2018). Journal of the American Chemical Society.
 - Van Allsburg, K. M., et al. (2022). Early-stage evaluation of catalyst manufacturing cost and environmental impact using CatCost. Nature Catalysis.
 
-Selected benchmark references:
-
-- [Nature Communications 2023 on Ru ensembles for ammonia decomposition](https://doi.org/10.1038/s41467-023-36339-w)
-- [Nature Communications 2025 on Ni-CeO2-x photothermal ammonia decomposition](https://doi.org/10.1038/s41467-025-66325-3)
-- [Nature 2012 on electrocatalyst approaches and challenges for automotive fuel cells](https://doi.org/10.1038/nature11115)
-- [Nature Catalysis 2019 on Fe-N-C cathodes for PEM fuel cells](https://www.nature.com/articles/s41929-019-0237-3)
-- [Nature Energy 2022 on durable Fe-N-C PEMFC cathodes](https://www.nature.com/articles/s41560-022-01062-1)
-- [Nature Communications 2025 on durable Pt/Co cathode design](https://www.nature.com/articles/s41467-025-65122-2)
-- [Nature Communications 2023 on low-iridium TaOx/IrO2 PEM electrolyzer anodes](https://www.nature.com/articles/s41467-023-40912-8)
-- [Nature Communications 2023 on ionomer-free porous-transport electrodes for PEM water electrolysis](https://www.nature.com/articles/s41467-023-40375-x)
-- [Nature Catalysis 2026 on Co-RuO2-enabled PEM electrolysis](https://www.nature.com/articles/s41929-025-01456-w)
+Benchmark and route-specific literature references are attached inside the application datasets and source library rather than duplicated in the GitHub README.
 
 ## License
 

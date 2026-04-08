@@ -1,5 +1,27 @@
 # Release Notes
 
+## v1.1.9 Workflow Guardrails and GitHub Copy Update
+
+Date: April 8, 2026
+
+This release updates the desktop workflow guardrails and tightens the GitHub-facing project description.
+
+### Included In This Update
+
+- Blocked forward navigation from `Composition` when thermocatalyst active-metal and promoter totals reach or exceed `100 wt%`.
+- Disabled direct section jumps into downstream estimate steps when composition or preparation inputs are not yet valid.
+- Rebuilt the packaged desktop app with the updated workflow guardrails.
+- Rewrote the GitHub-facing README and repository description so CatPrice reads as an independently developed research software project with broad thermocatalyst and electrocatalyst coverage.
+
+### Validation Status
+
+The following checks passed on April 8, 2026:
+
+```bash
+npm run build
+npm run smoke:desktop
+```
+
 ## v1.1.8 Desktop Sync for Matrix Harness
 
 Date: April 8, 2026

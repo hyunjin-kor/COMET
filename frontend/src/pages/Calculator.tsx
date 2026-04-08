@@ -576,6 +576,16 @@ export default function Calculator() {
       && electrocatalystConfig.substrateMaterialKey
       && activeElectroTemplate,
   );
+  const thermalValidationMessage = incompleteThermalRows.length > 0
+    ? `Complete or remove ${incompleteThermalRows.length} unfinished composition row${incompleteThermalRows.length > 1 ? 's' : ''} before continuing.`
+    : activeMetalCount === 0
+      ? 'Add at least one active metal before continuing.'
+      : nonSupportWt >= 100
+        ? 'Active metals and promoters must stay below 100 wt% so support remains positive.'
+        : 'Enter a valid non-zero loading for the active portion of the recipe.';
+  const electrocatalystValidationMessage = 'Select catalyst powder, ionomer, membrane, substrate / GDL, and a preparation template before continuing.';
+  const isCompositionSectionValid = catalystDomain === 'electrocatalyst' ? isElectroValid : isThermalValid;
+  const isManufacturingSectionValid = isCompositionSectionValid && steps.length > 0;
   const isValid = catalystDomain === 'electrocatalyst' ? isElectroValid : isThermalValid;
   const latestSnapshotForCurrentCase = latestSnapshot
     && latestSnapshot.result.input_summary.catalyst_domain === catalystDomain
@@ -585,6 +595,39 @@ export default function Calculator() {
     )
       ? latestSnapshot
       : null;
+  const disabledEstimateSections = [
+    ...(!isCompositionSectionValid ? ['manufacturing'] : []),
+    ...(!isManufacturingSectionValid ? ['result'] : []),
+  ];
+  const canAdvanceCurrentSection = sectionState.activeSection.id === 'composition'
+    ? isCompositionSectionValid
+    : sectionState.activeSection.id === 'manufacturing'
+      ? isManufacturingSectionValid
+      : true;
+
+  useEffect(() => {
+    if (sectionState.activeSection.id === 'manufacturing' && !isCompositionSectionValid) {
+      sectionState.setActiveSection('composition');
+      return;
+    }
+    if (sectionState.activeSection.id === 'result' && !isManufacturingSectionValid) {
+      sectionState.setActiveSection(isCompositionSectionValid ? 'manufacturing' : 'composition');
+    }
+  }, [
+    isCompositionSectionValid,
+    isManufacturingSectionValid,
+    sectionState,
+  ]);
+
+  function handleEstimateSectionSelect(id: string) {
+    if (disabledEstimateSections.includes(id)) return;
+    sectionState.setActiveSection(id);
+  }
+
+  function handleEstimateNext() {
+    if (!canAdvanceCurrentSection) return;
+    sectionState.goNext();
+  }
 
   function toggleRowSource(id: string) {
     setRows((previous) => previous.map((row) => {
@@ -1124,6 +1167,11 @@ export default function Calculator() {
               Choose the stored material records first, then tune the geometric inputs used for area-based costing.
             </p>
           </div>
+          {!isElectroValid ? (
+            <div className="mt-4 rounded-[20px] border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-800">
+              {electrocatalystValidationMessage}
+            </div>
+          ) : null}
           <div className="mt-5">{renderElectrocatalystPanel()}</div>
         </section>
       );
@@ -1138,6 +1186,11 @@ export default function Calculator() {
             Keep active metals and promoters explicit. Support share closes automatically so the mass basis stays readable.
           </p>
         </div>
+        {!isThermalValid ? (
+          <div className="mt-4 rounded-[20px] border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-800">
+            {thermalValidationMessage}
+          </div>
+        ) : null}
 
         <div className="mt-5 space-y-3.5">
         {renderRows('active_metal')}
@@ -1276,16 +1329,10 @@ export default function Calculator() {
   const validationMessage = catalystDomain === 'electrocatalyst'
     ? isValid
       ? `Electrocatalyst stack is ready: ${selectedCatalystMaterial?.name ?? 'catalyst'}, ${selectedIonomerMaterial?.name ?? 'ionomer'}, ${selectedMembraneMaterial?.name ?? 'membrane'}, and ${selectedSubstrateMaterial?.name ?? 'GDL'} are all sourced from the library.`
-      : 'Select catalyst powder, ionomer, membrane, substrate / GDL, and a preparation template before running the estimate.'
+      : electrocatalystValidationMessage
     : isValid
       ? `Recipe balance is valid: ${nonSupportWt.toFixed(1)} wt% actives and promoters, ${supportWtPct.toFixed(1)} wt% support.`
-      : incompleteThermalRows.length > 0
-        ? `Complete or remove ${incompleteThermalRows.length} unfinished composition row${incompleteThermalRows.length > 1 ? 's' : ''} before running the estimate.`
-        : activeMetalCount === 0
-        ? 'Add at least one active metal before running the estimate.'
-        : nonSupportWt >= 100
-          ? 'Active metals and promoters must stay below 100 wt% so support remains positive.'
-          : 'Enter a valid non-zero loading for the active portion of the recipe.';
+      : thermalValidationMessage;
 
   const activeWorkspaceSection = sectionState.activeSection.id === 'type'
     ? renderSetupSection()
@@ -1329,7 +1376,13 @@ export default function Calculator() {
         </div>
       </section>
 
-      <WorkspaceSectionNav sections={ESTIMATE_SECTIONS} activeSectionId={sectionState.activeSectionId} activeIndex={sectionState.activeIndex} onSelect={sectionState.setActiveSection} />
+      <WorkspaceSectionNav
+        sections={ESTIMATE_SECTIONS}
+        activeSectionId={sectionState.activeSectionId}
+        activeIndex={sectionState.activeIndex}
+        onSelect={handleEstimateSectionSelect}
+        disabledSectionIds={disabledEstimateSections}
+      />
 
       {renderWorkspaceSummary()}
 
@@ -1340,9 +1393,9 @@ export default function Calculator() {
         activeIndex={sectionState.activeIndex}
         totalSections={ESTIMATE_SECTIONS.length}
         onPrevious={sectionState.goPrevious}
-        onNext={sectionState.goNext}
+        onNext={handleEstimateNext}
         canGoPrevious={sectionState.canGoPrevious}
-        canGoNext={sectionState.canGoNext}
+        canGoNext={sectionState.canGoNext && canAdvanceCurrentSection}
       />
     </div>
   );
