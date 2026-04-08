@@ -75,6 +75,23 @@ In practice, CatPrice helps answer questions like:
 - `Literature Benchmarks` is an optional reference library for literature-backed catalyst families and route scoring across multiple reaction families.
 - `Result` is the reading surface for selling price, contribution structure, and component-level source review.
 
+## Representative Screens
+
+The README hero above shows the current `Result` surface from the desktop build. Representative screens for the main features are shown below.
+These assets are regenerated from the running desktop stack with `scripts/capture_readme_screens.mjs`.
+
+| Cost Estimate | Live Metal Prices |
+| --- | --- |
+| <img src="./docs/assets/screen-cost-estimate.png" alt="Cost Estimate screen" width="100%" /> | <img src="./docs/assets/screen-live-metal-prices.png" alt="Live Metal Prices screen" width="100%" /> |
+
+| Literature Benchmarks | Source Library |
+| --- | --- |
+| <img src="./docs/assets/screen-literature-benchmarks.png" alt="Literature Benchmarks screen" width="100%" /> | <img src="./docs/assets/screen-source-library.png" alt="Source Library screen" width="100%" /> |
+
+| Uncertainty Range | Result |
+| --- | --- |
+| <img src="./docs/assets/screen-uncertainty-range.png" alt="Uncertainty Range screen" width="100%" /> | <img src="./docs/assets/screen-result.png" alt="Result screen" width="100%" /> |
+
 ## Repository Highlights
 
 | Area | What CatPrice emphasizes |
