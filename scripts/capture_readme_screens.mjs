@@ -6,6 +6,8 @@ import { chromium } from 'playwright';
 const baseUrl = process.env.CATPRICE_CAPTURE_BASE_URL ?? 'http://127.0.0.1:4173';
 const outputDir = path.resolve(process.cwd(), 'docs', 'assets');
 const apiBaseUrl = process.env.CATPRICE_CAPTURE_API_URL ?? 'http://127.0.0.1:8765/api';
+const LB_PER_KG = 2.20462;
+const TROY_OZ_PER_LB = 14.5833;
 
 async function ensureOutputDir() {
   await mkdir(outputDir, { recursive: true });
@@ -32,6 +34,12 @@ async function captureClip(page, clip, filename) {
 
 function logStep(message) {
   console.log(`[capture] ${message}`);
+}
+
+function toPerLb(price, unit) {
+  if (unit === '$/troy_oz') return price * TROY_OZ_PER_LB;
+  if (unit === '$/kg') return price / LB_PER_KG;
+  return price;
 }
 
 async function navigateWithinApp(page, route) {
@@ -80,6 +88,58 @@ async function captureSelectorBox(page, selector, filename) {
   await captureClip(page, clip, filename);
 }
 
+async function captureSelectorTopSlice(page, selector, filename, maxHeight) {
+  const clip = await page.evaluate(({ query, capHeight }) => {
+    const node = document.querySelector(query);
+    if (!node) return null;
+    const rect = node.getBoundingClientRect();
+    return {
+      x: rect.left + window.scrollX,
+      y: rect.top + window.scrollY,
+      width: rect.width,
+      height: Math.min(rect.height, capHeight),
+    };
+  }, { query: selector, capHeight: maxHeight });
+  if (!clip) {
+    throw new Error(`Failed to find selector "${selector}"`);
+  }
+  await captureClip(page, clip, filename);
+}
+
+async function captureSelectorSliceFromText(page, selector, text, filename, maxHeight) {
+  const clip = await page.evaluate(({ query, needle, capHeight }) => {
+    const root = document.querySelector(query);
+    if (!root) return null;
+    const normalizedNeedle = needle.toLowerCase();
+    const candidates = [...root.querySelectorAll('section, div')]
+      .filter((node) => node.innerText.toLowerCase().includes(normalizedNeedle))
+      .filter((node) => {
+        const rect = node.getBoundingClientRect();
+        return rect.width >= 260 && rect.height >= 80;
+      });
+    if (!candidates.length) return null;
+    candidates.sort((left, right) => {
+      const leftRect = left.getBoundingClientRect();
+      const rightRect = right.getBoundingClientRect();
+      return leftRect.width * leftRect.height - rightRect.width * rightRect.height;
+    });
+    const target = candidates[0];
+    if (!target) return null;
+    const rootRect = root.getBoundingClientRect();
+    const targetRect = target.getBoundingClientRect();
+    return {
+      x: rootRect.left + window.scrollX,
+      y: targetRect.top + window.scrollY,
+      width: rootRect.width,
+      height: capHeight,
+    };
+  }, { query: selector, needle: text, capHeight: maxHeight });
+  if (!clip) {
+    throw new Error(`Failed to find "${text}" within selector "${selector}"`);
+  }
+  await captureClip(page, clip, filename);
+}
+
 async function captureSmallestBoxByText(page, text, filename) {
   const handle = await page.evaluateHandle((needle) => {
     const normalizedNeedle = needle.toLowerCase();
@@ -114,6 +174,7 @@ async function preparePage(context, draftSnapshot, resultSnapshot, route = '/') 
   const page = await context.newPage();
   page.setDefaultTimeout(45000);
   await page.addInitScript(({ draft, snapshot }) => {
+    localStorage.setItem('catprice_unit', 'kg');
     const apply = () => {
       window.sessionStorage.setItem('catprice_calculator_draft', JSON.stringify(draft));
       window.sessionStorage.setItem('catprice_calculator_result', JSON.stringify(snapshot));
@@ -138,57 +199,96 @@ async function preparePage(context, draftSnapshot, resultSnapshot, route = '/') 
 async function main() {
   await ensureOutputDir();
 
-  const [pricesResponse, resultResponse] = await Promise.all([
+  const [pricesResponse, compositionOptionsResponse] = await Promise.all([
     fetch(`${apiBaseUrl}/prices`),
-    fetch(`${apiBaseUrl}/calculate`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        catalyst_domain: 'thermal',
-        application_family: 'general',
-        order_size_tons: 20,
-        steps: ['mixer_slurry', 'incipient_wetness', 'dryer_rotary_100_300C'],
-        components: [
-          { role: 'active_metal', name: 'Ni', wt_pct: 20, price_per_lb: 16.83 },
-          { role: 'support', name: 'Al2O3', wt_pct: 80, price_per_lb: 1.1 },
-        ],
-      }),
-    }),
+    fetch(`${apiBaseUrl}/materials/composition-options?catalyst_domain=thermal`),
   ]);
 
   if (!pricesResponse.ok) {
     throw new Error(`Failed to fetch prices for README capture: ${pricesResponse.status}`);
   }
-  if (!resultResponse.ok) {
-    throw new Error(`Failed to fetch calculation result for README capture: ${resultResponse.status}`);
+  if (!compositionOptionsResponse.ok) {
+    throw new Error(`Failed to fetch composition options for README capture: ${compositionOptionsResponse.status}`);
   }
 
   const prices = await pricesResponse.json();
+  const compositionOptions = await compositionOptionsResponse.json();
+  const liveCu = prices.find((row) => row.symbol === 'Cu' && row.source_type === 'live');
+  const indexedMg = compositionOptions.promoter_options.find((row) => row.display_name === 'Mg');
+  const indexedAlumina = compositionOptions.support_options.find((row) => row.display_name === 'Al2O3');
+
+  if (!liveCu || !indexedMg || !indexedAlumina) {
+    throw new Error('Failed to assemble the thermal README capture case from live/feed-backed rows.');
+  }
+
+  const selectedSteps = [
+    'mixer_slurry',
+    'incipient_wetness',
+    'reactor_simple',
+    'dryer_rotary_100_300C',
+    'kiln_continuous_direct',
+  ];
+  const resultResponse = await fetch(`${apiBaseUrl}/calculate`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      catalyst_domain: 'thermal',
+      application_family: 'general',
+      order_size_tons: 20,
+      steps: selectedSteps,
+      components: [
+        { role: 'active_metal', name: 'Cu', wt_pct: 20, price_per_lb: toPerLb(liveCu.price, liveCu.unit) },
+        { role: 'promoter', name: indexedMg.display_name, wt_pct: 5, price_per_lb: indexedMg.price_per_lb },
+        { role: 'support', name: indexedAlumina.display_name, wt_pct: 75, price_per_lb: indexedAlumina.price_per_lb },
+      ],
+    }),
+  });
+  if (!resultResponse.ok) {
+    throw new Error(`Failed to fetch calculation result for README capture: ${resultResponse.status}`);
+  }
   const result = await resultResponse.json();
   const liveFeedCount = prices.filter((row) => row.source_type === 'live').length;
   const indexedFeedCount = prices.filter((row) => row.source_type === 'indexed').length;
   const draftSnapshot = {
     rows: [
       {
-        id: 'draft-active-ni',
+        id: 'draft-active-cu',
         role: 'active_metal',
-        name: 'Ni',
+        name: 'Cu',
+        material_key: null,
+        symbol: 'Cu',
+        selection_key: 'live:Cu',
         wt_pct: 20,
-        price_per_lb: 16.83,
-        source_type: 'manual',
-        source: 'Manual input',
+        price_per_lb: toPerLb(liveCu.price, liveCu.unit),
+        source_type: 'live',
+        source: liveCu.source,
       },
       {
-        id: 'draft-support-alumina',
+        id: 'draft-promoter-mg',
+        role: 'promoter',
+        name: indexedMg.display_name,
+        material_key: indexedMg.material_key ?? null,
+        symbol: indexedMg.symbol ?? null,
+        selection_key: indexedMg.selection_key,
+        wt_pct: 5,
+        price_per_lb: indexedMg.price_per_lb,
+        source_type: indexedMg.source_type,
+        source: indexedMg.quote_source ?? 'Library',
+      },
+      {
+        id: 'draft-support-al2o3',
         role: 'support',
-        name: 'Al2O3',
-        wt_pct: 80,
-        price_per_lb: 1.1,
-        source_type: 'manual',
-        source: 'Manual input',
+        name: indexedAlumina.display_name,
+        material_key: indexedAlumina.material_key ?? null,
+        symbol: indexedAlumina.symbol ?? null,
+        selection_key: indexedAlumina.selection_key,
+        wt_pct: 75,
+        price_per_lb: indexedAlumina.price_per_lb,
+        source_type: indexedAlumina.source_type,
+        source: indexedAlumina.quote_source ?? 'Library',
       },
     ],
-    steps: ['mixer_slurry', 'incipient_wetness', 'dryer_rotary_100_300C'],
+    steps: selectedSteps,
     catalystDomain: 'thermal',
     applicationFamily: 'general',
     orderSize: 20,
@@ -202,14 +302,14 @@ async function main() {
   const resultSnapshot = {
     result,
     orderSize: 20,
-    steps: ['mixer_slurry', 'incipient_wetness', 'dryer_rotary_100_300C'],
-    stepLabels: ['Slurry Mixer', 'Incipient Wetness', 'Rotary Dryer 100-300 C'],
+    steps: selectedSteps,
+    stepLabels: ['Slurry Mixer', 'Incipient Wetness', 'Simple Reactor', 'Rotary Dryer 100-300 C', 'Continuous Kiln Direct'],
     selectedSupportName: 'Al2O3',
     activeMetalCount: 1,
     liveFeedCount,
     indexedFeedCount,
-    nonSupportWt: 20,
-    supportWtPct: 80,
+    nonSupportWt: 25,
+    supportWtPct: 75,
     generatedAt: new Date().toISOString(),
     benchmarkCandidate: null,
   };
@@ -226,25 +326,45 @@ async function main() {
     await route.fulfill({ response });
   });
 
-  logStep('cost estimate');
+  logStep('cost estimate workflow');
+  {
+    const page = await preparePage(context, draftSnapshot, resultSnapshot, '/?estimate=type');
+    await page.waitForSelector('text=Choose the workflow before you edit the recipe.');
+    await captureSectionByText(page, 'Choose the workflow before you edit the recipe.', 'screen-cost-estimate-type.png');
+    await page.close();
+  }
   {
     const page = await preparePage(context, draftSnapshot, resultSnapshot, '/?estimate=composition');
     await page.waitForSelector('text=Define the catalyst recipe.');
-    await captureSectionByText(page, 'Define the catalyst recipe.', 'screen-cost-estimate.png');
+    await captureSectionByText(page, 'Define the catalyst recipe.', 'screen-cost-estimate-composition.png');
+    await page.close();
+  }
+  {
+    const page = await preparePage(context, draftSnapshot, resultSnapshot, '/?estimate=manufacturing');
+    await page.waitForSelector('text=Choose the preparation basis.');
+    await captureSectionByText(page, 'Choose the preparation basis.', 'screen-cost-estimate-preparation.png');
+    await page.close();
+  }
+
+  logStep('cost estimate result handoff');
+  {
+    const page = await preparePage(context, draftSnapshot, resultSnapshot, '/calculator/result?result=summary');
+    await page.waitForTimeout(1200);
+    await captureSelectorTopSlice(page, 'main > div > div:last-child', 'screen-cost-estimate-result.png', 860);
     await page.close();
   }
 
   logStep('result');
   {
-    const page = await preparePage(context, draftSnapshot, resultSnapshot, '/calculator/result?result=summary');
-    await page.waitForTimeout(1200);
-    await captureSectionByText(page, 'Estimated selling price', 'readme-hero.png');
-    await page.close();
-  }
-  {
     const page = await preparePage(context, draftSnapshot, resultSnapshot, '/calculator/result?result=manufacturing');
     await page.waitForTimeout(1200);
-    await captureSmallestBoxByText(page, 'Materials versus processing', 'screen-result.png');
+    await captureSelectorSliceFromText(
+      page,
+      'main > div > div:last-child',
+      'Separate route logic from raw inputs.',
+      'screen-result.png',
+      980,
+    );
     await page.close();
   }
 

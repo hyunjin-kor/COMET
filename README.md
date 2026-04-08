@@ -77,11 +77,31 @@ The captures below focus on one core task per screen so the feature surface stay
 
 ### Cost Estimate
 
-Recipe definition with explicit active metals, promoters, support balance, and preparation-ready inputs.
+The `Cost Estimate` workspace is structured as a four-step editing flow.
 
 <p>
-  <img src="./docs/assets/screen-cost-estimate.png" alt="Cost Estimate composition screen" width="100%" />
+  <img src="./docs/assets/screen-cost-estimate-type.png" alt="Cost Estimate catalyst type screen" width="100%" />
 </p>
+
+Select the workflow first so thermal and electrocatalyst cases stay separated before any recipe editing begins.
+
+<p>
+  <img src="./docs/assets/screen-cost-estimate-composition.png" alt="Cost Estimate composition screen" width="100%" />
+</p>
+
+Define active metals, promoters, and support balance with explicit mass fractions and source-linked price states.
+
+<p>
+  <img src="./docs/assets/screen-cost-estimate-preparation.png" alt="Cost Estimate preparation method screen" width="100%" />
+</p>
+
+Choose the preparation basis as a route, not a one-choice wizard. Each bucket can hold multiple operations when the real workflow requires it.
+
+<p>
+  <img src="./docs/assets/screen-cost-estimate-result.png" alt="Cost Estimate result handoff screen" width="100%" />
+</p>
+
+Open the final estimate on a separate reading surface so route basis, cost ledger, and evidence stay grouped after the run.
 
 ### Live Metal Prices
 
