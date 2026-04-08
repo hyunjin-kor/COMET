@@ -9,34 +9,33 @@
 <h1 align="center">CatPrice</h1>
 
 <p align="center">
-  <strong>Desktop software for comparing live raw-material price trends and estimating catalyst manufacturing cost.</strong><br />
-  Track changing metal prices, build catalyst recipes, choose preparation routes, and review a clear desktop estimate of what it could cost to make the catalyst.
+  <strong>Windows desktop application for catalyst cost estimation and raw-material price tracking.</strong>
 </p>
 
 <p align="center">
   <code>Windows app</code>
-  <code>Independent implementation</code>
-  <code>Market evidence</code>
-  <code>Result screen</code>
+  <code>Local desktop workflow</code>
+  <code>Source-linked library</code>
+  <code>Benchmark datasets</code>
   <code>Installer download</code>
 </p>
 
-CatPrice is a desktop application for people who want to compare changing raw-material prices and estimate how much it may cost to manufacture a catalyst. Instead of working through scattered spreadsheets, you can track live metal prices, assemble a catalyst recipe, choose a preparation method, and review the estimated cost on a dedicated result screen.
+CatPrice is a desktop tool I built to bring catalyst cost screening, raw-material price tracking, and literature-linked benchmark review into one local workflow. This repository contains the Electron application, the local FastAPI backend, the calculation engine, and the curated data files used by the app.
 
-The workflow is reaction-agnostic: choose catalyst type, define composition, set the preparation method, sync current metal prices, and read a clean selling-cost estimate. Optional literature benchmarks can still be loaded as reference starting points, but the main product is the estimator itself, not the benchmark library.
+The workflow is reaction-agnostic: choose catalyst type, define composition, set the preparation method, sync current metal prices, and review a cost estimate. Literature benchmark families are included as optional reference datasets, not as required inputs.
 
-## Research Workflow Alignment
+## Current Scope
 
-The current product is tuned for catalyst researchers who need a defensible early estimate, not a black-box number. The implementation now makes four things explicit:
+The current repository exposes the following research-facing pieces:
 
-- `workflow split`
-  Thermocatalyst and electrocatalyst cases stay separated so bulk supported catalysts do not inherit PEM/MEA route language.
+- `thermocatalyst and electrocatalyst workflows`
+  Bulk supported catalysts and electrode-stack cases are handled separately.
 - `source-linked pricing`
   Live feeds, indexed rows, vendor rows, and literature rows carry quote basis, year, scope, and public links when those links exist.
+- `preparation-route costing`
+  The Step Method remains the main processing-cost layer.
 - `recovery-aware thermal screening`
-  Thermocatalyst runs can include an optional spent-catalyst recovery proxy using reactor type and bulk density.
-- `clear model scope`
-  The app states what is estimated directly and what still remains outside the current engine.
+  Thermocatalyst runs can include an optional spent-catalyst recovery proxy.
 
 ## Implemented Now vs Planned Next
 
@@ -46,7 +45,7 @@ The current product is tuned for catalyst researchers who need a defensible earl
 | Chemistry basis | Explicit composition rows, support closure, electrocatalyst area model | RDKit/ChemPy validation microservice |
 | Lifecycle economics | Optional spent catalyst recovery proxy | Deactivation kinetics and regeneration-cycle economics |
 | Complexity penalty | Route steps, campaign scale, evidence scope | SCScore-style synthesis complexity penalty |
-| Validation | Backend pytest suite, desktop smoke test, data validation script | Chemistry-specific assertion harness and formalized AI output verification |
+| Validation | Backend pytest suite, desktop smoke test, data validation script | Chemistry-specific assertion harness and richer route-by-route verification |
 
 In practice, CatPrice helps answer questions like:
 
@@ -55,14 +54,14 @@ In practice, CatPrice helps answer questions like:
 - How much does the preparation method change the final estimate?
 - What is the evidence source behind each price used in the estimate?
 
-## Workflow Framework
+## Workflow
 
 | Stage | Screen | What you do | What CatPrice gives back |
 | --- | --- | --- | --- |
 | 1. Track the market | `Live Metal Prices` | Review live, indexed, and manual price bases with confidence and freshness metadata | A transparent sourcing basis for the catalyst recipe |
 | 2. Estimate the cost | `Cost Estimate` | Move through `Catalyst Type -> Composition -> Preparation Method -> Result` and run the estimate | A catalyst preparation estimate grounded in current price data |
 | 3. Check published benchmarks | `Literature Benchmarks` | Review optional literature-backed catalyst families and load one as a starting point if useful | A fast reference path without forcing the main workflow |
-| 4. Review the output | `Result` | Open the final output on a dedicated reading surface | A clean result screen optimized for interpretation instead of editing |
+| 4. Review the output | `Result` | Open the final output on a separate reading surface | A result view optimized for interpretation instead of editing |
 | 5. Iterate quickly | `Back to cost estimate` | Return to the cost estimate workspace, adjust pricing or steps, and rerun | The draft stays in place so scenario work remains fast |
 
 ## Screen Roles
@@ -72,24 +71,11 @@ In practice, CatPrice helps answer questions like:
 - `Literature Benchmarks` is an optional reference library for literature-backed catalyst families and route scoring.
 - `Result` is the reading surface for selling price, contribution structure, and component-level source review.
 
-## Product Principles
-
-- `Quiet desktop workflow`
-  The app keeps editing, screening, and reading on separate surfaces so long scientific sessions do not collapse into one scrolling page.
-- `Evidence-first review`
-  Estimates are paired with source type, freshness, quote year, pack basis, and public links whenever a stable source URL exists.
-- `Structured preparation methods`
-  Preparation is handled as a named workflow with preprocess, synthesis, and postprocess stages instead of a loose free-text note.
-- `Transparent price normalization`
-  Vendor packs, literature rows, indexed references, and live metal feeds are normalized into the estimate and surfaced again in the result screen.
-- `Reference routes without product lock-in`
-  Literature benchmarks are optional screening tools and starting points, not required inputs for the main estimate flow.
-
-## Product Highlights
+## Repository Highlights
 
 | Area | What CatPrice emphasizes |
 | --- | --- |
-| Core estimator | Reaction-agnostic catalyst preparation cost estimation with a dedicated reading surface |
+| Core estimator | Reaction-agnostic catalyst preparation cost estimation with a separate result view |
 | Price clarity | `LIVE`, `INDEXED`, and `MANUAL` states plus evidence confidence, freshness, quote year, and pack basis |
 | Workflow | Step-based workspace navigation with back/forward movement instead of long scroll stacks |
 | Preparation logic | Step Method, preparation extras, indexed escalation, and named preparation templates |
@@ -99,16 +85,25 @@ In practice, CatPrice helps answer questions like:
 
 ## Included Reference Families
 
-CatPrice currently ships three optional benchmark reference families:
+CatPrice currently ships ten optional benchmark families.
 
-- `Ammonia decomposition reference family`
-  Thermocatalyst routes including `Ni/gamma-Al2O3 baseline`, `Ni-MgO/CeO2 interface`, and `Ru/MgO premium`.
-- `Fuel-cell ORR cathode reference family`
-  Electrocatalyst routes including `Pt/C baseline cathode`, `Pt-Co intermetallic cathode`, and `Fe-N-C PGM-free cathode`.
-- `PEM electrolyzer OER reference family`
-  Electrocatalyst routes including `IrO2 PEM anode baseline`, `Low-Ir interface-engineered PEM route`, and `Ru-rich acidic OER route`.
+Thermal families:
 
-All families expose candidate-level evidence anchors plus a larger family literature bank in the Compare screen. The benchmark library distinguishes `Thermocatalyst` and `Electrocatalyst` routes explicitly, electrocatalyst presets now push stack defaults into the calculator, and full-stack electrocatalyst families can rank on area-based electrode cost instead of powder-only cost.
+- `ammonia-cracking`
+- `co2-methanol`
+- `co2-methanation`
+- `rwgs`
+- `dry-reforming`
+- `water-gas-shift`
+- `formic-acid-dehydrogenation`
+
+Electrocatalyst families:
+
+- `fuel-cell-orr`
+- `pem-electrolyzer-oer`
+- `aem-electrolyzer-oer`
+
+Each family includes candidate definitions, route templates, literature anchors, and pricing proxies that the app can load and score directly.
 
 ## Download
 
@@ -141,13 +136,13 @@ CatPrice is distributed as a desktop app. The public repository does not require
 
 ## Validation and Harness Engineering
 
-CatPrice does not rely on UI polish alone. The current repository validates the engine through:
+The current repository validates the engine through:
 
 - `pytest` coverage for the calculation engine and API
 - `desktop smoke` checks for launch, health, prices, and sample calculation behavior
 - `data validation` scripts for library consistency
 
-The long-term direction is stricter still: chemistry-aware assertion checks, richer route validation, and AI-assisted development constrained by executable test and validation layers. Those extensions are part of the roadmap, but they are not presented as already complete.
+Additional chemistry-specific checks and richer route-validation rules are still planned, but they are not presented as complete.
 
 ## App Mark
 
@@ -206,7 +201,7 @@ npm run smoke:desktop
 
 ## References
 
-CatPrice is an independent repository and desktop application. The codebase, interface, packaged app, source-linked library, benchmark structure, and release workflow shown here were built for this project. The papers below are cited as method or benchmark references, not reused product assets.
+CatPrice is my implementation of a local catalyst-cost desktop workflow. The repository cites CatCost methodology papers and benchmark literature, but it does not redistribute CatCost source data or reuse third-party product assets as part of this repository.
 
 Method references:
 
