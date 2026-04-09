@@ -330,19 +330,41 @@ async function main() {
   {
     const page = await preparePage(context, draftSnapshot, resultSnapshot, '/?estimate=type');
     await page.waitForSelector('text=Choose the workflow before you edit the recipe.');
-    await captureSectionByText(page, 'Choose the workflow before you edit the recipe.', 'screen-cost-estimate-type.png');
+    await captureSelectorSliceFromText(
+      page,
+      'main > div > div.min-w-0.pb-2',
+      'Choose the workflow before you edit the recipe.',
+      'screen-cost-estimate-type.png',
+      390,
+    );
     await page.close();
   }
   {
     const page = await preparePage(context, draftSnapshot, resultSnapshot, '/?estimate=composition');
+    await page.setViewportSize({ width: 1500, height: 1800 });
+    await waitForAppReady(page);
     await page.waitForSelector('text=Define the catalyst recipe.');
-    await captureSectionByText(page, 'Define the catalyst recipe.', 'screen-cost-estimate-composition.png');
+    await captureSelectorSliceFromText(
+      page,
+      'main > div > div.min-w-0.pb-2',
+      'Define the catalyst recipe.',
+      'screen-cost-estimate-composition.png',
+      1160,
+    );
     await page.close();
   }
   {
     const page = await preparePage(context, draftSnapshot, resultSnapshot, '/?estimate=manufacturing');
+    await page.setViewportSize({ width: 1500, height: 1800 });
+    await waitForAppReady(page);
     await page.waitForSelector('text=Choose the preparation basis.');
-    await captureSectionByText(page, 'Choose the preparation basis.', 'screen-cost-estimate-preparation.png');
+    await captureSelectorSliceFromText(
+      page,
+      'main > div > div.min-w-0.pb-2',
+      'Choose the preparation basis.',
+      'screen-cost-estimate-preparation.png',
+      1180,
+    );
     await page.close();
   }
 
