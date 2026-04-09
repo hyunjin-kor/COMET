@@ -70,29 +70,63 @@ The captures below focus on one core task per screen. These assets are regenerat
 
 ### Cost Estimate
 
-| Catalyst Type | Composition |
-| --- | --- |
-| <img src="./docs/assets/screen-cost-estimate-type.png" alt="Cost Estimate catalyst type screen" width="100%" /> | <img src="./docs/assets/screen-cost-estimate-composition.png" alt="Cost Estimate composition screen" width="100%" /> |
-| Choose thermocatalyst or electrocatalyst before editing the recipe. | Set active metals, promoters, and support balance with explicit source-backed price states. |
+Choose the catalyst workflow first, then define the recipe, route basis, and result handoff in sequence.
 
-| Preparation Method | Result handoff |
-| --- | --- |
-| <img src="./docs/assets/screen-cost-estimate-preparation.png" alt="Cost Estimate preparation method screen" width="100%" /> | <img src="./docs/assets/screen-cost-estimate-result.png" alt="Cost Estimate result handoff screen" width="100%" /> |
-| Build the route from operation buckets and campaign scale. | Run the case, then move into a dedicated result surface. |
+<p>
+  <img src="./docs/assets/screen-cost-estimate-type.png" alt="Cost Estimate catalyst type screen" width="100%" />
+</p>
+
+Select thermocatalyst or electrocatalyst before editing the case.
+
+<p>
+  <img src="./docs/assets/screen-cost-estimate-composition.png" alt="Cost Estimate composition screen" width="100%" />
+</p>
+
+Set active metals, promoters, and support balance with explicit source-backed price states.
+
+<p>
+  <img src="./docs/assets/screen-cost-estimate-preparation.png" alt="Cost Estimate preparation method screen" width="100%" />
+</p>
+
+Build the preparation route from operation buckets and campaign scale.
+
+<p>
+  <img src="./docs/assets/screen-cost-estimate-result.png" alt="Cost Estimate result handoff screen" width="100%" />
+</p>
+
+Run the case, then move into a dedicated result surface.
 
 ### Live Metal Prices
 
-| Overview | Trend + source audit |
-| --- | --- |
-| <img src="./docs/assets/screen-live-metal-prices-overview.png" alt="Live Metal Prices overview screen" width="100%" /> | <img src="./docs/assets/screen-live-metal-prices-trend.png" alt="Live Metal Prices selected metal trend screen" width="100%" /> |
-| Scan tracked symbols, quote status, and current price basis. | Read the price curve, period range, evidence tier, and freshness for one metal. |
+Scan tracked symbols and current quote basis first, then move into the trend and source audit for one metal.
+
+<p>
+  <img src="./docs/assets/screen-live-metal-prices-overview.png" alt="Live Metal Prices overview screen" width="100%" />
+</p>
+
+Review tracked symbols, quote status, and grouped market rows.
+
+<p>
+  <img src="./docs/assets/screen-live-metal-prices-trend.png" alt="Live Metal Prices selected metal trend screen" width="100%" />
+</p>
+
+Read the price curve, period range, evidence tier, and freshness together.
 
 ### Literature Benchmarks
 
-| Published routes | Selected reference route |
-| --- | --- |
-| <img src="./docs/assets/screen-literature-benchmarks-routes.png" alt="Literature Benchmarks candidate comparison screen" width="100%" /> | <img src="./docs/assets/screen-literature-benchmarks-detail.png" alt="Literature Benchmarks selected route detail screen" width="100%" /> |
-| Compare landed cost, score, and route position across the active family. | Inspect materials, processing, evidence anchors, and route basis before loading the case. |
+Compare the published route candidates first, then open the selected reference route to inspect the full benchmark basis.
+
+<p>
+  <img src="./docs/assets/screen-literature-benchmarks-routes.png" alt="Literature Benchmarks candidate comparison screen" width="100%" />
+</p>
+
+Compare landed catalyst cost, score, and route position across the active family.
+
+<p>
+  <img src="./docs/assets/screen-literature-benchmarks-detail.png" alt="Literature Benchmarks selected route detail screen" width="100%" />
+</p>
+
+Inspect materials, processing, evidence anchors, and route basis before loading the case.
 
 ### Source Library
 
