@@ -1,5 +1,28 @@
 # Release Notes
 
+## v1.1.11 Release Sync and README Screen Audit
+
+Date: April 9, 2026
+
+This release aligns the GitHub release state with the current `master` branch after the README screen refresh and repository audit.
+
+### Included In This Update
+
+- Re-verified repository sync across the local workspace, `origin/master`, the packaged desktop build, and the published GitHub release.
+- Refreshed the README screen assets so `Cost Estimate`, `Source Library`, and `Estimate Range` use the current desktop surfaces.
+- Tightened the README feature layout so screenshots stay full-width and easier to read on GitHub.
+- Rebuilt and republished the Windows desktop package so the latest release matches the current repository state.
+
+### Validation Status
+
+The following checks passed on April 9, 2026:
+
+```bash
+python -m pytest backend/tests -q
+npm run build
+npm run smoke:desktop
+```
+
 ## v1.1.10 Benchmark Detail Fit and Desktop Refresh
 
 Date: April 9, 2026

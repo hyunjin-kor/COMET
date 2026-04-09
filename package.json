@@ -1,7 +1,7 @@
 {
   "name": "catprice",
-  "version": "1.1.10",
-  "description": "Real-time metal price based catalyst manufacturing cost estimator",
+  "version": "1.1.11",
+  "description": "Windows desktop app for catalyst cost estimation and source-linked benchmark workflows",
   "main": "electron/main.js",
   "author": "CatPrice contributors",
   "license": "SEE LICENSE IN LICENSE",
