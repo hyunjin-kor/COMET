@@ -198,6 +198,10 @@ Portable asset:
 
 - `CatPrice-win-unpacked-1.1.11.zip`
 
+Most users only need the `Setup` installer. Download the portable zip only if you want to run CatPrice without installation.
+
+The packaged desktop app already includes the local backend and the bundled library data used to seed the workspace. CatPrice creates or updates the local SQLite database on startup, so users do not need to download a separate database file.
+
 CatPrice is distributed as a desktop app. The public repository does not require a public server deployment to use the product.
 
 ## What It Does
