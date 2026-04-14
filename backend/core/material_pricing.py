@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from sqlalchemy import or_
 from sqlmodel import Session, select
 
 from backend.core.constants import LB_PER_KG, TROY_OZ_PER_LB

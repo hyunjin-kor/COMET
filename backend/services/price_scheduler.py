@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import logging
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from sqlmodel import Session
 
@@ -27,7 +27,7 @@ async def collect_prices() -> dict[str, dict]:
 
 
 def _save_prices(prices: dict[str, dict]) -> None:
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     with Session(engine) as session:
         for symbol, info in prices.items():
             record = MetalPrice(

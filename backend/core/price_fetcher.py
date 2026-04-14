@@ -7,7 +7,7 @@ import html as html_lib
 import json
 import logging
 import re
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import httpx
 
@@ -108,8 +108,8 @@ def _latest_non_null(values: list[float | None]) -> float | None:
 
 def _timestamp_to_iso(timestamp: int | None) -> str:
     if timestamp:
-        return datetime.fromtimestamp(timestamp, tz=timezone.utc).replace(tzinfo=None).isoformat()
-    return datetime.now(timezone.utc).replace(tzinfo=None).isoformat()
+        return datetime.fromtimestamp(timestamp, tz=UTC).replace(tzinfo=None).isoformat()
+    return datetime.now(UTC).replace(tzinfo=None).isoformat()
 
 
 def _extract_yahoo_quote(payload: dict, factor: float) -> tuple[float | None, str]:
@@ -123,7 +123,7 @@ def _extract_yahoo_quote(payload: dict, factor: float) -> tuple[float | None, st
     if raw_price in (None, 0):
         raw_price = _latest_non_null(closes)
     if raw_price in (None, 0):
-        return None, datetime.now(timezone.utc).replace(tzinfo=None).isoformat()
+        return None, datetime.now(UTC).replace(tzinfo=None).isoformat()
 
     market_ts = meta.get("regularMarketTime") or meta.get("currentTradingPeriod", {}).get("regular", {}).get("end")
     return round(float(raw_price) * factor, 4), _timestamp_to_iso(market_ts)
@@ -148,7 +148,7 @@ def _extract_yahoo_history(payload: dict, factor: float) -> list[dict]:
         high = highs[idx] if idx < len(highs) and highs[idx] is not None else close
         low = lows[idx] if idx < len(lows) and lows[idx] is not None else close
         history.append({
-            "date": datetime.fromtimestamp(ts, tz=timezone.utc).strftime("%Y-%m-%d"),
+            "date": datetime.fromtimestamp(ts, tz=UTC).strftime("%Y-%m-%d"),
             "price": round(float(close) * factor, 4),
             "open": round(float(open_) * factor, 4),
             "high": round(float(high) * factor, 4),
@@ -238,7 +238,7 @@ async def fetch_metals_dev() -> dict[str, dict]:
                 "price": round(float(val), 4),
                 "unit": _UNITS.get(sym, "$/troy_oz"),
                 "source": "Metals.Dev",
-                "fetched_at": datetime.now(timezone.utc).replace(tzinfo=None).isoformat(),
+                "fetched_at": datetime.now(UTC).replace(tzinfo=None).isoformat(),
             }
     return results
 
@@ -264,7 +264,7 @@ async def fetch_metalprice_api() -> dict[str, dict]:
                 "price": round(1.0 / float(rate), 4),
                 "unit": "$/troy_oz",
                 "source": "MetalpriceAPI",
-                "fetched_at": datetime.now(timezone.utc).replace(tzinfo=None).isoformat(),
+                "fetched_at": datetime.now(UTC).replace(tzinfo=None).isoformat(),
             }
     return results
 
@@ -333,7 +333,7 @@ async def fetch_kitco() -> dict[str, dict]:
                 "price": round(price, 4),
                 "unit": unit,
                 "source": "Kitco (live)",
-                "fetched_at": datetime.now(timezone.utc).replace(tzinfo=None).isoformat(),
+                "fetched_at": datetime.now(UTC).replace(tzinfo=None).isoformat(),
             }
 
         logger.info("Kitco: %d metals -> %s", len(results), list(results))
@@ -391,7 +391,7 @@ def _parse_johnson_matthey_current_prices(page_html: str) -> dict[str, dict]:
             "price": round(float(price), 4),
             "unit": unit,
             "source": "Johnson Matthey (live)",
-            "fetched_at": fetched_at or datetime.now(timezone.utc).replace(tzinfo=None).isoformat(),
+            "fetched_at": fetched_at or datetime.now(UTC).replace(tzinfo=None).isoformat(),
         }
     return results
 
@@ -436,7 +436,7 @@ def _parse_markets_insider_quote(
         "price": round(raw_price * factor, 4),
         "unit": unit,
         "source": "Markets Insider (live)",
-        "fetched_at": datetime.now(timezone.utc).replace(tzinfo=None).isoformat(),
+        "fetched_at": datetime.now(UTC).replace(tzinfo=None).isoformat(),
         "market_hint": time_match.group(1).strip() if time_match else None,
     }
 

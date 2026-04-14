@@ -27,7 +27,7 @@ class ComponentInput(BaseModel):
     )
 
     @model_validator(mode="after")
-    def validate_component(self) -> "ComponentInput":
+    def validate_component(self) -> ComponentInput:
         if not self.material_key and not self.name:
             raise ValueError("Component requires either name or material_key")
         if self.price_per_lb is None and not self.material_key:
@@ -109,7 +109,7 @@ class CostCalculationRequest(BaseModel):
     electrode_input: ElectrodeCostInput | None = None
 
     @model_validator(mode="after")
-    def validate_payload(self) -> "CostCalculationRequest":
+    def validate_payload(self) -> CostCalculationRequest:
         if self.components:
             if self.catalyst_domain == "thermal" and len(self.components) > 4:
                 raise ValueError("Thermal workflows support at most four total components")

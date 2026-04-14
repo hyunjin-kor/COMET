@@ -2,7 +2,7 @@
 
 import logging
 from contextlib import asynccontextmanager
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from fastapi import FastAPI, HTTPException, Request
@@ -11,12 +11,20 @@ from sqlmodel import Session
 
 from backend.config import settings
 from backend.database import create_db_and_tables, engine, sync_material_library
-from backend.routers import calculator, catcost_import, compare, decision, materials, prices, uncertainty
+from backend.routers import (
+    calculator,
+    catcost_import,
+    compare,
+    decision,
+    materials,
+    prices,
+    uncertainty,
+)
 from backend.services.price_scheduler import collect_prices
 
 logger = logging.getLogger(__name__)
 
-scheduler = AsyncIOScheduler(timezone=timezone.utc)
+scheduler = AsyncIOScheduler(timezone=UTC)
 _last_price_update: datetime | None = None
 
 
@@ -25,7 +33,7 @@ async def _scheduled_price_update() -> None:
     global _last_price_update
     try:
         await collect_prices()
-        _last_price_update = datetime.now(timezone.utc)
+        _last_price_update = datetime.now(UTC)
         logger.info("Scheduled price update completed")
     except Exception as exc:  # pragma: no cover - defensive logging
         logger.error("Scheduled price update failed: %s", exc)
@@ -111,7 +119,7 @@ async def refresh_prices(request: Request):
 
     global _last_price_update
     prices_data = await collect_prices()
-    _last_price_update = datetime.now(timezone.utc)
+    _last_price_update = datetime.now(UTC)
     return {
         "status": "ok",
         "prices_fetched": len(prices_data),

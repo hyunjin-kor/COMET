@@ -2,9 +2,8 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
-
 
 _SOURCE_RULES: list[dict[str, Any]] = [
     {
@@ -90,8 +89,8 @@ def _parse_iso_datetime(value: str | None) -> datetime | None:
         return None
 
     if parsed.tzinfo is None:
-        return parsed.replace(tzinfo=timezone.utc)
-    return parsed.astimezone(timezone.utc)
+        return parsed.replace(tzinfo=UTC)
+    return parsed.astimezone(UTC)
 
 
 def _freshness_status(age_hours: float | None, freshness_target_hours: int | None) -> str:
@@ -141,7 +140,7 @@ def describe_price_evidence(
     parsed = _parse_iso_datetime(fetched_at)
     age_hours = None
     if parsed is not None and rule["freshness_target_hours"] is not None:
-        age_hours = max(0.0, (datetime.now(timezone.utc) - parsed).total_seconds() / 3600)
+        age_hours = max(0.0, (datetime.now(UTC) - parsed).total_seconds() / 3600)
 
     freshness_target_hours = rule["freshness_target_hours"]
     freshness_status = _freshness_status(age_hours, freshness_target_hours)

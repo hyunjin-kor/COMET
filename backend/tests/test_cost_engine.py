@@ -13,8 +13,8 @@ CatCost outputs.
 
 import pytest
 
-from backend.core.cost_engine import estimate_catalyst_cost
 from backend.core.constants import TROY_OZ_PER_LB
+from backend.core.cost_engine import estimate_catalyst_cost
 from backend.core.step_method import calculate_step_method
 
 
