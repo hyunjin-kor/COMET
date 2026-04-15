@@ -1,6 +1,10 @@
 """FastAPI endpoint integration tests."""
 
+import json
+
 import pytest
+
+from backend.routers.catcost_import import MAX_IMPORT_BYTES
 
 
 class TestHealth:
@@ -8,6 +12,21 @@ class TestHealth:
         resp = client.get("/api/health")
         assert resp.status_code == 200
         assert resp.json()["status"] == "ok"
+
+    def test_docs_are_disabled_in_non_debug_mode(self, client):
+        assert client.get("/docs").status_code == 404
+        assert client.get("/openapi.json").status_code == 404
+
+    def test_trusted_host_blocks_unexpected_host_header(self, client):
+        resp = client.get("/api/health", headers={"host": "evil.example"})
+        assert resp.status_code == 400
+
+    def test_security_headers_are_applied(self, client):
+        resp = client.get("/api/health")
+        assert resp.headers["X-Content-Type-Options"] == "nosniff"
+        assert resp.headers["X-Frame-Options"] == "DENY"
+        assert resp.headers["Referrer-Policy"] == "no-referrer"
+        assert resp.headers["Cache-Control"] == "no-store"
 
 
 class TestCalculator:
@@ -445,6 +464,24 @@ class TestMaterials:
         data = resp.json()
         assert any(step["key"] == "mixer_slurry" for step in data)
         assert any(step["key"] == "ccm_coating_pass" for step in data)
+
+
+class TestImportExport:
+    def test_import_rejects_large_json_payload(self, client):
+        oversized_payload = {"blob": "x" * MAX_IMPORT_BYTES}
+        resp = client.post(
+            "/api/import/catcost",
+            files={"file": ("oversized.json", json.dumps(oversized_payload).encode("utf-8"), "application/json")},
+        )
+        assert resp.status_code == 413
+
+    def test_import_requires_top_level_object(self, client):
+        resp = client.post(
+            "/api/import/catcost",
+            files={"file": ("array.json", b"[1, 2, 3]", "application/json")},
+        )
+        assert resp.status_code == 400
+        assert "top-level object" in resp.text
 
 
 class TestDecision:

@@ -26,6 +26,7 @@ class Settings(BaseSettings):
 
     # Loopback-only origins used by Vite during local desktop development.
     cors_origins: str = "http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173"
+    allowed_hosts: str = "127.0.0.1,localhost,testserver"
 
     model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
 
@@ -33,6 +34,11 @@ class Settings(BaseSettings):
     def cors_origins_list(self) -> list[str]:
         """Parse CORS_ORIGINS env var into a list."""
         return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
+
+    @property
+    def allowed_hosts_list(self) -> list[str]:
+        """Parse ALLOWED_HOSTS env var into a list."""
+        return [host.strip() for host in self.allowed_hosts.split(",") if host.strip()]
 
 
 settings = Settings()

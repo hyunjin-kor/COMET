@@ -61,6 +61,24 @@ function isAllowedExternalUrl(urlString) {
   }
 }
 
+function isAppNavigationUrl(urlString) {
+  try {
+    const parsed = new URL(urlString);
+    if (parsed.protocol === 'file:') {
+      return true;
+    }
+
+    const isLoopbackHost = parsed.hostname === '127.0.0.1' || parsed.hostname === 'localhost';
+    if (!isLoopbackHost) {
+      return false;
+    }
+
+    return parsed.port === String(BACKEND_PORT) || parsed.port === '5173';
+  } catch (_error) {
+    return false;
+  }
+}
+
 function sendWindowState() {
   if (!mainWindow || mainWindow.isDestroyed()) return;
   mainWindow.webContents.send('window-state-changed', {
@@ -614,6 +632,11 @@ function createMainWindow() {
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: true,
+      webviewTag: false,
+      allowRunningInsecureContent: false,
+      webSecurity: true,
+      safeDialogs: true,
+      navigateOnDragDrop: false,
     },
   });
 
@@ -720,6 +743,31 @@ p{color:#7099cc;font-size:14px;max-width:500px;text-align:center}
     }
     return { action: 'deny' };
   });
+
+  mainWindow.webContents.on('will-navigate', (event, url) => {
+    if (isAppNavigationUrl(url)) {
+      return;
+    }
+
+    event.preventDefault();
+    if (isAllowedExternalUrl(url)) {
+      shell.openExternal(url);
+    } else {
+      debugLog(`Blocked same-window navigation to ${url}`);
+    }
+  });
+
+  mainWindow.webContents.on('will-attach-webview', (event) => {
+    event.preventDefault();
+    debugLog('Blocked webview attachment');
+  });
+
+  mainWindow.webContents.session.setPermissionRequestHandler((_webContents, _permission, callback) => {
+    callback(false);
+  });
+  if (typeof mainWindow.webContents.session.setPermissionCheckHandler === 'function') {
+    mainWindow.webContents.session.setPermissionCheckHandler(() => false);
+  }
 }
 
 function showAbout() {

@@ -9,6 +9,7 @@ from backend.database import get_session
 from backend.models.estimate import Estimate
 
 router = APIRouter(prefix="/api", tags=["import_export"])
+MAX_IMPORT_BYTES = 1_048_576
 
 
 @router.post("/import/catcost")
@@ -22,10 +23,16 @@ async def import_catcost_json(file: UploadFile):
         raise HTTPException(status_code=400, detail="Only .json files are accepted")
 
     content = await file.read()
+    await file.close()
+    if len(content) > MAX_IMPORT_BYTES:
+        raise HTTPException(status_code=413, detail="Imported JSON exceeds the 1 MiB size limit")
+
     try:
         data = json.loads(content)
     except json.JSONDecodeError:
         raise HTTPException(status_code=400, detail="Invalid JSON file")
+    if not isinstance(data, dict):
+        raise HTTPException(status_code=400, detail="Imported JSON must contain a top-level object")
 
     # Normalize CatCost JSON format to CatPrice input
     normalized = {

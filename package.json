@@ -1,6 +1,6 @@
 {
   "name": "catprice",
-  "version": "1.1.11",
+  "version": "1.1.12",
   "description": "Windows desktop app for catalyst cost estimation and source-linked benchmark workflows",
   "main": "electron/main.js",
   "author": "hyunjin.kang",
@@ -65,8 +65,8 @@
   "devDependencies": {
     "concurrently": "^9.1.0",
     "cross-env": "^7.0.3",
-    "electron": "^32.0.0",
-    "electron-builder": "^25.0.0",
+    "electron": "^41.2.0",
+    "electron-builder": "^26.8.1",
     "wait-on": "^8.0.0"
   }
 }
