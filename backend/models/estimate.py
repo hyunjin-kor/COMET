@@ -1,8 +1,9 @@
 """Saved cost estimate model."""
 
 import json
-from datetime import datetime
+from datetime import UTC, datetime
 
+from sqlalchemy import DateTime
 from sqlmodel import Column, Field, SQLModel, Text
 
 
@@ -24,7 +25,10 @@ class Estimate(SQLModel, table=True):
     estimated_price_per_lb: float = 0.0
     input_json: str = Field(default="{}", sa_column=Column(Text))
     result_json: str = Field(default="{}", sa_column=Column(Text))
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(
+        default_factory=lambda: datetime.now(UTC),
+        sa_column=Column(DateTime(timezone=True), nullable=False),
+    )
 
     def get_input(self) -> dict:
         return json.loads(self.input_json)

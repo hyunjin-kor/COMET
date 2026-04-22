@@ -29,4 +29,5 @@ def get_benchmark_family(
     try:
         return evaluate_benchmark_family(session=session, family=family, profile=profile)
     except KeyError as exc:
-        raise HTTPException(status_code=404, detail=str(exc))
+        detail = exc.args[0] if exc.args else "Decision benchmark not found"
+        raise HTTPException(status_code=404, detail=detail)

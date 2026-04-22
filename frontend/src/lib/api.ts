@@ -7,6 +7,18 @@ export function apiUrl(path: string): string {
   return `${API_ROOT}${path}`;
 }
 
+function buildRequestInit(options?: RequestInit): RequestInit {
+  const headers = new Headers(options?.headers);
+  const body = options?.body;
+  if (!(body instanceof FormData) && !headers.has('Content-Type')) {
+    headers.set('Content-Type', 'application/json');
+  }
+  return {
+    ...options,
+    headers,
+  };
+}
+
 function formatApiErrorDetail(detail: unknown): string {
   if (typeof detail === 'string' && detail.trim()) {
     return detail;
@@ -44,16 +56,22 @@ function formatApiErrorDetail(detail: unknown): string {
   return '';
 }
 
-async function request<T>(path: string, options?: RequestInit): Promise<T> {
-  const res = await fetch(apiUrl(path), {
-    headers: { 'Content-Type': 'application/json' },
-    ...options,
-  });
+async function ensureOk(res: Response): Promise<Response> {
   if (!res.ok) {
     const err = await res.json().catch(() => ({ detail: res.statusText }));
     throw new Error(formatApiErrorDetail(err.detail ?? err) || res.statusText);
   }
+  return res;
+}
+
+async function request<T>(path: string, options?: RequestInit): Promise<T> {
+  const res = await ensureOk(await fetch(apiUrl(path), buildRequestInit(options)));
   return res.json();
+}
+
+async function requestText(path: string, options?: RequestInit): Promise<string> {
+  const res = await ensureOk(await fetch(apiUrl(path), buildRequestInit(options)));
+  return res.text();
 }
 
 // Calculator
@@ -210,6 +228,60 @@ export const calculateCost = (input: CostInput) =>
     body: JSON.stringify(input),
   });
 
+export interface SavedEstimateResponse {
+  id: number;
+  result: CostResult;
+}
+
+export const saveEstimate = (input: CostInput, name = 'Untitled') =>
+  request<SavedEstimateResponse>(`/calculate/save?name=${encodeURIComponent(name)}`, {
+    method: 'POST',
+    body: JSON.stringify(input),
+  });
+
+export interface SavedEstimateSummary {
+  id: number;
+  name: string;
+  description: string;
+  catalyst_domain: string;
+  application_family: string;
+  calculation_model: string;
+  metal_symbol: string;
+  metal_loading_wt_pct: number;
+  support_name: string;
+  order_size_tons: number;
+  estimated_price_per_lb: number;
+  created_at: string;
+}
+
+export interface SavedEstimateDetail extends SavedEstimateSummary {
+  input: Record<string, unknown>;
+  result: CostResult;
+}
+
+export interface SavedEstimateQuery {
+  q?: string;
+  catalystDomain?: CatalystDomain;
+  limit?: number;
+}
+
+export const fetchSavedEstimates = (query: SavedEstimateQuery = {}) => {
+  const params = new URLSearchParams();
+  if (query.q) params.set('q', query.q);
+  if (query.catalystDomain) params.set('catalyst_domain', query.catalystDomain);
+  if (query.limit) params.set('limit', String(query.limit));
+  const qs = params.toString();
+  return request<SavedEstimateSummary[]>(`/estimates${qs ? `?${qs}` : ''}`);
+};
+
+export const fetchSavedEstimate = (estimateId: number) =>
+  request<SavedEstimateDetail>(`/estimates/${estimateId}`);
+
+export const deleteSavedEstimate = (estimateId: number) =>
+  request<DeleteResponse>(`/estimates/${estimateId}`, {
+    method: 'DELETE',
+  });
+
 // Prices
 export interface MetalPrice {
   symbol: string;
@@ -235,6 +307,36 @@ export interface MetalPrice {
 
 export const fetchPrices = () => request<MetalPrice[]>('/prices');
 export const fetchPrice = (symbol: string) => request<MetalPrice>(`/prices/${symbol}`);
+
+export interface PriceHistoryPoint {
+  date: string;
+  price: number;
+  open: number;
+  high: number;
+  low: number;
+}
+
+export interface PriceHistoryResponse {
+  symbol: string;
+  period: string;
+  source: string;
+  count: number;
+  history: PriceHistoryPoint[];
+}
+
+export interface PriceHistoryQuery {
+  period?: '1mo' | '3mo' | '6mo' | '1y' | '2y' | '5y';
+  from?: string;
+  to?: string;
+}
+
+export const fetchPriceHistory = (symbol: string, query: PriceHistoryQuery = {}) => {
+  const params = new URLSearchParams();
+  params.set('period', query.period ?? '1y');
+  if (query.from) params.set('from', query.from);
+  if (query.to) params.set('to', query.to);
+  return request<PriceHistoryResponse>(`/prices/${symbol}/history?${params.toString()}`);
+};
 
 // Materials
 export interface MaterialItem {
@@ -262,6 +364,57 @@ export interface MaterialItem {
   is_custom: boolean;
 }
 
+export interface MaterialCreateInput {
+  name: string;
+  formula?: string | null;
+  category: string;
+  symbol?: string | null;
+  mw?: number | null;
+  density?: number | null;
+  concentration_pct?: number | null;
+  price?: number;
+  price_unit?: string;
+  price_scope?: string;
+  pack_quantity?: number | null;
+  pack_unit?: string | null;
+  source?: string;
+  quote_year?: number | null;
+  notes?: string;
+  has_lab_data?: boolean;
+  catalyst_domain?: CatalystDomain;
+  application_family?: string;
+  pricing_basis?: string;
+  reference_url?: string;
+}
+
+export interface MaterialUpdateInput {
+  name?: string;
+  formula?: string | null;
+  category?: string;
+  symbol?: string | null;
+  mw?: number | null;
+  density?: number | null;
+  concentration_pct?: number | null;
+  price?: number;
+  price_unit?: string;
+  price_scope?: string;
+  pack_quantity?: number | null;
+  pack_unit?: string | null;
+  source?: string;
+  quote_year?: number | null;
+  notes?: string;
+  has_lab_data?: boolean;
+  catalyst_domain?: CatalystDomain;
+  application_family?: string;
+  pricing_basis?: string;
+  reference_url?: string;
+}
+
+export interface DeleteResponse {
+  status: string;
+  id: string | number;
+}
+
 export const fetchMaterials = (
   category?: string,
   q?: string,
@@ -278,6 +431,35 @@ export const fetchMaterials = (
   const qs = params.toString();
   return request<MaterialItem[]>(`/materials${qs ? `?${qs}` : ''}`);
 };
+
+export const fetchMaterialCategories = () =>
+  request<string[]>('/materials/categories');
+
+export const fetchMaterialDomains = () =>
+  request<string[]>('/materials/domains');
+
+export const fetchMaterialApplicationFamilies = () =>
+  request<string[]>('/materials/applications');
+
+export const fetchMaterial = (materialId: number) =>
+  request<MaterialItem>(`/materials/${materialId}`);
+
+export const createMaterial = (input: MaterialCreateInput) =>
+  request<MaterialItem>('/materials', {
+    method: 'POST',
+    body: JSON.stringify(input),
+  });
+
+export const updateMaterial = (materialId: number, input: MaterialUpdateInput) =>
+  request<MaterialItem>(`/materials/${materialId}`, {
+    method: 'PATCH',
+    body: JSON.stringify(input),
+  });
+
+export const deleteMaterial = (materialId: number) =>
+  request<DeleteResponse>(`/materials/${materialId}`, {
+    method: 'DELETE',
+  });
 
 export interface ThermalCompositionOption {
   material_key: string;
@@ -328,7 +510,139 @@ export interface ProcessTemplate {
 }
 
 export const fetchTemplates = (catalystDomain?: CatalystDomain) =>
-  request<ProcessTemplate[]>(`/materials/templates${catalystDomain ? `?catalyst_domain=${catalystDomain}` : ''}`);
+  request<ProcessTemplate[]>(`/templates${catalystDomain ? `?catalyst_domain=${catalystDomain}` : ''}`);
+
+export const fetchTemplateDetail = (templateId: string) =>
+  request<ProcessTemplate>(`/templates/${templateId}`);
+
+export interface EquipmentItem {
+  id?: string | number;
+  category: string;
+  name: string;
+  size_units: string | null;
+  s_lower: number | null;
+  s_upper: number | null;
+  a: number | null;
+  b: number | null;
+  n: number | null;
+  c: number | null;
+  d: number | null;
+  function_type: string | null;
+  source: string | null;
+  cepci_basis: number | null;
+  nf_refinery_basis: number | null;
+  year: number | null;
+  pricing_basis: string | null;
+  installation_factor: number | null;
+  labor_factor: number | null;
+  note: string | null;
+  materials: string[];
+  material_factors: number[];
+  is_custom?: boolean;
+}
+
+export interface EquipmentCreateInput {
+  category: string;
+  name: string;
+  size_units: string;
+  s_lower?: number | null;
+  s_upper?: number | null;
+  a?: number | null;
+  b?: number | null;
+  n?: number | null;
+  c?: number | null;
+  d?: number | null;
+  function_type: string;
+  source?: string;
+  cepci_basis?: number | null;
+  nf_refinery_basis?: number | null;
+  year?: number | null;
+  pricing_basis?: string;
+  installation_factor?: number;
+  labor_factor?: number;
+  note?: string;
+  materials?: string[];
+  material_factors?: number[];
+}
+
+export interface EquipmentUpdateInput {
+  category?: string;
+  name?: string;
+  size_units?: string;
+  s_lower?: number | null;
+  s_upper?: number | null;
+  a?: number | null;
+  b?: number | null;
+  n?: number | null;
+  c?: number | null;
+  d?: number | null;
+  function_type?: string;
+  source?: string;
+  cepci_basis?: number | null;
+  nf_refinery_basis?: number | null;
+  year?: number | null;
+  pricing_basis?: string;
+  installation_factor?: number;
+  labor_factor?: number;
+  note?: string;
+  materials?: string[];
+  material_factors?: number[];
+}
+
+export const fetchEquipment = (category?: string, q?: string, limit?: number) => {
+  const params = new URLSearchParams();
+  if (category) params.set('category', category);
+  if (q) params.set('q', q);
+  if (limit) params.set('limit', String(limit));
+  const qs = params.toString();
+  return request<EquipmentItem[]>(`/equipment${qs ? `?${qs}` : ''}`);
+};
+
+export const fetchEquipmentDetail = (equipmentId: string | number) =>
+  request<EquipmentItem>(`/equipment/${equipmentId}`);
+
+export const createEquipment = (input: EquipmentCreateInput) =>
+  request<EquipmentItem>('/equipment', {
+    method: 'POST',
+    body: JSON.stringify(input),
+  });
+
+export const updateEquipment = (equipmentId: number, input: EquipmentUpdateInput) =>
+  request<EquipmentItem>(`/equipment/${equipmentId}`, {
+    method: 'PATCH',
+    body: JSON.stringify(input),
+  });
+
+export const deleteEquipment = (equipmentId: number) =>
+  request<DeleteResponse>(`/equipment/${equipmentId}`, {
+    method: 'DELETE',
+  });
+
+export interface ChemPPIIndexPayload {
+  version: string;
+  source: string;
+  series_id: string;
+  description: string;
+  annual: Record<string, number>;
+}
+
+export interface CEPCIAnnualRecord {
+  CEPCI: number | null;
+  MS: number | null;
+  NF: number | null;
+  ENR: number | null;
+  CEPCI_equip: number | null;
+}
+
+export interface CEPCIIndexPayload {
+  version: string;
+  source: string;
+  description: string;
+  annual: Record<string, CEPCIAnnualRecord>;
+}
+
+export const fetchChemPPIIndex = () => request<ChemPPIIndexPayload>('/indices/chemppi');
+export const fetchCEPCIIndex = () => request<CEPCIIndexPayload>('/indices/cepci');
 
 // Steps
 export interface StepLibraryItem {
@@ -344,12 +658,84 @@ export interface StepLibraryItem {
 export const fetchSteps = () =>
   request<StepLibraryItem[]>('/materials/steps');
 
+export interface CompareCompositionInput {
+  label?: string;
+  metal_symbol: string;
+  metal_price: number;
+  metal_price_unit?: string;
+  metal_loading_wt_pct: number;
+  support_name?: string;
+  support_price_per_lb?: number;
+  steps?: string[];
+  order_size_tons?: number;
+}
+
+export interface CompareCompositionResult {
+  index: number;
+  label: string;
+  metal_symbol: string;
+  metal_loading_wt_pct: number;
+  support_name: string;
+  order_size_tons: number;
+  estimated_price_per_lb: number;
+  estimated_price_per_kg: number;
+  materials_cost_per_lb: number;
+  processing_cost_per_lb: number;
+  materials_pct: number;
+  processing_pct: number;
+  scale: string;
+}
+
+export const compareCompositions = (compositions: CompareCompositionInput[]) =>
+  request<{ compositions: CompareCompositionResult[] }>('/compare', {
+    method: 'POST',
+    body: JSON.stringify({ compositions }),
+  });
+
+export interface CatCostImportResponse {
+  status: string;
+  normalized_input: {
+    metal_symbol: string;
+    metal_price: number;
+    metal_price_unit: string;
+    metal_loading_wt_pct: number;
+    support_name: string;
+    support_price_per_lb: number;
+    steps: string[];
+    order_size_tons: number;
+  };
+  raw_keys: string[];
+}
+
+export const importCatCostJson = async (file: File): Promise<CatCostImportResponse> => {
+  const formData = new FormData();
+  formData.append('file', file, file.name);
+  return request<CatCostImportResponse>('/import/catcost', {
+    method: 'POST',
+    body: formData,
+  });
+};
+
+export interface EstimateExportJson {
+  name: string;
+  created_at: string;
+  input: Record<string, unknown>;
+  result: CostResult;
+}
+
+export const exportEstimateJson = (estimateId: number) =>
+  request<EstimateExportJson>(`/export/${estimateId}`);
+
+export const exportEstimateCsv = (estimateId: number) =>
+  requestText(`/export/${estimateId}?format=csv`);
+
 // Health
-export const checkHealth = () => request<{ status: string; version: string }>('/health');
+export const checkHealth = () =>
+  request<{ status: string; version: string; last_price_update: string | null; scheduler_running: boolean }>('/health');
 
 // Refresh prices
 export const refreshPrices = () =>
-  request<{ status: string; prices_fetched: number }>('/prices/refresh', { method: 'POST' });
+  request<{ status: string; prices_fetched: number; updated_at: string }>('/prices/refresh', { method: 'POST' });
 
 export interface EstimateRangeResult {
   mean: number;

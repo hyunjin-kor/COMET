@@ -1,8 +1,12 @@
 """CatCost JSON import/export endpoints."""
 
+import csv
 import json
+from datetime import UTC, datetime
+from io import StringIO
 
 from fastapi import APIRouter, Depends, HTTPException, UploadFile
+from fastapi.responses import PlainTextResponse
 from sqlmodel import Session
 
 from backend.database import get_session
@@ -10,6 +14,25 @@ from backend.models.estimate import Estimate
 
 router = APIRouter(prefix="/api", tags=["import_export"])
 MAX_IMPORT_BYTES = 1_048_576
+
+
+def _summary_to_csv(summary: dict) -> str:
+    """Serialize a summary payload into a small metric/value CSV document."""
+
+    buffer = StringIO()
+    writer = csv.writer(buffer, lineterminator="\n")
+    writer.writerow(["metric", "value"])
+    for key, value in summary.items():
+        writer.writerow([key, value])
+    return buffer.getvalue()
+
+
+def _iso_utc(value: datetime) -> str:
+    """Serialize datetimes as explicit UTC ISO-8601 strings."""
+
+    if value.tzinfo is None:
+        value = value.replace(tzinfo=UTC)
+    return value.astimezone(UTC).isoformat()
 
 
 @router.post("/import/catcost")
@@ -66,17 +89,18 @@ def export_estimate(
     if format == "json":
         return {
             "name": estimate.name,
-            "created_at": estimate.created_at.isoformat(),
+            "created_at": _iso_utc(estimate.created_at),
             "input": input_data,
             "result": result,
         }
     elif format == "csv":
-        # Simple CSV-like dict for frontend to convert
         summary = result.get("summary", {})
-        return {
-            "format": "csv",
-            "headers": list(summary.keys()),
-            "values": list(summary.values()),
-        }
+        return PlainTextResponse(
+            content=_summary_to_csv(summary),
+            media_type="text/csv",
+            headers={
+                "Content-Disposition": f'attachment; filename="estimate-{estimate.id}.csv"',
+            },
+        )
     else:
         raise HTTPException(status_code=400, detail=f"Unsupported format: {format}")

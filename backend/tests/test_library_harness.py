@@ -66,6 +66,18 @@ def test_material_pricing_helpers_cover_mass_volume_and_area_units() -> None:
     assert area_price_to_per_cm2(500.0, "$/m2") == pytest.approx(0.05)
 
 
+def test_material_pricing_helpers_reject_unsupported_mass_units() -> None:
+    with pytest.raises(ValueError) as excinfo:
+        mass_price_to_per_lb(1.0, "$/stone")
+    assert str(excinfo.value) == "Unsupported mass price unit: $/stone"
+
+
+def test_material_pricing_helpers_reject_unsupported_volume_units() -> None:
+    with pytest.raises(ValueError) as excinfo:
+        volume_price_to_per_ml(1.0, "$/gallon")
+    assert str(excinfo.value) == "Unsupported volume price unit: $/gallon"
+
+
 def test_seeded_library_contains_sigma_and_fuel_cell_store_rows(session) -> None:
     keys = set(
         session.exec(select(Material.library_key).where(Material.is_custom == False)).all()  # noqa: E712

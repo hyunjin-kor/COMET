@@ -84,6 +84,12 @@ _CATCOST_REF: dict[str, float] = {
 }
 
 
+def _utc_now_iso() -> str:
+    """Return the current UTC timestamp as a timezone-aware ISO string."""
+
+    return datetime.now(UTC).isoformat()
+
+
 def _escalate(price_2018: float) -> float:
     """Scale a 2018 price to today using the ChemPPI index."""
     try:
@@ -108,8 +114,8 @@ def _latest_non_null(values: list[float | None]) -> float | None:
 
 def _timestamp_to_iso(timestamp: int | None) -> str:
     if timestamp:
-        return datetime.fromtimestamp(timestamp, tz=UTC).replace(tzinfo=None).isoformat()
-    return datetime.now(UTC).replace(tzinfo=None).isoformat()
+        return datetime.fromtimestamp(timestamp, tz=UTC).isoformat()
+    return _utc_now_iso()
 
 
 def _extract_yahoo_quote(payload: dict, factor: float) -> tuple[float | None, str]:
@@ -123,7 +129,7 @@ def _extract_yahoo_quote(payload: dict, factor: float) -> tuple[float | None, st
     if raw_price in (None, 0):
         raw_price = _latest_non_null(closes)
     if raw_price in (None, 0):
-        return None, datetime.now(UTC).replace(tzinfo=None).isoformat()
+        return None, _utc_now_iso()
 
     market_ts = meta.get("regularMarketTime") or meta.get("currentTradingPeriod", {}).get("regular", {}).get("end")
     return round(float(raw_price) * factor, 4), _timestamp_to_iso(market_ts)
@@ -238,7 +244,7 @@ async def fetch_metals_dev() -> dict[str, dict]:
                 "price": round(float(val), 4),
                 "unit": _UNITS.get(sym, "$/troy_oz"),
                 "source": "Metals.Dev",
-                "fetched_at": datetime.now(UTC).replace(tzinfo=None).isoformat(),
+                "fetched_at": _utc_now_iso(),
             }
     return results
 
@@ -264,7 +270,7 @@ async def fetch_metalprice_api() -> dict[str, dict]:
                 "price": round(1.0 / float(rate), 4),
                 "unit": "$/troy_oz",
                 "source": "MetalpriceAPI",
-                "fetched_at": datetime.now(UTC).replace(tzinfo=None).isoformat(),
+                "fetched_at": _utc_now_iso(),
             }
     return results
 
@@ -333,7 +339,7 @@ async def fetch_kitco() -> dict[str, dict]:
                 "price": round(price, 4),
                 "unit": unit,
                 "source": "Kitco (live)",
-                "fetched_at": datetime.now(UTC).replace(tzinfo=None).isoformat(),
+                "fetched_at": _utc_now_iso(),
             }
 
         logger.info("Kitco: %d metals -> %s", len(results), list(results))
@@ -381,7 +387,7 @@ def _parse_johnson_matthey_current_prices(page_html: str) -> dict[str, dict]:
         fetched_at = None
         if date_str:
             try:
-                fetched_at = datetime.strptime(date_str, "%d/%m/%Y").isoformat()
+                fetched_at = datetime.strptime(date_str, "%d/%m/%Y").replace(tzinfo=UTC).isoformat()
             except ValueError:
                 fetched_at = None
 
@@ -391,7 +397,7 @@ def _parse_johnson_matthey_current_prices(page_html: str) -> dict[str, dict]:
             "price": round(float(price), 4),
             "unit": unit,
             "source": "Johnson Matthey (live)",
-            "fetched_at": fetched_at or datetime.now(UTC).replace(tzinfo=None).isoformat(),
+            "fetched_at": fetched_at or _utc_now_iso(),
         }
     return results
 
@@ -436,7 +442,7 @@ def _parse_markets_insider_quote(
         "price": round(raw_price * factor, 4),
         "unit": unit,
         "source": "Markets Insider (live)",
-        "fetched_at": datetime.now(UTC).replace(tzinfo=None).isoformat(),
+        "fetched_at": _utc_now_iso(),
         "market_hint": time_match.group(1).strip() if time_match else None,
     }
 

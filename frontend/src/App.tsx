@@ -1,12 +1,14 @@
+import { lazy } from 'react';
 import { BrowserRouter, HashRouter, Route, Routes } from 'react-router-dom';
 import AppFrame from './components/layout/AppFrame';
-import Calculator from './pages/Calculator';
-import CalculatorResult from './pages/CalculatorResult';
-import Compare from './pages/Compare';
-import Library from './pages/Library';
-import Prices from './pages/Prices';
-import Uncertainty from './pages/Uncertainty';
 import { UnitProvider } from './lib/units';
+
+const Calculator = lazy(() => import('./pages/Calculator'));
+const CalculatorResult = lazy(() => import('./pages/CalculatorResult'));
+const Compare = lazy(() => import('./pages/Compare'));
+const Library = lazy(() => import('./pages/Library'));
+const Prices = lazy(() => import('./pages/Prices'));
+const Uncertainty = lazy(() => import('./pages/Uncertainty'));
 
 export default function App() {
   const Router =

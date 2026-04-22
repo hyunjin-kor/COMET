@@ -1,18 +1,10 @@
-import { useEffect, useState } from 'react';
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  ReferenceLine,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { WorkspaceSectionFooter, WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
 import { apiUrl, fetchPrices, refreshPrices, type MetalPrice } from '../lib/api';
 import { LB_PER_KG, TROY_OZ_PER_KG, TROY_OZ_PER_LB, type Unit } from '../lib/unit-conversion';
 import { useUnit } from '../lib/use-unit';
+
+const MetalTrendChart = lazy(() => import('../components/charts/MetalTrendChart'));
 
 type HistoryPoint = { date: string; price: number; open: number; high: number; low: number };
 type Period = '1mo' | '3mo' | '6mo' | '1y' | '2y' | '5y';
@@ -129,6 +121,15 @@ function InspectorRow({ label, value, detail }: { label: string; value: string; 
         {detail ? <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div> : null}
       </div>
       <div className="text-right text-sm font-semibold text-slate-950">{value}</div>
+    </div>
+  );
+}
+
+function DarkChartFallback({ label }: { label: string }) {
+  return (
+    <div className="flex h-full min-h-[320px] flex-col items-center justify-center gap-3 rounded-[28px] border border-white/10 bg-white/4 text-center">
+      <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#78f2d0] border-t-transparent" />
+      <div className="text-sm text-slate-300">{label}</div>
     </div>
   );
 }
@@ -480,63 +481,14 @@ export default function Prices() {
             ) : (
               <>
                 <div className="h-[320px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={displayHistory} margin={{ top: 8, right: 16, bottom: 0, left: 0 }}>
-                      <defs>
-                        <linearGradient id="priceFill" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor={METAL_COLORS[selected || 'Pt'] || '#78f2d0'} stopOpacity={0.3} />
-                          <stop offset="95%" stopColor={METAL_COLORS[selected || 'Pt'] || '#78f2d0'} stopOpacity={0} />
-                        </linearGradient>
-                      </defs>
-                      <CartesianGrid stroke="rgba(255,255,255,0.08)" vertical={false} />
-                      <XAxis
-                        dataKey="date"
-                        tick={{ fill: '#94a3b8', fontSize: 11 }}
-                        axisLine={false}
-                        tickLine={false}
-                        tickFormatter={(value) =>
-                          new Date(value).toLocaleDateString(
-                            'en-US',
-                            period === '1mo' ? { month: 'short', day: 'numeric' } : { year: '2-digit', month: 'short' },
-                          )
-                        }
-                      />
-                      <YAxis
-                        tick={{ fill: '#94a3b8', fontSize: 11 }}
-                        axisLine={false}
-                        tickLine={false}
-                        tickFormatter={(value) => `$${Number(value).toLocaleString('en-US')}`}
-                        width={72}
-                      />
-                      <Tooltip
-                        formatter={(value) => [`$${Number(value).toLocaleString('en-US')}`, selectedDisplayUnit]}
-                        labelFormatter={(value) =>
-                          new Date(value).toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                          })
-                        }
-                        contentStyle={{
-                          borderRadius: 18,
-                          border: '1px solid rgba(255,255,255,0.10)',
-                          background: '#0b1522',
-                          color: '#e2e8f0',
-                          fontSize: 12,
-                        }}
-                      />
-                      {displayHistory.length > 0 ? <ReferenceLine y={displayHistory[0].price} stroke="rgba(255,255,255,0.12)" strokeDasharray="4 4" /> : null}
-                      <Area
-                        type="monotone"
-                        dataKey="price"
-                        stroke={METAL_COLORS[selected || 'Pt'] || '#78f2d0'}
-                        strokeWidth={2.2}
-                        fill="url(#priceFill)"
-                        dot={false}
-                        activeDot={{ r: 4 }}
-                      />
-                    </AreaChart>
-                  </ResponsiveContainer>
+                  <Suspense fallback={<DarkChartFallback label="Loading trend chart..." />}>
+                    <MetalTrendChart
+                      data={displayHistory}
+                      period={period}
+                      selectedDisplayUnit={selectedDisplayUnit}
+                      selectedColor={METAL_COLORS[selected || 'Pt'] || '#78f2d0'}
+                    />
+                  </Suspense>
                 </div>
 
                 <div className="mt-5 grid gap-3 sm:grid-cols-3">

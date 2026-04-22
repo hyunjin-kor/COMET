@@ -1,6 +1,23 @@
+import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import TopNavigation from './TopNavigation';
+
+function RouteLoadingFallback() {
+  return (
+    <div className="rounded-[28px] border border-slate-200/70 bg-white/82 p-6 shadow-[0_20px_50px_rgba(15,23,42,0.06)]">
+      <div className="space-y-4">
+        <div className="h-3 w-28 animate-pulse rounded-full bg-slate-200/90" />
+        <div className="h-10 w-80 max-w-full animate-pulse rounded-full bg-slate-200/80" />
+        <div className="h-32 animate-pulse rounded-[24px] bg-slate-100/90" />
+        <div className="grid gap-3 md:grid-cols-2">
+          <div className="h-24 animate-pulse rounded-[22px] bg-slate-100/90" />
+          <div className="h-24 animate-pulse rounded-[22px] bg-slate-100/90" />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function AppFrame() {
   return (
@@ -12,7 +29,9 @@ export default function AppFrame() {
           <Sidebar />
 
           <div className="min-w-0 pb-2">
-            <Outlet />
+            <Suspense fallback={<RouteLoadingFallback />}>
+              <Outlet />
+            </Suspense>
           </div>
         </div>
       </main>

@@ -1,30 +1,14 @@
 """Multi-composition comparison endpoint."""
 
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel, Field
 
 from backend.core.cost_engine import estimate_catalyst_cost_simple
+from backend.schemas.comparison import CompareRequest, CompareResponse
 
 router = APIRouter(prefix="/api", tags=["compare"])
 
 
-class CompositionInput(BaseModel):
-    label: str = ""
-    metal_symbol: str
-    metal_price: float = Field(gt=0)
-    metal_price_unit: str = "$/troy_oz"
-    metal_loading_wt_pct: float = Field(gt=0, le=100)
-    support_name: str = "Al2O3"
-    support_price_per_lb: float = 0.50
-    steps: list[str] = ["mixer_slurry", "incipient_wetness", "dryer_rotary_100_300C"]
-    order_size_tons: float = 10.0
-
-
-class CompareRequest(BaseModel):
-    compositions: list[CompositionInput] = Field(..., min_length=2, max_length=4)
-
-
-@router.post("/compare")
+@router.post("/compare", response_model=CompareResponse)
 def compare_compositions(req: CompareRequest):
     """Compare up to 4 catalyst compositions side-by-side."""
     results = []
@@ -56,6 +40,6 @@ def compare_compositions(req: CompareRequest):
                 "scale": result["step_method"]["scale"],
             })
         except ValueError as e:
-            raise HTTPException(status_code=422, detail=f"Composition {i}: {e}")
+            raise HTTPException(status_code=422, detail=f"Composition {i + 1}: {e}")
 
     return {"compositions": results}

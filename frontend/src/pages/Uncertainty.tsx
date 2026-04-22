@@ -1,11 +1,12 @@
 import type { ReactNode } from 'react';
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { WorkspaceSectionFooter, WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
 import { runEstimateRange, type CostInput, type EstimateRangeResult } from '../lib/api';
 import { loadCalculatorDraft, loadCalculatorResultSnapshot, type CalculatorDraft, type CalculatorRow } from '../lib/calculator-session';
 import { useUnit } from '../lib/use-unit';
+
+const EstimateRangeBarChart = lazy(() => import('../components/charts/EstimateRangeBarChart'));
 
 const RANGE_SECTIONS: WorkspaceSection[] = [
   { id: 'case', label: 'Current Case', summary: 'Use the same draft that feeds Cost Estimate.' },
@@ -49,6 +50,15 @@ function FieldBlock({
       </div>
       <div className="mt-2">{children}</div>
     </label>
+  );
+}
+
+function ChartFallback() {
+  return (
+    <div className="flex h-full min-h-[280px] items-center justify-center gap-3 rounded-[24px] border border-slate-200 bg-slate-50/80 text-center">
+      <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#78f2d0] border-t-transparent" />
+      <div className="text-sm text-slate-600">Loading range chart...</div>
+    </div>
   );
 }
 
@@ -467,29 +477,9 @@ export default function Uncertainty() {
                 <div className="cp-heading-lg mt-2">Percentile-weighted price spread</div>
 
                 <div className="mt-5 h-[280px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={histData} barSize={54}>
-                      <CartesianGrid stroke="rgba(100,116,139,0.18)" vertical={false} />
-                      <XAxis dataKey="range" tick={{ fill: '#66748b', fontSize: 10 }} axisLine={false} tickLine={false} />
-                      <YAxis tick={{ fill: '#66748b', fontSize: 11 }} axisLine={false} tickLine={false} />
-                      <Tooltip
-                        formatter={(value) => [`${value}%`, 'Share of simulations']}
-                        contentStyle={{
-                          borderRadius: 18,
-                          border: '1px solid rgba(31,47,72,0.10)',
-                          background: 'rgba(255,251,245,0.96)',
-                          color: '#142033',
-                          fontSize: 12,
-                          boxShadow: '0 18px 48px rgba(23,34,51,0.12)',
-                        }}
-                      />
-                      <Bar dataKey="value" radius={[6, 6, 0, 0]}>
-                        {histData.map((entry) => (
-                          <Cell key={entry.range} fill={entry.fill} />
-                        ))}
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
+                  <Suspense fallback={<ChartFallback />}>
+                    <EstimateRangeBarChart data={histData} />
+                  </Suspense>
                 </div>
               </div>
 

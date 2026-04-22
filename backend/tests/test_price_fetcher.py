@@ -1,4 +1,5 @@
 import math
+from datetime import UTC, datetime
 
 from backend.core.price_fetcher import (
     _extract_yahoo_history,
@@ -6,6 +7,12 @@ from backend.core.price_fetcher import (
     _parse_johnson_matthey_current_prices,
     _parse_markets_insider_quote,
 )
+
+
+def _assert_utc_timestamp(value: str) -> None:
+    parsed = datetime.fromisoformat(value)
+    assert parsed.tzinfo is not None
+    assert parsed.astimezone(UTC).utcoffset() == UTC.utcoffset(parsed)
 
 
 def test_extract_yahoo_quote_uses_market_price_and_factor():
@@ -29,6 +36,7 @@ def test_extract_yahoo_quote_uses_market_price_and_factor():
 
     assert math.isclose(price or 0, 1.4282, rel_tol=1e-4)
     assert fetched_at.startswith("2024-03-09T")
+    _assert_utc_timestamp(fetched_at)
 
 
 def test_extract_yahoo_history_scales_ohlc_rows():
@@ -70,6 +78,7 @@ def test_parse_johnson_matthey_current_prices_reads_hidden_input():
     assert results["Ir"]["source"] == "Johnson Matthey (live)"
     assert results["Ru"]["price"] == 1750.0
     assert results["Ru"]["fetched_at"].startswith("2026-03-25T")
+    _assert_utc_timestamp(results["Ru"]["fetched_at"])
 
 
 def test_parse_markets_insider_quote_converts_metric_ton_to_lb():
@@ -94,3 +103,4 @@ def test_parse_markets_insider_quote_converts_metric_ton_to_lb():
     assert quote["symbol"] == "Ni"
     assert quote["source"] == "Markets Insider (live)"
     assert math.isclose(quote["price"], 7.6276, rel_tol=1e-4)
+    _assert_utc_timestamp(quote["fetched_at"])

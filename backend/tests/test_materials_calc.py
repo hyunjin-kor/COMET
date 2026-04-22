@@ -33,10 +33,16 @@ class TestStoichiometry:
         assert result == pytest.approx(80.0)
 
     def test_support_mass_invalid(self):
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError) as zero_excinfo:
             calculate_support_mass(10, 0)
-        with pytest.raises(ValueError):
+        assert str(zero_excinfo.value) == "wt_pct must be between 0 and 100 exclusive, got 0"
+
+        with pytest.raises(ValueError) as hundred_excinfo:
             calculate_support_mass(10, 100)
+        assert (
+            str(hundred_excinfo.value)
+            == "wt_pct must be between 0 and 100 exclusive, got 100"
+        )
 
     def test_catalyst_mass(self):
         result = calculate_catalyst_mass(2.0, 98.0)
@@ -47,8 +53,9 @@ class TestStoichiometry:
         assert result == pytest.approx(10000.0)
 
     def test_scaling_factor_invalid(self):
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError) as excinfo:
             calculate_scaling_factor(100, 0)
+        assert str(excinfo.value) == "m_cat_lab must be positive"
 
 
 class TestPricing:
@@ -61,8 +68,9 @@ class TestPricing:
         assert result <= 25.0
 
     def test_bulk_price_insufficient_points(self):
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError) as excinfo:
             extrapolate_bulk_price([(1, 10)], 100)
+        assert str(excinfo.value) == "At least 2 price points are required for regression"
 
     def test_precursor_price(self):
         # Pt at $950/TrOz, H2PtCl6 has 37.68% Pt, 5% markup
@@ -70,8 +78,9 @@ class TestPricing:
         assert result == pytest.approx(950 / 0.3768 * 1.05, rel=0.01)
 
     def test_precursor_price_invalid_fraction(self):
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError) as excinfo:
             precursor_price_from_metal(100, 0, 1.05)
+        assert str(excinfo.value) == "metal_fraction must be in (0, 1], got 0"
 
     def test_materials_cost_simple(self):
         # Ni at $7.50/lb, 21 wt% on Al2O3 at $0.50/lb

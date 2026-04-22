@@ -186,12 +186,13 @@ def calculate_cost_quick(req: QuickCalculationRequest):
     """Quick estimation with minimal single-metal inputs."""
 
     steps = ["mixer_slurry", "incipient_wetness", "dryer_rotary_100_300C"]
-    if req.template_id:
-        template = _load_template(req.template_id)
-        if template is not None:
-            steps = template.get("steps", steps)
 
     try:
+        if req.template_id:
+            template = _load_template(req.template_id)
+            if template is not None:
+                steps = template.get("steps", steps)
+
         result = estimate_catalyst_cost_simple(
             metal_symbol=req.metal_symbol,
             metal_price=req.metal_price,

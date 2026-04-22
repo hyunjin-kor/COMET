@@ -27,6 +27,22 @@ class UncertaintyRequest(BaseModel):
 
     @model_validator(mode="after")
     def validate_payload(self) -> "UncertaintyRequest":
+        if self.uncertainties:
+            for name, bounds in self.uncertainties.items():
+                if len(bounds) != 2:
+                    raise ValueError(
+                        f"Uncertainty '{name}' must provide exactly two values: [low, high]"
+                    )
+                low, high = bounds
+                if low <= 0 or high <= 0:
+                    raise ValueError(
+                        f"Uncertainty '{name}' must use strictly positive bounds"
+                    )
+                if low > high:
+                    raise ValueError(
+                        f"Uncertainty '{name}' must be a nondecreasing pair [low, high]"
+                    )
+
         if self.calculation_input is not None:
             return self
         required = {

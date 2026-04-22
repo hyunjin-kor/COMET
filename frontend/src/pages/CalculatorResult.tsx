@@ -1,5 +1,4 @@
-import { useLayoutEffect, useState } from 'react';
-import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
+import { lazy, Suspense, useLayoutEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   WorkspaceSectionFooter,
@@ -10,6 +9,8 @@ import {
 import type { CostResult } from '../lib/api';
 import { loadCalculatorResultSnapshot } from '../lib/calculator-session';
 import { useUnit } from '../lib/use-unit';
+
+const ResultBreakdownPieChart = lazy(() => import('../components/charts/ResultBreakdownPieChart'));
 
 const CHART_COLORS = ['#78f2d0', '#88a8ff', '#efc36c', '#f3a08d', '#c5b7ff', '#8de0ff'];
 const RESULT_SECTIONS: WorkspaceSection[] = [
@@ -87,6 +88,15 @@ function RailRow({ label, value, detail }: { label: string; value: string; detai
         {detail ? <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div> : null}
       </div>
       <div className="text-right text-sm font-semibold text-slate-950">{value}</div>
+    </div>
+  );
+}
+
+function ChartFallback() {
+  return (
+    <div className="flex h-full min-h-[240px] items-center justify-center gap-3 rounded-[24px] border border-slate-200 bg-slate-50/80 text-center">
+      <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#78f2d0] border-t-transparent" />
+      <div className="text-sm text-slate-600">Loading breakdown chart...</div>
     </div>
   );
 }
@@ -477,26 +487,9 @@ export default function CalculatorResult() {
             <div className="cp-heading-sm">Breakdown wheel</div>
             <div className="mt-1 text-xs text-slate-500">Materials, processing, and selling adjustments.</div>
             <div className="mt-4 h-[240px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie data={pieData} innerRadius={64} outerRadius={96} dataKey="value" paddingAngle={3} stroke="transparent">
-                    {pieData.map((entry, index) => (
-                      <Cell key={entry.name} fill={CHART_COLORS[index % CHART_COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    formatter={(value) => [`${Number(value).toFixed(1)}%`, 'Share']}
-                    contentStyle={{
-                      borderRadius: 18,
-                      border: '1px solid rgba(31,47,72,0.10)',
-                      background: 'rgba(255,251,245,0.96)',
-                      color: '#142033',
-                      fontSize: 12,
-                      boxShadow: '0 18px 48px rgba(23,34,51,0.12)',
-                    }}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
+              <Suspense fallback={<ChartFallback />}>
+                <ResultBreakdownPieChart data={pieData} colors={CHART_COLORS} />
+              </Suspense>
             </div>
             <div className="mt-2 grid gap-2 sm:grid-cols-2">
               {pieData.map((entry, index) => (

@@ -21,8 +21,9 @@ class TestEquipmentCost:
         assert result == pytest.approx(100000 * 2**0.6, rel=0.01)
 
     def test_scaling_invalid_size(self):
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError) as excinfo:
             equipment_cost_scaling(100000, 0, 100)
+        assert str(excinfo.value) == "Size parameters must be positive"
 
     def test_cost_correlation(self):
         # Cost = 5000 + 200 * 100^0.6

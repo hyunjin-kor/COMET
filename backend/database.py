@@ -9,6 +9,7 @@ from sqlalchemy import inspect
 from sqlmodel import Session, SQLModel, create_engine, select
 
 from backend.config import settings
+from backend.models.equipment import Equipment
 from backend.models.material import Material
 from backend.paths import data_dir
 

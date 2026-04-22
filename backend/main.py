@@ -17,8 +17,12 @@ from backend.routers import (
     catcost_import,
     compare,
     decision,
+    equipment,
+    estimates,
+    indices,
     materials,
     prices,
+    templates,
     uncertainty,
 )
 from backend.services.price_scheduler import collect_prices
@@ -92,7 +96,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins_list,
     allow_credentials=False,
-    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["Content-Type"],
 )
 
@@ -103,6 +107,10 @@ app.include_router(uncertainty.router)
 app.include_router(compare.router)
 app.include_router(catcost_import.router)
 app.include_router(decision.router)
+app.include_router(templates.router)
+app.include_router(equipment.router)
+app.include_router(estimates.router)
+app.include_router(indices.router)
 
 
 @app.middleware("http")

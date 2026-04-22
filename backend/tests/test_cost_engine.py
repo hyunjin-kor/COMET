@@ -16,6 +16,7 @@ import pytest
 from backend.core.constants import TROY_OZ_PER_LB
 from backend.core.cost_engine import estimate_catalyst_cost
 from backend.core.step_method import calculate_step_method
+from backend.core.uncertainty import run_monte_carlo
 
 
 class TestStepMethodVerification:
@@ -188,7 +189,7 @@ class TestCostEngine:
         )
 
     def test_invalid_price_unit(self):
-        with pytest.raises(ValueError, match="Unknown metal_price_unit"):
+        with pytest.raises(ValueError) as excinfo:
             estimate_catalyst_cost(
                 metal_symbol="Ni",
                 metal_price=7.50,
@@ -197,6 +198,7 @@ class TestCostEngine:
                 support_name="Al2O3",
                 support_price_per_lb=0.50,
             )
+        assert str(excinfo.value) == "Unknown metal_price_unit: $/gallon"
 
     def test_cost_breakdown_percentages(self):
         result = estimate_catalyst_cost(
@@ -229,3 +231,25 @@ class TestCostEngine:
             order_size_tons=10.0, basis_year=2017, target_year=2022,
         )
         assert escalated["summary"]["estimated_price_per_lb"] > base["summary"]["estimated_price_per_lb"]
+
+
+class TestUncertaintyEngine:
+    def test_run_monte_carlo_raises_when_all_simulations_fail(self):
+        base_params = {
+            "metal_symbol": "Ni",
+            "metal_price": 7.50,
+            "metal_price_unit": "$/lb",
+            "metal_loading_wt_pct": 15.0,
+            "support_name": "Al2O3",
+            "support_price_per_lb": 0.50,
+            "steps": ["mixer_slurry", "incipient_wetness"],
+            "order_size_tons": 10.0,
+        }
+
+        with pytest.raises(ValueError, match="All simulations failed"):
+            run_monte_carlo(
+                base_params,
+                uncertainties={"metal_loading_wt_pct": (10.0, 10.0)},
+                n_simulations=5,
+                seed=42,
+            )

@@ -70,9 +70,13 @@ class TestStepMethod:
             calculate_step_method(1.0, ["nonexistent_step"], 10)
 
     def test_unavailable_scale(self):
-        # dryer_batch_vacuum_tray only available at small scale
-        with pytest.raises(ValueError, match="not available"):
-            calculate_step_method(1.0, ["dryer_batch_vacuum_tray"], 20)
+        # dryer_spray is unavailable at small scale
+        with pytest.raises(ValueError) as excinfo:
+            calculate_step_method(1.0, ["dryer_spray"], 2)
+        assert str(excinfo.value) == (
+            "Step 'dryer_spray' is not available at 'small' scale. "
+            "Try a different scale or substitute step."
+        )
 
     def test_basic_calculation(self):
         result = calculate_step_method(

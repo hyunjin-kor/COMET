@@ -1,8 +1,9 @@
 """Metal price history model."""
 
-from datetime import datetime
+from datetime import UTC, datetime
 
-from sqlmodel import Field, SQLModel
+from sqlalchemy import DateTime
+from sqlmodel import Column, Field, SQLModel
 
 
 class MetalPrice(SQLModel, table=True):
@@ -16,4 +17,7 @@ class MetalPrice(SQLModel, table=True):
     price: float
     unit: str  # "$/troy_oz" or "$/lb"
     source: str  # API source name
-    fetched_at: datetime = Field(default_factory=datetime.utcnow)
+    fetched_at: datetime = Field(
+        default_factory=lambda: datetime.now(UTC),
+        sa_column=Column(DateTime(timezone=True), nullable=False),
+    )

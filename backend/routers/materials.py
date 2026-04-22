@@ -1,5 +1,6 @@
 """Materials library API endpoints."""
 
+import hashlib
 import json
 import re
 
@@ -9,8 +10,11 @@ from sqlmodel import Session, select
 
 from backend.core.material_pricing import mass_price_to_per_lb
 from backend.database import ensure_material_library_seeded, get_session
+from backend.models.equipment import Equipment
 from backend.models.material import Material
 from backend.paths import data_dir
+from backend.schemas.equipment import EquipmentResponse
+from backend.schemas.material import MaterialCreate, MaterialUpdate
 
 router = APIRouter(prefix="/api/materials", tags=["materials"])
 
@@ -81,6 +85,57 @@ _SUPPORT_IDENTITY_RULES = (
 )
 
 
+def _load_equipment_library() -> list[dict]:
+    """Load the bundled equipment library rows."""
+
+    with open(_DATA_DIR / "equipment_library.json", encoding="utf-8") as handle:
+        payload = json.load(handle)
+    return payload.get("equipment", [])
+
+
+def _equipment_library_key(equipment: dict) -> str:
+    """Generate a deterministic key for one bundled equipment row."""
+
+    fingerprint = json.dumps(equipment, sort_keys=True, separators=(",", ":"))
+    digest = hashlib.sha1(fingerprint.encode("utf-8")).hexdigest()[:16]
+    return f"bundled:{digest}"
+
+
+def _equipment_to_response(equipment: dict) -> dict:
+    """Normalize a bundled equipment row into the API response shape."""
+
+    payload = dict(equipment)
+    payload["id"] = _equipment_library_key(equipment)
+    payload["is_custom"] = False
+    return payload
+
+
+def get_bundled_equipment_detail(equipment_id: str) -> dict:
+    """Load one bundled equipment row by its stable deterministic id."""
+
+    for equipment in _load_equipment_library():
+        if _equipment_library_key(equipment) == equipment_id:
+            return _equipment_to_response(equipment)
+    raise HTTPException(status_code=404, detail="Equipment not found")
+
+
+def _custom_equipment_to_response(record: Equipment) -> dict:
+    """Normalize a custom equipment row into the dedicated API response shape."""
+
+    return EquipmentResponse.model_validate(record).model_dump()
+
+
+def get_equipment_detail(equipment_id: str, session: Session) -> dict:
+    """Resolve bundled and custom equipment identifiers into one response shape."""
+
+    if equipment_id.isdigit():
+        record = session.get(Equipment, int(equipment_id))
+        if record is not None:
+            return _custom_equipment_to_response(record)
+
+    return get_bundled_equipment_detail(equipment_id)
+
+
 def _material_to_response(material: Material) -> dict:
     """Normalize DB rows into the API response shape used by the frontend."""
 
@@ -108,6 +163,24 @@ def _material_to_response(material: Material) -> dict:
         "reference_url": material.reference_url,
         "is_custom": material.is_custom,
     }
+
+
+def _get_material_or_404(material_id: int, session: Session) -> Material:
+    """Load one material row by numeric identifier."""
+
+    material = session.get(Material, material_id)
+    if material is None:
+        raise HTTPException(status_code=404, detail="Material not found")
+    return material
+
+
+def _get_custom_material_or_error(material_id: int, session: Session) -> Material:
+    """Load one custom material row and reject bundled reference rows."""
+
+    material = _get_material_or_404(material_id, session)
+    if not material.is_custom:
+        raise HTTPException(status_code=403, detail="Bundled library materials are read-only")
+    return material
 
 
 def _template_domain(template: dict) -> str:
@@ -371,14 +444,15 @@ def list_application_families(session: Session = Depends(get_session)):
 
 
 @router.post("")
-def create_material(material: Material, session: Session = Depends(get_session)):
+def create_material(payload: MaterialCreate, session: Session = Depends(get_session)):
     """Add a custom material to the library."""
+    material = Material(**payload.model_dump())
     material.library_key = None
     material.is_custom = True
     session.add(material)
     session.commit()
     session.refresh(material)
-    return material
+    return _material_to_response(material)
 
 
 @router.get("/templates")
@@ -442,14 +516,64 @@ def list_equipment(
     limit: int = Query(default=100, le=500),
 ):
     """List equipment from library."""
-    with open(_DATA_DIR / "equipment_library.json", encoding="utf-8") as f:
-        data = json.load(f)
-    equipment = data.get("equipment", [])
+    equipment = _load_equipment_library()
     results = []
     for eq in equipment:
         if category and category.lower() not in (eq.get("category") or "").lower():
             continue
         if q and q.lower() not in (eq.get("name") or "").lower():
             continue
-        results.append(eq)
+        results.append(_equipment_to_response(eq))
     return results[:limit]
+
+
+@router.get("/equipment/{equipment_id}")
+def get_equipment_detail_via_legacy_alias(
+    equipment_id: str,
+    session: Session = Depends(get_session),
+):
+    """Support legacy material-scoped equipment detail lookups."""
+
+    return get_equipment_detail(equipment_id, session)
+
+
+@router.get("/{material_id}")
+def get_material(
+    material_id: int,
+    session: Session = Depends(get_session),
+):
+    """Get one material row by numeric identifier."""
+
+    material = _get_material_or_404(material_id, session)
+    return _material_to_response(material)
+
+
+@router.patch("/{material_id}")
+def update_material(
+    material_id: int,
+    payload: MaterialUpdate,
+    session: Session = Depends(get_session),
+):
+    """Patch mutable fields on a custom material row."""
+
+    material = _get_custom_material_or_error(material_id, session)
+    for field_name, value in payload.model_dump(exclude_unset=True).items():
+        setattr(material, field_name, value)
+
+    session.add(material)
+    session.commit()
+    session.refresh(material)
+    return _material_to_response(material)
+
+
+@router.delete("/{material_id}")
+def delete_material(
+    material_id: int,
+    session: Session = Depends(get_session),
+):
+    """Delete one custom material row by numeric identifier."""
+
+    material = _get_custom_material_or_error(material_id, session)
+    session.delete(material)
+    session.commit()
+    return {"status": "deleted", "id": str(material_id)}
