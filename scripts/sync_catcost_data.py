@@ -9,8 +9,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from catcost_excel import (
-    CatCostWorkbook,
     DATA_DIR,
+    CatCostWorkbook,
     extract_capex_factors,
     extract_cepci,
     extract_chemppi,

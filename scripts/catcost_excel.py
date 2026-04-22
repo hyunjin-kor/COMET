@@ -11,8 +11,8 @@ from __future__ import annotations
 import json
 import re
 import unicodedata
-import zipfile
 import xml.etree.ElementTree as ET
+import zipfile
 from pathlib import Path
 from typing import Any
 

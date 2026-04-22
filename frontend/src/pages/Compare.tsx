@@ -114,6 +114,18 @@ export default function Compare() {
   const [error, setError] = useState('');
   const [activeSlug, setActiveSlug] = useState<string | null>(null);
 
+  function handleFamilyChange(nextFamily: string) {
+    setLoading(true);
+    setError('');
+    setFamily(nextFamily);
+  }
+
+  function handleProfileChange(nextProfile: DecisionProfile) {
+    setLoading(true);
+    setError('');
+    setProfile(nextProfile);
+  }
+
   useEffect(() => {
     fetchBenchmarkFamilies()
       .then((payload) => {
@@ -133,8 +145,6 @@ export default function Compare() {
 
   useEffect(() => {
     if (!family) return;
-    setLoading(true);
-    setError('');
     fetchDecisionBenchmark(family, profile)
       .then((payload) => {
         setBenchmark(payload);
@@ -146,7 +156,7 @@ export default function Compare() {
       .finally(() => setLoading(false));
   }, [family, profile]);
 
-  const candidates = benchmark?.candidates ?? [];
+  const candidates = useMemo(() => benchmark?.candidates ?? [], [benchmark?.candidates]);
   const activeFamily = useMemo(() => families.find((item) => item.family === family) ?? null, [families, family]);
   const activeCandidate = useMemo(
     () => candidates.find((candidate) => candidate.slug === activeSlug) ?? benchmark?.winner ?? null,
@@ -233,7 +243,7 @@ export default function Compare() {
                 <div className="cp-subtle-label">Benchmark family</div>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {families.map((option) => (
-                    <button key={option.family} onClick={() => setFamily(option.family)} className={`rounded-[18px] border px-3 py-2 text-left text-sm transition ${option.family === family ? 'border-teal-200 bg-teal-50 text-teal-700' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}>
+                    <button key={option.family} onClick={() => handleFamilyChange(option.family)} className={`rounded-[18px] border px-3 py-2 text-left text-sm transition ${option.family === family ? 'border-teal-200 bg-teal-50 text-teal-700' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}>
                       <div className="font-semibold">{option.title}</div>
                       <div className="mt-1 text-xs leading-5 text-slate-500">{catalystDomainLabel(option.catalyst_domain)} / {applicationFamilyLabel(option.application_family)}</div>
                     </button>
@@ -244,7 +254,7 @@ export default function Compare() {
                 <div className="cp-subtle-label">Ranking profile</div>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {PROFILE_OPTIONS.map((option) => (
-                    <button key={option.id} onClick={() => setProfile(option.id)} className={`rounded-[18px] border px-3 py-2 text-left text-sm transition ${option.id === profile ? 'border-teal-200 bg-teal-50 text-teal-700' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}>
+                    <button key={option.id} onClick={() => handleProfileChange(option.id)} className={`rounded-[18px] border px-3 py-2 text-left text-sm transition ${option.id === profile ? 'border-teal-200 bg-teal-50 text-teal-700' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}>
                       <div className="font-semibold">{option.label}</div>
                       <div className="mt-1 text-xs leading-5 text-slate-500">{option.note}</div>
                     </button>

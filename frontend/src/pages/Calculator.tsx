@@ -563,7 +563,9 @@ export default function Calculator() {
           nextActiveOptions,
           nextSupportOptions,
         ));
-      } catch {}
+      } catch {
+        // Keep the form usable when live prices are temporarily unavailable.
+      }
     }
 
     void loadPrices();

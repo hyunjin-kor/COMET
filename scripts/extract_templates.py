@@ -1,8 +1,8 @@
 """Extract step method templates and CapEx/OpEx factors from CatCost Excel."""
-import zipfile
-import xml.etree.ElementTree as ET
-import sys
 import os
+import sys
+import xml.etree.ElementTree as ET
+import zipfile
 
 sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
@@ -14,14 +14,14 @@ def get_ss(z):
     ss = []
     root = ET.fromstring(z.read('xl/sharedStrings.xml'))
     for si in root:
-        texts = [t.text or '' for t in si.iter('{%s}t' % NS) if t.text]
+        texts = [t.text or '' for t in si.iter(f'{{{NS}}}t') if t.text]
         ss.append(''.join(texts))
     return ss
 
 
 def cell_val(cell, ss):
     t = cell.get('t', '')
-    v = cell.find('{%s}v' % NS)
+    v = cell.find(f'{{{NS}}}v')
     if v is None:
         return ''
     val = v.text or ''
@@ -36,7 +36,7 @@ def cell_val(cell, ss):
 def get_all_rows(z, fname, ss, max_rows=500):
     """Return all rows as list of dicts with col letter -> value."""
     root = ET.fromstring(z.read('xl/worksheets/' + fname))
-    sd = root.find('{%s}sheetData' % NS)
+    sd = root.find(f'{{{NS}}}sheetData')
     if sd is None:
         return []
     rows = []

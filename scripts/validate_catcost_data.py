@@ -23,7 +23,6 @@ from catcost_excel import (
     slugify,
 )
 
-
 ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "backend" / "data"
 PROCESS_TEMPLATES_DIR = DATA_DIR / "process_templates"
