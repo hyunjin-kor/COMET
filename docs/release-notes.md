@@ -1,5 +1,29 @@
 # Release Notes
 
+## v1.1.12 Final Desktop and Release Sync
+
+Date: April 22, 2026
+
+This release finalizes the current desktop workflow update set and aligns the repository, packaged app, and release-facing version metadata on the `1.1.12` line.
+
+### Included In This Update
+
+- Synced Python package metadata to `1.1.12` so backend/package versioning matches the desktop and frontend version line.
+- Added explicit regression coverage for remaining backend error-contract helpers in `materials_calc` and `material_pricing`.
+- Re-verified the packaged Electron desktop flow with current frontend assets, backend sidecar bundling, and smoke coverage.
+- Updated README and getting-started release references so installer and portable asset names match the current release workflow outputs.
+
+### Validation Status
+
+The following checks passed on April 22, 2026:
+
+```bash
+python -m pytest backend/tests -q
+npm.cmd run build:frontend
+npm.cmd run pack
+npm.cmd run smoke:desktop
+```
+
 ## v1.1.11 Release Sync and README Screen Audit
 
 Date: April 9, 2026
