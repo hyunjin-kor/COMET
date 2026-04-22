@@ -22,7 +22,7 @@ dist-electron\
 
 Primary outputs:
 
-- `dist-electron\CatPrice Setup 1.1.12.exe`
+- `dist-electron\CatPrice Setup 1.1.13.exe`
 - `dist-electron\win-unpacked\CatPrice.exe`
 
 For normal distribution, the installer is enough. The packaged app bundles the local backend and the seed data files, and CatPrice initializes or updates the local SQLite database at startup.

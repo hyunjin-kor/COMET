@@ -1,5 +1,29 @@
 # Release Notes
 
+## v1.1.13 Release Workflow Fix and Final Completion Pass
+
+Date: April 22, 2026
+
+This release closes the remaining completion blocker from the `1.1.12` line by fixing the GitHub desktop-release workflow and reissuing the desktop package on the `1.1.13` version line.
+
+### Included In This Update
+
+- Updated the GitHub Actions desktop release workflow so tagged builds do not trigger implicit `electron-builder` publishing before the release-upload step.
+- Bumped the desktop app, frontend package, backend API, and Python package metadata to `1.1.13`.
+- Synced installer references in the README and getting-started guide to the new package line.
+- Re-ran the local desktop packaging and smoke path to confirm the releasable build still works after the workflow fix.
+
+### Validation Status
+
+The following checks passed on April 22, 2026:
+
+```bash
+python -m pytest backend/tests -q
+npm.cmd run build:frontend
+npm.cmd run build
+npm.cmd run smoke:desktop
+```
+
 ## v1.1.12 Final Desktop and Release Sync
 
 Date: April 22, 2026

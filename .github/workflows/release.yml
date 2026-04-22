@@ -34,7 +34,11 @@ jobs:
         run: npm ci
 
       - name: Build desktop app
-        run: npm run build
+        run: |
+          npm run build:frontend
+          npm run build:backend-sidecar
+          npm run desktop:stop
+          npx electron-builder build --win --publish never
 
       - name: Archive unpacked desktop build
         shell: powershell
