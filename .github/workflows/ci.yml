@@ -20,7 +20,7 @@ jobs:
         run: pip install -e ".[dev]"
 
       - name: Lint
-        run: ruff check backend/
+        run: ruff check .
 
       - name: Test
         run: pytest backend/tests/ -v
@@ -39,6 +39,9 @@ jobs:
 
       - name: Install
         run: npm ci
+
+      - name: Lint
+        run: npm run lint
 
       - name: Build
         run: npm run build

@@ -33,6 +33,13 @@ jobs:
         working-directory: frontend
         run: npm ci
 
+      - name: Lint Python
+        run: ruff check .
+
+      - name: Lint frontend
+        working-directory: frontend
+        run: npm run lint
+
       - name: Build desktop app
         run: |
           npm run build:frontend
