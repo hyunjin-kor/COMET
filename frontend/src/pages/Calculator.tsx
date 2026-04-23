@@ -569,7 +569,7 @@ export default function Calculator() {
     }
 
     void loadPrices();
-  }, []);
+  }, [thermalOptions?.active_metal_options, thermalOptions?.support_options]);
 
   useEffect(() => {
     async function loadThermalOptions() {
@@ -591,7 +591,7 @@ export default function Calculator() {
     }
 
     void loadThermalOptions();
-  }, []);
+  }, [livePriceRows]);
 
   useEffect(() => {
     async function loadElectrocatalystReferences() {
@@ -706,6 +706,7 @@ export default function Calculator() {
     catalystDomain,
     electroMaterials,
     electroTemplates,
+    applicationFamily,
     electrocatalystConfig.catalystMaterialKey,
     electrocatalystConfig.ionomerMaterialKey,
     electrocatalystConfig.membraneMaterialKey,

@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 import { WorkspaceSectionFooter, WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
 import { apiUrl, fetchPrices, refreshPrices, type MetalPrice } from '../lib/api';
 import { LB_PER_KG, TROY_OZ_PER_KG, TROY_OZ_PER_LB, type Unit } from '../lib/unit-conversion';
@@ -155,19 +155,19 @@ export default function Prices() {
   const [histLoading, setHistLoading] = useState(false);
   const [period, setPeriod] = useState<Period>('1y');
 
-  const load = () => {
+  const load = useCallback(() => {
     setLoading(true);
     fetchPrices()
       .then((data) => {
         const rows = data as (MetalPrice & { is_live?: boolean })[];
         setPrices(rows);
-        if (!selected && rows.length > 0) setSelected(rows[0].symbol);
+        setSelected((current) => current ?? rows[0]?.symbol ?? null);
       })
       .catch(() => {})
       .finally(() => setLoading(false));
-  };
+  }, []);
 
-  useEffect(load, []);
+  useEffect(load, [load]);
 
   useEffect(() => {
     if (!selected) return;
