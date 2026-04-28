@@ -38,14 +38,14 @@ export default function Sidebar() {
                   to={item.to}
                   className={`group flex items-center gap-3 rounded-[18px] border px-3 py-3 transition ${
                     isActive
-                      ? 'border-[#7cf1d0]/18 bg-[linear-gradient(135deg,rgba(124,241,208,0.14),rgba(255,255,255,0.06))] shadow-[0_12px_26px_rgba(0,0,0,0.12)]'
+                      ? 'border-[#c96442]/18 bg-[linear-gradient(135deg,rgba(124,241,208,0.14),rgba(255,255,255,0.06))] shadow-[0_12px_26px_rgba(0,0,0,0.12)]'
                       : 'border-white/8 bg-white/[0.025] hover:border-white/14 hover:bg-white/[0.05]'
                   }`}
                 >
                   <div
                     className={`flex h-10 w-10 flex-none items-center justify-center rounded-[16px] border transition ${
                       isActive
-                        ? 'border-[#7cf1d0]/22 bg-[#7cf1d0]/12 text-[#c7fbeb]'
+                        ? 'border-[#c96442]/22 bg-[#c96442]/12 text-[#f0d9cb]'
                         : 'border-white/10 bg-white/6 text-slate-300 group-hover:text-white'
                     }`}
                   >
@@ -68,14 +68,14 @@ export default function Sidebar() {
             >
               <span
                 className={`flex-1 rounded-full px-3 py-2 text-xs font-semibold transition ${
-                  unit === 'kg' ? 'bg-[#7cf1d0] text-slate-950' : 'text-slate-300'
+                  unit === 'kg' ? 'bg-[#c96442] text-slate-950' : 'text-slate-300'
                 }`}
               >
                 kg
               </span>
               <span
                 className={`flex-1 rounded-full px-3 py-2 text-xs font-semibold transition ${
-                  unit === 'lb' ? 'bg-[#7cf1d0] text-slate-950' : 'text-slate-300'
+                  unit === 'lb' ? 'bg-[#c96442] text-slate-950' : 'text-slate-300'
                 }`}
               >
                 lb

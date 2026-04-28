@@ -1267,8 +1267,8 @@ export default function Calculator() {
     const items = rows.filter((row) => row.role === role);
     const selectionOptions = role === 'active_metal' ? activeMetalOptions : promoterOptions;
     const copy = role === 'active_metal'
-      ? { title: 'Active metals', description: 'Pick live metal feeds or library-backed material identities.', accent: 'bg-[#78f2d0]', button: 'Add active metal', placeholder: 'At least one active metal is required.' }
-      : { title: 'Promoters', description: 'Optional promoter rows use the same DB-backed thermal material bank.', accent: 'bg-[#88a8ff]', button: 'Add promoter', placeholder: 'No promoters added yet.' };
+      ? { title: 'Active metals', description: 'Pick live metal feeds or library-backed material identities.', accent: 'bg-[#c96442]', button: 'Add active metal', placeholder: 'At least one active metal is required.' }
+      : { title: 'Promoters', description: 'Optional promoter rows use the same DB-backed thermal material bank.', accent: 'bg-[#7c8db5]', button: 'Add promoter', placeholder: 'No promoters added yet.' };
 
     return (
       <div className="space-y-3">
@@ -1507,7 +1507,7 @@ export default function Calculator() {
         <div className="surface-ghost p-3.5">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#efc36c]" /><h3 className="cp-heading-sm">Support</h3></div>
+              <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#d4a857]" /><h3 className="cp-heading-sm">Support</h3></div>
               <p className="mt-1 text-xs leading-5 text-slate-500">
                 {supportIsSplit
                   ? 'Promoted support is on. Enter each support wt% explicitly so the total recipe closes at 100 wt%.'
