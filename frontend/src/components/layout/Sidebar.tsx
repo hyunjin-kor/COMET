@@ -68,14 +68,14 @@ export default function Sidebar() {
             >
               <span
                 className={`flex-1 rounded-full px-3 py-2 text-xs font-semibold transition ${
-                  unit === 'kg' ? 'bg-[#c96442] text-slate-950' : 'text-slate-300'
+                  unit === 'kg' ? 'bg-[#c96442] text-[#1a1612]' : 'text-slate-300'
                 }`}
               >
                 kg
               </span>
               <span
                 className={`flex-1 rounded-full px-3 py-2 text-xs font-semibold transition ${
-                  unit === 'lb' ? 'bg-[#c96442] text-slate-950' : 'text-slate-300'
+                  unit === 'lb' ? 'bg-[#c96442] text-[#1a1612]' : 'text-slate-300'
                 }`}
               >
                 lb

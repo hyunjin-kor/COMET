@@ -36,7 +36,7 @@ function uid() {
 
 function scoreTone(score: number) {
   if (score >= 80) return 'text-emerald-700';
-  if (score >= 60) return 'text-slate-950';
+  if (score >= 60) return 'text-[#1a1612]';
   return 'text-amber-700';
 }
 
@@ -94,7 +94,7 @@ function MetricTile({ label, value, detail }: { label: string; value: string; de
   return (
     <div className="cp-metric-tile">
       <div className="cp-subtle-label">{label}</div>
-      <div className="mt-2 text-[clamp(1.35rem,2vw,2rem)] leading-[1.08] font-display text-slate-950 [overflow-wrap:anywhere]">
+      <div className="mt-2 text-[clamp(1.35rem,2vw,2rem)] leading-[1.08] font-display text-[#1a1612] [overflow-wrap:anywhere]">
         {value}
       </div>
       <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div>
@@ -277,10 +277,10 @@ export default function Compare() {
               <button key={candidate.slug} onClick={() => { setActiveSlug(candidate.slug); sectionState.setActiveSection('detail'); }} className={`w-full rounded-[24px] border px-4 py-4 text-left transition ${activeCandidate.slug === candidate.slug ? 'border-emerald-200 bg-emerald-50/80' : 'border-slate-900/8 bg-white/64 hover:bg-white/88'}`}>
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                   <div className="min-w-0">
-                    <div className="flex items-center gap-3"><span className="flex h-9 w-9 items-center justify-center rounded-[16px] border border-slate-900/8 bg-white/72 text-sm font-semibold text-slate-950">{index + 1}</span><div className="min-w-0"><div className="truncate font-semibold text-slate-950">{candidate.title}</div><div className="mt-1 text-xs text-slate-500">{candidate.archetype}</div></div></div>
+                    <div className="flex items-center gap-3"><span className="flex h-9 w-9 items-center justify-center rounded-[16px] border border-slate-900/8 bg-white/72 text-sm font-semibold text-[#1a1612]">{index + 1}</span><div className="min-w-0"><div className="truncate font-semibold text-[#1a1612]">{candidate.title}</div><div className="mt-1 text-xs text-slate-500">{candidate.archetype}</div></div></div>
                     <div className="mt-3 text-sm leading-6 text-slate-600">{candidate.screening_summary}</div>
                   </div>
-                  <div className="grid shrink-0 gap-2 text-right sm:min-w-[150px]"><div><div className="cp-subtle-label">{candidate.summary.economics_basis_label}</div><div className="mt-2 text-2xl font-display text-slate-950">{benchmarkCostValue(candidate)}</div><div className="text-xs text-slate-500">{benchmarkCostDetail(candidate)}</div></div><div className={`text-sm font-semibold ${scoreTone(candidate.scores.total)}`}>Score {candidate.scores.total.toFixed(1)}</div></div>
+                  <div className="grid shrink-0 gap-2 text-right sm:min-w-[150px]"><div><div className="cp-subtle-label">{candidate.summary.economics_basis_label}</div><div className="mt-2 text-2xl font-display text-[#1a1612]">{benchmarkCostValue(candidate)}</div><div className="text-xs text-slate-500">{benchmarkCostDetail(candidate)}</div></div><div className={`text-sm font-semibold ${scoreTone(candidate.scores.total)}`}>Score {candidate.scores.total.toFixed(1)}</div></div>
                 </div>
               </button>
             ))}
@@ -323,11 +323,11 @@ export default function Compare() {
             <div className="space-y-4">
               <div className="surface-ghost p-4">
                 <div className="cp-subtle-label">Evidence anchors</div>
-                <div className="mt-3 space-y-3">{activeCandidate.literature_basis.map((item) => <a key={item.id} href={item.url} target="_blank" rel="noreferrer" className="block rounded-[18px] border border-slate-900/8 bg-white/64 px-3 py-3 transition hover:bg-white"><div className="font-semibold text-slate-950">{item.label}</div><div className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-400">{item.kind}</div><div className="mt-2 text-sm leading-6 text-slate-600">{item.note}</div></a>)}</div>
+                <div className="mt-3 space-y-3">{activeCandidate.literature_basis.map((item) => <a key={item.id} href={item.url} target="_blank" rel="noreferrer" className="block rounded-[18px] border border-slate-900/8 bg-white/64 px-3 py-3 transition hover:bg-white"><div className="font-semibold text-[#1a1612]">{item.label}</div><div className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-400">{item.kind}</div><div className="mt-2 text-sm leading-6 text-slate-600">{item.note}</div></a>)}</div>
               </div>
               <div className="surface-ghost p-4">
                 <div className="cp-subtle-label">Family literature bank</div>
-                <div className="mt-3 space-y-3">{benchmark.citations.map((item) => <a key={item.id} href={item.url} target="_blank" rel="noreferrer" className="block rounded-[18px] border border-slate-900/8 bg-white/64 px-3 py-3 transition hover:bg-white"><div className="flex flex-wrap items-center gap-2"><div className="font-semibold text-slate-950">{item.label}</div><span className="cp-chip">{item.kind}</span></div><div className="mt-2 text-sm leading-6 text-slate-600">{item.note}</div></a>)}</div>
+                <div className="mt-3 space-y-3">{benchmark.citations.map((item) => <a key={item.id} href={item.url} target="_blank" rel="noreferrer" className="block rounded-[18px] border border-slate-900/8 bg-white/64 px-3 py-3 transition hover:bg-white"><div className="flex flex-wrap items-center gap-2"><div className="font-semibold text-[#1a1612]">{item.label}</div><span className="cp-chip">{item.kind}</span></div><div className="mt-2 text-sm leading-6 text-slate-600">{item.note}</div></a>)}</div>
               </div>
             </div>
           </div>

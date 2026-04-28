@@ -113,7 +113,7 @@ function LibraryMetricTile({ label, value, detail }: { label: string; value: str
   return (
     <div className="rounded-[22px] border border-slate-900/8 bg-white/58 p-4">
       <div className="cp-subtle-label">{label}</div>
-      <div className="mt-2 text-2xl font-display text-slate-950">{value}</div>
+      <div className="mt-2 text-2xl font-display text-[#1a1612]">{value}</div>
       <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div>
     </div>
   );
@@ -126,7 +126,7 @@ function InspectorRow({ label, value, detail }: { label: string; value: string; 
         <div className="cp-subtle-label">{label}</div>
         {detail ? <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div> : null}
       </div>
-      <div className="text-right text-sm font-semibold text-slate-950">{value}</div>
+      <div className="text-right text-sm font-semibold text-[#1a1612]">{value}</div>
     </div>
   );
 }
@@ -350,7 +350,7 @@ export default function Library() {
                         >
                           <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
                             <div className="min-w-0">
-                              <div className="truncate font-semibold text-slate-950">{material.name}</div>
+                              <div className="truncate font-semibold text-[#1a1612]">{material.name}</div>
                               <div className="truncate text-xs text-slate-500">{material.symbol || material.formula || 'No symbol'}</div>
                               {material.notes ? <div className="mt-1 text-xs leading-5 text-slate-500">{material.notes}</div> : null}
                             </div>
@@ -375,7 +375,7 @@ export default function Library() {
               <div className="cp-inspector-rail">
                 <section className="cp-rail-panel">
                   <div className="cp-subtle-label">Source Detail</div>
-                  <div className="mt-2 text-lg font-semibold text-slate-950">{selectedMaterial?.name ?? 'Choose a material row'}</div>
+                  <div className="mt-2 text-lg font-semibold text-[#1a1612]">{selectedMaterial?.name ?? 'Choose a material row'}</div>
                   <div className="mt-3 flex flex-wrap gap-2">
                     {selectedMaterial ? <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${domainTone(selectedMaterial.catalyst_domain)}`}>{domainLabel(selectedMaterial.catalyst_domain)}</span> : null}
                     {selectedMaterial ? <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${applicationTone(selectedMaterial.application_family)}`}>{applicationLabel(selectedMaterial.application_family)}</span> : null}
@@ -426,7 +426,7 @@ export default function Library() {
                       >
                         <div className="flex items-start justify-between gap-3">
                           <div>
-                            <div className="font-semibold text-slate-950">{step.name}</div>
+                            <div className="font-semibold text-[#1a1612]">{step.name}</div>
                             <div className="mt-1 text-xs text-slate-500">{step.basis}</div>
                           </div>
                           <span className="cp-chip">{step.key}</span>
@@ -446,7 +446,7 @@ export default function Library() {
             <div className="cp-inspector-rail">
               <section className="cp-rail-panel">
                 <div className="cp-subtle-label">Step Detail</div>
-                <div className="mt-2 text-lg font-semibold text-slate-950">{selectedStep?.name ?? 'Choose a step row'}</div>
+                <div className="mt-2 text-lg font-semibold text-[#1a1612]">{selectedStep?.name ?? 'Choose a step row'}</div>
                 {selectedStep ? (
                   <>
                     <div className="mt-3 space-y-1">
@@ -521,7 +521,7 @@ export default function Library() {
               <div className="cp-inspector-rail">
                 <section className="cp-rail-panel">
                   <div className="cp-subtle-label">Route Audit</div>
-                  <div className="mt-2 text-lg font-semibold text-slate-950">{selectedTemplate?.name ?? 'Choose a template'}</div>
+                  <div className="mt-2 text-lg font-semibold text-[#1a1612]">{selectedTemplate?.name ?? 'Choose a template'}</div>
                   {selectedTemplate ? (
                     <>
                       <div className="mt-3 flex flex-wrap gap-2">
