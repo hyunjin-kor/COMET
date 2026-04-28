@@ -6,7 +6,7 @@ import { isNavigationPathActive, navigationItems } from './navigation';
 
 function MinimizeIcon() {
   return (
-    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth={1.5} className="h-3.5 w-3.5">
+    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth={1.5} className="h-3.5 w-3.5" aria-hidden="true">
       <path d="M2.25 6.75h7.5" strokeLinecap="round" />
     </svg>
   );
@@ -14,12 +14,12 @@ function MinimizeIcon() {
 
 function MaximizeIcon({ maximized }: { maximized: boolean }) {
   return maximized ? (
-    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth={1.2} className="h-3.5 w-3.5">
+    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth={1.2} className="h-3.5 w-3.5" aria-hidden="true">
       <path d="M3.25 2.75h5v5" strokeLinecap="round" strokeLinejoin="round" />
       <path d="M2.75 4.25v5h5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   ) : (
-    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth={1.2} className="h-3.5 w-3.5">
+    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth={1.2} className="h-3.5 w-3.5" aria-hidden="true">
       <rect x="2.5" y="2.5" width="7" height="7" rx="0.8" />
     </svg>
   );
@@ -27,7 +27,7 @@ function MaximizeIcon({ maximized }: { maximized: boolean }) {
 
 function CloseIcon() {
   return (
-    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth={1.5} className="h-3.5 w-3.5">
+    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth={1.5} className="h-3.5 w-3.5" aria-hidden="true">
       <path d="M3 3l6 6M9 3 3 9" strokeLinecap="round" />
     </svg>
   );
@@ -56,27 +56,33 @@ export default function TopNavigation() {
         <div className="drag-region relative h-[38px] border-b border-slate-900/8 bg-[#fbf7f1]">
           <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(120,242,208,0.04),transparent_34%,rgba(239,195,108,0.05))]" />
 
-          <div className="no-drag absolute right-0 top-0 flex h-full items-stretch">
+          <div className="no-drag absolute right-0 top-0 flex h-full items-stretch" role="group" aria-label="Window controls">
             <button
+              type="button"
               onClick={() => window.catpriceDesktop?.minimizeWindow?.()}
               className="flex w-12 items-center justify-center text-slate-500 transition hover:bg-slate-900/6 hover:text-slate-800"
               title="Minimize"
+              aria-label="Minimize window"
             >
               <MinimizeIcon />
             </button>
 
             <button
+              type="button"
               onClick={() => window.catpriceDesktop?.toggleMaximizeWindow?.()}
               className="flex w-12 items-center justify-center text-slate-500 transition hover:bg-slate-900/6 hover:text-slate-800"
               title={isMaximized ? 'Restore' : 'Maximize'}
+              aria-label={isMaximized ? 'Restore window' : 'Maximize window'}
             >
               <MaximizeIcon maximized={isMaximized} />
             </button>
 
             <button
+              type="button"
               onClick={() => window.catpriceDesktop?.closeWindow?.()}
               className="flex w-12 items-center justify-center text-slate-500 transition hover:bg-[#d95d5d] hover:text-white"
               title="Close"
+              aria-label="Close window"
             >
               <CloseIcon />
             </button>
@@ -111,11 +117,15 @@ export default function TopNavigation() {
             </div>
 
             <button
+              type="button"
               onClick={toggle}
               className="flex items-center gap-1 rounded-full border border-slate-300/70 bg-white/72 p-1 shadow-[0_10px_24px_rgba(23,34,51,0.05)]"
               title="Toggle output units"
+              aria-label={`Toggle output units, currently ${unit}`}
+              aria-pressed={unit === 'lb'}
             >
               <span
+                aria-hidden="true"
                 className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
                   unit === 'kg' ? 'bg-[#c96442] text-[#1a1612]' : 'text-slate-500'
                 }`}
@@ -123,6 +133,7 @@ export default function TopNavigation() {
                 kg
               </span>
               <span
+                aria-hidden="true"
                 className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
                   unit === 'lb' ? 'bg-[#c96442] text-[#1a1612]' : 'text-slate-500'
                 }`}
