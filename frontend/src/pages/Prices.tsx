@@ -172,18 +172,25 @@ export default function Prices() {
   useEffect(() => {
     if (!selected) return;
 
+    const controller = new AbortController();
     setHistLoading(true);
-    fetch(apiUrl(`/prices/${selected}/history?period=${period}`))
+    fetch(apiUrl(`/prices/${selected}/history?period=${period}`), { signal: controller.signal })
       .then((response) => response.json())
       .then((payload) => {
+        if (controller.signal.aborted) return;
         setHistory(payload.history || []);
         setHistorySource(payload.source || null);
       })
-      .catch(() => {
+      .catch((err) => {
+        if (controller.signal.aborted || (err instanceof DOMException && err.name === 'AbortError')) return;
         setHistory([]);
         setHistorySource(null);
       })
-      .finally(() => setHistLoading(false));
+      .finally(() => {
+        if (!controller.signal.aborted) setHistLoading(false);
+      });
+
+    return () => controller.abort();
   }, [selected, period]);
 
   const handleRefresh = async () => {
@@ -209,7 +216,10 @@ export default function Prices() {
       }))
     : history;
   const selectedDisplayUnit = selectedRow ? displayTrackedUnit(selectedRow.unit, unit) : '';
-  const pctChange = history.length >= 2 ? ((history[history.length - 1].price - history[0].price) / history[0].price) * 100 : null;
+  const pctChange =
+    history.length >= 2 && history[0].price !== 0
+      ? ((history[history.length - 1].price - history[0].price) / history[0].price) * 100
+      : null;
   const isUp = pctChange != null && pctChange >= 0;
   const latestFetchedAt = prices
     .map((row) => row.fetched_at)

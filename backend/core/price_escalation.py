@@ -70,6 +70,10 @@ def escalate_cost(
         raise KeyError(f"Year {from_year} not found in {index_type} index data")
     if to_key not in index_data:
         raise KeyError(f"Year {to_year} not found in {index_type} index data")
+    if index_data[from_key] == 0:
+        raise ValueError(
+            f"{index_type} index for {from_year} is zero; cannot escalate from a zero base"
+        )
 
     return cost * (index_data[to_key] / index_data[from_key])
 
@@ -92,4 +96,9 @@ def get_escalation_factor(
     if from_year == to_year:
         return 1.0
     index_data = _load_index(index_type)
-    return index_data[str(to_year)] / index_data[str(from_year)]
+    from_key = str(from_year)
+    if index_data[from_key] == 0:
+        raise ValueError(
+            f"{index_type} index for {from_year} is zero; cannot compute escalation factor"
+        )
+    return index_data[str(to_year)] / index_data[from_key]
