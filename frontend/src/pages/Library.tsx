@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { SkeletonListRows } from '../components/shared/Skeleton';
 import { WorkspaceSectionFooter, WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
 import {
   type CatalystDomain,
@@ -335,7 +336,9 @@ export default function Library() {
                 </div>
 
                 {loading ? (
-                  <div className="px-5 py-8 text-sm text-slate-500">Loading materials...</div>
+                  <div className="px-4 py-4">
+                    <SkeletonListRows count={6} />
+                  </div>
                 ) : materials.length === 0 ? (
                   <div className="px-5 py-8 text-sm text-slate-500">No materials match the current filters.</div>
                 ) : (

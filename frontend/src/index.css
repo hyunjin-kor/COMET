@@ -242,6 +242,57 @@ textarea {
   }
 }
 
+.cp-skeleton {
+  display: inline-block;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(232, 220, 200, 0.55) 0%,
+      rgba(240, 217, 203, 0.85) 50%,
+      rgba(232, 220, 200, 0.55) 100%
+    );
+  background-size: 220% 100%;
+  animation: cp-skeleton-shimmer 1.6s ease-in-out infinite;
+}
+
+@keyframes cp-skeleton-shimmer {
+  from {
+    background-position: 110% 0;
+  }
+
+  to {
+    background-position: -110% 0;
+  }
+}
+
+/* Editorial focus ring for keyboard navigation. We deliberately scope
+   to :focus-visible so mouse users do not see persistent rings on
+   click. The ring uses the accent token so focus reads as a coherent
+   part of the design language. */
+:focus-visible {
+  outline: 2px solid #c96442;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid #c96442;
+  outline-offset: 2px;
+}
+
+/* Inputs already have a colored ring from input-base; use a tighter
+   visible outline as a fallback so unstyled inputs still announce
+   focus. */
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid rgba(201, 100, 66, 0.45);
+  outline-offset: 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
