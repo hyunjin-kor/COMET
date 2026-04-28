@@ -192,7 +192,7 @@ Download the packaged Windows app from [GitHub Releases](https://github.com/hyun
 
 Recommended asset:
 
-- `CatPrice Setup 1.1.13.exe`
+- `CatPrice Setup 1.2.0.exe`
 
 Portable asset:
 
