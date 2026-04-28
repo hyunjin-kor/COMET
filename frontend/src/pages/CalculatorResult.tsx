@@ -12,7 +12,7 @@ import { useUnit } from '../lib/use-unit';
 
 const ResultBreakdownPieChart = lazy(() => import('../components/charts/ResultBreakdownPieChart'));
 
-const CHART_COLORS = ['#78f2d0', '#88a8ff', '#efc36c', '#f3a08d', '#c5b7ff', '#8de0ff'];
+const CHART_COLORS = ['#c96442', '#7c8db5', '#d4a857', '#7a9b8d', '#a48bc8', '#b8825d'];
 const RESULT_SECTIONS: WorkspaceSection[] = [
   { id: 'summary', label: 'Result', summary: 'Headline price, scope, and active warnings.' },
   { id: 'manufacturing', label: 'Preparation Method', summary: 'Route, cost structure, and campaign basis.' },
@@ -95,7 +95,7 @@ function RailRow({ label, value, detail }: { label: string; value: string; detai
 function ChartFallback() {
   return (
     <div className="flex h-full min-h-[240px] items-center justify-center gap-3 rounded-[24px] border border-slate-200 bg-slate-50/80 text-center">
-      <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#78f2d0] border-t-transparent" />
+      <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#c96442] border-t-transparent" />
       <div className="text-sm text-slate-600">Loading breakdown chart...</div>
     </div>
   );

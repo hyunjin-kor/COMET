@@ -26,20 +26,20 @@ const GROUPS: Record<string, { title: string; symbols: string[] }> = {
 };
 
 const METAL_COLORS: Record<string, string> = {
-  Pt: '#78f2d0',
-  Pd: '#88a8ff',
-  Rh: '#c5b7ff',
-  Ru: '#8de0ff',
-  Ir: '#9df8e3',
-  Au: '#efc36c',
-  Ag: '#d7dcee',
-  Ni: '#53d4b5',
-  Co: '#71b8ff',
-  Cu: '#f3a08d',
-  Al: '#9bb8ff',
-  Mo: '#d8d3cf',
-  W: '#aba39a',
-  Fe: '#ff908d',
+  Pt: '#c96442',
+  Pd: '#7c8db5',
+  Rh: '#a48bc8',
+  Ru: '#b8825d',
+  Ir: '#c9a96a',
+  Au: '#d4a857',
+  Ag: '#9ba6b8',
+  Ni: '#7a9b8d',
+  Co: '#6b85a8',
+  Cu: '#b56e52',
+  Al: '#a8b0bd',
+  Mo: '#9b8c7a',
+  W: '#7d756c',
+  Fe: '#a85a4c',
 };
 
 const FEED_SECTIONS: WorkspaceSection[] = [
@@ -128,7 +128,7 @@ function InspectorRow({ label, value, detail }: { label: string; value: string; 
 function DarkChartFallback({ label }: { label: string }) {
   return (
     <div className="flex h-full min-h-[320px] flex-col items-center justify-center gap-3 rounded-[28px] border border-white/10 bg-white/4 text-center">
-      <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#78f2d0] border-t-transparent" />
+      <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#c96442] border-t-transparent" />
       <div className="text-sm text-slate-300">{label}</div>
     </div>
   );
@@ -236,7 +236,7 @@ export default function Prices() {
   if (loading) {
     return (
       <div className="surface-card flex items-center gap-3 px-5 py-6 text-slate-600">
-        <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#78f2d0] border-t-transparent" />
+        <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#c96442] border-t-transparent" />
         Loading live metal prices...
       </div>
     );
@@ -363,7 +363,7 @@ export default function Prices() {
                           <div className="flex min-w-0 items-center gap-3">
                             <span
                               className="flex h-10 w-10 items-center justify-center rounded-[18px] text-sm font-semibold text-slate-950"
-                              style={{ backgroundColor: METAL_COLORS[row.symbol] || '#78f2d0' }}
+                              style={{ backgroundColor: METAL_COLORS[row.symbol] || '#c96442' }}
                             >
                               {row.symbol}
                             </span>
@@ -466,7 +466,7 @@ export default function Prices() {
                   key={value}
                   onClick={() => setPeriod(value)}
                   className={`rounded-[16px] px-3 py-2 text-xs font-semibold transition ${
-                    period === value ? 'bg-[#78f2d0] text-slate-950' : 'text-slate-300 hover:bg-white/8'
+                    period === value ? 'bg-[#c96442] text-slate-950' : 'text-slate-300 hover:bg-white/8'
                   }`}
                 >
                   {PERIOD_LABELS[value]}
@@ -478,7 +478,7 @@ export default function Prices() {
           <div className="mt-5">
             {histLoading ? (
               <div className="flex h-[320px] items-center justify-center gap-3 text-slate-300">
-                <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#78f2d0] border-t-transparent" />
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#c96442] border-t-transparent" />
                 Loading history...
               </div>
             ) : displayHistory.length === 0 ? (
@@ -496,7 +496,7 @@ export default function Prices() {
                       data={displayHistory}
                       period={period}
                       selectedDisplayUnit={selectedDisplayUnit}
-                      selectedColor={METAL_COLORS[selected || 'Pt'] || '#78f2d0'}
+                      selectedColor={METAL_COLORS[selected || 'Pt'] || '#c96442'}
                     />
                   </Suspense>
                 </div>

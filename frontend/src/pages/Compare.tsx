@@ -199,7 +199,7 @@ export default function Compare() {
   }
 
   if (loading) {
-    return <div className="surface-card flex items-center gap-3 px-5 py-6 text-slate-600"><span className="h-4 w-4 animate-spin rounded-full border-2 border-[#78f2d0] border-t-transparent" />Loading literature benchmarks...</div>;
+    return <div className="surface-card flex items-center gap-3 px-5 py-6 text-slate-600"><span className="h-4 w-4 animate-spin rounded-full border-2 border-[#c96442] border-t-transparent" />Loading literature benchmarks...</div>;
   }
 
   if (error || !benchmark || !activeCandidate) {

@@ -2,21 +2,23 @@
 
 :root {
   color-scheme: light;
-  --font-display: "Segoe UI Variable Display", "Segoe UI", "Noto Sans KR", "Malgun Gothic", sans-serif;
-  --font-body: "Segoe UI Variable Text", "Segoe UI", "Noto Sans KR", "Malgun Gothic", sans-serif;
-  --bg-base: #f6f3ee;
-  --bg-soft: #fbfaf7;
-  --bg-muted: #efeae0;
-  --ink-strong: #142033;
-  --ink: #26344a;
-  --ink-soft: #66748b;
-  --line: rgba(31, 47, 72, 0.08);
-  --mint: #78f2d0;
-  --mint-deep: #2aa88c;
-  --amber: #efc36c;
-  --blue: #88a8ff;
-  --rose: #f3a08d;
-  --navy: #091321;
+  --font-display: "Charter", "Cambria", "Iowan Old Style", "Georgia", "Segoe UI Variable Display", "Segoe UI", "Noto Serif KR", "Malgun Gothic", serif;
+  --font-body: "Segoe UI Variable Text", "Segoe UI", "Inter", "Helvetica Neue", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  --bg-base: #f5f1e8;
+  --bg-soft: #fbf8f1;
+  --bg-muted: #ece5d6;
+  --ink-strong: #1a1612;
+  --ink: #2c2620;
+  --ink-soft: #6b6357;
+  --line: rgba(28, 22, 14, 0.08);
+  --accent: #c96442;
+  --accent-deep: #9d4d33;
+  --accent-soft: #f0d9cb;
+  --accent-tint: rgba(201, 100, 66, 0.08);
+  --amber: #d4a857;
+  --slate-cool: #7c8db5;
+  --rose: #b8825d;
+  --navy: #1a2030;
 }
 
 html {
@@ -28,7 +30,7 @@ body {
   min-height: 100vh;
   color: var(--ink-strong);
   font-family: var(--font-body);
-  background: linear-gradient(180deg, #fbfaf7 0%, #f7f3ee 52%, #f5f1ea 100%);
+  background: linear-gradient(180deg, #fbf8f1 0%, #f7f1e6 52%, #f4ecdd 100%);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -55,7 +57,7 @@ textarea {
 }
 
 ::selection {
-  background: rgba(120, 242, 208, 0.28);
+  background: var(--accent-tint);
   color: var(--ink-strong);
 }
 
@@ -69,33 +71,33 @@ textarea {
 
 .font-display {
   font-family: var(--font-display);
-  letter-spacing: -0.045em;
-  font-weight: 650;
+  letter-spacing: -0.018em;
+  font-weight: 600;
 }
 
 .cp-heading-xl {
   font-family: var(--font-display);
-  font-weight: 650;
-  letter-spacing: -0.045em;
-  @apply text-[clamp(1.75rem,2.4vw,2.45rem)] leading-[0.98] text-slate-950;
+  font-weight: 600;
+  letter-spacing: -0.022em;
+  @apply text-[clamp(1.85rem,2.5vw,2.55rem)] leading-[1.04] text-[#1a1612];
 }
 
 .cp-heading-lg {
   font-family: var(--font-display);
-  font-weight: 650;
-  letter-spacing: -0.04em;
-  @apply text-[clamp(1.25rem,1.6vw,1.6rem)] leading-[1.02] text-slate-950;
+  font-weight: 600;
+  letter-spacing: -0.018em;
+  @apply text-[clamp(1.3rem,1.7vw,1.65rem)] leading-[1.08] text-[#1a1612];
 }
 
 .cp-heading-sm {
   font-family: var(--font-display);
-  font-weight: 650;
-  letter-spacing: -0.03em;
-  @apply text-[1.05rem] leading-[1.08] text-slate-950;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  @apply text-[1.08rem] leading-[1.18] text-[#1a1612];
 }
 
 .cp-body-copy {
-  @apply text-sm leading-7 text-slate-600;
+  @apply text-sm leading-7 text-[#5e564a];
 }
 
 .cp-shell {
@@ -108,89 +110,95 @@ textarea {
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(circle at 12% 16%, rgba(120, 242, 208, 0.05), transparent 0 22%),
-    radial-gradient(circle at 84% 14%, rgba(239, 195, 108, 0.04), transparent 0 18%);
-  filter: blur(28px);
-  opacity: 0.5;
+    radial-gradient(circle at 14% 18%, rgba(201, 100, 66, 0.06), transparent 0 24%),
+    radial-gradient(circle at 86% 12%, rgba(212, 168, 87, 0.05), transparent 0 22%);
+  filter: blur(32px);
+  opacity: 0.55;
 }
 
 .surface-card {
-  @apply rounded-[24px] border border-slate-900/7 bg-[rgba(255,252,247,0.92)]
-         shadow-[0_10px_28px_rgba(23,34,51,0.05)] backdrop-blur-xl;
+  @apply rounded-[20px] border border-[rgba(28,22,14,0.07)] bg-[rgba(252,248,240,0.94)]
+         shadow-[0_1px_0_rgba(255,255,255,0.7)_inset,0_8px_24px_rgba(34,24,12,0.04)] backdrop-blur-xl;
 }
 
 .surface-card-soft {
-  @apply rounded-[22px] border border-slate-900/7 bg-[rgba(255,255,255,0.82)]
-         shadow-[0_8px_22px_rgba(23,34,51,0.04)] backdrop-blur-xl;
+  @apply rounded-[18px] border border-[rgba(28,22,14,0.06)] bg-[rgba(255,253,248,0.84)]
+         shadow-[0_6px_18px_rgba(34,24,12,0.03)] backdrop-blur-xl;
 }
 
 .surface-ink {
-  @apply rounded-[22px] border border-white/10 bg-[linear-gradient(180deg,#101a2b,#18233a)]
-         text-white shadow-[0_14px_34px_rgba(7,18,33,0.16)];
+  @apply rounded-[20px] border border-white/8 bg-[linear-gradient(180deg,#1f1a14,#2a221a)]
+         text-[#f5efe2] shadow-[0_14px_34px_rgba(20,14,6,0.18)];
 }
 
 .surface-rail {
-  @apply rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,#101928,#162234)]
-         text-white shadow-[0_16px_42px_rgba(9,19,33,0.18)];
+  @apply rounded-[22px] border border-white/8 bg-[linear-gradient(180deg,#1d1812,#28211a)]
+         text-[#f5efe2] shadow-[0_16px_42px_rgba(20,14,6,0.2)];
 }
 
 .surface-ghost {
-  @apply rounded-[20px] border border-slate-900/7 bg-[rgba(255,255,255,0.58)] backdrop-blur-lg;
+  @apply rounded-[18px] border border-[rgba(28,22,14,0.06)] bg-[rgba(255,253,248,0.62)] backdrop-blur-lg;
 }
 
 .input-base {
-  @apply w-full min-w-0 rounded-[16px] border border-slate-300/70 bg-[rgba(255,255,255,0.96)] px-4 py-2.5
-         text-sm text-slate-900 shadow-[inset_0_1px_0_rgba(255,255,255,0.82),0_4px_12px_rgba(15,23,42,0.03)]
-         outline-none transition placeholder:text-slate-400 hover:border-slate-400/60
-         focus:border-teal-500/55 focus:ring-4 focus:ring-teal-500/10;
+  @apply w-full min-w-0 rounded-[14px] border border-[rgba(28,22,14,0.16)] bg-[rgba(255,253,248,0.96)] px-4 py-2.5
+         text-sm text-[#1a1612] shadow-[inset_0_1px_0_rgba(255,255,255,0.85),0_2px_8px_rgba(34,24,12,0.03)]
+         outline-none transition placeholder:text-[#9a8f7d] hover:border-[rgba(28,22,14,0.28)]
+         focus:border-[#c96442]/55 focus:ring-4 focus:ring-[#c96442]/12;
 }
 
 .section-kicker {
-  @apply inline-flex items-center gap-2 rounded-full border border-amber-300/60 bg-amber-50/90 px-3 py-1.5
-         text-[10px] font-semibold uppercase tracking-[0.26em] text-amber-700;
+  @apply inline-flex items-center gap-2 rounded-full border border-[rgba(212,168,87,0.45)] bg-[rgba(244,232,205,0.85)] px-3 py-1.5
+         text-[10px] font-semibold uppercase tracking-[0.26em] text-[#7a5a1a];
 }
 
 .cp-chip {
-  @apply inline-flex items-center rounded-full border border-slate-300/70 bg-white/76 px-2.5 py-1
-         text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-600;
+  @apply inline-flex items-center rounded-full border border-[rgba(28,22,14,0.14)] bg-[rgba(255,253,248,0.78)] px-2.5 py-1
+         text-[10px] font-semibold uppercase tracking-[0.18em] text-[#5e564a];
 }
 
 .cp-chip-dark {
-  @apply inline-flex items-center rounded-full border border-white/10 bg-white/8 px-2.5 py-1
-         text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-300;
+  @apply inline-flex items-center rounded-full border border-white/10 bg-white/6 px-2.5 py-1
+         text-[10px] font-semibold uppercase tracking-[0.18em] text-[#e9dfc8];
 }
 
 .cp-button-primary {
-  @apply inline-flex items-center justify-center rounded-[18px] bg-slate-950 px-4 py-3 text-sm font-semibold text-white
-         shadow-[0_8px_20px_rgba(15,23,42,0.12)] transition hover:-translate-y-px hover:bg-slate-900
+  @apply inline-flex items-center justify-center rounded-[14px] bg-[#1a1612] px-4 py-3 text-sm font-semibold text-[#fbf8f1]
+         shadow-[0_6px_18px_rgba(20,14,6,0.18)] transition hover:-translate-y-px hover:bg-[#2c2620]
          disabled:pointer-events-none disabled:opacity-45;
 }
 
 .cp-button-secondary {
-  @apply inline-flex items-center justify-center rounded-[18px] border border-slate-300/75 bg-white/88 px-4 py-3
-         text-sm font-semibold text-slate-700 shadow-[0_6px_14px_rgba(23,34,51,0.04)]
-         transition hover:border-slate-400/70 hover:bg-white disabled:pointer-events-none disabled:opacity-45;
+  @apply inline-flex items-center justify-center rounded-[14px] border border-[rgba(28,22,14,0.16)] bg-[rgba(255,253,248,0.92)] px-4 py-3
+         text-sm font-semibold text-[#2c2620] shadow-[0_4px_12px_rgba(34,24,12,0.04)]
+         transition hover:border-[rgba(28,22,14,0.3)] hover:bg-white disabled:pointer-events-none disabled:opacity-45;
 }
 
 .cp-button-ink {
-  @apply inline-flex items-center justify-center rounded-[18px] border border-white/10 bg-white/8 px-4 py-3
-         text-sm font-semibold text-slate-100 transition hover:bg-white/12 disabled:pointer-events-none disabled:opacity-45;
+  @apply inline-flex items-center justify-center rounded-[14px] border border-white/12 bg-white/6 px-4 py-3
+         text-sm font-semibold text-[#f5efe2] transition hover:bg-white/10 disabled:pointer-events-none disabled:opacity-45;
+}
+
+.cp-button-accent {
+  @apply inline-flex items-center justify-center rounded-[14px] bg-[#c96442] px-4 py-3 text-sm font-semibold text-white
+         shadow-[0_6px_18px_rgba(201,100,66,0.22)] transition hover:-translate-y-px hover:bg-[#b85838]
+         disabled:pointer-events-none disabled:opacity-45;
 }
 
 .cp-subtle-label {
-  @apply text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500;
+  @apply text-[11px] font-semibold uppercase tracking-[0.22em] text-[#8a8170];
 }
 
 .cp-metric-tile {
-  @apply rounded-[18px] border border-slate-900/7 bg-white/78 p-3.5 shadow-[0_6px_16px_rgba(23,34,51,0.035)] backdrop-blur-xl;
+  @apply rounded-[16px] border border-[rgba(28,22,14,0.07)] bg-[rgba(255,253,248,0.82)] p-3.5 shadow-[0_4px_12px_rgba(34,24,12,0.03)] backdrop-blur-xl;
 }
 
 .cp-metric-tile-dark {
-  @apply rounded-[18px] border border-white/10 bg-white/7 p-3.5 backdrop-blur-xl;
+  @apply rounded-[16px] border border-white/10 bg-white/6 p-3.5 backdrop-blur-xl;
 }
 
 .cp-toolbar {
-  @apply flex flex-wrap items-center gap-2 rounded-[18px] border border-slate-900/7 bg-white/82 p-1.5 backdrop-blur-xl;
+  @apply flex flex-wrap items-center gap-2 rounded-[16px] border border-[rgba(28,22,14,0.07)] bg-[rgba(255,253,248,0.86)] p-1.5 backdrop-blur-xl;
 }
 
 .cp-split-workspace {
@@ -202,30 +210,30 @@ textarea {
 }
 
 .cp-rail-panel {
-  @apply rounded-[20px] border border-slate-900/7 bg-[rgba(255,255,255,0.86)]
-         px-4 py-4 shadow-[0_8px_20px_rgba(23,34,51,0.04)] backdrop-blur-xl;
+  @apply rounded-[18px] border border-[rgba(28,22,14,0.07)] bg-[rgba(255,253,248,0.88)]
+         px-4 py-4 shadow-[0_6px_16px_rgba(34,24,12,0.04)] backdrop-blur-xl;
 }
 
 .cp-data-row {
-  @apply flex items-start justify-between gap-3 border-t border-slate-900/8 py-3 first:border-t-0 first:pt-0 last:pb-0;
+  @apply flex items-start justify-between gap-3 border-t border-[rgba(28,22,14,0.08)] py-3 first:border-t-0 first:pt-0 last:pb-0;
 }
 
 .cp-list-row {
-  @apply rounded-[20px] border border-slate-900/8 bg-white/64 px-4 py-3 transition hover:bg-white/88;
+  @apply rounded-[16px] border border-[rgba(28,22,14,0.07)] bg-[rgba(255,253,248,0.66)] px-4 py-3 transition hover:bg-[rgba(255,253,248,0.92)];
 }
 
 .cp-list-row-active {
-  @apply border-emerald-200 bg-emerald-50/78;
+  @apply border-[rgba(201,100,66,0.32)] bg-[rgba(240,217,203,0.55)];
 }
 
 .cp-enter {
-  animation: cp-enter 0.44s cubic-bezier(0.2, 1, 0.32, 1) both;
+  animation: cp-enter 0.42s cubic-bezier(0.2, 1, 0.32, 1) both;
 }
 
 @keyframes cp-enter {
   from {
     opacity: 0;
-    transform: translateY(18px) scale(0.985);
+    transform: translateY(14px) scale(0.99);
   }
 
   to {
@@ -256,13 +264,13 @@ textarea {
 
 ::-webkit-scrollbar-thumb {
   border-radius: 999px;
-  background: rgba(100, 116, 139, 0.34);
+  background: rgba(107, 99, 87, 0.32);
   border: 2px solid transparent;
   background-clip: padding-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(100, 116, 139, 0.52);
+  background: rgba(107, 99, 87, 0.5);
   border: 2px solid transparent;
   background-clip: padding-box;
 }

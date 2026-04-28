@@ -56,7 +56,7 @@ function FieldBlock({
 function ChartFallback() {
   return (
     <div className="flex h-full min-h-[280px] items-center justify-center gap-3 rounded-[24px] border border-slate-200 bg-slate-50/80 text-center">
-      <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#78f2d0] border-t-transparent" />
+      <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#c96442] border-t-transparent" />
       <div className="text-sm text-slate-600">Loading range chart...</div>
     </div>
   );
@@ -211,12 +211,12 @@ export default function Uncertainty() {
   const caseSummary = draft ? describeDraftCase(draft, snapshotComposition) : 'No current Cost Estimate draft';
   const histData = result
     ? [
-        { range: `${toDisplay(result.min).toFixed(1)}-${toDisplay(result.p5).toFixed(1)}`, value: 5, fill: '#f3a08d' },
-        { range: `${toDisplay(result.p5).toFixed(1)}-${toDisplay(result.p25).toFixed(1)}`, value: 20, fill: '#efc36c' },
-        { range: `${toDisplay(result.p25).toFixed(1)}-${toDisplay(result.median).toFixed(1)}`, value: 25, fill: '#78f2d0' },
-        { range: `${toDisplay(result.median).toFixed(1)}-${toDisplay(result.p75).toFixed(1)}`, value: 25, fill: '#78f2d0' },
-        { range: `${toDisplay(result.p75).toFixed(1)}-${toDisplay(result.p95).toFixed(1)}`, value: 20, fill: '#88a8ff' },
-        { range: `${toDisplay(result.p95).toFixed(1)}-${toDisplay(result.max).toFixed(1)}`, value: 5, fill: '#efc36c' },
+        { range: `${toDisplay(result.min).toFixed(1)}-${toDisplay(result.p5).toFixed(1)}`, value: 5, fill: '#b8825d' },
+        { range: `${toDisplay(result.p5).toFixed(1)}-${toDisplay(result.p25).toFixed(1)}`, value: 20, fill: '#d4a857' },
+        { range: `${toDisplay(result.p25).toFixed(1)}-${toDisplay(result.median).toFixed(1)}`, value: 25, fill: '#c96442' },
+        { range: `${toDisplay(result.median).toFixed(1)}-${toDisplay(result.p75).toFixed(1)}`, value: 25, fill: '#c96442' },
+        { range: `${toDisplay(result.p75).toFixed(1)}-${toDisplay(result.p95).toFixed(1)}`, value: 20, fill: '#d4a857' },
+        { range: `${toDisplay(result.p95).toFixed(1)}-${toDisplay(result.max).toFixed(1)}`, value: 5, fill: '#b8825d' },
       ]
     : [];
 

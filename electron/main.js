@@ -98,8 +98,8 @@ const BRAND_MARK_SVG = `
       <stop offset="100%" stop-color="#a1b1c8"/>
     </linearGradient>
     <linearGradient id="cp-signal" x1="154" y1="338" x2="358" y2="208" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#3ac8ff"/>
-      <stop offset="100%" stop-color="#49e0c1"/>
+      <stop offset="0%" stop-color="#c96442"/>
+      <stop offset="100%" stop-color="#d4a857"/>
     </linearGradient>
   </defs>
 
@@ -152,7 +152,7 @@ const BRAND_MARK_SVG = `
     stroke-linecap="round"
     stroke-linejoin="round"
   />
-  <g fill="#171c24" stroke="#49dec6" stroke-width="7">
+  <g fill="#1f1a14" stroke="#c96442" stroke-width="7">
     <circle cx="154" cy="338" r="11" />
     <circle cx="258" cy="286" r="11" />
     <circle cx="358" cy="208" r="11" />
@@ -424,10 +424,10 @@ function createSplashWindow() {
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     background:
-      radial-gradient(circle at 16% 18%, rgba(120, 242, 208, 0.16), transparent 0 26%),
-      radial-gradient(circle at 84% 12%, rgba(239, 195, 108, 0.14), transparent 0 22%),
-      linear-gradient(160deg, #0a1320 0%, #101d31 52%, #09111d 100%);
-    color: #f8fafc;
+      radial-gradient(circle at 16% 18%, rgba(201, 100, 66, 0.18), transparent 0 28%),
+      radial-gradient(circle at 84% 12%, rgba(212, 168, 87, 0.12), transparent 0 22%),
+      linear-gradient(160deg, #1a1612 0%, #251f17 52%, #14100c 100%);
+    color: #f5efe2;
     font-family: 'Segoe UI Variable Text', 'Segoe UI', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
     display: flex;
     align-items: center;
@@ -465,7 +465,7 @@ function createSplashWindow() {
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: radial-gradient(circle at top left, rgba(120, 242, 208, 0.16), transparent 0 34%);
+    background: radial-gradient(circle at top left, rgba(201, 100, 66, 0.18), transparent 0 34%);
     pointer-events: none;
   }
   .row {
@@ -492,14 +492,14 @@ function createSplashWindow() {
   }
   .logo {
     margin-top: 4px;
-    font-size: 34px;
-    font-weight: 700;
-    letter-spacing: -0.045em;
+    font-size: 36px;
+    font-weight: 600;
+    letter-spacing: -0.022em;
     line-height: 1;
-    font-family: 'Segoe UI Variable Display', 'Segoe UI', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+    font-family: 'Charter', 'Cambria', 'Iowan Old Style', 'Georgia', 'Segoe UI Variable Display', 'Noto Serif KR', 'Malgun Gothic', serif;
   }
-  .logo span.cat { color: #f8fafc; }
-  .logo span.price { color: #78f2d0; }
+  .logo span.cat { color: #f5efe2; }
+  .logo span.price { color: #c96442; }
   .subtitle {
     margin-top: 8px;
     max-width: 300px;
@@ -552,7 +552,7 @@ function createSplashWindow() {
     height: 100%;
     width: 42%;
     border-radius: inherit;
-    background: linear-gradient(90deg, #78f2d0, #efc36c);
+    background: linear-gradient(90deg, #c96442, #d4a857);
     animation: loading 1.5s ease-in-out infinite;
     transform-origin: left center;
   }

@@ -117,14 +117,14 @@ export default function TopNavigation() {
             >
               <span
                 className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
-                  unit === 'kg' ? 'bg-[#7cf1d0] text-slate-950' : 'text-slate-500'
+                  unit === 'kg' ? 'bg-[#c96442] text-slate-950' : 'text-slate-500'
                 }`}
               >
                 kg
               </span>
               <span
                 className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
-                  unit === 'lb' ? 'bg-[#7cf1d0] text-slate-950' : 'text-slate-500'
+                  unit === 'lb' ? 'bg-[#c96442] text-slate-950' : 'text-slate-500'
                 }`}
               >
                 lb
