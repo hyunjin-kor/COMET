@@ -92,7 +92,7 @@ export function WorkspaceSectionNav({
               disabled={disabled}
               className={`rounded-[16px] border px-3 py-3 text-left transition ${
                 active
-                  ? 'border-slate-950 bg-white text-slate-950 shadow-[0_6px_16px_rgba(15,23,42,0.06)]'
+                  ? 'border-slate-950 bg-white text-[#1a1612] shadow-[0_6px_16px_rgba(15,23,42,0.06)]'
                   : disabled
                     ? 'cursor-not-allowed border-slate-200/80 bg-slate-50/70 text-slate-300'
                     : 'border-slate-200/90 bg-transparent text-slate-500 hover:border-slate-300 hover:bg-white/72'
@@ -141,7 +141,7 @@ export function WorkspaceSectionFooter({
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="cp-subtle-label">Continue</div>
-          <div className="mt-2 font-semibold text-slate-950">{activeSection.label}</div>
+          <div className="mt-2 font-semibold text-[#1a1612]">{activeSection.label}</div>
           <div className="mt-1 text-xs leading-5 text-slate-500">
             Step {activeIndex + 1} of {totalSections}. {activeSection.summary}
           </div>

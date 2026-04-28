@@ -105,7 +105,7 @@ export default function TopNavigation() {
               </div>
 
               <div className="min-w-0">
-                <div className="font-display text-[1.45rem] leading-none text-slate-950">CatPrice</div>
+                <div className="font-display text-[1.45rem] leading-none text-[#1a1612]">CatPrice</div>
                 <div className="mt-0.5 text-xs text-slate-500">Evidence-first catalyst costing</div>
               </div>
             </div>
@@ -117,14 +117,14 @@ export default function TopNavigation() {
             >
               <span
                 className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
-                  unit === 'kg' ? 'bg-[#c96442] text-slate-950' : 'text-slate-500'
+                  unit === 'kg' ? 'bg-[#c96442] text-[#1a1612]' : 'text-slate-500'
                 }`}
               >
                 kg
               </span>
               <span
                 className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
-                  unit === 'lb' ? 'bg-[#c96442] text-slate-950' : 'text-slate-500'
+                  unit === 'lb' ? 'bg-[#c96442] text-[#1a1612]' : 'text-slate-500'
                 }`}
               >
                 lb

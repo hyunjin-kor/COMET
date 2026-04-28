@@ -87,7 +87,7 @@ function RailRow({ label, value, detail }: { label: string; value: string; detai
         <div className="cp-subtle-label">{label}</div>
         {detail ? <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div> : null}
       </div>
-      <div className="text-right text-sm font-semibold text-slate-950">{value}</div>
+      <div className="text-right text-sm font-semibold text-[#1a1612]">{value}</div>
     </div>
   );
 }
@@ -288,7 +288,7 @@ export default function CalculatorResult() {
 
           <div className="rounded-[22px] border border-slate-900/8 bg-white/62 p-4">
             <div className="cp-subtle-label">Preparation basis</div>
-            <div className="mt-2 text-base font-semibold text-slate-950">
+            <div className="mt-2 text-base font-semibold text-[#1a1612]">
               {routeSummary?.name ?? snapshotState.benchmarkCandidate?.route.name ?? 'Direct workspace route'}
             </div>
             <div className="mt-3 space-y-1">
@@ -469,7 +469,7 @@ export default function CalculatorResult() {
                 <div key={item.label}>
                   <div className="flex items-center justify-between gap-3 text-sm">
                     <span className="text-slate-600">{item.label}</span>
-                    <span className="font-semibold text-slate-950">{item.value}</span>
+                    <span className="font-semibold text-[#1a1612]">{item.value}</span>
                   </div>
                   <div className="mt-2 h-2 rounded-full bg-slate-200/80">
                     <div
@@ -635,7 +635,7 @@ export default function CalculatorResult() {
                 </div>
                 <div className="text-left sm:text-right">
                   <div className="cp-subtle-label">Per catalyst</div>
-                  <div className="mt-2 font-display text-[1.45rem] text-slate-950">
+                  <div className="mt-2 font-display text-[1.45rem] text-[#1a1612]">
                     ${toDisplay(component.cost_per_lb_cat).toFixed(3)}
                     {catLabel}
                   </div>
@@ -654,7 +654,7 @@ export default function CalculatorResult() {
         <div className="mt-4 rounded-[22px] border border-slate-900/8 bg-white/60 p-4">
           <div className="flex items-center justify-between gap-3 text-sm">
             <span className="text-slate-600">Total material cost</span>
-            <span className="font-semibold text-slate-950">
+            <span className="font-semibold text-[#1a1612]">
               ${toDisplay(result.materials.total_materials_cost_per_lb).toFixed(4)}
               {catLabel}
             </span>
@@ -672,7 +672,7 @@ export default function CalculatorResult() {
                 <div key={`${material.used_for}-${material.material_key}`} className="rounded-[18px] border border-slate-200 bg-white px-4 py-3">
                   <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                     <div className="min-w-0">
-                      <div className="font-semibold text-slate-950">{material.name}</div>
+                      <div className="font-semibold text-[#1a1612]">{material.name}</div>
                       <div className="mt-1 text-xs text-slate-500">
                         {material.used_for} / {material.price_scope} / {material.pricing_basis}
                       </div>

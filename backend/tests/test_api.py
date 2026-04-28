@@ -1255,6 +1255,62 @@ class TestImportExport:
         assert resp.status_code == 400
         assert resp.json()["detail"] == "Imported JSON must contain a top-level object"
 
+    def test_import_rejects_negative_loading(self, client):
+        payload = {"loading_wt_pct": -5, "metal": {"symbol": "Pt"}}
+        resp = client.post(
+            "/api/import/catcost",
+            files={"file": ("bad.json", json.dumps(payload).encode("utf-8"), "application/json")},
+        )
+        assert resp.status_code == 422
+        body = resp.json()
+        assert body["detail"]["message"] == "Imported JSON is malformed"
+        assert any("loading_wt_pct" in err.get("loc", ()) for err in body["detail"]["errors"])
+
+    def test_import_rejects_loading_above_100(self, client):
+        payload = {"loading_wt_pct": 150}
+        resp = client.post(
+            "/api/import/catcost",
+            files={"file": ("bad.json", json.dumps(payload).encode("utf-8"), "application/json")},
+        )
+        assert resp.status_code == 422
+
+    def test_import_rejects_unknown_price_unit(self, client):
+        payload = {"metal": {"symbol": "Pt", "price_unit": "$/gram"}}
+        resp = client.post(
+            "/api/import/catcost",
+            files={"file": ("bad.json", json.dumps(payload).encode("utf-8"), "application/json")},
+        )
+        assert resp.status_code == 422
+
+    def test_import_rejects_zero_or_negative_order_size(self, client):
+        payload = {"order_size_tons": 0}
+        resp = client.post(
+            "/api/import/catcost",
+            files={"file": ("bad.json", json.dumps(payload).encode("utf-8"), "application/json")},
+        )
+        assert resp.status_code == 422
+
+    def test_import_accepts_valid_payload(self, client):
+        payload = {
+            "metal": {"symbol": "Pt", "price": 1100.0, "price_unit": "$/troy_oz"},
+            "support": {"name": "Carbon", "price_per_lb": 1.2},
+            "loading_wt_pct": 5.0,
+            "steps": ["mixer_slurry", "incipient_wetness"],
+            "order_size_tons": 10.0,
+            "extra_metadata_field": "preserved in raw_keys",
+        }
+        resp = client.post(
+            "/api/import/catcost",
+            files={"file": ("ok.json", json.dumps(payload).encode("utf-8"), "application/json")},
+        )
+        assert resp.status_code == 200
+        body = resp.json()
+        assert body["status"] == "imported"
+        assert body["normalized_input"]["metal_symbol"] == "Pt"
+        assert body["normalized_input"]["metal_price"] == 1100.0
+        assert body["normalized_input"]["support_name"] == "Carbon"
+        assert "extra_metadata_field" in body["raw_keys"]
+
     def test_save_estimate_then_export_json(self, client):
         save_resp = client.post(
             "/api/calculate/save?name=Ni%20baseline",

@@ -471,7 +471,7 @@ function CompactValueRow({ label, value, detail }: { label: string; value: strin
         <div className="cp-subtle-label">{label}</div>
         {detail ? <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div> : null}
       </div>
-      <div className="text-right text-sm font-semibold text-slate-950">{value}</div>
+      <div className="text-right text-sm font-semibold text-[#1a1612]">{value}</div>
     </div>
   );
 }
@@ -1056,7 +1056,7 @@ export default function Calculator() {
     return (
       <div className="rounded-[24px] border border-slate-900/8 bg-white/72 p-4">
         <div className="cp-subtle-label">{label}</div>
-        <div className="mt-2 font-semibold text-slate-950">{material?.name ?? fallback}</div>
+        <div className="mt-2 font-semibold text-[#1a1612]">{material?.name ?? fallback}</div>
         <div className="mt-1 text-sm text-slate-600">{material ? materialQuoteLabel(material) : 'Select a library record to lock pricing.'}</div>
         {material ? (
           <div className="mt-2 space-y-2">
@@ -1351,7 +1351,7 @@ export default function Calculator() {
 
           <div className="rounded-[22px] border border-slate-900/8 bg-white/62 p-4">
             <div className="cp-subtle-label">Current case</div>
-            <div className="mt-2 text-base font-semibold text-slate-950">{catalystDomainLabel(catalystDomain)}</div>
+            <div className="mt-2 text-base font-semibold text-[#1a1612]">{catalystDomainLabel(catalystDomain)}</div>
             <div className="mt-2 text-sm leading-6 text-slate-600">{recipeSummary}</div>
             <div className="mt-3 flex flex-wrap gap-2">
               <span className="cp-chip">{catalystDomainLabel(catalystDomain)}</span>
@@ -1362,7 +1362,7 @@ export default function Calculator() {
 
           <div className="rounded-[22px] border border-slate-900/8 bg-white/62 p-4">
             <div className="cp-subtle-label">Preparation basis</div>
-            <div className="mt-2 text-base font-semibold text-slate-950">{preparationSummary}</div>
+            <div className="mt-2 text-base font-semibold text-[#1a1612]">{preparationSummary}</div>
             <div className="mt-2 space-y-1">
               <CompactValueRow label="Campaign" value={`${orderSize} tons`} detail={`${scale.label} scale / ${scale.rate}`} />
               <CompactValueRow
@@ -1459,7 +1459,7 @@ export default function Calculator() {
         </div>
 
         <div className="mt-4 rounded-[20px] border border-slate-200 bg-slate-50/80 px-4 py-3 text-sm leading-6 text-slate-600">
-          Changing workflow does not auto-advance. Review the selected mode, then move with <span className="font-semibold text-slate-950">Next</span>.
+          Changing workflow does not auto-advance. Review the selected mode, then move with <span className="font-semibold text-[#1a1612]">Next</span>.
         </div>
       </section>
     );
@@ -1529,7 +1529,7 @@ export default function Calculator() {
                     <span className="text-xs text-slate-500">wt%</span>
                   </div>
                 ) : (
-                  <div className="input-base flex min-w-[170px] flex-none items-center justify-between gap-3 bg-white/76"><span className="text-xs text-slate-500">Auto share</span><span className="font-mono text-slate-950">{supportWtPct.toFixed(1)} wt%</span></div>
+                  <div className="input-base flex min-w-[170px] flex-none items-center justify-between gap-3 bg-white/76"><span className="text-xs text-slate-500">Auto share</span><span className="font-mono text-[#1a1612]">{supportWtPct.toFixed(1)} wt%</span></div>
                 )}
                 {sourceChip(row)}
                 {priceField(row)}
@@ -1539,7 +1539,7 @@ export default function Calculator() {
             </div>
           ))}
           <div className="mt-3 rounded-[18px] border border-slate-200 bg-white/76 px-4 py-3 text-xs leading-6 text-slate-600">
-            Total components: <span className="font-semibold text-slate-950">{thermalRows.length}</span> / {maxThermalComponents}.
+            Total components: <span className="font-semibold text-[#1a1612]">{thermalRows.length}</span> / {maxThermalComponents}.
             {supportIsSplit ? ` Current recipe total: ${totalThermalWt.toFixed(1)} wt%.` : ` Support closes automatically at ${supportWtPct.toFixed(1)} wt%.`}
           </div>
         </div>
@@ -1569,21 +1569,21 @@ export default function Calculator() {
         <div className="grid gap-3 lg:grid-cols-3">
           <div className="rounded-[20px] border border-slate-200 bg-white/82 px-4 py-3">
             <div className="cp-subtle-label">Selection mode</div>
-            <div className="mt-2 text-sm font-semibold text-slate-950">Choose all operations that apply</div>
+            <div className="mt-2 text-sm font-semibold text-[#1a1612]">Choose all operations that apply</div>
             <div className="mt-1 text-xs leading-6 text-slate-500">
               This screen builds a full route, not a one-choice wizard.
             </div>
           </div>
           <div className="rounded-[20px] border border-slate-200 bg-white/82 px-4 py-3">
             <div className="cp-subtle-label">Bucket logic</div>
-            <div className="mt-2 text-sm font-semibold text-slate-950">One bucket can hold multiple steps</div>
+            <div className="mt-2 text-sm font-semibold text-[#1a1612]">One bucket can hold multiple steps</div>
             <div className="mt-1 text-xs leading-6 text-slate-500">
               Saved thermal and electrochemical templates often stack several operations inside the same bucket.
             </div>
           </div>
           <div className="rounded-[20px] border border-teal-200 bg-teal-50/80 px-4 py-3">
             <div className="cp-subtle-label !text-teal-700">Current route</div>
-            <div className="mt-2 text-sm font-semibold text-slate-950">
+            <div className="mt-2 text-sm font-semibold text-[#1a1612]">
               {steps.length} selected step{steps.length === 1 ? '' : 's'} across {selectedCategoryCount} bucket{selectedCategoryCount === 1 ? '' : 's'}
             </div>
             <div className="mt-1 text-xs leading-6 text-slate-500">

@@ -107,7 +107,7 @@ function StatusTile({ label, value, detail }: { label: string; value: string; de
   return (
     <div className="rounded-[22px] border border-slate-900/8 bg-white/58 p-4">
       <div className="cp-subtle-label">{label}</div>
-      <div className="mt-2 text-2xl font-display text-slate-950">{value}</div>
+      <div className="mt-2 text-2xl font-display text-[#1a1612]">{value}</div>
       <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div>
     </div>
   );
@@ -120,7 +120,7 @@ function InspectorRow({ label, value, detail }: { label: string; value: string; 
         <div className="cp-subtle-label">{label}</div>
         {detail ? <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div> : null}
       </div>
-      <div className="text-right text-sm font-semibold text-slate-950">{value}</div>
+      <div className="text-right text-sm font-semibold text-[#1a1612]">{value}</div>
     </div>
   );
 }
@@ -248,7 +248,7 @@ export default function Prices() {
         <div className="cp-inspector-rail">
           <section className="cp-rail-panel">
             <div className="cp-subtle-label">Evidence Surface</div>
-            <div className="mt-2 text-lg font-semibold text-slate-950">Choose a tracked symbol.</div>
+            <div className="mt-2 text-lg font-semibold text-[#1a1612]">Choose a tracked symbol.</div>
             <div className="mt-2 text-xs leading-6 text-slate-500">The inspector keeps source quality, freshness, and normalization context visible.</div>
           </section>
         </div>
@@ -277,7 +277,7 @@ export default function Prices() {
 
         <section className="cp-rail-panel">
           <div className="cp-subtle-label">Source Basis</div>
-          <div className="mt-2 text-lg font-semibold text-slate-950">Inspect trust before you read the number.</div>
+          <div className="mt-2 text-lg font-semibold text-[#1a1612]">Inspect trust before you read the number.</div>
           <div className="mt-3 space-y-1">
             <InspectorRow label="Acquisition" value={selectedRow.evidence.acquisition_mode} detail={sourceDescription(selectedRow)} />
             <InspectorRow label="Confidence" value={String(selectedRow.evidence.confidence_score)} detail={selectedRow.evidence.transparency} />
@@ -313,7 +313,7 @@ export default function Prices() {
             <div className="flex min-w-[280px] flex-col gap-2 rounded-[22px] border border-slate-200 bg-white/76 px-4 py-3 sm:items-end">
               <div className="cp-subtle-label">Quote Status</div>
               <div className="text-right">
-                <div className="text-sm font-semibold text-slate-950">
+                <div className="text-sm font-semibold text-[#1a1612]">
                   {refreshing ? 'Refreshing live quotes' : latestFetchedAt ? 'Live quotes loaded' : 'Stored pricing basis'}
                 </div>
                 <div className="mt-1 text-xs leading-5 text-slate-500">
@@ -362,13 +362,13 @@ export default function Prices() {
                         >
                           <div className="flex min-w-0 items-center gap-3">
                             <span
-                              className="flex h-10 w-10 items-center justify-center rounded-[18px] text-sm font-semibold text-slate-950"
+                              className="flex h-10 w-10 items-center justify-center rounded-[18px] text-sm font-semibold text-[#1a1612]"
                               style={{ backgroundColor: METAL_COLORS[row.symbol] || '#c96442' }}
                             >
                               {row.symbol}
                             </span>
                             <div className="min-w-0">
-                              <div className="truncate font-semibold text-slate-950">{row.name}</div>
+                              <div className="truncate font-semibold text-[#1a1612]">{row.name}</div>
                               <div className="truncate text-xs text-slate-500">
                                 {sourceDescription(row)} / {row.evidence.label}
                               </div>
@@ -378,7 +378,7 @@ export default function Prices() {
                           <SourceBadge sourceType={row.source_type} />
 
                           <div className="text-left sm:text-right">
-                            <div className="text-lg font-display text-slate-950">{fmtPrice(row.price, row.unit, unit)}</div>
+                            <div className="text-lg font-display text-[#1a1612]">{fmtPrice(row.price, row.unit, unit)}</div>
                             <div className="text-xs text-slate-500">{displayTrackedUnit(row.unit, unit)}</div>
                           </div>
                         </button>
@@ -401,7 +401,7 @@ export default function Prices() {
         <div className="cp-inspector-rail">
           <section className="cp-rail-panel">
             <div className="cp-subtle-label">Evidence Surface</div>
-            <div className="mt-2 text-lg font-semibold text-slate-950">Choose a symbol to inspect its history.</div>
+            <div className="mt-2 text-lg font-semibold text-[#1a1612]">Choose a symbol to inspect its history.</div>
           </section>
         </div>
       );
@@ -415,7 +415,7 @@ export default function Prices() {
       <div className="cp-inspector-rail">
         <section className="cp-rail-panel">
           <div className="cp-subtle-label">Trend Evidence</div>
-          <div className="mt-2 text-lg font-semibold text-slate-950">{selectedRow.name}</div>
+          <div className="mt-2 text-lg font-semibold text-[#1a1612]">{selectedRow.name}</div>
           <div className="mt-3 space-y-1">
             <InspectorRow label="Current" value={currentValue != null ? fmtPrice(currentValue, selectedRow.unit, unit) : 'N/A'} detail={displayTrackedUnit(selectedRow.unit, unit)} />
             <InspectorRow label="Period high" value={periodHigh != null ? fmtPrice(periodHigh, selectedRow.unit, unit) : 'N/A'} />
@@ -466,7 +466,7 @@ export default function Prices() {
                   key={value}
                   onClick={() => setPeriod(value)}
                   className={`rounded-[16px] px-3 py-2 text-xs font-semibold transition ${
-                    period === value ? 'bg-[#c96442] text-slate-950' : 'text-slate-300 hover:bg-white/8'
+                    period === value ? 'bg-[#c96442] text-[#1a1612]' : 'text-slate-300 hover:bg-white/8'
                   }`}
                 >
                   {PERIOD_LABELS[value]}
