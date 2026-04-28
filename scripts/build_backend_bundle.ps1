@@ -62,6 +62,15 @@ Write-Host "[CatPrice] Building backend sidecar..."
     --specpath $specPath `
     --collect-submodules backend `
     --collect-submodules uvicorn `
+    --collect-submodules apscheduler `
+    --collect-submodules sqlmodel `
+    --collect-submodules sqlalchemy `
+    --collect-submodules pydantic `
+    --collect-submodules pydantic_settings `
+    --collect-submodules httpx `
+    --collect-submodules yfinance `
+    --collect-submodules numpy `
+    --collect-submodules alembic `
     --add-data "$dataPath;backend/data" `
     $entryPoint
 

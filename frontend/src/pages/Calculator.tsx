@@ -27,9 +27,10 @@ import {
   type CalculatorResultSnapshot,
   type CalculatorRow,
 } from '../lib/calculator-session';
+import { LB_PER_KG, TROY_OZ_PER_LB } from '../lib/unit-conversion';
 import { useUnit } from '../lib/use-unit';
 
-const TROY_OZ_PER_LB = 14.5833;
+
 const THERMAL_WT_TOLERANCE = 0.05;
 const QUICK_ORDER_SIZES = [2, 20, 200];
 const DEFAULT_STEPS = ['mixer_slurry', 'incipient_wetness', 'dryer_rotary_100_300C'];
@@ -113,7 +114,7 @@ function uid() {
   return `row-${Date.now()}-${Math.random().toString(16).slice(2, 10)}`;
 }
 
-const toPerLb = (price: number, unit: string) => unit === '$/troy_oz' ? price * TROY_OZ_PER_LB : unit === '$/kg' ? price / 2.20462 : price;
+const toPerLb = (price: number, unit: string) => unit === '$/troy_oz' ? price * TROY_OZ_PER_LB : unit === '$/kg' ? price / LB_PER_KG : price;
 const getScale = (tons: number): Scale => (tons < 5 ? 'small' : tons < 70 ? 'medium' : 'large');
 const sourceTypeLabel = (sourceType: SourceType) => sourceType === 'live' ? 'Live' : sourceType === 'indexed' ? 'Indexed' : 'Manual';
 const sourceTone = (sourceType: SourceType) => sourceType === 'live' ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : sourceType === 'indexed' ? 'border-amber-200 bg-amber-50 text-amber-700' : 'border-slate-200 bg-white text-slate-600';

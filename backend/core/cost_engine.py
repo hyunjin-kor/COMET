@@ -2,12 +2,16 @@
 
 from __future__ import annotations
 
+import logging
+
 from backend.core.constants import LB_PER_KG, TROY_OZ_PER_LB
 from backend.core.electrocatalyst import calculate_electrode_layer_cost
 from backend.core.materials_calc import calculate_materials_cost_multi
 from backend.core.price_escalation import get_escalation_factor
 from backend.core.spent_catalyst import calculate_metal_recovery_value
 from backend.core.step_method import calculate_step_method
+
+logger = logging.getLogger(__name__)
 
 
 def estimate_catalyst_cost(
@@ -147,7 +151,13 @@ def estimate_catalyst_cost(
             )
             reclaimed = spent_result.get("V_reclaimed_per_lb") or spent_result.get("V_reclaimed", 0)
             net_cost_per_lb = max(0.0, step_result["estimated_price_per_lb"] - float(reclaimed))
-        except Exception:
+        except (KeyError, ValueError, TypeError, ZeroDivisionError) as exc:
+            logger.warning(
+                "Spent-catalyst recovery skipped (%s/%s): %s",
+                primary["name"],
+                primary_support["name"],
+                exc,
+            )
             spent_result = None
 
     if (
