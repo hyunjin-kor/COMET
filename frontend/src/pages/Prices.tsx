@@ -502,11 +502,19 @@ export default function Prices() {
                 Loading history...
               </div>
             ) : displayHistory.length === 0 ? (
-              <div className="flex h-[320px] flex-col items-center justify-center gap-2 rounded-[28px] border border-dashed border-white/10 bg-white/4 text-center">
+              <div className="flex h-[320px] flex-col items-center justify-center gap-3 rounded-[28px] border border-dashed border-white/10 bg-white/4 text-center">
                 <div className="font-display text-2xl text-white">No stored price history</div>
                 <div className="max-w-md text-sm leading-7 text-slate-400">
                   Refresh quotes or choose a symbol that already has stored history.
                 </div>
+                <button
+                  type="button"
+                  onClick={handleRefresh}
+                  disabled={refreshing}
+                  className="cp-button-ink mt-2 px-4 py-2 text-xs"
+                >
+                  {refreshing ? 'Refreshing now…' : 'Refresh quotes'}
+                </button>
               </div>
             ) : (
               <>

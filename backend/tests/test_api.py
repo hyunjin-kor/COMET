@@ -246,7 +246,11 @@ class TestCalculator:
             "order_size_tons": 10.0,
         })
         assert resp.status_code == 422
-        assert resp.json()["detail"] == "Unknown metal_price_unit: $/stone"
+        # The Literal[$/lb,$/kg,$/troy_oz] rejection now fires at the
+        # Pydantic layer before the engine gets called.
+        payload = resp.json()
+        assert isinstance(payload["detail"], list)
+        assert payload["detail"][0]["loc"][-1] == "metal_price_unit"
 
     def test_calculate_quick_rejects_full_metal_loading_without_support_fraction(self, client):
         resp = client.post("/api/calculate/quick", json={

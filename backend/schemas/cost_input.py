@@ -4,11 +4,21 @@ from __future__ import annotations
 
 from typing import Literal
 
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, model_validator
+
+PriceUnit = Literal["$/lb", "$/kg", "$/troy_oz"]
+ApplicationFamily = Literal[
+    "general",
+    "fuel_cell",
+    "direct_methanol_fuel_cell",
+    "electrolyzer",
+]
 
 
 class ComponentInput(BaseModel):
     """One component of the catalyst formulation."""
+
+    model_config = ConfigDict(extra="ignore")
 
     role: Literal["active_metal", "active_catalyst", "promoter", "support"] = "active_metal"
     material_key: str | None = Field(
@@ -38,12 +48,9 @@ class ComponentInput(BaseModel):
 class ElectrodeCostInput(BaseModel):
     """Optional area-based coating model for electrocatalyst workflows."""
 
-    application_family: Literal[
-        "general",
-        "fuel_cell",
-        "direct_methanol_fuel_cell",
-        "electrolyzer",
-    ] = "general"
+    model_config = ConfigDict(extra="ignore")
+
+    application_family: ApplicationFamily = "general"
     catalyst_material_key: str | None = None
     ionomer_material_key: str | None = None
     substrate_material_key: str | None = None
@@ -73,6 +80,8 @@ class CostCalculationRequest(BaseModel):
     so you do not need to pre-normalize (though it is good practice).
     """
 
+    model_config = ConfigDict(extra="ignore")
+
     components: list[ComponentInput] | None = Field(
         default=None,
         min_length=1,
@@ -80,7 +89,7 @@ class CostCalculationRequest(BaseModel):
     )
     metal_symbol: str | None = None
     metal_price: float | None = Field(default=None, gt=0)
-    metal_price_unit: str = "$/troy_oz"
+    metal_price_unit: PriceUnit = "$/troy_oz"
     metal_loading_wt_pct: float | None = Field(default=None, gt=0, le=100)
     support_name: str | None = None
     support_price_per_lb: float = Field(default=0.50, ge=0)
@@ -91,12 +100,7 @@ class CostCalculationRequest(BaseModel):
         description="Processing step keys from the Step Library",
     )
     catalyst_domain: Literal["thermal", "electrocatalyst"] = Field(default="thermal")
-    application_family: Literal[
-        "general",
-        "fuel_cell",
-        "direct_methanol_fuel_cell",
-        "electrolyzer",
-    ] = Field(default="general")
+    application_family: ApplicationFamily = Field(default="general")
     template_id: str | None = None
     order_size_tons: float = Field(default=10.0, gt=0)
     ga_overhead_pct: float = Field(default=0.05, ge=0, le=1)
@@ -171,18 +175,15 @@ class CostCalculationRequest(BaseModel):
 class QuickCalculationRequest(BaseModel):
     """Simplified single-metal input for POST /api/calculate/quick."""
 
-    metal_symbol: str
+    model_config = ConfigDict(extra="ignore")
+
+    metal_symbol: str = Field(..., min_length=1, max_length=64)
     metal_price: float = Field(..., gt=0)
-    metal_price_unit: str = "$/troy_oz"
+    metal_price_unit: PriceUnit = "$/troy_oz"
     metal_loading_wt_pct: float = Field(..., gt=0, le=100)
-    support_name: str = "Al2O3"
-    support_price_per_lb: float = 0.50
+    support_name: str = Field(default="Al2O3", min_length=1, max_length=128)
+    support_price_per_lb: float = Field(default=0.50, ge=0)
     catalyst_domain: Literal["thermal", "electrocatalyst"] = "thermal"
-    application_family: Literal[
-        "general",
-        "fuel_cell",
-        "direct_methanol_fuel_cell",
-        "electrolyzer",
-    ] = "general"
-    order_size_tons: float = 10.0
+    application_family: ApplicationFamily = "general"
+    order_size_tons: float = Field(default=10.0, gt=0)
     template_id: str | None = None

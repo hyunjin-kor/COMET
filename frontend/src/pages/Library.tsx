@@ -340,7 +340,26 @@ export default function Library() {
                     <SkeletonListRows count={6} />
                   </div>
                 ) : materials.length === 0 ? (
-                  <div className="px-5 py-8 text-sm text-slate-500">No materials match the current filters.</div>
+                  <div className="flex flex-col items-start gap-3 px-5 py-8 text-sm text-slate-500">
+                    <div>
+                      <div className="font-semibold text-[#1a1612]">No materials match the current filters.</div>
+                      <div className="mt-1 text-xs leading-5 text-slate-500">
+                        Try clearing the search box or category filter to see the full library.
+                      </div>
+                    </div>
+                    {(search || category) ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSearch('');
+                          setCategory('');
+                        }}
+                        className="cp-button-secondary px-3.5 py-2 text-xs"
+                      >
+                        Clear filters
+                      </button>
+                    ) : null}
+                  </div>
                 ) : (
                   <div className="max-h-[68vh] space-y-2 overflow-auto px-4 py-4">
                     {materials.map((material) => {

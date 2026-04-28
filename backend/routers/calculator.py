@@ -178,7 +178,7 @@ def calculate_cost(
         result, _, _ = _prepare_calculation(req, session)
         return result
     except ValueError as exc:
-        raise HTTPException(status_code=422, detail=str(exc))
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
 
 
 @router.post("/calculate/quick")
@@ -207,7 +207,7 @@ def calculate_cost_quick(req: QuickCalculationRequest):
         )
         return result
     except ValueError as exc:
-        raise HTTPException(status_code=422, detail=str(exc))
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
 
 
 @router.post("/calculate/save")
@@ -221,7 +221,7 @@ def save_estimate(
     try:
         result, resolved_components, application_family = _prepare_calculation(req, session)
     except ValueError as exc:
-        raise HTTPException(status_code=422, detail=str(exc))
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
 
     active = [
         component for component in resolved_components

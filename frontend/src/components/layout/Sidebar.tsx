@@ -62,11 +62,15 @@ export default function Sidebar() {
             <div className="cp-subtle-label !text-slate-400">Display Unit</div>
 
             <button
+              type="button"
               onClick={toggle}
               className="no-drag mt-3 flex w-full items-center gap-1 rounded-full border border-white/10 bg-white/6 p-1"
               title="Toggle output units"
+              aria-label={`Toggle output units, currently ${unit}`}
+              aria-pressed={unit === 'lb'}
             >
               <span
+                aria-hidden="true"
                 className={`flex-1 rounded-full px-3 py-2 text-xs font-semibold transition ${
                   unit === 'kg' ? 'bg-[#c96442] text-[#1a1612]' : 'text-slate-300'
                 }`}
@@ -74,6 +78,7 @@ export default function Sidebar() {
                 kg
               </span>
               <span
+                aria-hidden="true"
                 className={`flex-1 rounded-full px-3 py-2 text-xs font-semibold transition ${
                   unit === 'lb' ? 'bg-[#c96442] text-[#1a1612]' : 'text-slate-300'
                 }`}

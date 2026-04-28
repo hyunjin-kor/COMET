@@ -1,5 +1,7 @@
 import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
+import { useKeyboardShortcuts } from '../../lib/use-keyboard-shortcuts';
+import KeyboardHints from './KeyboardHints';
 import Sidebar from './Sidebar';
 import TopNavigation from './TopNavigation';
 
@@ -20,6 +22,8 @@ function RouteLoadingFallback() {
 }
 
 export default function AppFrame() {
+  const { hintsVisible, closeHints } = useKeyboardShortcuts();
+
   return (
     <div className="cp-shell relative min-h-screen overflow-x-hidden">
       <TopNavigation />
@@ -35,6 +39,8 @@ export default function AppFrame() {
           </div>
         </div>
       </main>
+
+      <KeyboardHints visible={hintsVisible} onClose={closeHints} />
     </div>
   );
 }
