@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Skeleton } from '../components/shared/Skeleton';
 import { WorkspaceSectionFooter, WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
 import {
   fetchBenchmarkFamilies,
@@ -199,7 +200,24 @@ export default function Compare() {
   }
 
   if (loading) {
-    return <div className="surface-card flex items-center gap-3 px-5 py-6 text-slate-600"><span className="h-4 w-4 animate-spin rounded-full border-2 border-[#c96442] border-t-transparent" />Loading literature benchmarks...</div>;
+    return (
+      <section className="surface-card cp-enter overflow-hidden p-6 sm:p-7">
+        <div className="cp-subtle-label">Literature Benchmarks</div>
+        <Skeleton className="mt-3 h-9 w-3/5 max-w-md" />
+        <Skeleton className="mt-3 h-3 w-3/4 max-w-xl" />
+        <Skeleton className="mt-2 h-3 w-2/3 max-w-lg" />
+        <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {Array.from({ length: 6 }, (_, idx) => (
+            <div key={idx} className="rounded-[24px] border border-[rgba(28,22,14,0.07)] bg-[rgba(255,253,248,0.5)] px-4 py-4">
+              <Skeleton className="h-3 w-1/3" />
+              <Skeleton className="mt-3 h-6 w-3/4" />
+              <Skeleton className="mt-2 h-3 w-1/2" />
+              <Skeleton className="mt-4 h-8 w-24 rounded-full" />
+            </div>
+          ))}
+        </div>
+      </section>
+    );
   }
 
   if (error || !benchmark || !activeCandidate) {

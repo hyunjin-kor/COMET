@@ -1,4 +1,5 @@
 import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
+import { SkeletonListRows, SkeletonTile } from '../components/shared/Skeleton';
 import { WorkspaceSectionFooter, WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
 import { apiUrl, fetchPrices, refreshPrices, type MetalPrice } from '../lib/api';
 import { LB_PER_KG, TROY_OZ_PER_KG, TROY_OZ_PER_LB, type Unit } from '../lib/unit-conversion';
@@ -235,10 +236,29 @@ export default function Prices() {
 
   if (loading) {
     return (
-      <div className="surface-card flex items-center gap-3 px-5 py-6 text-slate-600">
-        <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#c96442] border-t-transparent" />
-        Loading live metal prices...
-      </div>
+      <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6">
+        <div className="mb-5 flex flex-col gap-2">
+          <div className="cp-subtle-label">Live Metal Prices</div>
+          <div className="h-9 w-2/3 max-w-md rounded-[10px] bg-[rgba(232,220,200,0.55)] cp-skeleton" />
+          <div className="h-3 w-3/4 max-w-xl rounded-[8px] bg-[rgba(232,220,200,0.45)] cp-skeleton" />
+        </div>
+        <div className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          {Array.from({ length: 4 }, (_, idx) => (
+            <SkeletonTile key={idx} />
+          ))}
+        </div>
+        <div className="space-y-4">
+          {['Platinum Group Metals', 'Precious Metals', 'Industrial Metals'].map((title, idx) => (
+            <div key={title} className="surface-ghost overflow-hidden p-4">
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <div className="cp-subtle-label">{title}</div>
+                <span className="cp-chip">Loading…</span>
+              </div>
+              <SkeletonListRows count={idx === 2 ? 5 : 3} />
+            </div>
+          ))}
+        </div>
+      </section>
     );
   }
 

@@ -23,13 +23,15 @@ export default function ResultBreakdownPieChart({
         <Tooltip
           formatter={(value) => [`${Number(value).toFixed(1)}%`, 'Share']}
           contentStyle={{
-            borderRadius: 18,
-            border: '1px solid rgba(31,47,72,0.10)',
-            background: 'rgba(255,251,245,0.96)',
-            color: '#142033',
+            borderRadius: 14,
+            border: '1px solid rgba(28,22,14,0.10)',
+            background: 'rgba(252,248,240,0.97)',
+            color: '#1a1612',
             fontSize: 12,
-            boxShadow: '0 18px 48px rgba(23,34,51,0.12)',
+            boxShadow: '0 18px 42px rgba(34,24,12,0.10)',
+            padding: '8px 12px',
           }}
+          labelStyle={{ color: '#5e564a', fontSize: 11, marginBottom: 4 }}
         />
       </PieChart>
     </ResponsiveContainer>
