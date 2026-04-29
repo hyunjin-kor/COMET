@@ -46,6 +46,9 @@ CatCost_v1-1-1/
 tmp/
 output/
 .playwright-cli/
+
+# Agent / tooling runtime state
+.claude/
 backend/data/_catcost_raw_extract.json
 CodexLauncher.vbs
 scripts/create_codex_shortcut.ps1
