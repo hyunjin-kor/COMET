@@ -16,8 +16,28 @@ const CHART_COLORS = ['#c96442', '#7c8db5', '#d4a857', '#7a9b8d', '#a48bc8', '#b
 const RESULT_SECTIONS: WorkspaceSection[] = [
   { id: 'summary', label: 'Result', summary: 'Headline price, scope, and active warnings.' },
   { id: 'manufacturing', label: 'Preparation Method', summary: 'Route, cost structure, and campaign basis.' },
+  { id: 'environmental', label: 'Environmental', summary: 'Cradle-to-gate impact per kg of catalyst.' },
   { id: 'sources', label: 'Evidence', summary: 'Resolved source rows, normalization, and links.' },
 ];
+
+function formatLcaNumber(value: number | null | undefined): string {
+  if (value == null) return 'No data';
+  if (value >= 10000) return value.toLocaleString('en-US', { maximumFractionDigits: 0 });
+  if (value >= 100) return value.toLocaleString('en-US', { maximumFractionDigits: 1 });
+  return value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 });
+}
+
+function lcaFactorStatusLabel(status: string): string {
+  if (status === 'matched') return 'Matched';
+  if (status === 'matched_alias') return 'Matched (alias)';
+  if (status === 'explicitly_unsupported') return 'Not in dataset';
+  return 'No factor';
+}
+
+function lcaFactorStatusTone(status: string): string {
+  if (status === 'matched' || status === 'matched_alias') return 'border-emerald-200 bg-emerald-50 text-emerald-700';
+  return 'border-amber-200 bg-amber-50 text-amber-700';
+}
 
 function sourceRecordLabel(priceScope: string, hasLink: boolean) {
   if (hasLink) {
@@ -283,6 +303,13 @@ export default function CalculatorResult() {
                 value={String(routeReferenceCount)}
                 detail={routeReferenceCount ? 'Public route links stored' : 'No route link stored'}
               />
+              {result.lca && result.lca.gwp_kg_co2eq_per_kg_catalyst != null ? (
+                <RailRow
+                  label="Cradle-to-gate GWP"
+                  value={`${formatLcaNumber(result.lca.gwp_kg_co2eq_per_kg_catalyst)} kg CO2-eq/kg`}
+                  detail={`${result.lca.coverage_pct}% mass coverage / Nuss & Eckelman 2014`}
+                />
+              ) : null}
             </div>
           </div>
 
@@ -587,6 +614,136 @@ export default function CalculatorResult() {
     );
   }
 
+  function renderEnvironmentalSection() {
+    const lca = result.lca;
+    if (!lca) {
+      return (
+        <section className="surface-card p-4">
+          <div className="cp-subtle-label">Environmental</div>
+          <div className="cp-heading-lg mt-2">No LCA data attached to this estimate.</div>
+          <div className="mt-2 text-xs leading-6 text-slate-500">
+            Re-run the estimate to compute cradle-to-gate impact.
+          </div>
+        </section>
+      );
+    }
+
+    const ref = lca.reference;
+    const gwp = lca.gwp_kg_co2eq_per_kg_catalyst;
+    const ced = lca.ced_mj_per_kg_catalyst;
+    const coverage = lca.coverage_pct;
+    const dataGap = lca.data_gap_pct;
+
+    return (
+      <section className="surface-card p-4">
+        <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div className="min-w-0">
+            <div className="cp-subtle-label">Environmental</div>
+            <div className="cp-heading-lg mt-2">Cradle-to-gate impact per kg of catalyst</div>
+            <div className="mt-1 text-xs leading-6 text-slate-500">
+              Weighted-average over the wt% composition. Manufacturing-step emissions are not included in this version — only embodied material impact.
+            </div>
+          </div>
+          <span className={`cp-chip shrink-0 ${dataGap > 0 ? 'border-amber-200 bg-amber-50 text-amber-700' : 'border-emerald-200 bg-emerald-50 text-emerald-700'}`}>
+            {coverage}% covered
+          </span>
+        </div>
+
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <MetricTile
+            label="GWP (100a)"
+            value={`${formatLcaNumber(gwp)} kg`}
+            detail="kg CO2-eq per kg of finished catalyst (IPCC GWP100a)."
+          />
+          <MetricTile
+            label="Cumulative energy demand"
+            value={`${formatLcaNumber(ced)} MJ`}
+            detail="Total primary energy per kg of finished catalyst."
+          />
+          <MetricTile
+            label="Composition coverage"
+            value={`${coverage}%`}
+            detail={dataGap > 0 ? `${dataGap}% of mass has no verified factor.` : 'Every component has a verified factor.'}
+          />
+          <MetricTile
+            label="Data source"
+            value="Nuss & Eckelman 2014"
+            detail="PLOS ONE 9(7): e101298 — CC BY 4.0."
+          />
+        </div>
+
+        {lca.warnings.length > 0 ? (
+          <div className="mt-4 rounded-[18px] border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900" role="status">
+            <div className="font-semibold">LCA notes</div>
+            <ul className="mt-2 list-disc space-y-1 pl-5">
+              {lca.warnings.map((warning, idx) => (
+                <li key={idx}>{warning}</li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+
+        <div className="mt-5 overflow-hidden rounded-[24px] border border-slate-200">
+          <table className="min-w-full text-left text-xs leading-6">
+            <thead className="bg-slate-50 text-slate-600">
+              <tr>
+                <th className="px-3 py-2 font-semibold">Component</th>
+                <th className="px-3 py-2 font-semibold">Role</th>
+                <th className="px-3 py-2 font-semibold">wt%</th>
+                <th className="px-3 py-2 font-semibold">Status</th>
+                <th className="px-3 py-2 font-semibold text-right">GWP (kg CO2-eq/kg cat)</th>
+                <th className="px-3 py-2 font-semibold text-right">CED (MJ/kg cat)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {lca.per_component.map((entry, idx) => (
+                <tr key={`${entry.name}-${idx}`} className="border-t border-slate-100">
+                  <td className="px-3 py-2 font-semibold text-slate-900">
+                    {entry.name}
+                    {entry.matched_key && entry.matched_key !== entry.name ? (
+                      <span className="ml-1 text-[10px] text-slate-500">(via {entry.matched_key})</span>
+                    ) : null}
+                  </td>
+                  <td className="px-3 py-2 text-slate-600">{entry.role ?? '—'}</td>
+                  <td className="px-3 py-2 text-slate-600">{entry.wt_pct.toFixed(2)}</td>
+                  <td className="px-3 py-2">
+                    <span className={`inline-flex rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.16em] ${lcaFactorStatusTone(entry.factor_status)}`}>
+                      {lcaFactorStatusLabel(entry.factor_status)}
+                    </span>
+                  </td>
+                  <td className="px-3 py-2 text-right font-mono text-slate-900">
+                    {entry.gwp_contribution_kg_co2eq_per_kg_catalyst != null
+                      ? formatLcaNumber(entry.gwp_contribution_kg_co2eq_per_kg_catalyst)
+                      : '—'}
+                  </td>
+                  <td className="px-3 py-2 text-right font-mono text-slate-900">
+                    {entry.ced_contribution_mj_per_kg_catalyst != null
+                      ? formatLcaNumber(entry.ced_contribution_mj_per_kg_catalyst)
+                      : '—'}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="mt-5 rounded-[20px] border border-slate-200 bg-white/72 p-4">
+          <div className="cp-subtle-label">Reference</div>
+          <div className="mt-2 text-sm font-semibold text-slate-900">{ref.citation}</div>
+          <div className="mt-1 text-xs leading-6 text-slate-600">
+            {ref.table_of_origin}. Underlying LCI: {ref.underlying_lci_database}. Uncertainty: {ref.uncertainty_basis}. License: {ref.license}.
+          </div>
+          <div className="mt-2 text-xs">
+            <a href={ref.url} target="_blank" rel="noreferrer" className="text-[#c96442] underline-offset-4 hover:underline">
+              Open the source paper (DOI {ref.doi})
+            </a>
+          </div>
+          <div className="mt-3 text-xs leading-6 text-slate-500">{ref.notes}</div>
+        </div>
+      </section>
+    );
+  }
+
   function renderSourcesSection() {
     return (
       <section className="surface-card p-4">
@@ -778,6 +935,7 @@ export default function CalculatorResult() {
 
       {sectionState.activeSection.id === 'summary' ? renderSummarySection() : null}
       {sectionState.activeSection.id === 'manufacturing' ? renderManufacturingSection() : null}
+      {sectionState.activeSection.id === 'environmental' ? renderEnvironmentalSection() : null}
       {sectionState.activeSection.id === 'sources' ? renderSourcesSection() : null}
 
       <WorkspaceSectionFooter

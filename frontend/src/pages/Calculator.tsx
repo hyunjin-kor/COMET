@@ -539,51 +539,41 @@ export default function Calculator() {
     }));
   }, [currentScale]);
 
+  // Fetch live prices ONCE on mount. Each fetchPrices() returns a fresh array
+  // reference, and the dedupe/derived options below depend on it — putting
+  // thermalOptions in the deps used to cause a fetch ping-pong with the next
+  // effect (each fetch produced a new ref, retriggering the other effect).
   useEffect(() => {
+    let cancelled = false;
     async function loadPrices() {
       try {
         const prices = await fetchPrices();
-        const map = toFeedMap(prices);
-        const nextLiveOptions = prices.map(buildLiveMetalOption);
-        const nextActiveOptions = dedupeThermalOptions([
-          ...nextLiveOptions,
-          ...((thermalOptions?.active_metal_options ?? []).map(buildLibraryThermalOption)),
-        ]);
-        const nextSupportOptions = dedupeThermalOptions((thermalOptions?.support_options ?? []).map(buildLibraryThermalOption));
+        if (cancelled) return;
         setLivePriceRows(prices);
-        setLiveMap(map);
+        setLiveMap(toFeedMap(prices));
         setPricesUpdatedAt(new Date());
-        setRows((previous) => ensureThermalRows(
-          previous.map((row) => {
-            if (row.role === 'support') return row;
-            const liveKey = row.symbol ? `live:${row.symbol}` : `live:${row.name}`;
-            const liveOption = nextLiveOptions.find((option) => option.selection_key === liveKey);
-            if (!liveOption || row.source_type === 'manual') return row;
-            return applyOptionToRow(row, liveOption);
-          }),
-          nextActiveOptions,
-          nextSupportOptions,
-        ));
       } catch {
         // Keep the form usable when live prices are temporarily unavailable.
       }
     }
-
     void loadPrices();
-  }, [thermalOptions?.active_metal_options, thermalOptions?.support_options]);
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
+  // Fetch thermal composition options ONCE on mount, for the same reason.
   useEffect(() => {
+    let cancelled = false;
     async function loadThermalOptions() {
       try {
         const payload = await fetchThermalCompositionOptions();
+        if (cancelled) return;
         setThermalOptions(payload);
-        const nextLiveOptions = livePriceRows.map(buildLiveMetalOption);
-        const nextActiveOptions = dedupeThermalOptions([...nextLiveOptions, ...payload.active_metal_options.map(buildLibraryThermalOption)]);
-        const nextSupportOptions = dedupeThermalOptions(payload.support_options.map(buildLibraryThermalOption));
-        setRows((previous) => ensureThermalRows(previous, nextActiveOptions, nextSupportOptions));
       } catch {
+        if (cancelled) return;
         setThermalOptions({
-          max_components: 4,
+          max_components: 10,
           active_metal_options: [],
           promoter_options: [],
           support_options: [],
@@ -592,7 +582,38 @@ export default function Calculator() {
     }
 
     void loadThermalOptions();
-  }, [livePriceRows]);
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Reconcile rows whenever the live price feed or thermal option library
+  // changes. This effect only mutates state — no network fetches — so it
+  // can safely depend on the upstream sources without producing a loop.
+  useEffect(() => {
+    if (!livePriceRows.length && !thermalOptions) return;
+    const nextLiveOptions = livePriceRows.map(buildLiveMetalOption);
+    const nextActiveOptions = dedupeThermalOptions([
+      ...nextLiveOptions,
+      ...((thermalOptions?.active_metal_options ?? []).map(buildLibraryThermalOption)),
+    ]);
+    const nextSupportOptions = dedupeThermalOptions(
+      (thermalOptions?.support_options ?? []).map(buildLibraryThermalOption),
+    );
+    setRows((previous) =>
+      ensureThermalRows(
+        previous.map((row) => {
+          if (row.role === 'support') return row;
+          const liveKey = row.symbol ? `live:${row.symbol}` : `live:${row.name}`;
+          const liveOption = nextLiveOptions.find((option) => option.selection_key === liveKey);
+          if (!liveOption || row.source_type === 'manual') return row;
+          return applyOptionToRow(row, liveOption);
+        }),
+        nextActiveOptions,
+        nextSupportOptions,
+      ),
+    );
+  }, [livePriceRows, thermalOptions]);
 
   useEffect(() => {
     async function loadElectrocatalystReferences() {
@@ -763,7 +784,7 @@ export default function Calculator() {
   const thermalOptionMap = new Map<string, ThermalSelectionOption>(
     [...activeMetalOptions, ...promoterOptions, ...supportSelectionOptions].map((option) => [option.selection_key, option]),
   );
-  const maxThermalComponents = thermalOptions?.max_components ?? 4;
+  const maxThermalComponents = thermalOptions?.max_components ?? 10;
   const electroMaterialMap = new Map(electroMaterials.map((material) => [String(material.id), material]));
   const catalystPowders = electroMaterials.filter((material) => material.category === 'Electrocatalyst Powder');
   const ionomerOptions = electroMaterials.filter((material) => material.category === 'Ionomer');

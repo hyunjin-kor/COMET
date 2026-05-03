@@ -378,22 +378,28 @@ class TestCalculator:
         assert data["input_summary"]["n_components"] == 4
         assert "/Al2O3+CeO2" in data["input_summary"]["composition"]
 
-    def test_calculate_rejects_more_than_four_thermal_components(self, client):
+    def test_calculate_rejects_more_than_ten_thermal_components(self, client):
         resp = client.post("/api/calculate", json={
             "catalyst_domain": "thermal",
             "order_size_tons": 20.0,
             "steps": ["mixer_slurry", "incipient_wetness", "dryer_rotary_100_300C"],
             "components": [
-                {"role": "active_metal", "name": "Ni", "wt_pct": 10.0, "price_per_lb": 16.83},
-                {"role": "active_metal", "name": "Co", "wt_pct": 10.0, "price_per_lb": 14.25},
-                {"role": "promoter", "name": "Mo", "wt_pct": 5.0, "price_per_lb": 24.5},
+                {"role": "active_metal", "name": "Ni", "wt_pct": 5.0, "price_per_lb": 16.83},
+                {"role": "active_metal", "name": "Co", "wt_pct": 5.0, "price_per_lb": 14.25},
+                {"role": "active_metal", "name": "Cu", "wt_pct": 4.0, "price_per_lb": 4.4},
+                {"role": "active_metal", "name": "Fe", "wt_pct": 3.0, "price_per_lb": 0.5},
+                {"role": "promoter", "name": "Mo", "wt_pct": 2.0, "price_per_lb": 24.5},
+                {"role": "promoter", "name": "Mn", "wt_pct": 2.0, "price_per_lb": 1.5},
+                {"role": "promoter", "name": "V", "wt_pct": 2.0, "price_per_lb": 12.0},
+                {"role": "promoter", "name": "Ce", "wt_pct": 2.0, "price_per_lb": 8.0},
                 {"role": "support", "material_key": "lit:usgs-alumina-2025", "wt_pct": 35.0},
-                {"role": "support", "material_key": "lit:usgs-ceria-2025", "wt_pct": 40.0},
+                {"role": "support", "material_key": "lit:usgs-ceria-2025", "wt_pct": 35.0},
+                {"role": "support", "material_key": "lit:usgs-zirconia-2025", "wt_pct": 5.0},
             ],
         })
         assert resp.status_code == 422
         payload = resp.json()
-        assert payload["detail"][0]["msg"] == "Value error, Thermal workflows support at most four total components"
+        assert payload["detail"][0]["msg"] == "Value error, Thermal workflows support at most ten total components"
 
 
 class TestUncertainty:
@@ -842,7 +848,7 @@ class TestMaterials:
         resp = client.get("/api/materials/composition-options?catalyst_domain=thermal")
         assert resp.status_code == 200
         payload = resp.json()
-        assert payload["max_components"] == 4
+        assert payload["max_components"] == 10
         assert payload["active_metal_options"]
         assert payload["promoter_options"]
         assert payload["support_options"]

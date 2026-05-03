@@ -1,7 +1,7 @@
 import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 import { SkeletonListRows, SkeletonTile } from '../components/shared/Skeleton';
 import { WorkspaceSectionFooter, WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
-import { apiUrl, fetchPrices, refreshPrices, type MetalPrice } from '../lib/api';
+import { fetchPriceHistory, fetchPrices, refreshPrices, type MetalPrice } from '../lib/api';
 import { LB_PER_KG, TROY_OZ_PER_KG, TROY_OZ_PER_LB, type Unit } from '../lib/unit-conversion';
 import { useUnit } from '../lib/use-unit';
 
@@ -147,9 +147,10 @@ export default function Prices() {
     goPrevious,
     setActiveSection,
   } = useWorkspaceSections(FEED_SECTIONS, 'feed');
-  const [prices, setPrices] = useState<(MetalPrice & { is_live?: boolean })[]>([]);
+  const [prices, setPrices] = useState<MetalPrice[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
   const [history, setHistory] = useState<HistoryPoint[]>([]);
   const [historySource, setHistorySource] = useState<string | null>(null);
@@ -158,13 +159,15 @@ export default function Prices() {
 
   const load = useCallback(() => {
     setLoading(true);
+    setError(null);
     fetchPrices()
-      .then((data) => {
-        const rows = data as (MetalPrice & { is_live?: boolean })[];
+      .then((rows) => {
         setPrices(rows);
         setSelected((current) => current ?? rows[0]?.symbol ?? null);
       })
-      .catch(() => {})
+      .catch((err: unknown) => {
+        setError(err instanceof Error ? err.message : 'Failed to load metal prices');
+      })
       .finally(() => setLoading(false));
   }, []);
 
@@ -173,33 +176,37 @@ export default function Prices() {
   useEffect(() => {
     if (!selected) return;
 
-    const controller = new AbortController();
+    let cancelled = false;
     setHistLoading(true);
-    fetch(apiUrl(`/prices/${selected}/history?period=${period}`), { signal: controller.signal })
-      .then((response) => response.json())
+    fetchPriceHistory(selected, { period })
       .then((payload) => {
-        if (controller.signal.aborted) return;
-        setHistory(payload.history || []);
-        setHistorySource(payload.source || null);
+        if (cancelled) return;
+        setHistory(payload.history ?? []);
+        setHistorySource(payload.source ?? null);
       })
-      .catch((err) => {
-        if (controller.signal.aborted || (err instanceof DOMException && err.name === 'AbortError')) return;
+      .catch(() => {
+        if (cancelled) return;
         setHistory([]);
         setHistorySource(null);
       })
       .finally(() => {
-        if (!controller.signal.aborted) setHistLoading(false);
+        if (!cancelled) setHistLoading(false);
       });
 
-    return () => controller.abort();
+    return () => {
+      cancelled = true;
+    };
   }, [selected, period]);
 
   const handleRefresh = async () => {
     setRefreshing(true);
+    setError(null);
 
     try {
       await refreshPrices();
       load();
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to refresh metal prices');
     } finally {
       setRefreshing(false);
     }
@@ -222,11 +229,13 @@ export default function Prices() {
       ? ((history[history.length - 1].price - history[0].price) / history[0].price) * 100
       : null;
   const isUp = pctChange != null && pctChange >= 0;
-  const latestFetchedAt = prices
-    .map((row) => row.fetched_at)
-    .filter((value): value is string => Boolean(value))
-    .sort()
-    .at(-1) ?? null;
+  const latestFetchedAt = prices.reduce<string | null>((latest, row) => {
+    if (!row.fetched_at) return latest;
+    const time = new Date(row.fetched_at).getTime();
+    if (Number.isNaN(time)) return latest;
+    if (latest == null) return row.fetched_at;
+    return time > new Date(latest).getTime() ? row.fetched_at : latest;
+  }, null);
   const liveQuoteCount = prices.filter((row) => row.source_type === 'live').length;
   const indexedQuoteCount = prices.filter((row) => row.source_type === 'indexed').length;
   const manualQuoteCount = prices.filter((row) => row.source_type === 'manual').length;
@@ -348,6 +357,12 @@ export default function Prices() {
               </button>
             </div>
           </div>
+
+          {error ? (
+            <div className="mb-4 rounded-[18px] border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700" role="alert">
+              {error}
+            </div>
+          ) : null}
 
           <div className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
             <StatusTile label="Tracked symbols" value={String(prices.length)} detail="Metals visible in the desktop feed." />

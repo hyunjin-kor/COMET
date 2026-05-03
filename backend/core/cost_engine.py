@@ -6,6 +6,7 @@ import logging
 
 from backend.core.constants import LB_PER_KG, TROY_OZ_PER_LB
 from backend.core.electrocatalyst import calculate_electrode_layer_cost
+from backend.core.lca import compute_catalyst_lca
 from backend.core.materials_calc import calculate_materials_cost_multi
 from backend.core.price_escalation import get_escalation_factor
 from backend.core.spent_catalyst import calculate_metal_recovery_value
@@ -208,6 +209,8 @@ def estimate_catalyst_cost(
 
     estimated = step_result["estimated_price_per_lb"]
 
+    lca_result = compute_catalyst_lca(components)
+
     return {
         "input_summary": {
             **legacy_input_summary,
@@ -227,6 +230,7 @@ def estimate_catalyst_cost(
         "route_summary": route_summary,
         "resolved_materials": resolved_materials or [],
         "warnings": warnings,
+        "lca": lca_result,
         "summary": {
             "estimated_price_per_lb": round(estimated, 4),
             "estimated_price_per_kg": round(estimated * LB_PER_KG, 4),
@@ -238,6 +242,9 @@ def estimate_catalyst_cost(
             "processing_pct": round(
                 step_result["processing_cost_per_lb"] / estimated * 100, 1
             ) if estimated > 0 else 0.0,
+            "gwp_kg_co2eq_per_kg_catalyst": lca_result.get("gwp_kg_co2eq_per_kg_catalyst"),
+            "ced_mj_per_kg_catalyst": lca_result.get("ced_mj_per_kg_catalyst"),
+            "lca_coverage_pct": lca_result.get("coverage_pct"),
         },
     }
 

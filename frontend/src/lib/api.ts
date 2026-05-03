@@ -212,6 +212,7 @@ export interface CostResult {
     normalized_price_per_cm2?: number;
     normalized_price_per_kg_solids?: number;
   }>;
+  lca?: LcaResult;
   summary: {
     estimated_price_per_lb: number;
     estimated_price_per_kg: number;
@@ -219,8 +220,57 @@ export interface CostResult {
     net_cost_per_kg: number;
     materials_pct: number;
     processing_pct: number;
+    gwp_kg_co2eq_per_kg_catalyst?: number | null;
+    ced_mj_per_kg_catalyst?: number | null;
+    lca_coverage_pct?: number;
   };
 }
+
+export interface LcaPerComponent {
+  name: string;
+  role: string | null;
+  wt_pct: number;
+  matched_key: string | null;
+  factor_status: 'matched' | 'matched_alias' | 'no_factor_in_dataset' | 'explicitly_unsupported';
+  gwp_kg_co2eq_per_kg_material?: number;
+  ced_mj_per_kg_material?: number;
+  gwp_contribution_kg_co2eq_per_kg_catalyst: number | null;
+  ced_contribution_mj_per_kg_catalyst: number | null;
+  process_name?: string;
+  data_origin?: string;
+}
+
+export interface LcaReference {
+  citation: string;
+  doi: string;
+  url: string;
+  license: string;
+  table_of_origin: string;
+  underlying_lci_database: string;
+  uncertainty_basis: string;
+  notes: string;
+}
+
+export interface LcaResult {
+  gwp_kg_co2eq_per_kg_catalyst: number | null;
+  ced_mj_per_kg_catalyst: number | null;
+  per_component: LcaPerComponent[];
+  data_gap_pct: number;
+  coverage_pct: number;
+  warnings: string[];
+  reference: LcaReference;
+  impact_categories: Record<string, { label: string; unit: string; characterization: string }>;
+}
+
+export const fetchLcaFactors = () => request<{ primary_reference: LcaReference; factors: Record<string, unknown> }>(
+  '/lca/factors',
+);
+
+export const calculateLca = (components: Array<{ name: string; wt_pct: number; role?: string }>) =>
+  request<LcaResult>('/lca/calculate', {
+    method: 'POST',
+    body: JSON.stringify({ components }),
+  });
 
 export const calculateCost = (input: CostInput) =>
   request<CostResult>('/calculate', {

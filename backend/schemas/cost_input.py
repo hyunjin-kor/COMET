@@ -115,8 +115,8 @@ class CostCalculationRequest(BaseModel):
     @model_validator(mode="after")
     def validate_payload(self) -> CostCalculationRequest:
         if self.components:
-            if self.catalyst_domain == "thermal" and len(self.components) > 4:
-                raise ValueError("Thermal workflows support at most four total components")
+            if self.catalyst_domain == "thermal" and len(self.components) > 10:
+                raise ValueError("Thermal workflows support at most ten total components")
             return self
 
         if (

@@ -236,7 +236,7 @@ def test_thermal_option_bank_active_support_matrix(client) -> None:
     """Every thermal active option and support option should produce a valid estimate."""
 
     active_options, _, support_options, max_components = _thermal_option_bank(client)
-    assert max_components == 4
+    assert max_components == 10
 
     executed = 0
     failures: list[str] = []

@@ -146,15 +146,25 @@ export default function Compare() {
 
   useEffect(() => {
     if (!family) return;
+
+    let cancelled = false;
     fetchDecisionBenchmark(family, profile)
       .then((payload) => {
+        if (cancelled) return;
         setBenchmark(payload);
         setActiveSlug((current) => current ?? payload.winner?.slug ?? payload.candidates[0]?.slug ?? null);
       })
       .catch((caughtError: unknown) => {
+        if (cancelled) return;
         setError(caughtError instanceof Error ? caughtError.message : 'Failed to load literature benchmarks');
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [family, profile]);
 
   const candidates = useMemo(() => benchmark?.candidates ?? [], [benchmark?.candidates]);
@@ -261,7 +271,7 @@ export default function Compare() {
                 <div className="cp-subtle-label">Benchmark family</div>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {families.map((option) => (
-                    <button key={option.family} onClick={() => handleFamilyChange(option.family)} className={`rounded-[18px] border px-3 py-2 text-left text-sm transition ${option.family === family ? 'border-teal-200 bg-teal-50 text-teal-700' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}>
+                    <button type="button" key={option.family} onClick={() => handleFamilyChange(option.family)} className={`rounded-[18px] border px-3 py-2 text-left text-sm transition ${option.family === family ? 'border-teal-200 bg-teal-50 text-teal-700' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}>
                       <div className="font-semibold">{option.title}</div>
                       <div className="mt-1 text-xs leading-5 text-slate-500">{catalystDomainLabel(option.catalyst_domain)} / {applicationFamilyLabel(option.application_family)}</div>
                     </button>
@@ -272,7 +282,7 @@ export default function Compare() {
                 <div className="cp-subtle-label">Ranking profile</div>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {PROFILE_OPTIONS.map((option) => (
-                    <button key={option.id} onClick={() => handleProfileChange(option.id)} className={`rounded-[18px] border px-3 py-2 text-left text-sm transition ${option.id === profile ? 'border-teal-200 bg-teal-50 text-teal-700' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}>
+                    <button type="button" key={option.id} onClick={() => handleProfileChange(option.id)} className={`rounded-[18px] border px-3 py-2 text-left text-sm transition ${option.id === profile ? 'border-teal-200 bg-teal-50 text-teal-700' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}>
                       <div className="font-semibold">{option.label}</div>
                       <div className="mt-1 text-xs leading-5 text-slate-500">{option.note}</div>
                     </button>
@@ -292,7 +302,7 @@ export default function Compare() {
           <div className="flex items-start justify-between gap-3"><div><div className="cp-subtle-label">Published routes</div><div className="cp-heading-lg mt-2">How do these routes compare right now?</div></div><span className="cp-chip">{candidates.length} candidates</span></div>
           <div className="mt-4 space-y-3">
             {candidates.map((candidate, index) => (
-              <button key={candidate.slug} onClick={() => { setActiveSlug(candidate.slug); sectionState.setActiveSection('detail'); }} className={`w-full rounded-[24px] border px-4 py-4 text-left transition ${activeCandidate.slug === candidate.slug ? 'border-emerald-200 bg-emerald-50/80' : 'border-slate-900/8 bg-white/64 hover:bg-white/88'}`}>
+              <button type="button" key={candidate.slug} onClick={() => { setActiveSlug(candidate.slug); sectionState.setActiveSection('detail'); }} className={`w-full rounded-[24px] border px-4 py-4 text-left transition ${activeCandidate.slug === candidate.slug ? 'border-emerald-200 bg-emerald-50/80' : 'border-slate-900/8 bg-white/64 hover:bg-white/88'}`}>
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                   <div className="min-w-0">
                     <div className="flex items-center gap-3"><span className="flex h-9 w-9 items-center justify-center rounded-[16px] border border-slate-900/8 bg-white/72 text-sm font-semibold text-[#1a1612]">{index + 1}</span><div className="min-w-0"><div className="truncate font-semibold text-[#1a1612]">{candidate.title}</div><div className="mt-1 text-xs text-slate-500">{candidate.archetype}</div></div></div>
@@ -310,7 +320,7 @@ export default function Compare() {
         <section className="surface-card p-4">
           <div className="flex flex-col gap-3 border-b border-slate-900/8 pb-4 sm:flex-row sm:items-start sm:justify-between">
             <div className="min-w-0"><div className="cp-subtle-label">Selected reference route</div><div className="cp-heading-lg mt-2">{activeCandidate.title}</div><div className="mt-1 text-sm text-slate-500">{activeCandidate.archetype}</div><div className="mt-2 flex flex-wrap gap-2"><span className="cp-chip">{catalystDomainLabel(activeCandidate.catalyst_domain)}</span><span className="cp-chip">{applicationFamilyLabel(activeCandidate.application_family)}</span></div></div>
-            <button onClick={() => loadIntoCalculator(activeCandidate)} className="cp-button-primary">Load into cost estimate</button>
+            <button type="button" onClick={() => loadIntoCalculator(activeCandidate)} className="cp-button-primary">Load into cost estimate</button>
           </div>
           <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
             <MetricTile label={activeCandidate.summary.economics_basis_label} value={benchmarkCostValue(activeCandidate)} detail={benchmarkCostDetail(activeCandidate)} />

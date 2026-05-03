@@ -40,7 +40,6 @@ const ALLOWED_EXTERNAL_HOSTS = new Set([
 // ─── State ────────────────────────────────────────────────────────────────────
 let mainWindow = null;
 let backendProcess = null;
-let splashWindow = null;
 
 function isAllowedExternalUrl(urlString) {
   try {
@@ -86,79 +85,6 @@ function sendWindowState() {
   });
 }
 
-const BRAND_MARK_SVG = `
-<svg viewBox="0 0 512 512" width="42" height="42" fill="none" aria-hidden="true">
-  <defs>
-    <linearGradient id="cp-bg" x1="86" y1="64" x2="426" y2="448" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#171c24"/>
-      <stop offset="100%" stop-color="#2a313d"/>
-    </linearGradient>
-    <linearGradient id="cp-frame" x1="192" y1="134" x2="320" y2="362" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#f1f6ff"/>
-      <stop offset="100%" stop-color="#a1b1c8"/>
-    </linearGradient>
-    <linearGradient id="cp-signal" x1="154" y1="338" x2="358" y2="208" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#c96442"/>
-      <stop offset="100%" stop-color="#d4a857"/>
-    </linearGradient>
-  </defs>
-
-  <rect x="40" y="40" width="432" height="432" rx="110" fill="url(#cp-bg)" />
-  <rect x="54" y="54" width="404" height="404" rx="96" fill="none" stroke="#3c4659" stroke-width="8" />
-  <g opacity="0.16" stroke="#d8e1ef" stroke-width="4" stroke-linecap="round">
-    <path d="M156 166H356" />
-    <path d="M156 214H356" />
-    <path d="M156 262H356" />
-    <path d="M156 310H356" />
-    <path d="M156 358H356" />
-    <path d="M192 142V382" />
-    <path d="M256 142V382" />
-    <path d="M320 142V382" />
-  </g>
-  <path
-    d="M214 132 H298 L320 176 V308
-       C320 338 296 362 266 362
-       H246
-       C216 362 192 338 192 308
-       V176
-       Z"
-    fill="none"
-    stroke="url(#cp-frame)"
-    stroke-width="20"
-    stroke-linejoin="round"
-  />
-  <path
-    d="M204 232 H308 V298
-       C308 317 293 332 274 332
-       H238
-       C219 332 204 317 204 298
-       Z"
-    fill="#243240"
-  />
-  <g fill="#e7eef8">
-    <circle cx="228" cy="256" r="12" />
-    <circle cx="256" cy="240" r="12" />
-    <circle cx="284" cy="256" r="12" />
-    <circle cx="240" cy="286" r="12" />
-    <circle cx="268" cy="286" r="12" />
-  </g>
-  <path
-    d="M154 338
-       C194 320 226 304 258 286
-       C292 266 324 240 358 208"
-    fill="none"
-    stroke="url(#cp-signal)"
-    stroke-width="18"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  />
-  <g fill="#1f1a14" stroke="#c96442" stroke-width="7">
-    <circle cx="154" cy="338" r="11" />
-    <circle cx="258" cy="286" r="11" />
-    <circle cx="358" cy="208" r="11" />
-  </g>
-</svg>`;
-
 function debugLog(message) {
   const line = `[${new Date().toISOString()}] ${message}`;
   console.log(line);
@@ -177,10 +103,6 @@ function showAndFocusMainWindow(reason = 'show') {
   if (!mainWindow || mainWindow.isDestroyed()) return;
 
   debugLog(`Showing main window (${reason})`);
-  if (splashWindow && !splashWindow.isDestroyed()) {
-    splashWindow.close();
-    splashWindow = null;
-  }
   if (mainWindow.isMinimized()) {
     mainWindow.restore();
   }
@@ -397,214 +319,6 @@ function stopBackend() {
   }
 }
 
-// ─── Splash Screen ────────────────────────────────────────────────────────────
-function createSplashWindow() {
-  debugLog('Creating splash window');
-  splashWindow = new BrowserWindow({
-    width: 560,
-    height: 356,
-    frame: false,
-    transparent: false,
-    alwaysOnTop: true,
-    resizable: false,
-    skipTaskbar: true,
-    backgroundColor: '#091321',
-    webPreferences: {
-      contextIsolation: true,
-      nodeIntegration: false,
-      sandbox: true,
-    },
-  });
-
-  const splashHTML = `
-<!DOCTYPE html>
-<html>
-<head>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    background:
-      radial-gradient(circle at 16% 18%, rgba(201, 100, 66, 0.18), transparent 0 28%),
-      radial-gradient(circle at 84% 12%, rgba(212, 168, 87, 0.12), transparent 0 22%),
-      linear-gradient(160deg, #1a1612 0%, #251f17 52%, #14100c 100%);
-    color: #f5efe2;
-    font-family: 'Segoe UI Variable Text', 'Segoe UI', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    overflow: hidden;
-    padding: 14px;
-  }
-  body::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
-    background-size: 84px 84px;
-    mask-image: radial-gradient(circle at center, black 22%, transparent 82%);
-    opacity: 0.5;
-  }
-  .panel {
-    position: relative;
-    width: 100%;
-    min-height: 100%;
-    padding: 18px 18px 16px;
-    border-radius: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
-    box-shadow: 0 22px 52px rgba(0, 0, 0, 0.28);
-    backdrop-filter: blur(18px);
-    display: flex;
-    flex-direction: column;
-  }
-  .panel::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: radial-gradient(circle at top left, rgba(201, 100, 66, 0.18), transparent 0 34%);
-    pointer-events: none;
-  }
-  .row {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    z-index: 1;
-  }
-  .mark {
-    width: 64px;
-    height: 64px;
-    border-radius: 22px;
-    display: grid;
-    place-items: center;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.10);
-  }
-  .eyebrow {
-    color: #94a3b8;
-    font-size: 11px;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-  }
-  .logo {
-    margin-top: 4px;
-    font-size: 36px;
-    font-weight: 600;
-    letter-spacing: -0.022em;
-    line-height: 1;
-    font-family: 'Charter', 'Cambria', 'Iowan Old Style', 'Georgia', 'Segoe UI Variable Display', 'Noto Serif KR', 'Malgun Gothic', serif;
-  }
-  .logo span.cat { color: #f5efe2; }
-  .logo span.price { color: #c96442; }
-  .subtitle {
-    margin-top: 8px;
-    max-width: 300px;
-    color: #cbd5e1;
-    font-size: 13px;
-    line-height: 1.5;
-  }
-  .meta {
-    position: relative;
-    z-index: 1;
-    margin-top: 16px;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 10px;
-  }
-  .stat {
-    padding: 12px 12px 13px;
-    border-radius: 16px;
-    border: 1px solid rgba(255,255,255,0.08);
-    background: rgba(255,255,255,0.04);
-  }
-  .stat .label {
-    color: #94a3b8;
-    font-size: 10px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-  }
-  .stat .value {
-    margin-top: 8px;
-    color: #f8fafc;
-    font-size: 15px;
-    font-weight: 600;
-  }
-  .progress {
-    position: relative;
-    z-index: 1;
-    margin-top: 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .track {
-    flex: 1;
-    height: 9px;
-    overflow: hidden;
-    border-radius: 999px;
-    background: rgba(255,255,255,0.08);
-  }
-  .bar {
-    height: 100%;
-    width: 42%;
-    border-radius: inherit;
-    background: linear-gradient(90deg, #c96442, #d4a857);
-    animation: loading 1.5s ease-in-out infinite;
-    transform-origin: left center;
-  }
-  .status {
-    position: relative;
-    z-index: 1;
-    margin-top: 10px;
-    color: #cbd5e1;
-    font-size: 12.5px;
-    line-height: 1.45;
-  }
-  .version {
-    position: relative;
-    z-index: 1;
-    margin-top: auto;
-    padding-top: 10px;
-    color: #64748b;
-    font-size: 11px;
-  }
-  @keyframes loading {
-    0% { transform: translateX(-38%) scaleX(0.72); opacity: 0.78; }
-    50% { transform: translateX(18%) scaleX(1); opacity: 1; }
-    100% { transform: translateX(128%) scaleX(0.72); opacity: 0.78; }
-  }
-</style>
-</head>
-<body>
-  <div class="panel">
-    <div class="row">
-      <div class="mark">${BRAND_MARK_SVG}</div>
-      <div>
-        <div class="eyebrow">Desktop Workspace</div>
-        <div class="logo"><span class="cat">Cat</span><span class="price">Price</span></div>
-        <div class="subtitle">Live metals, catalyst cost intelligence, and process economics loading into the desktop workspace.</div>
-      </div>
-    </div>
-    <div class="meta">
-      <div class="stat"><div class="label">Mode</div><div class="value">Desktop launch</div></div>
-      <div class="stat"><div class="label">Engine</div><div class="value">FastAPI shell</div></div>
-      <div class="stat"><div class="label">Focus</div><div class="value">Cost studio</div></div>
-    </div>
-    <div class="progress"><div class="track"><div class="bar"></div></div></div>
-    <div class="status">Starting the backend and fitting the market workspace to the window...</div>
-    <div class="version">v${app.getVersion()}</div>
-  </div>
-</body>
-</html>`;
-
-  splashWindow.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(splashHTML)}`);
-  splashWindow.show();
-}
-
 // ─── Main Window ──────────────────────────────────────────────────────────────
 function createMainWindow() {
   debugLog('Creating main window');
@@ -678,10 +392,6 @@ function createMainWindow() {
 
   function showMain() {
     if (mainWindow && !mainWindow.isDestroyed() && !mainWindow.isVisible()) {
-      if (splashWindow && !splashWindow.isDestroyed()) {
-        splashWindow.close();
-        splashWindow = null;
-      }
       showAndFocusMainWindow('ready-to-show');
     }
   }
@@ -819,7 +529,7 @@ ipcMain.handle('window:is-maximized', () => {
 });
 
 // ─── App Lifecycle ────────────────────────────────────────────────────────────
-app.whenReady().then(async () => {
+app.whenReady().then(() => {
   if (!gotLock) {
     debugLog('Skipping startup because single-instance lock is not owned');
     app.quit();
@@ -827,21 +537,24 @@ app.whenReady().then(async () => {
   }
 
   debugLog('App ready');
-  createSplashWindow();
 
-  try {
-    await startBackend();
-  } catch (err) {
-    debugLog(`Backend startup failure: ${err.message}`);
-    dialog.showErrorBox(
-      'Backend Error',
-      `Could not start the CatPrice server.\n\n${err.message}\n\nMake sure Python 3.11+ is installed and dependencies are set up.\nRun: pip install -r requirements.txt`
-    );
-    app.quit();
-    return;
-  }
-
+  // Open the main window immediately. The frontend renders skeletons until
+  // the FastAPI sidecar finishes booting, so a separate splash isn't needed.
   createMainWindow();
+
+  // Start the backend in parallel. Any failure surfaces as an error dialog
+  // *after* the window is up, so the user can still see the app shell.
+  startBackend()
+    .then(() => {
+      debugLog('Backend startup complete');
+    })
+    .catch((err) => {
+      debugLog(`Backend startup failure: ${err.message}`);
+      dialog.showErrorBox(
+        'Backend not running',
+        `CatPrice could not start the local server.\n\n${err.message}\n\nMake sure Python 3.11+ is installed and dependencies are set up.\nRun: pip install -r requirements.txt`
+      );
+    });
 });
 
 app.on('render-process-gone', (_event, webContents, details) => {
@@ -881,11 +594,6 @@ if (!gotLock) {
     debugLog('Received second-instance event');
     if (mainWindow && !mainWindow.isDestroyed()) {
       showAndFocusMainWindow('second-instance');
-    } else if (splashWindow && !splashWindow.isDestroyed()) {
-      debugLog('Showing splash window for second-instance');
-      splashWindow.show();
-      splashWindow.moveTop();
-      splashWindow.focus();
     } else if (app.isReady()) {
       createMainWindow();
     }

@@ -6,7 +6,7 @@ from datetime import UTC, datetime
 from io import StringIO
 from typing import Literal
 
-from fastapi import APIRouter, Depends, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, HTTPException, Query, UploadFile
 from fastapi.responses import PlainTextResponse
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 from sqlmodel import Session
@@ -123,7 +123,7 @@ async def import_catcost_json(file: UploadFile):
 @router.get("/export/{estimate_id}")
 def export_estimate(
     estimate_id: int,
-    format: str = "json",
+    export_format: str = Query("json", alias="format"),
     session: Session = Depends(get_session),
 ):
     """Export a saved estimate as JSON or CSV."""
@@ -134,14 +134,14 @@ def export_estimate(
     result = estimate.get_result()
     input_data = estimate.get_input()
 
-    if format == "json":
+    if export_format == "json":
         return {
             "name": estimate.name,
             "created_at": _iso_utc(estimate.created_at),
             "input": input_data,
             "result": result,
         }
-    elif format == "csv":
+    if export_format == "csv":
         summary = result.get("summary", {})
         return PlainTextResponse(
             content=_summary_to_csv(summary),
@@ -150,5 +150,4 @@ def export_estimate(
                 "Content-Disposition": f'attachment; filename="estimate-{estimate.id}.csv"',
             },
         )
-    else:
-        raise HTTPException(status_code=400, detail=f"Unsupported format: {format}")
+    raise HTTPException(status_code=400, detail=f"Unsupported format: {export_format}")

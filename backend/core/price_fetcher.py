@@ -12,6 +12,7 @@ from datetime import UTC, datetime
 import httpx
 
 from backend.config import settings
+from backend.core.constants import LB_PER_METRIC_TON
 from backend.paths import data_dir
 
 logger = logging.getLogger(__name__)
@@ -29,7 +30,7 @@ YAHOO_METALS: list[tuple[str, str, str, str, float]] = [
     ("Ag", "SI=F", "Silver", "$/troy_oz", 1.0),
     ("Cu", "HG=F", "Copper", "$/lb", 1.0),
     # ALI=F is quoted in USD per metric ton.
-    ("Al", "ALI=F", "Aluminum", "$/lb", 1 / 2204.62),
+    ("Al", "ALI=F", "Aluminum", "$/lb", 1 / LB_PER_METRIC_TON),
 ]
 
 _NAMES: dict[str, str] = {
@@ -100,8 +101,8 @@ def _escalate(price_2018: float) -> float:
         latest = float(annual.get(str(latest_year), 0))
         if base and latest:
             return round(price_2018 * (latest / base), 4)
-    except Exception:
-        pass
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        logger.warning("ChemPPI escalation skipped (%s): %s", type(exc).__name__, exc)
     return price_2018
 
 
@@ -455,7 +456,7 @@ async def fetch_markets_insider() -> dict[str, dict]:
             "name": "Nickel",
             "url": "https://markets.businessinsider.com/commodities/nickel-price",
             "unit": "$/lb",
-            "factor": 1 / 2204.62,
+            "factor": 1 / LB_PER_METRIC_TON,
         },
     ]
 

@@ -1,5 +1,6 @@
 """FastAPI sidecar entry point for the desktop app."""
 
+import asyncio
 import logging
 from contextlib import asynccontextmanager
 from datetime import UTC, datetime
@@ -20,6 +21,7 @@ from backend.routers import (
     equipment,
     estimates,
     indices,
+    lca,
     materials,
     prices,
     templates,
@@ -31,6 +33,7 @@ logger = logging.getLogger(__name__)
 
 scheduler = AsyncIOScheduler(timezone=UTC)
 _last_price_update: datetime | None = None
+_startup_tasks: set[asyncio.Task] = set()
 
 
 async def _scheduled_price_update() -> None:
@@ -57,9 +60,10 @@ async def lifespan(app: FastAPI):
         sync_material_library(session, force=True)
 
     # Fetch prices immediately on startup without blocking the Electron shell.
-    import asyncio
-
-    asyncio.create_task(_scheduled_price_update())
+    # Hold a reference so the task can't be garbage-collected mid-flight.
+    startup_task = asyncio.create_task(_scheduled_price_update())
+    _startup_tasks.add(startup_task)
+    startup_task.add_done_callback(_startup_tasks.discard)
 
     scheduler.add_job(
         _scheduled_price_update,
@@ -77,7 +81,7 @@ async def lifespan(app: FastAPI):
 
     yield
 
-    scheduler.shutdown()
+    scheduler.shutdown(wait=False)
 
 
 app = FastAPI(
@@ -111,6 +115,7 @@ app.include_router(templates.router)
 app.include_router(equipment.router)
 app.include_router(estimates.router)
 app.include_router(indices.router)
+app.include_router(lca.router)
 
 
 @app.middleware("http")

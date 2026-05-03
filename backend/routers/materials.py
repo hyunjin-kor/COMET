@@ -314,7 +314,7 @@ def list_composition_options(
 
     if catalyst_domain.strip().lower() != "thermal":
         return {
-            "max_components": 4,
+            "max_components": 10,
             "active_metal_options": [],
             "promoter_options": [],
             "support_options": [],
@@ -358,7 +358,7 @@ def list_composition_options(
     )
 
     return {
-        "max_components": 4,
+        "max_components": 10,
         "active_metal_options": active_materials,
         "promoter_options": active_materials,
         "support_options": support_materials,

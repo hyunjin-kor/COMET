@@ -7,6 +7,8 @@ from __future__ import annotations
 
 import json
 import logging
+import os
+import tempfile
 
 import httpx
 
@@ -54,15 +56,22 @@ async def update_chemppi() -> dict[str, float]:
 
     annual = {year: round(sum(vals) / len(vals), 1) for year, vals in yearly.items()}
 
-    # Update local file
+    # Update local file (atomic write so a partial failure doesn't corrupt the index).
     filepath = _DATA_DIR / "chemppi.json"
-    with open(filepath) as f:
+    with open(filepath, encoding="utf-8") as f:
         existing = json.load(f)
 
     existing["annual"].update(annual)
 
-    with open(filepath, "w") as f:
-        json.dump(existing, f, indent=2)
+    fd, tmp_path = tempfile.mkstemp(prefix="chemppi.", suffix=".json", dir=str(filepath.parent))
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as tmp:
+            json.dump(existing, tmp, indent=2)
+        os.replace(tmp_path, filepath)
+    except Exception:
+        if os.path.exists(tmp_path):
+            os.remove(tmp_path)
+        raise
 
     logger.info("Updated ChemPPI with %d years of data", len(annual))
     return existing["annual"]

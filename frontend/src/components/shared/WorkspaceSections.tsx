@@ -87,6 +87,7 @@ export function WorkspaceSectionNav({
           const disabled = !active && disabledSectionIds.includes(section.id);
           return (
             <button
+              type="button"
               key={section.id}
               onClick={() => !disabled && onSelect(section.id)}
               disabled={disabled}
@@ -149,6 +150,7 @@ export function WorkspaceSectionFooter({
 
         <div className="flex w-full gap-2 sm:w-auto">
           <button
+            type="button"
             onClick={onPrevious}
             disabled={!canGoPrevious}
             className="cp-button-secondary flex-1 px-4 py-2.5 text-sm disabled:opacity-35 sm:flex-none"
@@ -156,6 +158,7 @@ export function WorkspaceSectionFooter({
             Back
           </button>
           <button
+            type="button"
             onClick={onNext}
             disabled={!canGoNext}
             className="cp-button-primary flex-1 px-4 py-2.5 text-sm disabled:opacity-35 sm:flex-none"

@@ -13,7 +13,7 @@ import {
 
 type Tab = 'materials' | 'steps' | 'templates';
 
-const CATEGORIES = ['', 'Precious Metal / PGM', 'Base Metal', 'Support', 'Chemical', 'Chemical / Solvent'];
+const CATEGORIES = ['Precious Metal / PGM', 'Base Metal', 'Support', 'Chemical', 'Chemical / Solvent'];
 const APPLICATION_OPTIONS = [
   { value: '', label: 'All applications' },
   { value: 'general', label: 'General' },
@@ -144,6 +144,7 @@ export default function Library() {
   const [catalystDomain, setCatalystDomain] = useState<'' | CatalystDomain>('');
   const [applicationFamily, setApplicationFamily] = useState('');
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [selectedMaterialId, setSelectedMaterialId] = useState<string | null>(null);
   const [selectedStepKey, setSelectedStepKey] = useState<string | null>(null);
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
@@ -166,7 +167,8 @@ export default function Library() {
 
     async function loadData() {
       setLoading(true);
-        try {
+      setError(null);
+      try {
         if (tab === 'materials') {
           const data = await fetchMaterials(
             category || undefined,
@@ -188,11 +190,12 @@ export default function Library() {
 
         const data = await fetchSteps();
         if (!cancelled) setSteps(data);
-      } catch {
+      } catch (err: unknown) {
         if (!cancelled) {
           setMaterials([]);
           setTemplates([]);
           setSteps([]);
+          setError(err instanceof Error ? err.message : 'Failed to load library data');
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -258,6 +261,12 @@ export default function Library() {
           />
         </div>
 
+        {error ? (
+          <div className="mt-4 rounded-[18px] border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700" role="alert">
+            {error}
+          </div>
+        ) : null}
+
         {tab === 'materials' && (
           <>
             <div className="mt-5 grid gap-3 lg:grid-cols-[minmax(0,1fr)_220px_220px_220px]">
@@ -278,7 +287,7 @@ export default function Library() {
                 <div className="mt-2">
                   <select value={category} onChange={(event) => setCategory(event.target.value)} className="input-base">
                     <option value="">All categories</option>
-                    {CATEGORIES.filter(Boolean).map((value) => (
+                    {CATEGORIES.map((value) => (
                       <option key={value} value={value}>
                         {value}
                       </option>
@@ -296,7 +305,7 @@ export default function Library() {
                     className="input-base"
                   >
                     {DOMAIN_OPTIONS.map((option) => (
-                      <option key={option.label} value={option.value}>
+                      <option key={option.value || 'all'} value={option.value}>
                         {option.label}
                       </option>
                     ))}
@@ -313,7 +322,7 @@ export default function Library() {
                     className="input-base"
                   >
                     {APPLICATION_OPTIONS.map((option) => (
-                      <option key={option.label} value={option.value}>
+                      <option key={option.value || 'all'} value={option.value}>
                         {option.label}
                       </option>
                     ))}
@@ -365,10 +374,12 @@ export default function Library() {
                     {materials.map((material) => {
                       const active = selectedMaterial?.id === material.id;
                       return (
-                        <div
+                        <button
                           key={material.id}
+                          type="button"
                           onClick={() => setSelectedMaterialId(String(material.id))}
-                          className={`${active ? 'cp-list-row cp-list-row-active' : 'cp-list-row'} cursor-pointer`}
+                          aria-pressed={active}
+                          className={`${active ? 'cp-list-row cp-list-row-active' : 'cp-list-row'} block w-full text-left`}
                         >
                           <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
                             <div className="min-w-0">
@@ -387,7 +398,7 @@ export default function Library() {
                             <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${categoryTone(material.category)}`}>{material.category || 'Uncategorised'}</span>
                             <span className={`inline-flex rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] ${sourceTrustTone(material)}`}>{sourceTrustLabel(material)}</span>
                           </div>
-                        </div>
+                        </button>
                       );
                     })}
                   </div>
@@ -501,7 +512,7 @@ export default function Library() {
                     className="input-base"
                   >
                     {DOMAIN_OPTIONS.map((option) => (
-                      <option key={option.label} value={option.value}>
+                      <option key={option.value || 'all'} value={option.value}>
                         {option.label}
                       </option>
                     ))}
