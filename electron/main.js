@@ -127,23 +127,33 @@ function waitForBackend(timeoutMs) {
       }
     };
 
+    const retryOrFinish = () => {
+      if (Date.now() - start >= timeoutMs) {
+        finish(false);
+      } else {
+        setTimeout(poll, POLL_INTERVAL_MS);
+      }
+    };
+
     const poll = () => {
       const req = http.get(HEALTH_URL, (res) => {
         res.resume();
-        finish(res.statusCode === 200);
+        if (res.statusCode === 200) {
+          finish(true);
+        } else {
+          // Some other process is listening on the port but isn't our
+          // backend (or hasn't finished initializing). Keep polling
+          // until the timeout — this avoids giving up when a stale
+          // sidecar / unrelated server holds the port.
+          retryOrFinish();
+        }
       });
 
       req.setTimeout(2000, () => {
         req.destroy();
       });
 
-      req.on('error', () => {
-        if (Date.now() - start >= timeoutMs) {
-          finish(false);
-        } else {
-          setTimeout(poll, POLL_INTERVAL_MS);
-        }
-      });
+      req.on('error', retryOrFinish);
     };
 
     poll();
@@ -278,8 +288,20 @@ async function startBackend() {
       );
     }
 
+    // Keep the most recent stderr lines so we can surface a useful error
+    // message (e.g. "port already in use") instead of a generic timeout.
+    const stderrTail = [];
+    const STDERR_TAIL_MAX = 8;
+
     backendProcess.stdout.on('data', (d) => debugLog(`[Backend] ${d.toString().trim()}`));
-    backendProcess.stderr.on('data', (d) => debugLog(`[Backend:stderr] ${d.toString().trim()}`));
+    backendProcess.stderr.on('data', (d) => {
+      const text = d.toString().trim();
+      debugLog(`[Backend:stderr] ${text}`);
+      for (const line of text.split(/\r?\n/)) {
+        if (line.trim()) stderrTail.push(line.trim());
+      }
+      while (stderrTail.length > STDERR_TAIL_MAX) stderrTail.shift();
+    });
     backendProcess.on('error', (err) => {
       debugLog(`Backend failed to start: ${err.message}`);
       finishStartup(reject, err);
@@ -289,7 +311,12 @@ async function startBackend() {
         debugLog(`Backend exited with code ${code}`);
       }
       if (!startupSettled) {
-        finishStartup(reject, new Error(`Backend exited during startup (code ${code ?? 'unknown'})`));
+        const tail = stderrTail.join('\n');
+        const portInUse = /10048|EADDRINUSE|address already in use/i.test(tail);
+        const reason = portInUse
+          ? `Port ${BACKEND_PORT} is already in use by another process. Stop any running CatPrice or development backend (e.g. uvicorn) and try again.`
+          : `Backend exited during startup (code ${code ?? 'unknown'}).${tail ? `\n\n${tail}` : ''}`;
+        finishStartup(reject, new Error(reason));
       }
     });
 

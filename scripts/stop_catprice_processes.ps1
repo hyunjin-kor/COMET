@@ -24,6 +24,27 @@ foreach ($name in $processNames) {
     }
 }
 
+# Also free port 8765 (sidecar port). A leftover dev `uvicorn` from a
+# previous session shows up as `python.exe`, which the loop above won't
+# match by process name. Find by listening port instead.
+$port = 8765
+try {
+    $owners = Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue
+    foreach ($conn in $owners) {
+        $owner = Get-Process -Id $conn.OwningProcess -ErrorAction SilentlyContinue
+        if (-not $owner) { continue }
+        if (-not $Quiet) {
+            Write-Host "[CatPrice] Releasing port $port from $($owner.ProcessName) (PID $($owner.Id))"
+        }
+        Stop-Process -Id $owner.Id -Force -ErrorAction SilentlyContinue
+        $stoppedAny = $true
+    }
+} catch {
+    if (-not $Quiet) {
+        Write-Host "[CatPrice] Could not query port $port owner: $($_.Exception.Message)"
+    }
+}
+
 if (-not $Quiet) {
     if ($stoppedAny) {
         Write-Host "[CatPrice] Desktop processes stopped."
