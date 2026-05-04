@@ -1,5 +1,6 @@
 import { lazy, Suspense, useLayoutEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FitPriceText } from '../components/shared/FitPriceText';
 import {
   WorkspaceSectionFooter,
   WorkspaceSectionNav,
@@ -8,6 +9,7 @@ import {
 } from '../components/shared/WorkspaceSections';
 import type { CostResult } from '../lib/api';
 import { loadCalculatorResultSnapshot } from '../lib/calculator-session';
+import { formatPrice } from '../lib/format-price';
 import { useUnit } from '../lib/use-unit';
 
 const ResultBreakdownPieChart = lazy(() => import('../components/charts/ResultBreakdownPieChart'));
@@ -255,18 +257,20 @@ export default function CalculatorResult() {
     return (
       <section className="surface-card p-4">
         <div className="grid gap-3 xl:grid-cols-[minmax(0,1.15fr)_repeat(3,minmax(0,1fr))]">
-          <div className="rounded-[20px] border border-[#191f28] bg-[#191f28] p-4 text-white shadow-[0_8px_24px_rgba(15,23,42,0.18)]">
+          <div className="min-w-0 overflow-hidden rounded-[20px] border border-[#191f28] bg-[#191f28] p-4 text-white shadow-[0_8px_24px_rgba(15,23,42,0.18)]">
             <div className="cp-subtle-label !text-slate-400">Final result</div>
             <div className="mt-2 text-sm text-slate-300">{composition}</div>
             <div className="mt-4 flex items-end gap-3">
-              <div className="font-display text-[clamp(2.5rem,4vw,4.4rem)] leading-none text-white">
-                ${toDisplay(result.summary.estimated_price_per_lb).toFixed(2)}
-              </div>
+              <FitPriceText
+                size="xl"
+                text={formatPrice(toDisplay(result.summary.estimated_price_per_lb))}
+                className="min-w-0 text-white"
+              />
               <div className="pb-1 text-base text-slate-300">{fmtLabel}</div>
             </div>
             <div className="mt-2 text-xs leading-6 text-slate-300">
-              Net cost ${toDisplay(result.summary.net_cost_per_lb).toFixed(2)}
-              {fmtLabel} before selling margin treatment. Alternate view ${altPrice.toFixed(2)}
+              Net cost {formatPrice(toDisplay(result.summary.net_cost_per_lb))}
+              {fmtLabel} before selling margin treatment. Alternate view {formatPrice(altPrice)}
               {altLabel}.
             </div>
             <div className="mt-3 flex flex-wrap gap-2">
@@ -359,18 +363,19 @@ export default function CalculatorResult() {
 
         <div className="mt-4 grid gap-3 xl:grid-cols-[minmax(0,1.18fr)_minmax(320px,0.82fr)]">
           <div className="surface-ink relative overflow-hidden p-5 sm:p-6">
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(120,242,208,0.22),transparent_0_34%),radial-gradient(circle_at_bottom_right,rgba(239,195,108,0.12),transparent_0_28%)]" />
-            <div className="relative">
+            <div className="relative min-w-0">
               <div className="cp-subtle-label !text-slate-400">Estimated selling price</div>
               <div className="mt-2 text-sm text-slate-300">{composition}</div>
               <div className="mt-4 flex flex-wrap items-end gap-3">
-                <div className="font-display text-[clamp(3rem,6vw,5.3rem)] leading-none text-white">
-                  ${toDisplay(result.summary.estimated_price_per_lb).toFixed(2)}
-                </div>
+                <FitPriceText
+                  size="xl"
+                  text={formatPrice(toDisplay(result.summary.estimated_price_per_lb))}
+                  className="min-w-0 text-white"
+                />
                 <div className="pb-2 text-xl text-slate-300">{fmtLabel}</div>
               </div>
               <div className="mt-3 text-sm text-slate-300">
-                Net cost ${toDisplay(result.summary.net_cost_per_lb).toFixed(2)}
+                Net cost {formatPrice(toDisplay(result.summary.net_cost_per_lb))}
                 {fmtLabel} before selling margin treatment.
               </div>
               <div className="mt-4 flex flex-wrap gap-2">

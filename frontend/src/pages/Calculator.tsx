@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FitPriceText } from '../components/shared/FitPriceText';
 import { WorkspaceSectionFooter, WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
 import {
   type ApplicationFamily,
@@ -27,6 +28,7 @@ import {
   type CalculatorResultSnapshot,
   type CalculatorRow,
 } from '../lib/calculator-session';
+import { formatPrice } from '../lib/format-price';
 import { LB_PER_KG, TROY_OZ_PER_LB } from '../lib/unit-conversion';
 import { useUnit } from '../lib/use-unit';
 
@@ -1411,9 +1413,15 @@ export default function Calculator() {
               </button>
             </div>
             <div className="mt-3 flex items-end gap-2">
-              <div className="font-display text-[2.35rem] leading-none text-white">
-                {latestSnapshotForCurrentCase ? `$${toDisplay(latestSnapshotForCurrentCase.result.summary.estimated_price_per_lb).toFixed(2)}` : 'Pending'}
-              </div>
+              {latestSnapshotForCurrentCase ? (
+                <FitPriceText
+                  size="md"
+                  text={formatPrice(toDisplay(latestSnapshotForCurrentCase.result.summary.estimated_price_per_lb))}
+                  className="min-w-0 text-white"
+                />
+              ) : (
+                <div className="font-display text-[1.6rem] leading-none text-white">Pending</div>
+              )}
               <div className="pb-1 text-sm text-slate-300">{latestSnapshotForCurrentCase ? fmtLabel : ''}</div>
             </div>
             <div className="mt-2 text-xs leading-6 text-slate-300">

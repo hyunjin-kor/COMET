@@ -1,4 +1,5 @@
 import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
+import { FitPriceText } from '../components/shared/FitPriceText';
 import { SkeletonListRows, SkeletonTile } from '../components/shared/Skeleton';
 import { WorkspaceSectionFooter, WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
 import { fetchPriceHistory, fetchPrices, refreshPrices, type MetalPrice } from '../lib/api';
@@ -292,9 +293,11 @@ export default function Prices() {
           <div className="cp-subtle-label !text-slate-400">Selected Quote</div>
           <div className="mt-2 text-sm text-slate-300">{selectedRow.name}</div>
           <div className="mt-3 flex items-end gap-3">
-            <div className="font-display text-[clamp(2.2rem,4vw,3.7rem)] leading-none text-white">
-              {fmtPrice(selectedRow.price, selectedRow.unit, unit)}
-            </div>
+            <FitPriceText
+              size="lg"
+              text={fmtPrice(selectedRow.price, selectedRow.unit, unit)}
+              className="min-w-0 text-white"
+            />
             <div className="pb-1 text-sm text-slate-300">{displayTrackedUnit(selectedRow.unit, unit)}</div>
           </div>
           <div className="mt-3 flex flex-wrap gap-2">

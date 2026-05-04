@@ -205,7 +205,7 @@ Download the packaged Windows app from [GitHub Releases](https://github.com/hyun
 Recommended asset:
 
 <<<<<<< Updated upstream
-- `CatPrice Setup 1.3.0.exe`
+- `CatPrice Setup 1.3.1.exe`
 =======
 - `CatPrice.Setup.1.1.13.exe`
 >>>>>>> Stashed changes
