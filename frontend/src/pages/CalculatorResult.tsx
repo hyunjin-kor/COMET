@@ -12,7 +12,7 @@ import { useUnit } from '../lib/use-unit';
 
 const ResultBreakdownPieChart = lazy(() => import('../components/charts/ResultBreakdownPieChart'));
 
-const CHART_COLORS = ['#c96442', '#7c8db5', '#d4a857', '#7a9b8d', '#a48bc8', '#b8825d'];
+const CHART_COLORS = ['#3182f6', '#8b95a1', '#3182f6', '#7a9b8d', '#8b95a1', '#4e5968'];
 const RESULT_SECTIONS: WorkspaceSection[] = [
   { id: 'summary', label: 'Result', summary: 'Headline price, scope, and active warnings.' },
   { id: 'manufacturing', label: 'Preparation Method', summary: 'Route, cost structure, and campaign basis.' },
@@ -107,7 +107,7 @@ function RailRow({ label, value, detail }: { label: string; value: string; detai
         <div className="cp-subtle-label">{label}</div>
         {detail ? <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div> : null}
       </div>
-      <div className="text-right text-sm font-semibold text-[#1a1612]">{value}</div>
+      <div className="text-right text-sm font-semibold text-[#191f28]">{value}</div>
     </div>
   );
 }
@@ -115,7 +115,7 @@ function RailRow({ label, value, detail }: { label: string; value: string; detai
 function ChartFallback() {
   return (
     <div className="flex h-full min-h-[240px] items-center justify-center gap-3 rounded-[24px] border border-slate-200 bg-slate-50/80 text-center">
-      <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#c96442] border-t-transparent" />
+      <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#3182f6] border-t-transparent" />
       <div className="text-sm text-slate-600">Loading breakdown chart...</div>
     </div>
   );
@@ -255,7 +255,7 @@ export default function CalculatorResult() {
     return (
       <section className="surface-card p-4">
         <div className="grid gap-3 xl:grid-cols-[minmax(0,1.15fr)_repeat(3,minmax(0,1fr))]">
-          <div className="rounded-[22px] border border-slate-900/8 bg-[linear-gradient(180deg,#0f172a,#142033)] p-4 text-white shadow-[0_18px_40px_rgba(15,23,42,0.16)]">
+          <div className="rounded-[20px] border border-[#191f28] bg-[#191f28] p-4 text-white shadow-[0_8px_24px_rgba(15,23,42,0.18)]">
             <div className="cp-subtle-label !text-slate-400">Final result</div>
             <div className="mt-2 text-sm text-slate-300">{composition}</div>
             <div className="mt-4 flex items-end gap-3">
@@ -315,7 +315,7 @@ export default function CalculatorResult() {
 
           <div className="rounded-[22px] border border-slate-900/8 bg-white/62 p-4">
             <div className="cp-subtle-label">Preparation basis</div>
-            <div className="mt-2 text-base font-semibold text-[#1a1612]">
+            <div className="mt-2 text-base font-semibold text-[#191f28]">
               {routeSummary?.name ?? snapshotState.benchmarkCandidate?.route.name ?? 'Direct workspace route'}
             </div>
             <div className="mt-3 space-y-1">
@@ -496,7 +496,7 @@ export default function CalculatorResult() {
                 <div key={item.label}>
                   <div className="flex items-center justify-between gap-3 text-sm">
                     <span className="text-slate-600">{item.label}</span>
-                    <span className="font-semibold text-[#1a1612]">{item.value}</span>
+                    <span className="font-semibold text-[#191f28]">{item.value}</span>
                   </div>
                   <div className="mt-2 h-2 rounded-full bg-slate-200/80">
                     <div
@@ -734,7 +734,7 @@ export default function CalculatorResult() {
             {ref.table_of_origin}. Underlying LCI: {ref.underlying_lci_database}. Uncertainty: {ref.uncertainty_basis}. License: {ref.license}.
           </div>
           <div className="mt-2 text-xs">
-            <a href={ref.url} target="_blank" rel="noreferrer" className="text-[#c96442] underline-offset-4 hover:underline">
+            <a href={ref.url} target="_blank" rel="noreferrer" className="text-[#3182f6] underline-offset-4 hover:underline">
               Open the source paper (DOI {ref.doi})
             </a>
           </div>
@@ -792,7 +792,7 @@ export default function CalculatorResult() {
                 </div>
                 <div className="text-left sm:text-right">
                   <div className="cp-subtle-label">Per catalyst</div>
-                  <div className="mt-2 font-display text-[1.45rem] text-[#1a1612]">
+                  <div className="mt-2 font-display text-[1.45rem] text-[#191f28]">
                     ${toDisplay(component.cost_per_lb_cat).toFixed(3)}
                     {catLabel}
                   </div>
@@ -811,7 +811,7 @@ export default function CalculatorResult() {
         <div className="mt-4 rounded-[22px] border border-slate-900/8 bg-white/60 p-4">
           <div className="flex items-center justify-between gap-3 text-sm">
             <span className="text-slate-600">Total material cost</span>
-            <span className="font-semibold text-[#1a1612]">
+            <span className="font-semibold text-[#191f28]">
               ${toDisplay(result.materials.total_materials_cost_per_lb).toFixed(4)}
               {catLabel}
             </span>
@@ -829,7 +829,7 @@ export default function CalculatorResult() {
                 <div key={`${material.used_for}-${material.material_key}`} className="rounded-[18px] border border-slate-200 bg-white px-4 py-3">
                   <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                     <div className="min-w-0">
-                      <div className="font-semibold text-[#1a1612]">{material.name}</div>
+                      <div className="font-semibold text-[#191f28]">{material.name}</div>
                       <div className="mt-1 text-xs text-slate-500">
                         {material.used_for} / {material.price_scope} / {material.pricing_basis}
                       </div>

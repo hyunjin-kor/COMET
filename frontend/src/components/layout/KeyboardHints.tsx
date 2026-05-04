@@ -28,7 +28,7 @@ export default function KeyboardHints({ visible, onClose }: KeyboardHintsProps) 
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-[200] flex items-center justify-center bg-[rgba(20,14,6,0.45)] backdrop-blur-sm"
+      className="fixed inset-0 z-[200] flex items-center justify-center bg-[rgba(15,23,42,0.45)] backdrop-blur-sm"
       role="presentation"
     >
       <div
@@ -49,21 +49,21 @@ export default function KeyboardHints({ visible, onClose }: KeyboardHintsProps) 
         <ul className="mt-5 space-y-2.5">
           {navigationItems.map((item, idx) => (
             <li key={item.to} className="flex items-center justify-between gap-3">
-              <span className="text-sm text-[#2c2620]">{item.label}</span>
-              <kbd className="rounded-md border border-[rgba(28,22,14,0.16)] bg-[rgba(255,253,248,0.96)] px-2 py-0.5 text-xs font-mono text-[#1a1612] shadow-[inset_0_-1px_0_rgba(28,22,14,0.06)]">
+              <span className="text-sm text-[#333d4b]">{item.label}</span>
+              <kbd className="rounded-md border border-[rgba(25,31,40,0.16)] bg-[rgba(255,255,255,0.96)] px-2 py-0.5 text-xs font-mono text-[#191f28] shadow-[inset_0_-1px_0_rgba(25,31,40,0.06)]">
                 Alt + {idx + 1}
               </kbd>
             </li>
           ))}
-          <li className="mt-3 flex items-center justify-between gap-3 border-t border-[rgba(28,22,14,0.07)] pt-3">
-            <span className="text-sm text-[#2c2620]">Toggle this dialog</span>
-            <kbd className="rounded-md border border-[rgba(28,22,14,0.16)] bg-[rgba(255,253,248,0.96)] px-2 py-0.5 text-xs font-mono text-[#1a1612] shadow-[inset_0_-1px_0_rgba(28,22,14,0.06)]">
+          <li className="mt-3 flex items-center justify-between gap-3 border-t border-[rgba(25,31,40,0.07)] pt-3">
+            <span className="text-sm text-[#333d4b]">Toggle this dialog</span>
+            <kbd className="rounded-md border border-[rgba(25,31,40,0.16)] bg-[rgba(255,255,255,0.96)] px-2 py-0.5 text-xs font-mono text-[#191f28] shadow-[inset_0_-1px_0_rgba(25,31,40,0.06)]">
               ?
             </kbd>
           </li>
           <li className="flex items-center justify-between gap-3">
-            <span className="text-sm text-[#2c2620]">Close</span>
-            <kbd className="rounded-md border border-[rgba(28,22,14,0.16)] bg-[rgba(255,253,248,0.96)] px-2 py-0.5 text-xs font-mono text-[#1a1612] shadow-[inset_0_-1px_0_rgba(28,22,14,0.06)]">
+            <span className="text-sm text-[#333d4b]">Close</span>
+            <kbd className="rounded-md border border-[rgba(25,31,40,0.16)] bg-[rgba(255,255,255,0.96)] px-2 py-0.5 text-xs font-mono text-[#191f28] shadow-[inset_0_-1px_0_rgba(25,31,40,0.06)]">
               Esc
             </kbd>
           </li>

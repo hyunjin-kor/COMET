@@ -56,7 +56,7 @@ function FieldBlock({
 function ChartFallback() {
   return (
     <div className="flex h-full min-h-[280px] items-center justify-center gap-3 rounded-[24px] border border-slate-200 bg-slate-50/80 text-center">
-      <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#c96442] border-t-transparent" />
+      <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#3182f6] border-t-transparent" />
       <div className="text-sm text-slate-600">Loading range chart...</div>
     </div>
   );
@@ -211,12 +211,12 @@ export default function Uncertainty() {
   const caseSummary = draft ? describeDraftCase(draft, snapshotComposition) : 'No current Cost Estimate draft';
   const histData = result
     ? [
-        { range: `${toDisplay(result.min).toFixed(1)}-${toDisplay(result.p5).toFixed(1)}`, value: 5, fill: '#b8825d' },
-        { range: `${toDisplay(result.p5).toFixed(1)}-${toDisplay(result.p25).toFixed(1)}`, value: 20, fill: '#d4a857' },
-        { range: `${toDisplay(result.p25).toFixed(1)}-${toDisplay(result.median).toFixed(1)}`, value: 25, fill: '#c96442' },
-        { range: `${toDisplay(result.median).toFixed(1)}-${toDisplay(result.p75).toFixed(1)}`, value: 25, fill: '#c96442' },
-        { range: `${toDisplay(result.p75).toFixed(1)}-${toDisplay(result.p95).toFixed(1)}`, value: 20, fill: '#d4a857' },
-        { range: `${toDisplay(result.p95).toFixed(1)}-${toDisplay(result.max).toFixed(1)}`, value: 5, fill: '#b8825d' },
+        { range: `${toDisplay(result.min).toFixed(1)}-${toDisplay(result.p5).toFixed(1)}`, value: 5, fill: '#4e5968' },
+        { range: `${toDisplay(result.p5).toFixed(1)}-${toDisplay(result.p25).toFixed(1)}`, value: 20, fill: '#3182f6' },
+        { range: `${toDisplay(result.p25).toFixed(1)}-${toDisplay(result.median).toFixed(1)}`, value: 25, fill: '#3182f6' },
+        { range: `${toDisplay(result.median).toFixed(1)}-${toDisplay(result.p75).toFixed(1)}`, value: 25, fill: '#3182f6' },
+        { range: `${toDisplay(result.p75).toFixed(1)}-${toDisplay(result.p95).toFixed(1)}`, value: 20, fill: '#3182f6' },
+        { range: `${toDisplay(result.p95).toFixed(1)}-${toDisplay(result.max).toFixed(1)}`, value: 5, fill: '#4e5968' },
       ]
     : [];
 
@@ -276,19 +276,19 @@ export default function Uncertainty() {
               <div className="mt-5 grid gap-3 lg:grid-cols-3">
                 <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
                   <div className="cp-subtle-label">Current case</div>
-                  <div className="mt-2 text-base font-semibold text-[#1a1612]">{caseSummary}</div>
+                  <div className="mt-2 text-base font-semibold text-[#191f28]">{caseSummary}</div>
                   <div className="mt-1 text-xs leading-6 text-slate-500">
                     {draft.catalystDomain === 'electrocatalyst' ? 'Electrocatalyst stack' : 'Thermocatalyst recipe'}
                   </div>
                 </div>
                 <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
                   <div className="cp-subtle-label">Preparation basis</div>
-                  <div className="mt-2 text-base font-semibold text-[#1a1612]">{draft.steps.length} step{draft.steps.length === 1 ? '' : 's'}</div>
+                  <div className="mt-2 text-base font-semibold text-[#191f28]">{draft.steps.length} step{draft.steps.length === 1 ? '' : 's'}</div>
                   <div className="mt-1 text-xs leading-6 text-slate-500">{draft.steps.join(', ') || 'No steps selected'}</div>
                 </div>
                 <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
                   <div className="cp-subtle-label">Campaign scale</div>
-                  <div className="mt-2 text-base font-semibold text-[#1a1612]">{draft.orderSize} tons</div>
+                  <div className="mt-2 text-base font-semibold text-[#191f28]">{draft.orderSize} tons</div>
                   <div className="mt-1 text-xs leading-6 text-slate-500">
                     {draft.applicationFamily ?? 'general'} / {draft.catalystDomain}
                   </div>
@@ -375,19 +375,19 @@ export default function Uncertainty() {
               <div className="mt-5 grid gap-3 sm:grid-cols-3">
                 <div className="cp-metric-tile">
                   <div className="cp-subtle-label">Baseline source</div>
-                  <div className="mt-2 text-lg font-semibold text-[#1a1612]">Current Cost Estimate draft</div>
+                  <div className="mt-2 text-lg font-semibold text-[#191f28]">Current Cost Estimate draft</div>
                   <div className="mt-1 text-xs leading-5 text-slate-500">No separate metal-only form is used here anymore.</div>
                 </div>
                 <div className="cp-metric-tile">
                   <div className="cp-subtle-label">What moves</div>
-                  <div className="mt-2 text-lg font-semibold text-[#1a1612]">
+                  <div className="mt-2 text-lg font-semibold text-[#191f28]">
                     {draft.catalystDomain === 'electrocatalyst' ? 'Catalyst + adjunct prices' : 'Active, promoter, and support prices'}
                   </div>
                   <div className="mt-1 text-xs leading-5 text-slate-500">The same case is re-run under sampled price and scale perturbations.</div>
                 </div>
                 <div className="cp-metric-tile">
                   <div className="cp-subtle-label">Interpretation</div>
-                  <div className="mt-2 text-lg font-semibold text-[#1a1612]">Estimate spread, not a new recipe</div>
+                  <div className="mt-2 text-lg font-semibold text-[#191f28]">Estimate spread, not a new recipe</div>
                   <div className="mt-1 text-xs leading-5 text-slate-500">Use this to read cost confidence around the existing route.</div>
                 </div>
               </div>
@@ -451,21 +451,21 @@ export default function Uncertainty() {
               <div className="mt-5 grid gap-3 lg:grid-cols-3">
                 <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
                   <div className="cp-subtle-label">Case</div>
-                  <div className="mt-2 text-base font-semibold text-[#1a1612]">{result.composition}</div>
+                  <div className="mt-2 text-base font-semibold text-[#191f28]">{result.composition}</div>
                   <div className="mt-1 text-xs leading-6 text-slate-500">
                     {result.catalyst_domain} / {result.application_family}
                   </div>
                 </div>
                 <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
                   <div className="cp-subtle-label">Range width</div>
-                  <div className="mt-2 text-base font-semibold text-[#1a1612]">
+                  <div className="mt-2 text-base font-semibold text-[#191f28]">
                     ${(toDisplay(result.p95 - result.p5)).toFixed(2)}{fmtLabel}
                   </div>
                   <div className="mt-1 text-xs leading-6 text-slate-500">P95 minus P5</div>
                 </div>
                 <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
                   <div className="cp-subtle-label">Std dev</div>
-                  <div className="mt-2 text-base font-semibold text-[#1a1612]">
+                  <div className="mt-2 text-base font-semibold text-[#191f28]">
                     ${toDisplay(result.std).toFixed(2)}{fmtLabel}
                   </div>
                   <div className="mt-1 text-xs leading-6 text-slate-500">Distribution spread</div>
@@ -495,7 +495,7 @@ export default function Uncertainty() {
                 ].map(([label, value]) => (
                   <div key={String(label)} className="rounded-[22px] border border-slate-900/8 bg-white/62 px-3 py-4 text-center">
                     <div className="cp-subtle-label">{label}</div>
-                    <div className="mt-2 font-mono text-sm text-[#1a1612]">${toDisplay(Number(value)).toFixed(2)}</div>
+                    <div className="mt-2 font-mono text-sm text-[#191f28]">${toDisplay(Number(value)).toFixed(2)}</div>
                   </div>
                 ))}
               </div>

@@ -119,7 +119,7 @@ const getScale = (tons: number): Scale => (tons < 5 ? 'small' : tons < 70 ? 'med
 const sourceTypeLabel = (sourceType: SourceType) => sourceType === 'live' ? 'Live' : sourceType === 'indexed' ? 'Indexed' : 'Manual';
 const sourceTone = (sourceType: SourceType) => sourceType === 'live' ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : sourceType === 'indexed' ? 'border-amber-200 bg-amber-50 text-amber-700' : 'border-slate-200 bg-white text-slate-600';
 const priceTone = (sourceType: SourceType) => sourceType === 'live' ? 'border-emerald-200 bg-emerald-50/70 text-emerald-800' : sourceType === 'indexed' ? 'border-amber-200 bg-amber-50/70 text-amber-800' : '';
-const scaleMeta = (scale: Scale) => scale === 'small' ? { label: 'Small', rate: '1 t/day', classes: 'border-violet-200 bg-violet-50 text-violet-700' } : scale === 'medium' ? { label: 'Medium', rate: '10 t/day', classes: 'border-sky-200 bg-sky-50 text-sky-700' } : { label: 'Large', rate: '150 t/day', classes: 'border-teal-200 bg-teal-50 text-teal-700' };
+const scaleMeta = (scale: Scale) => scale === 'small' ? { label: 'Small', rate: '1 t/day', classes: 'border-violet-200 bg-violet-50 text-violet-700' } : scale === 'medium' ? { label: 'Medium', rate: '10 t/day', classes: 'border-sky-200 bg-sky-50 text-sky-700' } : { label: 'Large', rate: '150 t/day', classes: 'border-[#3182f6] bg-[#e8f2ff] text-[#1b64da]' };
 const formatStepLabel = (stepKey: string) => ALL_STEPS.find((step) => step.key === stepKey)?.label ?? stepKey;
 const catalystDomainLabel = (domain: Extract<CatalystDomain, 'thermal' | 'electrocatalyst'>) => domain === 'electrocatalyst' ? 'Electrocatalyst' : 'Thermocatalyst';
 const defaultElectrocatalystConfig = (): ElectrocatalystDraft => ({
@@ -471,7 +471,7 @@ function CompactValueRow({ label, value, detail }: { label: string; value: strin
         <div className="cp-subtle-label">{label}</div>
         {detail ? <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div> : null}
       </div>
-      <div className="text-right text-sm font-semibold text-[#1a1612]">{value}</div>
+      <div className="text-right text-sm font-semibold text-[#191f28]">{value}</div>
     </div>
   );
 }
@@ -1077,7 +1077,7 @@ export default function Calculator() {
     return (
       <div className="rounded-[24px] border border-slate-900/8 bg-white/72 p-4">
         <div className="cp-subtle-label">{label}</div>
-        <div className="mt-2 font-semibold text-[#1a1612]">{material?.name ?? fallback}</div>
+        <div className="mt-2 font-semibold text-[#191f28]">{material?.name ?? fallback}</div>
         <div className="mt-1 text-sm text-slate-600">{material ? materialQuoteLabel(material) : 'Select a library record to lock pricing.'}</div>
         {material ? (
           <div className="mt-2 space-y-2">
@@ -1288,8 +1288,8 @@ export default function Calculator() {
     const items = rows.filter((row) => row.role === role);
     const selectionOptions = role === 'active_metal' ? activeMetalOptions : promoterOptions;
     const copy = role === 'active_metal'
-      ? { title: 'Active metals', description: 'Pick live metal feeds or library-backed material identities.', accent: 'bg-[#c96442]', button: 'Add active metal', placeholder: 'At least one active metal is required.' }
-      : { title: 'Promoters', description: 'Optional promoter rows use the same DB-backed thermal material bank.', accent: 'bg-[#7c8db5]', button: 'Add promoter', placeholder: 'No promoters added yet.' };
+      ? { title: 'Active metals', description: 'Pick live metal feeds or library-backed material identities.', accent: 'bg-[#3182f6]', button: 'Add active metal', placeholder: 'At least one active metal is required.' }
+      : { title: 'Promoters', description: 'Optional promoter rows use the same DB-backed thermal material bank.', accent: 'bg-[#8b95a1]', button: 'Add promoter', placeholder: 'No promoters added yet.' };
 
     return (
       <div className="space-y-3">
@@ -1372,7 +1372,7 @@ export default function Calculator() {
 
           <div className="rounded-[22px] border border-slate-900/8 bg-white/62 p-4">
             <div className="cp-subtle-label">Current case</div>
-            <div className="mt-2 text-base font-semibold text-[#1a1612]">{catalystDomainLabel(catalystDomain)}</div>
+            <div className="mt-2 text-base font-semibold text-[#191f28]">{catalystDomainLabel(catalystDomain)}</div>
             <div className="mt-2 text-sm leading-6 text-slate-600">{recipeSummary}</div>
             <div className="mt-3 flex flex-wrap gap-2">
               <span className="cp-chip">{catalystDomainLabel(catalystDomain)}</span>
@@ -1383,7 +1383,7 @@ export default function Calculator() {
 
           <div className="rounded-[22px] border border-slate-900/8 bg-white/62 p-4">
             <div className="cp-subtle-label">Preparation basis</div>
-            <div className="mt-2 text-base font-semibold text-[#1a1612]">{preparationSummary}</div>
+            <div className="mt-2 text-base font-semibold text-[#191f28]">{preparationSummary}</div>
             <div className="mt-2 space-y-1">
               <CompactValueRow label="Campaign" value={`${orderSize} tons`} detail={`${scale.label} scale / ${scale.rate}`} />
               <CompactValueRow
@@ -1403,7 +1403,7 @@ export default function Calculator() {
             </div>
           </div>
 
-          <div className="rounded-[22px] border border-slate-900/8 bg-[linear-gradient(180deg,#0f172a,#18253b)] p-4 text-white shadow-[0_14px_34px_rgba(15,23,42,0.14)]">
+          <div className="rounded-[20px] border border-[#191f28] bg-[#191f28] p-4 text-white shadow-[0_8px_24px_rgba(15,23,42,0.18)]">
             <div className="flex items-start justify-between gap-3">
               <div className="cp-subtle-label !text-slate-400">Latest result</div>
               <button onClick={() => navigate('/calculator/result')} disabled={!latestSnapshotForCurrentCase} className="cp-button-ink px-3 py-2 text-xs">
@@ -1480,7 +1480,7 @@ export default function Calculator() {
         </div>
 
         <div className="mt-4 rounded-[20px] border border-slate-200 bg-slate-50/80 px-4 py-3 text-sm leading-6 text-slate-600">
-          Changing workflow does not auto-advance. Review the selected mode, then move with <span className="font-semibold text-[#1a1612]">Next</span>.
+          Changing workflow does not auto-advance. Review the selected mode, then move with <span className="font-semibold text-[#191f28]">Next</span>.
         </div>
       </section>
     );
@@ -1528,7 +1528,7 @@ export default function Calculator() {
         <div className="surface-ghost p-3.5">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#d4a857]" /><h3 className="cp-heading-sm">Support</h3></div>
+              <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#3182f6]" /><h3 className="cp-heading-sm">Support</h3></div>
               <p className="mt-1 text-xs leading-5 text-slate-500">
                 {supportIsSplit
                   ? 'Promoted support is on. Enter each support wt% explicitly so the total recipe closes at 100 wt%.'
@@ -1550,7 +1550,7 @@ export default function Calculator() {
                     <span className="text-xs text-slate-500">wt%</span>
                   </div>
                 ) : (
-                  <div className="input-base flex min-w-[170px] flex-none items-center justify-between gap-3 bg-white/76"><span className="text-xs text-slate-500">Auto share</span><span className="font-mono text-[#1a1612]">{supportWtPct.toFixed(1)} wt%</span></div>
+                  <div className="input-base flex min-w-[170px] flex-none items-center justify-between gap-3 bg-white/76"><span className="text-xs text-slate-500">Auto share</span><span className="font-mono text-[#191f28]">{supportWtPct.toFixed(1)} wt%</span></div>
                 )}
                 {sourceChip(row)}
                 {priceField(row)}
@@ -1560,7 +1560,7 @@ export default function Calculator() {
             </div>
           ))}
           <div className="mt-3 rounded-[18px] border border-slate-200 bg-white/76 px-4 py-3 text-xs leading-6 text-slate-600">
-            Total components: <span className="font-semibold text-[#1a1612]">{thermalRows.length}</span> / {maxThermalComponents}.
+            Total components: <span className="font-semibold text-[#191f28]">{thermalRows.length}</span> / {maxThermalComponents}.
             {supportIsSplit ? ` Current recipe total: ${totalThermalWt.toFixed(1)} wt%.` : ` Support closes automatically at ${supportWtPct.toFixed(1)} wt%.`}
           </div>
         </div>
@@ -1590,21 +1590,21 @@ export default function Calculator() {
         <div className="grid gap-3 lg:grid-cols-3">
           <div className="rounded-[20px] border border-slate-200 bg-white/82 px-4 py-3">
             <div className="cp-subtle-label">Selection mode</div>
-            <div className="mt-2 text-sm font-semibold text-[#1a1612]">Choose all operations that apply</div>
+            <div className="mt-2 text-sm font-semibold text-[#191f28]">Choose all operations that apply</div>
             <div className="mt-1 text-xs leading-6 text-slate-500">
               This screen builds a full route, not a one-choice wizard.
             </div>
           </div>
           <div className="rounded-[20px] border border-slate-200 bg-white/82 px-4 py-3">
             <div className="cp-subtle-label">Bucket logic</div>
-            <div className="mt-2 text-sm font-semibold text-[#1a1612]">One bucket can hold multiple steps</div>
+            <div className="mt-2 text-sm font-semibold text-[#191f28]">One bucket can hold multiple steps</div>
             <div className="mt-1 text-xs leading-6 text-slate-500">
               Saved thermal and electrochemical templates often stack several operations inside the same bucket.
             </div>
           </div>
-          <div className="rounded-[20px] border border-teal-200 bg-teal-50/80 px-4 py-3">
-            <div className="cp-subtle-label !text-teal-700">Current route</div>
-            <div className="mt-2 text-sm font-semibold text-[#1a1612]">
+          <div className="rounded-[20px] border border-[#3182f6] bg-[#e8f2ff] px-4 py-3">
+            <div className="cp-subtle-label !text-[#1b64da]">Current route</div>
+            <div className="mt-2 text-sm font-semibold text-[#191f28]">
               {steps.length} selected step{steps.length === 1 ? '' : 's'} across {selectedCategoryCount} bucket{selectedCategoryCount === 1 ? '' : 's'}
             </div>
             <div className="mt-1 text-xs leading-6 text-slate-500">
@@ -1638,7 +1638,7 @@ export default function Calculator() {
                   <div className="cp-subtle-label">{category}</div>
                   <div className={`rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] ${
                     selectedInCategory.length > 0
-                      ? 'border-teal-200 bg-teal-50 text-teal-700'
+                      ? 'border-[#3182f6] bg-[#e8f2ff] text-[#1b64da]'
                       : 'border-slate-200 bg-white text-slate-400'
                   }`}>
                     {selectedInCategory.length} selected
@@ -1650,7 +1650,7 @@ export default function Calculator() {
                     const available = (step.scales as readonly Scale[]).includes(currentScale);
                     const checked = steps.includes(step.key);
                     const availabilityLabel = step.scales.length === 3 ? null : step.scales.map((item) => item[0].toUpperCase()).join('/');
-                    return <button key={step.key} onClick={() => available && toggleStep(step.key)} disabled={!available} title={available ? step.label : `Not available at ${scale.label.toLowerCase()} scale`} className={`rounded-[16px] border px-3 py-2 text-left text-sm transition ${!available ? 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400' : checked ? 'border-teal-200 bg-teal-50 text-teal-700' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}><div className="flex items-center justify-between gap-3"><div className="font-medium">{step.label}</div>{checked ? <span className="rounded-full border border-teal-200 bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-teal-700">On</span> : null}</div>{availabilityLabel ? <div className="mt-1 text-[10px] uppercase tracking-[0.18em] text-slate-400">{availabilityLabel}</div> : null}</button>;
+                    return <button key={step.key} onClick={() => available && toggleStep(step.key)} disabled={!available} title={available ? step.label : `Not available at ${scale.label.toLowerCase()} scale`} className={`rounded-[16px] border px-3 py-2 text-left text-sm transition ${!available ? 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400' : checked ? 'border-[#3182f6] bg-[#e8f2ff] text-[#1b64da]' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}><div className="flex items-center justify-between gap-3"><div className="font-medium">{step.label}</div>{checked ? <span className="rounded-full border border-[#3182f6] bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#1b64da]">On</span> : null}</div>{availabilityLabel ? <div className="mt-1 text-[10px] uppercase tracking-[0.18em] text-slate-400">{availabilityLabel}</div> : null}</button>;
                   })}
                 </div>
                 {selectedInCategory.length > 0 ? (

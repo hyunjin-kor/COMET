@@ -38,14 +38,14 @@ export default function Sidebar() {
                   to={item.to}
                   className={`group flex items-center gap-3 rounded-[18px] border px-3 py-3 transition ${
                     isActive
-                      ? 'border-[#c96442]/18 bg-[linear-gradient(135deg,rgba(124,241,208,0.14),rgba(255,255,255,0.06))] shadow-[0_12px_26px_rgba(0,0,0,0.12)]'
+                      ? 'border-[#3182f6]/18 bg-[linear-gradient(135deg,rgba(124,241,208,0.14),rgba(255,255,255,0.06))] shadow-[0_12px_26px_rgba(0,0,0,0.12)]'
                       : 'border-white/8 bg-white/[0.025] hover:border-white/14 hover:bg-white/[0.05]'
                   }`}
                 >
                   <div
                     className={`flex h-10 w-10 flex-none items-center justify-center rounded-[16px] border transition ${
                       isActive
-                        ? 'border-[#c96442]/22 bg-[#c96442]/12 text-[#f0d9cb]'
+                        ? 'border-[#3182f6]/22 bg-[#3182f6]/12 text-[#e8f2ff]'
                         : 'border-white/10 bg-white/6 text-slate-300 group-hover:text-white'
                     }`}
                   >
@@ -72,7 +72,7 @@ export default function Sidebar() {
               <span
                 aria-hidden="true"
                 className={`flex-1 rounded-full px-3 py-2 text-xs font-semibold transition ${
-                  unit === 'kg' ? 'bg-[#c96442] text-[#1a1612]' : 'text-slate-300'
+                  unit === 'kg' ? 'bg-[#3182f6] text-[#191f28]' : 'text-slate-300'
                 }`}
               >
                 kg
@@ -80,7 +80,7 @@ export default function Sidebar() {
               <span
                 aria-hidden="true"
                 className={`flex-1 rounded-full px-3 py-2 text-xs font-semibold transition ${
-                  unit === 'lb' ? 'bg-[#c96442] text-[#1a1612]' : 'text-slate-300'
+                  unit === 'lb' ? 'bg-[#3182f6] text-[#191f28]' : 'text-slate-300'
                 }`}
               >
                 lb

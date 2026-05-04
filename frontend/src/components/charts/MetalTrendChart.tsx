@@ -39,10 +39,10 @@ export default function MetalTrendChart({
             <stop offset="95%" stopColor={selectedColor} stopOpacity={0} />
           </linearGradient>
         </defs>
-        <CartesianGrid stroke="rgba(245,239,226,0.08)" vertical={false} />
+        <CartesianGrid stroke="rgba(255,255,255,0.08)" vertical={false} />
         <XAxis
           dataKey="date"
-          tick={{ fill: '#a89e8d', fontSize: 11 }}
+          tick={{ fill: '#8b95a1', fontSize: 11 }}
           axisLine={false}
           tickLine={false}
           tickFormatter={(value) =>
@@ -53,14 +53,14 @@ export default function MetalTrendChart({
           }
         />
         <YAxis
-          tick={{ fill: '#a89e8d', fontSize: 11 }}
+          tick={{ fill: '#8b95a1', fontSize: 11 }}
           axisLine={false}
           tickLine={false}
           tickFormatter={(value) => `$${Number(value).toLocaleString('en-US')}`}
           width={72}
         />
         <Tooltip
-          cursor={{ stroke: 'rgba(201,100,66,0.35)', strokeWidth: 1, strokeDasharray: '3 3' }}
+          cursor={{ stroke: 'rgba(49,130,246,0.35)', strokeWidth: 1, strokeDasharray: '3 3' }}
           formatter={(value) => [`$${Number(value).toLocaleString('en-US')}`, selectedDisplayUnit]}
           labelFormatter={(value) =>
             new Date(value).toLocaleDateString('en-US', {
@@ -70,17 +70,17 @@ export default function MetalTrendChart({
             })
           }
           contentStyle={{
-            borderRadius: 14,
-            border: '1px solid rgba(245,239,226,0.12)',
-            background: '#1f1a14',
-            color: '#f5efe2',
+            borderRadius: 12,
+            border: '1px solid #e5e8eb',
+            background: '#ffffff',
+            color: '#191f28',
             fontSize: 12,
-            boxShadow: '0 18px 42px rgba(20,14,6,0.35)',
+            boxShadow: '0 12px 28px rgba(15,23,42,0.12)',
             padding: '8px 12px',
           }}
-          labelStyle={{ color: '#d4c8ad', fontSize: 11, marginBottom: 4 }}
+          labelStyle={{ color: '#4e5968', fontSize: 11, marginBottom: 4 }}
         />
-        {data.length > 0 ? <ReferenceLine y={data[0].price} stroke="rgba(245,239,226,0.14)" strokeDasharray="4 4" /> : null}
+        {data.length > 0 ? <ReferenceLine y={data[0].price} stroke="rgba(255,255,255,0.18)" strokeDasharray="4 4" /> : null}
         <Area
           type="monotone"
           dataKey="price"

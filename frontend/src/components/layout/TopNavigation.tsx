@@ -53,14 +53,12 @@ export default function TopNavigation() {
   if (isWindowsDesktop) {
     return (
       <header className="sticky top-0 z-50 hidden lg:block">
-        <div className="drag-region relative h-[38px] border-b border-slate-900/8 bg-[#fbf7f1]">
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(120,242,208,0.04),transparent_34%,rgba(239,195,108,0.05))]" />
-
+        <div className="drag-region relative h-[38px] border-b border-[#e5e8eb] bg-white">
           <div className="no-drag absolute right-0 top-0 flex h-full items-stretch" role="group" aria-label="Window controls">
             <button
               type="button"
               onClick={() => window.catpriceDesktop?.minimizeWindow?.()}
-              className="flex w-12 items-center justify-center text-slate-500 transition hover:bg-slate-900/6 hover:text-slate-800"
+              className="flex w-12 items-center justify-center text-[#8b95a1] transition hover:bg-[#f2f4f6] hover:text-[#191f28]"
               title="Minimize"
               aria-label="Minimize window"
             >
@@ -70,7 +68,7 @@ export default function TopNavigation() {
             <button
               type="button"
               onClick={() => window.catpriceDesktop?.toggleMaximizeWindow?.()}
-              className="flex w-12 items-center justify-center text-slate-500 transition hover:bg-slate-900/6 hover:text-slate-800"
+              className="flex w-12 items-center justify-center text-[#8b95a1] transition hover:bg-[#f2f4f6] hover:text-[#191f28]"
               title={isMaximized ? 'Restore' : 'Maximize'}
               aria-label={isMaximized ? 'Restore window' : 'Maximize window'}
             >
@@ -80,7 +78,7 @@ export default function TopNavigation() {
             <button
               type="button"
               onClick={() => window.catpriceDesktop?.closeWindow?.()}
-              className="flex w-12 items-center justify-center text-slate-500 transition hover:bg-[#d95d5d] hover:text-white"
+              className="flex w-12 items-center justify-center text-[#8b95a1] transition hover:bg-[#f04452] hover:text-white"
               title="Close"
               aria-label="Close window"
             >
@@ -95,47 +93,46 @@ export default function TopNavigation() {
   return (
     <header className="sticky top-0 z-50 px-3 pb-2 pt-2 sm:px-4 lg:hidden">
       <div className="surface-card-soft overflow-hidden">
-        <div className="drag-region relative border-b border-slate-900/8 px-4 pb-1.5 pt-[calc(env(titlebar-area-height,0px)+8px)]">
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(120,242,208,0.06),transparent_28%,transparent_72%,rgba(239,195,108,0.08))]" />
-          <div className="relative flex items-center justify-between gap-3">
+        <div className="drag-region border-b border-[#e5e8eb] px-4 pb-1.5 pt-[calc(env(titlebar-area-height,0px)+8px)]">
+          <div className="flex items-center justify-between gap-3">
             <div className="cp-subtle-label">Desktop Window</div>
-            <div className="hidden h-6 w-28 rounded-full border border-slate-900/8 bg-white/40 xl:block" />
+            <div className="hidden h-6 w-28 rounded-full border border-[#e5e8eb] bg-[#f9fafb] xl:block" />
           </div>
         </div>
 
         <div className="no-drag px-4 py-2.5">
           <div className="flex items-center justify-between gap-3">
             <div className="flex min-w-0 items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-[16px] border border-slate-900/8 bg-white/80 shadow-[0_12px_24px_rgba(23,34,51,0.06)]">
+              <div className="flex h-10 w-10 items-center justify-center rounded-[14px] bg-[#3182f6]">
                 <BrandMark className="h-7 w-7" />
               </div>
 
               <div className="min-w-0">
-                <div className="font-display text-[1.45rem] leading-none text-[#1a1612]">CatPrice</div>
-                <div className="mt-0.5 text-xs text-slate-500">Evidence-first catalyst costing</div>
+                <div className="font-display text-[1.45rem] leading-none text-[#191f28]">CatPrice</div>
+                <div className="mt-0.5 text-xs text-[#8b95a1]">Evidence-first catalyst costing</div>
               </div>
             </div>
 
             <button
               type="button"
               onClick={toggle}
-              className="flex items-center gap-1 rounded-full border border-slate-300/70 bg-white/72 p-1 shadow-[0_10px_24px_rgba(23,34,51,0.05)]"
+              className="flex items-center gap-1 rounded-full border border-[#e5e8eb] bg-[#f2f4f6] p-1"
               title="Toggle output units"
               aria-label={`Toggle output units, currently ${unit}`}
               aria-pressed={unit === 'lb'}
             >
               <span
                 aria-hidden="true"
-                className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
-                  unit === 'kg' ? 'bg-[#c96442] text-[#1a1612]' : 'text-slate-500'
+                className={`rounded-full px-3 py-1.5 text-xs font-bold transition ${
+                  unit === 'kg' ? 'bg-white text-[#191f28] shadow-[0_1px_3px_rgba(15,23,42,0.06)]' : 'text-[#8b95a1]'
                 }`}
               >
                 kg
               </span>
               <span
                 aria-hidden="true"
-                className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
-                  unit === 'lb' ? 'bg-[#c96442] text-[#1a1612]' : 'text-slate-500'
+                className={`rounded-full px-3 py-1.5 text-xs font-bold transition ${
+                  unit === 'lb' ? 'bg-white text-[#191f28] shadow-[0_1px_3px_rgba(15,23,42,0.06)]' : 'text-[#8b95a1]'
                 }`}
               >
                 lb
@@ -151,23 +148,23 @@ export default function TopNavigation() {
                 <NavLink
                   key={item.to}
                   to={item.to}
-                  className={`group flex min-w-[164px] items-center gap-3 rounded-[18px] border px-3.5 py-2.5 transition ${
+                  className={`group flex min-w-[164px] items-center gap-3 rounded-[14px] border px-3.5 py-2.5 transition ${
                     isActive
-                      ? 'border-teal-300/55 bg-[linear-gradient(135deg,rgba(124,241,208,0.22),rgba(255,255,255,0.94))] shadow-[0_10px_24px_rgba(23,34,51,0.07)]'
-                      : 'border-slate-300/70 bg-white/74 hover:border-slate-400/70 hover:bg-white'
+                      ? 'border-[#3182f6] bg-[#e8f2ff]'
+                      : 'border-[#e5e8eb] bg-white hover:border-[#d1d6db] hover:bg-[#f9fafb]'
                   }`}
                 >
                   <div
-                    className={`flex h-9 w-9 flex-none items-center justify-center rounded-[14px] border transition ${
+                    className={`flex h-9 w-9 flex-none items-center justify-center rounded-[12px] transition ${
                       isActive
-                        ? 'border-teal-300/55 bg-teal-50 text-teal-700'
-                        : 'border-slate-300/60 bg-slate-50 text-slate-500 group-hover:text-slate-700'
+                        ? 'bg-[#3182f6] text-white'
+                        : 'bg-[#f2f4f6] text-[#8b95a1] group-hover:text-[#4e5968]'
                     }`}
                   >
                     <item.Icon className="h-[18px] w-[18px]" />
                   </div>
 
-                  <div className="truncate text-sm font-semibold text-slate-900">{item.label}</div>
+                  <div className="truncate text-sm font-bold text-[#191f28]">{item.label}</div>
                 </NavLink>
               );
             })}

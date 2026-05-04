@@ -1,24 +1,54 @@
 @import "tailwindcss";
 
+/* ──────────────────────────────────────────────────────────────────────
+   CatPrice design tokens — Toss-style.
+   Reference: Toss Design System / Pretendard.
+   - White surfaces, cool neutral grays, single Toss Blue accent.
+   - No serif display fonts; bold Pretendard for headings + numbers.
+   - Subtle depth (1px hairlines, soft shadows), no warm gradients.
+   ────────────────────────────────────────────────────────────────────── */
 :root {
   color-scheme: light;
-  --font-display: "Charter", "Cambria", "Iowan Old Style", "Georgia", "Segoe UI Variable Display", "Segoe UI", "Noto Serif KR", "Malgun Gothic", serif;
-  --font-body: "Segoe UI Variable Text", "Segoe UI", "Inter", "Helvetica Neue", "Noto Sans KR", "Malgun Gothic", sans-serif;
-  --bg-base: #f5f1e8;
-  --bg-soft: #fbf8f1;
-  --bg-muted: #ece5d6;
-  --ink-strong: #1a1612;
-  --ink: #2c2620;
-  --ink-soft: #6b6357;
-  --line: rgba(28, 22, 14, 0.08);
-  --accent: #c96442;
-  --accent-deep: #9d4d33;
-  --accent-soft: #f0d9cb;
-  --accent-tint: rgba(201, 100, 66, 0.08);
-  --amber: #d4a857;
-  --slate-cool: #7c8db5;
-  --rose: #b8825d;
-  --navy: #1a2030;
+
+  --font-sans: "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont,
+               system-ui, "Roboto", "Helvetica Neue", "Segoe UI",
+               "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  --font-display: var(--font-sans);
+  --font-body: var(--font-sans);
+  --font-mono: "SF Mono", "JetBrains Mono", "Menlo", "Consolas", monospace;
+
+  /* Surfaces */
+  --bg-base: #ffffff;
+  --bg-soft: #f9fafb;
+  --bg-muted: #f2f4f6;
+  --bg-elevated: #ffffff;
+
+  /* Text (Toss neutral scale) */
+  --ink-strong: #191f28;
+  --ink: #333d4b;
+  --ink-soft: #4e5968;
+  --ink-mute: #8b95a1;
+  --ink-faint: #b0b8c1;
+
+  /* Lines */
+  --line: #e5e8eb;
+  --line-strong: #d1d6db;
+  --line-faint: #f2f4f6;
+
+  /* Brand (Toss Blue) */
+  --brand: #3182f6;
+  --brand-hover: #1b64da;
+  --brand-press: #1957c2;
+  --brand-soft: #e8f2ff;
+  --brand-tint: rgba(49, 130, 246, 0.08);
+
+  /* Status */
+  --success: #22c55e;
+  --success-soft: #e6f9ee;
+  --danger: #f04452;
+  --danger-soft: #ffeaec;
+  --warning: #ffa800;
+  --warning-soft: #fff4dd;
 }
 
 html {
@@ -30,13 +60,9 @@ body {
   min-height: 100vh;
   color: var(--ink-strong);
   font-family: var(--font-body);
-  background: linear-gradient(180deg, #fbf8f1 0%, #f7f1e6 52%, #f4ecdd 100%);
+  background: var(--bg-soft);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-}
-
-body::before {
-  content: none;
 }
 
 #root {
@@ -57,7 +83,7 @@ textarea {
 }
 
 ::selection {
-  background: var(--accent-tint);
+  background: var(--brand-tint);
   color: var(--ink-strong);
 }
 
@@ -69,138 +95,146 @@ textarea {
   -webkit-app-region: no-drag;
 }
 
+/* ─── Typography (Toss-style: bold sans, no serif display) ─────────── */
 .font-display {
-  font-family: var(--font-display);
-  letter-spacing: -0.018em;
-  font-weight: 600;
+  font-family: var(--font-sans);
+  letter-spacing: -0.02em;
+  font-weight: 700;
 }
 
 .cp-heading-xl {
-  font-family: var(--font-display);
-  font-weight: 600;
-  letter-spacing: -0.022em;
-  @apply text-[clamp(1.85rem,2.5vw,2.55rem)] leading-[1.04] text-[#1a1612];
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: -0.024em;
+  @apply text-[clamp(1.85rem,2.5vw,2.55rem)] leading-[1.18] text-[#191f28];
 }
 
 .cp-heading-lg {
-  font-family: var(--font-display);
-  font-weight: 600;
-  letter-spacing: -0.018em;
-  @apply text-[clamp(1.3rem,1.7vw,1.65rem)] leading-[1.08] text-[#1a1612];
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  @apply text-[clamp(1.3rem,1.7vw,1.65rem)] leading-[1.25] text-[#191f28];
 }
 
 .cp-heading-sm {
-  font-family: var(--font-display);
-  font-weight: 600;
+  font-family: var(--font-sans);
+  font-weight: 700;
   letter-spacing: -0.012em;
-  @apply text-[1.08rem] leading-[1.18] text-[#1a1612];
+  @apply text-[1.08rem] leading-[1.3] text-[#191f28];
 }
 
 .cp-body-copy {
-  @apply text-sm leading-7 text-[#5e564a];
+  @apply text-sm leading-[1.7] text-[#4e5968];
 }
 
 .cp-shell {
   position: relative;
+  background: var(--bg-soft);
 }
 
+/* No warm radial overlay; Toss screens are flat surfaces. */
 .cp-shell::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 14% 18%, rgba(201, 100, 66, 0.06), transparent 0 24%),
-    radial-gradient(circle at 86% 12%, rgba(212, 168, 87, 0.05), transparent 0 22%);
-  filter: blur(32px);
-  opacity: 0.55;
+  content: none;
 }
 
+/* ─── Surfaces (white cards, hairline borders, soft shadows) ───────── */
 .surface-card {
-  @apply rounded-[20px] border border-[rgba(28,22,14,0.07)] bg-[rgba(252,248,240,0.94)]
-         shadow-[0_1px_0_rgba(255,255,255,0.7)_inset,0_8px_24px_rgba(34,24,12,0.04)] backdrop-blur-xl;
+  @apply rounded-[20px] border border-[#e5e8eb] bg-white
+         shadow-[0_1px_2px_rgba(15,23,42,0.04),0_4px_12px_rgba(15,23,42,0.04)];
 }
 
 .surface-card-soft {
-  @apply rounded-[18px] border border-[rgba(28,22,14,0.06)] bg-[rgba(255,253,248,0.84)]
-         shadow-[0_6px_18px_rgba(34,24,12,0.03)] backdrop-blur-xl;
+  @apply rounded-[16px] border border-[#e5e8eb] bg-white
+         shadow-[0_1px_2px_rgba(15,23,42,0.03)];
 }
 
+/* "ink" surfaces used to be dark/warm. In Toss style we keep them
+   visually distinct with a deeper navy-black so hero / metric blocks
+   still anchor the layout without breaking the color system. */
 .surface-ink {
-  @apply rounded-[20px] border border-white/8 bg-[linear-gradient(180deg,#1f1a14,#2a221a)]
-         text-[#f5efe2] shadow-[0_14px_34px_rgba(20,14,6,0.18)];
+  @apply rounded-[20px] border border-[#191f28] bg-[#191f28]
+         text-white shadow-[0_8px_24px_rgba(15,23,42,0.18)];
 }
 
 .surface-rail {
-  @apply rounded-[22px] border border-white/8 bg-[linear-gradient(180deg,#1d1812,#28211a)]
-         text-[#f5efe2] shadow-[0_16px_42px_rgba(20,14,6,0.2)];
+  @apply rounded-[20px] border border-[#191f28] bg-[#191f28]
+         text-white shadow-[0_8px_24px_rgba(15,23,42,0.18)];
 }
 
 .surface-ghost {
-  @apply rounded-[18px] border border-[rgba(28,22,14,0.06)] bg-[rgba(255,253,248,0.62)] backdrop-blur-lg;
+  @apply rounded-[16px] border border-[#e5e8eb] bg-[#f9fafb];
 }
 
+/* ─── Form controls ────────────────────────────────────────────────── */
 .input-base {
-  @apply w-full min-w-0 rounded-[14px] border border-[rgba(28,22,14,0.16)] bg-[rgba(255,253,248,0.96)] px-4 py-2.5
-         text-sm text-[#1a1612] shadow-[inset_0_1px_0_rgba(255,255,255,0.85),0_2px_8px_rgba(34,24,12,0.03)]
-         outline-none transition placeholder:text-[#9a8f7d] hover:border-[rgba(28,22,14,0.28)]
-         focus:border-[#c96442]/55 focus:ring-4 focus:ring-[#c96442]/12;
+  @apply w-full min-w-0 rounded-[12px] border border-[#d1d6db] bg-white px-4 py-2.5
+         text-sm text-[#191f28] outline-none transition
+         placeholder:text-[#b0b8c1]
+         hover:border-[#8b95a1]
+         focus:border-[#3182f6] focus:ring-4 focus:ring-[rgba(49,130,246,0.15)];
 }
 
+/* ─── Chips / tags ─────────────────────────────────────────────────── */
 .section-kicker {
-  @apply inline-flex items-center gap-2 rounded-full border border-[rgba(212,168,87,0.45)] bg-[rgba(244,232,205,0.85)] px-3 py-1.5
-         text-[10px] font-semibold uppercase tracking-[0.26em] text-[#7a5a1a];
+  @apply inline-flex items-center gap-2 rounded-full bg-[#e8f2ff] px-3 py-1.5
+         text-[11px] font-bold uppercase tracking-[0.16em] text-[#1b64da];
 }
 
 .cp-chip {
-  @apply inline-flex items-center rounded-full border border-[rgba(28,22,14,0.14)] bg-[rgba(255,253,248,0.78)] px-2.5 py-1
-         text-[10px] font-semibold uppercase tracking-[0.18em] text-[#5e564a];
+  @apply inline-flex items-center rounded-full bg-[#f2f4f6] px-2.5 py-1
+         text-[11px] font-semibold uppercase tracking-[0.12em] text-[#4e5968];
 }
 
 .cp-chip-dark {
-  @apply inline-flex items-center rounded-full border border-white/10 bg-white/6 px-2.5 py-1
-         text-[10px] font-semibold uppercase tracking-[0.18em] text-[#e9dfc8];
+  @apply inline-flex items-center rounded-full border border-white/15 bg-white/10 px-2.5 py-1
+         text-[11px] font-semibold uppercase tracking-[0.12em] text-white;
 }
 
+/* ─── Buttons (Toss: solid blue primary, light gray secondary) ─────── */
 .cp-button-primary {
-  @apply inline-flex items-center justify-center rounded-[14px] bg-[#1a1612] px-4 py-3 text-sm font-semibold text-[#fbf8f1]
-         shadow-[0_6px_18px_rgba(20,14,6,0.18)] transition hover:-translate-y-px hover:bg-[#2c2620]
-         disabled:pointer-events-none disabled:opacity-45;
+  @apply inline-flex items-center justify-center rounded-[12px] bg-[#3182f6] px-4 py-3 text-sm font-bold text-white
+         transition hover:bg-[#1b64da] active:bg-[#1957c2]
+         disabled:pointer-events-none disabled:bg-[#d1d6db] disabled:text-white;
 }
 
 .cp-button-secondary {
-  @apply inline-flex items-center justify-center rounded-[14px] border border-[rgba(28,22,14,0.16)] bg-[rgba(255,253,248,0.92)] px-4 py-3
-         text-sm font-semibold text-[#2c2620] shadow-[0_4px_12px_rgba(34,24,12,0.04)]
-         transition hover:border-[rgba(28,22,14,0.3)] hover:bg-white disabled:pointer-events-none disabled:opacity-45;
-}
-
-.cp-button-ink {
-  @apply inline-flex items-center justify-center rounded-[14px] border border-white/12 bg-white/6 px-4 py-3
-         text-sm font-semibold text-[#f5efe2] transition hover:bg-white/10 disabled:pointer-events-none disabled:opacity-45;
-}
-
-.cp-button-accent {
-  @apply inline-flex items-center justify-center rounded-[14px] bg-[#c96442] px-4 py-3 text-sm font-semibold text-white
-         shadow-[0_6px_18px_rgba(201,100,66,0.22)] transition hover:-translate-y-px hover:bg-[#b85838]
+  @apply inline-flex items-center justify-center rounded-[12px] border border-[#d1d6db] bg-white px-4 py-3
+         text-sm font-bold text-[#333d4b] transition
+         hover:border-[#8b95a1] hover:bg-[#f9fafb]
          disabled:pointer-events-none disabled:opacity-45;
 }
 
-.cp-subtle-label {
-  @apply text-[11px] font-semibold uppercase tracking-[0.22em] text-[#8a8170];
+.cp-button-ink {
+  @apply inline-flex items-center justify-center rounded-[12px] border border-white/20 bg-white/8 px-4 py-3
+         text-sm font-bold text-white transition hover:bg-white/15
+         disabled:pointer-events-none disabled:opacity-45;
 }
 
+.cp-button-accent {
+  @apply inline-flex items-center justify-center rounded-[12px] bg-[#3182f6] px-4 py-3 text-sm font-bold text-white
+         transition hover:bg-[#1b64da] active:bg-[#1957c2]
+         disabled:pointer-events-none disabled:bg-[#d1d6db];
+}
+
+/* ─── Subtle labels (small caps, used as section eyebrows) ─────────── */
+.cp-subtle-label {
+  @apply text-[11px] font-bold uppercase tracking-[0.16em] text-[#8b95a1];
+}
+
+/* ─── Metric tiles ─────────────────────────────────────────────────── */
 .cp-metric-tile {
-  @apply rounded-[16px] border border-[rgba(28,22,14,0.07)] bg-[rgba(255,253,248,0.82)] p-3.5 shadow-[0_4px_12px_rgba(34,24,12,0.03)] backdrop-blur-xl;
+  @apply rounded-[16px] border border-[#e5e8eb] bg-white p-4;
 }
 
 .cp-metric-tile-dark {
-  @apply rounded-[16px] border border-white/10 bg-white/6 p-3.5 backdrop-blur-xl;
+  @apply rounded-[16px] border border-white/15 bg-white/8 p-4;
 }
 
 .cp-toolbar {
-  @apply flex flex-wrap items-center gap-2 rounded-[16px] border border-[rgba(28,22,14,0.07)] bg-[rgba(255,253,248,0.86)] p-1.5 backdrop-blur-xl;
+  @apply flex flex-wrap items-center gap-2 rounded-[14px] border border-[#e5e8eb] bg-white p-1.5;
 }
 
+/* ─── Layout helpers ───────────────────────────────────────────────── */
 .cp-split-workspace {
   @apply grid gap-4 xl:grid-cols-[minmax(0,1fr)_320px] xl:items-start;
 }
@@ -210,49 +244,50 @@ textarea {
 }
 
 .cp-rail-panel {
-  @apply rounded-[18px] border border-[rgba(28,22,14,0.07)] bg-[rgba(255,253,248,0.88)]
-         px-4 py-4 shadow-[0_6px_16px_rgba(34,24,12,0.04)] backdrop-blur-xl;
+  @apply rounded-[16px] border border-[#e5e8eb] bg-white p-4;
 }
 
 .cp-data-row {
-  @apply flex items-start justify-between gap-3 border-t border-[rgba(28,22,14,0.08)] py-3 first:border-t-0 first:pt-0 last:pb-0;
+  @apply flex items-start justify-between gap-3 border-t border-[#f2f4f6] py-3 first:border-t-0 first:pt-0 last:pb-0;
 }
 
 .cp-list-row {
-  @apply rounded-[16px] border border-[rgba(28,22,14,0.07)] bg-[rgba(255,253,248,0.66)] px-4 py-3 transition hover:bg-[rgba(255,253,248,0.92)];
+  @apply rounded-[14px] border border-[#e5e8eb] bg-white px-4 py-3 transition hover:border-[#d1d6db] hover:bg-[#f9fafb];
 }
 
 .cp-list-row-active {
-  @apply border-[rgba(201,100,66,0.32)] bg-[rgba(240,217,203,0.55)];
+  @apply border-[#3182f6] bg-[#e8f2ff];
 }
 
+/* ─── Motion ───────────────────────────────────────────────────────── */
 .cp-enter {
-  animation: cp-enter 0.42s cubic-bezier(0.2, 1, 0.32, 1) both;
+  animation: cp-enter 0.32s cubic-bezier(0.2, 1, 0.32, 1) both;
 }
 
 @keyframes cp-enter {
   from {
     opacity: 0;
-    transform: translateY(14px) scale(0.99);
+    transform: translateY(8px);
   }
 
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
 }
 
+/* ─── Skeletons (cool gray shimmer, not warm) ─────────────────────── */
 .cp-skeleton {
   display: inline-block;
   background:
     linear-gradient(
       90deg,
-      rgba(232, 220, 200, 0.55) 0%,
-      rgba(240, 217, 203, 0.85) 50%,
-      rgba(232, 220, 200, 0.55) 100%
+      #f2f4f6 0%,
+      #e5e8eb 50%,
+      #f2f4f6 100%
     );
   background-size: 220% 100%;
-  animation: cp-skeleton-shimmer 1.6s ease-in-out infinite;
+  animation: cp-skeleton-shimmer 1.4s ease-in-out infinite;
 }
 
 @keyframes cp-skeleton-shimmer {
@@ -265,12 +300,9 @@ textarea {
   }
 }
 
-/* Editorial focus ring for keyboard navigation. We deliberately scope
-   to :focus-visible so mouse users do not see persistent rings on
-   click. The ring uses the accent token so focus reads as a coherent
-   part of the design language. */
+/* ─── Focus ring (Toss Blue, accessible) ──────────────────────────── */
 :focus-visible {
-  outline: 2px solid #c96442;
+  outline: 2px solid #3182f6;
   outline-offset: 2px;
   border-radius: 6px;
 }
@@ -279,17 +311,14 @@ a:focus-visible,
 button:focus-visible,
 [role="button"]:focus-visible,
 [tabindex]:focus-visible {
-  outline: 2px solid #c96442;
+  outline: 2px solid #3182f6;
   outline-offset: 2px;
 }
 
-/* Inputs already have a colored ring from input-base; use a tighter
-   visible outline as a fallback so unstyled inputs still announce
-   focus. */
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid rgba(201, 100, 66, 0.45);
+  outline: 2px solid rgba(49, 130, 246, 0.6);
   outline-offset: 0;
 }
 
@@ -304,6 +333,7 @@ textarea:focus-visible {
   }
 }
 
+/* ─── Scrollbar (cool neutral) ─────────────────────────────────────── */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -315,13 +345,13 @@ textarea:focus-visible {
 
 ::-webkit-scrollbar-thumb {
   border-radius: 999px;
-  background: rgba(107, 99, 87, 0.32);
+  background: rgba(139, 149, 161, 0.35);
   border: 2px solid transparent;
   background-clip: padding-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(107, 99, 87, 0.5);
+  background: rgba(78, 89, 104, 0.55);
   border: 2px solid transparent;
   background-clip: padding-box;
 }

@@ -49,7 +49,7 @@ export function SkeletonListRows({ count = 4, className = '' }: SkeletonRowsProp
       {Array.from({ length: count }, (_, idx) => (
         <div
           key={idx}
-          className="grid w-full gap-3 rounded-[16px] border border-[rgba(28,22,14,0.07)] bg-[rgba(255,253,248,0.5)] px-4 py-3 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-center"
+          className="grid w-full gap-3 rounded-[16px] border border-[rgba(25,31,40,0.07)] bg-[rgba(255,255,255,0.5)] px-4 py-3 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-center"
         >
           <div className="flex min-w-0 items-center gap-3">
             <Skeleton circle width={40} height={40} />
@@ -72,7 +72,7 @@ export function SkeletonListRows({ count = 4, className = '' }: SkeletonRowsProp
 /** A single tile-shaped skeleton for status/metric cards. */
 export function SkeletonTile({ className = '' }: { className?: string }) {
   return (
-    <div className={`rounded-[16px] border border-[rgba(28,22,14,0.07)] bg-[rgba(255,253,248,0.5)] p-4 ${className}`}>
+    <div className={`rounded-[16px] border border-[rgba(25,31,40,0.07)] bg-[rgba(255,255,255,0.5)] p-4 ${className}`}>
       <Skeleton className="h-2.5 w-1/3" />
       <Skeleton className="mt-3 h-7 w-2/5" />
       <Skeleton className="mt-2 h-2.5 w-3/4" />

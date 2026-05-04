@@ -24,14 +24,14 @@ export default function ResultBreakdownPieChart({
           formatter={(value) => [`${Number(value).toFixed(1)}%`, 'Share']}
           contentStyle={{
             borderRadius: 14,
-            border: '1px solid rgba(28,22,14,0.10)',
+            border: '1px solid rgba(25,31,40,0.10)',
             background: 'rgba(252,248,240,0.97)',
-            color: '#1a1612',
+            color: '#191f28',
             fontSize: 12,
-            boxShadow: '0 18px 42px rgba(34,24,12,0.10)',
+            boxShadow: '0 18px 42px rgba(15,23,42,0.10)',
             padding: '8px 12px',
           }}
-          labelStyle={{ color: '#5e564a', fontSize: 11, marginBottom: 4 }}
+          labelStyle={{ color: '#4e5968', fontSize: 11, marginBottom: 4 }}
         />
       </PieChart>
     </ResponsiveContainer>

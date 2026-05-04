@@ -26,21 +26,23 @@ const GROUPS: Record<string, { title: string; symbols: string[] }> = {
   Base: { title: 'Industrial Metals', symbols: ['Ni', 'Co', 'Cu', 'Al', 'Mo', 'W', 'Fe'] },
 };
 
+// Toss-style data palette: blue family for the most prominent metals
+// (PGMs / precious), cool neutrals + accent hues for the rest.
 const METAL_COLORS: Record<string, string> = {
-  Pt: '#c96442',
-  Pd: '#7c8db5',
-  Rh: '#a48bc8',
-  Ru: '#b8825d',
-  Ir: '#c9a96a',
-  Au: '#d4a857',
-  Ag: '#9ba6b8',
-  Ni: '#7a9b8d',
-  Co: '#6b85a8',
-  Cu: '#b56e52',
-  Al: '#a8b0bd',
-  Mo: '#9b8c7a',
-  W: '#7d756c',
-  Fe: '#a85a4c',
+  Pt: '#3182f6',
+  Pd: '#0067ff',
+  Rh: '#1b64da',
+  Ru: '#1957c2',
+  Ir: '#7da7ff',
+  Au: '#ffa800',
+  Ag: '#8b95a1',
+  Ni: '#22c55e',
+  Co: '#0099ff',
+  Cu: '#f04452',
+  Al: '#b0b8c1',
+  Mo: '#7950f2',
+  W: '#4e5968',
+  Fe: '#fb6f5f',
 };
 
 const FEED_SECTIONS: WorkspaceSection[] = [
@@ -108,7 +110,7 @@ function StatusTile({ label, value, detail }: { label: string; value: string; de
   return (
     <div className="rounded-[22px] border border-slate-900/8 bg-white/58 p-4">
       <div className="cp-subtle-label">{label}</div>
-      <div className="mt-2 text-2xl font-display text-[#1a1612]">{value}</div>
+      <div className="mt-2 text-2xl font-display text-[#191f28]">{value}</div>
       <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div>
     </div>
   );
@@ -121,7 +123,7 @@ function InspectorRow({ label, value, detail }: { label: string; value: string; 
         <div className="cp-subtle-label">{label}</div>
         {detail ? <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div> : null}
       </div>
-      <div className="text-right text-sm font-semibold text-[#1a1612]">{value}</div>
+      <div className="text-right text-sm font-semibold text-[#191f28]">{value}</div>
     </div>
   );
 }
@@ -129,7 +131,7 @@ function InspectorRow({ label, value, detail }: { label: string; value: string; 
 function DarkChartFallback({ label }: { label: string }) {
   return (
     <div className="flex h-full min-h-[320px] flex-col items-center justify-center gap-3 rounded-[28px] border border-white/10 bg-white/4 text-center">
-      <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#c96442] border-t-transparent" />
+      <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#3182f6] border-t-transparent" />
       <div className="text-sm text-slate-300">{label}</div>
     </div>
   );
@@ -248,8 +250,8 @@ export default function Prices() {
       <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6">
         <div className="mb-5 flex flex-col gap-2">
           <div className="cp-subtle-label">Live Metal Prices</div>
-          <div className="h-9 w-2/3 max-w-md rounded-[10px] bg-[rgba(232,220,200,0.55)] cp-skeleton" />
-          <div className="h-3 w-3/4 max-w-xl rounded-[8px] bg-[rgba(232,220,200,0.45)] cp-skeleton" />
+          <div className="h-9 w-2/3 max-w-md rounded-[10px] bg-[rgba(229,232,235,0.55)] cp-skeleton" />
+          <div className="h-3 w-3/4 max-w-xl rounded-[8px] bg-[rgba(229,232,235,0.45)] cp-skeleton" />
         </div>
         <div className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
           {Array.from({ length: 4 }, (_, idx) => (
@@ -277,7 +279,7 @@ export default function Prices() {
         <div className="cp-inspector-rail">
           <section className="cp-rail-panel">
             <div className="cp-subtle-label">Evidence Surface</div>
-            <div className="mt-2 text-lg font-semibold text-[#1a1612]">Choose a tracked symbol.</div>
+            <div className="mt-2 text-lg font-semibold text-[#191f28]">Choose a tracked symbol.</div>
             <div className="mt-2 text-xs leading-6 text-slate-500">The inspector keeps source quality, freshness, and normalization context visible.</div>
           </section>
         </div>
@@ -306,7 +308,7 @@ export default function Prices() {
 
         <section className="cp-rail-panel">
           <div className="cp-subtle-label">Source Basis</div>
-          <div className="mt-2 text-lg font-semibold text-[#1a1612]">Inspect trust before you read the number.</div>
+          <div className="mt-2 text-lg font-semibold text-[#191f28]">Inspect trust before you read the number.</div>
           <div className="mt-3 space-y-1">
             <InspectorRow label="Acquisition" value={selectedRow.evidence.acquisition_mode} detail={sourceDescription(selectedRow)} />
             <InspectorRow label="Confidence" value={String(selectedRow.evidence.confidence_score)} detail={selectedRow.evidence.transparency} />
@@ -342,7 +344,7 @@ export default function Prices() {
             <div className="flex min-w-[280px] flex-col gap-2 rounded-[22px] border border-slate-200 bg-white/76 px-4 py-3 sm:items-end">
               <div className="cp-subtle-label">Quote Status</div>
               <div className="text-right">
-                <div className="text-sm font-semibold text-[#1a1612]">
+                <div className="text-sm font-semibold text-[#191f28]">
                   {refreshing ? 'Refreshing live quotes' : latestFetchedAt ? 'Live quotes loaded' : 'Stored pricing basis'}
                 </div>
                 <div className="mt-1 text-xs leading-5 text-slate-500">
@@ -397,13 +399,13 @@ export default function Prices() {
                         >
                           <div className="flex min-w-0 items-center gap-3">
                             <span
-                              className="flex h-10 w-10 items-center justify-center rounded-[18px] text-sm font-semibold text-[#1a1612]"
-                              style={{ backgroundColor: METAL_COLORS[row.symbol] || '#c96442' }}
+                              className="flex h-10 w-10 items-center justify-center rounded-[18px] text-sm font-semibold text-[#191f28]"
+                              style={{ backgroundColor: METAL_COLORS[row.symbol] || '#3182f6' }}
                             >
                               {row.symbol}
                             </span>
                             <div className="min-w-0">
-                              <div className="truncate font-semibold text-[#1a1612]">{row.name}</div>
+                              <div className="truncate font-semibold text-[#191f28]">{row.name}</div>
                               <div className="truncate text-xs text-slate-500">
                                 {sourceDescription(row)} / {row.evidence.label}
                               </div>
@@ -413,7 +415,7 @@ export default function Prices() {
                           <SourceBadge sourceType={row.source_type} />
 
                           <div className="text-left sm:text-right">
-                            <div className="text-lg font-display text-[#1a1612]">{fmtPrice(row.price, row.unit, unit)}</div>
+                            <div className="text-lg font-display text-[#191f28]">{fmtPrice(row.price, row.unit, unit)}</div>
                             <div className="text-xs text-slate-500">{displayTrackedUnit(row.unit, unit)}</div>
                           </div>
                         </button>
@@ -436,7 +438,7 @@ export default function Prices() {
         <div className="cp-inspector-rail">
           <section className="cp-rail-panel">
             <div className="cp-subtle-label">Evidence Surface</div>
-            <div className="mt-2 text-lg font-semibold text-[#1a1612]">Choose a symbol to inspect its history.</div>
+            <div className="mt-2 text-lg font-semibold text-[#191f28]">Choose a symbol to inspect its history.</div>
           </section>
         </div>
       );
@@ -450,7 +452,7 @@ export default function Prices() {
       <div className="cp-inspector-rail">
         <section className="cp-rail-panel">
           <div className="cp-subtle-label">Trend Evidence</div>
-          <div className="mt-2 text-lg font-semibold text-[#1a1612]">{selectedRow.name}</div>
+          <div className="mt-2 text-lg font-semibold text-[#191f28]">{selectedRow.name}</div>
           <div className="mt-3 space-y-1">
             <InspectorRow label="Current" value={currentValue != null ? fmtPrice(currentValue, selectedRow.unit, unit) : 'N/A'} detail={displayTrackedUnit(selectedRow.unit, unit)} />
             <InspectorRow label="Period high" value={periodHigh != null ? fmtPrice(periodHigh, selectedRow.unit, unit) : 'N/A'} />
@@ -501,7 +503,7 @@ export default function Prices() {
                   key={value}
                   onClick={() => setPeriod(value)}
                   className={`rounded-[16px] px-3 py-2 text-xs font-semibold transition ${
-                    period === value ? 'bg-[#c96442] text-[#1a1612]' : 'text-slate-300 hover:bg-white/8'
+                    period === value ? 'bg-[#3182f6] text-[#191f28]' : 'text-slate-300 hover:bg-white/8'
                   }`}
                 >
                   {PERIOD_LABELS[value]}
@@ -513,7 +515,7 @@ export default function Prices() {
           <div className="mt-5">
             {histLoading ? (
               <div className="flex h-[320px] items-center justify-center gap-3 text-slate-300">
-                <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#c96442] border-t-transparent" />
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#3182f6] border-t-transparent" />
                 Loading history...
               </div>
             ) : displayHistory.length === 0 ? (
@@ -539,7 +541,7 @@ export default function Prices() {
                       data={displayHistory}
                       period={period}
                       selectedDisplayUnit={selectedDisplayUnit}
-                      selectedColor={METAL_COLORS[selected || 'Pt'] || '#c96442'}
+                      selectedColor={METAL_COLORS[selected || 'Pt'] || '#3182f6'}
                     />
                   </Suspense>
                 </div>
