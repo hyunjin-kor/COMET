@@ -211,6 +211,22 @@ export interface CostResult {
     normalized_price_per_ml?: number;
     normalized_price_per_cm2?: number;
     normalized_price_per_kg_solids?: number;
+    live_override?:
+      | {
+          applied: true;
+          live_price: number;
+          live_price_unit: string;
+          live_source: string;
+          live_fetched_at: string | null;
+          fallback_price: number;
+          fallback_price_unit: string;
+          fallback_source: string;
+          fallback_quote_year: number | null;
+        }
+      | {
+          applied: false;
+          reason: string;
+        };
   }>;
   lca?: LcaResult;
   summary: {

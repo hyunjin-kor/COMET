@@ -89,6 +89,69 @@ def resolve_library_material(session: Session, material_key: str) -> Material:
     raise ValueError(f"Unknown material_key: {material_key}")
 
 
+# Library rows that represent a pure-metal commodity proxy (USGS bulk
+# reference). These are eligible for runtime upgrade to a live market
+# quote when one is available, so the calculator and the live-prices
+# panel never disagree on the same metal.
+_LIVE_ELIGIBLE_LIBRARY_KEYS: set[str] = {
+    "lit:usgs-platinum-bullion-2025",
+    "lit:usgs-palladium-bullion-2025",
+    "lit:usgs-rhodium-bullion-2025",
+    "lit:usgs-iridium-bullion-2025",
+    "lit:usgs-ruthenium-bullion-2025",
+    "lit:usgs-gold-bullion-2025",
+    "lit:usgs-silver-bullion-2025",
+    "lit:usgs-copper-cathode-2025",
+    "lit:usgs-nickel-cathode-2025",
+    "lit:usgs-cobalt-cathode-2025",
+    "lit:usgs-aluminum-ingot-2025",
+}
+
+
+def _latest_live_price(session: Session, symbol: str) -> "MetalPrice | None":  # noqa: F821
+    """Return the most recent stored live quote for ``symbol``, if any."""
+
+    from backend.models.metal_price import MetalPrice  # local import to avoid cycle
+
+    stmt = (
+        select(MetalPrice)
+        .where(MetalPrice.symbol == symbol)
+        .order_by(MetalPrice.fetched_at.desc())
+        .limit(1)
+    )
+    return session.exec(stmt).first()
+
+
+def _live_override_for_material(
+    session: Session, material: Material
+) -> dict | None:
+    """If ``material`` is a USGS commodity proxy and a live quote exists, return it.
+
+    Returns a dict with ``price``, ``price_unit``, ``source``, ``fetched_at``
+    suitable for swapping into the resolved component. Returns ``None`` when
+    the row is not eligible for live upgrade or no live quote is stored.
+    """
+
+    library_key = material.library_key or ""
+    if library_key not in _LIVE_ELIGIBLE_LIBRARY_KEYS:
+        return None
+    symbol = (material.symbol or "").strip()
+    if not symbol:
+        return None
+
+    quote = _latest_live_price(session, symbol)
+    if quote is None or quote.price is None or quote.price <= 0:
+        return None
+
+    return {
+        "price": float(quote.price),
+        "price_unit": quote.unit,
+        "source": quote.source,
+        "fetched_at": quote.fetched_at.isoformat() if quote.fetched_at else None,
+        "symbol": symbol,
+    }
+
+
 def material_snapshot(material: Material, *, used_for: str) -> dict:
     """Serialize a material row for calculation evidence reporting."""
 
@@ -123,7 +186,15 @@ def component_engine_name(material: Material, role: str) -> str:
 
 
 def resolve_component_input(session: Session, component: dict) -> tuple[dict, dict | None]:
-    """Resolve a component row against the library when a material key is provided."""
+    """Resolve a component row against the library when a material key is provided.
+
+    For library rows that are USGS commodity-metal proxies, the resolver
+    upgrades the static USGS quote to the latest live market quote when
+    one is stored in the metal-price table. This keeps the catalog-backed
+    catalog calculation aligned with the live prices the user sees in the
+    market panel. The static USGS price is preserved in the snapshot
+    metadata as the offline fallback so the audit trail still shows it.
+    """
 
     material_key = component.get("material_key")
     if not material_key:
@@ -137,10 +208,43 @@ def resolve_component_input(session: Session, component: dict) -> tuple[dict, di
     resolved = dict(component)
     resolved["material_key"] = material.library_key or str(material.id)
     resolved["name"] = component_engine_name(material, str(component.get("role", "")))
-    resolved["price_per_lb"] = round(mass_price_to_per_lb(material.price or 0.0, material.price_unit), 6)
 
     snapshot = material_snapshot(material, used_for=f"component:{component.get('role', 'component')}")
-    snapshot["normalized_price_per_lb"] = resolved["price_per_lb"]
+
+    live = _live_override_for_material(session, material)
+    if live is not None:
+        resolved["price_per_lb"] = round(
+            mass_price_to_per_lb(live["price"], live["price_unit"]), 6
+        )
+        snapshot["price"] = live["price"]
+        snapshot["price_unit"] = live["price_unit"]
+        snapshot["price_scope"] = "live_market"
+        snapshot["quote_source"] = live["source"]
+        snapshot["normalized_price_per_lb"] = resolved["price_per_lb"]
+        # Preserve the static USGS quote so the audit trail still shows it.
+        snapshot["live_override"] = {
+            "applied": True,
+            "live_price": live["price"],
+            "live_price_unit": live["price_unit"],
+            "live_source": live["source"],
+            "live_fetched_at": live["fetched_at"],
+            "fallback_price": material.price,
+            "fallback_price_unit": material.price_unit,
+            "fallback_source": material.source,
+            "fallback_quote_year": material.quote_year,
+        }
+    else:
+        resolved["price_per_lb"] = round(
+            mass_price_to_per_lb(material.price or 0.0, material.price_unit), 6
+        )
+        snapshot["normalized_price_per_lb"] = resolved["price_per_lb"]
+        if (material.library_key or "") in _LIVE_ELIGIBLE_LIBRARY_KEYS:
+            # Eligible for live but no quote stored; surface that for clarity.
+            snapshot["live_override"] = {
+                "applied": False,
+                "reason": "no_live_quote_stored",
+            }
+
     return resolved, snapshot
 
 

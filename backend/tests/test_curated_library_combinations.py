@@ -13,9 +13,12 @@ from __future__ import annotations
 
 import json
 from collections.abc import Iterable
+from datetime import datetime
 from pathlib import Path
 
 import pytest
+
+from backend.models.metal_price import MetalPrice
 
 CURATED_PATH = (
     Path(__file__).resolve().parent.parent / "data" / "materials_curated.json"
@@ -235,6 +238,153 @@ def test_bimetallic_pgm_with_promoter_and_support(client) -> None:
     assert summary["estimated_price_per_kg"] > 0
     # PGMs at 1.5 wt% should keep the catalyst price well above the support floor.
     assert summary["estimated_price_per_lb"] > 5.0
+
+
+def _calculate_pt_on_alumina(client) -> dict:
+    """Helper: 5 wt% Pt commodity-proxy on alumina, return the full response."""
+    payload = {
+        "catalyst_domain": "thermal",
+        "order_size_tons": 10.0,
+        "steps": ["mixer_slurry", "incipient_wetness", "dryer_rotary_100_300C"],
+        "components": [
+            {
+                "role": "active_metal",
+                "material_key": "lit:usgs-platinum-bullion-2025",
+                "wt_pct": 5.0,
+            },
+            {
+                "role": "support",
+                "material_key": "lit:usgs-alumina-2025",
+                "wt_pct": 95.0,
+            },
+        ],
+    }
+    resp = client.post("/api/calculate", json=payload)
+    assert resp.status_code == 200, resp.text
+    return resp.json()
+
+
+def test_usgs_proxy_falls_back_when_no_live_quote(client) -> None:
+    """Without any stored live quote, the engine uses the static USGS price.
+
+    The resolved-materials snapshot must flag this explicitly so the UI can
+    show the user that no live quote was available and the catalog price
+    is in use.
+    """
+
+    body = _calculate_pt_on_alumina(client)
+    pt_snapshot = next(
+        m for m in body["resolved_materials"]
+        if m["material_key"] == "lit:usgs-platinum-bullion-2025"
+    )
+    # No live quote in the empty test DB -> override should report not applied.
+    override = pt_snapshot.get("live_override")
+    assert override is not None, "Eligible row must surface a live_override block"
+    assert override["applied"] is False
+    assert override["reason"] == "no_live_quote_stored"
+    # Price must be the static USGS quote.
+    assert pt_snapshot["price"] == 950.0
+    assert pt_snapshot["price_unit"] == "$/troy_oz"
+    assert pt_snapshot["price_scope"] == "literature_high_volume"
+
+
+def test_usgs_proxy_upgrades_to_live_quote_when_available(client, session) -> None:
+    """When a live Pt quote is in the metal-price table, the calculation uses it.
+
+    This is the link between /api/prices (live feed) and the catalog: the
+    same metal must price the same way in both surfaces, regardless of
+    whether the user picked it from the live feed or the curated library.
+    """
+
+    # Seed a "live" Pt quote much higher than the static USGS $950.
+    session.add(MetalPrice(
+        symbol="Pt",
+        name="Platinum",
+        price=1450.0,
+        unit="$/troy_oz",
+        source="Yahoo Finance (live)",
+        fetched_at=datetime(2026, 5, 4, 10, 0, 0),
+    ))
+    session.commit()
+
+    body = _calculate_pt_on_alumina(client)
+    pt_snapshot = next(
+        m for m in body["resolved_materials"]
+        if m["material_key"] == "lit:usgs-platinum-bullion-2025"
+    )
+    override = pt_snapshot["live_override"]
+    assert override["applied"] is True
+    assert override["live_price"] == 1450.0
+    assert override["live_price_unit"] == "$/troy_oz"
+    assert override["live_source"] == "Yahoo Finance (live)"
+    # Static USGS row preserved as the documented fallback.
+    assert override["fallback_price"] == 950.0
+    assert override["fallback_quote_year"] == 2024
+    # Snapshot's "current" price reflects the live quote, not the USGS static.
+    assert pt_snapshot["price"] == 1450.0
+    assert pt_snapshot["price_scope"] == "live_market"
+
+
+def test_live_override_propagates_to_catalyst_price(client, session) -> None:
+    """A live Pt quote 50% higher than USGS must visibly raise the catalyst price."""
+
+    body_static = _calculate_pt_on_alumina(client)
+    static_price = body_static["summary"]["estimated_price_per_lb"]
+
+    # Same composition, but Pt now quoted at 1.5x the USGS bullion proxy.
+    session.add(MetalPrice(
+        symbol="Pt",
+        name="Platinum",
+        price=950.0 * 1.5,
+        unit="$/troy_oz",
+        source="Live feed (test)",
+        fetched_at=datetime(2026, 5, 4, 10, 0, 0),
+    ))
+    session.commit()
+
+    body_live = _calculate_pt_on_alumina(client)
+    live_price = body_live["summary"]["estimated_price_per_lb"]
+
+    # Catalyst has 5 wt% Pt; raising Pt 50% should raise the catalyst cost
+    # noticeably (not by exactly 50% because of overhead/margin layers).
+    assert live_price > static_price * 1.05, (
+        f"Live override did not propagate (static={static_price}, live={live_price})"
+    )
+
+
+def test_non_eligible_library_row_has_no_live_override_block(client) -> None:
+    """Sigma vendor-lab rows are not commodity proxies and must NOT carry the block.
+
+    Live quotes only override the USGS commodity proxies. Sigma rows
+    represent a specific vendor SKU at a specific pack size — replacing
+    that price with a market quote would be misleading.
+    """
+
+    payload = {
+        "catalyst_domain": "thermal",
+        "order_size_tons": 10.0,
+        "steps": ["mixer_slurry", "incipient_wetness", "dryer_rotary_100_300C"],
+        "components": [
+            {
+                "role": "active_metal",
+                "material_key": "sigma:520896",  # chloroplatinic acid (vendor lab)
+                "wt_pct": 5.0,
+            },
+            {
+                "role": "support",
+                "material_key": "lit:usgs-alumina-2025",
+                "wt_pct": 95.0,
+            },
+        ],
+    }
+    resp = client.post("/api/calculate", json=payload)
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+    sigma_snapshot = next(
+        m for m in body["resolved_materials"]
+        if m["material_key"] == "sigma:520896"
+    )
+    assert "live_override" not in sigma_snapshot
 
 
 def test_new_pgm_proxies_are_more_expensive_than_base_metals(client) -> None:

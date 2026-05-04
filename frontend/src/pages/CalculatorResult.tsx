@@ -869,12 +869,39 @@ export default function CalculatorResult() {
                       </div>
                     </div>
                   </div>
+                  {material.live_override?.applied ? (
+                    <div className="mt-3 rounded-[14px] border border-[#3182f6] bg-[#e8f2ff] px-3 py-2.5 text-xs leading-5 text-[#1957c2]">
+                      <div className="font-bold uppercase tracking-[0.16em] text-[#1b64da]">
+                        Live market quote in use
+                      </div>
+                      <div className="mt-1 text-[#191f28]">
+                        Catalyst price uses the latest <span className="font-semibold">{material.live_override.live_source}</span> quote
+                        of <span className="font-mono font-semibold">${material.live_override.live_price.toFixed(material.live_override.live_price < 1 ? 4 : 2)} {material.live_override.live_price_unit}</span>
+                        {material.live_override.live_fetched_at
+                          ? ` (fetched ${new Date(material.live_override.live_fetched_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })})`
+                          : ''}
+                        .
+                      </div>
+                      <div className="mt-1 text-[#4e5968]">
+                        Offline fallback: <span className="font-mono">${material.live_override.fallback_price.toFixed(2)} {material.live_override.fallback_price_unit}</span> from {material.live_override.fallback_source}
+                        {material.live_override.fallback_quote_year ? ` (${material.live_override.fallback_quote_year})` : ''}
+                        .
+                      </div>
+                    </div>
+                  ) : material.live_override && material.live_override.applied === false ? (
+                    <div className="mt-3 rounded-[14px] border border-[#ffa800] bg-[#fff4dd] px-3 py-2.5 text-xs leading-5 text-[#7a5a00]">
+                      <span className="font-bold uppercase tracking-[0.16em]">No live quote</span>
+                      <span className="ml-2">
+                        This metal can carry a live market quote, but none is stored. Using the static catalog price. Refresh the prices feed to populate.
+                      </span>
+                    </div>
+                  ) : null}
                   {material.reference_url ? (
                     <a
                       href={material.reference_url}
                       target="_blank"
                       rel="noreferrer"
-                      className="mt-2 inline-flex text-xs text-sky-700 underline underline-offset-2"
+                      className="mt-2 inline-flex text-xs text-[#1b64da] underline underline-offset-2"
                     >
                       Open source
                     </a>
