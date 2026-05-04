@@ -1,36 +1,51 @@
 # CatPrice — Real-Time Catalyst Cost Estimator
 
-> 촉매 조성을 입력하면 실시간 금속 시세 기반으로 제조원가를 산출하는 데스크톱 도구
+> A desktop tool that takes a catalyst composition and returns its
+> manufacturing cost using real-time metal market prices.
 
-## 1. 프로젝트 개요
+## Current implementation status (as of 2026-04-26)
 
-### 1.1 문제 정의
-- CatCost(NREL, v1.1.1 July 2025)는 방법론은 탄탄하나 금속 시세를 사용자가 수동 입력해야 함
-- CEPCI/ChemPPI 지수는 업데이트하지만, 실제 Ru/Ni/Co 등 원료 가격은 자동 반영 안 됨
-- Excel 기반이라 팀 협업, 모바일 접근, 시각화에 한계
-- Evonik CCCT는 자사 제품 편향, 범용성 부족
+- GitHub repository: `https://github.com/hyunjin-kor/CatPrice`
+- Latest verified release: `v1.1.13`
+- Current desktop packaging: Electron (`electron/`, `dist-electron/`)
+- Current Claude hand-off entry point: `CLAUDE.md`
+- Blog / homepage URL: not currently surfaced in the repo or GitHub metadata.
+- The Tauri / web-deployment content below comes from the original planning
+  doc; for the current implementation, prefer `README.md`, `AGENTS.md`,
+  `CLAUDE.md`, and the actual source layout.
 
-### 1.2 솔루션: CatPrice
-CatCost Step Method 방법론 기반 + **실시간 금속 시세 API 연동** + 현대적 웹/앱 UI
-- 어떤 촉매든 조성 입력 → 오늘 기준 제조원가/유통가 즉시 산출
-- 금속 가격 변동 추이, 변동성 지표 제공
-- TEA/LCOH 시뮬레이션 (선택적 확장)
+## 1. Project overview
 
-### 1.3 CatCost와의 관계
-- CatCost를 대체하는 것이 아님 → CatCost의 방법론을 인용/활용
-- CatCost가 못하는 것(실시간 시세, 현대 UI)을 보완
-- CatCost 논문(Baddour 2018, Van Allsburg 2022)을 학술적으로 인용
+### 1.1 Problem statement
+- CatCost (NREL, v1.1.1, July 2025) has a strong methodology, but the user has
+  to enter metal prices manually.
+- It updates the CEPCI / ChemPPI indices, but the underlying Ru / Ni / Co
+  prices do not refresh automatically.
+- Excel-based, which limits team collaboration, mobile access, and visualization.
+- Evonik CCCT is biased toward their own products and lacks general applicability.
 
-### 1.4 공개 저장소 운영
+### 1.2 Solution: CatPrice
+CatCost-Step-Method methodology + **live metal price-feed integration** + a
+modern web/app UI.
+- Any catalyst recipe → today's manufacturing cost / retail estimate, instantly.
+- Per-metal price trend and volatility indicator.
+- TEA / LCOH simulation (optional extension).
+
+### 1.3 Relationship to CatCost
+- Not a replacement for CatCost — cites and uses the CatCost methodology.
+- Fills the gaps CatCost does not cover (real-time pricing, modern UI).
+- Academically cites the CatCost papers (Baddour 2018, Van Allsburg 2022).
+
+### 1.4 Open-repository operations
 - License: All rights reserved
-- GitHub public repository
-- Zenodo DOI (학술 인용용)
+- Public GitHub repository
+- Zenodo DOI (for academic citation)
 
 ---
 
-## 2. 기술 스택
+## 2. Tech stack
 
-### 2.1 아키텍처
+### 2.1 Architecture
 
 ```
 ┌────────────────────────────────────────────────┐
@@ -65,30 +80,31 @@ CatCost Step Method 방법론 기반 + **실시간 금속 시세 API 연동** + 
 └──────────────────────────────────────────────────┘
 ```
 
-### 2.2 기술 선택
+### 2.2 Technology choices
 
-| 레이어 | 기술 | 이유 |
-|--------|------|------|
-| Frontend | React 18 + TypeScript + Vite | 빠른 개발, 생태계 |
-| Desktop | Tauri 2.0 | Electron보다 10배 가벼움 |
-| UI | shadcn/ui + Tailwind CSS | 깔끔, 커스터마이징 |
-| Charts | Recharts + Plotly.js | 인터랙티브 시각화 |
-| Backend | FastAPI (Python 3.11+) | async, 자동 API docs |
-| Engine | Python (NumPy, Pandas) | 계산 로직 |
-| DB | SQLite → PostgreSQL | 가격 이력 저장 |
-| Price API | httpx + APScheduler | 비동기 시세 수집 |
-| Testing | pytest + Playwright | 백엔드 + E2E |
+| Layer | Tech | Rationale |
+|-------|------|-----------|
+| Frontend | React 18 + TypeScript + Vite | Fast iteration, large ecosystem |
+| Desktop | Tauri 2.0 | ~10x lighter than Electron |
+| UI | shadcn/ui + Tailwind CSS | Clean, customizable |
+| Charts | Recharts + Plotly.js | Interactive visualizations |
+| Backend | FastAPI (Python 3.11+) | async, automatic API docs |
+| Engine | Python (NumPy, Pandas) | Calculation logic |
+| DB | SQLite → PostgreSQL | Price-history storage |
+| Price API | httpx + APScheduler | Async price collection |
+| Testing | pytest + Playwright | Backend + E2E |
 | Deploy | Docker + GitHub Actions | CI/CD |
 
 ---
 
-## 3. 핵심 기능
+## 3. Core features
 
-### 3.1 촉매 가격 계산기 (Core Feature)
+### 3.1 Catalyst price calculator (core feature)
 
-사용자가 촉매 조성을 입력하면 실시간 시세 기반으로 제조원가를 산출.
+The user enters a catalyst composition; the calculator returns the
+manufacturing cost based on real-time prices.
 
-#### 입력 UI
+#### Input UI
 ```
 ┌─────────────────────────────────────────────┐
 │  🔧 Catalyst Composition                    │
@@ -109,20 +125,20 @@ CatCost Step Method 방법론 기반 + **실시간 금속 시세 API 연동** + 
 └─────────────────────────────────────────────┘
 ```
 
-#### 계산 로직 (CatCost Step Method 기반)
+#### Calculation logic (CatCost Step Method-based)
 ```python
 def calculate_catalyst_cost(composition: CatalystInput) -> CostResult:
     """
     CatCost Step Method (Baddour et al., Org. Process Res. Dev. 2018)
-    + 실시간 금속 시세 자동 반영
+    + automatic live metal-price refresh.
     """
 
-    # Step 1: 원료비 (Raw Material Cost) — 실시간 시세 적용
+    # Step 1: raw material cost — apply live prices
     metal_costs = []
     for metal in composition.active_metals:
-        live_price = price_db.get_latest(metal.symbol)  # ← 실시간!
+        live_price = price_db.get_latest(metal.symbol)  # ← live!
         precursor = get_precursor(metal.symbol, metal.precursor)
-        # 금속 가격 → 전구체 가격 변환
+        # Convert metal price to precursor price.
         precursor_cost = live_price / precursor.metal_fraction * precursor.markup
         metal_costs.append(metal.loading_wt_pct / 100 * precursor_cost)
 
@@ -132,22 +148,22 @@ def calculate_catalyst_cost(composition: CatalystInput) -> CostResult:
 
     C_raw = sum(metal_costs) + support_cost + promoter_cost
 
-    # Step 2: 제조비 — 합성 방법별 계수
+    # Step 2: manufacturing cost — per-method factor
     f_mfg = MANUFACTURING_FACTORS[composition.synthesis_method]  # 1.3~8.0
     C_mfg = C_raw * f_mfg
 
-    # Step 3: 오버헤드 (R&D, 관리, 이윤)
+    # Step 3: overhead (R&D, admin, profit)
     C_overhead = (C_raw + C_mfg) * composition.overhead_factor  # default 0.30
 
-    # Step 4: 규모 보정
+    # Step 4: scale adjustment
     f_scale = SCALE_FACTORS[composition.production_scale]  # 0.7~50
     manufacturing_cost = (C_raw + C_mfg + C_overhead) * f_scale
 
-    # Step 5: 유통가 추정
+    # Step 5: retail estimate
     f_dist = DISTRIBUTION_MARKUP[composition.production_scale]  # 1.5~5.0
     retail_estimate = manufacturing_cost * f_dist
 
-    # Step 6: 폐촉매 회수 가치
+    # Step 6: spent-catalyst recovery value
     recovery = calculate_spent_value(composition.active_metals)
     net_cost = manufacturing_cost - recovery
 
@@ -167,7 +183,7 @@ def calculate_catalyst_cost(composition: CatalystInput) -> CostResult:
     )
 ```
 
-#### 출력 UI
+#### Output UI
 ```
 ┌─────────────────────────────────────────────────────┐
 │  💰 Cost Estimate: 5wt% Ru/Al₂O₃                   │
@@ -180,7 +196,7 @@ def calculate_catalyst_cost(composition: CatalystInput) -> CostResult:
 │  ──────────────────────────────────                 │
 │  Manufacturing Cost: $2,892/kg cat                   │
 │  Retail Estimate:    $7,200 — $10,100/kg cat         │
-│  Spent Recovery:     -$588/kg (Ru회수 95%)           │
+│  Spent Recovery:     -$588/kg (Ru recovery 95%)      │
 │  ──────────────────────────────────                 │
 │  ★ Net Cost:         $2,304/kg cat                   │
 │                                                     │
@@ -190,23 +206,23 @@ def calculate_catalyst_cost(composition: CatalystInput) -> CostResult:
 
 ---
 
-### 3.2 실시간 금속 시세 (Price Feed)
+### 3.2 Live metal prices (price feed)
 
-#### 데이터 소스
-| 금속 | 소스 | 빈도 | API/방법 |
-|------|------|------|----------|
-| Ru, Pt, Ir, Rh, Pd | Kitco / Heraeus | 매일 | 웹 스크래핑 or API |
-| Ni, Co, Cu, Zn, Mo | LME | 매일 | LME API or 스크래핑 |
-| Fe, rare earths | USGS / World Bank | 매주-매월 | CSV/API |
+#### Data sources
+| Metals | Source | Cadence | API / method |
+|--------|--------|---------|--------------|
+| Ru, Pt, Ir, Rh, Pd | Kitco / Heraeus | daily | scraping or API |
+| Ni, Co, Cu, Zn, Mo | LME | daily | LME API or scraping |
+| Fe, rare earths | USGS / World Bank | weekly–monthly | CSV / API |
 
-#### 기능
-- 금속별 실시간 가격 대시보드
-- 5년 가격 추이 차트
-- 변동성 지표 (촉매 비용 불확실성 반영)
-- 가격 알림 (임계치 초과 시)
-- 가격 이력 DB (시계열 분석용)
+#### Capabilities
+- Per-metal live-price dashboard
+- 5-year price-trend chart
+- Volatility indicator (so catalyst cost uncertainty is visible)
+- Price alerts (when thresholds are crossed)
+- Price-history DB (for time-series analysis)
 
-#### DB 스키마
+#### DB schema
 ```sql
 CREATE TABLE metal_prices (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -221,44 +237,44 @@ CREATE UNIQUE INDEX idx_symbol_date_source ON metal_prices(symbol, price_date, s
 
 ---
 
-### 3.3 원료 라이브러리 (Materials Library)
+### 3.3 Materials library
 
-CatCost처럼 내장 라이브러리 제공 + 사용자 추가 가능.
+A built-in library similar to CatCost's, with the option to add user materials.
 
-#### 카테고리
+#### Categories
 - **Metals**: Ru, Ni, Co, Fe, Mo, Cu, Pt, Ir, Rh, Pd, Li, Mn, ...
 - **Supports**: γ-Al₂O₃, α-Al₂O₃, SiO₂, TiO₂, CeO₂, MgO, MgAl₂O₄, CNT, SiC, BN, zeolites, ...
 - **Promoters**: K₂O, Cs₂CO₃, BaO, La₂O₃, Na₂CO₃, CeO₂, ...
-- **Precursors**: RuCl₃, Ni(NO₃)₂·6H₂O, Co(NO₃)₂·6H₂O, H₂PtCl₆, ... (금속분율, 마크업 포함)
+- **Precursors**: RuCl₃, Ni(NO₃)₂·6H₂O, Co(NO₃)₂·6H₂O, H₂PtCl₆, ... (with metal fraction and markup)
 
-#### 가격 소스 우선순위
-1. 실시간 API (금속)
-2. 사용자 커스텀 입력
-3. 내장 기본값 (seed data)
-
----
-
-### 3.4 비용 비교 & 시각화
-
-- **조성 비교**: 최대 4개 촉매 조성 side-by-side
-- **파이 차트**: 원료(금속/담체/촉진제) vs 제조 vs 오버헤드 비중
-- **규모 곡선**: lab → pilot → industrial 가격 변화
-- **금속 가격 민감도**: Tornado chart (어떤 원소가 가격에 가장 큰 영향?)
-- **시계열**: 같은 조성의 제조원가가 금속 시세 변동에 따라 어떻게 변했는지
+#### Price-source priority
+1. Live API (metals)
+2. User custom override
+3. Built-in default (seed data)
 
 ---
 
-### 3.5 TEA/LCOH 모듈 (Phase 2 확장)
+### 3.4 Cost comparison & visualization
 
-촉매 가격 계산 결과를 TEA에 바로 연결하는 선택적 모듈.
-- 촉매 비용 → LCOH 기여도 자동 산출
-- 규모별(0.1~100 TPD) LCOH 곡선
-- NH₃/H₂/메탄올 등 공정별 TEA 템플릿
-- 민감도 분석 (NH₃ 가격, 전기료, 촉매 수명 등)
+- **Composition comparison**: up to four catalyst recipes side-by-side
+- **Pie chart**: raw materials (metal / support / promoter) vs manufacturing vs overhead
+- **Scale curve**: lab → pilot → industrial price changes
+- **Metal price sensitivity**: Tornado chart (which element dominates the cost?)
+- **Time series**: how the manufacturing cost of the same recipe has tracked the metal market
 
 ---
 
-## 4. 프로젝트 구조
+### 3.5 TEA / LCOH module (Phase 2 extension)
+
+Optional module that connects the catalyst-cost result directly to TEA.
+- Catalyst cost → LCOH contribution, computed automatically.
+- LCOH curve by scale (0.1~100 TPD).
+- Process-specific TEA templates for NH₃ / H₂ / methanol.
+- Sensitivity analysis (NH₃ price, electricity rate, catalyst lifetime, etc.).
+
+---
+
+## 4. Project structure
 
 ```
 catprice/
@@ -269,31 +285,31 @@ catprice/
 │
 ├── backend/
 │   ├── main.py                      # FastAPI entry
-│   ├── config.py                    # 환경변수, API keys
+│   ├── config.py                    # Env vars, API keys
 │   ├── database.py                  # SQLAlchemy
 │   │
-│   ├── core/                        # 핵심 계산 엔진
-│   │   ├── cost_engine.py           # 촉매 가격 계산
-│   │   ├── price_fetcher.py         # 금속 시세 수집
-│   │   ├── constants.py             # 제조 계수, 열역학 상수
-│   │   └── tea_engine.py            # TEA 모듈 (Phase 2)
+│   ├── core/                        # Core calculation engine
+│   │   ├── cost_engine.py           # Catalyst-cost calculation
+│   │   ├── price_fetcher.py         # Metal price collection
+│   │   ├── constants.py             # Manufacturing factors, thermo constants
+│   │   └── tea_engine.py            # TEA module (Phase 2)
 │   │
-│   ├── models/                      # SQLAlchemy DB 모델
+│   ├── models/                      # SQLAlchemy DB models
 │   │   ├── metal_price.py
-│   │   └── estimate.py              # 저장된 추정 결과
+│   │   └── estimate.py              # Saved estimate
 │   │
-│   ├── schemas/                     # Pydantic I/O 스키마
+│   ├── schemas/                     # Pydantic I/O schemas
 │   │   ├── cost_input.py
 │   │   ├── cost_result.py
 │   │   └── metal_price.py
 │   │
-│   ├── routers/                     # API 라우터
+│   ├── routers/                     # API routers
 │   │   ├── calculator.py            # POST /api/calculate
 │   │   ├── prices.py                # GET  /api/prices
 │   │   ├── materials.py             # GET  /api/materials
-│   │   └── compare.py              # POST /api/compare
+│   │   └── compare.py               # POST /api/compare
 │   │
-│   ├── data/                        # Seed 데이터
+│   ├── data/                        # Seed data
 │   │   ├── manufacturing_factors.json
 │   │   ├── raw_material_prices.json
 │   │   ├── supports.json
@@ -301,7 +317,7 @@ catprice/
 │   │   └── precursors.json
 │   │
 │   └── tests/
-│       ├── test_cost_engine.py      # 계산 검증 (CatCost 결과와 비교)
+│       ├── test_cost_engine.py      # Cost validation (compare to CatCost)
 │       ├── test_price_fetcher.py
 │       └── test_api.py
 │
@@ -312,90 +328,90 @@ catprice/
 │   └── src/
 │       ├── App.tsx
 │       ├── pages/
-│       │   ├── Calculator.tsx       # 메인: 촉매 가격 계산기
-│       │   ├── Prices.tsx           # 금속 시세 대시보드
-│       │   ├── Compare.tsx          # 조성 비교
-│       │   ├── Library.tsx          # 원료 라이브러리
-│       │   └── TEA.tsx              # TEA 모듈 (Phase 2)
+│       │   ├── Calculator.tsx       # Main: catalyst price calculator
+│       │   ├── Prices.tsx           # Metal-price dashboard
+│       │   ├── Compare.tsx          # Composition comparison
+│       │   ├── Library.tsx          # Materials library
+│       │   └── TEA.tsx              # TEA module (Phase 2)
 │       │
 │       └── components/
-│           ├── CompositionInput.tsx  # 조성 입력 폼
-│           ├── CostBreakdown.tsx     # 파이/바 차트
-│           ├── PriceTimeline.tsx     # 금속 시세 추이
-│           ├── TornadoChart.tsx      # 민감도 분석
-│           └── ScaleCurve.tsx        # 규모별 비용 곡선
+│           ├── CompositionInput.tsx  # Composition form
+│           ├── CostBreakdown.tsx     # Pie / bar chart
+│           ├── PriceTimeline.tsx     # Metal price time series
+│           ├── TornadoChart.tsx      # Sensitivity analysis
+│           └── ScaleCurve.tsx        # Scale-by-cost curve
 │
-├── desktop/                         # Tauri 래퍼
+├── desktop/                         # Tauri wrapper
 │   └── src-tauri/
 │       └── tauri.conf.json
 │
 └── docs/                            # MkDocs
     ├── index.md
-    ├── methodology.md               # CatCost Step Method 설명
+    ├── methodology.md               # CatCost Step Method explanation
     └── api-reference.md
 ```
 
 ---
 
-## 5. 개발 로드맵
+## 5. Roadmap
 
-### Phase 1: MVP (2~3주)
-- [ ] `cost_engine.py` — 핵심 계산 로직 (조성→제조원가)
-- [ ] `constants.py` — 제조 계수, 규모 계수, 전구체 데이터
-- [ ] Seed 데이터 (금속/담체/촉진제/전구체 가격)
+### Phase 1: MVP (2~3 weeks)
+- [ ] `cost_engine.py` — core calculation logic (composition → manufacturing cost)
+- [ ] `constants.py` — manufacturing factors, scale factors, precursor data
+- [ ] Seed data (metal / support / promoter / precursor prices)
 - [ ] FastAPI: `POST /api/calculate`, `GET /api/materials`
-- [ ] React: Calculator 페이지 (입력 폼 → 결과 + 파이 차트)
-- [ ] 금속 가격은 seed data에서 불러오기 (API 연동 전)
+- [ ] React: Calculator page (input form → result + pie chart)
+- [ ] Read metal prices from seed data (before live API integration)
 
-### Phase 2: Live Prices (2~3주)
-- [ ] `price_fetcher.py` — LME/Kitco 실시간 시세 수집
-- [ ] 가격 이력 DB + 스케줄러 (매일 자동 수집)
-- [ ] Prices 대시보드 (시계열 차트, 변동성)
-- [ ] 계산 결과에 "오늘 시세 기준" 자동 반영
+### Phase 2: Live Prices (2~3 weeks)
+- [ ] `price_fetcher.py` — LME / Kitco real-time price collection
+- [ ] Price-history DB + scheduler (daily auto-collect)
+- [ ] Prices dashboard (time series, volatility)
+- [ ] Calculator results auto-reflect "today's basis"
 
-### Phase 3: Advanced Features (3~4주)
-- [ ] 조성 비교 모드 (최대 4개)
-- [ ] 규모별 비용 곡선
-- [ ] 민감도 분석 (Tornado chart)
-- [ ] TEA/LCOH 모듈 기본 버전
-- [ ] Tauri 데스크탑 앱 패키징
+### Phase 3: Advanced features (3~4 weeks)
+- [ ] Composition-comparison mode (up to 4)
+- [ ] Cost-by-scale curve
+- [ ] Sensitivity analysis (Tornado chart)
+- [ ] TEA / LCOH module — basic version
+- [ ] Tauri desktop-app packaging
 
-### Phase 4: Community Release (2~3주)
-- [ ] Docker compose 원클릭 배포
+### Phase 4: Community release (2~3 weeks)
+- [ ] Docker compose one-click deploy
 - [ ] GitHub Actions CI/CD
-- [ ] MkDocs 문서 사이트
-- [ ] Zenodo DOI 등록
+- [ ] MkDocs docs site
+- [ ] Zenodo DOI registration
 - [ ] README, Contributing guide, Examples
 
 ---
 
-## 6. 핵심 데이터 (Seed Data)
+## 6. Key data (seed data)
 
-### 6.1 제조 비용 계수
-→ `catprice_seed_data/manufacturing_factors.json` (이미 생성됨)
+### 6.1 Manufacturing-cost factors
+→ `catprice_seed_data/manufacturing_factors.json` (already created)
 
-### 6.2 원료 가격 DB
-→ `catprice_seed_data/raw_material_prices.json` (이미 생성됨)
+### 6.2 Raw-material price DB
+→ `catprice_seed_data/raw_material_prices.json` (already created)
 
-### 6.3 검증 방법
-CatCost의 알려진 예시(ZSM-5, Pt/TiO₂, Mo₂C)와 동일 입력으로 계산해서
-±20% 이내 일치 여부를 test case로 작성
+### 6.3 Validation method
+Use known CatCost examples (ZSM-5, Pt/TiO₂, Mo₂C) with the same inputs and
+write tests that the result is within ±20%.
 
 ---
 
-## 7. API 설계
+## 7. API design
 
-### 핵심 엔드포인트
+### Core endpoints
 ```
-POST /api/calculate          — 촉매 조성 → 비용 산출
-GET  /api/prices             — 전체 금속 최신 시세
-GET  /api/prices/{symbol}    — 특정 금속 시세 + 이력
-GET  /api/materials          — 원료 라이브러리 (금속/담체/촉진제)
-POST /api/compare            — 다중 조성 비교
-GET  /api/health             — 서버 상태 + 시세 업데이트 시각
+POST /api/calculate          — Catalyst composition → cost
+GET  /api/prices             — Latest price for every metal
+GET  /api/prices/{symbol}    — Latest price + history for one metal
+GET  /api/materials          — Materials library (metals / supports / promoters)
+POST /api/compare            — Multi-composition comparison
+GET  /api/health             — Server status + last price-update time
 ```
 
-### POST /api/calculate 예시
+### POST /api/calculate example
 ```json
 // Request
 {
@@ -431,7 +447,7 @@ GET  /api/health             — 서버 상태 + 시세 업데이트 시각
 
 ---
 
-## 8. 참고 문헌
+## 8. References
 
 1. Baddour et al., "Estimating Precommercial Heterogeneous Catalyst Price: A Simple Step-Based Method", *Org. Process Res. Dev.* **2018**, 22(12). DOI: 10.1021/acs.oprd.8b00245
 2. Van Allsburg et al., "Early-stage evaluation of catalyst manufacturing cost and environmental impact using CatCost", *Nature Catalysis* **2022**. DOI: 10.1038/s41929-022-00759-6
@@ -440,13 +456,13 @@ GET  /api/health             — 서버 상태 + 시세 업데이트 시각
 
 ---
 
-## 9. Codex 개발 사용법
+## 9. How to use this with Codex
 
 ```bash
-# 이 파일을 프로젝트 루트에 놓고:
-# "CatPrice_Project_Spec.md 읽고 Phase 1부터 구현해줘" 라고 하면 됨
+# Drop this file at the project root and say:
+# "Read CatPrice_Project.md and start implementing from Phase 1".
 
-# Seed 데이터는 catprice_seed_data/ 폴더에 이미 준비됨:
-# - manufacturing_factors.json (제조 계수)
-# - raw_material_prices.json (금속/담체/촉진제/전구체 가격)
+# Seed data is already prepared under catprice_seed_data/:
+# - manufacturing_factors.json (manufacturing-cost factors)
+# - raw_material_prices.json (metal / support / promoter / precursor prices)
 ```
