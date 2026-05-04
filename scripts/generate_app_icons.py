@@ -49,21 +49,32 @@ def polygon_shadow(size: int, points: list[tuple[float, float]], offset: tuple[i
 
 
 def draw_icon(size: int) -> Image.Image:
+    """Draw the CatPrice app icon at the requested size.
+
+    Same composition as before (rounded square, hexagonal catalyst chamber,
+    three pellets, signal-line arrow) but the palette is Toss-aligned:
+      - Background: Toss Blue gradient (#3182f6 -> #1b64da). No warm tones.
+      - Inner chamber: Toss black (#191f28).
+      - Pellets: pure white for clean contrast on the dark chamber.
+      - Signal arrow + tip: white stroke with a brighter Toss-blue accent
+        at the head, replacing the previous warm yellow accent.
+    """
     inset = max(2, int(size * 0.075))
     radius = max(8, int(size * 0.22))
     border_width = max(1, int(size * 0.012))
     canvas = Image.new("RGBA", (size, size), (0, 0, 0, 0))
 
-    background = make_linear_gradient(size, (92, 193, 255), (38, 118, 219))
+    # Toss Blue gradient: #3182f6 (top) -> #1b64da (bottom).
+    background = make_linear_gradient(size, (49, 130, 246), (27, 100, 218))
     canvas.paste(background, (0, 0), rounded_mask(size, inset, radius))
 
-    canvas.alpha_composite(glow_layer(size, (size * 0.33, size * 0.27), size * 0.22, (255, 255, 255, 58)))
+    canvas.alpha_composite(glow_layer(size, (size * 0.33, size * 0.27), size * 0.22, (255, 255, 255, 50)))
 
     draw = ImageDraw.Draw(canvas)
     draw.rounded_rectangle(
         (inset, inset, size - inset, size - inset),
         radius=radius,
-        outline=(255, 255, 255, 92),
+        outline=(255, 255, 255, 96),
         width=border_width,
     )
 
@@ -79,8 +90,10 @@ def draw_icon(size: int) -> Image.Image:
     canvas.alpha_composite(
         polygon_shadow(size, outer, (0, max(2, int(size * 0.014))), max(3, int(size * 0.018)), (0, 0, 0, 60))
     )
-    draw.polygon(outer, fill=(13, 36, 69, 255), outline=(232, 245, 255, 232))
+    # Inner chamber: Toss black (#191f28). Hairline outline in soft white.
+    draw.polygon(outer, fill=(25, 31, 40, 255), outline=(232, 240, 254, 232))
 
+    # Pellets: pure white circles for crisp contrast on the dark chamber.
     pellet_r = size * 0.04
     for cx, cy in ((0.43, 0.46), (0.57, 0.46), (0.50, 0.57)):
         draw.ellipse(
@@ -90,7 +103,7 @@ def draw_icon(size: int) -> Image.Image:
                 size * cx + pellet_r,
                 size * cy + pellet_r,
             ),
-            fill=(165, 242, 224, 255),
+            fill=(255, 255, 255, 255),
         )
 
     arrow_points = [
@@ -103,13 +116,16 @@ def draw_icon(size: int) -> Image.Image:
     glow = Image.new("RGBA", (size, size), (0, 0, 0, 0))
     glow_draw = ImageDraw.Draw(glow)
     glow_draw.line(arrow_points, fill=(255, 255, 255, 76), width=arrow_width + max(2, int(size * 0.02)), joint="curve")
+    # Arrow-head glow: a brighter cyan-blue (#7da7ff) replaces the warm
+    # yellow accent. Stays in the Toss family but pops against the white
+    # signal line and the dark chamber.
     glow_draw.polygon(
         [
             (size * 0.75, size * 0.37),
             (size * 0.62, size * 0.41),
             (size * 0.68, size * 0.52),
         ],
-        fill=(255, 214, 107, 76),
+        fill=(125, 167, 255, 80),
     )
     canvas.alpha_composite(glow.filter(ImageFilter.GaussianBlur(radius=max(3, int(size * 0.02)))))
 
@@ -120,7 +136,7 @@ def draw_icon(size: int) -> Image.Image:
             (size * 0.63, size * 0.41),
             (size * 0.69, size * 0.52),
         ],
-        fill=(255, 214, 107, 255),
+        fill=(125, 167, 255, 255),
     )
 
     return canvas
