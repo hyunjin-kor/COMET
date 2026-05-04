@@ -14,7 +14,18 @@ import { useUnit } from '../lib/use-unit';
 
 const ResultBreakdownPieChart = lazy(() => import('../components/charts/ResultBreakdownPieChart'));
 
-const CHART_COLORS = ['#3182f6', '#8b95a1', '#3182f6', '#7a9b8d', '#8b95a1', '#4e5968'];
+// Toss-aligned categorical palette: every entry is visually distinct so the
+// donut and the cost-share bars never paint two slices in the same hue.
+const CHART_COLORS = [
+  '#3182f6', // Toss blue
+  '#22c55e', // green
+  '#ffa800', // amber
+  '#f04452', // red
+  '#7950f2', // purple
+  '#0099ff', // cyan
+  '#fb6f5f', // coral
+  '#4e5968', // slate
+];
 const RESULT_SECTIONS: WorkspaceSection[] = [
   { id: 'summary', label: 'Result', summary: 'Headline price, scope, and active warnings.' },
   { id: 'manufacturing', label: 'Preparation Method', summary: 'Route, cost structure, and campaign basis.' },
