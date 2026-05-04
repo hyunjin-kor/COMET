@@ -3,8 +3,8 @@
 ## Development Setup
 
 ```bash
-git clone https://github.com/yourusername/catprice.git
-cd catprice
+git clone https://github.com/hyunjin-kor/CatPrice.git
+cd CatPrice
 pip install -e ".[dev]"
 cd frontend && npm install && cd ..
 npm install

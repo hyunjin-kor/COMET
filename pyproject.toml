@@ -23,6 +23,13 @@ dependencies = [
     "python-multipart>=0.0.9",
 ]
 
+[project.urls]
+Homepage = "https://github.com/hyunjin-kor/CatPrice#readme"
+Repository = "https://github.com/hyunjin-kor/CatPrice"
+Issues = "https://github.com/hyunjin-kor/CatPrice/issues"
+Releases = "https://github.com/hyunjin-kor/CatPrice/releases"
+LatestInstaller = "https://github.com/hyunjin-kor/CatPrice/releases/latest"
+
 [project.optional-dependencies]
 dev = [
     "pytest>=8.0",

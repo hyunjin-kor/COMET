@@ -22,6 +22,18 @@ This repository contains the Electron application, the local FastAPI backend, th
 
 The workflow is reaction-agnostic: choose catalyst type, define composition, set the preparation method, sync current metal prices, and review a cost estimate. Literature benchmark families are included as optional reference datasets, not as required inputs.
 
+## Official Links
+
+| Link | Current target |
+| --- | --- |
+| GitHub repository | [hyunjin-kor/CatPrice](https://github.com/hyunjin-kor/CatPrice) |
+| Latest Windows release | [v1.1.13](https://github.com/hyunjin-kor/CatPrice/releases/tag/v1.1.13) |
+| Installer download | [CatPrice.Setup.1.1.13.exe](https://github.com/hyunjin-kor/CatPrice/releases/download/v1.1.13/CatPrice.Setup.1.1.13.exe) |
+| Portable download | [CatPrice-win-unpacked.zip](https://github.com/hyunjin-kor/CatPrice/releases/download/v1.1.13/CatPrice-win-unpacked.zip) |
+| Issues | [GitHub Issues](https://github.com/hyunjin-kor/CatPrice/issues) |
+
+No public blog or website URL is currently configured in the GitHub repository metadata. Add the verified URL to `docs/project-links.md` and the package metadata before publishing external announcements.
+
 ## Current Scope
 
 The current repository exposes the following research-facing pieces:
@@ -192,7 +204,11 @@ Download the packaged Windows app from [GitHub Releases](https://github.com/hyun
 
 Recommended asset:
 
+<<<<<<< Updated upstream
 - `CatPrice Setup 1.2.0.exe`
+=======
+- `CatPrice.Setup.1.1.13.exe`
+>>>>>>> Stashed changes
 
 Portable asset:
 
