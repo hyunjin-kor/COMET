@@ -6,6 +6,7 @@ from sqlmodel import Session, select
 
 from backend.core.constants import LB_PER_KG, TROY_OZ_PER_LB
 from backend.models.material import Material
+from backend.models.metal_price import MetalPrice
 
 GRAMS_PER_LB = 453.59237
 MG_PER_LB = GRAMS_PER_LB * 1000.0
@@ -108,10 +109,8 @@ _LIVE_ELIGIBLE_LIBRARY_KEYS: set[str] = {
 }
 
 
-def _latest_live_price(session: Session, symbol: str) -> "MetalPrice | None":  # noqa: F821
+def _latest_live_price(session: Session, symbol: str) -> MetalPrice | None:
     """Return the most recent stored live quote for ``symbol``, if any."""
-
-    from backend.models.metal_price import MetalPrice  # local import to avoid cycle
 
     stmt = (
         select(MetalPrice)
