@@ -27,9 +27,9 @@ The workflow is reaction-agnostic: choose catalyst type, define composition, set
 | Link | Current target |
 | --- | --- |
 | GitHub repository | [hyunjin-kor/CatPrice](https://github.com/hyunjin-kor/CatPrice) |
-| Latest Windows release | [v1.3.3](https://github.com/hyunjin-kor/CatPrice/releases/tag/v1.3.3) |
-| Installer download | [CatPrice.Setup.1.3.3.exe](https://github.com/hyunjin-kor/CatPrice/releases/download/v1.3.3/CatPrice.Setup.1.3.3.exe) |
-| Portable download | [CatPrice-win-unpacked.zip](https://github.com/hyunjin-kor/CatPrice/releases/download/v1.3.3/CatPrice-win-unpacked.zip) |
+| Latest Windows release | [v1.3.4](https://github.com/hyunjin-kor/CatPrice/releases/tag/v1.3.4) |
+| Installer download | [CatPrice.Setup.1.3.4.exe](https://github.com/hyunjin-kor/CatPrice/releases/download/v1.3.4/CatPrice.Setup.1.3.4.exe) |
+| Portable download | [CatPrice-win-unpacked.zip](https://github.com/hyunjin-kor/CatPrice/releases/download/v1.3.4/CatPrice-win-unpacked.zip) |
 | Issues | [GitHub Issues](https://github.com/hyunjin-kor/CatPrice/issues) |
 
 No public blog or website URL is currently configured in the GitHub repository metadata. Add the verified URL to `docs/project-links.md` and the package metadata before publishing external announcements.
@@ -204,7 +204,7 @@ Download the packaged Windows app from [GitHub Releases](https://github.com/hyun
 
 Recommended asset:
 
-- `CatPrice.Setup.1.3.3.exe`
+- `CatPrice.Setup.1.3.4.exe`
 
 Portable asset:
 
@@ -258,7 +258,7 @@ npm run build
 
 Main outputs:
 
-- `dist-electron\CatPrice Setup 1.3.3.exe`
+- `dist-electron\CatPrice Setup 1.3.4.exe`
 - `dist-electron\win-unpacked\CatPrice.exe`
 
 Before rebuilding desktop artifacts, CatPrice stops old desktop processes automatically. You can also stop them manually:

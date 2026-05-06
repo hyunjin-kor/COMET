@@ -584,7 +584,7 @@ GET    /api/health                 Server status + last price-update time
 
 ## 6. Development phases (Codex work units)
 
-> **Historical reference.** Phases 1–5 below were the original Codex work plan. The current repo state (v1.3.3, 2026-05) has implemented the bulk of every phase plus material that was never on the original list (LCA, decision engine, electrocatalyst layer model, curated USGS proxy library, source-evidence tagging, multi-family benchmark library). Use `git log --oneline` and the `## 3.1 Live additions` section above for the current ground truth; treat the lists below as the seed plan, not an open backlog.
+> **Historical reference.** Phases 1–5 below were the original Codex work plan. The current repo state (v1.3.4, 2026-05) has implemented the bulk of every phase plus material that was never on the original list (LCA, decision engine, electrocatalyst layer model, curated USGS proxy library, source-evidence tagging, multi-family benchmark library). Use `git log --oneline` and the `## 3.1 Live additions` section above for the current ground truth; treat the lists below as the seed plan, not an open backlog.
 
 ### Phase 1: Calculation engine core (MVP)
 ```
