@@ -214,7 +214,7 @@ export default function Library() {
       return;
     }
     if (!selectedMaterialId || !materials.some((material) => String(material.id) === selectedMaterialId)) {
-      setSelectedMaterialId(String(materials[0].id));
+      setSelectedMaterialId(String(materials[0]!.id));
     }
   }, [materials, selectedMaterialId]);
 
@@ -224,7 +224,7 @@ export default function Library() {
       return;
     }
     if (!selectedStepKey || !steps.some((step) => step.key === selectedStepKey)) {
-      setSelectedStepKey(steps[0].key);
+      setSelectedStepKey(steps[0]!.key);
     }
   }, [selectedStepKey, steps]);
 
@@ -234,7 +234,7 @@ export default function Library() {
       return;
     }
     if (!selectedTemplateId || !templates.some((template) => template.id === selectedTemplateId)) {
-      setSelectedTemplateId(templates[0].id);
+      setSelectedTemplateId(templates[0]!.id);
     }
   }, [selectedTemplateId, templates]);
 

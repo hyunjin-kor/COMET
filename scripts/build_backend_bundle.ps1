@@ -70,7 +70,6 @@ Write-Host "[CatPrice] Building backend sidecar..."
     --collect-submodules httpx `
     --collect-submodules yfinance `
     --collect-submodules numpy `
-    --collect-submodules alembic `
     --add-data "$dataPath;backend/data" `
     $entryPoint
 

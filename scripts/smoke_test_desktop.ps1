@@ -9,6 +9,7 @@ $ErrorActionPreference = "Stop"
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $packagedExe = Join-Path $projectRoot "dist-electron\win-unpacked\CatPrice.exe"
 $logPath = Join-Path $env:APPDATA "CatPrice\catprice-launcher.log"
+# Port 8765 must match BACKEND_PORT in electron/main.js (single source of truth).
 $healthUrl = "http://127.0.0.1:8765/api/health"
 $pricesUrl = "http://127.0.0.1:8765/api/prices"
 $calculateUrl = "http://127.0.0.1:8765/api/calculate"

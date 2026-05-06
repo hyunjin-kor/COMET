@@ -204,17 +204,15 @@ Download the packaged Windows app from [GitHub Releases](https://github.com/hyun
 
 Recommended asset:
 
-<<<<<<< Updated upstream
-- `CatPrice Setup 1.3.3.exe`
-=======
 - `CatPrice.Setup.1.3.3.exe`
->>>>>>> Stashed changes
 
 Portable asset:
 
 - `CatPrice-win-unpacked.zip`
 
 Most users only need the `Setup` installer. Download the portable zip only if you want to run CatPrice without installation.
+
+The repository also ships `CatPrice.vbs`, a small VBScript launcher that runs the unpacked `dist-electron\win-unpacked\CatPrice.exe` (or falls back to `start.bat`) without opening a console window. Use it only when working from a local source checkout — packaged installer users should launch through the Start menu shortcut instead.
 
 The packaged desktop app already includes the local backend and the bundled library data used to seed the workspace. CatPrice creates or updates the local SQLite database on startup, so users do not need to download a separate database file.
 

@@ -20,5 +20,21 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     emptyOutDir: true,
+    sourcemap: 'hidden',
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules/recharts')) return 'recharts';
+          if (id.includes('node_modules/@tanstack/react-query')) return 'query';
+          if (
+            id.includes('node_modules/react-router-dom') ||
+            id.includes('node_modules/react-dom') ||
+            id.includes('node_modules/react/')
+          ) {
+            return 'react';
+          }
+        },
+      },
+    },
   },
 })

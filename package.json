@@ -13,6 +13,7 @@
     "url": "https://github.com/hyunjin-kor/CatPrice/issues"
   },
   "homepage": "https://github.com/hyunjin-kor/CatPrice#readme",
+  "//port": "8765 must match BACKEND_PORT in electron/main.js (single source of truth)",
   "scripts": {
     "dev": "concurrently --kill-others-on-fail \"npm run dev:backend\" \"npm run dev:frontend\" \"npm run electron:wait\"",
     "dev:backend": "uvicorn backend.main:app --host 127.0.0.1 --port 8765 --reload",

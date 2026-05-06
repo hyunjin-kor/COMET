@@ -46,8 +46,8 @@ export function FitPriceText({
   size?: FitSize;
   className?: string;
 }) {
-  const bucket =
-    BUCKETS[size].find((entry) => text.length <= entry.max) ?? BUCKETS[size][BUCKETS[size].length - 1];
+  const buckets = BUCKETS[size];
+  const bucket = buckets.find((entry) => text.length <= entry.max) ?? buckets[buckets.length - 1]!;
   return (
     <div
       className={`font-display tabular-nums leading-[1.05] [overflow-wrap:anywhere] ${className}`}

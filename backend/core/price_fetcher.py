@@ -345,7 +345,7 @@ async def fetch_kitco() -> dict[str, dict]:
 
         logger.info("Kitco: %d metals -> %s", len(results), list(results))
         return results
-    except Exception as e:
+    except (httpx.HTTPError, json.JSONDecodeError, KeyError, ValueError) as e:
         logger.warning("Kitco scraper failed: %s", e)
         return {}
 
@@ -414,7 +414,7 @@ async def fetch_johnson_matthey() -> dict[str, dict]:
         results = _parse_johnson_matthey_current_prices(html)
         logger.info("Johnson Matthey: %d metals -> %s", len(results), list(results))
         return results
-    except Exception as e:
+    except (httpx.HTTPError, json.JSONDecodeError, KeyError, ValueError) as e:
         logger.warning("Johnson Matthey scraper failed: %s", e)
         return {}
 
@@ -475,7 +475,7 @@ async def fetch_markets_insider() -> dict[str, dict]:
                 )
                 if quote:
                     results[source["symbol"]] = quote
-            except Exception as e:
+            except (httpx.HTTPError, ValueError) as e:
                 logger.warning("Markets Insider %s failed: %s", source["symbol"], e)
 
     logger.info("Markets Insider: %d metals -> %s", len(results), list(results))
@@ -503,7 +503,7 @@ async def fetch_all_prices() -> dict[str, dict]:
     if settings.metals_dev_api_key:
         try:
             results.update(await fetch_metals_dev())
-        except Exception as e:
+        except (httpx.HTTPError, ValueError, KeyError) as e:
             logger.warning("Metals.Dev failed: %s", e)
 
     yahoo_task = asyncio.create_task(fetch_yfinance())
@@ -555,7 +555,7 @@ async def fetch_all_prices() -> dict[str, dict]:
                 existing_src = results.get(sym, {}).get("source", "")
                 if "CatCost" in existing_src:
                     results[sym] = data
-        except Exception as e:
+        except (httpx.HTTPError, ValueError, KeyError) as e:
             logger.warning("MetalpriceAPI failed: %s", e)
 
     live_count = sum(1 for value in results.values() if "CatCost" not in value.get("source", ""))
@@ -579,6 +579,6 @@ async def fetch_history(symbol: str, period: str = "1y") -> list[dict]:
             )
             resp.raise_for_status()
         return _extract_yahoo_history(resp.json(), factor)
-    except Exception as e:
+    except (httpx.HTTPError, json.JSONDecodeError, KeyError, ValueError) as e:
         logger.warning("fetch_history(%s, %s): %s", symbol, period, e)
         return []

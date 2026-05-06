@@ -1,3 +1,4 @@
+// Port 8765 must match BACKEND_PORT in electron/main.js (single source of truth).
 const API_ROOT =
   typeof window !== 'undefined' && window.location.protocol === 'file:'
     ? 'http://127.0.0.1:8765/api'
@@ -66,7 +67,11 @@ async function ensureOk(res: Response): Promise<Response> {
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await ensureOk(await fetch(apiUrl(path), buildRequestInit(options)));
-  return res.json();
+  try {
+    return (await res.json()) as T;
+  } catch {
+    throw new Error(`Expected JSON from ${path} but got non-JSON response (status ${res.status}).`);
+  }
 }
 
 async function requestText(path: string, options?: RequestInit): Promise<string> {

@@ -22,10 +22,10 @@ dist-electron\
 
 Primary local outputs:
 
-- `dist-electron\CatPrice Setup 1.1.13.exe`
+- `dist-electron\CatPrice Setup 1.3.3.exe`
 - `dist-electron\win-unpacked\CatPrice.exe`
 
-The current GitHub release asset name is `CatPrice.Setup.1.1.13.exe`.
+The current GitHub release asset name is `CatPrice.Setup.1.3.3.exe`.
 
 For normal distribution, the installer is enough. The packaged app bundles the local backend and the seed data files, and CatPrice initializes or updates the local SQLite database at startup.
 

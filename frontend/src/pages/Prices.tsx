@@ -228,8 +228,8 @@ export default function Prices() {
     : history;
   const selectedDisplayUnit = selectedRow ? displayTrackedUnit(selectedRow.unit, unit) : '';
   const pctChange =
-    history.length >= 2 && history[0].price !== 0
-      ? ((history[history.length - 1].price - history[0].price) / history[0].price) * 100
+    history.length >= 2 && history[0]!.price !== 0
+      ? ((history[history.length - 1]!.price - history[0]!.price) / history[0]!.price) * 100
       : null;
   const isUp = pctChange != null && pctChange >= 0;
   const latestFetchedAt = prices.reduce<string | null>((latest, row) => {
@@ -379,7 +379,10 @@ export default function Prices() {
           <div className="space-y-4">
             {GROUP_ORDER.map((groupKey) => {
               const group = GROUPS[groupKey];
-              const rows = group.symbols.map((symbol) => priceMap[symbol]).filter(Boolean);
+              if (!group) return null;
+              const rows = group.symbols
+                .map((symbol) => priceMap[symbol])
+                .filter((row): row is MetalPrice => row !== undefined);
               if (!rows.length) return null;
 
               return (
@@ -447,7 +450,7 @@ export default function Prices() {
       );
     }
 
-    const currentValue = displayHistory.length > 0 ? displayHistory[displayHistory.length - 1].price : null;
+    const currentValue = displayHistory.length > 0 ? displayHistory[displayHistory.length - 1]!.price : null;
     const periodHigh = displayHistory.length > 0 ? Math.max(...displayHistory.map((point) => point.high ?? point.price)) : null;
     const periodLow = displayHistory.length > 0 ? Math.min(...displayHistory.map((point) => point.low ?? point.price)) : null;
 
@@ -552,7 +555,7 @@ export default function Prices() {
                 <div className="mt-5 grid gap-3 sm:grid-cols-3">
                   <div className="cp-metric-tile-dark">
                     <div className="cp-subtle-label !text-slate-400">Current</div>
-                    <div className="mt-2 text-xl font-display text-white">{fmtPrice(displayHistory[displayHistory.length - 1].price, selectedRow?.unit ?? '$/lb', unit)}</div>
+                    <div className="mt-2 text-xl font-display text-white">{fmtPrice(displayHistory[displayHistory.length - 1]!.price, selectedRow?.unit ?? '$/lb', unit)}</div>
                     <div className="mt-1 text-xs leading-5 text-slate-400">{selectedDisplayUnit}</div>
                   </div>
                   <div className="cp-metric-tile-dark">

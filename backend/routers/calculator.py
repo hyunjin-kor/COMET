@@ -177,7 +177,7 @@ def calculate_cost(
     try:
         result, _, _ = _prepare_calculation(req, session)
         return result
-    except ValueError as exc:
+    except (ValueError, KeyError) as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
 
 
@@ -206,7 +206,7 @@ def calculate_cost_quick(req: QuickCalculationRequest):
             order_size_tons=req.order_size_tons,
         )
         return result
-    except ValueError as exc:
+    except (ValueError, KeyError) as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
 
 
@@ -220,7 +220,7 @@ def save_estimate(
 
     try:
         result, resolved_components, application_family = _prepare_calculation(req, session)
-    except ValueError as exc:
+    except (ValueError, KeyError) as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
 
     active = [

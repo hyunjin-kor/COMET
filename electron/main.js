@@ -13,6 +13,12 @@ const fs = require('fs');
 app.disableHardwareAcceleration();
 
 // ─── Configuration ───────────────────────────────────────────────────────────
+// BACKEND_PORT is the single source of truth for the desktop sidecar port.
+// Keep these references in sync if you change it:
+//   - package.json (dev:backend, dev:frontend, electron:wait scripts)
+//   - frontend/src/lib/api.ts (file:// fallback URL)
+//   - scripts/smoke_test_desktop.ps1
+//   - scripts/stop_catprice_processes.ps1
 const BACKEND_PORT = 8765;      // Avoid conflicts with other services
 const BACKEND_HOST = '127.0.0.1';
 const BACKEND_URL  = `http://${BACKEND_HOST}:${BACKEND_PORT}`;
@@ -40,6 +46,8 @@ const ALLOWED_EXTERNAL_HOSTS = new Set([
 // ─── State ────────────────────────────────────────────────────────────────────
 let mainWindow = null;
 let backendProcess = null;
+let shutdownPromise = null;
+let appIsQuitting = false;
 
 function isAllowedExternalUrl(urlString) {
   try {
@@ -333,17 +341,46 @@ async function startBackend() {
 }
 
 function stopBackend() {
-  if (backendProcess) {
-    debugLog('Stopping backend');
-    backendProcess.kill('SIGTERM');
-    // Force kill after 3 seconds
-    setTimeout(() => {
-      if (backendProcess && !backendProcess.killed) {
-        backendProcess.kill('SIGKILL');
-      }
-    }, 3000);
-    backendProcess = null;
+  if (shutdownPromise) return shutdownPromise;
+  if (!backendProcess) {
+    shutdownPromise = Promise.resolve();
+    return shutdownPromise;
   }
+
+  const proc = backendProcess;
+  backendProcess = null;
+
+  shutdownPromise = new Promise((resolve) => {
+    let settled = false;
+    const settle = (reason) => {
+      if (settled) return;
+      settled = true;
+      debugLog(`Backend shutdown settled (${reason})`);
+      resolve();
+    };
+
+    proc.once('exit', () => settle('child exit'));
+
+    debugLog('Stopping backend (SIGTERM)');
+    try {
+      proc.kill('SIGTERM');
+    } catch (err) {
+      debugLog(`Backend SIGTERM failed: ${err.message}`);
+    }
+
+    // Escalate to SIGKILL if the child is still alive after the grace period.
+    const force = setTimeout(() => {
+      if (!proc.killed) {
+        debugLog('Backend SIGTERM timed out, sending SIGKILL');
+        try { proc.kill('SIGKILL'); } catch (_err) { /* already gone */ }
+      }
+      // Cap total wait so app.quit() can't hang indefinitely.
+      setTimeout(() => settle('forced timeout'), 500);
+    }, 3000);
+    proc.once('exit', () => clearTimeout(force));
+  });
+
+  return shutdownPromise;
 }
 
 // ─── Main Window ──────────────────────────────────────────────────────────────
@@ -596,7 +633,7 @@ app.on('render-process-gone', (_event, webContents, details) => {
 
 app.on('window-all-closed', () => {
   debugLog('All windows closed');
-  stopBackend();
+  // app.quit() triggers `before-quit`, which awaits the backend shutdown.
   if (process.platform !== 'darwin') app.quit();
 });
 
@@ -609,7 +646,17 @@ app.on('activate', () => {
   }
 });
 
-app.on('before-quit', () => stopBackend());
+app.on('before-quit', (event) => {
+  if (appIsQuitting) return;          // already in the shutdown sequence
+  if (!backendProcess && !shutdownPromise) return; // nothing to wait for
+
+  event.preventDefault();
+  appIsQuitting = true;
+  stopBackend().finally(() => {
+    debugLog('Backend stopped; exiting app');
+    app.exit(0);
+  });
+});
 
 // Prevent multiple instances
 const gotLock = app.requestSingleInstanceLock();

@@ -80,22 +80,21 @@ consider scraping Heraeus / Johnson Matthey.
 ```
 Frontend:  React 19 + TypeScript + Vite
 UI:        Tailwind CSS 4
-Charts:    Recharts (default) + Plotly.js (3D / Sankey)
+Charts:    Recharts
 Desktop:   Electron 41 (sidecar: FastAPI bundled with PyInstaller)
 Backend:   FastAPI (Python 3.11+), async
 ORM:       SQLModel (SQLAlchemy + Pydantic integration)
-DB:        SQLite (development / desktop) → PostgreSQL (deployment)
-Migration: Alembic
+DB:        SQLite (desktop / dev) — single-file, ships embedded with the app
 Scheduler: APScheduler (auto price collection)
 HTTP:      httpx (async)
-Testing:   pytest + pytest-asyncio + Playwright (E2E)
-CI/CD:     GitHub Actions
-Deploy:    Docker Compose
-Docs:      Markdown docs (MkDocs Material is a candidate for the public docs site)
+Testing:   pytest (backend), tsc + vite build (frontend type/build), PowerShell desktop smoke
+CI/CD:     GitHub Actions (CI on push/PR, release.yml on tag)
+Docs:      Markdown docs in `docs/` (MkDocs Material is a candidate for a future hosted site)
 ```
 
-**Status note**: The project moved from the initial Tauri boilerplate plan
-to Electron-based desktop packaging.
+**Status notes**:
+- The project moved from the initial Tauri boilerplate plan to Electron-based desktop packaging.
+- The original plan referenced Plotly.js, Alembic, Playwright, pytest-asyncio, Docker Compose, and a PostgreSQL deploy target. None of those are wired up in the current repo. Treat the plan's mention of them as "considered, not adopted" — only the items above are in `package.json` / `pyproject.toml`.
 
 ---
 
@@ -129,7 +128,6 @@ catprice/
 │   │   ├── price_fetcher.py           # Metal price collector (Metals.Dev, MetalpriceAPI)
 │   │   ├── price_escalation.py        # ChemPPI / CEPCI year-over-year escalation
 │   │   ├── uncertainty.py             # Monte Carlo uncertainty (BioSTEAM-inspired)
-│   │   ├── tea_engine.py              # TEA / LCOH module (Phase 2)
 │   │   └── constants.py               # Manufacturing factors, thermo constants, scale factors
 │   │
 │   ├── models/                        # SQLModel DB models
@@ -137,8 +135,9 @@ catprice/
 │   │   ├── metal_price.py             # Metal price history
 │   │   ├── material.py                # Materials library item
 │   │   ├── equipment.py               # Equipment library (cost correlation included)
-│   │   ├── estimate.py                # Saved cost estimate
-│   │   └── process_template.py        # Process template (Step + CapEx/OpEx)
+│   │   └── estimate.py                # Saved cost estimate
+│   │   # Note: process templates ship as JSON files in `data/process_templates/`,
+│   │   # not as a SQL model.
 │   │
 │   ├── schemas/                       # Pydantic I/O schemas
 │   │   ├── __init__.py
@@ -250,6 +249,20 @@ catprice/
     ├── project-links.md               # Verified external links + Claude hand-off status
     └── contributing.md
 ```
+
+### 3.1 Live additions since the initial scaffold
+
+The tree above is the original Phase-1 scaffold. The repo has since grown the
+following modules. Always run `git ls-files backend` for the authoritative
+current layout — this list is a navigation aid, not a contract.
+
+- `backend/core/`: `decision_engine.py` (benchmark scoring), `electrocatalyst.py` (electrode-area cost model), `lca.py` (GWP / CED), `material_pricing.py` (library-backed price resolution), `price_evidence.py` (confidence / freshness tagging)
+- `backend/routers/`: `decision.py`, `estimates.py` (saved-estimate CRUD), `lca.py`, `indices.py`
+- `backend/data/`: 10 reaction-family benchmark JSON files (`*_benchmark.json`), `electrocatalyst_library.json`, `lca_factors.json`, `materials_curated.json` (curated public-source proxies in addition to `materials_library.json`), 19 process templates (PEM/AEM/DMFC/USY/ZSM-5/etc.)
+- `backend/launcher.py`, `backend/paths.py`: PyInstaller-friendly resource resolution for the packaged sidecar
+- `backend/services/bls_updater.py`: ChemPPI auto-update from BLS API
+- `electron/preload.js`: contextBridge for window controls and menu IPC
+- `scripts/` highlights: `build_backend_bundle.ps1` (PyInstaller), `smoke_test_desktop.ps1`, `validate_catcost_data.py` (local-only, requires gitignored CatCost workbook), `capture_readme_screens.mjs`, `generate_app_icons.py`, `generate_social_preview.py`
 
 ---
 
@@ -571,6 +584,8 @@ GET    /api/health                 Server status + last price-update time
 
 ## 6. Development phases (Codex work units)
 
+> **Historical reference.** Phases 1–5 below were the original Codex work plan. The current repo state (v1.3.3, 2026-05) has implemented the bulk of every phase plus material that was never on the original list (LCA, decision engine, electrocatalyst layer model, curated USGS proxy library, source-evidence tagging, multi-family benchmark library). Use `git log --oneline` and the `## 3.1 Live additions` section above for the current ground truth; treat the lists below as the seed plan, not an open backlog.
+
 ### Phase 1: Calculation engine core (MVP)
 ```
 Task 1.1: Project bootstrap (pyproject.toml, directory layout, DB setup)
@@ -634,18 +649,18 @@ Task 5.6: README + Contributing guide
 |----------|------------|------------------|--------------|-----------|
 | 2 wt% Pt/C | 2 ton, Small scale | $27.37/lb | $34.09/lb | ±20% |
 | 21 wt% Ni/Al₂O₃ | 20 ton, Medium scale | $20.59/lb | $21.33/lb | ±20% |
-| USY-based FCC | 200 ton, Large scale | $2.41/lb | $2.73/lb | ±20% |
+| USY-based FCC | 200 ton, Large scale | $2.41/lb | $2.73/lb | ±25% |
 
-Run these three cases as a regression at the end of every Phase.
+Run these three cases as a regression at the end of every Phase. The FCC band is wider (±25%) because reproducing the large-scale slurry/spray-dry route precisely requires proprietary precursor pricing that CatPrice does not redistribute; tightening it back to ±20% is a follow-up once a public USY proxy is in the materials library. See `backend/tests/test_cost_engine.py` for the live tolerance values.
 
 ---
 
 ## 8. Coding conventions
 
-- Python: ruff (formatter + linter), required type hints, Google-style docstrings
-- TypeScript: ESLint + Prettier, strict mode
-- Commit messages: Conventional Commits (`feat:`, `fix:`, `docs:`, `test:`)
-- PRs: feature-scoped, must include tests
+- Python: ruff (formatter + linter, configured in `pyproject.toml`), type hints encouraged on public APIs
+- TypeScript: strict mode in `frontend/tsconfig.app.json`, ESLint via `frontend/eslint.config.js`
+- Commit messages: Conventional Commits (`feat:`, `fix:`, `docs:`, `test:`, `chore:`, `style:`)
+- PRs: feature-scoped, must include tests for non-trivial logic
 - Environment variables: provide `.env.example`; never commit secrets
 
 ---

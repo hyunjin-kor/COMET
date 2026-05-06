@@ -80,7 +80,7 @@ export default function MetalTrendChart({
           }}
           labelStyle={{ color: '#4e5968', fontSize: 11, marginBottom: 4 }}
         />
-        {data.length > 0 ? <ReferenceLine y={data[0].price} stroke="rgba(255,255,255,0.18)" strokeDasharray="4 4" /> : null}
+        {data.length > 0 ? <ReferenceLine y={data[0]!.price} stroke="rgba(255,255,255,0.18)" strokeDasharray="4 4" /> : null}
         <Area
           type="monotone"
           dataKey="price"

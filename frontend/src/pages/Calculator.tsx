@@ -1391,7 +1391,7 @@ export default function Calculator() {
               <CompactValueRow
                 label="Steps"
                 value={String(steps.length)}
-                detail={steps.length > 0 ? `${formatStepLabel(steps[0])}${steps.length > 1 ? ` +${steps.length - 1}` : ''}` : 'Choose at least one step'}
+                detail={steps.length > 0 ? `${formatStepLabel(steps[0]!)}${steps.length > 1 ? ` +${steps.length - 1}` : ''}` : 'Choose at least one step'}
               />
               <CompactValueRow
                 label={catalystDomain === 'thermal' ? 'Recovery' : 'Family'}
@@ -1657,7 +1657,7 @@ export default function Calculator() {
                   {ALL_STEPS.filter((step) => step.category === category).map((step) => {
                     const available = (step.scales as readonly Scale[]).includes(currentScale);
                     const checked = steps.includes(step.key);
-                    const availabilityLabel = step.scales.length === 3 ? null : step.scales.map((item) => item[0].toUpperCase()).join('/');
+                    const availabilityLabel = step.scales.length === 3 ? null : step.scales.map((item) => item.charAt(0).toUpperCase()).join('/');
                     return <button key={step.key} onClick={() => available && toggleStep(step.key)} disabled={!available} title={available ? step.label : `Not available at ${scale.label.toLowerCase()} scale`} className={`rounded-[16px] border px-3 py-2 text-left text-sm transition ${!available ? 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400' : checked ? 'border-[#3182f6] bg-[#e8f2ff] text-[#1b64da]' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}><div className="flex items-center justify-between gap-3"><div className="font-medium">{step.label}</div>{checked ? <span className="rounded-full border border-[#3182f6] bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#1b64da]">On</span> : null}</div>{availabilityLabel ? <div className="mt-1 text-[10px] uppercase tracking-[0.18em] text-slate-400">{availabilityLabel}</div> : null}</button>;
                   })}
                 </div>

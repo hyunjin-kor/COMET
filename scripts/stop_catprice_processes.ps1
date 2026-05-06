@@ -27,6 +27,7 @@ foreach ($name in $processNames) {
 # Also free port 8765 (sidecar port). A leftover dev `uvicorn` from a
 # previous session shows up as `python.exe`, which the loop above won't
 # match by process name. Find by listening port instead.
+# Port 8765 must match BACKEND_PORT in electron/main.js (single source of truth).
 $port = 8765
 try {
     $owners = Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue

@@ -9,12 +9,16 @@ export type WorkspaceSection = {
 };
 
 export function useWorkspaceSections(sections: WorkspaceSection[], queryKey: string) {
+  if (sections.length === 0) {
+    throw new Error('useWorkspaceSections requires at least one section');
+  }
   const [searchParams, setSearchParams] = useSearchParams();
   const sectionIds = useMemo(() => sections.map((section) => section.id), [sections]);
   const rawValue = searchParams.get(queryKey);
-  const activeSectionId = rawValue && sectionIds.includes(rawValue) ? rawValue : sections[0]?.id ?? '';
+  const activeSectionId = rawValue && sectionIds.includes(rawValue) ? rawValue : sections[0]!.id;
   const activeIndex = Math.max(0, sectionIds.indexOf(activeSectionId));
-  const activeSection = sections[activeIndex] ?? sections[0];
+  // Safe: activeIndex is clamped to [0, sections.length-1] and sections is non-empty.
+  const activeSection: WorkspaceSection = sections[activeIndex] ?? sections[0]!;
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -30,12 +34,12 @@ export function useWorkspaceSections(sections: WorkspaceSection[], queryKey: str
 
   function goPrevious() {
     if (activeIndex <= 0) return;
-    setActiveSection(sectionIds[activeIndex - 1]);
+    setActiveSection(sectionIds[activeIndex - 1]!);
   }
 
   function goNext() {
     if (activeIndex >= sectionIds.length - 1) return;
-    setActiveSection(sectionIds[activeIndex + 1]);
+    setActiveSection(sectionIds[activeIndex + 1]!);
   }
 
   return {
@@ -65,7 +69,8 @@ export function WorkspaceSectionNav({
   onSelect,
   disabledSectionIds = [],
 }: WorkspaceSectionNavProps) {
-  const activeSection = sections[activeIndex] ?? sections[0];
+  if (sections.length === 0) return null;
+  const activeSection: WorkspaceSection = sections[activeIndex] ?? sections[0]!;
 
   return (
     <section className="surface-card-soft px-4 py-3">

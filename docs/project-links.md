@@ -1,6 +1,6 @@
 # Project Links
 
-Last verified: 2026-04-26
+Last verified: 2026-05-05
 
 This page tracks CatPrice's external connection points. Only verified links are listed as active.
 
@@ -9,10 +9,9 @@ This page tracks CatPrice's external connection points. Only verified links are 
 | Area | Link | Status |
 | --- | --- | --- |
 | GitHub repository | https://github.com/hyunjin-kor/CatPrice | Active public repository |
-| Latest release | https://github.com/hyunjin-kor/CatPrice/releases/tag/v1.1.13 | Active release verified through GitHub API |
-| Installer asset | https://github.com/hyunjin-kor/CatPrice/releases/download/v1.1.13/CatPrice.Setup.1.1.13.exe | Active release asset |
-| Portable asset | https://github.com/hyunjin-kor/CatPrice/releases/download/v1.1.13/CatPrice-win-unpacked.zip | Active release asset |
 | Issues | https://github.com/hyunjin-kor/CatPrice/issues | Active |
+| Releases index | https://github.com/hyunjin-kor/CatPrice/releases | Active |
+| Latest release (per package.json) | https://github.com/hyunjin-kor/CatPrice/releases/tag/v1.3.3 | Re-verify with `gh release list -L 1` before quoting |
 | Source repository clone URL | https://github.com/hyunjin-kor/CatPrice.git | Active |
 
 ## Not Yet Connected
@@ -26,12 +25,15 @@ This page tracks CatPrice's external connection points. Only verified links are 
 
 ## Release Metadata
 
-- Current package version: `1.1.13`
-- Python package version: `1.1.13`
-- Frontend package version: `1.1.13`
-- GitHub latest release: `v1.1.13`
-- GitHub release published at: `2026-04-22T07:22:36Z`
-- Repository pushed at: `2026-04-23T07:24:11Z`
+Single source of truth: `package.json`, `pyproject.toml`, `frontend/package.json` must agree.
+
+- Current package version: `1.3.3`
+- Python package version: `1.3.3`
+- Frontend package version: `1.3.3`
+- Latest verified GitHub release: `v1.3.3` (published 2026-05-04, verified via `gh release view v1.3.3` on 2026-05-05)
+- Asset name pattern: `CatPrice.Setup.<version>.exe` (installer), `CatPrice-win-unpacked.zip` (portable)
+
+The published GitHub release tag may lag behind the package version when a bump has not yet been tagged. To re-verify, run `gh release list -L 1` against the repo.
 
 ## Claude Handoff
 
