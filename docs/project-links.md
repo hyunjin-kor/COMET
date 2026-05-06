@@ -30,7 +30,7 @@ Single source of truth: `package.json`, `pyproject.toml`, `frontend/package.json
 - Current package version: `1.3.4`
 - Python package version: `1.3.4`
 - Frontend package version: `1.3.4`
-- Latest verified GitHub release: `v1.3.4` (tagged 2026-05-06; release.yml builds and publishes the assets — re-verify with `gh release view v1.3.4` once the workflow completes)
+- Latest verified GitHub release: `v1.3.4` (published 2026-05-06, verified via `gh release view v1.3.4` on 2026-05-06)
 - Asset name pattern: `CatPrice.Setup.<version>.exe` (installer), `CatPrice-win-unpacked.zip` (portable)
 
 The published GitHub release tag may lag behind the package version when a bump has not yet been tagged. To re-verify, run `gh release list -L 1` against the repo.
