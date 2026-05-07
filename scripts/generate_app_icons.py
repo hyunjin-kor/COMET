@@ -1,18 +1,21 @@
 """Resize the master brand asset into the production icon set.
 
 Single source of truth: ``frontend/public/icon-source.png``. Replace
-that one file when the brand icon changes; this script:
+that one file when the brand icon changes; this script downscales it
+into every PNG / ICO output the desktop app and the docs reference,
+then trims a small uniform inset and applies an iOS-style rounded
+mask so the file edges follow the rounded-square frame baked into
+the brand asset.
 
-1. detects the rounded-square frame already baked into the source
-   image (typical for an AI-generated app icon render),
-2. crops to that frame's exact bounding box,
-3. resizes to each output size,
-4. applies a rounded-corner alpha mask whose radius matches the
-   detected frame curvature, scaled down to the target size.
+The cream-to-mint gradient in the master extends edge-to-edge, so
+auto-detection of the frame outline by colour difference isn't
+reliable. Two fixed knobs control the result:
 
-This way the file edges follow the frame the brand asset already
-shows — we never invent a new corner radius and never crop into
-the frame contents.
+  * ``EDGE_INSET_RATIO`` — how much of each side to trim before
+    rounding. Set this to skip whatever soft halo the AI render
+    leaves around the frame (drop shadow, glow, anti-aliased gradient).
+  * ``CORNER_RADIUS_RATIO`` — final corner curvature, fraction of the
+    side after the inset crop. iOS app icons use ~22%.
 
 Outputs:
   frontend/public/icon-32x32.png
@@ -28,7 +31,6 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import numpy as np
 from PIL import Image, ImageChops, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -38,101 +40,66 @@ SOURCE = PUBLIC_DIR / "icon-source.png"
 
 PNG_SIZES = (32, 128, 256, 512)
 ICO_SIZES = [(16, 16), (24, 24), (32, 32), (48, 48), (64, 64), (128, 128), (256, 256)]
-CONTENT_THRESHOLD = 18  # sum-of-RGB-channel diff vs corner background; tuned empirically
+EDGE_INSET_RATIO = 0.05    # trim 5% off each side before rounding
+CORNER_RADIUS_RATIO = 0.22 # iOS-standard squircle approximation
 
 
-def _content_mask(img: Image.Image, threshold: int = CONTENT_THRESHOLD) -> np.ndarray:
-    """True wherever a pixel differs from the corner background by ``threshold`` RGB sum."""
-    arr = np.array(img.convert("RGB"))
-    bg = arr[0:30, 0:30].astype(float).mean(axis=(0, 1))
-    diff = np.abs(arr.astype(float) - bg).sum(axis=2)
-    return diff > threshold
+def crop_to_square_with_inset(img: Image.Image, inset_ratio: float = EDGE_INSET_RATIO) -> Image.Image:
+    """Center-crop to square and trim ``inset_ratio`` off each side."""
+    w, h = img.size
+    side = int(min(w, h) * (1.0 - 2 * inset_ratio))
+    cx, cy = w // 2, h // 2
+    half = side // 2
+    return img.crop((cx - half, cy - half, cx + half, cy + half))
 
 
-def detect_frame(img: Image.Image) -> tuple[Image.Image, int]:
-    """Detect the baked-in rounded frame and return ``(cropped_square, radius_px)``.
-
-    The returned image is the source cropped tightly to the frame's outer
-    bounding box, then center-cropped to square if the bbox isn't already.
-    The radius is the corner curvature in pixels at that crop's resolution.
-    """
-    mask = _content_mask(img)
-    h, w = mask.shape
-    ys_any = np.any(mask, axis=1)
-    xs_any = np.any(mask, axis=0)
-    if not ys_any.any():
-        # No detectable frame — treat the whole image as content with no rounding.
-        return img, 0
-
-    top = int(np.argmax(ys_any))
-    bottom = int(h - 1 - np.argmax(ys_any[::-1]))
-    left = int(np.argmax(xs_any))
-    right = int(w - 1 - np.argmax(xs_any[::-1]))
-
-    # Radius: at the topmost content row (ignoring AA), the first content x sits
-    # at ``left + radius``; symmetric on the right side. Average for stability.
-    sample_y = min(top + 3, bottom - 1)
-    row = np.where(mask[sample_y])[0]
-    if len(row) == 0:
-        radius = 0
-    else:
-        radius_left = int(row.min()) - left
-        radius_right = right - int(row.max())
-        radius = max(0, (radius_left + radius_right) // 2)
-
-    cropped = img.crop((left, top, right + 1, bottom + 1))
-    cw, ch = cropped.size
-    if cw != ch:
-        side = min(cw, ch)
-        cl = (cw - side) // 2
-        ct = (ch - side) // 2
-        cropped = cropped.crop((cl, ct, cl + side, ct + side))
-    return cropped, radius
-
-
-def render(cropped: Image.Image, source_radius: int, target: int) -> Image.Image:
-    """Resize the framed source to ``target`` square and apply a matching rounded mask."""
-    source_size = cropped.size[0]
-    scaled_radius = int(round(source_radius * target / source_size))
-    img = cropped.resize((target, target), Image.LANCZOS)
-    mask = Image.new("L", (target, target), 0)
+def apply_rounded_mask(img: Image.Image, radius_ratio: float = CORNER_RADIUS_RATIO) -> Image.Image:
+    """Multiply the icon's alpha by an iOS-style rounded-square mask."""
+    w, h = img.size
+    radius = int(min(w, h) * radius_ratio)
+    mask = Image.new("L", (w, h), 0)
     ImageDraw.Draw(mask).rounded_rectangle(
-        (0, 0, target - 1, target - 1), radius=scaled_radius, fill=255
+        (0, 0, w - 1, h - 1), radius=radius, fill=255
     )
     r, g, b, a = img.split()
     return Image.merge("RGBA", (r, g, b, ImageChops.multiply(a, mask)))
 
 
-def load_source() -> tuple[Image.Image, int]:
+def load_source() -> Image.Image:
     if not SOURCE.exists():
         raise FileNotFoundError(
             f"icon source not found: {SOURCE}\n"
             "Place a square (or near-square) PNG at this path before running."
         )
-    return detect_frame(Image.open(SOURCE).convert("RGBA"))
+    return crop_to_square_with_inset(Image.open(SOURCE).convert("RGBA"))
 
 
-def save_pngs(cropped: Image.Image, radius: int) -> None:
+def render(cropped: Image.Image, target: int) -> Image.Image:
+    return apply_rounded_mask(cropped.resize((target, target), Image.LANCZOS))
+
+
+def save_pngs(cropped: Image.Image) -> None:
     for size in PNG_SIZES:
-        icon = render(cropped, radius, size)
+        icon = render(cropped, size)
         icon.save(PUBLIC_DIR / f"icon-{size}x{size}.png")
         if size == 512:
             icon.save(PUBLIC_DIR / "icon.png")
             icon.save(ELECTRON_DIR / "icon.png")
 
 
-def save_ico(cropped: Image.Image, radius: int) -> None:
-    icon = render(cropped, radius, 512)
+def save_ico(cropped: Image.Image) -> None:
+    icon = render(cropped, 512)
     icon.save(PUBLIC_DIR / "icon.ico", format="ICO", sizes=ICO_SIZES)
 
 
 def main() -> None:
-    cropped, radius = load_source()
-    save_pngs(cropped, radius)
-    save_ico(cropped, radius)
+    cropped = load_source()
+    save_pngs(cropped)
+    save_ico(cropped)
     print(
-        f"detected frame: cropped to {cropped.size[0]}x{cropped.size[1]} "
-        f"with corner radius {radius}px (~{radius / cropped.size[0] * 100:.1f}% of side)"
+        f"regenerated icons: inset {int(EDGE_INSET_RATIO * 100)}% per side, "
+        f"corner radius {int(CORNER_RADIUS_RATIO * 100)}% (cropped source "
+        f"{cropped.size[0]}x{cropped.size[1]})"
     )
 
 
