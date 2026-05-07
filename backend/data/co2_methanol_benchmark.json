@@ -86,6 +86,20 @@
       "url": "https://www.nature.com/articles/s41467-025-67625-4",
       "kind": "literature",
       "note": "ZnO nanorod-based methanol route emphasizing geometry-sensitive CO2 activation and oxygen-vacancy exposure."
+    },
+    {
+      "id": "behrens-cuznoal2o3-science-2012",
+      "label": "Science 2012",
+      "url": "https://doi.org/10.1126/science.1219831",
+      "kind": "literature",
+      "note": "Behrens, Studt et al.: identification of the active site of methanol synthesis over the industrial Cu/ZnO/Al2O3 catalyst via combined microscopy and DFT."
+    },
+    {
+      "id": "kattel-cu-binding-jacs-2016",
+      "label": "J. Am. Chem. Soc. 2016",
+      "url": "https://doi.org/10.1021/jacs.6b05791",
+      "kind": "literature",
+      "note": "Kattel, Yan, Yang and Liu: optimising binding energies of key intermediates for CO2 hydrogenation to methanol over oxide-supported copper catalysts."
     }
   ],
   "catalog_quotes": [],
@@ -213,7 +227,10 @@
       "performance_index": 75,
       "manufacturing_readiness": 95,
       "screening_exactness": 71,
-      "temperature_window_c": [220, 290],
+      "temperature_window_c": [
+        220,
+        290
+      ],
       "literature_basis_ids": [
         "znzr-methanol-ncomms-2019",
         "cu-zrox-mgo-natcatal-2024",
@@ -277,7 +294,10 @@
       "performance_index": 89,
       "manufacturing_readiness": 72,
       "screening_exactness": 79,
-      "temperature_window_c": [180, 260],
+      "temperature_window_c": [
+        180,
+        260
+      ],
       "literature_basis_ids": [
         "cu-zrox-mgo-natcatal-2024",
         "znzr-methanol-ncomms-2019",
@@ -341,7 +361,10 @@
       "performance_index": 92,
       "manufacturing_readiness": 68,
       "screening_exactness": 83,
-      "temperature_window_c": [180, 250],
+      "temperature_window_c": [
+        180,
+        250
+      ],
       "literature_basis_ids": [
         "ni-in2o3-ncomms-2021",
         "in2o3-dynamics-ncomms-2022",

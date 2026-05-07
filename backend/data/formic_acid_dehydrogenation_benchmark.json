@@ -79,6 +79,13 @@
       "url": "https://doi.org/10.1038/nnano.2011.42",
       "kind": "literature",
       "note": "Tedsree, Li, Jones et al.: Ag-Pd core-shell nanocatalyst enabling room-temperature gas-phase formic-acid decomposition with selective H2 generation."
+    },
+    {
+      "id": "mellmann-sponholz-fad-csr-2016",
+      "label": "Chem. Soc. Rev. 2016",
+      "url": "https://doi.org/10.1039/c5cs00618j",
+      "kind": "literature",
+      "note": "Mellmann, Sponholz, Junge and Beller: foundational review of formic acid as a hydrogen-storage medium, surveying homogeneous catalysts for selective H2 release."
     }
   ],
   "catalog_quotes": [],

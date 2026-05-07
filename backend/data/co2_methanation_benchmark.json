@@ -86,6 +86,20 @@
       "url": "https://doi.org/10.1021/acscatal.7b01896",
       "kind": "literature",
       "note": "Mutz, Belimov et al.: alumina-supported Ni3Fe alloy with stable activity for CO2 methanation; alloying improves resistance to deactivation under load swings."
+    },
+    {
+      "id": "ronsch-methanation-fuel-2016",
+      "label": "Fuel 2016",
+      "url": "https://doi.org/10.1016/j.fuel.2015.10.111",
+      "kind": "literature",
+      "note": "Roensch et al.: review of methanation from fundamentals to current SNG projects, covering Ni-based catalysts, reactor concepts, and process integration."
+    },
+    {
+      "id": "guo-ru-ceo2-methanation-acscatal-2018",
+      "label": "ACS Catal. 2018",
+      "url": "https://doi.org/10.1021/acscatal.7b04469",
+      "kind": "literature",
+      "note": "Guo, Mei, Yuan et al.: low-temperature CO2 methanation over CeO2-supported Ru single atoms, nanoclusters and nanoparticles, comparing how active-site geometry tunes the selectivity-activity trade-off."
     }
   ],
   "catalog_quotes": [],

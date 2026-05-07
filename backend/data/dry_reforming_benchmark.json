@@ -79,6 +79,20 @@
       "url": "https://doi.org/10.1016/0926-860x(95)00201-4",
       "kind": "literature",
       "note": "Ruckenstein & Hu: foundational study of CO2 reforming of methane over nickel/alkaline-earth metal oxide catalysts; alkaline-earth additives mitigate coke deposition."
+    },
+    {
+      "id": "pakhare-spivey-drm-csr-2014",
+      "label": "Chem. Soc. Rev. 2014",
+      "url": "https://doi.org/10.1039/c3cs60395d",
+      "kind": "literature",
+      "note": "Pakhare and Spivey: foundational review of dry (CO2) reforming of methane over noble-metal catalysts, covering mechanism, deactivation, and support effects."
+    },
+    {
+      "id": "buelens-superdry-science-2016",
+      "label": "Science 2016",
+      "url": "https://doi.org/10.1126/science.aah7161",
+      "kind": "literature",
+      "note": "Buelens, Galvita et al.: super-dry reforming of methane intensifies CO2 utilization by coupling Ni catalysis with a CaO/Fe2O3 redox cycle."
     }
   ],
   "catalog_quotes": [],

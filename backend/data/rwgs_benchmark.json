@@ -86,6 +86,20 @@
       "url": "https://doi.org/10.1023/a:1019181715731",
       "kind": "literature",
       "note": "Spencer: foundational analysis of zinc oxide's role in Cu/ZnO catalysts coupling methanol synthesis to the (reverse) water-gas shift equilibrium."
+    },
+    {
+      "id": "daza-kuhn-rwgs-rsc-2016",
+      "label": "RSC Adv. 2016",
+      "url": "https://doi.org/10.1039/c6ra05414e",
+      "kind": "literature",
+      "note": "Daza and Kuhn: comparative review of catalysts for the reverse water-gas shift reaction as a CO2 conversion route, organising by support, promoter, and active metal."
+    },
+    {
+      "id": "wang-co2-hydrogenation-csr-2011",
+      "label": "Chem. Soc. Rev. 2011",
+      "url": "https://doi.org/10.1039/c1cs15008a",
+      "kind": "literature",
+      "note": "Wang, Wang and Liu: review of recent advances in catalytic hydrogenation of carbon dioxide, broadly covering RWGS, methanation, and methanol routes."
     }
   ],
   "catalog_quotes": [],

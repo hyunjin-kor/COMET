@@ -86,6 +86,41 @@
       "url": "https://doi.org/10.1115/1.4047963",
       "kind": "literature",
       "note": "Henkensmeier, Najibah et al.: overview of state-of-the-art commercial anion-exchange membranes used in water electrolysis cells."
+    },
+    {
+      "id": "suen-oer-csr-2017",
+      "label": "Chem. Soc. Rev. 2017",
+      "url": "https://doi.org/10.1039/c6cs00328a",
+      "kind": "literature",
+      "note": "Suen, Hung et al.: foundational review of electrocatalysis for the oxygen evolution reaction, covering precious-metal and non-precious-metal materials and their kinetics."
+    },
+    {
+      "id": "mccrory-oer-benchmark-jacs-2013",
+      "label": "J. Am. Chem. Soc. 2013",
+      "url": "https://doi.org/10.1021/ja407115p",
+      "kind": "literature",
+      "note": "McCrory, Jung, Peters and Jaramillo: standardised benchmarking protocol comparing heterogeneous OER electrocatalysts under unified conditions."
+    },
+    {
+      "id": "suntivich-perovskite-oer-science-2011",
+      "label": "Science 2011",
+      "url": "https://doi.org/10.1126/science.1212858",
+      "kind": "literature",
+      "note": "Suntivich, May, Gasteiger and Shao-Horn: molecular-orbital design principle linking perovskite eg occupancy to OER activity, with Ba0.5Sr0.5Co0.8Fe0.2O3 as the showcase composition."
+    },
+    {
+      "id": "seh-electrocatalysis-science-2017",
+      "label": "Science 2017",
+      "url": "https://doi.org/10.1126/science.aad4998",
+      "kind": "literature",
+      "note": "Seh, Kibsgaard, Dickens et al.: comprehensive electrocatalyst design framework combining theory and experiment, including OER scaling relations and descriptor selection."
+    },
+    {
+      "id": "trotochaud-nife-oxyhydroxide-jacs-2014",
+      "label": "J. Am. Chem. Soc. 2014",
+      "url": "https://doi.org/10.1021/ja502379c",
+      "kind": "literature",
+      "note": "Trotochaud, Young, Ranney and Boettcher: nickel-iron oxyhydroxide OER electrocatalysts, clarifying the role of intentional and incidental Fe incorporation in alkaline activity."
     }
   ],
   "catalog_quotes": [],
