@@ -1,6 +1,7 @@
 import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
+import { spawnSync } from 'node:child_process';
 import { chromium } from 'playwright';
 
 const baseUrl = process.env.CATPRICE_CAPTURE_BASE_URL ?? 'http://127.0.0.1:4173';
@@ -379,6 +380,8 @@ async function main() {
   logStep('result');
   {
     const page = await preparePage(context, draftSnapshot, resultSnapshot, '/calculator/result?result=manufacturing');
+    await page.setViewportSize({ width: 1500, height: 2000 });
+    await waitForAppReady(page);
     await page.waitForTimeout(1200);
     await captureSelectorSliceFromText(
       page,
@@ -440,8 +443,19 @@ async function main() {
     await page.close();
   }
 
-  logStep('done');
+  logStep('round corners');
   await browser.close();
+  roundCorners();
+  logStep('done');
+}
+
+function roundCorners() {
+  const pythonExe = process.env.PYTHON ?? (process.platform === 'win32' ? 'python' : 'python3');
+  const script = path.resolve(process.cwd(), 'scripts', 'round_readme_screens.py');
+  const result = spawnSync(pythonExe, [script], { stdio: 'inherit' });
+  if (result.status !== 0) {
+    throw new Error(`round_readme_screens.py exited with status ${result.status}`);
+  }
 }
 
 main().catch((error) => {
