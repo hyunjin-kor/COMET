@@ -72,6 +72,13 @@
       "url": "https://doi.org/10.1038/s41467-025-65619-w",
       "kind": "literature",
       "note": "Ce-modified Ni-exsolved perovskite route with strong CH4 and CO2 conversion plus long-term robustness."
+    },
+    {
+      "id": "ruckenstein-drm-apcata-1995",
+      "label": "Applied Catalysis A 1995",
+      "url": "https://doi.org/10.1016/0926-860x(95)00201-4",
+      "kind": "literature",
+      "note": "Ruckenstein & Hu: foundational study of CO2 reforming of methane over nickel/alkaline-earth metal oxide catalysts; alkaline-earth additives mitigate coke deposition."
     }
   ],
   "catalog_quotes": [],
@@ -196,7 +203,10 @@
       "performance_index": 90,
       "manufacturing_readiness": 74,
       "screening_exactness": 84,
-      "temperature_window_c": [650, 800],
+      "temperature_window_c": [
+        650,
+        800
+      ],
       "literature_basis_ids": [
         "ni-single-atom-drm-ncomms-2019",
         "cokefree-drm-ncomms-2023"
@@ -245,7 +255,10 @@
       "performance_index": 83,
       "manufacturing_readiness": 80,
       "screening_exactness": 79,
-      "temperature_window_c": [650, 820],
+      "temperature_window_c": [
+        650,
+        820
+      ],
       "literature_basis_ids": [
         "ni-zeolite-drm-ncomms-2024",
         "cokefree-drm-ncomms-2023"
@@ -294,7 +307,10 @@
       "performance_index": 95,
       "manufacturing_readiness": 68,
       "screening_exactness": 85,
-      "temperature_window_c": [650, 750],
+      "temperature_window_c": [
+        650,
+        750
+      ],
       "literature_basis_ids": [
         "ir-ceria-drm-ncomms-2024",
         "ce-exsolved-perovskite-drm-ncomms-2025"

@@ -72,6 +72,20 @@
       "url": "https://www.nature.com/articles/s41467-025-61895-8",
       "kind": "literature",
       "note": "Study quantifying how platinum electronic and geometric effects control WGS activity."
+    },
+    {
+      "id": "fu-au-pt-ceo2-science-2003",
+      "label": "Science 2003",
+      "url": "https://doi.org/10.1126/science.1085721",
+      "kind": "literature",
+      "note": "Fu, Saltsburg & Flytzani-Stephanopoulos: landmark identification of nonmetallic Au and Pt species on ceria as the active phase in low-temperature WGS."
+    },
+    {
+      "id": "luengnaruemitchai-wgs-catcomm-2003",
+      "label": "Catalysis Communications 2003",
+      "url": "https://doi.org/10.1016/s1566-7367(03)00036-0",
+      "kind": "literature",
+      "note": "Luengnaruemitchai, Osuwan & Gulari: comparative low-temperature WGS over Pt/CeO2, Au/CeO2, and Au/Fe2O3."
     }
   ],
   "catalog_quotes": [],
@@ -197,7 +211,10 @@
       "performance_index": 79,
       "manufacturing_readiness": 95,
       "screening_exactness": 74,
-      "temperature_window_c": [180, 280],
+      "temperature_window_c": [
+        180,
+        280
+      ],
       "literature_basis_ids": [
         "cu-facet-wgs-ncomms-2017"
       ],
@@ -259,7 +276,10 @@
       "performance_index": 88,
       "manufacturing_readiness": 78,
       "screening_exactness": 81,
-      "temperature_window_c": [180, 260],
+      "temperature_window_c": [
+        180,
+        260
+      ],
       "literature_basis_ids": [
         "co-ceria-wgs-ncomms-2023"
       ],
@@ -307,7 +327,10 @@
       "performance_index": 95,
       "manufacturing_readiness": 73,
       "screening_exactness": 85,
-      "temperature_window_c": [120, 240],
+      "temperature_window_c": [
+        120,
+        240
+      ],
       "literature_basis_ids": [
         "pt-moc-wgs-nature-2021",
         "pt-ceria-wgs-ncomms-2021",

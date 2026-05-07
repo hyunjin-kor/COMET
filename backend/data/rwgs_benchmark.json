@@ -72,6 +72,20 @@
       "url": "https://doi.org/10.1038/s41467-026-68756-y",
       "kind": "literature",
       "note": "High-energy Mo2N-based catalyst route prepared through pressure processing with in situ ammonia decomposition."
+    },
+    {
+      "id": "goguet-rwgs-jcatal-2006",
+      "label": "Journal of Catalysis 2006",
+      "url": "https://doi.org/10.1016/j.jcat.2005.10.020",
+      "kind": "literature",
+      "note": "Goguet, Shekhtman et al.: pulse-response TAP study of the reverse water-gas shift over Pt/CeO2, distinguishing redox and associative pathways."
+    },
+    {
+      "id": "spencer-cuzn-topcat-1999",
+      "label": "Topics in Catalysis 1999",
+      "url": "https://doi.org/10.1023/a:1019181715731",
+      "kind": "literature",
+      "note": "Spencer: foundational analysis of zinc oxide's role in Cu/ZnO catalysts coupling methanol synthesis to the (reverse) water-gas shift equilibrium."
     }
   ],
   "catalog_quotes": [],
@@ -196,7 +210,10 @@
       "performance_index": 78,
       "manufacturing_readiness": 82,
       "screening_exactness": 77,
-      "temperature_window_c": [350, 550],
+      "temperature_window_c": [
+        350,
+        550
+      ],
       "literature_basis_ids": [
         "cu-ceria-rwgs-ncomms-2022"
       ],
@@ -244,7 +261,10 @@
       "performance_index": 93,
       "manufacturing_readiness": 70,
       "screening_exactness": 81,
-      "temperature_window_c": [250, 450],
+      "temperature_window_c": [
+        250,
+        450
+      ],
       "literature_basis_ids": [
         "pt-moox-mon2-ncomms-2022",
         "pt-tio2-ml-ncomms-2023"
@@ -293,7 +313,10 @@
       "performance_index": 84,
       "manufacturing_readiness": 73,
       "screening_exactness": 78,
-      "temperature_window_c": [500, 750],
+      "temperature_window_c": [
+        500,
+        750
+      ],
       "literature_basis_ids": [
         "monx-dynamic-rwgs-ncomms-2024",
         "mo2n-highenergy-ncomms-2026"

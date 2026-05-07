@@ -65,6 +65,27 @@
       "url": "https://www.nature.com/articles/s41467-025-57954-9",
       "kind": "literature",
       "note": "Layered sodium titanate supported ruthenium route for ambient-pressure CO2 methanation, highlighting low-temperature activity at the cost of a noble-metal basis."
+    },
+    {
+      "id": "aldana-nizr-cattoday-2013",
+      "label": "Catalysis Today 2013",
+      "url": "https://doi.org/10.1016/j.cattod.2013.02.019",
+      "kind": "literature",
+      "note": "Aldana, Ocampo et al.: operando IR mechanistic study of CO2 methanation on Ni-based ceria-zirconia, implicating formate and carbonyl intermediates."
+    },
+    {
+      "id": "mutz-ni-jcatal-2015",
+      "label": "Journal of Catalysis 2015",
+      "url": "https://doi.org/10.1016/j.jcat.2015.04.006",
+      "kind": "literature",
+      "note": "Mutz, Carvalho et al.: structural response of a Ni-based methanation catalyst under fluctuating reaction conditions unraveled by operando XAS/Raman/IR."
+    },
+    {
+      "id": "mutz-ni3fe-acscat-2017",
+      "label": "ACS Catalysis 2017",
+      "url": "https://doi.org/10.1021/acscatal.7b01896",
+      "kind": "literature",
+      "note": "Mutz, Belimov et al.: alumina-supported Ni3Fe alloy with stable activity for CO2 methanation; alloying improves resistance to deactivation under load swings."
     }
   ],
   "catalog_quotes": [],

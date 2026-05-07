@@ -58,6 +58,27 @@
       "url": "https://www.nature.com/articles/s41467-024-52517-w",
       "kind": "literature",
       "note": "Co single-atoms plus nanoparticles on N-doped carbon reported as a non-noble route for formic-acid dehydrogenation."
+    },
+    {
+      "id": "loges-fad-acie-2008",
+      "label": "Angew. Chem. Int. Ed. 2008",
+      "url": "https://doi.org/10.1002/anie.200705972",
+      "kind": "literature",
+      "note": "Loges, Boddien & Junge: room-temperature hydrogen generation from formic-acid amine adducts, demonstrated through H2/O2 fuel-cell coupling."
+    },
+    {
+      "id": "boddien-fad-science-2011",
+      "label": "Science 2011",
+      "url": "https://doi.org/10.1126/science.1206613",
+      "kind": "literature",
+      "note": "Boddien, Mellmann, Gartner et al.: efficient iron-based homogeneous catalyst for formic-acid dehydrogenation, establishing non-noble-metal viability."
+    },
+    {
+      "id": "tedsree-agpd-natnano-2011",
+      "label": "Nature Nanotechnology 2011",
+      "url": "https://doi.org/10.1038/nnano.2011.42",
+      "kind": "literature",
+      "note": "Tedsree, Li, Jones et al.: Ag-Pd core-shell nanocatalyst enabling room-temperature gas-phase formic-acid decomposition with selective H2 generation."
     }
   ],
   "catalog_quotes": [],

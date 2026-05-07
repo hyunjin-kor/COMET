@@ -65,6 +65,27 @@
       "url": "https://www.nature.com/articles/s41467-025-61356-2",
       "kind": "literature",
       "note": "Scalable all-earth-abundant NiFe layered-double-hydroxide route reported for membrane-free alkaline water electrolysis and relevant anode manufacture."
+    },
+    {
+      "id": "du-aem-chemrev-2022",
+      "label": "Chemical Reviews 2022",
+      "url": "https://doi.org/10.1021/acs.chemrev.1c00854",
+      "kind": "review",
+      "note": "Du, Roy et al.: comprehensive review of anion-exchange membrane water electrolyzers covering components, performance benchmarks, and durability."
+    },
+    {
+      "id": "yang-aem-chemsocrev-2022",
+      "label": "Chem. Soc. Rev. 2022",
+      "url": "https://doi.org/10.1039/d2cs00038e",
+      "kind": "review",
+      "note": "Yang, Li et al.: AEM water electrolyzers and fuel cells review covering membrane chemistry, electrode design, and system integration."
+    },
+    {
+      "id": "henkensmeier-aem-jeec-2020",
+      "label": "J. Electrochem. Energy 2020",
+      "url": "https://doi.org/10.1115/1.4047963",
+      "kind": "literature",
+      "note": "Henkensmeier, Najibah et al.: overview of state-of-the-art commercial anion-exchange membranes used in water electrolysis cells."
     }
   ],
   "catalog_quotes": [],

@@ -850,6 +850,24 @@
       "application_family": "general",
       "pricing_basis": "annual_average_silicon_metal_price_2024",
       "reference_url": "https://pubs.usgs.gov/periodicals/mcs2025/mcs2025-silicon.pdf"
+    },
+    {
+      "library_key": "lit:usgs-zircon-2026",
+      "name": "Zircon mineral concentrate, commodity proxy (USGS MCS 2026)",
+      "formula": "ZrSiO4",
+      "category": "Support",
+      "symbol": "Zr",
+      "price": 1.9,
+      "price_unit": "$/kg",
+      "price_scope": "literature_high_volume",
+      "source": "USGS Mineral Commodity Summaries 2026",
+      "quote_year": 2025,
+      "notes": "USGS reports a 2025 imported (landed-duty-paid) zircon unit value of $1,900 per metric ton, gross weight. Use as an upstream raw-material proxy for ZrO2-based supports - refined zirconia powders cost substantially more, so this is a screening floor, not a direct catalyst-grade quote.",
+      "has_lab_data": false,
+      "catalyst_domain": "thermal",
+      "application_family": "general",
+      "pricing_basis": "imported_unit_value_2025",
+      "reference_url": "https://pubs.usgs.gov/periodicals/mcs2026/mcs2026-zirconium-hafnium.pdf"
     }
   ]
 }
