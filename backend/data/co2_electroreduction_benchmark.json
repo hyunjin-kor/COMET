@@ -1,0 +1,398 @@
+{
+  "family": "co2-electroreduction",
+  "title": "CO2 electroreduction (CO2RR) reference family",
+  "catalyst_domain": "electrocatalyst",
+  "application_family": "electrolyzer",
+  "reaction": "CO2 + n e- + n H+ -> products (CO, HCOO-, C2H4, C2H5OH, ...)",
+  "objective": "Optional literature-backed electrocatalyst family for CO2-to-product electrolyzer cathodes. Candidates compare a Cu route biased toward multicarbon products (ethylene/ethanol) with an Au route optimized for CO selectivity and a Sn route optimized for formate, so the screening can reward different product targets and stack chemistries.",
+  "decision_profiles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Balance current stack economics, evidence quality, route maturity, and reported performance.",
+      "weights": {
+        "economics": 0.42,
+        "evidence": 0.22,
+        "route": 0.16,
+        "performance": 0.2
+      }
+    },
+    "cost-first": {
+      "label": "Cost-first",
+      "description": "Bias ranking toward catalyst and electrode cost while preserving route and evidence guardrails.",
+      "weights": {
+        "economics": 0.58,
+        "evidence": 0.14,
+        "route": 0.08,
+        "performance": 0.2
+      }
+    },
+    "evidence-first": {
+      "label": "Evidence-first",
+      "description": "Reward stronger literature support and more reproducible CO2 electrolyzer cathode routes.",
+      "weights": {
+        "economics": 0.3,
+        "evidence": 0.34,
+        "route": 0.16,
+        "performance": 0.2
+      }
+    }
+  },
+  "citations": [
+    {
+      "id": "kuhl-cu-co2rr-ees-2012",
+      "label": "Energy Environ. Sci. 2012",
+      "url": "https://doi.org/10.1039/c2ee21234j",
+      "kind": "literature",
+      "note": "Kuhl, Cave et al.: insights into the electrochemical reduction of CO2 on metallic copper surfaces, establishing the canonical Cu product distribution as a function of potential."
+    },
+    {
+      "id": "lin-cof-co-co2rr-science-2015",
+      "label": "Science 2015",
+      "url": "https://doi.org/10.1126/science.aac8343",
+      "kind": "literature",
+      "note": "Lin, Diercks et al.: covalent organic frameworks comprising cobalt porphyrins for catalytic CO2 reduction in water, establishing molecular-MOF/COF cathodes as a non-metallic option."
+    },
+    {
+      "id": "hall-mesostructure-co2rr-jacs-2015",
+      "label": "J. Am. Chem. Soc. 2015",
+      "url": "https://doi.org/10.1021/jacs.5b08259",
+      "kind": "literature",
+      "note": "Hall, Yoon et al.: mesostructure-induced selectivity in CO2 reduction catalysis, showing how nanostructured metal cathodes shift the product distribution."
+    },
+    {
+      "id": "verdaguer-od-cu-co2rr-jacs-2015",
+      "label": "J. Am. Chem. Soc. 2015",
+      "url": "https://doi.org/10.1021/jacs.5b06227",
+      "kind": "literature",
+      "note": "Verdaguer-Casadevall, Li et al.: probing the active surface sites for CO reduction on oxide-derived copper electrocatalysts, supporting the OD-Cu architecture as a multicarbon-favoring route."
+    },
+    {
+      "id": "liu-field-co2rr-nature-2016",
+      "label": "Nature 2016",
+      "url": "https://doi.org/10.1038/nature19060",
+      "kind": "literature",
+      "note": "Liu, Pang et al.: enhanced electrocatalytic CO2 reduction via field-induced reagent concentration, motivating high-aspect-ratio Cu morphologies for multicarbon products."
+    },
+    {
+      "id": "dunwell-bicarbonate-au-co2rr-jacs-2017",
+      "label": "J. Am. Chem. Soc. 2017",
+      "url": "https://doi.org/10.1021/jacs.6b13287",
+      "kind": "literature",
+      "note": "Dunwell, Lu et al.: central role of bicarbonate in the electrochemical reduction of CO2 on gold, clarifying the active CO2 source under buffered conditions."
+    },
+    {
+      "id": "dinh-cu-ethylene-science-2018",
+      "label": "Science 2018",
+      "url": "https://doi.org/10.1126/science.aas9100",
+      "kind": "literature",
+      "note": "Dinh, Burdyny et al.: CO2 electroreduction to ethylene via hydroxide-mediated copper catalysis at an abrupt interface, demonstrating C2 selectivity at industrially relevant currents."
+    },
+    {
+      "id": "nitopi-cu-co2rr-chemrev-2019",
+      "label": "Chem. Rev. 2019",
+      "url": "https://doi.org/10.1021/acs.chemrev.8b00705",
+      "kind": "review",
+      "note": "Nitopi, Bertheussen et al.: progress and perspectives of electrochemical CO2 reduction on copper in aqueous electrolyte, foundational comprehensive Cu CO2RR review."
+    },
+    {
+      "id": "birdja-co2rr-natenergy-2019",
+      "label": "Nature Energy 2019",
+      "url": "https://doi.org/10.1038/s41560-019-0450-y",
+      "kind": "review",
+      "note": "Birdja, Perez-Gallent et al.: advances and challenges in understanding the electrocatalytic conversion of CO2 to fuels, broad CO2RR review covering products, catalysts, and stacks."
+    },
+    {
+      "id": "li-mol-tuning-co2rr-nature-2019",
+      "label": "Nature 2019",
+      "url": "https://doi.org/10.1038/s41586-019-1782-2",
+      "kind": "literature",
+      "note": "Li, Thevenon et al.: molecular tuning of CO2-to-ethylene conversion, demonstrating organic-modified Cu surfaces with improved C2 selectivity."
+    },
+    {
+      "id": "li-cooperative-ethanol-natcatal-2019",
+      "label": "Nature Catalysis 2019",
+      "url": "https://doi.org/10.1038/s41929-019-0383-7",
+      "kind": "literature",
+      "note": "Li, Li et al.: cooperative CO2-to-ethanol conversion via enriched intermediates at molecule-metal catalyst interfaces, supporting hybrid molecular-metal designs."
+    },
+    {
+      "id": "garciadequer-multicarbon-science-2020",
+      "label": "Science 2020",
+      "url": "https://doi.org/10.1126/science.aay4217",
+      "kind": "literature",
+      "note": "Garcia de Arquer, Dinh et al.: CO2 electrolysis to multicarbon products at activities greater than 1 A/cm2, demonstrating gas-diffusion-electrode operation at industrial currents."
+    }
+  ],
+  "catalog_quotes": [],
+  "route_templates": [
+    {
+      "id": "cu-co2rr-cathode-route",
+      "name": "Cu CO2RR cathode route",
+      "calculator_template_id": "pem_electrolyzer_ccm",
+      "manufacturing_mode": "CO2 electrolyzer cathode coating route (Cu)",
+      "preprocess": [
+        "Cu precursor or oxide-derived Cu staging",
+        "Conductive carbon or GDL substrate preparation",
+        "Membrane hydration"
+      ],
+      "synthesis": [
+        "Cu deposition or oxide-derived Cu reduction",
+        "Ink homogenization with PFSA or AEM ionomer",
+        "Ultrasonic dispersion"
+      ],
+      "postprocess": [
+        "CCM coating pass on the cathode side",
+        "Low-temperature drying",
+        "Hot-press lamination",
+        "Electrochemical break-in"
+      ],
+      "quality_gates": [
+        "Cu loading verification",
+        "Faradaic efficiency screen for C2 products",
+        "Current-density and selectivity hold"
+      ],
+      "steps": [
+        "membrane_pretreatment",
+        "substrate_pretreatment",
+        "ionomer_ink_homogenization",
+        "ultrasonic_dispersion",
+        "ccm_coating_pass",
+        "electrode_drying_low_temp",
+        "hot_press_lamination",
+        "electrochemical_break_in"
+      ],
+      "non_step_cost_per_lb": 0.74,
+      "route_confidence": 78,
+      "route_note": "Most transferable Cu CO2RR cathode basis covering oxide-derived and nanostructured copper variants targeting multicarbon products."
+    },
+    {
+      "id": "au-co-co2rr-route",
+      "name": "Au CO-selective CO2RR route",
+      "calculator_template_id": "pem_electrolyzer_ccm",
+      "manufacturing_mode": "Au CO2RR cathode coating route",
+      "preprocess": [
+        "Au precursor staging",
+        "Carbon support and GDL preparation",
+        "Membrane hydration"
+      ],
+      "synthesis": [
+        "Au nanoparticle deposition",
+        "Ink homogenization with PFSA ionomer",
+        "Ultrasonic dispersion"
+      ],
+      "postprocess": [
+        "CCM coating pass",
+        "Low-temperature drying",
+        "Hot-press lamination",
+        "Electrochemical break-in"
+      ],
+      "quality_gates": [
+        "Au dispersion proxy",
+        "CO Faradaic efficiency screen",
+        "Long-hold polarization check"
+      ],
+      "steps": [
+        "membrane_pretreatment",
+        "substrate_pretreatment",
+        "ionomer_ink_homogenization",
+        "ultrasonic_dispersion",
+        "ccm_coating_pass",
+        "electrode_drying_low_temp",
+        "hot_press_lamination",
+        "electrochemical_break_in"
+      ],
+      "non_step_cost_per_lb": 0.76,
+      "route_confidence": 80,
+      "route_note": "Au cathode route for CO-selective CO2RR, mature and highly selective but exposed to gold price."
+    },
+    {
+      "id": "sn-formate-co2rr-route",
+      "name": "Sn formate-selective CO2RR route",
+      "calculator_template_id": "alkaline_electrolyzer_gde",
+      "manufacturing_mode": "Sn-based CO2RR cathode coating route (alkaline / AEM)",
+      "preprocess": [
+        "Sn or SnO2 precursor staging",
+        "Substrate / GDL preparation",
+        "Membrane hydration and ion-exchange conversion"
+      ],
+      "synthesis": [
+        "Sn nanoparticle deposition or SnO2 reduction",
+        "Ink homogenization",
+        "Ultrasonic dispersion"
+      ],
+      "postprocess": [
+        "Electrode coating pass",
+        "Low-temperature drying",
+        "Hot-press or compression assembly",
+        "Electrochemical break-in"
+      ],
+      "quality_gates": [
+        "Sn loading verification",
+        "Formate Faradaic efficiency screen",
+        "Stability hold under formate-product flow"
+      ],
+      "steps": [
+        "membrane_pretreatment",
+        "substrate_pretreatment",
+        "ion_exchange_conversion",
+        "ionomer_ink_homogenization",
+        "ultrasonic_dispersion",
+        "ccm_coating_pass",
+        "electrode_drying_low_temp",
+        "hot_press_lamination",
+        "electrochemical_break_in"
+      ],
+      "non_step_cost_per_lb": 0.66,
+      "route_confidence": 76,
+      "route_note": "Sn-based formate-selective cathode in an alkaline / AEM stack, low catalyst-cost option when liquid formate is the target product."
+    }
+  ],
+  "candidates": [
+    {
+      "slug": "cu-multicarbon-co2rr",
+      "title": "Cu multicarbon CO2RR cathode",
+      "archetype": "Multicarbon route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Oxide-derived or nanostructured Cu cathode for CO2 electroreduction targeting ethylene / ethanol multicarbon products in a PEM-like or AEM-like stack.",
+      "route_template_id": "cu-co2rr-cathode-route",
+      "order_size_tons": 2,
+      "performance_index": 80,
+      "manufacturing_readiness": 72,
+      "screening_exactness": 70,
+      "temperature_window_c": [
+        20,
+        70
+      ],
+      "literature_basis_ids": [
+        "kuhl-cu-co2rr-ees-2012",
+        "verdaguer-od-cu-co2rr-jacs-2015",
+        "dinh-cu-ethylene-science-2018",
+        "nitopi-cu-co2rr-chemrev-2019",
+        "garciadequer-multicarbon-science-2020"
+      ],
+      "catalog_quote_ids": [],
+      "electrode_defaults": {
+        "application_family": "electrolyzer",
+        "ionomer_material_key": "fcs:pfsa-d5",
+        "membrane_material_key": "fcs:pfsa-d50r",
+        "substrate_material_key": "fcs:ti-ptl-ultrathin",
+        "active_area_cm2": 25,
+        "catalyst_loading_mg_cm2": 1.5,
+        "ionomer_to_catalyst_ratio": 0.25
+      },
+      "decision_notes": [
+        "Best fit when the program goal is multicarbon CO2 reduction (ethylene / ethanol) and a Cu cathode is acceptable.",
+        "Selectivity to C2 products improves with morphology control, but route maturity is lower than Au or Sn alternatives."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Cu",
+          "wt_pct": 100,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Cu",
+            "precursor_markup": 1.1,
+            "note": "Live Cu feed with a precursor / conversion markup for oxide-derived or nanostructured Cu cathode screening."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "au-co-co2rr",
+      "title": "Au CO-selective CO2RR cathode",
+      "archetype": "CO-selective benchmark",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Au nanoparticle cathode optimized for CO-selective CO2 electroreduction in a PEM-like stack, used as the CO product anchor.",
+      "route_template_id": "au-co-co2rr-route",
+      "order_size_tons": 1,
+      "performance_index": 86,
+      "manufacturing_readiness": 80,
+      "screening_exactness": 76,
+      "temperature_window_c": [
+        20,
+        70
+      ],
+      "literature_basis_ids": [
+        "hall-mesostructure-co2rr-jacs-2015",
+        "dunwell-bicarbonate-au-co2rr-jacs-2017",
+        "birdja-co2rr-natenergy-2019"
+      ],
+      "catalog_quote_ids": [],
+      "electrode_defaults": {
+        "application_family": "electrolyzer",
+        "ionomer_material_key": "fcs:pfsa-d5",
+        "membrane_material_key": "fcs:pfsa-d50r",
+        "substrate_material_key": "fcs:ti-ptl-ultrathin",
+        "active_area_cm2": 25,
+        "catalyst_loading_mg_cm2": 1.0,
+        "ionomer_to_catalyst_ratio": 0.25
+      },
+      "decision_notes": [
+        "Use when high CO Faradaic efficiency is the program target and a precious-metal cathode is acceptable.",
+        "Catalyst economics are dominated by gold price exposure even at moderate loadings."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Au",
+          "wt_pct": 100,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Au",
+            "precursor_markup": 1.05,
+            "note": "Live Au feed with a mild precursor / conversion markup for Au CO2RR cathode screening."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "sn-formate-co2rr",
+      "title": "Sn formate CO2RR cathode",
+      "archetype": "Formate-selective non-noble route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Sn or SnO2-derived cathode for formate-selective CO2 electroreduction in an alkaline / AEM stack.",
+      "route_template_id": "sn-formate-co2rr-route",
+      "order_size_tons": 5,
+      "performance_index": 78,
+      "manufacturing_readiness": 76,
+      "screening_exactness": 72,
+      "temperature_window_c": [
+        20,
+        80
+      ],
+      "literature_basis_ids": [
+        "lin-cof-co-co2rr-science-2015",
+        "li-mol-tuning-co2rr-nature-2019",
+        "li-cooperative-ethanol-natcatal-2019"
+      ],
+      "catalog_quote_ids": [],
+      "electrode_defaults": {
+        "application_family": "electrolyzer",
+        "ionomer_material_key": "fcs:sustainion-xa9-25ml",
+        "membrane_material_key": "fcs:sustainion-x37-50-rt",
+        "substrate_material_key": "fcs:nickel-fiber-felt",
+        "active_area_cm2": 25,
+        "catalyst_loading_mg_cm2": 2.0,
+        "ionomer_to_catalyst_ratio": 0.15
+      },
+      "decision_notes": [
+        "Use this when liquid formate is the target product and a non-noble cathode in an alkaline / AEM stack is acceptable.",
+        "Cathode economics stay favorable because Sn avoids PGM exposure, but stack durability under formate flow remains a sensitivity."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Sn",
+          "wt_pct": 100,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Sn",
+            "precursor_markup": 1.1,
+            "note": "Live Sn feed with a precursor / conversion markup for Sn cathode screening."
+          }
+        }
+      ]
+    }
+  ]
+}

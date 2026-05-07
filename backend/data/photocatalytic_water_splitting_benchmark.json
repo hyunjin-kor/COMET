@@ -1,0 +1,346 @@
+{
+  "family": "photocatalytic-water-splitting",
+  "title": "Photocatalytic water splitting reference family",
+  "catalyst_domain": "thermal",
+  "application_family": "general",
+  "reaction": "2 H2O + hν -> 2 H2 + O2 (overall) | 2 H2O + hν -> 2 H2 + O2 via half-reactions",
+  "objective": "Optional literature-backed family for solar-driven photocatalytic water splitting using powder photocatalysts. Candidates compare a TiO2 (anatase) anchor with the metal-free graphitic carbon nitride (g-C3N4) polymer photocatalyst and a Pt/TiO2 cocatalyst route, so the screening can reward the canonical oxide baseline, a non-PGM polymer variant, or a precious-metal cocatalyst boost.",
+  "decision_profiles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Balance catalyst cost, evidence quality, route maturity, and reported solar-to-hydrogen activity.",
+      "weights": {
+        "economics": 0.4,
+        "evidence": 0.22,
+        "route": 0.18,
+        "performance": 0.2
+      }
+    },
+    "cost-first": {
+      "label": "Cost-first",
+      "description": "Bias ranking toward photocatalyst cost while preserving route and evidence guardrails.",
+      "weights": {
+        "economics": 0.58,
+        "evidence": 0.14,
+        "route": 0.08,
+        "performance": 0.2
+      }
+    },
+    "evidence-first": {
+      "label": "Evidence-first",
+      "description": "Reward stronger literature support and more reproducible photocatalyst preparation routes.",
+      "weights": {
+        "economics": 0.3,
+        "evidence": 0.34,
+        "route": 0.16,
+        "performance": 0.2
+      }
+    }
+  },
+  "citations": [
+    {
+      "id": "fujishima-honda-tio2-nature-1972",
+      "label": "Nature 1972",
+      "url": "https://doi.org/10.1038/238037a0",
+      "kind": "literature",
+      "note": "Fujishima and Honda: electrochemical photolysis of water at a semiconductor (TiO2) electrode, the founding observation for semiconductor photocatalysis."
+    },
+    {
+      "id": "wang-gcn-natmater-2008",
+      "label": "Nature Materials 2008",
+      "url": "https://doi.org/10.1038/nmat2317",
+      "kind": "literature",
+      "note": "Wang, Maeda et al.: a metal-free polymeric photocatalyst (g-C3N4) for hydrogen production from water under visible light, foundational metal-free photocatalyst paper."
+    },
+    {
+      "id": "kudo-miseki-photocatalyst-csr-2009",
+      "label": "Chem. Soc. Rev. 2009",
+      "url": "https://doi.org/10.1039/b800489g",
+      "kind": "review",
+      "note": "Kudo and Miseki: foundational review of heterogeneous photocatalyst materials for water splitting, organising oxide, oxynitride, and sulfide families."
+    },
+    {
+      "id": "chen-shen-photocatalyst-chemrev-2010",
+      "label": "Chem. Rev. 2010",
+      "url": "https://doi.org/10.1021/cr1001645",
+      "kind": "review",
+      "note": "Chen, Shen et al.: comprehensive review of semiconductor-based photocatalytic hydrogen generation, covering material classes, cocatalyst strategies, and kinetic principles."
+    },
+    {
+      "id": "walter-warren-solar-water-chemrev-2010",
+      "label": "Chem. Rev. 2010",
+      "url": "https://doi.org/10.1021/cr1002326",
+      "kind": "review",
+      "note": "Walter, Warren et al.: foundational review of solar water splitting cells, comparing photoelectrochemical, photocatalytic, and photovoltaic-electrolysis architectures."
+    },
+    {
+      "id": "scanlon-tio2-band-natmater-2013",
+      "label": "Nature Materials 2013",
+      "url": "https://doi.org/10.1038/nmat3697",
+      "kind": "literature",
+      "note": "Scanlon, Dunnill et al.: band alignment of rutile and anatase TiO2, explaining the anatase-vs-rutile activity gap that underpins TiO2 photocatalyst selection."
+    },
+    {
+      "id": "wang-heterojunction-csr-2014",
+      "label": "Chem. Soc. Rev. 2014",
+      "url": "https://doi.org/10.1039/c4cs00126e",
+      "kind": "review",
+      "note": "Wang, Zhang et al.: review of semiconductor heterojunction photocatalysts covering design, construction, and photocatalytic performance, bridging single-phase and composite designs."
+    },
+    {
+      "id": "hisatomi-domen-particulate-natcatal-2019",
+      "label": "Nature Catalysis 2019",
+      "url": "https://doi.org/10.1038/s41929-019-0242-6",
+      "kind": "literature",
+      "note": "Hisatomi and Domen: reaction systems for solar hydrogen production via water splitting with particulate semiconductor photocatalysts, framing scale-up paths and operating constraints."
+    }
+  ],
+  "catalog_quotes": [],
+  "route_templates": [
+    {
+      "id": "tio2-anatase-route",
+      "name": "TiO2 (anatase) photocatalyst route",
+      "manufacturing_mode": "Bulk anatase TiO2 photocatalyst preparation",
+      "preprocess": [
+        "Titanium precursor balancing",
+        "Solvent and template staging",
+        "Crystallization-window setup"
+      ],
+      "synthesis": [
+        "Sol-gel or hydrothermal assembly",
+        "Aging and crystallization",
+        "Wash and solids recovery"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination to anatase phase",
+        "Milling to target particle size"
+      ],
+      "quality_gates": [
+        "Anatase phase purity proxy",
+        "Surface-area / particle-size screen",
+        "UV photoactivity hold"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "crystallizer",
+        "filter_rotary_vacuum",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "mill"
+      ],
+      "non_step_cost_per_lb": 0.62,
+      "route_confidence": 88,
+      "route_note": "Mature anatase TiO2 powder route, broadly used as the canonical oxide photocatalyst baseline."
+    },
+    {
+      "id": "gcn-bulk-route",
+      "name": "g-C3N4 polymer route",
+      "manufacturing_mode": "Bulk graphitic carbon nitride photocatalyst preparation",
+      "preprocess": [
+        "Nitrogen-rich precursor (melamine / urea / dicyandiamide) staging",
+        "Crucible / furnace conditioning",
+        "Pyrolysis-atmosphere setup"
+      ],
+      "synthesis": [
+        "Thermal polymerization to g-C3N4",
+        "Cooling and bulk recovery"
+      ],
+      "postprocess": [
+        "Acid wash or solvent wash",
+        "Drying",
+        "Milling and exfoliation"
+      ],
+      "quality_gates": [
+        "g-C3N4 phase / heptazine motif proxy",
+        "Optical bandgap screen",
+        "Visible-light photoactivity hold"
+      ],
+      "steps": [
+        "mixer_dry_blender",
+        "kiln_batch",
+        "filter_rotary_vacuum",
+        "dryer_rotary_100_300C",
+        "mill"
+      ],
+      "non_step_cost_per_lb": 0.7,
+      "route_confidence": 78,
+      "route_note": "Metal-free polymer photocatalyst route, attractive when avoiding metal-based active phases is the program goal."
+    },
+    {
+      "id": "pt-tio2-cocatalyst-route",
+      "name": "Pt / TiO2 cocatalyst route",
+      "manufacturing_mode": "TiO2 photocatalyst with Pt cocatalyst loading",
+      "preprocess": [
+        "TiO2 base powder staging",
+        "Pt precursor balancing",
+        "Photo-deposition or wet-impregnation setup"
+      ],
+      "synthesis": [
+        "Pt deposition on TiO2",
+        "Reduction or photo-reduction to metallic Pt",
+        "Wash and solids recovery"
+      ],
+      "postprocess": [
+        "Drying",
+        "Mild thermal hold",
+        "Milling to target particle size"
+      ],
+      "quality_gates": [
+        "Pt loading verification",
+        "Pt nanoparticle dispersion proxy",
+        "Hydrogen-evolution activity hold under UV / visible light"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "filter_rotary_vacuum",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "mill"
+      ],
+      "non_step_cost_per_lb": 0.74,
+      "route_confidence": 82,
+      "route_note": "Pt cocatalyst on TiO2 route, established way to boost H2 evolution rate over the bare-oxide baseline at the cost of precious-metal exposure."
+    }
+  ],
+  "candidates": [
+    {
+      "slug": "tio2-anatase-baseline",
+      "title": "TiO2 (anatase) baseline",
+      "archetype": "Oxide benchmark",
+      "screening_basis": "engineering_proxy",
+      "summary": "Bulk anatase TiO2 photocatalyst used as the canonical oxide baseline for solar water splitting screening.",
+      "route_template_id": "tio2-anatase-route",
+      "order_size_tons": 5,
+      "performance_index": 60,
+      "manufacturing_readiness": 90,
+      "screening_exactness": 80,
+      "temperature_window_c": [
+        20,
+        80
+      ],
+      "literature_basis_ids": [
+        "fujishima-honda-tio2-nature-1972",
+        "scanlon-tio2-band-natmater-2013",
+        "kudo-miseki-photocatalyst-csr-2009"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Most transferable oxide photocatalyst basis and the clearest comparison anchor across the literature.",
+        "UV-only activity limits solar-to-hydrogen performance versus visible-light variants."
+      ],
+      "components": [
+        {
+          "role": "active_catalyst",
+          "name": "TiO2 (anatase)",
+          "wt_pct": 100,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 2.4,
+            "evidence_label": "Anatase TiO2 photocatalyst screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 66,
+            "transparency": "derived_proxy",
+            "note": "Anatase TiO2 powder cost held on an engineering proxy comparable to commercial photocatalyst-grade titania."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "gcn-metal-free",
+      "title": "g-C3N4 metal-free photocatalyst",
+      "archetype": "Metal-free polymer route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Graphitic carbon nitride polymer photocatalyst for visible-light hydrogen evolution, offering a fully metal-free option.",
+      "route_template_id": "gcn-bulk-route",
+      "order_size_tons": 2,
+      "performance_index": 68,
+      "manufacturing_readiness": 78,
+      "screening_exactness": 72,
+      "temperature_window_c": [
+        20,
+        80
+      ],
+      "literature_basis_ids": [
+        "wang-gcn-natmater-2008",
+        "wang-heterojunction-csr-2014",
+        "hisatomi-domen-particulate-natcatal-2019"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Use when avoiding metals altogether is the program goal and visible-light operation is required.",
+        "Pyrolysis precursor choice and exfoliation discipline drive activity reproducibility."
+      ],
+      "components": [
+        {
+          "role": "active_catalyst",
+          "name": "g-C3N4",
+          "wt_pct": 100,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 4.5,
+            "evidence_label": "g-C3N4 photocatalyst screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 60,
+            "transparency": "derived_proxy",
+            "note": "g-C3N4 powder held on a derived screening proxy reflecting nitrogen-precursor and pyrolysis processing overhead."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "pt-tio2-cocatalyst",
+      "title": "Pt / TiO2 cocatalyst",
+      "archetype": "Cocatalyst-boosted route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "TiO2 anatase loaded with a Pt cocatalyst to boost H2 evolution rate over the bare-oxide baseline.",
+      "route_template_id": "pt-tio2-cocatalyst-route",
+      "order_size_tons": 2,
+      "performance_index": 80,
+      "manufacturing_readiness": 84,
+      "screening_exactness": 76,
+      "temperature_window_c": [
+        20,
+        80
+      ],
+      "literature_basis_ids": [
+        "chen-shen-photocatalyst-chemrev-2010",
+        "walter-warren-solar-water-chemrev-2010",
+        "kudo-miseki-photocatalyst-csr-2009"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Use when boosting H2 evolution rate is worth Pt exposure and a TiO2 base is acceptable.",
+        "Activity gains plateau at low Pt loading; further Pt addition adds cost without proportional activity."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Pt",
+          "wt_pct": 1.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Pt",
+            "precursor_markup": 1.05,
+            "note": "Live Pt feed with a mild precursor / conversion markup for cocatalyst loading screening."
+          }
+        },
+        {
+          "role": "support",
+          "name": "TiO2 (anatase)",
+          "wt_pct": 99.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 2.4,
+            "evidence_label": "Anatase TiO2 photocatalyst screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 66,
+            "transparency": "derived_proxy",
+            "note": "Anatase TiO2 base powder cost held on an engineering proxy comparable to the bare TiO2 baseline."
+          }
+        }
+      ]
+    }
+  ]
+}
