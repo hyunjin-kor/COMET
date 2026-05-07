@@ -1,0 +1,422 @@
+{
+  "family": "hydrogen-evolution-reaction",
+  "title": "HER (hydrogen evolution) reference family",
+  "catalyst_domain": "electrocatalyst",
+  "application_family": "electrolyzer",
+  "reaction": "2 H+ + 2 e- -> H2 (acidic) | 2 H2O + 2 e- -> H2 + 2 OH- (alkaline)",
+  "objective": "Optional literature-backed electrocatalyst family for HER cathodes in PEM and AEM/alkaline water electrolyzers. Candidates compare a Pt/C precious-metal anchor with non-noble routes (NiMo alkaline, MoS2 acidic) so the screening can reward either route maturity or non-PGM catalyst economics.",
+  "decision_profiles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Balance current stack economics, evidence quality, route maturity, and reported performance.",
+      "weights": {
+        "economics": 0.42,
+        "evidence": 0.22,
+        "route": 0.16,
+        "performance": 0.2
+      }
+    },
+    "cost-first": {
+      "label": "Cost-first",
+      "description": "Bias ranking toward catalyst and electrode cost while preserving route and evidence guardrails.",
+      "weights": {
+        "economics": 0.58,
+        "evidence": 0.14,
+        "route": 0.08,
+        "performance": 0.2
+      }
+    },
+    "evidence-first": {
+      "label": "Evidence-first",
+      "description": "Reward stronger literature support and more reproducible electrolyzer-cathode routes.",
+      "weights": {
+        "economics": 0.3,
+        "evidence": 0.34,
+        "route": 0.16,
+        "performance": 0.2
+      }
+    }
+  },
+  "citations": [
+    {
+      "id": "norskov-her-volcano-jes-2005",
+      "label": "J. Electrochem. Soc. 2005",
+      "url": "https://doi.org/10.1149/1.1856988",
+      "kind": "literature",
+      "note": "Norskov, Bligaard et al.: trends in the exchange current for HER establishing the canonical HER volcano plot and free-energy descriptor used to rank electrocatalysts."
+    },
+    {
+      "id": "hinnemann-mos2-jacs-2005",
+      "label": "J. Am. Chem. Soc. 2005",
+      "url": "https://doi.org/10.1021/ja0504690",
+      "kind": "literature",
+      "note": "Hinnemann, Moses et al.: biomimetic hydrogen evolution showing MoS2 nanoparticles as a non-precious HER catalyst, motivating the active-edge-site picture for sulfide electrocatalysts."
+    },
+    {
+      "id": "jaramillo-mos2-edge-science-2007",
+      "label": "Science 2007",
+      "url": "https://doi.org/10.1126/science.1141483",
+      "kind": "literature",
+      "note": "Jaramillo, Jorgensen, Bonde et al.: identification of MoS2 edge sites as the active surface for electrochemical H2 evolution, establishing the basal-plane vs edge-plane design rule."
+    },
+    {
+      "id": "stamenkovic-pt-bimetallic-natmater-2007",
+      "label": "Nature Materials 2007",
+      "url": "https://doi.org/10.1038/nmat1840",
+      "kind": "literature",
+      "note": "Stamenkovic, Mun et al.: trends in electrocatalysis on extended and nanoscale Pt-bimetallic alloy surfaces, foundational for HER cathodes at low Pt loading."
+    },
+    {
+      "id": "li-mos2-graphene-jacs-2011",
+      "label": "J. Am. Chem. Soc. 2011",
+      "url": "https://doi.org/10.1021/ja201269b",
+      "kind": "literature",
+      "note": "Li, Wang et al.: MoS2 nanoparticles grown on graphene as an advanced HER electrocatalyst, demonstrating the conductive-support strategy for sulfide active phases."
+    },
+    {
+      "id": "voiry-ws2-natmater-2013",
+      "label": "Nature Materials 2013",
+      "url": "https://doi.org/10.1038/nmat3700",
+      "kind": "literature",
+      "note": "Voiry, Yamaguchi et al.: enhanced HER activity on strained chemically exfoliated WS2 nanosheets, showing how phase and strain engineering activate transition-metal dichalcogenides."
+    },
+    {
+      "id": "gong-nio-her-ncomms-2014",
+      "label": "Nature Communications 2014",
+      "url": "https://doi.org/10.1038/ncomms5695",
+      "kind": "literature",
+      "note": "Gong, Zhou et al.: nanoscale nickel oxide / nickel heterostructures for active HER electrocatalysis in alkaline electrolyte, an early non-noble alkaline cathode demonstration."
+    },
+    {
+      "id": "zou-her-csr-2015",
+      "label": "Chem. Soc. Rev. 2015",
+      "url": "https://doi.org/10.1039/c4cs00448e",
+      "kind": "review",
+      "note": "Zou and Zhang: comprehensive review of noble-metal-free hydrogen-evolution catalysts for water splitting, organising sulfide, phosphide, carbide, and alloy families."
+    },
+    {
+      "id": "jiao-doped-graphene-natenergy-2016",
+      "label": "Nature Energy 2016",
+      "url": "https://doi.org/10.1038/nenergy.2016.130",
+      "kind": "literature",
+      "note": "Jiao, Zheng et al.: activity origin and catalyst design principles for electrocatalytic HER on heteroatom-doped graphene, supporting metal-free HER routes."
+    },
+    {
+      "id": "li-mos2-basal-natmater-2016",
+      "label": "Nature Materials 2016",
+      "url": "https://doi.org/10.1038/nmat4564",
+      "kind": "literature",
+      "note": "Li, Tsai et al.: activating and optimizing MoS2 basal planes for HER through the formation of strained sulphur vacancies, expanding usable active surface beyond edges."
+    },
+    {
+      "id": "voiry-mos2-substrate-natmater-2016",
+      "label": "Nature Materials 2016",
+      "url": "https://doi.org/10.1038/nmat4660",
+      "kind": "literature",
+      "note": "Voiry, Fullon et al.: role of electronic coupling between substrate and 2D MoS2 nanosheets in electrocatalytic hydrogen production, clarifying interfacial charge transfer."
+    },
+    {
+      "id": "zhang-pt-mxene-natcatal-2018",
+      "label": "Nature Catalysis 2018",
+      "url": "https://doi.org/10.1038/s41929-018-0195-1",
+      "kind": "literature",
+      "note": "Zhang, Zhao et al.: single Pt atoms immobilized on an MXene as an efficient HER catalyst, showing the path to ultralow Pt loading on conductive 2D supports."
+    }
+  ],
+  "catalog_quotes": [],
+  "route_templates": [
+    {
+      "id": "pem-pt-carbon-cathode-route",
+      "name": "PEM Pt/C cathode route",
+      "calculator_template_id": "pem_electrolyzer_ccm",
+      "manufacturing_mode": "PEM electrolyzer cathode coating route",
+      "preprocess": [
+        "Carbon support drying and sizing",
+        "Pt precursor balancing",
+        "Membrane hydration"
+      ],
+      "synthesis": [
+        "Pt deposition on carbon",
+        "Ink homogenization with PFSA ionomer",
+        "Ultrasonic dispersion"
+      ],
+      "postprocess": [
+        "CCM coating pass on the cathode side",
+        "Low-temperature drying",
+        "Hot-press lamination",
+        "Electrochemical break-in"
+      ],
+      "quality_gates": [
+        "Pt loading verification",
+        "ECSA proxy",
+        "Cathode polarization screen"
+      ],
+      "steps": [
+        "membrane_pretreatment",
+        "substrate_pretreatment",
+        "ionomer_ink_homogenization",
+        "ultrasonic_dispersion",
+        "ccm_coating_pass",
+        "electrode_drying_low_temp",
+        "hot_press_lamination",
+        "electrochemical_break_in"
+      ],
+      "non_step_cost_per_lb": 0.7,
+      "route_confidence": 92,
+      "route_note": "Most transferable PEM electrolyzer cathode basis with mature commercial Pt/C inputs."
+    },
+    {
+      "id": "alkaline-nimo-route",
+      "name": "Alkaline NiMo cathode route",
+      "calculator_template_id": "alkaline_electrolyzer_gde",
+      "manufacturing_mode": "Alkaline / AEM electrolyzer cathode coating route",
+      "preprocess": [
+        "Nickel substrate or felt preparation",
+        "Membrane hydration and ion-exchange conversion",
+        "NiMo precursor staging"
+      ],
+      "synthesis": [
+        "NiMo deposition or alloy formation",
+        "Binder staging and ink homogenization",
+        "Ultrasonic dispersion"
+      ],
+      "postprocess": [
+        "Electrode coating pass",
+        "Low-temperature drying",
+        "Hot-press or compression assembly",
+        "Electrochemical break-in"
+      ],
+      "quality_gates": [
+        "Catalyst loading verification",
+        "Hydroxide-form conductivity check",
+        "HER activation-voltage screen"
+      ],
+      "steps": [
+        "membrane_pretreatment",
+        "substrate_pretreatment",
+        "ion_exchange_conversion",
+        "ionomer_ink_homogenization",
+        "ultrasonic_dispersion",
+        "ccm_coating_pass",
+        "electrode_drying_low_temp",
+        "hot_press_lamination",
+        "electrochemical_break_in"
+      ],
+      "non_step_cost_per_lb": 0.62,
+      "route_confidence": 80,
+      "route_note": "Non-noble alkaline cathode route, mature in industrial alkaline electrolyzers and reasonable for AEM cells."
+    },
+    {
+      "id": "acidic-mos2-route",
+      "name": "MoS2 acidic cathode route",
+      "calculator_template_id": "pem_electrolyzer_ccm",
+      "manufacturing_mode": "PEM-style cathode with MoS2 active phase",
+      "preprocess": [
+        "Conductive carbon or MXene support staging",
+        "Mo and S precursor accounting",
+        "Membrane hydration"
+      ],
+      "synthesis": [
+        "MoS2 synthesis or exfoliation",
+        "Ink homogenization with PFSA ionomer",
+        "Ultrasonic dispersion"
+      ],
+      "postprocess": [
+        "CCM coating pass",
+        "Low-temperature drying",
+        "Hot-press lamination",
+        "Electrochemical break-in"
+      ],
+      "quality_gates": [
+        "MoS2 phase / edge-site proxy",
+        "Acidic stability screen",
+        "Cathode polarization screen"
+      ],
+      "steps": [
+        "membrane_pretreatment",
+        "substrate_pretreatment",
+        "ionomer_ink_homogenization",
+        "ultrasonic_dispersion",
+        "ccm_coating_pass",
+        "electrode_drying_low_temp",
+        "hot_press_lamination",
+        "electrochemical_break_in"
+      ],
+      "non_step_cost_per_lb": 0.78,
+      "route_confidence": 68,
+      "route_note": "Emerging non-noble PEM cathode option; MoS2 phase control and long-term acidic stability lower route maturity versus Pt/C."
+    }
+  ],
+  "candidates": [
+    {
+      "slug": "pt-carbon-her-cathode",
+      "title": "Pt/C HER cathode (PEM)",
+      "archetype": "Commercial benchmark",
+      "screening_basis": "engineering_proxy",
+      "summary": "Commercial Pt/C cathode used as the baseline PEM-electrolyzer HER anchor.",
+      "route_template_id": "pem-pt-carbon-cathode-route",
+      "order_size_tons": 5,
+      "performance_index": 90,
+      "manufacturing_readiness": 92,
+      "screening_exactness": 84,
+      "temperature_window_c": [
+        50,
+        85
+      ],
+      "literature_basis_ids": [
+        "norskov-her-volcano-jes-2005",
+        "stamenkovic-pt-bimetallic-natmater-2007"
+      ],
+      "catalog_quote_ids": [],
+      "electrode_defaults": {
+        "application_family": "electrolyzer",
+        "ionomer_material_key": "fcs:pfsa-d5",
+        "membrane_material_key": "fcs:pfsa-d50r",
+        "substrate_material_key": "fcs:ti-ptl-ultrathin",
+        "active_area_cm2": 25,
+        "catalyst_loading_mg_cm2": 0.5,
+        "ionomer_to_catalyst_ratio": 0.3
+      },
+      "decision_notes": [
+        "Most transferable HER cathode basis and the clearest commercial comparison point for PEM electrolyzer stacks.",
+        "Economics remain dominated by live Pt price exposure even at low cathode loading."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Pt",
+          "wt_pct": 20.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Pt",
+            "precursor_markup": 1.05,
+            "note": "Live Pt feed with a mild precursor / conversion markup for commercial Pt/C cathode screening."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Carbon",
+          "wt_pct": 80.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.5,
+            "evidence_label": "Carbon support screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 68,
+            "transparency": "derived_proxy",
+            "note": "Carbon support held on an engineering proxy basis in line with the ORR Pt/C convention."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "nimo-alkaline-her-cathode",
+      "title": "NiMo alkaline HER cathode",
+      "archetype": "Non-noble benchmark",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Nickel-molybdenum alloy cathode for alkaline / AEM electrolyzer HER, common in industrial alkaline stacks.",
+      "route_template_id": "alkaline-nimo-route",
+      "order_size_tons": 5,
+      "performance_index": 82,
+      "manufacturing_readiness": 80,
+      "screening_exactness": 73,
+      "temperature_window_c": [
+        40,
+        90
+      ],
+      "literature_basis_ids": [
+        "gong-nio-her-ncomms-2014",
+        "zou-her-csr-2015"
+      ],
+      "catalog_quote_ids": [],
+      "electrode_defaults": {
+        "application_family": "electrolyzer",
+        "ionomer_material_key": "fcs:sustainion-xa9-25ml",
+        "membrane_material_key": "fcs:sustainion-x37-50-rt",
+        "substrate_material_key": "fcs:nickel-fiber-felt",
+        "active_area_cm2": 25,
+        "catalyst_loading_mg_cm2": 2.0,
+        "ionomer_to_catalyst_ratio": 0.15
+      },
+      "decision_notes": [
+        "Use this when avoiding PGMs is the program goal and an alkaline / AEM stack is acceptable.",
+        "Earth-abundant chemistry keeps catalyst economics low at the cost of slightly higher overpotential than Pt/C."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Ni",
+          "wt_pct": 70.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ni",
+            "precursor_markup": 1.1,
+            "note": "Live Ni feed with a precursor / conversion markup."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "Mo",
+          "wt_pct": 30.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Mo",
+            "precursor_markup": 1.1,
+            "note": "Indexed Mo feed with a precursor / conversion markup for NiMo alloy screening."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "mos2-acidic-her-cathode",
+      "title": "MoS2 acidic HER cathode",
+      "archetype": "Emerging non-noble route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "MoS2-based cathode targeting non-noble PEM-style HER, leveraging edge-site and basal-plane activation strategies from the literature.",
+      "route_template_id": "acidic-mos2-route",
+      "order_size_tons": 2,
+      "performance_index": 76,
+      "manufacturing_readiness": 68,
+      "screening_exactness": 70,
+      "temperature_window_c": [
+        25,
+        80
+      ],
+      "literature_basis_ids": [
+        "jaramillo-mos2-edge-science-2007",
+        "li-mos2-basal-natmater-2016",
+        "voiry-mos2-substrate-natmater-2016"
+      ],
+      "catalog_quote_ids": [],
+      "electrode_defaults": {
+        "application_family": "electrolyzer",
+        "ionomer_material_key": "fcs:pfsa-d5",
+        "membrane_material_key": "fcs:pfsa-d50r",
+        "substrate_material_key": "fcs:ti-ptl-ultrathin",
+        "active_area_cm2": 25,
+        "catalyst_loading_mg_cm2": 1.5,
+        "ionomer_to_catalyst_ratio": 0.25
+      },
+      "decision_notes": [
+        "Use when an acidic non-noble HER cathode is desired and the program can absorb lower route maturity for catalyst-economics upside.",
+        "Long-term acidic stability and reproducible edge-site population remain the main risks versus the Pt/C anchor."
+      ],
+      "components": [
+        {
+          "role": "active_catalyst",
+          "name": "MoS2",
+          "wt_pct": 100,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 12.0,
+            "evidence_label": "MoS2 powder screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 60,
+            "transparency": "derived_proxy",
+            "note": "MoS2 active phase held on a derived screening proxy combining Mo commodity exposure with a sulfide-processing overhead until a cleaner public bulk price is curated."
+          }
+        }
+      ]
+    }
+  ]
+}

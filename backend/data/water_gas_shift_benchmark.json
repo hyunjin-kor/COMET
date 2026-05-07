@@ -86,6 +86,13 @@
       "url": "https://doi.org/10.1016/s1566-7367(03)00036-0",
       "kind": "literature",
       "note": "Luengnaruemitchai, Osuwan & Gulari: comparative low-temperature WGS over Pt/CeO2, Au/CeO2, and Au/Fe2O3."
+    },
+    {
+      "id": "zhai-pt-ohx-wgs-science-2010",
+      "label": "Science 2010",
+      "url": "https://doi.org/10.1126/science.1192449",
+      "kind": "literature",
+      "note": "Zhai, Pierre et al.: alkali-stabilized Pt-OHx species as the catalytically active phase for low-temperature WGS, refining the picture of Pt/oxide interfacial sites."
     }
   ],
   "catalog_quotes": [],
