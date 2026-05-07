@@ -1,0 +1,414 @@
+{
+  "family": "ethylene-epoxidation",
+  "title": "Ethylene epoxidation reference family",
+  "catalyst_domain": "thermal",
+  "application_family": "general",
+  "reaction": "C2H4 + 1/2 O2 -> C2H4O (ethylene oxide; competing combustion: C2H4 + 3 O2 -> 2 CO2 + 2 H2O)",
+  "objective": "Optional literature-backed family for industrial ethylene oxide (EO) production. Candidates compare an Ag / alpha-Al2O3 baseline (the 50-year canonical industrial catalyst), a Cs-promoted Ag / Al2O3 high-selectivity variant (industrial standard), and an Ag-Cs-Re / Al2O3 high-selectivity emerging variant (Re-promoted commercial-grade).",
+  "decision_profiles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Balance catalyst cost, evidence quality, route maturity, and reported EO selectivity / activity.",
+      "weights": {
+        "economics": 0.42,
+        "evidence": 0.22,
+        "route": 0.18,
+        "performance": 0.18
+      }
+    },
+    "cost-first": {
+      "label": "Cost-first",
+      "description": "Bias ranking toward catalyst cost while preserving route and evidence guardrails.",
+      "weights": {
+        "economics": 0.6,
+        "evidence": 0.16,
+        "route": 0.08,
+        "performance": 0.16
+      }
+    },
+    "evidence-first": {
+      "label": "Evidence-first",
+      "description": "Reward stronger literature support and reproducible Ag / Al2O3 epoxidation routes.",
+      "weights": {
+        "economics": 0.3,
+        "evidence": 0.36,
+        "route": 0.16,
+        "performance": 0.18
+      }
+    }
+  },
+  "citations": [
+    {
+      "id": "linic-microkinetic-jcat-2003",
+      "label": "J. Catal. 2003",
+      "url": "https://doi.org/10.1016/s0021-9517(02)00156-2",
+      "kind": "literature",
+      "note": "Linic et al.: construction of a reaction coordinate and a microkinetic model for ethylene epoxidation on silver from DFT calculations and surface-science experiments."
+    },
+    {
+      "id": "linic-oxametallacycle-jacs-2003",
+      "label": "J. Am. Chem. Soc. 2003",
+      "url": "https://doi.org/10.1021/ja029076g",
+      "kind": "literature",
+      "note": "Linic and Barteau: control of ethylene epoxidation selectivity by surface oxametallacycles, foundational identification of the EO selectivity intermediate."
+    },
+    {
+      "id": "ayame-ag-alpha-apcata-2003",
+      "label": "Appl. Catal. A 2003",
+      "url": "https://doi.org/10.1016/s0926-860x(02)00595-1",
+      "kind": "literature",
+      "note": "Ayame, Uchida et al.: epoxidation of ethylene over silver catalysts on alpha-alumina crystal carriers, characterising the dominant industrial support choice."
+    },
+    {
+      "id": "linic-cs-promotion-jacs-2004",
+      "label": "J. Am. Chem. Soc. 2004",
+      "url": "https://doi.org/10.1021/ja048462q",
+      "kind": "literature",
+      "note": "Linic and Barteau: mechanism of Cs promotion in ethylene epoxidation on Ag, supporting the industrial Cs-promoted Ag formulation."
+    },
+    {
+      "id": "christopher-ag-shape-cctc-2010",
+      "label": "ChemCatChem 2010",
+      "url": "https://doi.org/10.1002/cctc.200900231",
+      "kind": "literature",
+      "note": "Christopher and Linic: shape- and size-specific chemistry of Ag nanostructures in catalytic ethylene epoxidation, demonstrating particle-morphology selectivity control."
+    },
+    {
+      "id": "ozbek-ag-oxide-cctc-2010",
+      "label": "ChemCatChem 2010",
+      "url": "https://doi.org/10.1002/cctc.201000249",
+      "kind": "review",
+      "note": "Ozbek, Onal et al.: review of ethylene epoxidation catalysed by silver oxide, organising mechanism and surface-state hypotheses."
+    },
+    {
+      "id": "diao-re-promoter-jcat-2015",
+      "label": "J. Catal. 2015",
+      "url": "https://doi.org/10.1016/j.jcat.2014.11.007",
+      "kind": "literature",
+      "note": "Diao, DiGiulio et al.: investigation on the role of Re as a promoter in Ag-Cs-Re / alpha-Al2O3 high-selectivity ethylene epoxidation catalysts; closest reference to current commercial high-selectivity formulations."
+    },
+    {
+      "id": "ren-cs-mechanism-mcat-2017",
+      "label": "Mol. Catal. 2017",
+      "url": "https://doi.org/10.1016/j.mcat.2017.08.007",
+      "kind": "literature",
+      "note": "Ren and Xu: origin of enhanced ethylene oxide selectivity by Cs-promoted silver catalyst, complementary to Linic 2004 mechanism."
+    }
+  ],
+  "catalog_quotes": [],
+  "route_templates": [
+    {
+      "id": "ag-alumina-eo-route",
+      "name": "Ag / alpha-Al2O3 baseline route",
+      "manufacturing_mode": "Supported Ag on alpha-alumina ethylene epoxidation catalyst",
+      "preprocess": [
+        "Alpha-alumina support sizing",
+        "Ag precursor balancing",
+        "Impregnation-window setup"
+      ],
+      "synthesis": [
+        "Ag impregnation onto alpha-alumina",
+        "Aging hold",
+        "Solids handling"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination / decomposition",
+        "Reduction to active Ag",
+        "Forming and sizing"
+      ],
+      "quality_gates": [
+        "Ag dispersion proxy",
+        "EO selectivity / ethylene combustion screen",
+        "Long-hold activity check"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple",
+        "mill",
+        "extruder_with_feeder"
+      ],
+      "non_step_cost_per_lb": 0.62,
+      "route_confidence": 92,
+      "route_note": "Most transferable ethylene-epoxidation basis using Ag on alpha-alumina, the 50-year industrial catalyst architecture."
+    },
+    {
+      "id": "agcs-eo-route",
+      "name": "Ag-Cs / Al2O3 high-selectivity route",
+      "manufacturing_mode": "Cs-promoted Ag / alpha-alumina catalyst",
+      "preprocess": [
+        "Alpha-alumina support sizing",
+        "Ag and Cs precursor balancing",
+        "Sequential or co-impregnation setup"
+      ],
+      "synthesis": [
+        "Ag and Cs sequential or co-impregnation",
+        "Aging hold",
+        "Solids handling"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination",
+        "Reduction to active Ag",
+        "Forming and sizing"
+      ],
+      "quality_gates": [
+        "Ag-Cs dispersion proxy",
+        "EO selectivity hold",
+        "Long-hold combustion screen"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple",
+        "mill",
+        "extruder_with_feeder"
+      ],
+      "non_step_cost_per_lb": 0.66,
+      "route_confidence": 90,
+      "route_note": "Industrial high-selectivity Cs-promoted Ag route; Cs promoter widens the EO selectivity window over the bare-Ag baseline."
+    },
+    {
+      "id": "agcsre-eo-route",
+      "name": "Ag-Cs-Re / Al2O3 modern industrial route",
+      "manufacturing_mode": "Re-promoted Cs-Ag / alpha-alumina catalyst",
+      "preprocess": [
+        "Alpha-alumina support sizing",
+        "Ag, Cs and Re precursor balancing",
+        "Multi-pass impregnation setup"
+      ],
+      "synthesis": [
+        "Sequential impregnation of Ag, Cs, and Re",
+        "Aging holds",
+        "Solids handling"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination",
+        "Reduction / activation",
+        "Forming and sizing"
+      ],
+      "quality_gates": [
+        "Ag-Cs-Re dispersion proxy",
+        "EO selectivity hold (>85%)",
+        "Long-hold deactivation check"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple",
+        "mill",
+        "extruder_with_feeder"
+      ],
+      "non_step_cost_per_lb": 0.74,
+      "route_confidence": 86,
+      "route_note": "Re-promoted high-selectivity industrial route; the closest reference to current commercial high-selectivity formulations."
+    }
+  ],
+  "candidates": [
+    {
+      "slug": "ag-alumina-baseline",
+      "title": "Ag / alpha-Al2O3 baseline",
+      "archetype": "Industrial baseline",
+      "screening_basis": "engineering_proxy",
+      "summary": "Bare Ag on alpha-alumina; the canonical ethylene-oxide catalyst architecture used as the cost and process anchor.",
+      "route_template_id": "ag-alumina-eo-route",
+      "order_size_tons": 50,
+      "performance_index": 70,
+      "manufacturing_readiness": 95,
+      "screening_exactness": 86,
+      "temperature_window_c": [
+        220,
+        280
+      ],
+      "literature_basis_ids": [
+        "ayame-ag-alpha-apcata-2003",
+        "linic-oxametallacycle-jacs-2003",
+        "linic-microkinetic-jcat-2003",
+        "christopher-ag-shape-cctc-2010"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Most transferable ethylene-epoxidation basis with mature commercial inputs.",
+        "Without a promoter, EO selectivity is meaningfully lower than industrial Cs- or Cs/Re-promoted catalysts."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Ag",
+          "wt_pct": 15.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ag",
+            "precursor_markup": 1.05,
+            "note": "Live Ag feed with a mild precursor / conversion markup for commercial Ag / Al2O3 ethylene-oxide screening."
+          }
+        },
+        {
+          "role": "support",
+          "name": "alpha-Al2O3",
+          "wt_pct": 85.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.1,
+            "evidence_label": "Alpha-alumina support screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 70,
+            "transparency": "derived_proxy",
+            "note": "Alpha-alumina support cost held on engineering proxy; alpha phase carries a small premium over gamma."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "agcs-industrial",
+      "title": "Ag-Cs / Al2O3 (industrial standard)",
+      "archetype": "Industrial high-selectivity benchmark",
+      "screening_basis": "engineering_proxy",
+      "summary": "Cs-promoted Ag on alpha-alumina; the dominant commercial high-selectivity ethylene-oxide catalyst.",
+      "route_template_id": "agcs-eo-route",
+      "order_size_tons": 50,
+      "performance_index": 86,
+      "manufacturing_readiness": 94,
+      "screening_exactness": 84,
+      "temperature_window_c": [
+        220,
+        280
+      ],
+      "literature_basis_ids": [
+        "linic-cs-promotion-jacs-2004",
+        "ren-cs-mechanism-mcat-2017",
+        "ozbek-ag-oxide-cctc-2010"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Best fit for high-selectivity industrial duty without paying for Re-promotion overhead.",
+        "Catalyst economics dominated by Ag; Cs is a small fraction of cost but widens the selectivity window meaningfully."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Ag",
+          "wt_pct": 15.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ag",
+            "precursor_markup": 1.05,
+            "note": "Live Ag feed with a mild precursor / conversion markup."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "Cs",
+          "wt_pct": 0.05,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 320.0,
+            "evidence_label": "Cesium promoter screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 58,
+            "transparency": "derived_proxy",
+            "note": "Cs salt cost held on a derived screening proxy reflecting bulk cesium salt pricing."
+          }
+        },
+        {
+          "role": "support",
+          "name": "alpha-Al2O3",
+          "wt_pct": 84.95,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.1,
+            "evidence_label": "Alpha-alumina support screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 70,
+            "transparency": "derived_proxy",
+            "note": "Alpha-alumina support cost held on engineering proxy."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "agcsre-modern",
+      "title": "Ag-Cs-Re / Al2O3 (modern HSE)",
+      "archetype": "Modern high-selectivity industrial route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Re-promoted Cs / Ag on alpha-alumina; the closest published reference to current modern industrial high-selectivity ethylene-oxide catalysts (>85% EO selectivity).",
+      "route_template_id": "agcsre-eo-route",
+      "order_size_tons": 20,
+      "performance_index": 92,
+      "manufacturing_readiness": 88,
+      "screening_exactness": 80,
+      "temperature_window_c": [
+        220,
+        280
+      ],
+      "literature_basis_ids": [
+        "diao-re-promoter-jcat-2015"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Best fit for the highest-selectivity industrial duty when Re-promoter overhead is acceptable.",
+        "Re exposure is small but Re prices are high; promoter precursor accounting dominates non-Ag cost."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Ag",
+          "wt_pct": 15.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ag",
+            "precursor_markup": 1.05,
+            "note": "Live Ag feed with a mild precursor / conversion markup."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "Cs",
+          "wt_pct": 0.05,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 320.0,
+            "evidence_label": "Cesium promoter screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 58,
+            "transparency": "derived_proxy",
+            "note": "Cs salt cost held on the same derived screening proxy as the Ag-Cs candidate."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "Re",
+          "wt_pct": 0.5,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Re",
+            "precursor_markup": 1.1,
+            "note": "Live Re feed with a precursor / conversion markup; Re promoter discipline drives the selectivity uplift."
+          }
+        },
+        {
+          "role": "support",
+          "name": "alpha-Al2O3",
+          "wt_pct": 84.45,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.1,
+            "evidence_label": "Alpha-alumina support screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 70,
+            "transparency": "derived_proxy",
+            "note": "Alpha-alumina support cost held on engineering proxy."
+          }
+        }
+      ]
+    }
+  ]
+}

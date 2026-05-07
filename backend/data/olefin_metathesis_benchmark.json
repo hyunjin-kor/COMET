@@ -1,0 +1,366 @@
+{
+  "family": "olefin-metathesis",
+  "title": "Heterogeneous olefin metathesis reference family",
+  "catalyst_domain": "thermal",
+  "application_family": "general",
+  "reaction": "2 RCH=CH2 -> RCH=CHR + CH2=CH2 (cross / self-metathesis) | C2H4 + 2-C4H8 -> 2 C3H6 (ethylene + butene to propylene)",
+  "objective": "Optional literature-backed family for heterogeneous olefin metathesis. Candidates compare a Re2O7 / Al2O3 mild-condition anchor (oleochemistry / lab-scale), a WO3 / SiO2 industrial OCT-style propylene route (Lummus OCT / Korea Petrochemical), and a MoO3 / Al2O3-SiO2 alkane-metathesis emerging variant.",
+  "decision_profiles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Balance catalyst cost, evidence quality, route maturity, and reported metathesis activity / selectivity.",
+      "weights": {
+        "economics": 0.42,
+        "evidence": 0.22,
+        "route": 0.18,
+        "performance": 0.18
+      }
+    },
+    "cost-first": {
+      "label": "Cost-first",
+      "description": "Bias ranking toward catalyst cost while preserving route and evidence guardrails.",
+      "weights": {
+        "economics": 0.6,
+        "evidence": 0.16,
+        "route": 0.08,
+        "performance": 0.16
+      }
+    },
+    "evidence-first": {
+      "label": "Evidence-first",
+      "description": "Reward stronger literature support and reproducible metathesis routes.",
+      "weights": {
+        "economics": 0.3,
+        "evidence": 0.36,
+        "route": 0.16,
+        "performance": 0.18
+      }
+    }
+  },
+  "citations": [
+    {
+      "id": "mol-oleochem-greenchem-2002",
+      "label": "Green Chem. 2002",
+      "url": "https://doi.org/10.1039/b109896a",
+      "kind": "literature",
+      "note": "Mol: application of olefin metathesis in oleochemistry, foundational green-chemistry reference for fatty-acid metathesis using Re2O7."
+    },
+    {
+      "id": "onaka-re2o7-cl-2002",
+      "label": "Chem. Lett. 2002",
+      "url": "https://doi.org/10.1246/cl.2002.850",
+      "kind": "literature",
+      "note": "Onaka and Oikawa: olefin metathesis over mesoporous alumina-supported rhenium oxide catalyst, mild-condition Re2O7 reference."
+    },
+    {
+      "id": "mol-industrial-jmolcat-2004",
+      "label": "J. Mol. Catal. A 2004",
+      "url": "https://doi.org/10.1016/j.molcata.2003.10.049",
+      "kind": "review",
+      "note": "Mol: foundational review (840+ citations) of industrial applications of olefin metathesis, covering Re / Mo / W heterogeneous and Ru / Mo homogeneous routes."
+    },
+    {
+      "id": "balcar-re2o7-catlett-2004",
+      "label": "Catal. Lett. 2004",
+      "url": "https://doi.org/10.1023/b:catl.0000034280.35570.26",
+      "kind": "literature",
+      "note": "Balcar, Hamtil et al.: Re2O7 supported on mesoporous organised alumina as a catalyst for metathesis of 1-alkenes."
+    },
+    {
+      "id": "handzlik-mo-comparison-apcata-2006",
+      "label": "Appl. Catal. A 2006",
+      "url": "https://doi.org/10.1016/j.apcata.2006.07.002",
+      "kind": "literature",
+      "note": "Handzlik and Ogonowski: properties and metathesis activity of molybdena-alumina, molybdena-silica-alumina and molybdena-silica catalysts; comparative support-effect study."
+    },
+    {
+      "id": "leroux-w-alkane-adsc-2007",
+      "label": "Adv. Synth. Catal. 2007",
+      "url": "https://doi.org/10.1002/adsc.200600436",
+      "kind": "literature",
+      "note": "Le Roux, Taoufik et al.: silica-alumina-supported tungsten-based heterogeneous alkane metathesis catalyst, foundational for surface-organometallic alkane metathesis."
+    },
+    {
+      "id": "merle-mo-bipodal-cc-2017",
+      "label": "Chem. Commun. 2017",
+      "url": "https://doi.org/10.1039/c7cc06041f",
+      "kind": "literature",
+      "note": "Merle, Le Quemener et al.: well-defined silica-supported bipodal molybdenum oxo alkyl complexes as a model of the active sites of industrial olefin metathesis catalysts."
+    }
+  ],
+  "catalog_quotes": [],
+  "route_templates": [
+    {
+      "id": "re2o7-alumina-met-route",
+      "name": "Re2O7 / Al2O3 mild-condition route",
+      "manufacturing_mode": "Rhenium-oxide on alumina metathesis catalyst preparation",
+      "preprocess": [
+        "Alumina support sizing",
+        "Re precursor (NH4ReO4) balancing",
+        "Impregnation-window setup"
+      ],
+      "synthesis": [
+        "Re impregnation onto alumina",
+        "Aging hold",
+        "Solids handling"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination to Re2O7",
+        "Activation",
+        "Forming and sizing"
+      ],
+      "quality_gates": [
+        "Re2O7 dispersion proxy",
+        "Mild-condition metathesis activity screen",
+        "Long-hold deactivation check"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple",
+        "mill",
+        "extruder_with_feeder"
+      ],
+      "non_step_cost_per_lb": 0.84,
+      "route_confidence": 86,
+      "route_note": "Most transferable mild-condition metathesis basis using Re2O7 / Al2O3; Re economics dominate."
+    },
+    {
+      "id": "wo3-silica-met-route",
+      "name": "WO3 / SiO2 industrial OCT route",
+      "manufacturing_mode": "Tungsten-oxide on silica metathesis catalyst (industrial OCT)",
+      "preprocess": [
+        "Silica support sizing",
+        "W precursor (ammonium tungstate) balancing",
+        "Impregnation setup"
+      ],
+      "synthesis": [
+        "W impregnation onto silica",
+        "Aging hold",
+        "Solids handling"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination to WO3",
+        "Activation under olefin / inert",
+        "Forming and sizing"
+      ],
+      "quality_gates": [
+        "WO3 dispersion proxy",
+        "Ethylene / butene -> propylene conversion screen",
+        "Long-hold thermal stability"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple",
+        "mill",
+        "extruder_with_feeder"
+      ],
+      "non_step_cost_per_lb": 0.66,
+      "route_confidence": 90,
+      "route_note": "Industrial WO3 / SiO2 metathesis route used in Lummus OCT for on-purpose propylene; high temperatures, mature process."
+    },
+    {
+      "id": "mo-silica-alumina-met-route",
+      "name": "MoO3 / SiO2-Al2O3 emerging route",
+      "manufacturing_mode": "Molybdenum-oxide on silica-alumina metathesis catalyst",
+      "preprocess": [
+        "Silica-alumina support sizing",
+        "Mo precursor (ammonium molybdate) balancing",
+        "Impregnation setup"
+      ],
+      "synthesis": [
+        "Mo impregnation onto silica-alumina",
+        "Aging hold",
+        "Solids handling"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination to MoO3",
+        "Activation",
+        "Forming and sizing"
+      ],
+      "quality_gates": [
+        "MoO3 dispersion proxy",
+        "Cross / self-metathesis activity screen",
+        "Acidity / metathesis-balance hold"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple",
+        "mill"
+      ],
+      "non_step_cost_per_lb": 0.7,
+      "route_confidence": 80,
+      "route_note": "MoO3 / silica-alumina emerging metathesis route; intermediate-temperature option between Re2O7 (mild) and WO3 (high-T)."
+    }
+  ],
+  "candidates": [
+    {
+      "slug": "re2o7-alumina-mild",
+      "title": "Re2O7 / Al2O3 mild-condition",
+      "archetype": "Mild-condition benchmark",
+      "screening_basis": "engineering_proxy",
+      "summary": "Re2O7 on alumina, the canonical mild-condition heterogeneous metathesis catalyst widely used in oleochemistry and lab-scale work.",
+      "route_template_id": "re2o7-alumina-met-route",
+      "order_size_tons": 1,
+      "performance_index": 80,
+      "manufacturing_readiness": 86,
+      "screening_exactness": 80,
+      "temperature_window_c": [
+        25,
+        100
+      ],
+      "literature_basis_ids": [
+        "mol-oleochem-greenchem-2002",
+        "onaka-re2o7-cl-2002",
+        "balcar-re2o7-catlett-2004"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Best fit when mild-condition metathesis is required and Re economics are acceptable.",
+        "Catalyst economics dominated by Re; Al2O3 support is a small fraction of cost."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Re",
+          "wt_pct": 8.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Re",
+            "precursor_markup": 1.1,
+            "note": "Live Re feed with a precursor / conversion markup; Re2O7 active phase derives from calcined precursor."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Al2O3",
+          "wt_pct": 92.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.9,
+            "evidence_label": "Alumina support screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 70,
+            "transparency": "derived_proxy",
+            "note": "Gamma-alumina support cost held on engineering proxy."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "wo3-silica-oct",
+      "title": "WO3 / SiO2 (Lummus OCT)",
+      "archetype": "Industrial benchmark",
+      "screening_basis": "engineering_proxy",
+      "summary": "WO3 on silica, the industrial OCT (Lummus / Sinopec) metathesis catalyst for ethylene + 2-butene to propylene.",
+      "route_template_id": "wo3-silica-met-route",
+      "order_size_tons": 50,
+      "performance_index": 88,
+      "manufacturing_readiness": 95,
+      "screening_exactness": 84,
+      "temperature_window_c": [
+        300,
+        450
+      ],
+      "literature_basis_ids": [
+        "mol-industrial-jmolcat-2004",
+        "handzlik-mo-comparison-apcata-2006"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Most transferable industrial metathesis basis and the dominant on-purpose propylene route.",
+        "WO3 / SiO2 needs higher temperature than Re2O7 but tungsten is far cheaper than rhenium."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "W",
+          "wt_pct": 7.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "W",
+            "precursor_markup": 1.1,
+            "note": "Live W feed with a precursor / conversion markup; WO3 active phase derives from calcined ammonium tungstate."
+          }
+        },
+        {
+          "role": "support",
+          "name": "SiO2",
+          "wt_pct": 93.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.1,
+            "evidence_label": "Silica support screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 68,
+            "transparency": "derived_proxy",
+            "note": "Silica support cost held on engineering proxy comparable to commercial silica gel ranges."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "mo-silica-alumina",
+      "title": "MoO3 / SiO2-Al2O3 emerging",
+      "archetype": "Intermediate-temperature route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "MoO3 on silica-alumina mixed support, an intermediate-temperature metathesis route between Re2O7 (mild) and WO3 (high-T).",
+      "route_template_id": "mo-silica-alumina-met-route",
+      "order_size_tons": 5,
+      "performance_index": 82,
+      "manufacturing_readiness": 82,
+      "screening_exactness": 76,
+      "temperature_window_c": [
+        100,
+        300
+      ],
+      "literature_basis_ids": [
+        "leroux-w-alkane-adsc-2007",
+        "merle-mo-bipodal-cc-2017"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Best fit when intermediate-temperature metathesis is desired and Mo economics are preferred over Re.",
+        "Support acidity (silica-alumina) increases activity but introduces side-reactions; balance vs pure silica."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Mo",
+          "wt_pct": 8.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Mo",
+            "precursor_markup": 1.1,
+            "note": "Live Mo feed with a precursor / conversion markup; MoO3 active phase derives from calcined ammonium molybdate."
+          }
+        },
+        {
+          "role": "support",
+          "name": "SiO2-Al2O3",
+          "wt_pct": 92.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.0,
+            "evidence_label": "Silica-alumina mixed support screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 66,
+            "transparency": "derived_proxy",
+            "note": "Silica-alumina mixed support cost held on engineering proxy averaged between silica and alumina baselines."
+          }
+        }
+      ]
+    }
+  ]
+}

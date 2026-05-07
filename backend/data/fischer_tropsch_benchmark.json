@@ -1,0 +1,392 @@
+{
+  "family": "fischer-tropsch-synthesis",
+  "title": "Fischer-Tropsch synthesis (FTS) reference family",
+  "catalyst_domain": "thermal",
+  "application_family": "general",
+  "reaction": "n CO + (2n+1) H2 -> CnH(2n+2) + n H2O (alkanes) | n CO + 2n H2 -> CnH2n + n H2O (alkenes)",
+  "objective": "Optional literature-backed family for syngas-to-hydrocarbons Fischer-Tropsch screening. Candidates compare a Co/Al2O3 high-temperature anchor (the canonical commercial benchmark), an Fe/SiO2 lower-olefin route, and a Co/CNT structured-support emerging variant.",
+  "decision_profiles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Balance catalyst cost, evidence quality, route maturity, and reported selectivity / chain-length performance.",
+      "weights": {
+        "economics": 0.42,
+        "evidence": 0.22,
+        "route": 0.18,
+        "performance": 0.18
+      }
+    },
+    "cost-first": {
+      "label": "Cost-first",
+      "description": "Bias ranking toward catalyst cost while preserving route and evidence guardrails.",
+      "weights": {
+        "economics": 0.6,
+        "evidence": 0.16,
+        "route": 0.08,
+        "performance": 0.16
+      }
+    },
+    "evidence-first": {
+      "label": "Evidence-first",
+      "description": "Reward stronger literature support and more reproducible Co / Fe FT preparation routes.",
+      "weights": {
+        "economics": 0.3,
+        "evidence": 0.36,
+        "route": 0.16,
+        "performance": 0.18
+      }
+    }
+  },
+  "citations": [
+    {
+      "id": "chu-co-alumina-jcat-2007",
+      "label": "J. Catal. 2007",
+      "url": "https://doi.org/10.1016/j.jcat.2007.09.018",
+      "kind": "literature",
+      "note": "Chu, Chernavskii et al.: cobalt species in promoted Co / alumina-supported FT catalysts, characterising the active Co0 phase and reduction window."
+    },
+    {
+      "id": "khodakov-co-structure-cattoday-2009",
+      "label": "Catal. Today 2009",
+      "url": "https://doi.org/10.1016/j.cattod.2008.10.036",
+      "kind": "review",
+      "note": "Khodakov: foundational review of cobalt FT catalysts linking nanoparticle structure to catalytic performance, the canonical Co-FT structure-activity reference."
+    },
+    {
+      "id": "trepanier-co-cnt-apcata-2010",
+      "label": "Appl. Catal. A 2010",
+      "url": "https://doi.org/10.1016/j.apcata.2009.11.029",
+      "kind": "literature",
+      "note": "Trepanier, Dalai et al.: CNT-supported cobalt nanoparticle FT catalysts, demonstrating how carbon-nanotube supports change reducibility and selectivity vs alumina."
+    },
+    {
+      "id": "melaet-co-size-topcat-2013",
+      "label": "Top. Catal. 2013",
+      "url": "https://doi.org/10.1007/s11244-013-0206-z",
+      "kind": "literature",
+      "note": "Melaet, Lindeman et al.: cobalt particle-size effects in FT and in CO2 hydrogenation, mapping the activity / selectivity dependence on Co nanoparticle dimensions."
+    },
+    {
+      "id": "todic-co-kinetics-cattoday-2014",
+      "label": "Catal. Today 2014",
+      "url": "https://doi.org/10.1016/j.cattod.2013.08.008",
+      "kind": "literature",
+      "note": "Todic, Ma et al.: CO-insertion mechanism kinetic model for FT over Re-promoted Co, providing a transferable kinetic baseline for Co-based reactor screening."
+    },
+    {
+      "id": "oschatz-fe-mesoporous-cctc-2016",
+      "label": "ChemCatChem 2016",
+      "url": "https://doi.org/10.1002/cctc.201600492",
+      "kind": "literature",
+      "note": "Oschatz, Lamme et al.: ordered mesoporous materials as supports for stable iron catalysts in Fischer-Tropsch synthesis of lower olefins."
+    },
+    {
+      "id": "wang-solar-fts-chem-2018",
+      "label": "Chem 2018",
+      "url": "https://doi.org/10.1016/j.chempr.2018.11.020",
+      "kind": "literature",
+      "note": "Wang, Xia et al.: Fischer-Tropsch synthesis steps into the solar era, demonstrating syngas-to-lower-olefin conversion under photothermal conditions."
+    }
+  ],
+  "catalog_quotes": [],
+  "route_templates": [
+    {
+      "id": "co-alumina-fts-route",
+      "name": "Co / Al2O3 FT cobalt route",
+      "manufacturing_mode": "Supported cobalt FT catalyst preparation",
+      "preprocess": [
+        "Alumina support sizing",
+        "Co precursor balancing",
+        "Promoter (Re / Pt) staging"
+      ],
+      "synthesis": [
+        "Co impregnation onto alumina",
+        "Aging hold",
+        "Solids handling"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination",
+        "Reduction to active Co0",
+        "Forming and sizing"
+      ],
+      "quality_gates": [
+        "Co dispersion proxy",
+        "Reducibility check",
+        "C5+ selectivity hold"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple",
+        "mill",
+        "extruder_with_feeder"
+      ],
+      "non_step_cost_per_lb": 0.84,
+      "route_confidence": 92,
+      "route_note": "Most transferable FT basis matching the dominant commercial Co / Al2O3 catalysts (Sasol / Shell-style)."
+    },
+    {
+      "id": "fe-silica-fts-route",
+      "name": "Fe / SiO2 lower-olefin FT route",
+      "manufacturing_mode": "Iron-based FT catalyst targeting lower olefins",
+      "preprocess": [
+        "Silica or mesoporous support sizing",
+        "Fe precursor balancing",
+        "K / Mn promoter staging"
+      ],
+      "synthesis": [
+        "Co-precipitation or impregnation of Fe",
+        "Aging hold",
+        "Solids handling"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination",
+        "Activation under syngas",
+        "Forming and sizing"
+      ],
+      "quality_gates": [
+        "Fe phase proxy (carbide vs oxide)",
+        "Lower-olefin / methane selectivity screen",
+        "Long-hold attrition / activity check"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "filter_rotary_vacuum",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple",
+        "mill",
+        "extruder_with_feeder"
+      ],
+      "non_step_cost_per_lb": 0.74,
+      "route_confidence": 88,
+      "route_note": "Iron-based FT route biased toward C2-C4 olefins, complementary to the Co route which favors heavier paraffins."
+    },
+    {
+      "id": "co-cnt-fts-route",
+      "name": "Co / CNT structured-support FT route",
+      "manufacturing_mode": "Cobalt on carbon-nanotube support FT route",
+      "preprocess": [
+        "CNT support functionalization and sizing",
+        "Co precursor balancing",
+        "Reduction-window setup"
+      ],
+      "synthesis": [
+        "Co deposition on CNT",
+        "Aging hold",
+        "Solids handling"
+      ],
+      "postprocess": [
+        "Drying",
+        "Mild thermal hold",
+        "Reduction to active Co0",
+        "Forming and sizing"
+      ],
+      "quality_gates": [
+        "Co nanoparticle size proxy",
+        "Reducibility check",
+        "Selectivity hold"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple",
+        "mill"
+      ],
+      "non_step_cost_per_lb": 0.96,
+      "route_confidence": 76,
+      "route_note": "Cobalt on CNT support; structured carbon increases Co dispersion at the cost of CNT support overhead."
+    }
+  ],
+  "candidates": [
+    {
+      "slug": "co-alumina-fts",
+      "title": "Co / Al2O3 FT (commercial baseline)",
+      "archetype": "Commercial benchmark",
+      "screening_basis": "engineering_proxy",
+      "summary": "Cobalt supported on alumina with Re or Pt promoter; the dominant low-temperature FT commercial catalyst basis (Sasol / Shell GTL).",
+      "route_template_id": "co-alumina-fts-route",
+      "order_size_tons": 50,
+      "performance_index": 90,
+      "manufacturing_readiness": 95,
+      "screening_exactness": 86,
+      "temperature_window_c": [
+        200,
+        260
+      ],
+      "literature_basis_ids": [
+        "chu-co-alumina-jcat-2007",
+        "khodakov-co-structure-cattoday-2009",
+        "todic-co-kinetics-cattoday-2014"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Most transferable FT basis and the clearest commercial comparison point for low-temperature GTL.",
+        "Catalyst economics dominated by Co loading and Re / Pt promoter; alumina support is a small fraction of cost."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Co",
+          "wt_pct": 20.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Co",
+            "precursor_markup": 1.1,
+            "note": "Live Co feed with a precursor / conversion markup for commercial Co / Al2O3 FT screening."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "Re",
+          "wt_pct": 0.5,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Re",
+            "precursor_markup": 1.1,
+            "note": "Live Re feed with a precursor / conversion markup."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Al2O3",
+          "wt_pct": 79.5,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.9,
+            "evidence_label": "Gamma-alumina support screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 70,
+            "transparency": "derived_proxy",
+            "note": "Gamma-alumina cost on engineering proxy comparable to commercial Sasol / BASF ranges."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "fe-silica-lower-olefin",
+      "title": "Fe / SiO2 lower-olefin FT",
+      "archetype": "Iron lower-olefin route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Iron on mesoporous silica targeting C2-C4 olefins via high-temperature FT, an alternative to Co-FT when olefins are the desired product.",
+      "route_template_id": "fe-silica-fts-route",
+      "order_size_tons": 50,
+      "performance_index": 84,
+      "manufacturing_readiness": 88,
+      "screening_exactness": 80,
+      "temperature_window_c": [
+        300,
+        360
+      ],
+      "literature_basis_ids": [
+        "oschatz-fe-mesoporous-cctc-2016",
+        "wang-solar-fts-chem-2018"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Best fit when the program target is lower olefins (C2=-C4=) rather than heavier paraffins.",
+        "Iron is far cheaper than cobalt but methane selectivity is higher; promoter (K, Mn) discipline matters."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Fe",
+          "wt_pct": 30.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Fe",
+            "precursor_markup": 1.1,
+            "note": "Live Fe feed with a precursor / conversion markup for Fe-FT screening."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "K",
+          "wt_pct": 1.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.4,
+            "evidence_label": "Potassium promoter screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 64,
+            "transparency": "derived_proxy",
+            "note": "Potassium promoter cost held on a derived screening proxy."
+          }
+        },
+        {
+          "role": "support",
+          "name": "SiO2 (mesoporous)",
+          "wt_pct": 69.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.1,
+            "evidence_label": "Mesoporous silica support screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 68,
+            "transparency": "derived_proxy",
+            "note": "Mesoporous silica cost held on engineering proxy comparable to commercial silica gel ranges."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "co-cnt-structured",
+      "title": "Co / CNT structured FT",
+      "archetype": "Structured-support emerging route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Cobalt on carbon-nanotube support exploiting CNT architecture for tunable Co dispersion and reducibility.",
+      "route_template_id": "co-cnt-fts-route",
+      "order_size_tons": 5,
+      "performance_index": 86,
+      "manufacturing_readiness": 76,
+      "screening_exactness": 76,
+      "temperature_window_c": [
+        200,
+        260
+      ],
+      "literature_basis_ids": [
+        "trepanier-co-cnt-apcata-2010",
+        "melaet-co-size-topcat-2013"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Use this when CNT-support architecture is acceptable and tighter Co dispersion control is desired.",
+        "Catalyst economics shift toward CNT support cost; active-Co reducibility window is wider than alumina-supported."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Co",
+          "wt_pct": 15.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Co",
+            "precursor_markup": 1.1,
+            "note": "Live Co feed with a precursor / conversion markup."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Carbon nanotubes",
+          "wt_pct": 85.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 22.0,
+            "evidence_label": "CNT support screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 58,
+            "transparency": "derived_proxy",
+            "note": "Multi-walled CNT support cost held on engineering proxy reflecting structured-carbon premium."
+          }
+        }
+      ]
+    }
+  ]
+}

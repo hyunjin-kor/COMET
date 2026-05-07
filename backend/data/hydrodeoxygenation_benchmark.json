@@ -1,0 +1,388 @@
+{
+  "family": "hydrodeoxygenation",
+  "title": "Hydrodeoxygenation (HDO) of bio-oils reference family",
+  "catalyst_domain": "thermal",
+  "application_family": "general",
+  "reaction": "Phenolics + n H2 -> arenes / cycloalkanes + n H2O (e.g., guaiacol -> phenol -> benzene; m-cresol -> toluene)",
+  "objective": "Optional literature-backed family for hydrodeoxygenation of biomass-derived oxygenates (guaiacol, anisole, m-cresol, lignin phenols). Candidates compare a Pt / SiO2 noble-metal anchor (Resasco lab studies), a CoMoS sulfide commercial-style catalyst (lignin-to-arenes), and a NiMo / carbon non-noble emerging route.",
+  "decision_profiles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Balance catalyst cost, evidence quality, route maturity, and reported deoxygenation activity / aromatic preservation.",
+      "weights": {
+        "economics": 0.42,
+        "evidence": 0.22,
+        "route": 0.18,
+        "performance": 0.18
+      }
+    },
+    "cost-first": {
+      "label": "Cost-first",
+      "description": "Bias ranking toward catalyst cost while preserving route and evidence guardrails.",
+      "weights": {
+        "economics": 0.6,
+        "evidence": 0.16,
+        "route": 0.08,
+        "performance": 0.16
+      }
+    },
+    "evidence-first": {
+      "label": "Evidence-first",
+      "description": "Reward stronger literature support and reproducible HDO routes.",
+      "weights": {
+        "economics": 0.3,
+        "evidence": 0.36,
+        "route": 0.16,
+        "performance": 0.18
+      }
+    }
+  },
+  "citations": [
+    {
+      "id": "gutierrez-guaiacol-cattoday-2009",
+      "label": "Catal. Today 2009",
+      "url": "https://doi.org/10.1016/j.cattod.2008.10.037",
+      "kind": "literature",
+      "note": "Gutierrez, Kaila et al.: hydrodeoxygenation of guaiacol on noble-metal catalysts; foundational HDO benchmarking study (480+ citations) of Pt, Pd, Rh, Ru on Al2O3 and ZrO2."
+    },
+    {
+      "id": "gonzalez-borja-anisole-ef-2011",
+      "label": "Energy Fuels 2011",
+      "url": "https://doi.org/10.1021/ef200728r",
+      "kind": "literature",
+      "note": "Gonzalez-Borja and Resasco: anisole and guaiacol HDO over monolithic Pt-Sn catalysts, showing how Sn promoter changes deoxygenation selectivity."
+    },
+    {
+      "id": "nie-mcresol-jcat-2014",
+      "label": "J. Catal. 2014",
+      "url": "https://doi.org/10.1016/j.jcat.2014.05.024",
+      "kind": "literature",
+      "note": "Nie and Resasco: kinetics and mechanism of m-cresol HDO on a Pt / SiO2 catalyst, providing transferable kinetic baselines for Pt-based HDO."
+    },
+    {
+      "id": "roldugina-mesoporous-apcata-2018",
+      "label": "Appl. Catal. A 2018",
+      "url": "https://doi.org/10.1016/j.apcata.2018.01.008",
+      "kind": "literature",
+      "note": "Roldugina, Naranov et al.: HDO of guaiacol over mesoporous noble-metal catalysts in methanol, surveying Pt / Pd / Rh / Ru on different mesoporous supports."
+    },
+    {
+      "id": "song-comos-acscatal-2018",
+      "label": "ACS Catal. 2018",
+      "url": "https://doi.org/10.1021/acscatal.8b03402",
+      "kind": "literature",
+      "note": "Song, Zhou et al.: surface engineering of CoMoS nanosulfide for HDO of lignin-derived phenols to arenes; key reference for the sulfide-based HDO route."
+    },
+    {
+      "id": "resasco-pt-isolated-acscatal-2019",
+      "label": "ACS Catal. 2019",
+      "url": "https://doi.org/10.1021/acscatal.9b04330",
+      "kind": "literature",
+      "note": "Resasco and Yang: relationship between atomic-scale structure and reactivity of isolated Pt catalysts, focused on HDO of m-cresol."
+    },
+    {
+      "id": "jiang-nimo-greenchem-2024",
+      "label": "Green Chem. 2024",
+      "url": "https://doi.org/10.1039/d4gc02298j",
+      "kind": "literature",
+      "note": "Jiang, Shu et al.: efficient HDO of lignin-derived phenolic compounds under acid-free conditions over carbon-supported NiMo catalysts."
+    }
+  ],
+  "catalog_quotes": [],
+  "route_templates": [
+    {
+      "id": "pt-silica-hdo-route",
+      "name": "Pt / SiO2 HDO route",
+      "manufacturing_mode": "Supported Pt on silica HDO catalyst preparation",
+      "preprocess": [
+        "Silica support sizing",
+        "Pt precursor balancing",
+        "Impregnation-window setup"
+      ],
+      "synthesis": [
+        "Pt impregnation onto silica",
+        "Aging hold",
+        "Solids handling"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination",
+        "Reduction to active Pt0",
+        "Forming and sizing"
+      ],
+      "quality_gates": [
+        "Pt dispersion proxy",
+        "Deoxygenation activity / aromatic preservation screen",
+        "Long-hold stability"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple",
+        "mill",
+        "extruder_with_feeder"
+      ],
+      "non_step_cost_per_lb": 0.78,
+      "route_confidence": 88,
+      "route_note": "Most transferable HDO basis for arene-preserving deoxygenation; Pt economics dominate."
+    },
+    {
+      "id": "comos-hdo-route",
+      "name": "CoMoS sulfide HDO route",
+      "manufacturing_mode": "CoMoS sulfide catalyst preparation",
+      "preprocess": [
+        "Co and Mo precursor balancing",
+        "Support (Al2O3 / carbon) sizing",
+        "Sulfidation-feed setup"
+      ],
+      "synthesis": [
+        "Sequential or co-impregnation of Co / Mo",
+        "Aging hold",
+        "Solids handling"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination",
+        "Sulfidation to CoMoS phase",
+        "Forming and sizing"
+      ],
+      "quality_gates": [
+        "CoMoS phase proxy",
+        "Lignin-phenol -> arene conversion screen",
+        "Sulfur-stability hold"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple",
+        "mill",
+        "extruder_with_feeder"
+      ],
+      "non_step_cost_per_lb": 0.7,
+      "route_confidence": 90,
+      "route_note": "CoMoS sulfide route mirrors industrial hydrotreating catalysts; route maturity is high but sulfidation control is demanding."
+    },
+    {
+      "id": "nimo-carbon-hdo-route",
+      "name": "NiMo / carbon non-noble HDO route",
+      "manufacturing_mode": "NiMo on carbon HDO catalyst preparation",
+      "preprocess": [
+        "Carbon support sizing",
+        "Ni and Mo precursor balancing",
+        "Impregnation setup"
+      ],
+      "synthesis": [
+        "Sequential or co-impregnation of Ni / Mo",
+        "Aging hold",
+        "Solids handling"
+      ],
+      "postprocess": [
+        "Drying",
+        "Mild thermal hold",
+        "Reduction to active NiMo",
+        "Forming and sizing"
+      ],
+      "quality_gates": [
+        "NiMo phase proxy",
+        "Acid-free deoxygenation screen",
+        "Long-hold stability"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple",
+        "mill"
+      ],
+      "non_step_cost_per_lb": 0.62,
+      "route_confidence": 80,
+      "route_note": "NiMo on carbon non-noble HDO route, attractive when avoiding PGMs and operating sulfur-free is the program goal."
+    }
+  ],
+  "candidates": [
+    {
+      "slug": "pt-silica-hdo",
+      "title": "Pt / SiO2 HDO",
+      "archetype": "Noble-metal benchmark",
+      "screening_basis": "engineering_proxy",
+      "summary": "Pt on silica used as the canonical HDO benchmark for arene-preserving deoxygenation of guaiacol / anisole / m-cresol.",
+      "route_template_id": "pt-silica-hdo-route",
+      "order_size_tons": 5,
+      "performance_index": 88,
+      "manufacturing_readiness": 86,
+      "screening_exactness": 84,
+      "temperature_window_c": [
+        250,
+        400
+      ],
+      "literature_basis_ids": [
+        "gutierrez-guaiacol-cattoday-2009",
+        "gonzalez-borja-anisole-ef-2011",
+        "nie-mcresol-jcat-2014",
+        "resasco-pt-isolated-acscatal-2019",
+        "roldugina-mesoporous-apcata-2018"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Best fit for arene-preserving HDO duty where Pt economics are acceptable.",
+        "Pt loading typically <2 wt% so support-cost share is meaningful relative to Pt."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Pt",
+          "wt_pct": 1.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Pt",
+            "precursor_markup": 1.05,
+            "note": "Live Pt feed with a mild precursor / conversion markup for HDO Pt / SiO2 screening."
+          }
+        },
+        {
+          "role": "support",
+          "name": "SiO2",
+          "wt_pct": 99.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.1,
+            "evidence_label": "Silica support screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 68,
+            "transparency": "derived_proxy",
+            "note": "Silica support cost held on engineering proxy comparable to commercial silica gel ranges."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "comos-hdo",
+      "title": "CoMoS / Al2O3 sulfide HDO",
+      "archetype": "Industrial sulfide benchmark",
+      "screening_basis": "engineering_proxy",
+      "summary": "CoMoS sulfide on alumina; the industrial hydrotreating-style HDO catalyst for lignin-derived phenol upgrading to arenes.",
+      "route_template_id": "comos-hdo-route",
+      "order_size_tons": 20,
+      "performance_index": 84,
+      "manufacturing_readiness": 92,
+      "screening_exactness": 84,
+      "temperature_window_c": [
+        300,
+        400
+      ],
+      "literature_basis_ids": [
+        "song-comos-acscatal-2018"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Best fit when industrial hydrotreating-style HDO is acceptable and sulfided-catalyst handling is in scope.",
+        "Sulfidation discipline (atmosphere, temperature ramp) drives long-hold activity."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Mo",
+          "wt_pct": 12.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Mo",
+            "precursor_markup": 1.1,
+            "note": "Live Mo feed with a precursor / conversion markup; sulfide form derives from in-situ sulfidation."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "Co",
+          "wt_pct": 4.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Co",
+            "precursor_markup": 1.1,
+            "note": "Live Co feed with a precursor / conversion markup."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Al2O3",
+          "wt_pct": 84.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.9,
+            "evidence_label": "Alumina support screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 70,
+            "transparency": "derived_proxy",
+            "note": "Gamma-alumina support cost held on engineering proxy."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "nimo-carbon-hdo",
+      "title": "NiMo / carbon (acid-free)",
+      "archetype": "Non-noble emerging route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "NiMo on carbon for acid-free HDO of lignin phenols, a non-noble option that avoids alumina acidity and sulfur handling.",
+      "route_template_id": "nimo-carbon-hdo-route",
+      "order_size_tons": 5,
+      "performance_index": 80,
+      "manufacturing_readiness": 80,
+      "screening_exactness": 76,
+      "temperature_window_c": [
+        250,
+        380
+      ],
+      "literature_basis_ids": [
+        "jiang-nimo-greenchem-2024"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Best fit when avoiding noble metals and sulfide handling is the program goal.",
+        "NiMo / carbon trades sulfide-route maturity for cleaner reduction chemistry; activity is competitive with sulfides on selected substrates."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Mo",
+          "wt_pct": 10.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Mo",
+            "precursor_markup": 1.1,
+            "note": "Live Mo feed with a precursor / conversion markup."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "Ni",
+          "wt_pct": 5.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ni",
+            "precursor_markup": 1.1,
+            "note": "Live Ni feed with a precursor / conversion markup."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Activated carbon",
+          "wt_pct": 85.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.6,
+            "evidence_label": "Activated carbon support screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 64,
+            "transparency": "derived_proxy",
+            "note": "Activated carbon support cost held on engineering proxy."
+          }
+        }
+      ]
+    }
+  ]
+}

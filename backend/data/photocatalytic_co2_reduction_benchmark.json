@@ -1,0 +1,359 @@
+{
+  "family": "photocatalytic-co2-reduction",
+  "title": "Photocatalytic CO2 reduction reference family",
+  "catalyst_domain": "thermal",
+  "application_family": "general",
+  "reaction": "CO2 + n H2O + hν -> products (CO, CH4, CH3OH, HCOOH, ...) + n O2 (overall photocatalytic CO2 reduction)",
+  "objective": "Optional literature-backed family for solar-driven CO2 photo-reduction. Candidates compare a TiO2 photocatalyst anchor (the canonical UV reference), a g-C3N4 / SnS2 Z-scheme visible-light option, and an MOF / Cu2O ternary heterojunction emerging route. Note: photocatalytic CO2 reduction differs from the photocatalytic water splitting family by product target (CO2 -> hydrocarbons / CO instead of H2 / O2).",
+  "decision_profiles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Balance photocatalyst cost, evidence quality, route maturity, and reported solar-to-hydrocarbon performance.",
+      "weights": {
+        "economics": 0.4,
+        "evidence": 0.22,
+        "route": 0.18,
+        "performance": 0.2
+      }
+    },
+    "cost-first": {
+      "label": "Cost-first",
+      "description": "Bias ranking toward photocatalyst cost while preserving route and evidence guardrails.",
+      "weights": {
+        "economics": 0.58,
+        "evidence": 0.14,
+        "route": 0.08,
+        "performance": 0.2
+      }
+    },
+    "evidence-first": {
+      "label": "Evidence-first",
+      "description": "Reward stronger literature support and reproducible photocatalyst preparation routes.",
+      "weights": {
+        "economics": 0.3,
+        "evidence": 0.34,
+        "route": 0.16,
+        "performance": 0.2
+      }
+    }
+  },
+  "citations": [
+    {
+      "id": "hoffmann-artificial-dalton-2011",
+      "label": "Dalton Trans. 2011",
+      "url": "https://doi.org/10.1039/c0dt01777a",
+      "kind": "review",
+      "note": "Hoffmann, Moss et al.: artificial photosynthesis review covering semiconductor photocatalytic fixation of CO2 to higher organic compounds."
+    },
+    {
+      "id": "ohno-wo3-gcn-jcou-2014",
+      "label": "J. CO2 Util. 2014",
+      "url": "https://doi.org/10.1016/j.jcou.2014.02.002",
+      "kind": "literature",
+      "note": "Ohno, Murakami et al.: photocatalytic reduction of CO2 over a hybrid photocatalyst composed of WO3 and graphitic carbon nitride (g-C3N4) under visible light."
+    },
+    {
+      "id": "ola-tio2-jpr-2015",
+      "label": "J. Photochem. Photobiol. C 2015",
+      "url": "https://doi.org/10.1016/j.jphotochemrev.2015.06.001",
+      "kind": "review",
+      "note": "Ola and Maroto-Valer: foundational review of material design and reactor engineering on TiO2 photocatalysis for CO2 reduction (880+ citations)."
+    },
+    {
+      "id": "low-tio2-co2-apsusc-2017",
+      "label": "Appl. Surf. Sci. 2017",
+      "url": "https://doi.org/10.1016/j.apsusc.2016.09.093",
+      "kind": "review",
+      "note": "Low, Cheng et al.: surface modification and enhanced photocatalytic CO2 reduction performance of TiO2; widely cited TiO2 functionalization reference."
+    },
+    {
+      "id": "di-z-scheme-jcat-2017",
+      "label": "J. Catal. 2017",
+      "url": "https://doi.org/10.1016/j.jcat.2017.06.006",
+      "kind": "literature",
+      "note": "Di, Zhu et al.: direct Z-scheme g-C3N4 / SnS2 photocatalyst with superior visible-light CO2 reduction performance."
+    },
+    {
+      "id": "wang-cu-ti3-apcatb-2022",
+      "label": "Appl. Catal. B 2022",
+      "url": "https://doi.org/10.1016/j.apcatb.2021.120803",
+      "kind": "literature",
+      "note": "Wang, Shi et al.: Cu+-Ti3+ interface interaction mediated CO2 coordination model for controlling the selectivity of photocatalytic CO2 reduction."
+    },
+    {
+      "id": "yang-in2o3-nanoenergy-2022",
+      "label": "Nano Energy 2022",
+      "url": "https://doi.org/10.1016/j.nanoen.2022.107613",
+      "kind": "literature",
+      "note": "Yang, Pan et al.: nitrogen-doped indium oxide for enhanced photocatalytic reduction of CO2 to methanol."
+    },
+    {
+      "id": "ozin-optochem-matter-2022",
+      "label": "Matter 2022",
+      "url": "https://doi.org/10.1016/j.matt.2022.07.033",
+      "kind": "literature",
+      "note": "Ozin: accelerated optochemical engineering solutions to CO2 photocatalysis for a sustainable future, framing scale-up paths and reactor architecture."
+    }
+  ],
+  "catalog_quotes": [],
+  "route_templates": [
+    {
+      "id": "tio2-photo-co2-route",
+      "name": "TiO2 photocatalyst CO2-reduction route",
+      "manufacturing_mode": "Bulk TiO2 photocatalyst preparation for CO2 reduction",
+      "preprocess": [
+        "Titanium precursor balancing",
+        "Solvent and template staging",
+        "Crystallization-window setup"
+      ],
+      "synthesis": [
+        "Sol-gel or hydrothermal synthesis",
+        "Aging and crystallization",
+        "Wash and solids recovery"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination",
+        "Surface modification (Pt or Cu cocatalyst optional)",
+        "Milling"
+      ],
+      "quality_gates": [
+        "Anatase phase purity proxy",
+        "BET surface area screen",
+        "CO2 reduction yield hold under UV"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "crystallizer",
+        "filter_rotary_vacuum",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "mill"
+      ],
+      "non_step_cost_per_lb": 0.62,
+      "route_confidence": 86,
+      "route_note": "Most transferable photocatalyst basis for CO2 reduction; UV-only activity limits solar-to-hydrocarbon performance."
+    },
+    {
+      "id": "gcn-sns2-z-scheme-route",
+      "name": "g-C3N4 / SnS2 Z-scheme route",
+      "manufacturing_mode": "Z-scheme g-C3N4 / SnS2 visible-light photocatalyst",
+      "preprocess": [
+        "Nitrogen-precursor staging for g-C3N4",
+        "Sn and S precursor balancing for SnS2",
+        "Coupling-method setup"
+      ],
+      "synthesis": [
+        "Thermal polymerization to g-C3N4",
+        "Hydrothermal SnS2 growth",
+        "Z-scheme heterojunction assembly"
+      ],
+      "postprocess": [
+        "Drying",
+        "Mild thermal hold",
+        "Milling and exfoliation"
+      ],
+      "quality_gates": [
+        "Z-scheme heterojunction proxy",
+        "Visible-light absorption window check",
+        "CO2 reduction yield hold"
+      ],
+      "steps": [
+        "mixer_dry_blender",
+        "kiln_batch",
+        "crystallizer",
+        "filter_rotary_vacuum",
+        "dryer_rotary_100_300C",
+        "mill"
+      ],
+      "non_step_cost_per_lb": 0.86,
+      "route_confidence": 76,
+      "route_note": "Z-scheme g-C3N4 / SnS2 route, attractive when visible-light operation is required and tunable redox-band alignment is desired."
+    },
+    {
+      "id": "cu2o-mof-co2-route",
+      "name": "Cu2O / MOF heterojunction route",
+      "manufacturing_mode": "MOF-derived Cu2O heterojunction photocatalyst",
+      "preprocess": [
+        "MOF precursor staging",
+        "Cu precursor balancing for Cu2O growth",
+        "Heterojunction-formation setup"
+      ],
+      "synthesis": [
+        "MOF synthesis",
+        "Cu2O deposition or in-situ reduction",
+        "Heterojunction assembly"
+      ],
+      "postprocess": [
+        "Drying",
+        "Mild thermal hold",
+        "Milling"
+      ],
+      "quality_gates": [
+        "Cu2O / MOF interface proxy",
+        "CO2 adsorption capacity screen",
+        "CO2 reduction yield hold"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "crystallizer",
+        "filter_rotary_vacuum",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "mill"
+      ],
+      "non_step_cost_per_lb": 1.1,
+      "route_confidence": 70,
+      "route_note": "MOF-derived Cu2O heterojunction route, an emerging high-surface-area option whose route maturity and MOF cost are the main risks."
+    }
+  ],
+  "candidates": [
+    {
+      "slug": "tio2-photo-co2",
+      "title": "TiO2 photocatalyst (UV anchor)",
+      "archetype": "Oxide benchmark",
+      "screening_basis": "engineering_proxy",
+      "summary": "Bulk TiO2 photocatalyst, the canonical UV anchor for CO2 photo-reduction; product slate biased toward CO and CH4.",
+      "route_template_id": "tio2-photo-co2-route",
+      "order_size_tons": 5,
+      "performance_index": 60,
+      "manufacturing_readiness": 90,
+      "screening_exactness": 80,
+      "temperature_window_c": [
+        20,
+        80
+      ],
+      "literature_basis_ids": [
+        "ola-tio2-jpr-2015",
+        "low-tio2-co2-apsusc-2017",
+        "hoffmann-artificial-dalton-2011"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Most transferable photocatalyst basis for CO2 reduction screening.",
+        "UV-only activity caps solar-to-product performance versus visible-light variants."
+      ],
+      "components": [
+        {
+          "role": "active_catalyst",
+          "name": "TiO2 (anatase)",
+          "wt_pct": 100,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 2.4,
+            "evidence_label": "Anatase TiO2 photocatalyst screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 66,
+            "transparency": "derived_proxy",
+            "note": "Anatase TiO2 cost held on engineering proxy comparable to commercial photocatalyst-grade titania (matches PWC family)."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "gcn-sns2-zscheme",
+      "title": "g-C3N4 / SnS2 Z-scheme",
+      "archetype": "Visible-light Z-scheme route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "g-C3N4 / SnS2 direct Z-scheme heterojunction for visible-light-driven CO2 reduction, biased toward CO and methanol products.",
+      "route_template_id": "gcn-sns2-z-scheme-route",
+      "order_size_tons": 2,
+      "performance_index": 76,
+      "manufacturing_readiness": 76,
+      "screening_exactness": 72,
+      "temperature_window_c": [
+        20,
+        80
+      ],
+      "literature_basis_ids": [
+        "ohno-wo3-gcn-jcou-2014",
+        "di-z-scheme-jcat-2017",
+        "wang-cu-ti3-apcatb-2022"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Best fit when visible-light operation is required and metal-free polymer + sulfide stack is acceptable.",
+        "Heterojunction reproducibility and SnS2 stability under irradiation are the main route-maturity concerns."
+      ],
+      "components": [
+        {
+          "role": "active_catalyst",
+          "name": "g-C3N4",
+          "wt_pct": 60.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 4.5,
+            "evidence_label": "g-C3N4 photocatalyst screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 60,
+            "transparency": "derived_proxy",
+            "note": "g-C3N4 cost held on derived screening proxy reflecting nitrogen-precursor and pyrolysis overhead."
+          }
+        },
+        {
+          "role": "co_active_catalyst",
+          "name": "SnS2",
+          "wt_pct": 40.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Sn",
+            "precursor_markup": 1.15,
+            "note": "Sn pricing via market feed with a precursor / conversion markup for SnS2 active phase."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "cu2o-mof-co2",
+      "title": "Cu2O / MOF heterojunction",
+      "archetype": "MOF-derived emerging route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Cu2O / MOF ternary heterojunction photocatalyst with high CO2 adsorption capacity, biased toward methanol and CH4 products.",
+      "route_template_id": "cu2o-mof-co2-route",
+      "order_size_tons": 1,
+      "performance_index": 80,
+      "manufacturing_readiness": 70,
+      "screening_exactness": 70,
+      "temperature_window_c": [
+        20,
+        80
+      ],
+      "literature_basis_ids": [
+        "yang-in2o3-nanoenergy-2022",
+        "ozin-optochem-matter-2022"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Best fit when high CO2 adsorption capacity is the program target.",
+        "MOF cost and Cu2O surface stability under photocatalysis remain the main risks."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Cu (from Cu2O)",
+          "wt_pct": 40.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Cu",
+            "precursor_markup": 1.1,
+            "note": "Live Cu feed with a precursor / conversion markup for Cu2O active phase."
+          }
+        },
+        {
+          "role": "support",
+          "name": "MOF host",
+          "wt_pct": 60.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 35.0,
+            "evidence_label": "MOF host screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 56,
+            "transparency": "derived_proxy",
+            "note": "MOF host cost held on a derived screening proxy reflecting linker / metal-cluster synthesis overhead."
+          }
+        }
+      ]
+    }
+  ]
+}

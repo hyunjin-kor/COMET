@@ -1,0 +1,390 @@
+{
+  "family": "glycerol-electrooxidation",
+  "title": "Glycerol electrooxidation reference family",
+  "catalyst_domain": "electrocatalyst",
+  "application_family": "electrolyzer",
+  "reaction": "C3H8O3 + n OH- -> C3 oxygenates (DHA, glyceraldehyde, glyceric acid, glycolate, formate) + n e- + n H2O",
+  "objective": "Optional literature-backed family for glycerol electrooxidation as a low-overpotential biorefinery anode reaction. Candidates compare a Pt / C alkaline-anode anchor, a Au / C selectivity-tilted variant biased toward DHA / glyceric acid, and a NiOOH non-noble alkaline option (Goetz 2022 Nat. Comm. design).",
+  "decision_profiles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Balance current stack economics, evidence quality, route maturity, and reported product selectivity / overpotential.",
+      "weights": {
+        "economics": 0.42,
+        "evidence": 0.22,
+        "route": 0.18,
+        "performance": 0.18
+      }
+    },
+    "cost-first": {
+      "label": "Cost-first",
+      "description": "Bias ranking toward catalyst and electrode cost while preserving route and evidence guardrails.",
+      "weights": {
+        "economics": 0.6,
+        "evidence": 0.16,
+        "route": 0.08,
+        "performance": 0.16
+      }
+    },
+    "evidence-first": {
+      "label": "Evidence-first",
+      "description": "Reward stronger literature support and more reproducible glycerol-oxidation routes.",
+      "weights": {
+        "economics": 0.3,
+        "evidence": 0.36,
+        "route": 0.16,
+        "performance": 0.18
+      }
+    }
+  },
+  "citations": [
+    {
+      "id": "kwon-glycerol-mechanism-cctc-2011",
+      "label": "ChemCatChem 2011",
+      "url": "https://doi.org/10.1002/cctc.201100023",
+      "kind": "literature",
+      "note": "Kwon, Schouten et al.: foundational mechanism study of catalytic oxidation of glycerol on polycrystalline Au and Pt electrodes, mapping the C-C cleavage and C3-oxygenate selectivity."
+    },
+    {
+      "id": "habibi-glycerol-pdptau-ijhe-2012",
+      "label": "Int. J. Hydrogen Energy 2012",
+      "url": "https://doi.org/10.1016/j.ijhydene.2012.08.127",
+      "kind": "literature",
+      "note": "Habibi and Razmi: glycerol electrooxidation on Pd, Pt and Au nanoparticles supported on carbon ceramic in alkaline media; comparative benchmarking across the three precious metals."
+    },
+    {
+      "id": "zalineeva-bi-pd-elcom-2013",
+      "label": "Electrochem. Commun. 2013",
+      "url": "https://doi.org/10.1016/j.elecom.2013.07.022",
+      "kind": "literature",
+      "note": "Zalineeva, Baranton et al.: Bi-modified palladium nanocubes for glycerol electrooxidation, demonstrating Bi adatom selectivity-tuning toward C3 oxygenates."
+    },
+    {
+      "id": "antolini-glycerol-catalysts-2019",
+      "label": "Catalysts 2019",
+      "url": "https://doi.org/10.3390/catal9120980",
+      "kind": "review",
+      "note": "Antolini: comprehensive review of glycerol electrooxidation in alkaline media and alkaline direct glycerol fuel cells, including Pt, Pd, Au, and bimetallic anode survey."
+    },
+    {
+      "id": "coutanceau-valuechem-frontchem-2019",
+      "label": "Front. Chem. 2019",
+      "url": "https://doi.org/10.3389/fchem.2019.00100",
+      "kind": "review",
+      "note": "Coutanceau, Baranton et al.: review of selective electrooxidation of glycerol into value-added chemicals, framing the biorefinery anode opportunity."
+    },
+    {
+      "id": "li-glycerol-mechanisms-cssc-2021",
+      "label": "ChemSusChem 2021",
+      "url": "https://doi.org/10.1002/cssc.202002669",
+      "kind": "review",
+      "note": "Li, Harrington et al.: foundational comparative review of glycerol electrooxidation mechanisms on Pt, Pd and Au, organising selectivity descriptors per metal surface."
+    },
+    {
+      "id": "goetz-niooh-natcomm-2022",
+      "label": "Nature Communications 2022",
+      "url": "https://doi.org/10.1038/s41467-022-33637-7",
+      "kind": "literature",
+      "note": "Goetz, Bender et al.: predictive control of selective secondary alcohol oxidation of glycerol on NiOOH; landmark non-noble alkaline anode demonstration."
+    }
+  ],
+  "catalog_quotes": [],
+  "route_templates": [
+    {
+      "id": "pt-c-glycerol-route",
+      "name": "Pt / C alkaline anode route",
+      "calculator_template_id": "alkaline_electrolyzer_gde",
+      "manufacturing_mode": "Pt / C anode for glycerol electrooxidation",
+      "preprocess": [
+        "Carbon support drying and sizing",
+        "Pt precursor balancing",
+        "Membrane hydration"
+      ],
+      "synthesis": [
+        "Pt deposition on carbon",
+        "Ink homogenization with AEM ionomer",
+        "Ultrasonic dispersion"
+      ],
+      "postprocess": [
+        "Electrode coating pass",
+        "Low-temperature drying",
+        "Hot-press / compression assembly",
+        "Electrochemical break-in"
+      ],
+      "quality_gates": [
+        "Pt loading verification",
+        "Glycerol conversion / Faradaic efficiency screen",
+        "Long-hold C3-oxygenate selectivity"
+      ],
+      "steps": [
+        "membrane_pretreatment",
+        "substrate_pretreatment",
+        "ion_exchange_conversion",
+        "ionomer_ink_homogenization",
+        "ultrasonic_dispersion",
+        "ccm_coating_pass",
+        "electrode_drying_low_temp",
+        "hot_press_lamination",
+        "electrochemical_break_in"
+      ],
+      "non_step_cost_per_lb": 0.78,
+      "route_confidence": 84,
+      "route_note": "Most transferable glycerol-anode basis using a Pt / C anchor in an AEM stack."
+    },
+    {
+      "id": "au-c-glycerol-route",
+      "name": "Au / C selectivity route",
+      "calculator_template_id": "alkaline_electrolyzer_gde",
+      "manufacturing_mode": "Au / C anode for selective glycerol oxidation",
+      "preprocess": [
+        "Carbon support sizing",
+        "Au precursor balancing",
+        "Membrane hydration"
+      ],
+      "synthesis": [
+        "Au nanoparticle deposition on carbon",
+        "Ink homogenization",
+        "Ultrasonic dispersion"
+      ],
+      "postprocess": [
+        "Electrode coating pass",
+        "Low-temperature drying",
+        "Hot-press / compression assembly",
+        "Electrochemical break-in"
+      ],
+      "quality_gates": [
+        "Au dispersion proxy",
+        "Glyceric acid / DHA selectivity screen",
+        "Long-hold stability"
+      ],
+      "steps": [
+        "membrane_pretreatment",
+        "substrate_pretreatment",
+        "ion_exchange_conversion",
+        "ionomer_ink_homogenization",
+        "ultrasonic_dispersion",
+        "ccm_coating_pass",
+        "electrode_drying_low_temp",
+        "hot_press_lamination",
+        "electrochemical_break_in"
+      ],
+      "non_step_cost_per_lb": 0.84,
+      "route_confidence": 80,
+      "route_note": "Au / C anode tilts product selectivity toward C3 oxygenates (glyceric acid / glycerate) at higher overpotential than Pt."
+    },
+    {
+      "id": "niooh-glycerol-route",
+      "name": "NiOOH non-noble alkaline route",
+      "calculator_template_id": "alkaline_electrolyzer_gde",
+      "manufacturing_mode": "NiOOH non-noble anode for glycerol oxidation",
+      "preprocess": [
+        "Ni substrate / nickel-felt staging",
+        "Membrane hydration and ion-exchange conversion",
+        "Surface oxidation setup"
+      ],
+      "synthesis": [
+        "Electrochemical or chemical oxidation of Ni surface to NiOOH",
+        "Ink / binder hold for any composite layer",
+        "Ultrasonic dispersion"
+      ],
+      "postprocess": [
+        "Electrode coating pass",
+        "Low-temperature drying",
+        "Hot-press / compression assembly",
+        "Electrochemical break-in / NiOOH cycling"
+      ],
+      "quality_gates": [
+        "NiOOH formation proxy",
+        "Selectivity to formate / glycolate screen",
+        "Long-hold cyclic stability"
+      ],
+      "steps": [
+        "membrane_pretreatment",
+        "substrate_pretreatment",
+        "ion_exchange_conversion",
+        "ionomer_ink_homogenization",
+        "ultrasonic_dispersion",
+        "ccm_coating_pass",
+        "electrode_drying_low_temp",
+        "hot_press_lamination",
+        "electrochemical_break_in"
+      ],
+      "non_step_cost_per_lb": 0.6,
+      "route_confidence": 78,
+      "route_note": "NiOOH non-noble alkaline anode route, attractive when avoiding PGMs is the program goal."
+    }
+  ],
+  "candidates": [
+    {
+      "slug": "pt-c-glycerol-anode",
+      "title": "Pt / C glycerol anode",
+      "archetype": "Precious-metal benchmark",
+      "screening_basis": "engineering_proxy",
+      "summary": "Pt / C anode used as the canonical alkaline glycerol-electrooxidation anchor, with the lowest documented overpotential among the three candidates.",
+      "route_template_id": "pt-c-glycerol-route",
+      "order_size_tons": 2,
+      "performance_index": 86,
+      "manufacturing_readiness": 84,
+      "screening_exactness": 80,
+      "temperature_window_c": [
+        25,
+        80
+      ],
+      "literature_basis_ids": [
+        "kwon-glycerol-mechanism-cctc-2011",
+        "habibi-glycerol-pdptau-ijhe-2012",
+        "li-glycerol-mechanisms-cssc-2021"
+      ],
+      "catalog_quote_ids": [],
+      "electrode_defaults": {
+        "application_family": "electrolyzer",
+        "ionomer_material_key": "fcs:sustainion-xa9-25ml",
+        "membrane_material_key": "fcs:sustainion-x37-50-rt",
+        "substrate_material_key": "fcs:nickel-fiber-felt",
+        "active_area_cm2": 25,
+        "catalyst_loading_mg_cm2": 1.0,
+        "ionomer_to_catalyst_ratio": 0.2
+      },
+      "decision_notes": [
+        "Best fit when low onset potential matters more than full PGM avoidance.",
+        "Catalyst economics dominated by Pt loading even at 20 wt%."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Pt",
+          "wt_pct": 20.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Pt",
+            "precursor_markup": 1.05,
+            "note": "Live Pt feed with a mild precursor / conversion markup."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Carbon",
+          "wt_pct": 80.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.5,
+            "evidence_label": "Carbon support screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 68,
+            "transparency": "derived_proxy",
+            "note": "Carbon support held on engineering proxy in line with other Pt / C electrocatalyst candidates."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "au-c-glycerol-selectivity",
+      "title": "Au / C glycerol anode (selectivity)",
+      "archetype": "Selectivity-tilted route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Au / C anode tilted toward C3 oxygenates (glyceric acid, glycerate) for higher-value product slates.",
+      "route_template_id": "au-c-glycerol-route",
+      "order_size_tons": 1,
+      "performance_index": 84,
+      "manufacturing_readiness": 80,
+      "screening_exactness": 78,
+      "temperature_window_c": [
+        25,
+        80
+      ],
+      "literature_basis_ids": [
+        "kwon-glycerol-mechanism-cctc-2011",
+        "antolini-glycerol-catalysts-2019",
+        "coutanceau-valuechem-frontchem-2019"
+      ],
+      "catalog_quote_ids": [],
+      "electrode_defaults": {
+        "application_family": "electrolyzer",
+        "ionomer_material_key": "fcs:sustainion-xa9-25ml",
+        "membrane_material_key": "fcs:sustainion-x37-50-rt",
+        "substrate_material_key": "fcs:nickel-fiber-felt",
+        "active_area_cm2": 25,
+        "catalyst_loading_mg_cm2": 1.0,
+        "ionomer_to_catalyst_ratio": 0.2
+      },
+      "decision_notes": [
+        "Best fit when the program target is selective C3 oxygenate production rather than total oxidation.",
+        "Au has a higher onset potential than Pt; trade overpotential for selectivity."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Au",
+          "wt_pct": 20.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Au",
+            "precursor_markup": 1.05,
+            "note": "Live Au feed with a mild precursor / conversion markup."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Carbon",
+          "wt_pct": 80.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.5,
+            "evidence_label": "Carbon support screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 68,
+            "transparency": "derived_proxy",
+            "note": "Carbon support held on the same engineering proxy as the Pt / C anchor."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "niooh-glycerol-anode",
+      "title": "NiOOH non-noble glycerol anode",
+      "archetype": "Non-noble alkaline route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "NiOOH-based alkaline anode for glycerol oxidation, the leading non-noble option with selective secondary-alcohol oxidation behavior.",
+      "route_template_id": "niooh-glycerol-route",
+      "order_size_tons": 5,
+      "performance_index": 82,
+      "manufacturing_readiness": 78,
+      "screening_exactness": 74,
+      "temperature_window_c": [
+        25,
+        80
+      ],
+      "literature_basis_ids": [
+        "goetz-niooh-natcomm-2022",
+        "zalineeva-bi-pd-elcom-2013"
+      ],
+      "catalog_quote_ids": [],
+      "electrode_defaults": {
+        "application_family": "electrolyzer",
+        "ionomer_material_key": "fcs:sustainion-xa9-25ml",
+        "membrane_material_key": "fcs:sustainion-x37-50-rt",
+        "substrate_material_key": "fcs:nickel-fiber-felt",
+        "active_area_cm2": 25,
+        "catalyst_loading_mg_cm2": 2.0,
+        "ionomer_to_catalyst_ratio": 0.15
+      },
+      "decision_notes": [
+        "Best fit when avoiding PGMs is the program goal and dihydroxyacetone / glycolate selectivity is acceptable.",
+        "Selectivity is governed by NiOOH cycling; cell design must accommodate Ni3+ regeneration."
+      ],
+      "components": [
+        {
+          "role": "active_catalyst",
+          "name": "NiOOH",
+          "wt_pct": 100,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ni",
+            "precursor_markup": 1.15,
+            "note": "Live Ni feed with a precursor / conversion markup; NiOOH active phase derives from Ni substrate oxidation."
+          }
+        }
+      ]
+    }
+  ]
+}

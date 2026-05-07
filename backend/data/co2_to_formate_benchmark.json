@@ -1,0 +1,379 @@
+{
+  "family": "co2-to-formate",
+  "title": "CO2 hydrogenation to formate / formic acid reference family",
+  "catalyst_domain": "thermal",
+  "application_family": "general",
+  "reaction": "CO2 + H2 -> HCOOH (homogeneous / heterogeneous) | CO2 + 2 e- + H+ -> HCOO- (electrochemical, see CO2RR family)",
+  "objective": "Optional literature-backed family for CO2-to-formate (formic acid) catalysis. Candidates compare a homogeneous Ir-pincer benchmark (Tanaka/Nozaki 2009 anchor), a Ru pincer alternative (Sanford 2013), and a heterogeneous PdAg / N-doped carbon emerging route. Aqueous electrochemical reduction of CO2 to formate is covered separately by the CO2RR family.",
+  "decision_profiles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Balance catalyst cost, evidence quality, route maturity, and reported turnover / formate selectivity.",
+      "weights": {
+        "economics": 0.42,
+        "evidence": 0.22,
+        "route": 0.18,
+        "performance": 0.18
+      }
+    },
+    "cost-first": {
+      "label": "Cost-first",
+      "description": "Bias ranking toward catalyst cost (precious-metal exposure) while preserving route and evidence guardrails.",
+      "weights": {
+        "economics": 0.6,
+        "evidence": 0.16,
+        "route": 0.08,
+        "performance": 0.16
+      }
+    },
+    "evidence-first": {
+      "label": "Evidence-first",
+      "description": "Reward stronger literature support and reproducible CO2-to-formate routes.",
+      "weights": {
+        "economics": 0.3,
+        "evidence": 0.36,
+        "route": 0.16,
+        "performance": 0.18
+      }
+    }
+  },
+  "citations": [
+    {
+      "id": "tanaka-ir-pincer-jacs-2009",
+      "label": "J. Am. Chem. Soc. 2009",
+      "url": "https://doi.org/10.1021/ja903574e",
+      "kind": "literature",
+      "note": "Tanaka, Yamashita and Nozaki: catalytic hydrogenation of CO2 using Ir(III)-pincer complexes; foundational homogeneous catalyst (850+ citations) for CO2 to formate."
+    },
+    {
+      "id": "huff-ru-pincer-acscatal-2013",
+      "label": "ACS Catal. 2013",
+      "url": "https://doi.org/10.1021/cs400609u",
+      "kind": "literature",
+      "note": "Huff and Sanford: catalytic CO2 hydrogenation to formate by a ruthenium pincer complex, key benchmark for Ru-PNN/PNP pincer chemistry."
+    },
+    {
+      "id": "kang-ir-electro-chemsci-2013",
+      "label": "Chem. Sci. 2013",
+      "url": "https://doi.org/10.1039/c3sc51339d",
+      "kind": "literature",
+      "note": "Kang and Meyer: selective electrocatalytic reduction of CO2 to formate by a water-soluble iridium pincer catalyst, bridging homogeneous and electrochemical formate production."
+    },
+    {
+      "id": "zhao-sn-electro-cej-2016",
+      "label": "Chem. Eng. J. 2016",
+      "url": "https://doi.org/10.1016/j.cej.2016.02.084",
+      "kind": "literature",
+      "note": "Zhao and Wang: electrochemical reduction of CO2 to formate in aqueous solution using electro-deposited Sn catalysts, key heterogeneous-electro reference for formate-selective CO2RR."
+    },
+    {
+      "id": "onishi-laurenczy-ccr-2018",
+      "label": "Coord. Chem. Rev. 2018",
+      "url": "https://doi.org/10.1016/j.ccr.2017.11.021",
+      "kind": "review",
+      "note": "Onishi, Laurenczy et al.: foundational review of reversible homogeneous catalytic hydrogen storage in formic acid and methanol, framing CO2-to-formate within the H2-storage cycle."
+    },
+    {
+      "id": "shao-ir-sac-chem-2019",
+      "label": "Chem 2019",
+      "url": "https://doi.org/10.1016/j.chempr.2018.12.014",
+      "kind": "literature",
+      "note": "Shao and Yang: iridium single-atom catalyst performing a quasi-homogeneous hydrogenation transformation of CO2 to formate, bridging the homogeneous-heterogeneous boundary."
+    },
+    {
+      "id": "zhang-pd-zro2-mcat-2019",
+      "label": "Mol. Catal. 2019",
+      "url": "https://doi.org/10.1016/j.mcat.2019.110461",
+      "kind": "literature",
+      "note": "Zhang et al.: zirconia phase effect in Pd / ZrO2-catalysed CO2 hydrogenation into formate, supporting Pd-on-oxide screening for thermal-catalysis routes."
+    },
+    {
+      "id": "yang-pdag-ndcarbon-apcatb-2021",
+      "label": "Appl. Catal. B 2021",
+      "url": "https://doi.org/10.1016/j.apcatb.2020.119628",
+      "kind": "literature",
+      "note": "Yang and Kuwahara: PdAg alloy nanoparticles encapsulated in N-doped microporous hollow carbon spheres for hydrogenation of CO2 to formate."
+    }
+  ],
+  "catalog_quotes": [],
+  "route_templates": [
+    {
+      "id": "ir-pincer-co2fa-route",
+      "name": "Homogeneous Ir-pincer route",
+      "manufacturing_mode": "Homogeneous Ir-pincer complex preparation",
+      "preprocess": [
+        "Pincer ligand synthesis / staging",
+        "Iridium precursor balancing",
+        "Inert-atmosphere conditioning"
+      ],
+      "synthesis": [
+        "Iridium-pincer metalation",
+        "Workup and purification",
+        "Solvent recovery"
+      ],
+      "postprocess": [
+        "Drying",
+        "Solids handling",
+        "Activity verification"
+      ],
+      "quality_gates": [
+        "Ligand purity / NMR check",
+        "Iridium loading verification",
+        "Turnover-number screen for CO2 to formate"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "reactor_multistep",
+        "filter_rotary_vacuum",
+        "dryer_batch_vacuum_tray",
+        "dryer_rotary_40_100C"
+      ],
+      "non_step_cost_per_lb": 1.4,
+      "route_confidence": 80,
+      "route_note": "Homogeneous Ir-pincer route with the highest documented per-Ir turnovers; Ir economics dominate the cost basis."
+    },
+    {
+      "id": "ru-pincer-co2fa-route",
+      "name": "Homogeneous Ru-pincer route",
+      "manufacturing_mode": "Homogeneous Ru-pincer complex preparation",
+      "preprocess": [
+        "Pincer ligand synthesis / staging",
+        "Ru precursor balancing",
+        "Inert-atmosphere conditioning"
+      ],
+      "synthesis": [
+        "Ru-pincer metalation",
+        "Workup and purification",
+        "Solvent recovery"
+      ],
+      "postprocess": [
+        "Drying",
+        "Solids handling",
+        "Activity verification"
+      ],
+      "quality_gates": [
+        "Ligand purity / NMR check",
+        "Ru loading verification",
+        "Turnover-number screen for CO2 to formate"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "reactor_multistep",
+        "filter_rotary_vacuum",
+        "dryer_batch_vacuum_tray",
+        "dryer_rotary_40_100C"
+      ],
+      "non_step_cost_per_lb": 1.2,
+      "route_confidence": 78,
+      "route_note": "Ru-pincer alternative to the Ir baseline; Ru is meaningfully cheaper than Ir but turnover frequency is typically lower."
+    },
+    {
+      "id": "pdag-ndc-co2fa-route",
+      "name": "Heterogeneous PdAg / N-doped carbon route",
+      "manufacturing_mode": "Supported PdAg alloy on N-doped carbon",
+      "preprocess": [
+        "N-doped carbon support synthesis or staging",
+        "Pd and Ag precursor balancing",
+        "Co-impregnation setup"
+      ],
+      "synthesis": [
+        "Sequential or co-impregnation of Pd and Ag",
+        "Reduction to PdAg alloy",
+        "Solids handling"
+      ],
+      "postprocess": [
+        "Drying",
+        "Mild thermal hold",
+        "Forming and sizing"
+      ],
+      "quality_gates": [
+        "PdAg alloy proxy",
+        "Formate Faradaic / turnover screen",
+        "Long-hold stability check"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "filter_rotary_vacuum",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple",
+        "mill"
+      ],
+      "non_step_cost_per_lb": 0.94,
+      "route_confidence": 76,
+      "route_note": "Heterogeneous PdAg on N-doped carbon for CO2-to-formate; alloy and N-functionalisation control selectivity over CO byproduct."
+    }
+  ],
+  "candidates": [
+    {
+      "slug": "ir-pincer-co2fa",
+      "title": "Ir-pincer (Tanaka / Nozaki anchor)",
+      "archetype": "Homogeneous benchmark",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Iridium-pincer homogeneous catalyst for CO2 hydrogenation to formate; the highest-turnover documented homogeneous benchmark.",
+      "route_template_id": "ir-pincer-co2fa-route",
+      "order_size_tons": 0.5,
+      "performance_index": 92,
+      "manufacturing_readiness": 78,
+      "screening_exactness": 80,
+      "temperature_window_c": [
+        25,
+        100
+      ],
+      "literature_basis_ids": [
+        "tanaka-ir-pincer-jacs-2009",
+        "kang-ir-electro-chemsci-2013",
+        "shao-ir-sac-chem-2019"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Best fit when very high turnover frequency is the program goal and Ir economics are acceptable.",
+        "Iridium price exposure dominates the cost basis; ligand-only proxy understates total catalyst cost."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Ir",
+          "wt_pct": 30.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ir",
+            "precursor_markup": 1.1,
+            "note": "Live Ir feed with a precursor / conversion markup; pincer-ligand mass is included implicitly."
+          }
+        },
+        {
+          "role": "ligand",
+          "name": "PNP / PNN pincer ligand",
+          "wt_pct": 70.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 800.0,
+            "evidence_label": "Pincer ligand screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 56,
+            "transparency": "derived_proxy",
+            "note": "Pincer ligand cost held on a derived screening proxy reflecting multi-step organic-synthesis overhead."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "ru-pincer-co2fa",
+      "title": "Ru-pincer (Sanford / Beller-style)",
+      "archetype": "Lower-cost homogeneous route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Ruthenium-pincer homogeneous catalyst for CO2 hydrogenation to formate, providing a lower precious-metal-cost alternative to the Ir benchmark.",
+      "route_template_id": "ru-pincer-co2fa-route",
+      "order_size_tons": 0.5,
+      "performance_index": 86,
+      "manufacturing_readiness": 76,
+      "screening_exactness": 78,
+      "temperature_window_c": [
+        25,
+        100
+      ],
+      "literature_basis_ids": [
+        "huff-ru-pincer-acscatal-2013",
+        "onishi-laurenczy-ccr-2018"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Use when Ru chemistry is acceptable and cost reduction over Ir is desirable.",
+        "Pincer-ligand cost dominates total cost more than Ir route since Ru is cheaper per oz."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Ru",
+          "wt_pct": 30.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ru",
+            "precursor_markup": 1.1,
+            "note": "Live Ru feed with a precursor / conversion markup."
+          }
+        },
+        {
+          "role": "ligand",
+          "name": "PNP / PNN pincer ligand",
+          "wt_pct": 70.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 800.0,
+            "evidence_label": "Pincer ligand screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 56,
+            "transparency": "derived_proxy",
+            "note": "Pincer ligand cost held on the same derived screening proxy as the Ir route."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "pdag-ndcarbon-co2fa",
+      "title": "PdAg / N-doped carbon",
+      "archetype": "Heterogeneous emerging route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "PdAg alloy nanoparticles encapsulated in N-doped microporous carbon for heterogeneous CO2-to-formate hydrogenation.",
+      "route_template_id": "pdag-ndc-co2fa-route",
+      "order_size_tons": 2,
+      "performance_index": 80,
+      "manufacturing_readiness": 76,
+      "screening_exactness": 74,
+      "temperature_window_c": [
+        25,
+        120
+      ],
+      "literature_basis_ids": [
+        "yang-pdag-ndcarbon-apcatb-2021",
+        "zhang-pd-zro2-mcat-2019",
+        "zhao-sn-electro-cej-2016"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Best fit when a heterogeneous, separable catalyst is required and a small Pd / Ag inventory is acceptable.",
+        "N-doped carbon support supplies amine-style sites that stabilise CO2 / formate intermediates."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Pd",
+          "wt_pct": 5.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Pd",
+            "precursor_markup": 1.08,
+            "note": "Live Pd feed with a precursor / conversion markup."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "Ag",
+          "wt_pct": 5.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ag",
+            "precursor_markup": 1.05,
+            "note": "Live Ag feed with a mild precursor / conversion markup for PdAg alloy formation."
+          }
+        },
+        {
+          "role": "support",
+          "name": "N-doped carbon",
+          "wt_pct": 90.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.8,
+            "evidence_label": "N-doped carbon support screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 60,
+            "transparency": "derived_proxy",
+            "note": "N-doped carbon support cost held on engineering proxy until a clean public bulk price is curated."
+          }
+        }
+      ]
+    }
+  ]
+}
