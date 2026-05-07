@@ -2,7 +2,9 @@
 
 Single source of truth: ``frontend/public/icon-source.png``. Replace
 that one file when the brand icon changes; this script downscales it
-into every PNG / ICO output the desktop app and the docs reference.
+into every PNG / ICO output the desktop app and the docs reference,
+applying an iOS-style rounded-corner alpha mask so the file edges
+look clean inside avatar / repo-card UIs.
 
 Outputs:
   frontend/public/icon-32x32.png
@@ -14,15 +16,16 @@ Outputs:
   electron/icon.png                   (mirror of 512x512)
 
 If the source isn't square (typical for an AI-generated render), the
-image is center-cropped to the smaller dimension before resizing, so
-the frame and subject stay in proportion.
+image is center-cropped to the smaller dimension before resizing.
+The rounded mask is applied per output size so edge anti-aliasing
+stays crisp at every resolution.
 """
 
 from __future__ import annotations
 
 from pathlib import Path
 
-from PIL import Image
+from PIL import Image, ImageChops, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1]
 PUBLIC_DIR = ROOT / "frontend" / "public"
@@ -31,17 +34,34 @@ SOURCE = PUBLIC_DIR / "icon-source.png"
 
 PNG_SIZES = (32, 128, 256, 512)
 ICO_SIZES = [(16, 16), (24, 24), (32, 32), (48, 48), (64, 64), (128, 128), (256, 256)]
+CORNER_RADIUS_RATIO = 0.22  # iOS app-icon standard squircle approximation
+CONTENT_ZOOM = 0.07         # crop this fraction off each side so the dome content
+                            # fills more of the visible icon (the rounded mask later
+                            # trims any leftover cream halo near the corners)
 
 
-def to_square(img: Image.Image) -> Image.Image:
-    """Center-crop to the smaller side so resizes don't distort."""
+def to_square(img: Image.Image, zoom: float = CONTENT_ZOOM) -> Image.Image:
+    """Center-crop to a square, optionally zooming in by ``zoom`` on each side."""
     w, h = img.size
-    if w == h:
-        return img
-    side = min(w, h)
-    left = (w - side) // 2
-    top = (h - side) // 2
-    return img.crop((left, top, left + side, top + side))
+    side = int(min(w, h) * (1.0 - 2 * zoom))
+    cx, cy = w // 2, h // 2
+    half = side // 2
+    return img.crop((cx - half, cy - half, cx + half, cy + half))
+
+
+def apply_rounded_mask(img: Image.Image, radius_ratio: float = CORNER_RADIUS_RATIO) -> Image.Image:
+    """Multiply the icon's alpha by an iOS-style rounded-square mask.
+
+    Existing transparency in the source is preserved (we multiply alphas
+    rather than replace), so any sprite cut-outs inside the brand frame
+    keep working.
+    """
+    w, h = img.size
+    radius = int(min(w, h) * radius_ratio)
+    mask = Image.new("L", (w, h), 0)
+    ImageDraw.Draw(mask).rounded_rectangle((0, 0, w - 1, h - 1), radius=radius, fill=255)
+    r, g, b, a = img.split()
+    return Image.merge("RGBA", (r, g, b, ImageChops.multiply(a, mask)))
 
 
 def load_source() -> Image.Image:
@@ -53,13 +73,13 @@ def load_source() -> Image.Image:
     return to_square(Image.open(SOURCE).convert("RGBA"))
 
 
-def resized(source: Image.Image, size: int) -> Image.Image:
-    return source.resize((size, size), Image.LANCZOS)
+def render(source: Image.Image, size: int) -> Image.Image:
+    return apply_rounded_mask(source.resize((size, size), Image.LANCZOS))
 
 
 def save_pngs(source: Image.Image) -> None:
     for size in PNG_SIZES:
-        icon = resized(source, size)
+        icon = render(source, size)
         icon.save(PUBLIC_DIR / f"icon-{size}x{size}.png")
         if size == 512:
             icon.save(PUBLIC_DIR / "icon.png")
@@ -67,7 +87,7 @@ def save_pngs(source: Image.Image) -> None:
 
 
 def save_ico(source: Image.Image) -> None:
-    icon = resized(source, 512)
+    icon = render(source, 512)
     icon.save(PUBLIC_DIR / "icon.ico", format="ICO", sizes=ICO_SIZES)
 
 
@@ -75,7 +95,8 @@ def main() -> None:
     source = load_source()
     save_pngs(source)
     save_ico(source)
-    print(f"regenerated icons from {SOURCE.name} ({source.size[0]}×{source.size[1]} after square crop)")
+    print(f"regenerated icons with {int(CORNER_RADIUS_RATIO * 100)}% rounded mask "
+          f"(source {source.size[0]}×{source.size[1]} after square crop)")
 
 
 if __name__ == "__main__":
