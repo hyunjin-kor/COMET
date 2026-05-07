@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/hyunjin-kor/CatPrice/security/advisories/new
+    about: Please use the private security advisory flow rather than opening a public issue.
+  - name: Releases / download links
+    url: https://github.com/hyunjin-kor/CatPrice/releases/latest
+    about: Looking for the latest installer or release notes.

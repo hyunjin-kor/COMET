@@ -2,8 +2,9 @@
 
 The output goes to ``docs/assets/social-preview.png`` and is meant to be
 uploaded once at GitHub Settings -> General -> Social preview. The image
-keeps the same icon language as the desktop app (re-uses ``draw_icon``
-from generate_app_icons.py) on a clean Toss-style white surface.
+re-uses the production app icon (loaded from ``frontend/public/
+icon-source.png`` via ``generate_app_icons``) on a clean white surface
+so the desktop icon and the social card stay visually consistent.
 """
 
 from __future__ import annotations
@@ -15,7 +16,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
-from generate_app_icons import draw_icon  # noqa: E402
+from generate_app_icons import load_source, render  # noqa: E402
 
 OUTPUT = ROOT / "docs" / "assets" / "social-preview.png"
 
@@ -49,20 +50,10 @@ def main() -> None:
     canvas = Image.new("RGBA", (CANVAS_W, CANVAS_H), (255, 255, 255, 255))
     draw = ImageDraw.Draw(canvas)
 
-    # Soft Toss-blue accent stripe behind the icon.
-    accent = Image.new("RGBA", (CANVAS_W, CANVAS_H), (0, 0, 0, 0))
-    accent_draw = ImageDraw.Draw(accent)
-    accent_draw.rounded_rectangle(
-        (PADDING_LEFT - 32, (CANVAS_H - ICON_SIZE) // 2 - 32,
-         PADDING_LEFT + ICON_SIZE + 32,
-         (CANVAS_H + ICON_SIZE) // 2 + 32),
-        radius=64,
-        fill=(232, 242, 255, 255),  # #e8f2ff (Toss brand-soft)
-    )
-    canvas.alpha_composite(accent)
-
-    # Render the existing app icon at 360 px and paste it.
-    icon = draw_icon(ICON_SIZE)
+    # Render the production app icon at 360px (rounded mask + cream/mint gradient
+    # already baked into the brand asset, so no extra accent stripe is needed).
+    cropped = load_source()
+    icon = render(cropped, ICON_SIZE)
     icon_x = PADDING_LEFT
     icon_y = (CANVAS_H - ICON_SIZE) // 2
     canvas.alpha_composite(icon, (icon_x, icon_y))

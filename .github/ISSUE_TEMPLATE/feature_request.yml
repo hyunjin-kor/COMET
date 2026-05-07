@@ -1,0 +1,42 @@
+name: Feature request
+description: Suggest a new capability for the calculation engine, desktop UI, or library data.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        CatPrice has a locked stack and a focused scope (see [AGENTS.md](https://github.com/hyunjin-kor/CatPrice/blob/master/AGENTS.md) §2 and §3). Stack changes need an issue first; methodology changes have to keep the three CatCost validation cases within the tolerances in §7.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the user / research situation that the current app handles poorly.
+      placeholder: "Today I have to … because …"
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: What would the new behavior be? Mention which screen / endpoint / library data it touches.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Estimated scope
+      options:
+        - Small (one component / one endpoint)
+        - Medium (cross-cutting UI or API change)
+        - Large (new module, new dependency, methodology change)
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other ways to solve the same problem and why they fall short.
