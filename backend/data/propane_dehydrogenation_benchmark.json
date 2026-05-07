@@ -1,0 +1,397 @@
+{
+  "family": "propane-dehydrogenation",
+  "title": "Propane dehydrogenation (PDH) reference family",
+  "catalyst_domain": "thermal",
+  "application_family": "general",
+  "reaction": "C3H8 -> C3H6 + H2 (non-oxidative PDH) | C3H8 + 1/2 O2 -> C3H6 + H2O (oxidative ODHP)",
+  "objective": "Optional literature-backed family for on-purpose propylene production. Candidates compare a Pt-Sn / Al2O3 commercial benchmark (Oleflex-style), a PtZn intermetallic emerging route, and a boron-nitride oxidative-dehydrogenation (ODHP) route, so the screening can reward either non-oxidative maturity or oxidative selectivity.",
+  "decision_profiles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Balance catalyst cost, evidence quality, route maturity, and reported propylene selectivity / stability.",
+      "weights": {
+        "economics": 0.42,
+        "evidence": 0.22,
+        "route": 0.18,
+        "performance": 0.18
+      }
+    },
+    "cost-first": {
+      "label": "Cost-first",
+      "description": "Bias ranking toward catalyst cost while preserving route and evidence guardrails.",
+      "weights": {
+        "economics": 0.6,
+        "evidence": 0.16,
+        "route": 0.08,
+        "performance": 0.16
+      }
+    },
+    "evidence-first": {
+      "label": "Evidence-first",
+      "description": "Reward stronger literature support and more reproducible Pt-based PDH preparation routes.",
+      "weights": {
+        "economics": 0.3,
+        "evidence": 0.36,
+        "route": 0.16,
+        "performance": 0.18
+      }
+    }
+  },
+  "citations": [
+    {
+      "id": "santhosh-ptsn-sba15-cattoday-2009",
+      "label": "Catal. Today 2009",
+      "url": "https://doi.org/10.1016/j.cattod.2009.01.002",
+      "kind": "literature",
+      "note": "Santhosh Kumar, Chen et al.: PDH over Pt-SBA-15 and Pt-Sn-SBA-15 showing how Sn improves Pt dispersion and propylene selectivity, foundational for Pt-Sn PDH design."
+    },
+    {
+      "id": "deng-ptsn-silica-cctc-2014",
+      "label": "ChemCatChem 2014",
+      "url": "https://doi.org/10.1002/cctc.201402306",
+      "kind": "literature",
+      "note": "Deng, Miura et al.: silica-supported Pt-Sn catalysts prepared by direct reduction; quantifies Sn/Pt ratio effects on stability and selectivity in PDH."
+    },
+    {
+      "id": "sattler-dehydrogenation-chemrev-2014",
+      "label": "Chem. Rev. 2014",
+      "url": "https://doi.org/10.1021/cr5002436",
+      "kind": "review",
+      "note": "Sattler, Ruiz-Martinez et al.: foundational review of catalytic dehydrogenation of light alkanes on metals and metal oxides; covers Pt-Sn, Cr-Al2O3, and emerging routes."
+    },
+    {
+      "id": "grant-bn-odhp-science-2016",
+      "label": "Science 2016",
+      "url": "https://doi.org/10.1126/science.aaf7885",
+      "kind": "literature",
+      "note": "Grant, Carrero et al.: selective oxidative dehydrogenation of propane using boron-nitride catalysts, opening the BN-ODHP route family."
+    },
+    {
+      "id": "kaylor-ptsn-jcat-2018",
+      "label": "J. Catal. 2018",
+      "url": "https://doi.org/10.1016/j.jcat.2018.09.006",
+      "kind": "literature",
+      "note": "Kaylor, Davis et al.: PDH over supported Pt-Sn nanoparticles, mapping how nanoparticle size and Sn coverage tune selectivity / coking trade-offs."
+    },
+    {
+      "id": "venegas-bn-odhp-angew-2020",
+      "label": "Angew. Chem. Int. Ed. 2020",
+      "url": "https://doi.org/10.1002/anie.202003695",
+      "kind": "literature",
+      "note": "Venegas, Zhang et al.: explanation of why boron nitride is selective for ODHP; identifies surface oxidised B species as the active phase."
+    },
+    {
+      "id": "han-ptzn-mesozeolite-acscatal-2021",
+      "label": "ACS Catal. 2021",
+      "url": "https://doi.org/10.1021/acscatal.1c01808",
+      "kind": "literature",
+      "note": "Han, Park et al.: PtZn intermetallic compound nanoparticles in mesoporous zeolite exhibiting high catalyst durability for PDH; supports the PtZn intermetallic emerging route."
+    },
+    {
+      "id": "zhang-ptzn-aiche-2021",
+      "label": "AIChE J. 2021",
+      "url": "https://doi.org/10.1002/aic.17295",
+      "kind": "literature",
+      "note": "Zhang, Li et al.: PtZn intermetallic nanoalloy encapsulated in silicalite-1 for PDH, establishing zeolite-encapsulated intermetallics for coke resistance."
+    },
+    {
+      "id": "motagamwala-pdh-thermolimit-science-2021",
+      "label": "Science 2021",
+      "url": "https://doi.org/10.1126/science.abg7894",
+      "kind": "literature",
+      "note": "Motagamwala, Almallahi et al.: stable and selective catalysts for propane dehydrogenation operating at the thermodynamic limit, demonstrating high-conversion PDH design rules."
+    },
+    {
+      "id": "nakaya-pt-sa-cplus-2022",
+      "label": "ChemPlusChem 2022",
+      "url": "https://doi.org/10.1002/cplu.202100560",
+      "kind": "literature",
+      "note": "Nakaya, Furukawa et al.: tailoring single-atom platinum for selective and stable catalysts in PDH, surveying the Pt-SA design space for ultra-low Pt loading."
+    }
+  ],
+  "catalog_quotes": [],
+  "route_templates": [
+    {
+      "id": "ptsn-alumina-pdh-route",
+      "name": "Pt-Sn / Al2O3 PDH route (Oleflex-style)",
+      "manufacturing_mode": "Supported Pt-Sn alumina PDH catalyst preparation",
+      "preprocess": [
+        "Alumina support sizing",
+        "Pt and Sn precursor balancing",
+        "Co-impregnation window setup"
+      ],
+      "synthesis": [
+        "Sequential or co-impregnation of Pt and Sn",
+        "Aging hold",
+        "Solids handling"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination",
+        "Reduction / activation",
+        "Forming and sizing"
+      ],
+      "quality_gates": [
+        "Pt-Sn alloy proxy",
+        "Coke-resistance screen",
+        "Propane conversion / propylene selectivity hold"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple",
+        "mill",
+        "extruder_with_feeder"
+      ],
+      "non_step_cost_per_lb": 0.82,
+      "route_confidence": 92,
+      "route_note": "Most transferable PDH basis and the dominant commercial benchmark (Oleflex-style supported Pt-Sn)."
+    },
+    {
+      "id": "ptzn-intermetallic-pdh-route",
+      "name": "PtZn intermetallic in zeolite PDH route",
+      "manufacturing_mode": "Zeolite-encapsulated PtZn intermetallic PDH catalyst",
+      "preprocess": [
+        "Zeolite (silicalite-1 or mesoporous) staging",
+        "Pt and Zn precursor balancing",
+        "Encapsulation / impregnation setup"
+      ],
+      "synthesis": [
+        "Pt-Zn precursor introduction into the zeolite",
+        "Aging and intermetallic-formation hold",
+        "Solids handling"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination",
+        "High-temperature reduction to PtZn intermetallic",
+        "Forming and sizing"
+      ],
+      "quality_gates": [
+        "PtZn intermetallic phase proxy",
+        "Zeolite framework integrity check",
+        "Long-hold conversion / selectivity stability"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple",
+        "mill"
+      ],
+      "non_step_cost_per_lb": 0.94,
+      "route_confidence": 76,
+      "route_note": "PtZn intermetallic in zeolite route, an emerging high-stability PDH option; zeolite encapsulation discipline reduces route maturity vs Pt-Sn."
+    },
+    {
+      "id": "bn-odhp-route",
+      "name": "Boron nitride ODHP route",
+      "manufacturing_mode": "Boron-nitride oxidative dehydrogenation catalyst",
+      "preprocess": [
+        "h-BN powder sizing",
+        "Surface conditioning hold",
+        "O-activation setup"
+      ],
+      "synthesis": [
+        "Surface oxidation of h-BN",
+        "Optional binder staging",
+        "Solids handling"
+      ],
+      "postprocess": [
+        "Drying",
+        "Mild thermal hold",
+        "Forming and sizing"
+      ],
+      "quality_gates": [
+        "Surface B-O species proxy",
+        "Combustion / over-oxidation screen",
+        "Propylene selectivity hold"
+      ],
+      "steps": [
+        "mixer_dry_blender",
+        "kiln_continuous_indirect",
+        "reactor_simple",
+        "mill"
+      ],
+      "non_step_cost_per_lb": 0.7,
+      "route_confidence": 72,
+      "route_note": "BN-ODHP route is non-oxidative-PDH alternative trading reactor heat duty for an oxidative pathway with high propylene selectivity."
+    }
+  ],
+  "candidates": [
+    {
+      "slug": "ptsn-alumina-pdh",
+      "title": "Pt-Sn / Al2O3 (Oleflex-style)",
+      "archetype": "Commercial benchmark",
+      "screening_basis": "engineering_proxy",
+      "summary": "Pt-Sn supported on alumina, the dominant commercial PDH catalyst basis (Oleflex-style); used as the cost and performance anchor.",
+      "route_template_id": "ptsn-alumina-pdh-route",
+      "order_size_tons": 50,
+      "performance_index": 90,
+      "manufacturing_readiness": 95,
+      "screening_exactness": 86,
+      "temperature_window_c": [
+        550,
+        650
+      ],
+      "literature_basis_ids": [
+        "santhosh-ptsn-sba15-cattoday-2009",
+        "deng-ptsn-silica-cctc-2014",
+        "sattler-dehydrogenation-chemrev-2014",
+        "kaylor-ptsn-jcat-2018"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Most transferable PDH basis and the clearest commercial comparison point.",
+        "Catalyst economics dominated by Pt exposure even at low loadings; Sn promoter mitigates coking."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Pt",
+          "wt_pct": 0.5,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Pt",
+            "precursor_markup": 1.05,
+            "note": "Live Pt feed with a mild precursor / conversion markup for commercial Pt-Sn PDH catalyst screening."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "Sn",
+          "wt_pct": 0.5,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Sn",
+            "precursor_markup": 1.1,
+            "note": "Live Sn feed with a precursor / conversion markup."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Al2O3",
+          "wt_pct": 99.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.9,
+            "evidence_label": "Gamma-alumina support screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 70,
+            "transparency": "derived_proxy",
+            "note": "Gamma-alumina support cost held on an engineering proxy comparable to commercial Sasol / BASF alumina ranges."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "ptzn-intermetallic-pdh",
+      "title": "PtZn intermetallic / zeolite",
+      "archetype": "Emerging high-stability route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "PtZn intermetallic encapsulated in mesoporous zeolite or silicalite-1 for high-stability PDH with reduced coking versus Pt-Sn.",
+      "route_template_id": "ptzn-intermetallic-pdh-route",
+      "order_size_tons": 10,
+      "performance_index": 92,
+      "manufacturing_readiness": 76,
+      "screening_exactness": 76,
+      "temperature_window_c": [
+        500,
+        650
+      ],
+      "literature_basis_ids": [
+        "han-ptzn-mesozeolite-acscatal-2021",
+        "zhang-ptzn-aiche-2021",
+        "motagamwala-pdh-thermolimit-science-2021",
+        "nakaya-pt-sa-cplus-2022"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Best fit when long-hold stability and reduced regen cycles matter more than the Pt-Sn maturity.",
+        "Zeolite-encapsulation discipline reduces route confidence; intermetallic phase formation needs strict reduction temperature control."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Pt",
+          "wt_pct": 0.5,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Pt",
+            "precursor_markup": 1.05,
+            "note": "Live Pt feed with a mild precursor / conversion markup."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "Zn",
+          "wt_pct": 1.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Zn",
+            "precursor_markup": 1.1,
+            "note": "Live Zn feed with a precursor / conversion markup for intermetallic formation."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Mesoporous zeolite (silicalite-1)",
+          "wt_pct": 98.5,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 7.5,
+            "evidence_label": "Mesoporous zeolite screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 64,
+            "transparency": "derived_proxy",
+            "note": "Mesoporous silicalite-1 support cost held on a derived screening proxy reflecting templated synthesis overhead."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "bn-odhp",
+      "title": "h-BN ODHP route",
+      "archetype": "Oxidative-dehydrogenation route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Boron-nitride catalyst for oxidative dehydrogenation of propane, providing an alternative non-Pt route with high propylene selectivity.",
+      "route_template_id": "bn-odhp-route",
+      "order_size_tons": 20,
+      "performance_index": 82,
+      "manufacturing_readiness": 70,
+      "screening_exactness": 72,
+      "temperature_window_c": [
+        450,
+        550
+      ],
+      "literature_basis_ids": [
+        "grant-bn-odhp-science-2016",
+        "venegas-bn-odhp-angew-2020"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Use when an oxidative pathway is acceptable and a metal-free catalyst is the program goal.",
+        "Combustion / over-oxidation control becomes the main process risk versus the established Pt-Sn route."
+      ],
+      "components": [
+        {
+          "role": "active_catalyst",
+          "name": "h-BN",
+          "wt_pct": 100,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 18.0,
+            "evidence_label": "h-BN powder screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 60,
+            "transparency": "derived_proxy",
+            "note": "Hexagonal boron-nitride catalyst cost held on a derived screening proxy reflecting BN powder grade and surface-conditioning overhead."
+          }
+        }
+      ]
+    }
+  ]
+}

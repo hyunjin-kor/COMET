@@ -1,0 +1,358 @@
+{
+  "family": "nitrogen-reduction-reaction",
+  "title": "Electrochemical N2 reduction (NRR) reference family",
+  "catalyst_domain": "electrocatalyst",
+  "application_family": "electrolyzer",
+  "reaction": "N2 + 6 H+ + 6 e- -> 2 NH3 (aqueous) | Li + N2 + e- -> Li3N -> NH3 (lithium-mediated cycle)",
+  "objective": "Optional literature-backed family for electrochemical ammonia synthesis. Candidates compare a lithium-mediated NRR cathode (the most rigorously validated route to date), a plasma-assisted NRR option, and an ambient aqueous Cu / Bi cathode anchor. Note: ambient aqueous NRR claims require strict isotope and contamination controls (Andersen 2019, Choi 2020); the aqueous candidate here is a literature-architecture proxy, not an industrial benchmark.",
+  "decision_profiles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Balance current stack economics, evidence quality, route maturity, and reported NH3-production performance.",
+      "weights": {
+        "economics": 0.4,
+        "evidence": 0.26,
+        "route": 0.16,
+        "performance": 0.18
+      }
+    },
+    "cost-first": {
+      "label": "Cost-first",
+      "description": "Bias ranking toward catalyst and electrode cost while preserving route and evidence guardrails.",
+      "weights": {
+        "economics": 0.56,
+        "evidence": 0.18,
+        "route": 0.08,
+        "performance": 0.18
+      }
+    },
+    "evidence-first": {
+      "label": "Evidence-first",
+      "description": "Reward stronger literature support and rigorous (isotope-verified) NH3 production claims.",
+      "weights": {
+        "economics": 0.28,
+        "evidence": 0.4,
+        "route": 0.14,
+        "performance": 0.18
+      }
+    }
+  },
+  "citations": [
+    {
+      "id": "andersen-rigorous-nrr-nature-2019",
+      "label": "Nature 2019",
+      "url": "https://doi.org/10.1038/s41586-019-1260-x",
+      "kind": "literature",
+      "note": "Andersen, Colic et al.: rigorous electrochemical ammonia synthesis protocol with quantitative isotope measurements; reset benchmark for genuine NRR claims and exposed widespread contamination artefacts."
+    },
+    {
+      "id": "suryanto-nrr-natcatal-2019",
+      "label": "Nature Catalysis 2019",
+      "url": "https://doi.org/10.1038/s41929-019-0252-4",
+      "kind": "review",
+      "note": "Suryanto, Du et al.: comprehensive review of challenges and prospects in electroreduction of nitrogen to ammonia, organising aqueous, non-aqueous, and lithium-mediated routes."
+    },
+    {
+      "id": "choi-false-positives-nrr-ncomms-2020",
+      "label": "Nature Communications 2020",
+      "url": "https://doi.org/10.1038/s41467-020-19130-z",
+      "kind": "literature",
+      "note": "Choi, Suryanto et al.: identification and elimination of false positives in electrochemical NRR studies, establishing community-standard isotope and blank protocols."
+    },
+    {
+      "id": "lazouski-li-mediated-joule-2019",
+      "label": "Joule 2019",
+      "url": "https://doi.org/10.1016/j.joule.2019.02.003",
+      "kind": "literature",
+      "note": "Lazouski, Schiffer et al.: understanding continuous lithium-mediated electrochemical nitrogen reduction, foundational study of the most reproducible NRR mechanism."
+    },
+    {
+      "id": "deluna-electrosynthesis-science-2019",
+      "label": "Science 2019",
+      "url": "https://doi.org/10.1126/science.aav3506",
+      "kind": "literature",
+      "note": "De Luna, Hahn et al.: what would it take for renewably powered electrosynthesis to displace petrochemical processes; key techno-economic framing for green NH3."
+    },
+    {
+      "id": "gorbanev-plasma-acssuschem-2020",
+      "label": "ACS Sustainable Chem. Eng. 2020",
+      "url": "https://doi.org/10.1021/acssuschemeng.9b07849",
+      "kind": "literature",
+      "note": "Gorbanev, Vervloessem et al.: nitrogen fixation with water vapor by non-equilibrium plasma toward sustainable ammonia production, demonstrating an alternative non-electrochemical N2 fixation route."
+    },
+    {
+      "id": "hou-li-mea-joule-2023",
+      "label": "Joule 2023",
+      "url": "https://doi.org/10.1016/j.joule.2023.07.019",
+      "kind": "literature",
+      "note": "Hou, Deng et al.: membrane electrode assembly for lithium-mediated nitrogen reduction, mapping the technical roadmap from batch to continuous flow operation."
+    }
+  ],
+  "catalog_quotes": [],
+  "route_templates": [
+    {
+      "id": "li-mediated-nrr-route",
+      "name": "Lithium-mediated NRR cathode route",
+      "calculator_template_id": "pem_electrolyzer_ccm",
+      "manufacturing_mode": "Non-aqueous lithium-mediated NRR cathode",
+      "preprocess": [
+        "Lithium salt and proton-shuttle staging",
+        "Cathode substrate (Cu / steel) preparation",
+        "Inert-atmosphere conditioning"
+      ],
+      "synthesis": [
+        "Cathode coating with Li-cycle compatible binder",
+        "Ink homogenization",
+        "Ultrasonic dispersion"
+      ],
+      "postprocess": [
+        "Substrate pretreatment for Li plating cycle",
+        "Drying",
+        "Hot-press / cell assembly under inert atmosphere",
+        "Electrochemical break-in"
+      ],
+      "quality_gates": [
+        "Li-cycle reproducibility check",
+        "Faradaic efficiency to NH3 with isotope verification",
+        "Long-hold stability under N2 / H2 feed"
+      ],
+      "steps": [
+        "membrane_pretreatment",
+        "substrate_pretreatment",
+        "ionomer_ink_homogenization",
+        "ultrasonic_dispersion",
+        "ccm_coating_pass",
+        "electrode_drying_low_temp",
+        "hot_press_lamination",
+        "electrochemical_break_in"
+      ],
+      "non_step_cost_per_lb": 0.86,
+      "route_confidence": 76,
+      "route_note": "Most rigorously validated NRR mechanism; engineering complexity comes from inert-atmosphere handling and Li-cycle reproducibility."
+    },
+    {
+      "id": "plasma-nrr-route",
+      "name": "Plasma-NRR cathode route",
+      "calculator_template_id": "alkaline_electrolyzer_gde",
+      "manufacturing_mode": "Plasma-assisted N2 fixation cathode",
+      "preprocess": [
+        "Plasma source / dielectric barrier setup",
+        "Catalyst-coated substrate preparation",
+        "Aqueous trap conditioning"
+      ],
+      "synthesis": [
+        "Cathode catalyst coating",
+        "Ink homogenization",
+        "Ultrasonic dispersion"
+      ],
+      "postprocess": [
+        "Drying",
+        "Cell assembly with plasma source",
+        "Electrochemical break-in"
+      ],
+      "quality_gates": [
+        "NOx -> NH3 selectivity check",
+        "Plasma-power efficiency screen",
+        "Trap-side ammonia recovery hold"
+      ],
+      "steps": [
+        "membrane_pretreatment",
+        "substrate_pretreatment",
+        "ion_exchange_conversion",
+        "ionomer_ink_homogenization",
+        "ultrasonic_dispersion",
+        "ccm_coating_pass",
+        "electrode_drying_low_temp",
+        "hot_press_lamination",
+        "electrochemical_break_in"
+      ],
+      "non_step_cost_per_lb": 0.78,
+      "route_confidence": 70,
+      "route_note": "Plasma-assisted N2 fixation provides a non-electrochemical NH3 route with demonstrable production at the cost of high plasma energy input."
+    },
+    {
+      "id": "aqueous-nrr-cu-route",
+      "name": "Aqueous Cu / Bi NRR cathode route",
+      "calculator_template_id": "pem_electrolyzer_ccm",
+      "manufacturing_mode": "Aqueous ambient NRR cathode (research-stage)",
+      "preprocess": [
+        "Cu or Bi precursor staging",
+        "Conductive carbon support and GDL preparation",
+        "Membrane hydration"
+      ],
+      "synthesis": [
+        "Cu / Bi nanoparticle deposition",
+        "Ink homogenization",
+        "Ultrasonic dispersion"
+      ],
+      "postprocess": [
+        "Cathode coating pass",
+        "Low-temperature drying",
+        "Hot-press lamination",
+        "Electrochemical break-in"
+      ],
+      "quality_gates": [
+        "Isotope-verified NH3 production check (15N2)",
+        "Blank-controlled Faradaic efficiency screen",
+        "HER suppression screen"
+      ],
+      "steps": [
+        "membrane_pretreatment",
+        "substrate_pretreatment",
+        "ionomer_ink_homogenization",
+        "ultrasonic_dispersion",
+        "ccm_coating_pass",
+        "electrode_drying_low_temp",
+        "hot_press_lamination",
+        "electrochemical_break_in"
+      ],
+      "non_step_cost_per_lb": 0.62,
+      "route_confidence": 58,
+      "route_note": "Aqueous NRR research-stage proxy; literature-architecture only — many ambient NRR claims have failed isotope and blank controls (Choi 2020), so this route should be treated as a screening anchor, not a process basis."
+    }
+  ],
+  "candidates": [
+    {
+      "slug": "li-mediated-nrr",
+      "title": "Lithium-mediated NRR cathode",
+      "archetype": "Most-validated route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Non-aqueous lithium-mediated NRR using a Cu or steel cathode in a THF / Li salt electrolyte; the most rigorously demonstrated electrochemical NH3-production route.",
+      "route_template_id": "li-mediated-nrr-route",
+      "order_size_tons": 1,
+      "performance_index": 78,
+      "manufacturing_readiness": 70,
+      "screening_exactness": 78,
+      "temperature_window_c": [
+        20,
+        50
+      ],
+      "literature_basis_ids": [
+        "lazouski-li-mediated-joule-2019",
+        "suryanto-nrr-natcatal-2019",
+        "hou-li-mea-joule-2023"
+      ],
+      "catalog_quote_ids": [],
+      "electrode_defaults": {
+        "application_family": "electrolyzer",
+        "ionomer_material_key": "fcs:pfsa-d5",
+        "membrane_material_key": "fcs:pfsa-d50r",
+        "substrate_material_key": "fcs:ti-ptl-ultrathin",
+        "active_area_cm2": 25,
+        "catalyst_loading_mg_cm2": 1.0,
+        "ionomer_to_catalyst_ratio": 0.2
+      },
+      "decision_notes": [
+        "Best fit when rigorous, reproducible NH3 production matters more than aqueous simplicity.",
+        "Cost is dominated by THF / Li salt cycle and inert-atmosphere stack hardware rather than catalyst material."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Cu (Li-cycle current collector)",
+          "wt_pct": 100,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Cu",
+            "precursor_markup": 1.1,
+            "note": "Live Cu feed with a precursor / conversion markup for the lithium-cycle cathode current collector."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "plasma-nrr",
+      "title": "Plasma-NRR ammonia route",
+      "archetype": "Non-equilibrium plasma route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Plasma-assisted N2 fixation with an aqueous trap, producing NH3 / HNO3 mixtures recoverable as ammonium salts.",
+      "route_template_id": "plasma-nrr-route",
+      "order_size_tons": 2,
+      "performance_index": 72,
+      "manufacturing_readiness": 68,
+      "screening_exactness": 70,
+      "temperature_window_c": [
+        20,
+        80
+      ],
+      "literature_basis_ids": [
+        "gorbanev-plasma-acssuschem-2020",
+        "deluna-electrosynthesis-science-2019"
+      ],
+      "catalog_quote_ids": [],
+      "electrode_defaults": {
+        "application_family": "electrolyzer",
+        "ionomer_material_key": "fcs:sustainion-xa9-25ml",
+        "membrane_material_key": "fcs:sustainion-x37-50-rt",
+        "substrate_material_key": "fcs:nickel-fiber-felt",
+        "active_area_cm2": 25,
+        "catalyst_loading_mg_cm2": 1.5,
+        "ionomer_to_catalyst_ratio": 0.15
+      },
+      "decision_notes": [
+        "Use when a non-electrochemical pathway is acceptable and plasma equipment is available.",
+        "Energy efficiency remains the main bottleneck; trap-side recovery design dominates cost."
+      ],
+      "components": [
+        {
+          "role": "active_catalyst",
+          "name": "Ni / steel (plasma-tolerant cathode)",
+          "wt_pct": 100,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ni",
+            "precursor_markup": 1.1,
+            "note": "Live Ni feed with a precursor / conversion markup for plasma-tolerant cathode screening."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "aqueous-nrr-cu",
+      "title": "Aqueous NRR research anchor (Cu)",
+      "archetype": "Research-stage screening anchor",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Cu-based aqueous NRR cathode used as a literature-architecture screening anchor; ambient aqueous NRR claims require isotope and blank controls per Choi 2020.",
+      "route_template_id": "aqueous-nrr-cu-route",
+      "order_size_tons": 1,
+      "performance_index": 60,
+      "manufacturing_readiness": 60,
+      "screening_exactness": 62,
+      "temperature_window_c": [
+        20,
+        50
+      ],
+      "literature_basis_ids": [
+        "andersen-rigorous-nrr-nature-2019",
+        "choi-false-positives-nrr-ncomms-2020"
+      ],
+      "catalog_quote_ids": [],
+      "electrode_defaults": {
+        "application_family": "electrolyzer",
+        "ionomer_material_key": "fcs:pfsa-d5",
+        "membrane_material_key": "fcs:pfsa-d50r",
+        "substrate_material_key": "fcs:ti-ptl-ultrathin",
+        "active_area_cm2": 25,
+        "catalyst_loading_mg_cm2": 1.0,
+        "ionomer_to_catalyst_ratio": 0.2
+      },
+      "decision_notes": [
+        "Use this only as a screening anchor; ambient aqueous NRR claims have a high false-positive rate without 15N2 isotope verification.",
+        "If the program target is real NH3 production, prefer the lithium-mediated or plasma routes above."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Cu",
+          "wt_pct": 100,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Cu",
+            "precursor_markup": 1.1,
+            "note": "Live Cu feed with a precursor / conversion markup for aqueous research-stage cathode screening."
+          }
+        }
+      ]
+    }
+  ]
+}

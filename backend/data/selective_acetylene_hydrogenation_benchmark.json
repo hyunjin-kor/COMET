@@ -1,0 +1,389 @@
+{
+  "family": "selective-acetylene-hydrogenation",
+  "title": "Selective acetylene hydrogenation reference family",
+  "catalyst_domain": "thermal",
+  "application_family": "general",
+  "reaction": "C2H2 + H2 -> C2H4 (selective) | over-hydrogenation: C2H2 + 2 H2 -> C2H6 (avoided)",
+  "objective": "Optional literature-backed family for front-end / tail-end selective hydrogenation of acetylene impurity in ethylene streams. Candidates compare a Pd / alumina baseline (industrial), a Pd-Ag bimetallic anchor (Studt 2008 design rule, dominant front-end), and a Pd-Cu single-atom-alloy emerging route.",
+  "decision_profiles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Balance catalyst cost, evidence quality, route maturity, and reported ethylene selectivity / over-hydrogenation suppression.",
+      "weights": {
+        "economics": 0.42,
+        "evidence": 0.22,
+        "route": 0.18,
+        "performance": 0.18
+      }
+    },
+    "cost-first": {
+      "label": "Cost-first",
+      "description": "Bias ranking toward catalyst cost while preserving route and evidence guardrails.",
+      "weights": {
+        "economics": 0.6,
+        "evidence": 0.16,
+        "route": 0.08,
+        "performance": 0.16
+      }
+    },
+    "evidence-first": {
+      "label": "Evidence-first",
+      "description": "Reward stronger literature support and more reproducible Pd-based selectivity-engineering routes.",
+      "weights": {
+        "economics": 0.3,
+        "evidence": 0.36,
+        "route": 0.16,
+        "performance": 0.18
+      }
+    }
+  },
+  "citations": [
+    {
+      "id": "huang-pdag-kbeta-apcata-2007",
+      "label": "Appl. Catal. A 2007",
+      "url": "https://doi.org/10.1016/j.apcata.2007.09.017",
+      "kind": "literature",
+      "note": "Huang, Pyrz et al.: selective hydrogenation of acetylene in the presence of ethylene on K+/beta-zeolite-supported Pd and Pd-Ag, demonstrating support and Ag-promotion effects on selectivity."
+    },
+    {
+      "id": "studt-nonprecious-science-2008",
+      "label": "Science 2008",
+      "url": "https://doi.org/10.1126/science.1156660",
+      "kind": "literature",
+      "note": "Studt, Abild-Pedersen et al.: identification of non-precious-metal alloy catalysts for selective hydrogenation of acetylene; foundational descriptor-based design (1100+ citations) underpinning the Pd-Ag and Cu-based selectivity-engineering literature."
+    },
+    {
+      "id": "boucher-saa-pccp-2013",
+      "label": "Phys. Chem. Chem. Phys. 2013",
+      "url": "https://doi.org/10.1039/c3cp51538a",
+      "kind": "literature",
+      "note": "Boucher, Zugic et al.: single-atom-alloy surface analogs in Pd-Cu nanoparticles for selective hydrogenation, foundational SAA paper applied to acetylene-style hydrogenation."
+    },
+    {
+      "id": "lucci-saa-butadiene-ncomms-2015",
+      "label": "Nature Communications 2015",
+      "url": "https://doi.org/10.1038/ncomms9550",
+      "kind": "literature",
+      "note": "Lucci, Liu et al.: selective hydrogenation of 1,3-butadiene on Pt-Cu alloys at the single-atom limit; landmark SAA selectivity demonstration that generalises to acetylene hydrogenation."
+    },
+    {
+      "id": "kruppe-pdcu-saa-acscatal-2017",
+      "label": "ACS Catal. 2017",
+      "url": "https://doi.org/10.1021/acscatal.7b02862",
+      "kind": "literature",
+      "note": "Kruppe, Krooswyk et al.: selective hydrogenation of acetylene to ethylene over a Pd/Cu(111) single-atom-alloy with a carbonaceous overlayer, model-surface validation of the SAA design."
+    },
+    {
+      "id": "liu-pdau-saa-cst-2017",
+      "label": "Catal. Sci. Technol. 2017",
+      "url": "https://doi.org/10.1039/c7cy00794a",
+      "kind": "literature",
+      "note": "Liu, Shan et al.: Pd-Au single-atom-alloy catalysts for liquid-phase selective hydrogenation of 1-hexyne, supporting the SAA design beyond Pd-Cu."
+    },
+    {
+      "id": "jorgensen-saa-kmc-jacs-2019",
+      "label": "J. Am. Chem. Soc. 2019",
+      "url": "https://doi.org/10.1021/jacs.9b02132",
+      "kind": "literature",
+      "note": "Jorgensen, Gronbeck: selective acetylene hydrogenation over single-atom-alloy nanoparticles by kinetic Monte Carlo, providing first-principles-grounded selectivity predictions."
+    }
+  ],
+  "catalog_quotes": [],
+  "route_templates": [
+    {
+      "id": "pd-alumina-sha-route",
+      "name": "Pd / Al2O3 baseline route",
+      "manufacturing_mode": "Supported Pd alumina selective-hydrogenation catalyst",
+      "preprocess": [
+        "Alumina support sizing",
+        "Pd precursor balancing",
+        "Impregnation window setup"
+      ],
+      "synthesis": [
+        "Pd impregnation onto alumina",
+        "Aging hold",
+        "Solids handling"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination",
+        "Reduction / activation",
+        "Forming and sizing"
+      ],
+      "quality_gates": [
+        "Pd dispersion proxy",
+        "Acetylene conversion / over-hydrogenation screen",
+        "Green-oil deactivation hold"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple",
+        "mill",
+        "extruder_with_feeder"
+      ],
+      "non_step_cost_per_lb": 0.66,
+      "route_confidence": 90,
+      "route_note": "Most transferable selective-hydrogenation basis; matches industrial low-loading Pd / Al2O3 catalysts widely used in front-end and tail-end units."
+    },
+    {
+      "id": "pdag-bimetallic-sha-route",
+      "name": "Pd-Ag bimetallic route",
+      "manufacturing_mode": "Pd-Ag bimetallic alumina catalyst (front-end style)",
+      "preprocess": [
+        "Alumina support sizing",
+        "Pd and Ag precursor balancing",
+        "Sequential or co-impregnation setup"
+      ],
+      "synthesis": [
+        "Sequential or co-impregnation of Pd and Ag",
+        "Aging hold",
+        "Solids handling"
+      ],
+      "postprocess": [
+        "Drying",
+        "Calcination",
+        "Reduction to bimetallic Pd-Ag",
+        "Forming and sizing"
+      ],
+      "quality_gates": [
+        "Pd-Ag bimetallic proxy",
+        "Ethylene-window selectivity screen",
+        "Long-hold runaway / over-hydrogenation check"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple",
+        "mill",
+        "extruder_with_feeder"
+      ],
+      "non_step_cost_per_lb": 0.74,
+      "route_confidence": 88,
+      "route_note": "Industrial front-end-style Pd-Ag selective hydrogenation route; Ag promoter widens the ethylene-selectivity window over the bare Pd baseline."
+    },
+    {
+      "id": "pdcu-saa-sha-route",
+      "name": "Pd-Cu single-atom-alloy route",
+      "manufacturing_mode": "Pd-Cu single-atom-alloy selective hydrogenation catalyst",
+      "preprocess": [
+        "Cu host nanoparticle preparation",
+        "Pd precursor balancing for sub-monolayer addition",
+        "SAA-formation setup"
+      ],
+      "synthesis": [
+        "Trace-Pd deposition on Cu host",
+        "Aging / SAA-formation hold",
+        "Solids handling"
+      ],
+      "postprocess": [
+        "Drying",
+        "Mild reduction",
+        "Forming and sizing"
+      ],
+      "quality_gates": [
+        "Pd isolation / SAA proxy",
+        "Ethylene selectivity / over-hydrogenation suppression screen",
+        "Hydride / coking stability hold"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple",
+        "mill"
+      ],
+      "non_step_cost_per_lb": 0.84,
+      "route_confidence": 74,
+      "route_note": "Pd-Cu single-atom-alloy emerging route; sub-monolayer Pd discipline keeps Pd intensity ultra-low at the cost of route maturity."
+    }
+  ],
+  "candidates": [
+    {
+      "slug": "pd-alumina-baseline",
+      "title": "Pd / Al2O3 baseline",
+      "archetype": "Industrial baseline",
+      "screening_basis": "engineering_proxy",
+      "summary": "Low-loading Pd on alumina, the canonical front-end / tail-end selective hydrogenation baseline; used as the cost and process anchor.",
+      "route_template_id": "pd-alumina-sha-route",
+      "order_size_tons": 50,
+      "performance_index": 76,
+      "manufacturing_readiness": 95,
+      "screening_exactness": 86,
+      "temperature_window_c": [
+        40,
+        180
+      ],
+      "literature_basis_ids": [
+        "huang-pdag-kbeta-apcata-2007",
+        "studt-nonprecious-science-2008"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Most transferable selective-hydrogenation basis with mature commercial inputs.",
+        "Without a promoter, the ethylene-selectivity window is narrow and over-hydrogenation risk is higher than Pd-Ag."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Pd",
+          "wt_pct": 0.04,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Pd",
+            "precursor_markup": 1.08,
+            "note": "Live Pd feed with a precursor / conversion markup; very low loading typical of industrial selective-hydrogenation catalysts."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Al2O3",
+          "wt_pct": 99.96,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.9,
+            "evidence_label": "Alumina support screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 70,
+            "transparency": "derived_proxy",
+            "note": "Gamma-alumina support cost held on an engineering proxy comparable to commercial alumina ranges."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "pdag-bimetallic",
+      "title": "Pd-Ag bimetallic (front-end style)",
+      "archetype": "Industrial bimetallic benchmark",
+      "screening_basis": "engineering_proxy",
+      "summary": "Pd-Ag bimetallic on alumina; the dominant industrial front-end selective hydrogenation catalyst owing to a wide ethylene-selectivity window.",
+      "route_template_id": "pdag-bimetallic-sha-route",
+      "order_size_tons": 50,
+      "performance_index": 88,
+      "manufacturing_readiness": 92,
+      "screening_exactness": 84,
+      "temperature_window_c": [
+        40,
+        180
+      ],
+      "literature_basis_ids": [
+        "huang-pdag-kbeta-apcata-2007",
+        "studt-nonprecious-science-2008"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Best fit for front-end ethylene-purification duty where the ethylene-selectivity window must stay wide.",
+        "Catalyst economics dominated by Pd; Ag is a small fraction by mass but widens the operability window meaningfully."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Pd",
+          "wt_pct": 0.04,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Pd",
+            "precursor_markup": 1.08,
+            "note": "Live Pd feed with a precursor / conversion markup; matches industrial front-end Pd loading ranges."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "Ag",
+          "wt_pct": 0.2,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ag",
+            "precursor_markup": 1.05,
+            "note": "Live Ag feed with a mild precursor / conversion markup."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Al2O3",
+          "wt_pct": 99.76,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.9,
+            "evidence_label": "Alumina support screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 70,
+            "transparency": "derived_proxy",
+            "note": "Gamma-alumina support cost held on an engineering proxy comparable to commercial alumina ranges."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "pdcu-saa",
+      "title": "Pd-Cu single-atom alloy",
+      "archetype": "Emerging single-atom-alloy route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Pd-Cu single-atom-alloy catalyst exploiting isolated Pd in a Cu host for high ethylene selectivity at ultra-low Pd intensity.",
+      "route_template_id": "pdcu-saa-sha-route",
+      "order_size_tons": 5,
+      "performance_index": 92,
+      "manufacturing_readiness": 74,
+      "screening_exactness": 76,
+      "temperature_window_c": [
+        40,
+        180
+      ],
+      "literature_basis_ids": [
+        "boucher-saa-pccp-2013",
+        "lucci-saa-butadiene-ncomms-2015",
+        "kruppe-pdcu-saa-acscatal-2017",
+        "liu-pdau-saa-cst-2017",
+        "jorgensen-saa-kmc-jacs-2019"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Best fit when Pd intensity must be minimised and high ethylene selectivity is the program goal.",
+        "Sub-monolayer Pd reproducibility is the main route-maturity risk; SAA preparation discipline lowers route confidence vs Pd-Ag."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Pd (single-atom)",
+          "wt_pct": 0.01,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Pd",
+            "precursor_markup": 1.1,
+            "note": "Live Pd feed with a precursor / conversion markup; SAA loading is sub-monolayer, much lower than the Pd-Ag bimetallic baseline."
+          }
+        },
+        {
+          "role": "host_metal",
+          "name": "Cu",
+          "wt_pct": 4.99,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Cu",
+            "precursor_markup": 1.1,
+            "note": "Live Cu feed with a precursor / conversion markup as the SAA host metal."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Al2O3",
+          "wt_pct": 95.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.9,
+            "evidence_label": "Alumina support screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 70,
+            "transparency": "derived_proxy",
+            "note": "Gamma-alumina support cost held on an engineering proxy comparable to commercial alumina ranges."
+          }
+        }
+      ]
+    }
+  ]
+}

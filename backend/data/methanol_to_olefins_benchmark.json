@@ -1,0 +1,343 @@
+{
+  "family": "methanol-to-olefins",
+  "title": "Methanol-to-olefins (MTO / MTH) reference family",
+  "catalyst_domain": "thermal",
+  "application_family": "general",
+  "reaction": "n CH3OH -> light olefins (C2= / C3= / C4=) + n H2O (zeolite-catalyzed via hydrocarbon-pool)",
+  "objective": "Optional literature-backed family for methanol-to-olefins / methanol-to-hydrocarbon screening. Candidates compare a SAPO-34 chabazite anchor (the commercial DMTO/UOP-MTO benchmark) with HZSM-5 for shifted product selectivity and a Zn-modified ZSM-5 variant for aromatic-leaning conversion.",
+  "decision_profiles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Balance catalyst cost, evidence quality, route maturity, and reported olefin selectivity.",
+      "weights": {
+        "economics": 0.42,
+        "evidence": 0.22,
+        "route": 0.18,
+        "performance": 0.18
+      }
+    },
+    "cost-first": {
+      "label": "Cost-first",
+      "description": "Bias ranking toward catalyst cost while preserving route and evidence guardrails.",
+      "weights": {
+        "economics": 0.6,
+        "evidence": 0.16,
+        "route": 0.08,
+        "performance": 0.16
+      }
+    },
+    "evidence-first": {
+      "label": "Evidence-first",
+      "description": "Reward stronger literature support and more reproducible zeolite preparation routes.",
+      "weights": {
+        "economics": 0.3,
+        "evidence": 0.36,
+        "route": 0.16,
+        "performance": 0.18
+      }
+    }
+  },
+  "citations": [
+    {
+      "id": "lesthaeghe-direct-cc-angew-2006",
+      "label": "Angew. Chem. Int. Ed. 2006",
+      "url": "https://doi.org/10.1002/anie.200503824",
+      "kind": "literature",
+      "note": "Lesthaeghe, Van Speybroeck et al.: failure of direct C-C coupling in zeolite-catalysed MTO; established the hydrocarbon-pool mechanism as the dominant route."
+    },
+    {
+      "id": "teketel-zsm22-cctc-2009",
+      "label": "ChemCatChem 2009",
+      "url": "https://doi.org/10.1002/cctc.200900057",
+      "kind": "literature",
+      "note": "Teketel, Svelle et al.: shape-selective conversion of methanol to hydrocarbons over 10-ring unidirectional H-ZSM-22, framing pore-geometry control of product slate."
+    },
+    {
+      "id": "teketel-mechanism-mmm-2010",
+      "label": "Microporous Mesoporous Mater. 2010",
+      "url": "https://doi.org/10.1016/j.micromeso.2010.07.013",
+      "kind": "literature",
+      "note": "Teketel, Olsbye et al.: selectivity control in MTH conversion through fundamental mechanistic insight, comparing 10-ring zeolites for olefin / aromatic balance."
+    },
+    {
+      "id": "white-carbon-pool-cst-2011",
+      "label": "Catal. Sci. Technol. 2011",
+      "url": "https://doi.org/10.1039/c1cy00197c",
+      "kind": "review",
+      "note": "White: methanol-to-hydrocarbon chemistry and the carbon-pool revolution; concise review of how the hydrocarbon-pool model overturned earlier direct-coupling proposals."
+    },
+    {
+      "id": "tian-mto-acscatal-2015",
+      "label": "ACS Catal. 2015",
+      "url": "https://doi.org/10.1021/acscatal.5b00007",
+      "kind": "review",
+      "note": "Tian, Wei et al.: foundational review of methanol to olefins from fundamentals to commercialization, surveying SAPO-34 vs ZSM-5 routes and DMTO commercial deployment."
+    },
+    {
+      "id": "wang-methylbenzene-jcat-2015",
+      "label": "J. Catal. 2015",
+      "url": "https://doi.org/10.1016/j.jcat.2015.10.001",
+      "kind": "literature",
+      "note": "Wang, Xu et al.: methylbenzene hydrocarbon-pool species in MTO conversion over zeolite H-ZSM-5, characterising the dominant active intermediates."
+    },
+    {
+      "id": "arora-chabazite-natcatal-2018",
+      "label": "Nature Catalysis 2018",
+      "url": "https://doi.org/10.1038/s41929-018-0125-2",
+      "kind": "literature",
+      "note": "Arora, Nieskens et al.: lifetime improvement in MTO catalysis over chabazite materials by high-pressure H2 co-feeds, establishing co-feed as a deactivation-mitigation lever."
+    }
+  ],
+  "catalog_quotes": [],
+  "route_templates": [
+    {
+      "id": "sapo-34-mto-route",
+      "name": "SAPO-34 chabazite MTO route",
+      "manufacturing_mode": "SAPO-34 chabazite zeolite catalyst preparation",
+      "preprocess": [
+        "Si / Al / P precursor balancing",
+        "SDA (template) staging",
+        "Crystallization-window setup"
+      ],
+      "synthesis": [
+        "Hydrothermal SAPO-34 crystallization",
+        "Aging hold",
+        "Filtration and template-laden solids recovery"
+      ],
+      "postprocess": [
+        "Drying",
+        "Template-burn calcination",
+        "Forming and sizing"
+      ],
+      "quality_gates": [
+        "Chabazite phase purity proxy",
+        "Si distribution / acidity screen",
+        "Light-olefin (C2=/C3=) selectivity hold"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "crystallizer",
+        "filter_rotary_vacuum",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "mill",
+        "extruder_with_feeder"
+      ],
+      "non_step_cost_per_lb": 0.78,
+      "route_confidence": 90,
+      "route_note": "Most transferable MTO basis matching the commercial DMTO / UOP-MTO process; SAPO-34 is the established light-olefin selective zeolite."
+    },
+    {
+      "id": "hzsm5-mto-route",
+      "name": "H-ZSM-5 MTO route",
+      "manufacturing_mode": "ZSM-5 zeolite catalyst preparation for MTH",
+      "preprocess": [
+        "Si / Al precursor balancing",
+        "SDA (TPAOH) staging",
+        "Crystallization setup"
+      ],
+      "synthesis": [
+        "Hydrothermal ZSM-5 crystallization",
+        "Aging hold",
+        "Filtration"
+      ],
+      "postprocess": [
+        "Drying",
+        "Template-burn calcination",
+        "Ion-exchange to H-form",
+        "Forming and sizing"
+      ],
+      "quality_gates": [
+        "MFI phase purity proxy",
+        "Si/Al ratio acidity screen",
+        "Methanol-to-hydrocarbon selectivity hold"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "crystallizer",
+        "filter_rotary_vacuum",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "ion_exchange_conversion",
+        "mill",
+        "extruder_with_feeder"
+      ],
+      "non_step_cost_per_lb": 0.68,
+      "route_confidence": 88,
+      "route_note": "Mature H-ZSM-5 route; product slate skews toward heavier hydrocarbons / aromatics relative to SAPO-34."
+    },
+    {
+      "id": "zn-zsm5-mto-route",
+      "name": "Zn-modified ZSM-5 MTO route",
+      "manufacturing_mode": "Zn-modified ZSM-5 for aromatic-leaning MTH conversion",
+      "preprocess": [
+        "H-ZSM-5 base zeolite staging",
+        "Zn precursor balancing",
+        "Impregnation setup"
+      ],
+      "synthesis": [
+        "Zn impregnation onto H-ZSM-5",
+        "Drying",
+        "Calcination"
+      ],
+      "postprocess": [
+        "Forming and sizing",
+        "Activation"
+      ],
+      "quality_gates": [
+        "Zn dispersion proxy",
+        "Acidity-modification screen",
+        "Aromatic / olefin selectivity hold"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "mill",
+        "extruder_with_feeder"
+      ],
+      "non_step_cost_per_lb": 0.74,
+      "route_confidence": 78,
+      "route_note": "Zn-modified ZSM-5 shifts MTH selectivity toward aromatics; route adds an impregnation pass over the bare H-ZSM-5 baseline."
+    }
+  ],
+  "candidates": [
+    {
+      "slug": "sapo-34-light-olefin",
+      "title": "SAPO-34 chabazite (DMTO baseline)",
+      "archetype": "Commercial light-olefin benchmark",
+      "screening_basis": "engineering_proxy",
+      "summary": "SAPO-34 chabazite zeolite catalyst, the commercial DMTO / UOP-MTO benchmark for light-olefin (ethylene + propylene) production from methanol.",
+      "route_template_id": "sapo-34-mto-route",
+      "order_size_tons": 50,
+      "performance_index": 88,
+      "manufacturing_readiness": 92,
+      "screening_exactness": 84,
+      "temperature_window_c": [
+        400,
+        500
+      ],
+      "literature_basis_ids": [
+        "tian-mto-acscatal-2015",
+        "arora-chabazite-natcatal-2018"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Most transferable MTO basis and the dominant commercial light-olefin route.",
+        "Deactivation through coke remains the main process-side cost driver; high-pressure H2 co-feed mitigates lifetime loss."
+      ],
+      "components": [
+        {
+          "role": "active_catalyst",
+          "name": "SAPO-34 chabazite",
+          "wt_pct": 100,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 8.5,
+            "evidence_label": "SAPO-34 zeolite screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 70,
+            "transparency": "derived_proxy",
+            "note": "SAPO-34 chabazite catalyst held on an engineering proxy in line with commercial DMTO catalyst pricing ranges."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "hzsm5-mth",
+      "title": "H-ZSM-5 (MTH baseline)",
+      "archetype": "Aromatic / heavier-cut benchmark",
+      "screening_basis": "engineering_proxy",
+      "summary": "H-ZSM-5 (MFI) zeolite catalyst for methanol-to-hydrocarbon conversion, biased toward heavier hydrocarbons and aromatics relative to SAPO-34.",
+      "route_template_id": "hzsm5-mto-route",
+      "order_size_tons": 50,
+      "performance_index": 80,
+      "manufacturing_readiness": 92,
+      "screening_exactness": 82,
+      "temperature_window_c": [
+        350,
+        500
+      ],
+      "literature_basis_ids": [
+        "lesthaeghe-direct-cc-angew-2006",
+        "teketel-zsm22-cctc-2009",
+        "teketel-mechanism-mmm-2010",
+        "wang-methylbenzene-jcat-2015"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Use when the program target includes aromatic gasoline-range or methanol-to-aromatics products rather than light olefins.",
+        "MFI pore geometry favors C5+ relative to chabazite, with stronger Bronsted acidity."
+      ],
+      "components": [
+        {
+          "role": "active_catalyst",
+          "name": "H-ZSM-5",
+          "wt_pct": 100,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 6.5,
+            "evidence_label": "H-ZSM-5 zeolite screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 72,
+            "transparency": "derived_proxy",
+            "note": "H-ZSM-5 catalyst held on an engineering proxy comparable to commercial Mobil / Sinopec ZSM-5 pricing ranges."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "zn-zsm5-aromatics",
+      "title": "Zn / ZSM-5 (aromatics-leaning)",
+      "archetype": "Modified-zeolite route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Zn-modified ZSM-5 catalyst for aromatic-leaning MTH conversion, used when the target slate is BTX-rich.",
+      "route_template_id": "zn-zsm5-mto-route",
+      "order_size_tons": 20,
+      "performance_index": 84,
+      "manufacturing_readiness": 80,
+      "screening_exactness": 76,
+      "temperature_window_c": [
+        350,
+        500
+      ],
+      "literature_basis_ids": [
+        "white-carbon-pool-cst-2011",
+        "tian-mto-acscatal-2015"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Use when the program goal is BTX or aromatic gasoline rather than light olefins.",
+        "Adding the Zn pass improves aromatic selectivity but increases catalyst cost and adds a deactivation pathway."
+      ],
+      "components": [
+        {
+          "role": "promoter",
+          "name": "Zn",
+          "wt_pct": 3.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Zn",
+            "precursor_markup": 1.1,
+            "note": "Live Zn feed with a precursor / conversion markup for ZSM-5 promoter loading."
+          }
+        },
+        {
+          "role": "support",
+          "name": "H-ZSM-5",
+          "wt_pct": 97.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 6.5,
+            "evidence_label": "H-ZSM-5 zeolite screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 72,
+            "transparency": "derived_proxy",
+            "note": "H-ZSM-5 base zeolite cost held on the same engineering proxy as the unmodified candidate."
+          }
+        }
+      ]
+    }
+  ]
+}
