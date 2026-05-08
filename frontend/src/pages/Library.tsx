@@ -84,9 +84,9 @@ function formatRawPrice(material: MaterialItem) {
 }
 
 function priceScopeLabel(scope: string) {
-  if (scope === 'literature_high_volume') return 'Literature HV';
-  if (scope === 'vendor_lab') return 'Vendor Lab';
-  return 'Historical Bulk';
+  if (scope === 'literature_high_volume') return 'Bulk commodity';
+  if (scope === 'vendor_lab') return 'Vendor pack price';
+  return 'Historical archive';
 }
 
 function pricingBasisLabel(basis: string) {
@@ -96,18 +96,54 @@ function pricingBasisLabel(basis: string) {
 
 function sourceTrustLabel(material: MaterialItem) {
   if (material.reference_url) {
-    if (material.price_scope === 'literature_high_volume') return 'Public literature source';
-    if (material.price_scope === 'vendor_lab') return 'Direct vendor source';
-    return 'Public source linked';
+    if (material.price_scope === 'literature_high_volume') return 'Public commodity source';
+    if (material.price_scope === 'vendor_lab') return 'Vendor product page';
+    return 'Public link';
   }
-  if (material.price_scope === 'historical_bulk') return 'No public permalink';
-  return 'Link not stored';
+  if (material.price_scope === 'historical_bulk') return 'Archive only (no public link)';
+  return 'No link stored';
 }
 
 function sourceTrustTone(material: MaterialItem) {
   if (material.reference_url) return 'border-emerald-200 bg-emerald-50 text-emerald-700';
   if (material.price_scope === 'historical_bulk') return 'border-amber-200 bg-amber-50 text-amber-700';
   return 'border-slate-200 bg-white text-slate-600';
+}
+
+function usabilityLabel(material: MaterialItem) {
+  if (material.is_calculator_usable) return 'Ready to cost';
+  return 'Browse only';
+}
+
+function usabilityTone(material: MaterialItem) {
+  if (material.is_calculator_usable) return 'border-sky-200 bg-sky-50 text-sky-700';
+  return 'border-slate-200 bg-slate-100 text-slate-600';
+}
+
+function usabilityHint(material: MaterialItem) {
+  if (material.is_calculator_usable) return 'This row can be picked in the calculator.';
+  if (material.price_unit && (material.price_unit.includes('cm2') || material.price_unit.includes('m2'))) {
+    return 'Area-priced electrocatalyst row. Used in the electrode stack model, not the thermal mass-based calculator.';
+  }
+  if (material.price_unit && material.price_unit.includes('mL')) {
+    return 'Volume-priced ionomer / dispersion row without density. Used directly in the electrode stack model.';
+  }
+  return 'Reference row only. Price unit is not yet mapped to the calculator.';
+}
+
+function quoteYearTone(year: number | null | undefined) {
+  if (year == null) return 'border-slate-200 bg-slate-100 text-slate-600';
+  const currentYear = new Date().getFullYear();
+  const age = currentYear - year;
+  if (age <= 2) return 'border-emerald-200 bg-emerald-50 text-emerald-700';
+  if (age <= 7) return 'border-sky-200 bg-sky-50 text-sky-700';
+  if (age <= 15) return 'border-amber-200 bg-amber-50 text-amber-700';
+  return 'border-rose-200 bg-rose-50 text-rose-700';
+}
+
+function quoteYearLabel(year: number | null | undefined) {
+  if (year == null) return 'Year unknown';
+  return `${year} quote`;
 }
 
 function LibraryMetricTile({ label, value, detail }: { label: string; value: string; detail: string }) {
@@ -149,10 +185,11 @@ export default function Library() {
   const [selectedStepKey, setSelectedStepKey] = useState<string | null>(null);
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
   const publicLinkCount = materials.filter((material) => Boolean(material.reference_url)).length;
-  const electrocatalystCount = materials.filter((material) => material.catalyst_domain === 'electrocatalyst').length;
   const historicalOnlyCount = materials.filter(
     (material) => material.price_scope === 'historical_bulk' && !material.reference_url,
   ).length;
+  const usableCount = materials.filter((material) => material.is_calculator_usable).length;
+  const browseOnlyCount = materials.length - usableCount;
   const selectedMaterial = materials.find((material) => String(material.id) === selectedMaterialId) ?? materials[0] ?? null;
   const selectedStep = steps.find((step) => step.key === selectedStepKey) ?? steps[0] ?? null;
   const selectedTemplate = templates.find((template) => template.id === selectedTemplateId) ?? templates[0] ?? null;
@@ -333,9 +370,9 @@ export default function Library() {
 
             <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
               <LibraryMetricTile label="Filtered rows" value={String(materials.length)} detail="Material rows visible under the current filters." />
-              <LibraryMetricTile label="Public links" value={String(publicLinkCount)} detail="Rows that open a source page directly." />
-              <LibraryMetricTile label="Electrocatalyst rows" value={String(electrocatalystCount)} detail="Rows tagged for electrocatalyst workflows." />
-              <LibraryMetricTile label="Archive-only rows" value={String(historicalOnlyCount)} detail="Historical bulk rows without a stable public URL." />
+              <LibraryMetricTile label="Ready to cost" value={String(usableCount)} detail={browseOnlyCount > 0 ? `${browseOnlyCount} more browse-only rows are listed for reference.` : 'Every visible row plugs into the calculator.'} />
+              <LibraryMetricTile label="Public source links" value={String(publicLinkCount)} detail="Rows that open a source page directly." />
+              <LibraryMetricTile label="Archive-only" value={String(historicalOnlyCount)} detail="Older bulk quotes without a stable public URL." />
             </div>
 
             <div className="cp-split-workspace mt-5">
@@ -393,6 +430,8 @@ export default function Library() {
                             </div>
                           </div>
                           <div className="mt-3 flex flex-wrap gap-2">
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] ${usabilityTone(material)}`}>{usabilityLabel(material)}</span>
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] ${quoteYearTone(material.quote_year)}`}>{quoteYearLabel(material.quote_year)}</span>
                             <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${domainTone(material.catalyst_domain)}`}>{domainLabel(material.catalyst_domain)}</span>
                             <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${applicationTone(material.application_family)}`}>{applicationLabel(material.application_family)}</span>
                             <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${categoryTone(material.category)}`}>{material.category || 'Uncategorised'}</span>
@@ -416,11 +455,22 @@ export default function Library() {
                   </div>
                   {selectedMaterial ? (
                     <>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        <span className={`inline-flex rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] ${usabilityTone(selectedMaterial)}`}>{usabilityLabel(selectedMaterial)}</span>
+                      </div>
+                      <div className="mt-3 text-xs leading-5 text-slate-500">{usabilityHint(selectedMaterial)}</div>
                       <div className="mt-4 space-y-1">
                         <InspectorRow label="Quote" value={formatRawPrice(selectedMaterial)} detail={formatPack(selectedMaterial)} />
-                        <InspectorRow label="Scope" value={priceScopeLabel(selectedMaterial.price_scope)} detail={pricingBasisLabel(selectedMaterial.pricing_basis)} />
+                        {selectedMaterial.is_calculator_usable && selectedMaterial.normalized_price_per_lb != null ? (
+                          <InspectorRow
+                            label="In calculator"
+                            value={`$${selectedMaterial.normalized_price_per_lb.toFixed(selectedMaterial.normalized_price_per_lb < 1 ? 4 : 2)}/lb`}
+                            detail="Normalized to a per-pound basis for the cost engine."
+                          />
+                        ) : null}
+                        <InspectorRow label="Source type" value={priceScopeLabel(selectedMaterial.price_scope)} detail={pricingBasisLabel(selectedMaterial.pricing_basis)} />
                         <InspectorRow label="Quote year" value={selectedMaterial.quote_year ? String(selectedMaterial.quote_year) : 'N/A'} detail={selectedMaterial.quote_source || 'Source not stated'} />
-                        <InspectorRow label="Trust" value={sourceTrustLabel(selectedMaterial)} detail={selectedMaterial.reference_url ? 'Public URL available.' : 'Public URL not stored.'} />
+                        <InspectorRow label="Public link" value={sourceTrustLabel(selectedMaterial)} detail={selectedMaterial.reference_url ? 'Public URL available.' : 'Public URL not stored.'} />
                       </div>
                       {selectedMaterial.notes ? (
                         <div className="mt-3 rounded-[18px] border border-slate-900/8 bg-white/72 px-3 py-3 text-xs leading-6 text-slate-600">

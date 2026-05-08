@@ -216,6 +216,10 @@ export interface CostResult {
     normalized_price_per_ml?: number;
     normalized_price_per_cm2?: number;
     normalized_price_per_kg_solids?: number;
+    raw_price_per_lb?: number;
+    escalation_factor?: number;
+    escalation_basis_year?: number | null;
+    escalation_target_year?: number;
     live_override?:
       | {
           applied: true;
@@ -433,6 +437,8 @@ export interface MaterialItem {
   pricing_basis: string;
   reference_url: string;
   is_custom: boolean;
+  is_calculator_usable: boolean;
+  normalized_price_per_lb: number | null;
 }
 
 export interface MaterialCreateInput {

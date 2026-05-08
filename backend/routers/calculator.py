@@ -87,7 +87,11 @@ def _prepare_calculation_context(req: CostCalculationRequest, session: Session) 
     resolved_components: list[dict] = []
     resolved_materials: list[dict] = []
     for component in _component_payload(req):
-        resolved_component, snapshot = resolve_component_input(session, component)
+        resolved_component, snapshot = resolve_component_input(
+            session,
+            component,
+            target_year=req.target_year,
+        )
         resolved_components.append(resolved_component)
         if snapshot is not None:
             resolved_materials.append(snapshot)

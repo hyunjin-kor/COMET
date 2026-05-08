@@ -885,6 +885,24 @@ export default function CalculatorResult() {
                       </div>
                     </div>
                   </div>
+                  {material.escalation_factor != null && material.escalation_factor !== 1 && material.escalation_basis_year ? (
+                    <div className="mt-3 rounded-[14px] border border-[#7950f2] bg-[#f3edff] px-3 py-2.5 text-xs leading-5 text-[#4d2eb5]">
+                      <div className="font-bold uppercase tracking-[0.16em] text-[#4d2eb5]">
+                        Inflated to {material.escalation_target_year ?? 2024} basis
+                      </div>
+                      <div className="mt-1 text-[#191f28]">
+                        Original {material.escalation_basis_year} quote of{' '}
+                        <span className="font-mono font-semibold">${(material.raw_price_per_lb ?? material.price).toFixed(material.raw_price_per_lb && material.raw_price_per_lb < 1 ? 4 : 2)}/lb</span>{' '}
+                        is multiplied by ChemPPI factor{' '}
+                        <span className="font-mono font-semibold">×{material.escalation_factor.toFixed(2)}</span>{' '}
+                        to land at the in-calculator value{' '}
+                        <span className="font-mono font-semibold">${(material.normalized_price_per_lb ?? 0).toFixed(material.normalized_price_per_lb && material.normalized_price_per_lb < 1 ? 4 : 2)}/lb</span>.
+                      </div>
+                      <div className="mt-1 text-[#4e5968]">
+                        ChemPPI tracks chemical-manufacturing producer prices and is the same index CatCost uses for materials and operating costs.
+                      </div>
+                    </div>
+                  ) : null}
                   {material.live_override?.applied ? (
                     <div className="mt-3 rounded-[14px] border border-[#3182f6] bg-[#e8f2ff] px-3 py-2.5 text-xs leading-5 text-[#1957c2]">
                       <div className="font-bold uppercase tracking-[0.16em] text-[#1b64da]">
