@@ -56,6 +56,17 @@ function LibraryIcon({ className = '' }: IconProps) {
   );
 }
 
+function CapExIcon({ className = '' }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} className={className}>
+      <path d="M3 20h18" strokeLinecap="round" />
+      <rect x="5" y="11" width="3.5" height="9" rx="1" />
+      <rect x="10.25" y="7" width="3.5" height="13" rx="1" />
+      <rect x="15.5" y="4" width="3.5" height="16" rx="1" />
+    </svg>
+  );
+}
+
 export type NavigationItem = {
   to: string;
   label: string;
@@ -67,6 +78,7 @@ export const navigationItems: NavigationItem[] = [
   { to: '/prices', label: 'Live Metal Prices', Icon: PricesIcon },
   { to: '/benchmarks', label: 'Literature Benchmarks', Icon: CompareIcon },
   { to: '/uncertainty', label: 'Estimate Range', Icon: UncertaintyIcon },
+  { to: '/capex', label: 'Capital & OpEx', Icon: CapExIcon },
   { to: '/library', label: 'Source Library', Icon: LibraryIcon },
 ];
 

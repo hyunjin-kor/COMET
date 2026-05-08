@@ -15,6 +15,7 @@ from backend.config import settings
 from backend.database import create_db_and_tables, engine, sync_material_library
 from backend.routers import (
     calculator,
+    capex,
     catcost_import,
     compare,
     decision,
@@ -105,6 +106,7 @@ app.add_middleware(
 )
 
 app.include_router(calculator.router)
+app.include_router(capex.router)
 app.include_router(prices.router)
 app.include_router(materials.router)
 app.include_router(uncertainty.router)

@@ -984,3 +984,100 @@ export const fetchDecisionBenchmark = (
   profile: 'balanced' | 'cost-first' | 'evidence-first' = 'balanced',
 ) =>
   request<DecisionBenchmark>(`/decision/benchmarks/${family}?profile=${profile}`);
+
+// CapEx & OpEx Factors workspace
+export interface EquipmentScalingItem {
+  name: string;
+  base_cost_usd: number;
+  base_size: number;
+  target_size: number;
+  exponent: number;
+  quantity: number;
+}
+
+export interface OpExInputs {
+  direct_labor_cost_usd: number;
+  raw_materials_cost_usd: number;
+  utilities_cost_usd: number;
+}
+
+export interface CapExRequest {
+  purchased_equipment_cost_usd?: number;
+  equipment?: EquipmentScalingItem[];
+  opex_inputs?: OpExInputs;
+}
+
+export interface EquipmentResolution {
+  name: string;
+  base_cost_usd: number;
+  base_size: number;
+  target_size: number;
+  exponent: number;
+  quantity: number;
+  scaled_unit_cost_usd: number;
+  line_total_usd: number;
+}
+
+export interface CapExBreakdown {
+  purchased_equipment: number;
+  installation: number;
+  instrumentation: number;
+  piping: number;
+  electrical: number;
+  buildings: number;
+  yard_improvements: number;
+  service_facilities: number;
+  land: number;
+  engineering_supervision: number;
+  construction: number;
+  legal: number;
+  contractors_fee: number;
+  contingency: number;
+  direct_capital: number;
+  indirect_capital: number;
+  fixed_capital_investment: number;
+  working_capital: number;
+  total_capital_investment: number;
+}
+
+export interface OpExBreakdown {
+  raw_materials: number;
+  direct_labor: number;
+  supervisory_clerical: number;
+  utilities: number;
+  laboratory: number;
+  maintenance_repair: number;
+  operating_supplies: number;
+  direct_operating_total: number;
+  local_taxes: number;
+  insurance: number;
+  rent: number;
+  plant_overhead: number;
+  fixed_operating_total: number;
+  administration: number;
+  distribution_marketing: number;
+  rnd: number;
+  general_expenses_total: number;
+  total_annual_opex: number;
+}
+
+export interface CapExResult {
+  purchased_equipment_cost_usd: number;
+  equipment_resolution: EquipmentResolution[];
+  capex: CapExBreakdown;
+  opex: OpExBreakdown | null;
+  summary: {
+    purchased_equipment_cost_usd: number;
+    fixed_capital_investment_usd: number;
+    total_capital_investment_usd: number;
+    fci_to_purchased_equipment_ratio: number;
+    tci_to_purchased_equipment_ratio: number;
+    annual_opex_usd: number | null;
+  };
+}
+
+export const fetchCapEx = (input: CapExRequest) =>
+  request<CapExResult>('/capex', {
+    method: 'POST',
+    body: JSON.stringify(input),
+  });
