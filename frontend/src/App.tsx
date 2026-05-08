@@ -5,6 +5,7 @@ import { UnitProvider } from './lib/units';
 
 const Calculator = lazy(() => import('./pages/Calculator'));
 const CalculatorResult = lazy(() => import('./pages/CalculatorResult'));
+const CapEx = lazy(() => import('./pages/CapEx'));
 const Compare = lazy(() => import('./pages/Compare'));
 const Library = lazy(() => import('./pages/Library'));
 const Prices = lazy(() => import('./pages/Prices'));
@@ -28,6 +29,7 @@ export default function App() {
             <Route path="/compare" element={<Compare />} />
             <Route path="/decision" element={<Compare />} />
             <Route path="/uncertainty" element={<Uncertainty />} />
+            <Route path="/capex" element={<CapEx />} />
             <Route path="/library" element={<Library />} />
           </Route>
         </Routes>
