@@ -145,6 +145,7 @@ def test_gallon_priced_row_costs_via_density_dispatch(client, session) -> None:
     """
 
     from sqlmodel import select
+
     from backend.models.material import Material
 
     row = session.exec(
@@ -205,6 +206,7 @@ def test_escalation_does_not_apply_to_live_market_override(client, session) -> N
     """
 
     from datetime import datetime
+
     from backend.models.metal_price import MetalPrice
 
     session.add(MetalPrice(
@@ -239,6 +241,7 @@ def test_unit_normalization_unblocks_legacy_ton_quote(client, session) -> None:
     """
 
     from sqlmodel import select
+
     from backend.models.material import Material
 
     # Pick any seeded row that uses a tonne quote. The row was previously
@@ -269,6 +272,7 @@ def test_calculator_usability_flag_classifies_each_row_correctly(session) -> Non
     """
 
     from fastapi.testclient import TestClient
+
     from backend.main import app
 
     with TestClient(app) as live_client:
