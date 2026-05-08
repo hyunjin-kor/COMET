@@ -17,7 +17,7 @@ if exist "C:\Users\%USERNAME%\AppData\Local\Programs\Python\Python311\python.exe
 "%PYTHON_EXE%" -c "import uvicorn" >nul 2>&1
 if %errorlevel% neq 0 (
     echo   Installing Python packages...
-    "%PYTHON_EXE%" -m pip install -q -r requirements.txt
+    "%PYTHON_EXE%" -m pip install -q .
 )
 
 if not exist "frontend\node_modules" (

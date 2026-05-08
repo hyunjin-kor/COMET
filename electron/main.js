@@ -616,7 +616,7 @@ app.whenReady().then(() => {
       debugLog(`Backend startup failure: ${err.message}`);
       dialog.showErrorBox(
         'Backend not running',
-        `CatPrice could not start the local server.\n\n${err.message}\n\nMake sure Python 3.11+ is installed and dependencies are set up.\nRun: pip install -r requirements.txt`
+        `CatPrice could not start the local server.\n\n${err.message}\n\nMake sure Python 3.11+ is installed and dependencies are set up.\nRun: pip install .`
       );
     });
 });
