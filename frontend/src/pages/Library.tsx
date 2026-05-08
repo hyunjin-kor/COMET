@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { SkeletonListRows } from '../components/shared/Skeleton';
 import { WorkspaceSectionFooter, WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
 import {
@@ -12,6 +12,31 @@ import {
 } from '../lib/api';
 
 type Tab = 'materials' | 'steps' | 'templates';
+type SortKey = 'name' | 'year_desc' | 'year_asc' | 'price_desc' | 'price_asc';
+
+const SORT_OPTIONS: Array<{ value: SortKey; label: string }> = [
+  { value: 'name', label: 'Name (A-Z)' },
+  { value: 'year_desc', label: 'Quote year (newest)' },
+  { value: 'year_asc', label: 'Quote year (oldest)' },
+  { value: 'price_desc', label: 'In-calculator $/lb (high-low)' },
+  { value: 'price_asc', label: 'In-calculator $/lb (low-high)' },
+];
+
+function compareMaterials(a: MaterialItem, b: MaterialItem, key: SortKey): number {
+  if (key === 'year_desc' || key === 'year_asc') {
+    const ay = a.quote_year ?? Number.NEGATIVE_INFINITY;
+    const by = b.quote_year ?? Number.NEGATIVE_INFINITY;
+    if (ay !== by) return key === 'year_desc' ? by - ay : ay - by;
+    return a.name.localeCompare(b.name);
+  }
+  if (key === 'price_desc' || key === 'price_asc') {
+    const ap = a.normalized_price_per_lb ?? Number.NEGATIVE_INFINITY;
+    const bp = b.normalized_price_per_lb ?? Number.NEGATIVE_INFINITY;
+    if (ap !== bp) return key === 'price_desc' ? bp - ap : ap - bp;
+    return a.name.localeCompare(b.name);
+  }
+  return a.name.localeCompare(b.name);
+}
 
 const CATEGORIES = ['Precious Metal / PGM', 'Base Metal', 'Support', 'Chemical', 'Chemical / Solvent'];
 const APPLICATION_OPTIONS = [
@@ -179,18 +204,24 @@ export default function Library() {
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [catalystDomain, setCatalystDomain] = useState<'' | CatalystDomain>('');
   const [applicationFamily, setApplicationFamily] = useState('');
+  const [sortKey, setSortKey] = useState<SortKey>('name');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedMaterialId, setSelectedMaterialId] = useState<string | null>(null);
   const [selectedStepKey, setSelectedStepKey] = useState<string | null>(null);
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
+  const sortedMaterials = useMemo(() => {
+    const copy = materials.slice();
+    copy.sort((a, b) => compareMaterials(a, b, sortKey));
+    return copy;
+  }, [materials, sortKey]);
   const publicLinkCount = materials.filter((material) => Boolean(material.reference_url)).length;
   const historicalOnlyCount = materials.filter(
     (material) => material.price_scope === 'historical_bulk' && !material.reference_url,
   ).length;
   const usableCount = materials.filter((material) => material.is_calculator_usable).length;
   const browseOnlyCount = materials.length - usableCount;
-  const selectedMaterial = materials.find((material) => String(material.id) === selectedMaterialId) ?? materials[0] ?? null;
+  const selectedMaterial = sortedMaterials.find((material) => String(material.id) === selectedMaterialId) ?? sortedMaterials[0] ?? null;
   const selectedStep = steps.find((step) => step.key === selectedStepKey) ?? steps[0] ?? null;
   const selectedTemplate = templates.find((template) => template.id === selectedTemplateId) ?? templates[0] ?? null;
 
@@ -246,14 +277,14 @@ export default function Library() {
   }, [tab, category, debouncedSearch, catalystDomain, applicationFamily]);
 
   useEffect(() => {
-    if (materials.length === 0) {
+    if (sortedMaterials.length === 0) {
       setSelectedMaterialId(null);
       return;
     }
-    if (!selectedMaterialId || !materials.some((material) => String(material.id) === selectedMaterialId)) {
-      setSelectedMaterialId(String(materials[0]!.id));
+    if (!selectedMaterialId || !sortedMaterials.some((material) => String(material.id) === selectedMaterialId)) {
+      setSelectedMaterialId(String(sortedMaterials[0]!.id));
     }
-  }, [materials, selectedMaterialId]);
+  }, [sortedMaterials, selectedMaterialId]);
 
   useEffect(() => {
     if (steps.length === 0) {
@@ -306,7 +337,7 @@ export default function Library() {
 
         {tab === 'materials' && (
           <>
-            <div className="mt-5 grid gap-3 lg:grid-cols-[minmax(0,1fr)_220px_220px_220px]">
+            <div className="mt-5 grid gap-3 lg:grid-cols-[minmax(0,1fr)_repeat(4,200px)]">
               <label className="block">
                 <div className="cp-subtle-label">Search</div>
                 <div className="mt-2">
@@ -366,6 +397,23 @@ export default function Library() {
                   </select>
                 </div>
               </label>
+
+              <label className="block">
+                <div className="cp-subtle-label">Sort by</div>
+                <div className="mt-2">
+                  <select
+                    value={sortKey}
+                    onChange={(event) => setSortKey(event.target.value as SortKey)}
+                    className="input-base"
+                  >
+                    {SORT_OPTIONS.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </label>
             </div>
 
             <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
@@ -385,7 +433,7 @@ export default function Library() {
                   <div className="px-4 py-4">
                     <SkeletonListRows count={6} />
                   </div>
-                ) : materials.length === 0 ? (
+                ) : sortedMaterials.length === 0 ? (
                   <div className="flex flex-col items-start gap-3 px-5 py-8 text-sm text-slate-500">
                     <div>
                       <div className="font-semibold text-[#191f28]">No materials match the current filters.</div>
@@ -408,7 +456,7 @@ export default function Library() {
                   </div>
                 ) : (
                   <div className="max-h-[68vh] space-y-2 overflow-auto px-4 py-4">
-                    {materials.map((material) => {
+                    {sortedMaterials.map((material) => {
                       const active = selectedMaterial?.id === material.id;
                       return (
                         <button

@@ -282,8 +282,8 @@ def test_usgs_proxy_falls_back_when_no_live_quote(client) -> None:
     assert override is not None, "Eligible row must surface a live_override block"
     assert override["applied"] is False
     assert override["reason"] == "no_live_quote_stored"
-    # Price must be the static USGS quote.
-    assert pt_snapshot["price"] == 950.0
+    # Price must be the static USGS quote (MCS 2026: 2025 annual average).
+    assert pt_snapshot["price"] == 1200.0
     assert pt_snapshot["price_unit"] == "$/troy_oz"
     assert pt_snapshot["price_scope"] == "literature_high_volume"
 
@@ -296,11 +296,11 @@ def test_usgs_proxy_upgrades_to_live_quote_when_available(client, session) -> No
     whether the user picked it from the live feed or the curated library.
     """
 
-    # Seed a "live" Pt quote much higher than the static USGS $950.
+    # Seed a "live" Pt quote significantly above the static USGS proxy.
     session.add(MetalPrice(
         symbol="Pt",
         name="Platinum",
-        price=1450.0,
+        price=1700.0,
         unit="$/troy_oz",
         source="Yahoo Finance (live)",
         fetched_at=datetime(2026, 5, 4, 10, 0, 0),
@@ -314,14 +314,14 @@ def test_usgs_proxy_upgrades_to_live_quote_when_available(client, session) -> No
     )
     override = pt_snapshot["live_override"]
     assert override["applied"] is True
-    assert override["live_price"] == 1450.0
+    assert override["live_price"] == 1700.0
     assert override["live_price_unit"] == "$/troy_oz"
     assert override["live_source"] == "Yahoo Finance (live)"
-    # Static USGS row preserved as the documented fallback.
-    assert override["fallback_price"] == 950.0
-    assert override["fallback_quote_year"] == 2024
+    # Static USGS row preserved as the documented fallback (MCS 2026: 2025 annual average).
+    assert override["fallback_price"] == 1200.0
+    assert override["fallback_quote_year"] == 2025
     # Snapshot's "current" price reflects the live quote, not the USGS static.
-    assert pt_snapshot["price"] == 1450.0
+    assert pt_snapshot["price"] == 1700.0
     assert pt_snapshot["price_scope"] == "live_market"
 
 
@@ -335,7 +335,7 @@ def test_live_override_propagates_to_catalyst_price(client, session) -> None:
     session.add(MetalPrice(
         symbol="Pt",
         name="Platinum",
-        price=950.0 * 1.5,
+        price=1200.0 * 1.5,
         unit="$/troy_oz",
         source="Live feed (test)",
         fetched_at=datetime(2026, 5, 4, 10, 0, 0),
