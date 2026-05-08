@@ -106,7 +106,14 @@ export default function CapEx() {
         setLoading(false);
         return;
       }
-      request.equipment = equipmentRows.map(({ id: _id, ...item }) => item);
+      request.equipment = equipmentRows.map((row) => ({
+        name: row.name,
+        base_cost_usd: row.base_cost_usd,
+        base_size: row.base_size,
+        target_size: row.target_size,
+        exponent: row.exponent,
+        quantity: row.quantity,
+      }));
     }
 
     if (includeOpEx) {
