@@ -2,16 +2,26 @@
 
 from __future__ import annotations
 
+import logging
+
 from sqlmodel import Session, select
 
 from backend.core.constants import LB_PER_KG, TROY_OZ_PER_LB
+from backend.core.price_escalation import get_escalation_factor
 from backend.models.material import Material
 from backend.models.metal_price import MetalPrice
+
+logger = logging.getLogger(__name__)
+DEFAULT_ESCALATION_TARGET_YEAR = 2024
 
 GRAMS_PER_LB = 453.59237
 MG_PER_LB = GRAMS_PER_LB * 1000.0
 ML_PER_L = 1000.0
 CM2_PER_M2 = 10_000.0
+LB_PER_SHORT_TON = 2000.0
+LB_PER_METRIC_TON = 2204.62262
+LB_PER_CWT = 100.0
+ML_PER_US_GALLON = 3785.411784
 
 
 def normalize_price_unit(unit: str | None) -> str:
@@ -23,6 +33,10 @@ def normalize_price_unit(unit: str | None) -> str:
     normalized = normalized.replace("²", "2")
     normalized = normalized.replace("^2", "2")
     normalized = normalized.replace("μ", "u").replace("µ", "u")
+    if normalized in {"$/ozt", "$/troyoz", "$/oztroy"}:
+        return "$/troy_oz"
+    if normalized == "$/mt":
+        return "$/tonne"
     return normalized
 
 
@@ -40,6 +54,12 @@ def mass_price_to_per_lb(price: float, unit: str | None) -> float:
         return price * MG_PER_LB
     if normalized == "$/troy_oz":
         return price * TROY_OZ_PER_LB
+    if normalized == "$/ton":
+        return price / LB_PER_SHORT_TON
+    if normalized == "$/tonne":
+        return price / LB_PER_METRIC_TON
+    if normalized == "$/cwt":
+        return price / LB_PER_CWT
     raise ValueError(f"Unsupported mass price unit: {unit}")
 
 
@@ -59,7 +79,49 @@ def volume_price_to_per_ml(price: float, unit: str | None) -> float:
         return price / ML_PER_L
     if normalized == "$/ul":
         return price * ML_PER_L
+    if normalized == "$/gal":
+        return price / ML_PER_US_GALLON
     raise ValueError(f"Unsupported volume price unit: {unit}")
+
+
+def volume_price_to_per_lb(
+    price: float,
+    unit: str | None,
+    density_g_ml: float | None,
+) -> float:
+    """Convert a volume-based price into USD per pound using fluid density.
+
+    Required because solvent / liquid rows in the legacy CatCost library are
+    quoted per gallon. Without a density we cannot complete the conversion to
+    a mass basis, so the helper raises ``ValueError`` and the caller is
+    expected to flag the row as browse-only.
+    """
+
+    if density_g_ml is None or density_g_ml <= 0:
+        raise ValueError(
+            f"Volume price unit {unit!r} requires a positive density to convert to a mass basis"
+        )
+    price_per_ml = volume_price_to_per_ml(price, unit)
+    grams_per_ml = float(density_g_ml)
+    return price_per_ml / grams_per_ml * GRAMS_PER_LB
+
+
+def material_price_per_lb(material: Material) -> float:
+    """Return the per-pound price for a library row, dispatching by unit family.
+
+    Mass-based rows (lb, kg, g, mg, troy_oz, ton, tonne, cwt) flow through
+    :func:`mass_price_to_per_lb`. Volume-based rows fall back to
+    :func:`volume_price_to_per_lb` when the row carries a density. Anything
+    else raises ``ValueError``, which the routers / resolver translate into
+    a browse-only flag.
+    """
+
+    price = float(material.price or 0.0)
+    unit = material.price_unit
+    try:
+        return mass_price_to_per_lb(price, unit)
+    except ValueError:
+        return volume_price_to_per_lb(price, unit, material.density)
 
 
 def area_price_to_per_cm2(price: float, unit: str | None) -> float:
@@ -184,7 +246,36 @@ def component_engine_name(material: Material, role: str) -> str:
     return material.formula or material.symbol or material.name
 
 
-def resolve_component_input(session: Session, component: dict) -> tuple[dict, dict | None]:
+def _escalation_factor_for(quote_year: int | None, target_year: int) -> float:
+    """Compute the ChemPPI factor that lifts a row's quote year to ``target_year``.
+
+    Returns 1.0 when no escalation can be applied (missing year, missing index
+    coverage). The fallback is logged but not raised — a missing index entry
+    must not block a calculation; the row simply flows through at its raw quote
+    and the snapshot records ``escalation_factor=1.0`` so the UI can still
+    display "no escalation applied".
+    """
+
+    if not quote_year or quote_year == target_year:
+        return 1.0
+    try:
+        return get_escalation_factor(int(quote_year), int(target_year), "chemppi")
+    except (KeyError, ValueError, ZeroDivisionError) as exc:
+        logger.warning(
+            "ChemPPI escalation skipped for quote_year=%s target_year=%s: %s",
+            quote_year,
+            target_year,
+            exc,
+        )
+        return 1.0
+
+
+def resolve_component_input(
+    session: Session,
+    component: dict,
+    *,
+    target_year: int = DEFAULT_ESCALATION_TARGET_YEAR,
+) -> tuple[dict, dict | None]:
     """Resolve a component row against the library when a material key is provided.
 
     For library rows that are USGS commodity-metal proxies, the resolver
@@ -193,6 +284,11 @@ def resolve_component_input(session: Session, component: dict) -> tuple[dict, di
     catalog calculation aligned with the live prices the user sees in the
     market panel. The static USGS price is preserved in the snapshot
     metadata as the offline fallback so the audit trail still shows it.
+
+    Static library quotes are escalated from their per-row ``quote_year`` to
+    ``target_year`` using ChemPPI so a 2006 ICIS quote does not flow into a
+    "today's basis" estimate at face value. Live and live-eligible rows skip
+    escalation because their price already reflects the current market.
     """
 
     material_key = component.get("material_key")
@@ -212,15 +308,18 @@ def resolve_component_input(session: Session, component: dict) -> tuple[dict, di
 
     live = _live_override_for_material(session, material)
     if live is not None:
-        resolved["price_per_lb"] = round(
-            mass_price_to_per_lb(live["price"], live["price_unit"]), 6
-        )
+        live_per_lb = round(mass_price_to_per_lb(live["price"], live["price_unit"]), 6)
+        resolved["price_per_lb"] = live_per_lb
         snapshot["price"] = live["price"]
         snapshot["price_unit"] = live["price_unit"]
         snapshot["price_scope"] = "live_market"
         snapshot["quote_source"] = live["source"]
-        snapshot["normalized_price_per_lb"] = resolved["price_per_lb"]
-        # Preserve the static USGS quote so the audit trail still shows it.
+        snapshot["normalized_price_per_lb"] = live_per_lb
+        snapshot["raw_price_per_lb"] = live_per_lb
+        # Live quotes are by definition current; escalation is a no-op.
+        snapshot["escalation_factor"] = 1.0
+        snapshot["escalation_target_year"] = target_year
+        snapshot["escalation_basis_year"] = None
         snapshot["live_override"] = {
             "applied": True,
             "live_price": live["price"],
@@ -233,9 +332,13 @@ def resolve_component_input(session: Session, component: dict) -> tuple[dict, di
             "fallback_quote_year": material.quote_year,
         }
     else:
-        resolved["price_per_lb"] = round(
-            mass_price_to_per_lb(material.price or 0.0, material.price_unit), 6
-        )
+        raw_per_lb = round(material_price_per_lb(material), 6)
+        factor = _escalation_factor_for(material.quote_year, target_year)
+        resolved["price_per_lb"] = round(raw_per_lb * factor, 6)
+        snapshot["raw_price_per_lb"] = raw_per_lb
+        snapshot["escalation_factor"] = round(factor, 4)
+        snapshot["escalation_target_year"] = target_year
+        snapshot["escalation_basis_year"] = material.quote_year
         snapshot["normalized_price_per_lb"] = resolved["price_per_lb"]
         if (material.library_key or "") in _LIVE_ELIGIBLE_LIBRARY_KEYS:
             # Eligible for live but no quote stored; surface that for clarity.

@@ -8,7 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import or_
 from sqlmodel import Session, select
 
-from backend.core.material_pricing import mass_price_to_per_lb
+from backend.core.material_pricing import material_price_per_lb
 from backend.database import ensure_material_library_seeded, get_session
 from backend.models.equipment import Equipment
 from backend.models.material import Material
@@ -139,6 +139,7 @@ def get_equipment_detail(equipment_id: str, session: Session) -> dict:
 def _material_to_response(material: Material) -> dict:
     """Normalize DB rows into the API response shape used by the frontend."""
 
+    normalized_per_lb = _normalized_per_lb(material)
     return {
         "id": material.library_key or str(material.id),
         "name": material.name,
@@ -162,6 +163,8 @@ def _material_to_response(material: Material) -> dict:
         "pricing_basis": material.pricing_basis,
         "reference_url": material.reference_url,
         "is_custom": material.is_custom,
+        "is_calculator_usable": normalized_per_lb is not None,
+        "normalized_price_per_lb": normalized_per_lb,
     }
 
 
@@ -225,7 +228,7 @@ def _normalized_per_lb(material: Material) -> float | None:
     """Normalize the stored material quote into USD per pound when possible."""
 
     try:
-        return round(mass_price_to_per_lb(material.price or 0.0, material.price_unit), 6)
+        return round(material_price_per_lb(material), 6)
     except ValueError:
         return None
 
