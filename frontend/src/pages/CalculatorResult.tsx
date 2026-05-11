@@ -359,20 +359,7 @@ export default function CalculatorResult() {
   function renderSummarySection() {
     return (
       <section className="surface-card p-4">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-          <div>
-            <div className="cp-subtle-label">Result</div>
-            <div className="cp-heading-lg mt-2">Read the final estimate, route basis, and evidence together.</div>
-            <div className="mt-1 text-xs leading-6 text-slate-500">
-              Inputs stay in the cost estimate workspace. This screen is optimized for review, not editing.
-            </div>
-          </div>
-          <button onClick={goBackToCalculator} className="cp-button-secondary px-4 py-2.5 text-sm">
-            Back to cost estimate
-          </button>
-        </div>
-
-        <div className="mt-4 grid gap-3 xl:grid-cols-[minmax(0,1.18fr)_minmax(320px,0.82fr)]">
+        <div className="grid gap-3 xl:grid-cols-[minmax(0,1.18fr)_minmax(320px,0.82fr)]">
           <div className="surface-ink relative overflow-hidden p-5 sm:p-6">
             <div className="relative min-w-0">
               <div className="cp-subtle-label !text-slate-400">Estimated selling price</div>
