@@ -159,8 +159,8 @@ export default function Prices() {
   const [histLoading, setHistLoading] = useState(false);
   const [period, setPeriod] = useState<Period>('1y');
 
-  const load = useCallback(() => {
-    setLoading(true);
+  const load = useCallback((options?: { silent?: boolean }) => {
+    if (!options?.silent) setLoading(true);
     setError(null);
     fetchPrices()
       .then((rows) => {
@@ -170,10 +170,14 @@ export default function Prices() {
       .catch((err: unknown) => {
         setError(err instanceof Error ? err.message : 'Failed to load metal prices');
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        if (!options?.silent) setLoading(false);
+      });
   }, []);
 
-  useEffect(load, [load]);
+  useEffect(() => {
+    load();
+  }, [load]);
 
   useEffect(() => {
     if (!selected) return;
@@ -206,7 +210,10 @@ export default function Prices() {
 
     try {
       await refreshPrices();
-      load();
+      // Re-fetch silently — keep the current quote list visible so the user
+      // doesn't see the whole page collapse to a skeleton during refresh.
+      // The refresh button itself stays in its own spinner state.
+      load({ silent: true });
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Failed to refresh metal prices');
     } finally {
@@ -315,7 +322,7 @@ export default function Prices() {
             <InspectorRow label="Acquisition" value={selectedRow.evidence.acquisition_mode} detail={sourceDescription(selectedRow)} />
             <InspectorRow label="Confidence" value={String(selectedRow.evidence.confidence_score)} detail={selectedRow.evidence.transparency} />
             <InspectorRow label="Freshness" value={selectedRow.evidence.freshness_status} detail={selectedRow.evidence.note} />
-            <InspectorRow label="Target window" value={selectedRow.evidence.freshness_target_hours != null ? `${selectedRow.evidence.freshness_target_hours} h` : 'N/A'} detail="Expected refresh horizon for this source type." />
+            <InspectorRow label="Refresh target" value={selectedRow.evidence.freshness_target_hours != null ? `${selectedRow.evidence.freshness_target_hours} h` : 'N/A'} detail="Expected refresh horizon for this source type." />
           </div>
         </section>
 
