@@ -545,7 +545,14 @@ export default function Library() {
           <div className="cp-split-workspace mt-5">
             <div className="overflow-hidden rounded-[28px] border border-slate-900/8 bg-white/58 backdrop-blur-xl">
               {loading ? (
-                <div className="px-5 py-8 text-sm text-slate-500">Loading step rates...</div>
+                <div className="px-4 py-4">
+                  <SkeletonListRows count={6} />
+                </div>
+              ) : steps.length === 0 ? (
+                <div className="px-5 py-8 text-sm text-slate-500">
+                  <div className="font-semibold text-[#191f28]">No step rates loaded.</div>
+                  <div className="mt-1 text-xs leading-5 text-slate-500">The step library is empty — backend may not have published rates yet.</div>
+                </div>
               ) : (
                 <div className="max-h-[68vh] space-y-2 overflow-auto px-4 py-4">
                   {steps.map((step) => {
@@ -564,9 +571,9 @@ export default function Library() {
                           <span className="cp-chip">{step.key}</span>
                         </div>
                         <div className="mt-3 grid gap-2 sm:grid-cols-3">
-                          <div className="rounded-[16px] border border-slate-900/8 bg-white/72 px-3 py-2 text-xs text-slate-600">Small: {step.cost_small != null ? `$${step.cost_small}/hr` : 'N/A'}</div>
-                          <div className="rounded-[16px] border border-slate-900/8 bg-white/72 px-3 py-2 text-xs text-slate-600">Medium: {step.cost_medium != null ? `$${step.cost_medium}/hr` : 'N/A'}</div>
-                          <div className="rounded-[16px] border border-slate-900/8 bg-white/72 px-3 py-2 text-xs text-slate-600">Large: {step.cost_large != null ? `$${step.cost_large}/hr` : 'N/A'}</div>
+                          <div className="rounded-[16px] border border-slate-900/8 bg-white/72 px-3 py-2 text-xs text-slate-600">Small: {step.cost_small != null ? `${formatPrice(step.cost_small)}/hr` : 'N/A'}</div>
+                          <div className="rounded-[16px] border border-slate-900/8 bg-white/72 px-3 py-2 text-xs text-slate-600">Medium: {step.cost_medium != null ? `${formatPrice(step.cost_medium)}/hr` : 'N/A'}</div>
+                          <div className="rounded-[16px] border border-slate-900/8 bg-white/72 px-3 py-2 text-xs text-slate-600">Large: {step.cost_large != null ? `${formatPrice(step.cost_large)}/hr` : 'N/A'}</div>
                         </div>
                       </button>
                     );
@@ -582,9 +589,9 @@ export default function Library() {
                 {selectedStep ? (
                   <>
                     <div className="mt-3 space-y-1">
-                      <InspectorRow label="Small" value={selectedStep.cost_small != null ? `$${selectedStep.cost_small}/hr` : 'N/A'} />
-                      <InspectorRow label="Medium" value={selectedStep.cost_medium != null ? `$${selectedStep.cost_medium}/hr` : 'N/A'} />
-                      <InspectorRow label="Large" value={selectedStep.cost_large != null ? `$${selectedStep.cost_large}/hr` : 'N/A'} />
+                      <InspectorRow label="Small" value={selectedStep.cost_small != null ? `${formatPrice(selectedStep.cost_small)}/hr` : 'N/A'} />
+                      <InspectorRow label="Medium" value={selectedStep.cost_medium != null ? `${formatPrice(selectedStep.cost_medium)}/hr` : 'N/A'} />
+                      <InspectorRow label="Large" value={selectedStep.cost_large != null ? `${formatPrice(selectedStep.cost_large)}/hr` : 'N/A'} />
                       <InspectorRow label="Basis" value={selectedStep.basis || 'N/A'} detail={selectedStep.key} />
                     </div>
                     <div className="mt-3 rounded-[18px] border border-slate-900/8 bg-white/72 px-3 py-3 text-xs leading-6 text-slate-600">
@@ -623,7 +630,12 @@ export default function Library() {
             <div className="cp-split-workspace">
               <div className="space-y-3">
                 {loading ? (
-                  <div className="text-sm text-slate-500">Loading templates...</div>
+                  <SkeletonListRows count={4} />
+                ) : templates.length === 0 ? (
+                  <div className="rounded-[20px] border border-slate-200 bg-white/58 px-5 py-6 text-sm text-slate-500">
+                    <div className="font-semibold text-[#191f28]">No route templates loaded.</div>
+                    <div className="mt-1 text-xs leading-5 text-slate-500">No templates are stored for the current catalyst-domain filter. Switch to "All domains" to widen the search.</div>
+                  </div>
                 ) : (
                   templates.map((template) => {
                     const active = selectedTemplate?.id === template.id;
