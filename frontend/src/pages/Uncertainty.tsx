@@ -210,14 +210,17 @@ export default function Uncertainty() {
       ? String(latestSnapshot.result.input_summary.composition ?? '')
       : null;
   const caseSummary = draft ? describeDraftCase(draft, snapshotComposition) : 'No current Cost Estimate draft';
+  // Chart x-axis bar labels — Rule B price formatting (integer >= $1,
+  // 2-4 decimals < $1) without the leading "$" so labels stay compact.
+  const fmtBound = (v: number) => formatPrice(v).slice(1);
   const histData = result
     ? [
-        { range: `${toDisplay(result.min).toFixed(1)}-${toDisplay(result.p5).toFixed(1)}`, value: 5, fill: '#4e5968' },
-        { range: `${toDisplay(result.p5).toFixed(1)}-${toDisplay(result.p25).toFixed(1)}`, value: 20, fill: '#3182f6' },
-        { range: `${toDisplay(result.p25).toFixed(1)}-${toDisplay(result.median).toFixed(1)}`, value: 25, fill: '#3182f6' },
-        { range: `${toDisplay(result.median).toFixed(1)}-${toDisplay(result.p75).toFixed(1)}`, value: 25, fill: '#3182f6' },
-        { range: `${toDisplay(result.p75).toFixed(1)}-${toDisplay(result.p95).toFixed(1)}`, value: 20, fill: '#3182f6' },
-        { range: `${toDisplay(result.p95).toFixed(1)}-${toDisplay(result.max).toFixed(1)}`, value: 5, fill: '#4e5968' },
+        { range: `${fmtBound(toDisplay(result.min))}-${fmtBound(toDisplay(result.p5))}`, value: 5, fill: '#4e5968' },
+        { range: `${fmtBound(toDisplay(result.p5))}-${fmtBound(toDisplay(result.p25))}`, value: 20, fill: '#3182f6' },
+        { range: `${fmtBound(toDisplay(result.p25))}-${fmtBound(toDisplay(result.median))}`, value: 25, fill: '#3182f6' },
+        { range: `${fmtBound(toDisplay(result.median))}-${fmtBound(toDisplay(result.p75))}`, value: 25, fill: '#3182f6' },
+        { range: `${fmtBound(toDisplay(result.p75))}-${fmtBound(toDisplay(result.p95))}`, value: 20, fill: '#3182f6' },
+        { range: `${fmtBound(toDisplay(result.p95))}-${fmtBound(toDisplay(result.max))}`, value: 5, fill: '#4e5968' },
       ]
     : [];
 
