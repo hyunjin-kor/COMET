@@ -1217,7 +1217,7 @@ export default function Calculator() {
                 <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Active area</div>
                 <div className="mt-2 flex items-center gap-2">
                   <input type="number" min="1" step="0.1" value={electrocatalystConfig.activeAreaCm2} onChange={(event) => updateElectroConfig({ activeAreaCm2: Number(event.target.value) })} className="input-base text-right font-mono" />
-                  <span className="text-xs text-slate-500">cm2</span>
+                  <span className="text-xs text-slate-500">cm²</span>
                 </div>
               </label>
 
@@ -1225,7 +1225,7 @@ export default function Calculator() {
                 <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Catalyst loading</div>
                 <div className="mt-2 flex items-center gap-2">
                   <input type="number" min="0.01" step="0.01" value={electrocatalystConfig.catalystLoadingMgCm2} onChange={(event) => updateElectroConfig({ catalystLoadingMgCm2: Number(event.target.value) })} className="input-base text-right font-mono" />
-                  <span className="text-xs text-slate-500">mg/cm2</span>
+                  <span className="text-xs text-slate-500">mg/cm²</span>
                 </div>
               </label>
 
@@ -1349,7 +1349,7 @@ export default function Calculator() {
         : activeBenchmark?.route.name ?? 'Manual step selection';
     const recoverySummary = catalystDomain === 'thermal'
       ? includeSpentValue
-        ? `Recovery proxy on / ${reactorType} bed / ${catalystBulkDensity.toFixed(1)} lb/ft3`
+        ? `Recovery proxy on / ${reactorType} bed / ${catalystBulkDensity.toFixed(1)} lb/ft³`
         : 'Recovery proxy off'
       : applicationFamilyLabel(applicationFamily);
 
@@ -1758,7 +1758,7 @@ export default function Calculator() {
                     onChange={(event) => setCatalystBulkDensity(Math.max(1, Number(event.target.value) || 1))}
                     className="input-base w-full text-right font-mono"
                   />
-                  <span className="text-xs text-slate-500">lb/ft3</span>
+                  <span className="text-xs text-slate-500">lb/ft³</span>
                 </div>
               </label>
 

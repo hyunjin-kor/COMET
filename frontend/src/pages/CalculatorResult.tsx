@@ -82,7 +82,7 @@ function formatResolvedNormalization(
     return `${formatPrice(toDisplay(material.normalized_price_per_lb))}${fmtLabel}`;
   }
   if (typeof material.normalized_price_per_cm2 === 'number') {
-    return `${formatPrice(material.normalized_price_per_cm2)}/cm2`;
+    return `${formatPrice(material.normalized_price_per_cm2)}/cm²`;
   }
   if (typeof material.normalized_price_per_ml === 'number') {
     return `${formatPrice(material.normalized_price_per_ml)}/mL`;
@@ -420,10 +420,10 @@ export default function CalculatorResult() {
             </div>
 
             <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-              <MetricTile label="Active area" value={`${electrodeModel.active_area_cm2.toFixed(1)} cm2`} detail="Per modeled layer" />
-              <MetricTile label="Catalyst loading" value={`${electrodeModel.catalyst_loading_mg_cm2.toFixed(2)} mg/cm2`} detail="Dry catalyst loading" />
+              <MetricTile label="Active area" value={`${electrodeModel.active_area_cm2.toFixed(1)} cm²`} detail="Per modeled layer" />
+              <MetricTile label="Catalyst loading" value={`${electrodeModel.catalyst_loading_mg_cm2.toFixed(2)} mg/cm²`} detail="Dry catalyst loading" />
               <MetricTile label="Electrode total" value={formatPrice(electrodeModel.total_cost_usd)} detail="For selected active area" />
-              <MetricTile label="Stack density" value={`${formatPrice(electrodeModel.cost_per_cm2_usd)}/cm2`} detail={`${formatPrice(electrodeModel.cost_per_m2_usd)}/m2`} />
+              <MetricTile label="Stack density" value={`${formatPrice(electrodeModel.cost_per_cm2_usd)}/cm²`} detail={`${formatPrice(electrodeModel.cost_per_m2_usd)}/m²`} />
             </div>
           </div>
         ) : null}
