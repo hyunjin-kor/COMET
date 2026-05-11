@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { WorkspaceSectionFooter, WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
 import { runEstimateRange, type CostInput, type EstimateRangeResult } from '../lib/api';
 import { loadCalculatorDraft, loadCalculatorResultSnapshot, type CalculatorDraft, type CalculatorRow } from '../lib/calculator-session';
+import { formatPrice } from '../lib/format-price';
 import { useUnit } from '../lib/use-unit';
 
 const EstimateRangeBarChart = lazy(() => import('../components/charts/EstimateRangeBarChart'));
@@ -209,14 +210,17 @@ export default function Uncertainty() {
       ? String(latestSnapshot.result.input_summary.composition ?? '')
       : null;
   const caseSummary = draft ? describeDraftCase(draft, snapshotComposition) : 'No current Cost Estimate draft';
+  // Chart x-axis bar labels — Rule B price formatting (integer >= $1,
+  // 2-4 decimals < $1) without the leading "$" so labels stay compact.
+  const fmtBound = (v: number) => formatPrice(v).slice(1);
   const histData = result
     ? [
-        { range: `${toDisplay(result.min).toFixed(1)}-${toDisplay(result.p5).toFixed(1)}`, value: 5, fill: '#4e5968' },
-        { range: `${toDisplay(result.p5).toFixed(1)}-${toDisplay(result.p25).toFixed(1)}`, value: 20, fill: '#3182f6' },
-        { range: `${toDisplay(result.p25).toFixed(1)}-${toDisplay(result.median).toFixed(1)}`, value: 25, fill: '#3182f6' },
-        { range: `${toDisplay(result.median).toFixed(1)}-${toDisplay(result.p75).toFixed(1)}`, value: 25, fill: '#3182f6' },
-        { range: `${toDisplay(result.p75).toFixed(1)}-${toDisplay(result.p95).toFixed(1)}`, value: 20, fill: '#3182f6' },
-        { range: `${toDisplay(result.p95).toFixed(1)}-${toDisplay(result.max).toFixed(1)}`, value: 5, fill: '#4e5968' },
+        { range: `${fmtBound(toDisplay(result.min))}-${fmtBound(toDisplay(result.p5))}`, value: 5, fill: '#4e5968' },
+        { range: `${fmtBound(toDisplay(result.p5))}-${fmtBound(toDisplay(result.p25))}`, value: 20, fill: '#3182f6' },
+        { range: `${fmtBound(toDisplay(result.p25))}-${fmtBound(toDisplay(result.median))}`, value: 25, fill: '#3182f6' },
+        { range: `${fmtBound(toDisplay(result.median))}-${fmtBound(toDisplay(result.p75))}`, value: 25, fill: '#3182f6' },
+        { range: `${fmtBound(toDisplay(result.p75))}-${fmtBound(toDisplay(result.p95))}`, value: 20, fill: '#3182f6' },
+        { range: `${fmtBound(toDisplay(result.p95))}-${fmtBound(toDisplay(result.max))}`, value: 5, fill: '#4e5968' },
       ]
     : [];
 
@@ -437,12 +441,12 @@ export default function Uncertainty() {
             <>
               <div className="surface-ink overflow-hidden p-5">
                 <div className="grid gap-3 sm:grid-cols-4">
-                  <StatTileDark label="Baseline" value={`$${toDisplay(result.baseline_price_per_lb).toFixed(2)}${fmtLabel}`} detail="Current estimate" />
-                  <StatTileDark label="Mean" value={`$${toDisplay(result.mean).toFixed(2)}${fmtLabel}`} detail="Average outcome" />
-                  <StatTileDark label="Median" value={`$${toDisplay(result.median).toFixed(2)}${fmtLabel}`} detail="50th percentile" />
+                  <StatTileDark label="Baseline" value={`${formatPrice(toDisplay(result.baseline_price_per_lb))}${fmtLabel}`} detail="Current estimate" />
+                  <StatTileDark label="Mean" value={`${formatPrice(toDisplay(result.mean))}${fmtLabel}`} detail="Average outcome" />
+                  <StatTileDark label="Median" value={`${formatPrice(toDisplay(result.median))}${fmtLabel}`} detail="50th percentile" />
                   <StatTileDark
                     label="P5-P95"
-                    value={`$${toDisplay(result.p5).toFixed(2)}-$${toDisplay(result.p95).toFixed(2)}`}
+                    value={`${formatPrice(toDisplay(result.p5))}-${formatPrice(toDisplay(result.p95))}`}
                     detail={`${result.n_successful.toLocaleString('en-US')} successful runs`}
                   />
                 </div>
@@ -459,14 +463,14 @@ export default function Uncertainty() {
                 <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
                   <div className="cp-subtle-label">Range width</div>
                   <div className="mt-2 text-base font-semibold text-[#191f28]">
-                    ${(toDisplay(result.p95 - result.p5)).toFixed(2)}{fmtLabel}
+                    {formatPrice(toDisplay(result.p95 - result.p5))}{fmtLabel}
                   </div>
                   <div className="mt-1 text-xs leading-6 text-slate-500">P95 minus P5</div>
                 </div>
                 <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
                   <div className="cp-subtle-label">Std dev</div>
                   <div className="mt-2 text-base font-semibold text-[#191f28]">
-                    ${toDisplay(result.std).toFixed(2)}{fmtLabel}
+                    {formatPrice(toDisplay(result.std))}{fmtLabel}
                   </div>
                   <div className="mt-1 text-xs leading-6 text-slate-500">Distribution spread</div>
                 </div>
@@ -495,7 +499,7 @@ export default function Uncertainty() {
                 ].map(([label, value]) => (
                   <div key={String(label)} className="rounded-[22px] border border-slate-900/8 bg-white/62 px-3 py-4 text-center">
                     <div className="cp-subtle-label">{label}</div>
-                    <div className="mt-2 font-mono text-sm text-[#191f28]">${toDisplay(Number(value)).toFixed(2)}</div>
+                    <div className="mt-2 font-mono text-sm text-[#191f28]">{formatPrice(toDisplay(Number(value)))}</div>
                   </div>
                 ))}
               </div>

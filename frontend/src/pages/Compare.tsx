@@ -14,6 +14,7 @@ import {
   type CalculatorBenchmarkPreset,
   type CalculatorRow,
 } from '../lib/calculator-session';
+import { formatPrice } from '../lib/format-price';
 import { useUnit } from '../lib/use-unit';
 
 type DecisionProfile = 'balanced' | 'cost-first' | 'evidence-first';
@@ -175,8 +176,8 @@ export default function Compare() {
   );
 
   function benchmarkCostValue(candidate: DecisionCandidate) {
-    if (candidate.summary.economics_basis_unit === '$/cm2') return `$${candidate.summary.economics_basis_value.toFixed(2)}`;
-    return `$${toDisplay(candidate.summary.economics_basis_value).toFixed(2)}`;
+    if (candidate.summary.economics_basis_unit === '$/cm2') return formatPrice(candidate.summary.economics_basis_value);
+    return formatPrice(toDisplay(candidate.summary.economics_basis_value));
   }
 
   function benchmarkCostDetail(candidate: DecisionCandidate) {
@@ -209,7 +210,11 @@ export default function Compare() {
     navigate('/?estimate=composition');
   }
 
-  if (loading) {
+  // Only show the full skeleton on the very first load. Family/profile
+  // changes also flip `loading` to true, but if we already have a benchmark
+  // it's nicer to leave the current view in place than collapse the page
+  // to a skeleton between fetches.
+  if (loading && !benchmark) {
     return (
       <section className="surface-card cp-enter overflow-hidden p-6 sm:p-7">
         <div className="cp-subtle-label">Literature Benchmarks</div>
@@ -324,15 +329,15 @@ export default function Compare() {
           </div>
           <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
             <MetricTile label={activeCandidate.summary.economics_basis_label} value={benchmarkCostValue(activeCandidate)} detail={benchmarkCostDetail(activeCandidate)} />
-            <MetricTile label="Materials" value={`$${toDisplay(activeCandidate.summary.materials_cost_per_lb).toFixed(2)}`} detail="Raw material stack" />
-            <MetricTile label="Processing" value={`$${toDisplay(activeCandidate.summary.processing_cost_per_lb).toFixed(2)}`} detail="Step-method operations" />
-            <MetricTile label="Route extras" value={`$${toDisplay(activeCandidate.summary.route_extra_cost_per_lb).toFixed(2)}`} detail="QA + activation + route overhead" />
+            <MetricTile label="Materials" value={formatPrice(toDisplay(activeCandidate.summary.materials_cost_per_lb))} detail="Raw material stack" />
+            <MetricTile label="Processing" value={formatPrice(toDisplay(activeCandidate.summary.processing_cost_per_lb))} detail="Step-method operations" />
+            <MetricTile label="Route extras" value={formatPrice(toDisplay(activeCandidate.summary.route_extra_cost_per_lb))} detail="QA + activation + route overhead" />
           </div>
           <div className="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
             <MetricTile label="Evidence anchors" value={String(activeCandidate.literature_basis.length)} detail="Direct links supporting the selected route." />
             <MetricTile label="Family bank" value={String(benchmark.citations.length)} detail="Higher-level references visible across the family." />
             <MetricTile label="Screening basis" value={screeningBasisLabel(activeCandidate.screening_basis)} detail="How this route is framed in the benchmark set." />
-            <MetricTile label="Decision profile" value={benchmark.decision_profile.label} detail="Current weighting logic for ranking." />
+            <MetricTile label="Ranking profile" value={benchmark.decision_profile.label} detail="Current weighting logic for ranking." />
           </div>
           <div className="mt-4 grid gap-4 xl:grid-cols-[minmax(0,1.02fr)_minmax(320px,0.98fr)]">
             <div className="space-y-4">

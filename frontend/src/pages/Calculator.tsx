@@ -380,8 +380,7 @@ function materialSourceTrust(material: MaterialItem) {
 
 function materialQuoteLabel(material?: MaterialItem | null) {
   if (!material?.price_unit || material.price == null) return 'Price not available';
-  const formatted = material.price < 1 ? material.price.toFixed(4) : material.price.toFixed(2);
-  return `$${formatted} ${material.price_unit}`;
+  return `${formatPrice(material.price)} ${material.price_unit}`;
 }
 
 function calculatorMaterialLabel(material: MaterialItem) {
@@ -503,6 +502,8 @@ export default function Calculator() {
   const [electroTemplates, setElectroTemplates] = useState<ProcessTemplate[]>([]);
   const [latestSnapshot, setLatestSnapshot] = useState<CalculatorResultSnapshot | null>(() => loadCalculatorResultSnapshot());
   const [pricesUpdatedAt, setPricesUpdatedAt] = useState<Date | null>(() => storedDraft?.pricesUpdatedAt ? new Date(storedDraft.pricesUpdatedAt) : null);
+  const [pricesLoading, setPricesLoading] = useState(true);
+  const [pricesError, setPricesError] = useState(false);
   const currentScale = getScale(orderSize);
   const scale = scaleMeta(currentScale);
 
@@ -548,6 +549,8 @@ export default function Calculator() {
   useEffect(() => {
     let cancelled = false;
     async function loadPrices() {
+      setPricesLoading(true);
+      setPricesError(false);
       try {
         const prices = await fetchPrices();
         if (cancelled) return;
@@ -555,7 +558,12 @@ export default function Calculator() {
         setLiveMap(toFeedMap(prices));
         setPricesUpdatedAt(new Date());
       } catch {
-        // Keep the form usable when live prices are temporarily unavailable.
+        if (cancelled) return;
+        // Keep the form usable when live prices are temporarily unavailable;
+        // surface the failure in the Price basis tile instead of swallowing it.
+        setPricesError(true);
+      } finally {
+        if (!cancelled) setPricesLoading(false);
       }
     }
     void loadPrices();
@@ -1359,14 +1367,30 @@ export default function Calculator() {
             <div className="mt-3 space-y-1">
               <CompactValueRow
                 label="Status"
-                value={refreshing ? 'Refreshing' : pricesUpdatedAt ? 'Ready' : 'Pending'}
-                detail={pricesUpdatedAt
-                  ? `${liveFeedCount} live / ${indexedFeedCount} indexed rows synced ${pricesUpdatedAt.toLocaleTimeString('en-US', {
-                      hour: 'numeric',
-                      minute: '2-digit',
-                      hour12: true,
-                    })}`
-                  : 'Indexed and manual rows stay usable before the next live refresh.'}
+                value={
+                  refreshing
+                    ? 'Refreshing'
+                    : pricesLoading
+                      ? 'Loading live feed'
+                      : pricesError
+                        ? 'Live feed unavailable'
+                        : pricesUpdatedAt
+                          ? 'Ready'
+                          : 'Pending'
+                }
+                detail={
+                  pricesLoading
+                    ? 'Waiting for the local backend to publish live quotes.'
+                    : pricesError
+                      ? 'Indexed and manual rows still apply. Try Refresh to retry the live feed.'
+                      : pricesUpdatedAt
+                        ? `${liveFeedCount} live / ${indexedFeedCount} indexed rows synced ${pricesUpdatedAt.toLocaleTimeString('en-US', {
+                            hour: 'numeric',
+                            minute: '2-digit',
+                            hour12: true,
+                          })}`
+                        : 'Indexed and manual rows stay usable before the next live refresh.'
+                }
               />
               <CompactValueRow label="Manual overrides" value={String(manualOverrideCount)} detail="Rows still detached from tracked feeds." />
             </div>
@@ -1477,7 +1501,7 @@ export default function Calculator() {
                   <span className={`inline-flex h-6 min-w-6 items-center justify-center rounded-full px-2 text-[10px] font-semibold uppercase tracking-[0.16em] ${
                     active ? 'bg-slate-950 text-white' : 'bg-slate-100 text-slate-500'
                   }`}>
-                    {active ? 'On' : 'Off'}
+                    {active ? 'Selected' : 'Choose'}
                   </span>
                 </div>
                 <div className="mt-3 text-sm leading-6 text-slate-700">{option.note}</div>
@@ -1487,8 +1511,19 @@ export default function Calculator() {
           })}
         </div>
 
-        <div className="mt-4 rounded-[20px] border border-slate-200 bg-slate-50/80 px-4 py-3 text-sm leading-6 text-slate-600">
-          Changing workflow does not auto-advance. Review the selected mode, then move with <span className="font-semibold text-[#191f28]">Next</span>.
+        <div className="mt-4 rounded-[20px] border border-slate-200 bg-slate-50/80 px-4 py-3">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="text-sm leading-6 text-slate-600">
+              Selected: <span className="font-semibold text-[#191f28]">{catalystDomainLabel(catalystDomain)}</span>. Switching the workflow does not auto-advance.
+            </div>
+            <button
+              type="button"
+              onClick={handleEstimateNext}
+              className="cp-button-primary flex-none px-4 py-2 text-xs"
+            >
+              Next: Composition →
+            </button>
+          </div>
         </div>
       </section>
     );
@@ -1633,7 +1668,7 @@ export default function Calculator() {
         ) : null}
         <div className="surface-ghost p-3.5">
           <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-            <div><div className="cp-subtle-label">Order size</div><div className="mt-3 flex flex-wrap items-center gap-3"><input type="number" min="1" step="1" value={orderSize} onChange={(event) => setOrderSize(Math.max(1, Number(event.target.value)))} className="input-base w-32 text-center font-mono" /><span className="text-sm text-slate-500">tons per campaign</span><span className={`rounded-full border px-3 py-1 text-xs font-semibold ${scale.classes}`}>{scale.label} / {scale.rate}</span></div></div>
+            <div><div className="cp-subtle-label">Order size</div><div className="mt-3 flex flex-wrap items-center gap-3"><input type="number" min="1" step="1" value={orderSize} onChange={(event) => setOrderSize(Math.max(1, Number(event.target.value) || 1))} className="input-base w-32 text-center font-mono" /><span className="text-sm text-slate-500">tons per campaign</span><span className={`rounded-full border px-3 py-1 text-xs font-semibold ${scale.classes}`}>{scale.label} / {scale.rate}</span></div></div>
             <div className="cp-toolbar">{QUICK_ORDER_SIZES.map((size) => <button key={size} onClick={() => setOrderSize(size)} className={`rounded-[16px] px-3 py-2 text-xs font-semibold transition ${orderSize === size ? 'bg-slate-950 text-white' : 'text-slate-600 hover:bg-white hover:text-slate-900'}`}>{size} tons</button>)}</div>
           </div>
         </div>
@@ -1777,8 +1812,7 @@ export default function Calculator() {
         <div className="space-y-5">
           <div className="flex flex-col gap-4 border-b border-slate-900/8 pb-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <div className="cp-subtle-label">Cost Estimate</div>
-              <h2 className="cp-heading-xl mt-2">Estimate catalyst preparation cost with traceable inputs.</h2>
+              <h2 className="cp-heading-xl">Estimate catalyst preparation cost with traceable inputs.</h2>
               <p className="cp-body-copy mt-2 max-w-2xl">
                 {catalystDomain === 'electrocatalyst'
                   ? 'Move in order: choose workflow, build the stack, set the preparation basis, then run the result.'
@@ -1798,7 +1832,7 @@ export default function Calculator() {
         disabledSectionIds={disabledEstimateSections}
       />
 
-      {renderWorkspaceSummary()}
+      {sectionState.activeSectionId !== 'type' ? renderWorkspaceSummary() : null}
 
       <div className="space-y-4">{activeWorkspaceSection}</div>
 

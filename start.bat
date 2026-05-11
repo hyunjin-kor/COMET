@@ -53,7 +53,7 @@ echo.
 "%PYTHON_EXE%" -c "import uvicorn" >nul 2>&1
 if %errorlevel% neq 0 (
     echo   [1/3] Installing Python packages...
-    "%PYTHON_EXE%" -m pip install -q -r requirements.txt
+    "%PYTHON_EXE%" -m pip install -q .
     if %errorlevel% neq 0 ( echo   [ERROR] pip install failed & pause & exit /b 1 )
     echo   [1/3] Done.
 )
