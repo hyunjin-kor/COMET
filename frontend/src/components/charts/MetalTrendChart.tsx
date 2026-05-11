@@ -8,6 +8,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import { formatPrice } from '../../lib/format-price';
 
 type HistoryPoint = {
   date: string;
@@ -56,12 +57,12 @@ export default function MetalTrendChart({
           tick={{ fill: '#8b95a1', fontSize: 11 }}
           axisLine={false}
           tickLine={false}
-          tickFormatter={(value) => `$${Number(value).toLocaleString('en-US')}`}
+          tickFormatter={(value) => formatPrice(Number(value))}
           width={72}
         />
         <Tooltip
           cursor={{ stroke: 'rgba(49,130,246,0.35)', strokeWidth: 1, strokeDasharray: '3 3' }}
-          formatter={(value) => [`$${Number(value).toLocaleString('en-US')}`, selectedDisplayUnit]}
+          formatter={(value) => [formatPrice(Number(value)), selectedDisplayUnit]}
           labelFormatter={(value) =>
             new Date(value).toLocaleDateString('en-US', {
               year: 'numeric',
