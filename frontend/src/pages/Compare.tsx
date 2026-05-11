@@ -181,7 +181,7 @@ export default function Compare() {
   }
 
   function benchmarkCostDetail(candidate: DecisionCandidate) {
-    return candidate.summary.economics_basis_unit === '$/cm2' ? '/cm2' : fmtLabel;
+    return candidate.summary.economics_basis_unit === '$/cm2' ? '/cm²' : fmtLabel;
   }
 
   function loadIntoCalculator(candidate: DecisionCandidate) {
@@ -345,7 +345,7 @@ export default function Compare() {
                 <div className="cp-subtle-label">Preparation method</div>
                 <div className="mt-2 cp-heading-sm">{activeCandidate.route.name}</div>
                 <div className="mt-2 text-sm leading-7 text-slate-600">{activeCandidate.route.route_note}</div>
-                <div className="mt-3 flex flex-wrap gap-2"><span className="cp-chip">{activeCandidate.route.manufacturing_mode}</span><span className="cp-chip">{activeCandidate.summary.temperature_window_c[0]}-{activeCandidate.summary.temperature_window_c[1]} C</span><span className="cp-chip">{activeCandidate.summary.scale} scale</span></div>
+                <div className="mt-3 flex flex-wrap gap-2"><span className="cp-chip">{activeCandidate.route.manufacturing_mode}</span><span className="cp-chip">{activeCandidate.summary.temperature_window_c[0]}-{activeCandidate.summary.temperature_window_c[1]} °C</span><span className="cp-chip">{activeCandidate.summary.scale} scale</span></div>
                 <div className="mt-4 grid gap-3 md:grid-cols-3">{([['Preprocess', activeCandidate.route.preprocess], ['Synthesis', activeCandidate.route.synthesis], ['Postprocess', activeCandidate.route.postprocess]] as Array<[string, string[]]>).map(([label, items]) => <div key={label} className="rounded-[22px] border border-slate-900/8 bg-white/64 p-3"><div className="cp-subtle-label">{label}</div><div className="mt-3 space-y-2">{items.map((item) => <div key={item} className="text-sm leading-6 text-slate-700">{item}</div>)}</div></div>)}</div>
               </div>
               <div className="surface-ghost p-4">

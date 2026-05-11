@@ -62,13 +62,13 @@ These are the *only* facts you may state without re-verification. Re-verify (`gh
 - **Project**: CatPrice
 - **Repository**: https://github.com/hyunjin-kor/CatPrice
 - **Default branch**: `master`
-- **Package version** (as of 2026-05-06): `1.3.4` in `package.json`, `pyproject.toml`, `frontend/package.json`
+- **Package version**: defined in `package.json`, `pyproject.toml`, `frontend/package.json` — read those files directly instead of quoting from this doc (snapshots go stale across releases)
   - Installer name pattern: `CatPrice.Setup.<version>.exe`
   - Portable archive: `CatPrice-win-unpacked.zip`
 - **Public blog / homepage**: not configured in GitHub repo metadata
 - **License**: source-available, all rights reserved (see `LICENSE`)
 
-The package version is *not* automatically a published GitHub release. Before quoting "the latest release", run `gh release list -L 1` and compare. If `package.json` is ahead of the latest release tag, that's a prepared bump — say "package version 1.3.4, latest release vX.Y.Z" rather than conflating the two.
+The package version is *not* automatically a published GitHub release. Before quoting "the latest release", run `gh release list -L 1` and compare. If `package.json` is ahead of the latest release tag, that's a prepared bump — say "package version vA.B.C, latest release vX.Y.Z" rather than conflating the two.
 
 ---
 
