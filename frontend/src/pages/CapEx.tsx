@@ -326,7 +326,7 @@ export default function CapEx() {
 
         <div className="mt-5">
           <button onClick={handleCalculate} disabled={loading} className="cp-button-primary disabled:opacity-60">
-            {loading ? 'Calculating...' : 'Calculate CapEx'}
+            {loading ? 'Calculating...' : includeOpEx ? 'Calculate CapEx + OpEx' : 'Calculate CapEx'}
           </button>
         </div>
       </section>
