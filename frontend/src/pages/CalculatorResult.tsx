@@ -824,7 +824,14 @@ export default function CalculatorResult() {
           </div>
         </div>
 
-        {resolvedMaterials.length > 0 ? (
+        {resolvedMaterials.length === 0 ? (
+          <div className="mt-4 rounded-[22px] border border-slate-900/8 bg-white/60 p-4">
+            <div className="cp-subtle-label">Source Records</div>
+            <div className="mt-3 text-sm leading-6 text-slate-600">
+              No resolved source rows — this estimate ran on manual price entries. Pick library materials in the cost estimate workspace to populate per-row provenance.
+            </div>
+          </div>
+        ) : (
           <div className="mt-4 rounded-[22px] border border-slate-900/8 bg-white/60 p-4">
             <div className="cp-subtle-label">Source Records</div>
             <div className="mt-3 grid gap-3">
@@ -845,12 +852,22 @@ export default function CalculatorResult() {
                         {material.quote_source}
                         {material.quote_year ? ` / ${material.quote_year}` : ''}
                       </div>
-                      <div className="mt-2">
+                      <div className="mt-2 flex flex-wrap items-center gap-2 sm:justify-end">
                         <span
                           className={`inline-flex rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] ${sourceRecordTone(material.price_scope, Boolean(material.reference_url))}`}
                         >
                           {sourceRecordLabel(material.price_scope, Boolean(material.reference_url))}
                         </span>
+                        {material.reference_url ? (
+                          <a
+                            href={material.reference_url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-xs font-semibold text-[#1b64da] underline underline-offset-2"
+                          >
+                            Open source ↗
+                          </a>
+                        ) : null}
                       </div>
                     </div>
                   </div>
@@ -917,27 +934,18 @@ export default function CalculatorResult() {
                       </span>
                     </div>
                   ) : null}
-                  {material.reference_url ? (
-                    <a
-                      href={material.reference_url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="mt-2 inline-flex text-xs text-[#1b64da] underline underline-offset-2"
-                    >
-                      Open source
-                    </a>
-                  ) : (
+                  {!material.reference_url ? (
                     <div className="mt-2 text-xs leading-5 text-slate-500">
                       {material.price_scope === 'historical_bulk'
                         ? 'Historical bulk row without a stable public permalink.'
                         : 'No public source URL stored for this row.'}
                     </div>
-                  )}
+                  ) : null}
                 </div>
               ))}
             </div>
           </div>
-        ) : null}
+        )}
 
         {routeSummary?.reference_urls?.length ? (
           <div className="mt-4 rounded-[22px] border border-slate-900/8 bg-white/60 p-4">
