@@ -210,7 +210,11 @@ export default function Compare() {
     navigate('/?estimate=composition');
   }
 
-  if (loading) {
+  // Only show the full skeleton on the very first load. Family/profile
+  // changes also flip `loading` to true, but if we already have a benchmark
+  // it's nicer to leave the current view in place than collapse the page
+  // to a skeleton between fetches.
+  if (loading && !benchmark) {
     return (
       <section className="surface-card cp-enter overflow-hidden p-6 sm:p-7">
         <div className="cp-subtle-label">Literature Benchmarks</div>
@@ -333,7 +337,7 @@ export default function Compare() {
             <MetricTile label="Evidence anchors" value={String(activeCandidate.literature_basis.length)} detail="Direct links supporting the selected route." />
             <MetricTile label="Family bank" value={String(benchmark.citations.length)} detail="Higher-level references visible across the family." />
             <MetricTile label="Screening basis" value={screeningBasisLabel(activeCandidate.screening_basis)} detail="How this route is framed in the benchmark set." />
-            <MetricTile label="Decision profile" value={benchmark.decision_profile.label} detail="Current weighting logic for ranking." />
+            <MetricTile label="Ranking profile" value={benchmark.decision_profile.label} detail="Current weighting logic for ranking." />
           </div>
           <div className="mt-4 grid gap-4 xl:grid-cols-[minmax(0,1.02fr)_minmax(320px,0.98fr)]">
             <div className="space-y-4">
