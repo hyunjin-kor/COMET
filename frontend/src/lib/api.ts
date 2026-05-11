@@ -65,8 +65,38 @@ async function ensureOk(res: Response): Promise<Response> {
   return res;
 }
 
+// The packaged FastAPI sidecar can take up to ~60s to boot on first launch
+// (Windows Defender scan, PyInstaller cold start). Retry network failures
+// (fetch TypeError = couldn't reach the server) until the backend responds
+// at least once, so initial page loads keep showing skeletons instead of
+// flashing "Failed to fetch". After confirmed-ready, fail fast so a
+// mid-session backend failure surfaces immediately. HTTP error responses
+// (4xx/5xx) are never retried — the server answered, just not how we wanted.
+let backendConfirmedReady = false;
+const BOOT_RETRY_MAX_ATTEMPTS = 30;
+const BOOT_RETRY_DELAY_MS = 2000;
+
+async function fetchWithBootRetry(input: RequestInfo, init?: RequestInit): Promise<Response> {
+  const maxAttempts = backendConfirmedReady ? 1 : BOOT_RETRY_MAX_ATTEMPTS;
+  let lastError: unknown;
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    try {
+      const res = await fetch(input, init);
+      backendConfirmedReady = true;
+      return res;
+    } catch (err) {
+      lastError = err;
+      if (!(err instanceof TypeError)) throw err;
+      if (attempt < maxAttempts - 1) {
+        await new Promise((resolve) => setTimeout(resolve, BOOT_RETRY_DELAY_MS));
+      }
+    }
+  }
+  throw lastError;
+}
+
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
-  const res = await ensureOk(await fetch(apiUrl(path), buildRequestInit(options)));
+  const res = await ensureOk(await fetchWithBootRetry(apiUrl(path), buildRequestInit(options)));
   try {
     return (await res.json()) as T;
   } catch {
@@ -75,7 +105,7 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 }
 
 async function requestText(path: string, options?: RequestInit): Promise<string> {
-  const res = await ensureOk(await fetch(apiUrl(path), buildRequestInit(options)));
+  const res = await ensureOk(await fetchWithBootRetry(apiUrl(path), buildRequestInit(options)));
   return res.text();
 }
 
