@@ -10,6 +10,7 @@ import {
   type ProcessTemplate,
   type StepLibraryItem,
 } from '../lib/api';
+import { formatPrice } from '../lib/format-price';
 
 type Tab = 'materials' | 'steps' | 'templates';
 type SortKey = 'name' | 'year_desc' | 'year_asc' | 'price_desc' | 'price_asc';
@@ -105,7 +106,7 @@ function formatPack(material: MaterialItem) {
 
 function formatRawPrice(material: MaterialItem) {
   if (material.price == null || !material.price_unit) return 'N/A';
-  return `$${Number(material.price).toFixed(material.price < 1 ? 4 : 2)} ${material.price_unit}`;
+  return `${formatPrice(Number(material.price))} ${material.price_unit}`;
 }
 
 function priceScopeLabel(scope: string) {
@@ -512,7 +513,7 @@ export default function Library() {
                         {selectedMaterial.is_calculator_usable && selectedMaterial.normalized_price_per_lb != null ? (
                           <InspectorRow
                             label="In calculator"
-                            value={`$${selectedMaterial.normalized_price_per_lb.toFixed(selectedMaterial.normalized_price_per_lb < 1 ? 4 : 2)}/lb`}
+                            value={`${formatPrice(selectedMaterial.normalized_price_per_lb)}/lb`}
                             detail="Normalized to a per-pound basis for the cost engine."
                           />
                         ) : null}

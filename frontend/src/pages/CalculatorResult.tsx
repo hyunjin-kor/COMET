@@ -79,16 +79,16 @@ function formatResolvedNormalization(
   fmtLabel: string,
 ) {
   if (typeof material.normalized_price_per_lb === 'number') {
-    return `$${toDisplay(material.normalized_price_per_lb).toFixed(3)}${fmtLabel}`;
+    return `${formatPrice(toDisplay(material.normalized_price_per_lb))}${fmtLabel}`;
   }
   if (typeof material.normalized_price_per_cm2 === 'number') {
-    return `$${material.normalized_price_per_cm2.toFixed(4)}/cm2`;
+    return `${formatPrice(material.normalized_price_per_cm2)}/cm2`;
   }
   if (typeof material.normalized_price_per_ml === 'number') {
-    return `$${material.normalized_price_per_ml.toFixed(4)}/mL`;
+    return `${formatPrice(material.normalized_price_per_ml)}/mL`;
   }
   if (typeof material.normalized_price_per_kg_solids === 'number') {
-    return `$${material.normalized_price_per_kg_solids.toFixed(2)}/kg solids`;
+    return `${formatPrice(material.normalized_price_per_kg_solids)}/kg solids`;
   }
   return 'Not stored';
 }
@@ -203,32 +203,32 @@ export default function CalculatorResult() {
   const ledgerRows = [
     {
       label: 'Materials',
-      value: `$${toDisplay(result.materials.total_materials_cost_per_lb).toFixed(3)}${fmtLabel}`,
+      value: `${formatPrice(toDisplay(result.materials.total_materials_cost_per_lb))}${fmtLabel}`,
       detail: `${result.summary.materials_pct.toFixed(1)}% of selling price`,
     },
     {
       label: 'Processing',
-      value: `$${toDisplay(Number(result.step_method.processing_cost_per_lb)).toFixed(3)}${fmtLabel}`,
+      value: `${formatPrice(toDisplay(Number(result.step_method.processing_cost_per_lb)))}${fmtLabel}`,
       detail: `${result.summary.processing_pct.toFixed(1)}% of selling price`,
     },
     typeof result.step_method.ga_per_lb === 'number'
       ? {
           label: 'G&A',
-          value: `$${toDisplay(Number(result.step_method.ga_per_lb)).toFixed(3)}${fmtLabel}`,
+          value: `${formatPrice(toDisplay(Number(result.step_method.ga_per_lb)))}${fmtLabel}`,
           detail: 'General and administrative overhead',
         }
       : null,
     typeof result.step_method.sard_per_lb === 'number'
       ? {
           label: 'S&ARD',
-          value: `$${toDisplay(Number(result.step_method.sard_per_lb)).toFixed(3)}${fmtLabel}`,
+          value: `${formatPrice(toDisplay(Number(result.step_method.sard_per_lb)))}${fmtLabel}`,
           detail: 'Selling, administrative, and R&D uplift',
         }
       : null,
     typeof result.step_method.margin_per_lb === 'number'
       ? {
           label: 'Margin',
-          value: `$${toDisplay(Number(result.step_method.margin_per_lb)).toFixed(3)}${fmtLabel}`,
+          value: `${formatPrice(toDisplay(Number(result.step_method.margin_per_lb)))}${fmtLabel}`,
           detail: `${Number(result.step_method.margin_pct).toFixed(1)}% selling margin`,
         }
       : null,
@@ -237,12 +237,12 @@ export default function CalculatorResult() {
     {
       label: 'Materials',
       share: result.summary.materials_pct,
-      value: `$${toDisplay(result.materials.total_materials_cost_per_lb).toFixed(3)}${fmtLabel}`,
+      value: `${formatPrice(toDisplay(result.materials.total_materials_cost_per_lb))}${fmtLabel}`,
     },
     {
       label: 'Processing',
       share: result.summary.processing_pct,
-      value: `$${toDisplay(Number(result.step_method.processing_cost_per_lb)).toFixed(3)}${fmtLabel}`,
+      value: `${formatPrice(toDisplay(Number(result.step_method.processing_cost_per_lb)))}${fmtLabel}`,
     },
     {
       label: 'G&A + margin',
@@ -435,8 +435,8 @@ export default function CalculatorResult() {
             <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
               <MetricTile label="Active area" value={`${electrodeModel.active_area_cm2.toFixed(1)} cm2`} detail="Per modeled layer" />
               <MetricTile label="Catalyst loading" value={`${electrodeModel.catalyst_loading_mg_cm2.toFixed(2)} mg/cm2`} detail="Dry catalyst loading" />
-              <MetricTile label="Electrode total" value={`$${electrodeModel.total_cost_usd.toFixed(2)}`} detail="For selected active area" />
-              <MetricTile label="Stack density" value={`$${electrodeModel.cost_per_cm2_usd.toFixed(3)}/cm2`} detail={`$${electrodeModel.cost_per_m2_usd.toFixed(2)}/m2`} />
+              <MetricTile label="Electrode total" value={formatPrice(electrodeModel.total_cost_usd)} detail="For selected active area" />
+              <MetricTile label="Stack density" value={`${formatPrice(electrodeModel.cost_per_cm2_usd)}/cm2`} detail={`${formatPrice(electrodeModel.cost_per_m2_usd)}/m2`} />
             </div>
           </div>
         ) : null}
@@ -457,17 +457,17 @@ export default function CalculatorResult() {
             <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
               <MetricTile
                 label="Gross metal value"
-                value={`$${toDisplay(spentCatalyst.V_metal_per_lb).toFixed(2)}`}
+                value={formatPrice(toDisplay(spentCatalyst.V_metal_per_lb))}
                 detail={`Per${catLabel}`}
               />
               <MetricTile
                 label="Recovery cost"
-                value={`$${toDisplay(spentCatalyst.C_recovery_per_lb).toFixed(2)}`}
+                value={formatPrice(toDisplay(spentCatalyst.C_recovery_per_lb))}
                 detail={`Per${catLabel}`}
               />
               <MetricTile
                 label="Reclaimed value"
-                value={`$${toDisplay(spentCatalyst.V_reclaimed_per_lb).toFixed(2)}`}
+                value={formatPrice(toDisplay(spentCatalyst.V_reclaimed_per_lb))}
                 detail={`Per${catLabel}`}
               />
               <MetricTile
@@ -809,7 +809,7 @@ export default function CalculatorResult() {
                 <div className="text-left sm:text-right">
                   <div className="cp-subtle-label">Per catalyst</div>
                   <div className="mt-2 font-display text-[1.45rem] text-[#191f28]">
-                    ${toDisplay(component.cost_per_lb_cat).toFixed(3)}
+                    {formatPrice(toDisplay(component.cost_per_lb_cat))}
                     {catLabel}
                   </div>
                 </div>
@@ -817,7 +817,7 @@ export default function CalculatorResult() {
 
               <div className="mt-4 grid gap-2.5 sm:grid-cols-3 xl:grid-cols-1 2xl:grid-cols-3">
                 <MetricTile label="wt%" value={(component.wt_frac * 100).toFixed(1)} detail="Loaded into catalyst" />
-                <MetricTile label="Unit price" value={`$${toDisplay(component.price_per_lb).toFixed(3)}`} detail={`Per${fmtLabel}`} />
+                <MetricTile label="Unit price" value={formatPrice(toDisplay(component.price_per_lb))} detail={`Per${fmtLabel}`} />
                 <MetricTile label="Share" value={`${Number(component.cost_pct).toFixed(1)}%`} detail="Of material cost stack" />
               </div>
             </div>
@@ -828,7 +828,7 @@ export default function CalculatorResult() {
           <div className="flex items-center justify-between gap-3 text-sm">
             <span className="text-slate-600">Total material cost</span>
             <span className="font-semibold text-[#191f28]">
-              ${toDisplay(result.materials.total_materials_cost_per_lb).toFixed(4)}
+              {formatPrice(toDisplay(result.materials.total_materials_cost_per_lb))}
               {catLabel}
             </span>
           </div>
@@ -852,7 +852,7 @@ export default function CalculatorResult() {
                     </div>
                     <div className="text-left sm:text-right">
                       <div className="font-mono text-slate-900">
-                        ${material.price.toFixed(material.price < 1 ? 4 : 2)} {material.price_unit}
+                        {formatPrice(material.price)} {material.price_unit}
                       </div>
                       <div className="mt-1 text-xs text-slate-500">
                         {material.quote_source}
@@ -892,11 +892,11 @@ export default function CalculatorResult() {
                       </div>
                       <div className="mt-1 text-[#191f28]">
                         Original {material.escalation_basis_year} quote of{' '}
-                        <span className="font-mono font-semibold">${(material.raw_price_per_lb ?? material.price).toFixed(material.raw_price_per_lb && material.raw_price_per_lb < 1 ? 4 : 2)}/lb</span>{' '}
+                        <span className="font-mono font-semibold">{formatPrice(material.raw_price_per_lb ?? material.price)}/lb</span>{' '}
                         is multiplied by ChemPPI factor{' '}
                         <span className="font-mono font-semibold">×{material.escalation_factor.toFixed(2)}</span>{' '}
                         to land at the in-calculator value{' '}
-                        <span className="font-mono font-semibold">${(material.normalized_price_per_lb ?? 0).toFixed(material.normalized_price_per_lb && material.normalized_price_per_lb < 1 ? 4 : 2)}/lb</span>.
+                        <span className="font-mono font-semibold">{formatPrice(material.normalized_price_per_lb ?? 0)}/lb</span>.
                       </div>
                       <div className="mt-1 text-[#4e5968]">
                         ChemPPI tracks chemical-manufacturing producer prices and is the same index CatCost uses for materials and operating costs.
@@ -910,14 +910,14 @@ export default function CalculatorResult() {
                       </div>
                       <div className="mt-1 text-[#191f28]">
                         Catalyst price uses the latest <span className="font-semibold">{material.live_override.live_source}</span> quote
-                        of <span className="font-mono font-semibold">${material.live_override.live_price.toFixed(material.live_override.live_price < 1 ? 4 : 2)} {material.live_override.live_price_unit}</span>
+                        of <span className="font-mono font-semibold">{formatPrice(material.live_override.live_price)} {material.live_override.live_price_unit}</span>
                         {material.live_override.live_fetched_at
                           ? ` (fetched ${new Date(material.live_override.live_fetched_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })})`
                           : ''}
                         .
                       </div>
                       <div className="mt-1 text-[#4e5968]">
-                        Offline fallback: <span className="font-mono">${material.live_override.fallback_price.toFixed(2)} {material.live_override.fallback_price_unit}</span> from {material.live_override.fallback_source}
+                        Offline fallback: <span className="font-mono">{formatPrice(material.live_override.fallback_price)} {material.live_override.fallback_price_unit}</span> from {material.live_override.fallback_source}
                         {material.live_override.fallback_quote_year ? ` (${material.live_override.fallback_quote_year})` : ''}
                         .
                       </div>

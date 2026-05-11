@@ -380,8 +380,7 @@ function materialSourceTrust(material: MaterialItem) {
 
 function materialQuoteLabel(material?: MaterialItem | null) {
   if (!material?.price_unit || material.price == null) return 'Price not available';
-  const formatted = material.price < 1 ? material.price.toFixed(4) : material.price.toFixed(2);
-  return `$${formatted} ${material.price_unit}`;
+  return `${formatPrice(material.price)} ${material.price_unit}`;
 }
 
 function calculatorMaterialLabel(material: MaterialItem) {

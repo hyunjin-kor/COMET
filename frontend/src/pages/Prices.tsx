@@ -80,8 +80,7 @@ function formatSyncStamp(value: string | null) {
 function fmtPrice(price: number | null, rawUnit: string, displayUnit: Unit) {
   if (price == null) return 'N/A';
   const converted = convertTrackedPrice(price, rawUnit, displayUnit);
-  if (converted >= 1000) return `$${converted.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
-  if (converted >= 100) return `$${converted.toLocaleString('en-US', { maximumFractionDigits: 1 })}`;
+  if (Math.abs(converted) >= 1) return `$${converted.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
   return `$${converted.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 })}`;
 }
 
