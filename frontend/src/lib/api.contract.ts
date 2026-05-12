@@ -90,7 +90,7 @@ export const apiCrudContracts = {
   fetchSavedEstimate: (estimateId: number) => Promise<SavedEstimateDetail>;
   fetchSavedEstimates: (query?: SavedEstimateQuery) => Promise<SavedEstimateSummary[]>;
   fetchTemplateDetail: (templateId: string) => Promise<ProcessTemplate>;
-  refreshPrices: () => Promise<{ status: string; prices_fetched: number; updated_at: string }>;
+  refreshPrices: (source?: 'yahoo') => Promise<{ status: string; prices_fetched: number; updated_at: string }>;
   updateEquipment: (equipmentId: number, input: EquipmentUpdateInput) => Promise<EquipmentItem>;
   updateMaterial: (materialId: number, input: MaterialUpdateInput) => Promise<MaterialItem>;
 };

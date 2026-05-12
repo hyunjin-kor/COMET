@@ -143,14 +143,22 @@ def health():
 
 
 @app.post("/api/prices/refresh")
-async def refresh_prices(request: Request):
-    """Manually trigger a price update."""
+async def refresh_prices(request: Request, source: str | None = None):
+    """Manually trigger a price update.
+
+    Pass ``?source=yahoo`` for a fast, Yahoo Finance-only refresh — this is
+    what the desktop client uses for short-interval polling. Omit the
+    parameter for the full multi-source refresh.
+    """
     client_host = request.client.host if request.client else None
     if not settings.debug and not _is_local_request(client_host):
         raise HTTPException(status_code=403, detail="Manual refresh is only available from local requests.")
 
+    if source is not None and source != "yahoo":
+        raise HTTPException(status_code=422, detail="Unsupported source")
+
     global _last_price_update
-    prices_data = await collect_prices()
+    prices_data = await collect_prices(source=source)
     _last_price_update = datetime.now(UTC)
     return {
         "status": "ok",

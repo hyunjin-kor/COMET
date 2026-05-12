@@ -179,6 +179,36 @@ export default function Prices() {
     load();
   }, [load]);
 
+  // Two-tier live polling while the page is open, using only free sources:
+  //   - every 60s: Yahoo Finance quotes (Pt, Pd, Au, Ag, Cu, Al)
+  //   - every 5 min: full refresh — also pulls Kitco / Johnson Matthey /
+  //     Markets Insider so Rh, Ru, Ir, Ni, Co, Mo, W, Fe stay current
+  //     without any paid API. The slower cadence keeps the scrapers polite.
+  useEffect(() => {
+    const yahooTick = async () => {
+      try {
+        await refreshPrices('yahoo');
+        load({ silent: true });
+      } catch {
+        // Transient network blips shouldn't disturb the displayed quotes.
+      }
+    };
+    const fullTick = async () => {
+      try {
+        await refreshPrices();
+        load({ silent: true });
+      } catch {
+        // Transient network blips shouldn't disturb the displayed quotes.
+      }
+    };
+    const yahooId = window.setInterval(yahooTick, 60_000);
+    const fullId = window.setInterval(fullTick, 5 * 60_000);
+    return () => {
+      window.clearInterval(yahooId);
+      window.clearInterval(fullId);
+    };
+  }, [load]);
+
   useEffect(() => {
     if (!selected) return;
 

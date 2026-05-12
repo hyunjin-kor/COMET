@@ -7,20 +7,26 @@ from datetime import UTC, datetime
 
 from sqlmodel import Session
 
-from backend.core.price_fetcher import fetch_all_prices
+from backend.core.price_fetcher import fetch_all_prices, fetch_yfinance
 from backend.database import engine
 from backend.models.metal_price import MetalPrice
 
 logger = logging.getLogger(__name__)
 
 
-async def collect_prices() -> dict[str, dict]:
-    """Fetch all metal prices and persist to DB.
+async def collect_prices(source: str | None = None) -> dict[str, dict]:
+    """Fetch metal prices and persist to DB.
 
-    Returns:
-        Dict of {symbol: price_info_dict} from fetch_all_prices().
+    Args:
+        source: ``"yahoo"`` skips the slower scrapers and only refreshes the
+            Yahoo Finance-backed symbols — used by the desktop client's
+            in-page polling so frequent ticks don't hammer Kitco/JM.
+            Default fetches every configured source.
     """
-    results = await fetch_all_prices()
+    if source == "yahoo":
+        results = await fetch_yfinance()
+    else:
+        results = await fetch_all_prices()
     if results:
         _save_prices(results)
     return results
