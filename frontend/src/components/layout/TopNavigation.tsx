@@ -103,8 +103,8 @@ export default function TopNavigation() {
         <div className="no-drag px-4 py-2.5">
           <div className="flex items-center justify-between gap-3">
             <div className="flex min-w-0 items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-[14px] bg-[#3182f6]">
-                <BrandMark className="h-7 w-7" />
+              <div className="flex h-10 w-10 items-center justify-center">
+                <BrandMark className="h-10 w-10" />
               </div>
 
               <div className="min-w-0">
