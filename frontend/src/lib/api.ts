@@ -840,9 +840,12 @@ export const exportEstimateCsv = (estimateId: number) =>
 export const checkHealth = () =>
   request<{ status: string; version: string; last_price_update: string | null; scheduler_running: boolean }>('/health');
 
-// Refresh prices
-export const refreshPrices = () =>
-  request<{ status: string; prices_fetched: number; updated_at: string }>('/prices/refresh', { method: 'POST' });
+// Refresh prices. Pass 'yahoo' for the fast Yahoo Finance-only path that
+// the Prices page uses for live polling — undefined runs the full refresh.
+export const refreshPrices = (source?: 'yahoo') => {
+  const path = source ? `/prices/refresh?source=${source}` : '/prices/refresh';
+  return request<{ status: string; prices_fetched: number; updated_at: string }>(path, { method: 'POST' });
+};
 
 export interface EstimateRangeResult {
   mean: number;

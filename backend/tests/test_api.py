@@ -53,7 +53,10 @@ class TestHealth:
         assert resp.headers["Cache-Control"] == "no-store"
 
     def test_manual_price_refresh_updates_health_timestamp(self, client, monkeypatch):
-        async def fake_collect_prices():
+        captured_sources: list[str | None] = []
+
+        async def fake_collect_prices(source: str | None = None):
+            captured_sources.append(source)
             return {
                 "Pt": {
                     "name": "Platinum",
@@ -75,11 +78,19 @@ class TestHealth:
         refreshed_at = datetime.fromisoformat(refresh_payload["updated_at"])
         assert refreshed_at.tzinfo is not None
         assert refreshed_at.astimezone(UTC).utcoffset() == UTC.utcoffset(refreshed_at)
+        assert captured_sources == [None]
+
+        yahoo_resp = client.post("/api/prices/refresh?source=yahoo")
+        assert yahoo_resp.status_code == 200
+        assert captured_sources[-1] == "yahoo"
+
+        bad_resp = client.post("/api/prices/refresh?source=bogus")
+        assert bad_resp.status_code == 422
 
         health_resp = client.get("/api/health")
         assert health_resp.status_code == 200
         health_payload = health_resp.json()
-        assert health_payload["last_price_update"] == refresh_payload["updated_at"]
+        assert health_payload["last_price_update"] == yahoo_resp.json()["updated_at"]
 
     def test_manual_price_refresh_rejects_non_local_request(self, client, monkeypatch):
         monkeypatch.setattr(main_module.settings, "debug", False)
