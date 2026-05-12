@@ -68,7 +68,6 @@ Write-Host "[CatPrice] Building backend sidecar..."
     --collect-submodules pydantic `
     --collect-submodules pydantic_settings `
     --collect-submodules httpx `
-    --collect-submodules yfinance `
     --collect-submodules numpy `
     --add-data "$dataPath;backend/data" `
     $entryPoint
