@@ -1,6 +1,6 @@
 # Project Links
 
-Last verified: 2026-05-06
+Last verified: 2026-05-12
 
 This page tracks CatPrice's external connection points. Only verified links are listed as active.
 
@@ -27,10 +27,10 @@ This page tracks CatPrice's external connection points. Only verified links are 
 
 Single source of truth: `package.json`, `pyproject.toml`, `frontend/package.json` must agree.
 
-- Current package version: `1.3.7`
-- Python package version: `1.3.7`
-- Frontend package version: `1.3.7`
-- Latest verified GitHub release: `v1.3.7` (published 2026-05-08, verified via `gh release view v1.3.7` on 2026-05-08)
+- Current package version: `1.3.8`
+- Python package version: `1.3.8`
+- Frontend package version: `1.3.8`
+- Latest verified GitHub release: `v1.3.7` (published 2026-05-08, verified via `gh release view v1.3.7` on 2026-05-08); `v1.3.8` is a prepared bump that has not been tagged yet
 - Asset name pattern: `CatPrice.Setup.<version>.exe` (installer), `CatPrice-win-unpacked.zip` (portable)
 
 The published GitHub release tag may lag behind the package version when a bump has not yet been tagged. To re-verify, run `gh release list -L 1` against the repo.
