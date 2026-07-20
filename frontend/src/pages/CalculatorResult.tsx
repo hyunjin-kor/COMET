@@ -9,6 +9,7 @@ import {
 } from '../components/shared/WorkspaceSections';
 import type { CostResult } from '../lib/api';
 import { loadCalculatorResultSnapshot } from '../lib/calculator-session';
+import { buildResultCsv, downloadCsv, resultCsvFilename } from '../lib/export-csv';
 import { formatPrice } from '../lib/format-price';
 import { useUnit } from '../lib/use-unit';
 
@@ -972,9 +973,17 @@ export default function CalculatorResult() {
               The estimate, route basis, and evidence in one place — grouped for reading, separate from the editing workspace.
             </p>
           </div>
-          <button onClick={goBackToCalculator} className="cp-button-primary">
-            Back to cost estimate
-          </button>
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => downloadCsv(resultCsvFilename(snapshotState), buildResultCsv(snapshotState))}
+              className="cp-button-secondary px-4 py-2"
+            >
+              Export CSV
+            </button>
+            <button onClick={goBackToCalculator} className="cp-button-primary">
+              Back to cost estimate
+            </button>
+          </div>
         </div>
       </section>
 

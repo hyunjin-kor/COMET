@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { WorkspaceSectionFooter, WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
 import { runEstimateRange, type CostInput, type EstimateRangeResult } from '../lib/api';
 import { loadCalculatorDraft, loadCalculatorResultSnapshot, type CalculatorDraft, type CalculatorRow } from '../lib/calculator-session';
+import { buildRangeCsv, downloadCsv, rangeCsvFilename } from '../lib/export-csv';
 import { formatPrice } from '../lib/format-price';
 import { useUnit } from '../lib/use-unit';
 
@@ -501,6 +502,15 @@ export default function Uncertainty() {
                     <div className="mt-2 font-mono text-sm text-[#191f28]">{formatPrice(toDisplay(Number(value)))}</div>
                   </div>
                 ))}
+              </div>
+
+              <div className="mt-5">
+                <button
+                  onClick={() => downloadCsv(rangeCsvFilename(result), buildRangeCsv(result))}
+                  className="cp-button-secondary px-4 py-2"
+                >
+                  Export CSV
+                </button>
               </div>
             </>
           )}
