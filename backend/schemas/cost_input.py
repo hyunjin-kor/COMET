@@ -6,6 +6,8 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from backend.core.price_escalation import latest_index_year
+
 PriceUnit = Literal["$/lb", "$/kg", "$/troy_oz"]
 ApplicationFamily = Literal[
     "general",
@@ -106,7 +108,7 @@ class CostCalculationRequest(BaseModel):
     ga_overhead_pct: float = Field(default=0.05, ge=0, le=1)
     sard_pct: float = Field(default=0.05, ge=0, le=1)
     basis_year: int = Field(default=2017)
-    target_year: int = Field(default=2024)
+    target_year: int = Field(default_factory=lambda: latest_index_year("chemppi"))
     include_spent_value: bool = Field(default=False)
     reactor_type: str = Field(default="fixed")
     catalyst_bulk_density: float = Field(default=50.0, gt=0)

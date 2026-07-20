@@ -9,6 +9,7 @@ import json
 import logging
 import os
 import tempfile
+from datetime import UTC, datetime
 
 import httpx
 
@@ -28,10 +29,14 @@ async def update_chemppi() -> dict[str, float]:
     Returns:
         Updated annual index dict.
     """
+    # Unregistered BLS v2 requests are capped at a 10-year span; a wider
+    # window is silently truncated and recent years never arrive. The local
+    # file already carries the deep history, so only refresh recent years.
+    current_year = datetime.now(UTC).year
     params: dict = {
         "seriesid": [CHEMPPI_SERIES_ID],
-        "startyear": "2008",
-        "endyear": "2026",
+        "startyear": str(current_year - 4),
+        "endyear": str(current_year),
     }
     if settings.bls_api_key:
         params["registrationkey"] = settings.bls_api_key

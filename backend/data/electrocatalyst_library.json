@@ -709,12 +709,12 @@
       "pack_unit": "cm2",
       "source": "Fuel Cell Store",
       "quote_year": 2026,
-      "notes": "Nickel fiber felt described as a PTL for AEM electrolyzers. Product page lists a 20 x 20 cm sheet starting at $260.00.",
+      "notes": "Nickel fiber felt described as a PTL for AEM electrolyzers. The quoted 20 x 20 cm sheet was listed at $260.00. The live vendor page was removed around 2026-07, so the link points at the 2026-03 Wayback snapshot that shows the quoted price.",
       "has_lab_data": false,
       "catalyst_domain": "electrocatalyst",
       "application_family": "electrolyzer",
       "pricing_basis": "starting_price_smallest_pack",
-      "reference_url": "https://www.fuelcellstore.com/electrohy-nickel-fiber-felt"
+      "reference_url": "https://web.archive.org/web/20260305211538/https://www.fuelcellstore.com/electrohy-nickel-fiber-felt"
     },
     {
       "library_key": "fcs:gde-pt20-w1s1011",
@@ -808,7 +808,7 @@
       "catalyst_domain": "electrocatalyst",
       "application_family": "fuel_cell",
       "pricing_basis": "likely_value_500k_system_per_year",
-      "reference_url": "https://www.energy.gov/eere/vehicles/downloads/us-drive-fuel-cell-technical-team-roadmap"
+      "reference_url": "https://www.energy.gov/sites/prod/files/2017/11/f46/FCTT_Roadmap_Nov_2017.pdf"
     },
     {
       "library_key": "lit:doe-pem-gdl-2017",
@@ -825,7 +825,7 @@
       "catalyst_domain": "electrocatalyst",
       "application_family": "fuel_cell",
       "pricing_basis": "likely_value_500k_system_per_year",
-      "reference_url": "https://www.energy.gov/eere/vehicles/downloads/us-drive-fuel-cell-technical-team-roadmap"
+      "reference_url": "https://www.energy.gov/sites/prod/files/2017/11/f46/FCTT_Roadmap_Nov_2017.pdf"
     },
     {
       "library_key": "lit:doe-eptfe-2017",
@@ -842,7 +842,7 @@
       "catalyst_domain": "electrocatalyst",
       "application_family": "fuel_cell",
       "pricing_basis": "likely_value_500k_system_per_year",
-      "reference_url": "https://www.energy.gov/eere/vehicles/downloads/us-drive-fuel-cell-technical-team-roadmap"
+      "reference_url": "https://www.energy.gov/sites/prod/files/2017/11/f46/FCTT_Roadmap_Nov_2017.pdf"
     },
     {
       "library_key": "lit:dti-pem-membrane-2010",
