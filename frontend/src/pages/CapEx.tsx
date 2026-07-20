@@ -288,7 +288,7 @@ export default function CapEx() {
               type="checkbox"
               checked={includeOpEx}
               onChange={(event) => setIncludeOpEx(event.target.checked)}
-              className="h-4 w-4 rounded border-slate-300 text-[#3182f6] focus:ring-[#3182f6]"
+              className="h-4 w-4 rounded border-slate-300 text-[#0d9488] focus:ring-[#0d9488]"
             />
             <span className="font-semibold">Layer annual OpEx on top</span>
           </label>

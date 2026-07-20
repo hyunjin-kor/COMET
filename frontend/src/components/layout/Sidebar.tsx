@@ -14,8 +14,8 @@ export default function Sidebar() {
           <div className="flex items-center gap-2.5 px-1.5 pt-1.5">
             <BrandMark className="h-9 w-9" />
             <div className="min-w-0">
-              <div className="font-display text-[1.2rem] leading-none text-white">CatPrice</div>
-              <div className="mt-1 text-[11px] text-white/45">Catalyst cost workspace</div>
+              <div className="font-display text-[1.2rem] leading-none text-[#191f28]">CatPrice</div>
+              <div className="mt-1 text-[11px] text-[#b0b8c1]">Catalyst cost workspace</div>
             </div>
           </div>
 
@@ -29,20 +29,20 @@ export default function Sidebar() {
                   to={item.to}
                   aria-current={isActive ? 'page' : undefined}
                   className={`group relative flex items-center gap-3 rounded-[10px] px-3 py-2.5 transition ${
-                    isActive ? 'bg-white/10' : 'hover:bg-white/[0.05]'
+                    isActive ? 'bg-[#eef8f5]' : 'hover:bg-[#f4f6f7]'
                   }`}
                 >
                   {isActive ? (
-                    <span className="absolute left-0 top-1/2 h-4 w-[3px] -translate-y-1/2 rounded-full bg-[#3182f6]" aria-hidden="true" />
+                    <span className="absolute left-0 top-1/2 h-4 w-[3px] -translate-y-1/2 rounded-full bg-[#0d9488]" aria-hidden="true" />
                   ) : null}
                   <item.Icon
                     className={`h-[18px] w-[18px] flex-none transition ${
-                      isActive ? 'text-[#7cb2ff]' : 'text-white/40 group-hover:text-white/70'
+                      isActive ? 'text-[#0d9488]' : 'text-[#b0b8c1] group-hover:text-[#8b95a1]'
                     }`}
                   />
                   <div
                     className={`min-w-0 truncate text-sm transition ${
-                      isActive ? 'font-semibold text-white' : 'font-medium text-white/60 group-hover:text-white/90'
+                      isActive ? 'font-semibold text-[#0f766e]' : 'font-medium text-[#4e5968] group-hover:text-[#191f28]'
                     }`}
                   >
                     {item.label}
@@ -52,14 +52,14 @@ export default function Sidebar() {
             })}
           </nav>
 
-          <div className="border-t border-white/10 px-1.5 pb-1 pt-4">
+          <div className="border-t border-[#f2f4f6] px-1.5 pb-1 pt-4">
             <div className="flex items-center justify-between gap-3">
-              <div className="text-xs font-medium text-white/45">Display unit</div>
+              <div className="text-xs font-medium text-[#8b95a1]">Display unit</div>
 
               <button
                 type="button"
                 onClick={toggle}
-                className="no-drag flex items-center rounded-full bg-white/8 p-0.5"
+                className="no-drag flex items-center rounded-full bg-[#eef1f2] p-0.5"
                 title="Toggle output units"
                 aria-label={`Toggle output units, currently ${unit}`}
                 aria-pressed={unit === 'lb'}
@@ -67,7 +67,7 @@ export default function Sidebar() {
                 <span
                   aria-hidden="true"
                   className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
-                    unit === 'kg' ? 'bg-white text-[#191f28]' : 'text-white/55'
+                    unit === 'kg' ? 'bg-[#0d9488] text-white' : 'text-[#8b95a1]'
                   }`}
                 >
                   kg
@@ -75,7 +75,7 @@ export default function Sidebar() {
                 <span
                   aria-hidden="true"
                   className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
-                    unit === 'lb' ? 'bg-white text-[#191f28]' : 'text-white/55'
+                    unit === 'lb' ? 'bg-[#0d9488] text-white' : 'text-[#8b95a1]'
                   }`}
                 >
                   lb

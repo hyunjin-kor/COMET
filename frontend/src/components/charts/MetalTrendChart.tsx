@@ -61,7 +61,7 @@ export default function MetalTrendChart({
           width={72}
         />
         <Tooltip
-          cursor={{ stroke: 'rgba(49,130,246,0.35)', strokeWidth: 1, strokeDasharray: '3 3' }}
+          cursor={{ stroke: 'rgba(13,148,136,0.35)', strokeWidth: 1, strokeDasharray: '3 3' }}
           formatter={(value) => [formatPrice(Number(value)), selectedDisplayUnit]}
           labelFormatter={(value) =>
             new Date(value).toLocaleDateString('en-US', {

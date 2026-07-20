@@ -97,7 +97,7 @@ export function WorkspaceSectionNav({
                 aria-current={active ? 'step' : undefined}
                 className={`flex items-center gap-2 rounded-full py-1.5 pl-1.5 pr-3 transition ${
                   active
-                    ? 'bg-[#eef5ff]'
+                    ? 'bg-[#eef8f5]'
                     : disabled
                       ? 'cursor-not-allowed opacity-45'
                       : 'hover:bg-[#f4f6f8]'
@@ -106,7 +106,7 @@ export function WorkspaceSectionNav({
                 <span
                   className={`inline-flex h-5 w-5 items-center justify-center rounded-full text-[11px] font-semibold ${
                     active
-                      ? 'bg-[#3182f6] text-white'
+                      ? 'bg-[#0d9488] text-white'
                       : done
                         ? 'bg-[#191f28] text-white'
                         : 'bg-[#f2f4f6] text-[#8b95a1]'

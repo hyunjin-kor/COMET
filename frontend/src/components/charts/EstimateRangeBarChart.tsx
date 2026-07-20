@@ -14,7 +14,7 @@ export default function EstimateRangeBarChart({ data }: { data: HistogramBar[] }
         <XAxis dataKey="range" tick={{ fill: '#8b95a1', fontSize: 10 }} axisLine={false} tickLine={false} />
         <YAxis tick={{ fill: '#8b95a1', fontSize: 11 }} axisLine={false} tickLine={false} />
         <Tooltip
-          cursor={{ fill: 'rgba(49,130,246,0.06)' }}
+          cursor={{ fill: 'rgba(13,148,136,0.06)' }}
           formatter={(value) => [`${value}%`, 'Share of simulations']}
           contentStyle={{
             borderRadius: 14,

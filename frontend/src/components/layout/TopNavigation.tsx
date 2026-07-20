@@ -150,14 +150,14 @@ export default function TopNavigation() {
                   to={item.to}
                   className={`group flex min-w-[164px] items-center gap-3 rounded-[14px] border px-3.5 py-2.5 transition ${
                     isActive
-                      ? 'border-[#3182f6] bg-[#e8f2ff]'
+                      ? 'border-[#0d9488] bg-[#e6f5f2]'
                       : 'border-[#e5e8eb] bg-white hover:border-[#d1d6db] hover:bg-[#f9fafb]'
                   }`}
                 >
                   <div
                     className={`flex h-9 w-9 flex-none items-center justify-center rounded-[12px] transition ${
                       isActive
-                        ? 'bg-[#3182f6] text-white'
+                        ? 'bg-[#0d9488] text-white'
                         : 'bg-[#f2f4f6] text-[#8b95a1] group-hover:text-[#4e5968]'
                     }`}
                   >

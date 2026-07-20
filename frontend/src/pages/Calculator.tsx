@@ -121,7 +121,7 @@ const getScale = (tons: number): Scale => (tons < 5 ? 'small' : tons < 70 ? 'med
 const sourceTypeLabel = (sourceType: SourceType) => sourceType === 'live' ? 'Live' : sourceType === 'indexed' ? 'Indexed' : 'Manual';
 const sourceTone = (sourceType: SourceType) => sourceType === 'live' ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : sourceType === 'indexed' ? 'border-amber-200 bg-amber-50 text-amber-700' : 'border-slate-200 bg-white text-slate-600';
 const priceTone = (sourceType: SourceType) => sourceType === 'live' ? 'border-emerald-200 bg-emerald-50/70 text-emerald-800' : sourceType === 'indexed' ? 'border-amber-200 bg-amber-50/70 text-amber-800' : '';
-const scaleMeta = (scale: Scale) => scale === 'small' ? { label: 'Small', rate: '1 t/day', classes: 'border-violet-200 bg-violet-50 text-violet-700' } : scale === 'medium' ? { label: 'Medium', rate: '10 t/day', classes: 'border-sky-200 bg-sky-50 text-sky-700' } : { label: 'Large', rate: '150 t/day', classes: 'border-[#3182f6] bg-[#e8f2ff] text-[#1b64da]' };
+const scaleMeta = (scale: Scale) => scale === 'small' ? { label: 'Small', rate: '1 t/day', classes: 'border-violet-200 bg-violet-50 text-violet-700' } : scale === 'medium' ? { label: 'Medium', rate: '10 t/day', classes: 'border-sky-200 bg-sky-50 text-sky-700' } : { label: 'Large', rate: '150 t/day', classes: 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e]' };
 const formatStepLabel = (stepKey: string) => ALL_STEPS.find((step) => step.key === stepKey)?.label ?? stepKey;
 const catalystDomainLabel = (domain: Extract<CatalystDomain, 'thermal' | 'electrocatalyst'>) => domain === 'electrocatalyst' ? 'Electrocatalyst' : 'Thermocatalyst';
 const defaultElectrocatalystConfig = (): ElectrocatalystDraft => ({
@@ -1298,7 +1298,7 @@ export default function Calculator() {
     const items = rows.filter((row) => row.role === role);
     const selectionOptions = role === 'active_metal' ? activeMetalOptions : promoterOptions;
     const copy = role === 'active_metal'
-      ? { title: 'Active metals', description: 'Pick live metal feeds or library-backed material identities.', accent: 'bg-[#3182f6]', button: 'Add active metal', placeholder: 'At least one active metal is required.' }
+      ? { title: 'Active metals', description: 'Pick live metal feeds or library-backed material identities.', accent: 'bg-[#0d9488]', button: 'Add active metal', placeholder: 'At least one active metal is required.' }
       : { title: 'Promoters', description: 'Optional promoter rows use the same DB-backed thermal material bank.', accent: 'bg-[#8b95a1]', button: 'Add promoter', placeholder: 'No promoters added yet.' };
 
     return (
@@ -1571,7 +1571,7 @@ export default function Calculator() {
         <div className="surface-ghost p-3.5">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#3182f6]" /><h3 className="cp-heading-sm">Support</h3></div>
+              <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#0d9488]" /><h3 className="cp-heading-sm">Support</h3></div>
               <p className="mt-1 text-xs leading-5 text-slate-500">
                 {supportIsSplit
                   ? 'Promoted support is on. Enter each support wt% explicitly so the total recipe closes at 100 wt%.'
@@ -1645,8 +1645,8 @@ export default function Calculator() {
               Saved thermal and electrochemical templates often stack several operations inside the same bucket.
             </div>
           </div>
-          <div className="rounded-[20px] border border-[#3182f6] bg-[#e8f2ff] px-4 py-3">
-            <div className="cp-subtle-label !text-[#1b64da]">Current route</div>
+          <div className="rounded-[20px] border border-[#0d9488] bg-[#e6f5f2] px-4 py-3">
+            <div className="cp-subtle-label !text-[#0f766e]">Current route</div>
             <div className="mt-2 text-sm font-semibold text-[#191f28]">
               {steps.length} selected step{steps.length === 1 ? '' : 's'} across {selectedCategoryCount} bucket{selectedCategoryCount === 1 ? '' : 's'}
             </div>
@@ -1681,7 +1681,7 @@ export default function Calculator() {
                   <div className="cp-subtle-label">{category}</div>
                   <div className={`rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] ${
                     selectedInCategory.length > 0
-                      ? 'border-[#3182f6] bg-[#e8f2ff] text-[#1b64da]'
+                      ? 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e]'
                       : 'border-slate-200 bg-white text-slate-400'
                   }`}>
                     {selectedInCategory.length} selected
@@ -1693,7 +1693,7 @@ export default function Calculator() {
                     const available = (step.scales as readonly Scale[]).includes(currentScale);
                     const checked = steps.includes(step.key);
                     const availabilityLabel = step.scales.length === 3 ? null : step.scales.map((item) => item.charAt(0).toUpperCase()).join('/');
-                    return <button key={step.key} onClick={() => available && toggleStep(step.key)} disabled={!available} title={available ? step.label : `Not available at ${scale.label.toLowerCase()} scale`} className={`rounded-[16px] border px-3 py-2 text-left text-sm transition ${!available ? 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400' : checked ? 'border-[#3182f6] bg-[#e8f2ff] text-[#1b64da]' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}><div className="flex items-center justify-between gap-3"><div className="font-medium">{step.label}</div>{checked ? <span className="rounded-full border border-[#3182f6] bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#1b64da]">On</span> : null}</div>{availabilityLabel ? <div className="mt-1 text-[10px] uppercase tracking-[0.18em] text-slate-400">{availabilityLabel}</div> : null}</button>;
+                    return <button key={step.key} onClick={() => available && toggleStep(step.key)} disabled={!available} title={available ? step.label : `Not available at ${scale.label.toLowerCase()} scale`} className={`rounded-[16px] border px-3 py-2 text-left text-sm transition ${!available ? 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400' : checked ? 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e]' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}><div className="flex items-center justify-between gap-3"><div className="font-medium">{step.label}</div>{checked ? <span className="rounded-full border border-[#0d9488] bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#0f766e]">On</span> : null}</div>{availabilityLabel ? <div className="mt-1 text-[10px] uppercase tracking-[0.18em] text-slate-400">{availabilityLabel}</div> : null}</button>;
                   })}
                 </div>
                 {selectedInCategory.length > 0 ? (

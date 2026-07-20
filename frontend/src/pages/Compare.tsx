@@ -276,7 +276,7 @@ export default function Compare() {
                 <div className="cp-subtle-label">Benchmark family</div>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {families.map((option) => (
-                    <button type="button" key={option.family} onClick={() => handleFamilyChange(option.family)} className={`rounded-[18px] border px-3 py-2 text-left text-sm transition ${option.family === family ? 'border-[#3182f6] bg-[#e8f2ff] text-[#1b64da]' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}>
+                    <button type="button" key={option.family} onClick={() => handleFamilyChange(option.family)} className={`rounded-[18px] border px-3 py-2 text-left text-sm transition ${option.family === family ? 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e]' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}>
                       <div className="font-semibold">{option.title}</div>
                       <div className="mt-1 text-xs leading-5 text-slate-500">{catalystDomainLabel(option.catalyst_domain)} / {applicationFamilyLabel(option.application_family)}</div>
                     </button>
@@ -287,7 +287,7 @@ export default function Compare() {
                 <div className="cp-subtle-label">Ranking profile</div>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {PROFILE_OPTIONS.map((option) => (
-                    <button type="button" key={option.id} onClick={() => handleProfileChange(option.id)} className={`rounded-[18px] border px-3 py-2 text-left text-sm transition ${option.id === profile ? 'border-[#3182f6] bg-[#e8f2ff] text-[#1b64da]' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}>
+                    <button type="button" key={option.id} onClick={() => handleProfileChange(option.id)} className={`rounded-[18px] border px-3 py-2 text-left text-sm transition ${option.id === profile ? 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e]' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}>
                       <div className="font-semibold">{option.label}</div>
                       <div className="mt-1 text-xs leading-5 text-slate-500">{option.note}</div>
                     </button>

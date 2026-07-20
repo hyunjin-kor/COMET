@@ -27,13 +27,13 @@ const GROUPS: Record<string, { title: string; symbols: string[] }> = {
   Base: { title: 'Industrial Metals', symbols: ['Ni', 'Co', 'Cu', 'Al', 'Mo', 'W', 'Fe'] },
 };
 
-// Toss-style data palette: blue family for the most prominent metals
-// (PGMs / precious), cool neutrals + accent hues for the rest.
+// Data palette: brand teal for Pt, then visually distinct hues so PGM
+// trend lines and avatars stay tellable apart.
 const METAL_COLORS: Record<string, string> = {
-  Pt: '#3182f6',
+  Pt: '#0d9488',
   Pd: '#0067ff',
-  Rh: '#1b64da',
-  Ru: '#1957c2',
+  Rh: '#d6409f',
+  Ru: '#e8590c',
   Ir: '#7da7ff',
   Au: '#ffa800',
   Ag: '#8b95a1',
@@ -131,7 +131,7 @@ function InspectorRow({ label, value, detail }: { label: string; value: string; 
 function DarkChartFallback({ label }: { label: string }) {
   return (
     <div className="flex h-full min-h-[320px] flex-col items-center justify-center gap-3 rounded-[28px] border border-white/10 bg-white/4 text-center">
-      <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#3182f6] border-t-transparent" />
+      <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#0d9488] border-t-transparent" />
       <div className="text-sm text-slate-300">{label}</div>
     </div>
   );
@@ -441,7 +441,7 @@ export default function Prices() {
                           <div className="flex min-w-0 items-center gap-3">
                             <span
                               className="flex h-10 w-10 items-center justify-center rounded-[18px] text-sm font-semibold text-[#191f28]"
-                              style={{ backgroundColor: METAL_COLORS[row.symbol] || '#3182f6' }}
+                              style={{ backgroundColor: METAL_COLORS[row.symbol] || '#0d9488' }}
                             >
                               {row.symbol}
                             </span>
@@ -544,7 +544,7 @@ export default function Prices() {
                   key={value}
                   onClick={() => setPeriod(value)}
                   className={`rounded-[16px] px-3 py-2 text-xs font-semibold transition ${
-                    period === value ? 'bg-[#3182f6] text-[#191f28]' : 'text-slate-300 hover:bg-white/8'
+                    period === value ? 'bg-[#0d9488] text-[#191f28]' : 'text-slate-300 hover:bg-white/8'
                   }`}
                 >
                   {PERIOD_LABELS[value]}
@@ -556,7 +556,7 @@ export default function Prices() {
           <div className="mt-5">
             {histLoading ? (
               <div className="flex h-[320px] items-center justify-center gap-3 text-slate-300">
-                <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#3182f6] border-t-transparent" />
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#0d9488] border-t-transparent" />
                 Loading history...
               </div>
             ) : displayHistory.length === 0 ? (
@@ -582,7 +582,7 @@ export default function Prices() {
                       data={displayHistory}
                       period={period}
                       selectedDisplayUnit={selectedDisplayUnit}
-                      selectedColor={METAL_COLORS[selected || 'Pt'] || '#3182f6'}
+                      selectedColor={METAL_COLORS[selected || 'Pt'] || '#0d9488'}
                     />
                   </Suspense>
                 </div>

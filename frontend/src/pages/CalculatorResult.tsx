@@ -17,7 +17,7 @@ const ResultBreakdownPieChart = lazy(() => import('../components/charts/ResultBr
 // Toss-aligned categorical palette: every entry is visually distinct so the
 // donut and the cost-share bars never paint two slices in the same hue.
 const CHART_COLORS = [
-  '#3182f6', // Toss blue
+  '#0d9488', // Toss blue
   '#22c55e', // green
   '#ffa800', // amber
   '#f04452', // red
@@ -128,7 +128,7 @@ function RailRow({ label, value, detail }: { label: string; value: string; detai
 function ChartFallback() {
   return (
     <div className="flex h-full min-h-[240px] items-center justify-center gap-3 rounded-[24px] border border-slate-200 bg-slate-50/80 text-center">
-      <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#3182f6] border-t-transparent" />
+      <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#0d9488] border-t-transparent" />
       <div className="text-sm text-slate-600">Loading breakdown chart...</div>
     </div>
   );
@@ -736,7 +736,7 @@ export default function CalculatorResult() {
             {ref.table_of_origin}. Underlying LCI: {ref.underlying_lci_database}. Uncertainty: {ref.uncertainty_basis}. License: {ref.license}.
           </div>
           <div className="mt-2 text-xs">
-            <a href={ref.url} target="_blank" rel="noreferrer" className="text-[#3182f6] underline-offset-4 hover:underline">
+            <a href={ref.url} target="_blank" rel="noreferrer" className="text-[#0d9488] underline-offset-4 hover:underline">
               Open the source paper (DOI {ref.doi})
             </a>
           </div>
@@ -862,7 +862,7 @@ export default function CalculatorResult() {
                             href={material.reference_url}
                             target="_blank"
                             rel="noreferrer"
-                            className="text-xs font-semibold text-[#1b64da] underline underline-offset-2"
+                            className="text-xs font-semibold text-[#0f766e] underline underline-offset-2"
                           >
                             Open source ↗
                           </a>
@@ -907,8 +907,8 @@ export default function CalculatorResult() {
                     </div>
                   ) : null}
                   {material.live_override?.applied ? (
-                    <div className="mt-3 rounded-[14px] border border-[#3182f6] bg-[#e8f2ff] px-3 py-2.5 text-xs leading-5 text-[#1957c2]">
-                      <div className="font-bold uppercase tracking-[0.16em] text-[#1b64da]">
+                    <div className="mt-3 rounded-[14px] border border-[#0d9488] bg-[#e6f5f2] px-3 py-2.5 text-xs leading-5 text-[#115e59]">
+                      <div className="font-bold uppercase tracking-[0.16em] text-[#0f766e]">
                         Live market quote in use
                       </div>
                       <div className="mt-1 text-[#191f28]">
