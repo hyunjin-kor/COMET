@@ -38,8 +38,7 @@
     },
     "files": [
       "electron/**/*",
-      "frontend/dist/**/*",
-      "!node_modules/**/*"
+      "frontend/dist/**/*"
     ],
     "extraResources": [
       {
@@ -47,6 +46,11 @@
         "to": "backend-sidecar"
       }
     ],
+    "publish": {
+      "provider": "github",
+      "owner": "hyunjin-kor",
+      "repo": "CatPrice"
+    },
     "win": {
       "target": [
         {
@@ -61,6 +65,7 @@
       "signAndEditExecutable": false
     },
     "nsis": {
+      "artifactName": "${productName}.Setup.${version}.${ext}",
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
@@ -69,7 +74,8 @@
     }
   },
   "dependencies": {
-    "electron-log": "^5.2.0"
+    "electron-log": "^5.2.0",
+    "electron-updater": "^6.8.9"
   },
   "devDependencies": {
     "concurrently": "^9.1.0",
