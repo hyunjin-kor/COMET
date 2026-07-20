@@ -50,10 +50,23 @@ export default function TopNavigation() {
     return unsubscribe;
   }, [isWindowsDesktop]);
 
+  const activeItem = navigationItems.find((item) => isNavigationPathActive(location.pathname, item.to));
+
   if (isWindowsDesktop) {
     return (
       <header className="sticky top-0 z-50 hidden lg:block">
-        <div className="drag-region relative h-[38px] border-b border-[#e5e8eb] bg-white">
+        <div className="drag-region relative flex h-[38px] items-center border-b border-[#e5e8eb] bg-white pl-3">
+          <div className="flex min-w-0 items-center gap-2">
+            <BrandMark className="h-5 w-5 flex-none" />
+            <span className="font-display text-[13px] leading-none text-[#191f28]">CatPrice</span>
+            {activeItem ? (
+              <>
+                <span className="h-3.5 w-px bg-[#e5e8eb]" aria-hidden="true" />
+                <span className="truncate text-xs font-medium text-[#8b95a1]">{activeItem.label}</span>
+              </>
+            ) : null}
+          </div>
+
           <div className="no-drag absolute right-0 top-0 flex h-full items-stretch" role="group" aria-label="Window controls">
             <button
               type="button"
