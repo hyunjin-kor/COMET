@@ -16,5 +16,5 @@ source of truth. To find a specific version's notes, browse the
 [Releases page](https://github.com/hyunjin-kor/CatPrice/releases) or run:
 
 ```bash
-gh release view v1.3.4 --repo hyunjin-kor/CatPrice
+gh release view <tag> --repo hyunjin-kor/CatPrice
 ```

@@ -32,6 +32,10 @@ from backend.services.price_scheduler import collect_prices
 
 logger = logging.getLogger(__name__)
 
+# Must match package.json / pyproject.toml / frontend/package.json;
+# backend/tests/test_version_sync.py enforces this.
+APP_VERSION = "1.3.9"
+
 scheduler = AsyncIOScheduler(timezone=UTC)
 _last_price_update: datetime | None = None
 _startup_tasks: set[asyncio.Task] = set()
@@ -88,7 +92,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="CatPrice API",
     description="Loopback API sidecar for the CatPrice desktop app",
-    version="1.3.8",
+    version=APP_VERSION,
     lifespan=lifespan,
     docs_url="/docs" if settings.debug else None,
     redoc_url="/redoc" if settings.debug else None,
@@ -136,7 +140,7 @@ def health():
     """Server health check."""
     return {
         "status": "ok",
-        "version": "1.3.8",
+        "version": APP_VERSION,
         "last_price_update": _last_price_update.isoformat() if _last_price_update else None,
         "scheduler_running": scheduler.running,
     }

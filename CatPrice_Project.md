@@ -3,10 +3,10 @@
 > A desktop tool that takes a catalyst composition and returns its
 > manufacturing cost using real-time metal market prices.
 
-## Current implementation status (as of 2026-04-26)
+## Current implementation status (as of 2026-07-20)
 
 - GitHub repository: `https://github.com/hyunjin-kor/CatPrice`
-- Latest verified release: `v1.1.13`
+- Latest verified release: `v1.3.9`
 - Current desktop packaging: Electron (`electron/`, `dist-electron/`)
 - Current Claude hand-off entry point: `CLAUDE.md`
 - Blog / homepage URL: not currently surfaced in the repo or GitHub metadata.

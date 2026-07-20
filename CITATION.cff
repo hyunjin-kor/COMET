@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use CatPrice in your research, please cite it as below."
+title: "CatPrice: catalyst cost estimation from live metal market prices"
+type: software
+authors:
+  - family-names: "Kang"
+    given-names: "Hyunjin"
+repository-code: "https://github.com/hyunjin-kor/CatPrice"
+license-url: "https://github.com/hyunjin-kor/CatPrice/blob/master/LICENSE"
+keywords:
+  - catalysis
+  - cost-estimation
+  - techno-economic-analysis
+  - chemical-engineering
+references:
+  - type: article
+    title: "Early-stage evaluation of catalyst manufacturing cost and environmental impact using CatCost"
+    authors:
+      - family-names: "Van Allsburg"
+        given-names: "Kurt M."
+    journal: "Nature Catalysis"
+    year: 2022
