@@ -34,7 +34,7 @@ logger = logging.getLogger(__name__)
 
 # Must match package.json / pyproject.toml / frontend/package.json;
 # backend/tests/test_version_sync.py enforces this.
-APP_VERSION = "1.3.11"
+APP_VERSION = "1.3.12"
 
 scheduler = AsyncIOScheduler(timezone=UTC)
 _last_price_update: datetime | None = None
