@@ -17,7 +17,7 @@
 ### 0.1 Current implementation status (as of 2026-07-20)
 
 - **Remote repository**: `https://github.com/hyunjin-kor/CatPrice`
-- **Latest verified release**: `v1.3.11` (re-verify with `gh release list -L 1` before quoting)
+- **Latest verified release**: `v1.3.12` (re-verify with `gh release list -L 1` before quoting)
 - **Current desktop shell**: Electron (`electron/`, `dist-electron/`)
 - **Frontend stack**: React 19 + TypeScript + Vite
 - **Backend stack**: FastAPI + SQLModel + SQLite
