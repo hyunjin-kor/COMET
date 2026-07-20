@@ -13,6 +13,7 @@ This page tracks CatPrice's external connection points. Only verified links are 
 | Releases index | https://github.com/hyunjin-kor/CatPrice/releases | Active |
 | Latest release | https://github.com/hyunjin-kor/CatPrice/releases/latest | Redirects to the newest tag; re-verify with `gh release list -L 1` before quoting a specific version |
 | Source repository clone URL | https://github.com/hyunjin-kor/CatPrice.git | Active |
+| Zenodo DOI (all versions) | https://doi.org/10.5281/zenodo.21451931 | Active; auto-archives each new GitHub release |
 
 ## Not Yet Connected
 
@@ -21,16 +22,15 @@ This page tracks CatPrice's external connection points. Only verified links are 
 | Blog | No verified blog URL is present in repository files or GitHub repository metadata. | Add the exact blog URL after publication. |
 | Public website / homepage | GitHub repository `homepage` metadata is currently empty. | Set the homepage in GitHub and mirror it in `README.md`, `package.json`, and `pyproject.toml`. |
 | Hosted documentation site | No `mkdocs.yml` or hosted docs URL is present. | Add `mkdocs.yml` and publish docs only after the target URL is known. |
-| Zenodo DOI | Planned in project notes, but no verified DOI is present. | Add the DOI only after Zenodo registration. |
 
 ## Release Metadata
 
 Single source of truth: `package.json`, `pyproject.toml`, `frontend/package.json` must agree.
 
-- Current package version: `1.3.9`
-- Python package version: `1.3.9`
-- Frontend package version: `1.3.9`
-- Latest verified GitHub release: `v1.3.9` (published 2026-05-12, verified via `gh release list -L 1` on 2026-07-20)
+- Current package version: `1.3.10`
+- Python package version: `1.3.10`
+- Frontend package version: `1.3.10`
+- Latest verified GitHub release: `v1.3.10` (published 2026-07-20, verified via `gh release view v1.3.10` on 2026-07-20; archived on Zenodo as DOI `10.5281/zenodo.21451932`)
 - Asset name pattern: `CatPrice.Setup.<version>.exe` (installer), `CatPrice-win-unpacked.zip` (portable)
 
 The published GitHub release tag may lag behind the package version when a bump has not yet been tagged. To re-verify, run `gh release list -L 1` against the repo.

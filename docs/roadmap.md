@@ -8,8 +8,8 @@ CatPrice currently does one thing well: local catalyst cost screening on Windows
 
 The app is used in a research context, so the biggest near-term win is making it referenceable.
 
-- **Zenodo DOI**: archive a tagged release on Zenodo and add the DOI badge. This is what lets people cite CatPrice in a paper.
-- **`CITATION.cff`**: so GitHub shows a "Cite this repository" button. (Added alongside this roadmap.)
+- **Zenodo DOI** — done (2026-07-20): every release from v1.3.10 on is archived automatically; concept DOI `10.5281/zenodo.21451931`.
+- **`CITATION.cff`** — done: GitHub shows a "Cite this repository" button.
 - **Hosted documentation**: publish `docs/` with MkDocs Material on GitHub Pages. The methodology page in particular deserves a readable home — it is the strongest argument for trusting the numbers.
 - **Tighten the FCC validation band**: the USY-FCC case currently passes at ±25% because the large-scale slurry route needs a public USY precursor proxy. Sourcing one (USGS / vendor public pages) and bringing the band back to ±20% closes the last gap against the published reference cases.
 

@@ -6,6 +6,7 @@ authors:
   - family-names: "Kang"
     given-names: "Hyunjin"
 repository-code: "https://github.com/hyunjin-kor/CatPrice"
+doi: "10.5281/zenodo.21451931"
 license-url: "https://github.com/hyunjin-kor/CatPrice/blob/master/LICENSE"
 keywords:
   - catalysis
