@@ -649,9 +649,9 @@ Task 5.6: README + Contributing guide
 |----------|------------|------------------|--------------|-----------|
 | 2 wt% Pt/C | 2 ton, Small scale | $27.37/lb | $34.09/lb | ±20% |
 | 21 wt% Ni/Al₂O₃ | 20 ton, Medium scale | $20.59/lb | $21.33/lb | ±20% |
-| USY-based FCC | 200 ton, Large scale | $2.41/lb | $2.73/lb | ±25% |
+| USY-based FCC | 200 ton, Large scale | $2.41/lb | $2.73/lb | ±20% |
 
-Run these three cases as a regression at the end of every Phase. The FCC band is wider (±25%) because reproducing the large-scale slurry/spray-dry route precisely requires proprietary precursor pricing that CatPrice does not redistribute; tightening it back to ±20% is a follow-up once a public USY proxy is in the materials library. See `backend/tests/test_cost_engine.py` for the live tolerance values.
+Run these three cases as a regression at the end of every Phase. All three cases now share the ±20% band: the FCC case originally needed ±25%, but the v1.3.12 step-library and escalation fixes brought its deviation to about -13%, so the band was tightened without sourcing proprietary precursor pricing. See `backend/tests/test_cost_engine.py` for the live tolerance values.
 
 ---
 
