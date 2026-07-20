@@ -258,10 +258,9 @@ export default function Uncertainty() {
       {activeSection.id === 'case' ? (
         <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.06s' }}>
           <div className="border-b border-slate-900/8 pb-5">
-            <div className="cp-subtle-label">Estimate Range</div>
-            <h2 className="cp-heading-xl mt-2">Read the uncertainty around the same estimate case.</h2>
-            <p className="cp-body-copy mt-2 max-w-2xl">
-              This page uses the current draft from Cost Estimate. Edit the catalyst case there, then run the range here.
+            <h2 className="cp-heading-xl">Estimate Range</h2>
+            <p className="cp-body-copy mt-1.5 max-w-2xl">
+              Monte Carlo range around the current Cost Estimate draft. Edit the catalyst case there, then run the range here.
             </p>
           </div>
 

@@ -139,11 +139,9 @@ export default function CapEx() {
       <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.06s' }}>
         <div className="flex flex-col gap-4 border-b border-slate-900/8 pb-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <div className="cp-subtle-label">Capital & Operating Cost</div>
-            <h2 className="cp-heading-xl mt-2">Factor purchased equipment into FCI and TCI.</h2>
-            <p className="cp-body-copy mt-2 max-w-2xl">
-              Implements the CatCost Chapter-7 factored estimation: Peters &amp; Timmerhaus Lang factors expand purchased equipment into direct, indirect,
-              and working capital. Optionally layer annual OpEx on top.
+            <h2 className="cp-heading-xl">Capital &amp; OpEx</h2>
+            <p className="cp-body-copy mt-1.5 max-w-2xl">
+              Factor purchased equipment into FCI and TCI using Peters &amp; Timmerhaus Lang factors, then optionally layer annual OpEx on top.
             </p>
           </div>
           <span className="cp-chip">CatCost Ch.7</span>

@@ -105,8 +105,8 @@ textarea {
 .cp-heading-xl {
   font-family: var(--font-sans);
   font-weight: 700;
-  letter-spacing: -0.024em;
-  @apply text-[clamp(1.85rem,2.5vw,2.55rem)] leading-[1.18] text-[#191f28];
+  letter-spacing: -0.02em;
+  @apply text-[clamp(1.3rem,1.6vw,1.55rem)] leading-[1.25] text-[#191f28];
 }
 
 .cp-heading-lg {
@@ -139,30 +139,30 @@ textarea {
 
 /* ─── Surfaces (white cards, hairline borders, soft shadows) ───────── */
 .surface-card {
-  @apply rounded-[20px] border border-[#e5e8eb] bg-white
-         shadow-[0_1px_2px_rgba(15,23,42,0.04),0_4px_12px_rgba(15,23,42,0.04)];
+  @apply rounded-[16px] border border-[#e8ebef] bg-white
+         shadow-[0_1px_2px_rgba(15,23,42,0.03),0_3px_10px_rgba(15,23,42,0.03)];
 }
 
 .surface-card-soft {
-  @apply rounded-[16px] border border-[#e5e8eb] bg-white
-         shadow-[0_1px_2px_rgba(15,23,42,0.03)];
+  @apply rounded-[14px] border border-[#e8ebef] bg-white
+         shadow-[0_1px_2px_rgba(15,23,42,0.02)];
 }
 
 /* "ink" surfaces used to be dark/warm. In Toss style we keep them
    visually distinct with a deeper navy-black so hero / metric blocks
    still anchor the layout without breaking the color system. */
 .surface-ink {
-  @apply rounded-[20px] border border-[#191f28] bg-[#191f28]
-         text-white shadow-[0_8px_24px_rgba(15,23,42,0.18)];
+  @apply rounded-[16px] border border-[#151b26] bg-[#151b26]
+         text-white shadow-[0_6px_18px_rgba(15,23,42,0.14)];
 }
 
 .surface-rail {
-  @apply rounded-[20px] border border-[#191f28] bg-[#191f28]
-         text-white shadow-[0_8px_24px_rgba(15,23,42,0.18)];
+  @apply rounded-[16px] border border-[#151b26] bg-[#151b26]
+         text-white shadow-[0_6px_18px_rgba(15,23,42,0.14)];
 }
 
 .surface-ghost {
-  @apply rounded-[16px] border border-[#e5e8eb] bg-[#f9fafb];
+  @apply rounded-[12px] border border-transparent bg-[#f4f6f8];
 }
 
 /* ─── Form controls ────────────────────────────────────────────────── */
@@ -176,62 +176,61 @@ textarea {
 
 /* ─── Chips / tags ─────────────────────────────────────────────────── */
 .section-kicker {
-  @apply inline-flex items-center gap-2 rounded-full bg-[#e8f2ff] px-3 py-1.5
-         text-[11px] font-bold uppercase tracking-[0.16em] text-[#1b64da];
+  @apply inline-flex items-center gap-1.5 text-xs font-semibold tracking-[0.01em] text-[#3182f6];
 }
 
 .cp-chip {
   @apply inline-flex items-center rounded-full bg-[#f2f4f6] px-2.5 py-1
-         text-[11px] font-semibold uppercase tracking-[0.12em] text-[#4e5968];
+         text-xs font-medium text-[#4e5968];
 }
 
 .cp-chip-dark {
-  @apply inline-flex items-center rounded-full border border-white/15 bg-white/10 px-2.5 py-1
-         text-[11px] font-semibold uppercase tracking-[0.12em] text-white;
+  @apply inline-flex items-center rounded-full border border-white/12 bg-white/10 px-2.5 py-1
+         text-xs font-medium text-white/90;
 }
 
 /* ─── Buttons (Toss: solid blue primary, light gray secondary) ─────── */
 .cp-button-primary {
-  @apply inline-flex items-center justify-center rounded-[12px] bg-[#3182f6] px-4 py-3 text-sm font-bold text-white
+  @apply inline-flex items-center justify-center rounded-[10px] bg-[#3182f6] px-4 py-2.5 text-sm font-semibold text-white
          transition hover:bg-[#1b64da] active:bg-[#1957c2]
          disabled:pointer-events-none disabled:bg-[#d1d6db] disabled:text-white;
 }
 
 .cp-button-secondary {
-  @apply inline-flex items-center justify-center rounded-[12px] border border-[#d1d6db] bg-white px-4 py-3
-         text-sm font-bold text-[#333d4b] transition
-         hover:border-[#8b95a1] hover:bg-[#f9fafb]
+  @apply inline-flex items-center justify-center rounded-[10px] border border-[#d9dee3] bg-white px-4 py-2.5
+         text-sm font-semibold text-[#333d4b] transition
+         hover:border-[#b0b8c1] hover:bg-[#f9fafb]
          disabled:pointer-events-none disabled:opacity-45;
 }
 
 .cp-button-ink {
-  @apply inline-flex items-center justify-center rounded-[12px] border border-white/20 bg-white/8 px-4 py-3
-         text-sm font-bold text-white transition hover:bg-white/15
+  @apply inline-flex items-center justify-center rounded-[10px] border border-white/20 bg-white/8 px-4 py-2.5
+         text-sm font-semibold text-white transition hover:bg-white/15
          disabled:pointer-events-none disabled:opacity-45;
 }
 
 .cp-button-accent {
-  @apply inline-flex items-center justify-center rounded-[12px] bg-[#3182f6] px-4 py-3 text-sm font-bold text-white
+  @apply inline-flex items-center justify-center rounded-[10px] bg-[#3182f6] px-4 py-2.5 text-sm font-semibold text-white
          transition hover:bg-[#1b64da] active:bg-[#1957c2]
          disabled:pointer-events-none disabled:bg-[#d1d6db];
 }
 
-/* ─── Subtle labels (small caps, used as section eyebrows) ─────────── */
+/* ─── Subtle labels (quiet section eyebrows, sentence case) ────────── */
 .cp-subtle-label {
-  @apply text-[11px] font-bold uppercase tracking-[0.16em] text-[#8b95a1];
+  @apply text-xs font-semibold tracking-[0.01em] text-[#8b95a1];
 }
 
 /* ─── Metric tiles ─────────────────────────────────────────────────── */
 .cp-metric-tile {
-  @apply rounded-[16px] border border-[#e5e8eb] bg-white p-4;
+  @apply rounded-[12px] border border-transparent bg-[#f4f6f8] p-4;
 }
 
 .cp-metric-tile-dark {
-  @apply rounded-[16px] border border-white/15 bg-white/8 p-4;
+  @apply rounded-[12px] border border-white/12 bg-white/8 p-4;
 }
 
 .cp-toolbar {
-  @apply flex flex-wrap items-center gap-2 rounded-[14px] border border-[#e5e8eb] bg-white p-1.5;
+  @apply flex flex-wrap items-center gap-2 rounded-[12px] border border-[#e8ebef] bg-white p-1.5;
 }
 
 /* ─── Layout helpers ───────────────────────────────────────────────── */
@@ -244,7 +243,7 @@ textarea {
 }
 
 .cp-rail-panel {
-  @apply rounded-[16px] border border-[#e5e8eb] bg-white p-4;
+  @apply rounded-[14px] border border-[#e8ebef] bg-white p-4;
 }
 
 .cp-data-row {
@@ -252,11 +251,11 @@ textarea {
 }
 
 .cp-list-row {
-  @apply rounded-[14px] border border-[#e5e8eb] bg-white px-4 py-3 transition hover:border-[#d1d6db] hover:bg-[#f9fafb];
+  @apply rounded-[12px] border border-[#e8ebef] bg-white px-4 py-3 transition hover:border-[#d1d6db] hover:bg-[#f9fafb];
 }
 
 .cp-list-row-active {
-  @apply border-[#3182f6] bg-[#e8f2ff];
+  @apply border-[#3182f6] bg-[#eef5ff];
 }
 
 /* ─── Motion ───────────────────────────────────────────────────────── */

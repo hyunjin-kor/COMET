@@ -158,9 +158,8 @@ export default function CalculatorResult() {
   if (!snapshot) {
     return (
       <section className="surface-card cp-enter overflow-hidden p-6 sm:p-7">
-        <span className="section-kicker">Result</span>
-        <h1 className="cp-heading-xl mt-4">No saved result is available yet.</h1>
-        <p className="cp-body-copy mt-3 max-w-xl">
+        <h1 className="cp-heading-xl">No saved result yet</h1>
+        <p className="cp-body-copy mt-2 max-w-xl">
           Run an estimate from the cost estimate workspace first. The result then stays available for focused review.
         </p>
         <div className="mt-5">
@@ -968,10 +967,9 @@ export default function CalculatorResult() {
       <section className="surface-card cp-enter overflow-hidden p-5 sm:p-6">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <span className="section-kicker">Result</span>
-            <h1 className="cp-heading-xl mt-4">Read the estimate, route basis, and evidence in one place.</h1>
-            <p className="cp-body-copy mt-3 max-w-2xl">
-              This screen is for reading. Cost structure, preparation basis, and source records stay grouped without the editing workspace.
+            <h1 className="cp-heading-xl">Result</h1>
+            <p className="cp-body-copy mt-1.5 max-w-2xl">
+              The estimate, route basis, and evidence in one place — grouped for reading, separate from the editing workspace.
             </p>
           </div>
           <button onClick={goBackToCalculator} className="cp-button-primary">

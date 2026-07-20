@@ -250,8 +250,8 @@ export default function Compare() {
         <section className="surface-card cp-enter overflow-hidden p-5 sm:p-6">
           <div className="grid gap-4 xl:grid-cols-[minmax(0,1.1fr)_minmax(330px,0.9fr)]">
             <div className="surface-ink overflow-hidden p-5 sm:p-6">
-              <div className="cp-subtle-label !text-slate-400">Literature Benchmarks</div>
-              <h1 className="mt-3 font-display text-[clamp(2rem,4vw,3.5rem)] leading-[0.94] text-white">Screen published routes before you edit the cost case.</h1>
+              <h1 className="font-display text-[clamp(1.4rem,2vw,1.8rem)] leading-[1.2] text-white">Literature Benchmarks</h1>
+              <p className="mt-2 text-sm text-white/60">Screen published routes before you edit the cost case.</p>
               <div className="mt-3 flex flex-wrap gap-2">
                 {activeFamily ? <span className="cp-chip-dark">{activeFamily.title}</span> : null}
                 {benchmark.reaction ? <span className="cp-chip-dark">{benchmark.reaction}</span> : null}

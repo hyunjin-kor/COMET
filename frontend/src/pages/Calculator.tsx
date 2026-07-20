@@ -1808,21 +1808,16 @@ export default function Calculator() {
 
   return (
     <div className="space-y-4">
-      <section className="surface-card cp-enter overflow-hidden px-4 py-4 sm:px-5" style={{ animationDelay: '0.06s' }}>
-        <div className="space-y-5">
-          <div className="flex flex-col gap-4 border-b border-slate-900/8 pb-4 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <h2 className="cp-heading-xl">Estimate catalyst preparation cost with traceable inputs.</h2>
-              <p className="cp-body-copy mt-2 max-w-2xl">
-                {catalystDomain === 'electrocatalyst'
-                  ? 'Move in order: choose workflow, build the stack, set the preparation basis, then run the result.'
-                  : 'Move in order: choose workflow, define the recipe, set the preparation basis, then run the result.'}
-              </p>
-            </div>
-            <span className="cp-chip">{sectionState.activeSection.label}</span>
-          </div>
+      <div className="flex items-end justify-between gap-4 px-1 pt-1">
+        <div>
+          <h2 className="cp-heading-xl">Cost Estimate</h2>
+          <p className="mt-1 text-sm text-[#8b95a1]">
+            {catalystDomain === 'electrocatalyst'
+              ? 'Choose the workflow, build the stack, set the preparation basis, then run the result.'
+              : 'Choose the workflow, define the recipe, set the preparation basis, then run the result.'}
+          </p>
         </div>
-      </section>
+      </div>
 
       <WorkspaceSectionNav
         sections={ESTIMATE_SECTIONS}

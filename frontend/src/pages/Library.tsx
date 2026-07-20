@@ -312,13 +312,11 @@ export default function Library() {
       <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.06s' }}>
         <div className="flex flex-col gap-4 border-b border-slate-900/8 pb-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <div className="cp-subtle-label">Source Library</div>
-            <h2 className="cp-heading-xl mt-2">Inspect material sources, step rates, and route templates.</h2>
-            <p className="cp-body-copy mt-2 max-w-2xl">
-              Keep quote basis, route structure, and domain filters in one library so the costing workflow stays auditable.
+            <h2 className="cp-heading-xl">Source Library</h2>
+            <p className="cp-body-copy mt-1.5 max-w-2xl">
+              Material sources, step rates, and route templates in one place, with the quote basis behind every number.
             </p>
           </div>
-          <span className="cp-chip">{tab}</span>
         </div>
 
         <div className="mt-5">
@@ -479,12 +477,12 @@ export default function Library() {
                             </div>
                           </div>
                           <div className="mt-3 flex flex-wrap gap-2">
-                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] ${usabilityTone(material)}`}>{usabilityLabel(material)}</span>
-                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] ${quoteYearTone(material.quote_year)}`}>{quoteYearLabel(material.quote_year)}</span>
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-medium ${usabilityTone(material)}`}>{usabilityLabel(material)}</span>
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-medium ${quoteYearTone(material.quote_year)}`}>{quoteYearLabel(material.quote_year)}</span>
                             <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${domainTone(material.catalyst_domain)}`}>{domainLabel(material.catalyst_domain)}</span>
                             <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${applicationTone(material.application_family)}`}>{applicationLabel(material.application_family)}</span>
                             <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${categoryTone(material.category)}`}>{material.category || 'Uncategorised'}</span>
-                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] ${sourceTrustTone(material)}`}>{sourceTrustLabel(material)}</span>
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-medium ${sourceTrustTone(material)}`}>{sourceTrustLabel(material)}</span>
                           </div>
                         </button>
                       );
@@ -505,7 +503,7 @@ export default function Library() {
                   {selectedMaterial ? (
                     <>
                       <div className="mt-3 flex flex-wrap gap-2">
-                        <span className={`inline-flex rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] ${usabilityTone(selectedMaterial)}`}>{usabilityLabel(selectedMaterial)}</span>
+                        <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-medium ${usabilityTone(selectedMaterial)}`}>{usabilityLabel(selectedMaterial)}</span>
                       </div>
                       <div className="mt-3 text-xs leading-5 text-slate-500">{usabilityHint(selectedMaterial)}</div>
                       <div className="mt-4 space-y-1">

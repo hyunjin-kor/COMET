@@ -108,9 +108,9 @@ function SourceBadge({ sourceType }: { sourceType: MetalPrice['source_type'] }) 
 
 function StatusTile({ label, value, detail }: { label: string; value: string; detail: string }) {
   return (
-    <div className="rounded-[22px] border border-slate-900/8 bg-white/58 p-4">
+    <div className="cp-metric-tile">
       <div className="cp-subtle-label">{label}</div>
-      <div className="mt-2 text-2xl font-display text-[#191f28]">{value}</div>
+      <div className="mt-1.5 text-2xl font-display text-[#191f28]">{value}</div>
       <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div>
     </div>
   );
@@ -373,10 +373,9 @@ export default function Prices() {
         <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.06s' }}>
           <div className="mb-5 flex flex-col gap-4 border-b border-slate-900/8 pb-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <div className="cp-subtle-label">Live Metal Prices</div>
-              <h2 className="cp-heading-xl mt-2">Monitor live and indexed metal price basis.</h2>
-              <p className="cp-body-copy mt-2 max-w-2xl">
-                Scan the tracked symbols first, then inspect evidence, freshness, and source quality for the selected metal.
+              <h2 className="cp-heading-xl">Live Metal Prices</h2>
+              <p className="cp-body-copy mt-1.5 max-w-2xl">
+                Scan the tracked symbols, then inspect evidence, freshness, and source quality for the selected metal.
               </p>
             </div>
 
