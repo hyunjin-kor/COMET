@@ -243,7 +243,7 @@ export default function Compare() {
   const updatedAt = benchmark.price_basis_updated_at ? new Date(benchmark.price_basis_updated_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true }) : 'Reference basis';
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-1 flex-col gap-4">
       <WorkspaceSectionNav sections={REFERENCE_SECTIONS} activeSectionId={sectionState.activeSectionId} activeIndex={sectionState.activeIndex} onSelect={sectionState.setActiveSection} />
 
       {sectionState.activeSection.id === 'overview' ? (

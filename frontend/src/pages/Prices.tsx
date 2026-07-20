@@ -639,7 +639,7 @@ export default function Prices() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-1 flex-col gap-4">
       <WorkspaceSectionNav
         sections={FEED_SECTIONS}
         activeSectionId={activeSectionId}

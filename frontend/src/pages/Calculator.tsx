@@ -1807,7 +1807,7 @@ export default function Calculator() {
         );
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-1 flex-col gap-4">
       <div className="flex items-end justify-between gap-4 px-1 pt-1">
         <div>
           <h2 className="cp-heading-xl">Cost Estimate</h2>
@@ -1829,7 +1829,7 @@ export default function Calculator() {
 
       {sectionState.activeSectionId !== 'type' ? renderWorkspaceSummary() : null}
 
-      <div className="space-y-4">{activeWorkspaceSection}</div>
+      <div className="flex flex-1 flex-col gap-4 [&>section]:flex-1">{activeWorkspaceSection}</div>
 
       <WorkspaceSectionFooter
         activeSection={sectionState.activeSection}

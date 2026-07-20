@@ -23,16 +23,19 @@ function RouteLoadingFallback() {
 
 export default function AppFrame() {
   const { hintsVisible, closeHints } = useKeyboardShortcuts();
+  // The Windows desktop shell adds a 38px custom titlebar above <main>;
+  // subtract it so short pages still end flush with the viewport.
+  const hasTitlebar = typeof window !== 'undefined' && window.catpriceDesktop?.platform === 'win32';
 
   return (
     <div className="cp-shell relative min-h-screen overflow-x-hidden">
       <TopNavigation />
 
-      <main className="mx-auto max-w-[1860px] px-3 pb-6 pt-2 sm:px-4 lg:px-5 lg:pt-1.5">
+      <main className="mx-auto max-w-[1860px] px-3 pb-4 pt-2 sm:px-4 lg:px-5 lg:pt-1.5">
         <div className="grid gap-3 lg:grid-cols-[264px_minmax(0,1fr)] xl:gap-4">
           <Sidebar />
 
-          <div className="min-w-0 pb-2">
+          <div className={`flex min-w-0 flex-col ${hasTitlebar ? 'min-h-[calc(100vh-60px)]' : 'min-h-[calc(100vh-22px)]'}`}>
             <Suspense fallback={<RouteLoadingFallback />}>
               <Outlet />
             </Suspense>

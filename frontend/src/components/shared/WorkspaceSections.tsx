@@ -152,7 +152,7 @@ export function WorkspaceSectionFooter({
   canGoNext,
 }: WorkspaceSectionFooterProps) {
   return (
-    <section className="surface-card-soft flex items-center justify-between gap-4 px-4 py-2.5">
+    <section className="surface-card-soft mt-auto flex items-center justify-between gap-4 px-4 py-2.5">
       <div className="min-w-0 truncate text-sm text-[#8b95a1]">
         Step {activeIndex + 1} of {totalSections}
         <span className="mx-1.5 text-[#d1d6db]">·</span>

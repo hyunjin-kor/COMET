@@ -963,7 +963,7 @@ export default function CalculatorResult() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-1 flex-col gap-4">
       <section className="surface-card cp-enter overflow-hidden p-5 sm:p-6">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
