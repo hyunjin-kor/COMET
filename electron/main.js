@@ -170,7 +170,7 @@ function waitForBackend(timeoutMs) {
 
 // ─── Backend Detection ────────────────────────────────────────────────────────
 function getPythonExecutable() {
-  // 1. Explicitly set by start.bat via env var
+  // 1. Explicitly set via env var
   if (process.env.CATPRICE_PYTHON && fs.existsSync(process.env.CATPRICE_PYTHON)) {
     return process.env.CATPRICE_PYTHON;
   }
@@ -485,7 +485,7 @@ p{color:#7099cc;font-size:14px;max-width:500px;text-align:center}
 </style></head><body>
 <h1>Could not connect to backend</h1>
 <p>Failed to load <code>${url}</code><br><br>${desc}</p>
-<p>Try restarting the app. If the issue persists, run <code>start.bat</code> from the command line to see error details.</p>
+<p>Try restarting the app. If the issue persists, check the launcher log in <code>%APPDATA%\\CatPrice\\catprice-launcher.log</code>.</p>
 </body></html>`)}`)
       .catch(() => {});
   });
