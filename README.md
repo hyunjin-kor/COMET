@@ -8,6 +8,10 @@
   <strong>Estimate what a catalyst costs to make, using live metal prices.</strong>
 </p>
 
+<p align="center">
+  <a href="https://doi.org/10.5281/zenodo.21451931"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.21451931.svg" alt="DOI" /></a>
+</p>
+
 CatPrice is a Windows desktop app for early-stage catalyst cost screening. You describe a catalyst — composition, support, preparation route — and it returns a manufacturing cost estimate built on current metal prices, published costing methodology, and a curated materials library. Everything runs locally: the app bundles its own calculation backend and database, so there is no server to set up and no account to create.
 
 It is aimed at catalysis researchers who want a quick, defensible answer to questions like:
@@ -113,6 +117,8 @@ CatPrice is an independent implementation. It cites the CatCost methodology acad
 - Van Allsburg, K. M., et al. (2022). Early-stage evaluation of catalyst manufacturing cost and environmental impact using CatCost. *Nature Catalysis*.
 
 Benchmark- and route-specific references are attached to the datasets inside the app.
+
+To cite CatPrice itself, use the Zenodo DOI [10.5281/zenodo.21451931](https://doi.org/10.5281/zenodo.21451931) or GitHub's "Cite this repository" button.
 
 ## Roadmap
 
