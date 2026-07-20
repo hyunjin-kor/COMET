@@ -135,15 +135,13 @@ export default function CapEx() {
   }
 
   return (
-    <div className="space-y-4">
-      <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.06s' }}>
+    <div className="flex flex-1 flex-col gap-4">
+      <section className="surface-card cp-enter flex-1 overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.06s' }}>
         <div className="flex flex-col gap-4 border-b border-slate-900/8 pb-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <div className="cp-subtle-label">Capital & Operating Cost</div>
-            <h2 className="cp-heading-xl mt-2">Factor purchased equipment into FCI and TCI.</h2>
-            <p className="cp-body-copy mt-2 max-w-2xl">
-              Implements the CatCost Chapter-7 factored estimation: Peters &amp; Timmerhaus Lang factors expand purchased equipment into direct, indirect,
-              and working capital. Optionally layer annual OpEx on top.
+            <h2 className="cp-heading-xl">Capital &amp; OpEx</h2>
+            <p className="cp-body-copy mt-1.5 max-w-2xl">
+              Factor purchased equipment into FCI and TCI using Peters &amp; Timmerhaus Lang factors, then optionally layer annual OpEx on top.
             </p>
           </div>
           <span className="cp-chip">CatCost Ch.7</span>
@@ -290,7 +288,7 @@ export default function CapEx() {
               type="checkbox"
               checked={includeOpEx}
               onChange={(event) => setIncludeOpEx(event.target.checked)}
-              className="h-4 w-4 rounded border-slate-300 text-[#3182f6] focus:ring-[#3182f6]"
+              className="h-4 w-4 rounded border-slate-300 text-[#0d9488] focus:ring-[#0d9488]"
             />
             <span className="font-semibold">Layer annual OpEx on top</span>
           </label>

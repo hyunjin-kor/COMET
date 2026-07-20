@@ -17,7 +17,7 @@ const ResultBreakdownPieChart = lazy(() => import('../components/charts/ResultBr
 // Toss-aligned categorical palette: every entry is visually distinct so the
 // donut and the cost-share bars never paint two slices in the same hue.
 const CHART_COLORS = [
-  '#3182f6', // Toss blue
+  '#0d9488', // Toss blue
   '#22c55e', // green
   '#ffa800', // amber
   '#f04452', // red
@@ -128,7 +128,7 @@ function RailRow({ label, value, detail }: { label: string; value: string; detai
 function ChartFallback() {
   return (
     <div className="flex h-full min-h-[240px] items-center justify-center gap-3 rounded-[24px] border border-slate-200 bg-slate-50/80 text-center">
-      <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#3182f6] border-t-transparent" />
+      <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#0d9488] border-t-transparent" />
       <div className="text-sm text-slate-600">Loading breakdown chart...</div>
     </div>
   );
@@ -158,9 +158,8 @@ export default function CalculatorResult() {
   if (!snapshot) {
     return (
       <section className="surface-card cp-enter overflow-hidden p-6 sm:p-7">
-        <span className="section-kicker">Result</span>
-        <h1 className="cp-heading-xl mt-4">No saved result is available yet.</h1>
-        <p className="cp-body-copy mt-3 max-w-xl">
+        <h1 className="cp-heading-xl">No saved result yet</h1>
+        <p className="cp-body-copy mt-2 max-w-xl">
           Run an estimate from the cost estimate workspace first. The result then stays available for focused review.
         </p>
         <div className="mt-5">
@@ -737,7 +736,7 @@ export default function CalculatorResult() {
             {ref.table_of_origin}. Underlying LCI: {ref.underlying_lci_database}. Uncertainty: {ref.uncertainty_basis}. License: {ref.license}.
           </div>
           <div className="mt-2 text-xs">
-            <a href={ref.url} target="_blank" rel="noreferrer" className="text-[#3182f6] underline-offset-4 hover:underline">
+            <a href={ref.url} target="_blank" rel="noreferrer" className="text-[#0d9488] underline-offset-4 hover:underline">
               Open the source paper (DOI {ref.doi})
             </a>
           </div>
@@ -863,7 +862,7 @@ export default function CalculatorResult() {
                             href={material.reference_url}
                             target="_blank"
                             rel="noreferrer"
-                            className="text-xs font-semibold text-[#1b64da] underline underline-offset-2"
+                            className="text-xs font-semibold text-[#0f766e] underline underline-offset-2"
                           >
                             Open source ↗
                           </a>
@@ -908,8 +907,8 @@ export default function CalculatorResult() {
                     </div>
                   ) : null}
                   {material.live_override?.applied ? (
-                    <div className="mt-3 rounded-[14px] border border-[#3182f6] bg-[#e8f2ff] px-3 py-2.5 text-xs leading-5 text-[#1957c2]">
-                      <div className="font-bold uppercase tracking-[0.16em] text-[#1b64da]">
+                    <div className="mt-3 rounded-[14px] border border-[#0d9488] bg-[#e6f5f2] px-3 py-2.5 text-xs leading-5 text-[#115e59]">
+                      <div className="font-bold uppercase tracking-[0.16em] text-[#0f766e]">
                         Live market quote in use
                       </div>
                       <div className="mt-1 text-[#191f28]">
@@ -964,14 +963,13 @@ export default function CalculatorResult() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-1 flex-col gap-4">
       <section className="surface-card cp-enter overflow-hidden p-5 sm:p-6">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <span className="section-kicker">Result</span>
-            <h1 className="cp-heading-xl mt-4">Read the estimate, route basis, and evidence in one place.</h1>
-            <p className="cp-body-copy mt-3 max-w-2xl">
-              This screen is for reading. Cost structure, preparation basis, and source records stay grouped without the editing workspace.
+            <h1 className="cp-heading-xl">Result</h1>
+            <p className="cp-body-copy mt-1.5 max-w-2xl">
+              The estimate, route basis, and evidence in one place — grouped for reading, separate from the editing workspace.
             </p>
           </div>
           <button onClick={goBackToCalculator} className="cp-button-primary">

@@ -9,26 +9,17 @@ export default function Sidebar() {
 
   return (
     <aside className="hidden lg:block">
-      <div className="surface-rail sticky top-[40px] overflow-hidden p-3">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(120,242,208,0.16),transparent_0_34%),radial-gradient(circle_at_bottom_right,rgba(239,195,108,0.10),transparent_0_24%)]" />
-
-        <div className="relative flex flex-col gap-4">
-          <div className="flex items-center gap-3 border-b border-white/10 pb-4">
-            <div className="flex h-11 w-11 items-center justify-center rounded-[16px] border border-white/10 bg-white/8">
-              <BrandMark className="h-8 w-8" />
-            </div>
-
+      <div className="surface-rail sticky top-[46px] overflow-hidden p-3">
+        <div className="flex flex-col gap-5">
+          <div className="flex items-center gap-2.5 px-1.5 pt-1.5">
+            <BrandMark className="h-9 w-9" />
             <div className="min-w-0">
-              <div className="font-display text-[1.45rem] leading-none text-white">CatPrice</div>
-              <div className="mt-1 text-xs text-slate-400">Catalyst cost workspace</div>
+              <div className="font-display text-[1.2rem] leading-none text-[#191f28]">CatPrice</div>
+              <div className="mt-1 text-[11px] text-[#b0b8c1]">Catalyst cost workspace</div>
             </div>
           </div>
 
-          <div>
-            <div className="cp-subtle-label !text-slate-400">Workflow</div>
-          </div>
-
-          <nav className="space-y-1.5">
+          <nav className="space-y-0.5">
             {navigationItems.map((item) => {
               const isActive = isNavigationPathActive(location.pathname, item.to);
 
@@ -36,56 +27,61 @@ export default function Sidebar() {
                 <NavLink
                   key={item.to}
                   to={item.to}
-                  className={`group flex items-center gap-3 rounded-[18px] border px-3 py-3 transition ${
-                    isActive
-                      ? 'border-[#3182f6]/18 bg-[linear-gradient(135deg,rgba(124,241,208,0.14),rgba(255,255,255,0.06))] shadow-[0_12px_26px_rgba(0,0,0,0.12)]'
-                      : 'border-white/8 bg-white/[0.025] hover:border-white/14 hover:bg-white/[0.05]'
+                  aria-current={isActive ? 'page' : undefined}
+                  className={`group relative flex items-center gap-3 rounded-[10px] px-3 py-2.5 transition ${
+                    isActive ? 'bg-[#eef8f5]' : 'hover:bg-[#f4f6f7]'
                   }`}
                 >
+                  {isActive ? (
+                    <span className="absolute left-0 top-1/2 h-4 w-[3px] -translate-y-1/2 rounded-full bg-[#0d9488]" aria-hidden="true" />
+                  ) : null}
+                  <item.Icon
+                    className={`h-[18px] w-[18px] flex-none transition ${
+                      isActive ? 'text-[#0d9488]' : 'text-[#b0b8c1] group-hover:text-[#8b95a1]'
+                    }`}
+                  />
                   <div
-                    className={`flex h-10 w-10 flex-none items-center justify-center rounded-[16px] border transition ${
-                      isActive
-                        ? 'border-[#3182f6]/22 bg-[#3182f6]/12 text-[#e8f2ff]'
-                        : 'border-white/10 bg-white/6 text-slate-300 group-hover:text-white'
+                    className={`min-w-0 truncate text-sm transition ${
+                      isActive ? 'font-semibold text-[#0f766e]' : 'font-medium text-[#4e5968] group-hover:text-[#191f28]'
                     }`}
                   >
-                    <item.Icon className="h-5 w-5" />
+                    {item.label}
                   </div>
-
-                  <div className="min-w-0 text-sm font-semibold text-white">{item.label}</div>
                 </NavLink>
               );
             })}
           </nav>
 
-          <div className="border-t border-white/10 pt-4">
-            <div className="cp-subtle-label !text-slate-400">Display Unit</div>
+          <div className="border-t border-[#f2f4f6] px-1.5 pb-1 pt-4">
+            <div className="flex items-center justify-between gap-3">
+              <div className="text-xs font-medium text-[#8b95a1]">Display unit</div>
 
-            <button
-              type="button"
-              onClick={toggle}
-              className="no-drag mt-3 flex w-full items-center gap-1 rounded-full border border-white/10 bg-white/6 p-1"
-              title="Toggle output units"
-              aria-label={`Toggle output units, currently ${unit}`}
-              aria-pressed={unit === 'lb'}
-            >
-              <span
-                aria-hidden="true"
-                className={`flex-1 rounded-full px-3 py-2 text-xs font-semibold transition ${
-                  unit === 'kg' ? 'bg-[#3182f6] text-[#191f28]' : 'text-slate-300'
-                }`}
+              <button
+                type="button"
+                onClick={toggle}
+                className="no-drag flex items-center rounded-full bg-[#eef1f2] p-0.5"
+                title="Toggle output units"
+                aria-label={`Toggle output units, currently ${unit}`}
+                aria-pressed={unit === 'lb'}
               >
-                kg
-              </span>
-              <span
-                aria-hidden="true"
-                className={`flex-1 rounded-full px-3 py-2 text-xs font-semibold transition ${
-                  unit === 'lb' ? 'bg-[#3182f6] text-[#191f28]' : 'text-slate-300'
-                }`}
-              >
-                lb
-              </span>
-            </button>
+                <span
+                  aria-hidden="true"
+                  className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
+                    unit === 'kg' ? 'bg-[#0d9488] text-white' : 'text-[#8b95a1]'
+                  }`}
+                >
+                  kg
+                </span>
+                <span
+                  aria-hidden="true"
+                  className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
+                    unit === 'lb' ? 'bg-[#0d9488] text-white' : 'text-[#8b95a1]'
+                  }`}
+                >
+                  lb
+                </span>
+              </button>
+            </div>
           </div>
         </div>
       </div>

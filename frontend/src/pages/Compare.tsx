@@ -243,15 +243,15 @@ export default function Compare() {
   const updatedAt = benchmark.price_basis_updated_at ? new Date(benchmark.price_basis_updated_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true }) : 'Reference basis';
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-1 flex-col gap-4">
       <WorkspaceSectionNav sections={REFERENCE_SECTIONS} activeSectionId={sectionState.activeSectionId} activeIndex={sectionState.activeIndex} onSelect={sectionState.setActiveSection} />
 
       {sectionState.activeSection.id === 'overview' ? (
         <section className="surface-card cp-enter overflow-hidden p-5 sm:p-6">
           <div className="grid gap-4 xl:grid-cols-[minmax(0,1.1fr)_minmax(330px,0.9fr)]">
             <div className="surface-ink overflow-hidden p-5 sm:p-6">
-              <div className="cp-subtle-label !text-slate-400">Literature Benchmarks</div>
-              <h1 className="mt-3 font-display text-[clamp(2rem,4vw,3.5rem)] leading-[0.94] text-white">Screen published routes before you edit the cost case.</h1>
+              <h1 className="font-display text-[clamp(1.4rem,2vw,1.8rem)] leading-[1.2] text-white">Literature Benchmarks</h1>
+              <p className="mt-2 text-sm text-white/60">Screen published routes before you edit the cost case.</p>
               <div className="mt-3 flex flex-wrap gap-2">
                 {activeFamily ? <span className="cp-chip-dark">{activeFamily.title}</span> : null}
                 {benchmark.reaction ? <span className="cp-chip-dark">{benchmark.reaction}</span> : null}
@@ -276,7 +276,7 @@ export default function Compare() {
                 <div className="cp-subtle-label">Benchmark family</div>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {families.map((option) => (
-                    <button type="button" key={option.family} onClick={() => handleFamilyChange(option.family)} className={`rounded-[18px] border px-3 py-2 text-left text-sm transition ${option.family === family ? 'border-[#3182f6] bg-[#e8f2ff] text-[#1b64da]' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}>
+                    <button type="button" key={option.family} onClick={() => handleFamilyChange(option.family)} className={`rounded-[18px] border px-3 py-2 text-left text-sm transition ${option.family === family ? 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e]' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}>
                       <div className="font-semibold">{option.title}</div>
                       <div className="mt-1 text-xs leading-5 text-slate-500">{catalystDomainLabel(option.catalyst_domain)} / {applicationFamilyLabel(option.application_family)}</div>
                     </button>
@@ -287,7 +287,7 @@ export default function Compare() {
                 <div className="cp-subtle-label">Ranking profile</div>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {PROFILE_OPTIONS.map((option) => (
-                    <button type="button" key={option.id} onClick={() => handleProfileChange(option.id)} className={`rounded-[18px] border px-3 py-2 text-left text-sm transition ${option.id === profile ? 'border-[#3182f6] bg-[#e8f2ff] text-[#1b64da]' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}>
+                    <button type="button" key={option.id} onClick={() => handleProfileChange(option.id)} className={`rounded-[18px] border px-3 py-2 text-left text-sm transition ${option.id === profile ? 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e]' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}>
                       <div className="font-semibold">{option.label}</div>
                       <div className="mt-1 text-xs leading-5 text-slate-500">{option.note}</div>
                     </button>

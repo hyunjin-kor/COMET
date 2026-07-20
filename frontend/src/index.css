@@ -1,11 +1,10 @@
 @import "tailwindcss";
 
 /* ──────────────────────────────────────────────────────────────────────
-   CatPrice design tokens — Toss-style.
-   Reference: Toss Design System / Pretendard.
-   - White surfaces, cool neutral grays, single Toss Blue accent.
-   - No serif display fonts; bold Pretendard for headings + numbers.
-   - Subtle depth (1px hairlines, soft shadows), no warm gradients.
+   CatPrice design tokens.
+   - All-light chrome: white cards and a white rail on a cool gray canvas.
+   - Single deep-teal accent; green-graphite ink panels for hero blocks.
+   - Bold Pretendard for headings; tabular numerals for prices.
    ────────────────────────────────────────────────────────────────────── */
 :root {
   color-scheme: light;
@@ -19,8 +18,8 @@
 
   /* Surfaces */
   --bg-base: #ffffff;
-  --bg-soft: #f9fafb;
-  --bg-muted: #f2f4f6;
+  --bg-soft: #f4f6f7;
+  --bg-muted: #eef1f2;
   --bg-elevated: #ffffff;
 
   /* Text (Toss neutral scale) */
@@ -35,12 +34,12 @@
   --line-strong: #d1d6db;
   --line-faint: #f2f4f6;
 
-  /* Brand (Toss Blue) */
-  --brand: #3182f6;
-  --brand-hover: #1b64da;
-  --brand-press: #1957c2;
-  --brand-soft: #e8f2ff;
-  --brand-tint: rgba(49, 130, 246, 0.08);
+  /* Brand (deep teal) */
+  --brand: #0d9488;
+  --brand-hover: #0f766e;
+  --brand-press: #115e59;
+  --brand-soft: #e6f5f2;
+  --brand-tint: rgba(13, 148, 136, 0.08);
 
   /* Status */
   --success: #22c55e;
@@ -63,6 +62,7 @@ body {
   background: var(--bg-soft);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  font-variant-numeric: tabular-nums;
 }
 
 #root {
@@ -105,8 +105,8 @@ textarea {
 .cp-heading-xl {
   font-family: var(--font-sans);
   font-weight: 700;
-  letter-spacing: -0.024em;
-  @apply text-[clamp(1.85rem,2.5vw,2.55rem)] leading-[1.18] text-[#191f28];
+  letter-spacing: -0.02em;
+  @apply text-[clamp(1.3rem,1.6vw,1.55rem)] leading-[1.25] text-[#191f28];
 }
 
 .cp-heading-lg {
@@ -139,30 +139,30 @@ textarea {
 
 /* ─── Surfaces (white cards, hairline borders, soft shadows) ───────── */
 .surface-card {
-  @apply rounded-[20px] border border-[#e5e8eb] bg-white
-         shadow-[0_1px_2px_rgba(15,23,42,0.04),0_4px_12px_rgba(15,23,42,0.04)];
+  @apply rounded-[16px] border border-[#e8ebef] bg-white
+         shadow-[0_1px_2px_rgba(15,23,42,0.03),0_3px_10px_rgba(15,23,42,0.03)];
 }
 
 .surface-card-soft {
-  @apply rounded-[16px] border border-[#e5e8eb] bg-white
-         shadow-[0_1px_2px_rgba(15,23,42,0.03)];
+  @apply rounded-[14px] border border-[#e8ebef] bg-white
+         shadow-[0_1px_2px_rgba(15,23,42,0.02)];
 }
 
-/* "ink" surfaces used to be dark/warm. In Toss style we keep them
-   visually distinct with a deeper navy-black so hero / metric blocks
-   still anchor the layout without breaking the color system. */
+/* Ink surfaces anchor hero / metric blocks with a green-graphite tone
+   that carries the teal brand into the dark end of the palette. */
 .surface-ink {
-  @apply rounded-[20px] border border-[#191f28] bg-[#191f28]
-         text-white shadow-[0_8px_24px_rgba(15,23,42,0.18)];
+  @apply rounded-[16px] border border-[#12211d] bg-[#12211d]
+         text-white shadow-[0_6px_18px_rgba(13,38,32,0.16)];
 }
 
+/* Light rail: the sidebar sits on the same white surface as cards. */
 .surface-rail {
-  @apply rounded-[20px] border border-[#191f28] bg-[#191f28]
-         text-white shadow-[0_8px_24px_rgba(15,23,42,0.18)];
+  @apply rounded-[16px] border border-[#e8ebef] bg-white
+         shadow-[0_1px_2px_rgba(15,23,42,0.03),0_3px_10px_rgba(15,23,42,0.03)];
 }
 
 .surface-ghost {
-  @apply rounded-[16px] border border-[#e5e8eb] bg-[#f9fafb];
+  @apply rounded-[12px] border border-transparent bg-[#f4f6f8];
 }
 
 /* ─── Form controls ────────────────────────────────────────────────── */
@@ -171,67 +171,66 @@ textarea {
          text-sm text-[#191f28] outline-none transition
          placeholder:text-[#b0b8c1]
          hover:border-[#8b95a1]
-         focus:border-[#3182f6] focus:ring-4 focus:ring-[rgba(49,130,246,0.15)];
+         focus:border-[#0d9488] focus:ring-4 focus:ring-[rgba(13,148,136,0.15)];
 }
 
 /* ─── Chips / tags ─────────────────────────────────────────────────── */
 .section-kicker {
-  @apply inline-flex items-center gap-2 rounded-full bg-[#e8f2ff] px-3 py-1.5
-         text-[11px] font-bold uppercase tracking-[0.16em] text-[#1b64da];
+  @apply inline-flex items-center gap-1.5 text-xs font-semibold tracking-[0.01em] text-[#0d9488];
 }
 
 .cp-chip {
   @apply inline-flex items-center rounded-full bg-[#f2f4f6] px-2.5 py-1
-         text-[11px] font-semibold uppercase tracking-[0.12em] text-[#4e5968];
+         text-xs font-medium text-[#4e5968];
 }
 
 .cp-chip-dark {
-  @apply inline-flex items-center rounded-full border border-white/15 bg-white/10 px-2.5 py-1
-         text-[11px] font-semibold uppercase tracking-[0.12em] text-white;
+  @apply inline-flex items-center rounded-full border border-white/12 bg-white/10 px-2.5 py-1
+         text-xs font-medium text-white/90;
 }
 
 /* ─── Buttons (Toss: solid blue primary, light gray secondary) ─────── */
 .cp-button-primary {
-  @apply inline-flex items-center justify-center rounded-[12px] bg-[#3182f6] px-4 py-3 text-sm font-bold text-white
-         transition hover:bg-[#1b64da] active:bg-[#1957c2]
+  @apply inline-flex items-center justify-center rounded-[10px] bg-[#0d9488] px-4 py-2.5 text-sm font-semibold text-white
+         transition hover:bg-[#0f766e] active:bg-[#115e59]
          disabled:pointer-events-none disabled:bg-[#d1d6db] disabled:text-white;
 }
 
 .cp-button-secondary {
-  @apply inline-flex items-center justify-center rounded-[12px] border border-[#d1d6db] bg-white px-4 py-3
-         text-sm font-bold text-[#333d4b] transition
-         hover:border-[#8b95a1] hover:bg-[#f9fafb]
+  @apply inline-flex items-center justify-center rounded-[10px] border border-[#d9dee3] bg-white px-4 py-2.5
+         text-sm font-semibold text-[#333d4b] transition
+         hover:border-[#b0b8c1] hover:bg-[#f9fafb]
          disabled:pointer-events-none disabled:opacity-45;
 }
 
 .cp-button-ink {
-  @apply inline-flex items-center justify-center rounded-[12px] border border-white/20 bg-white/8 px-4 py-3
-         text-sm font-bold text-white transition hover:bg-white/15
+  @apply inline-flex items-center justify-center rounded-[10px] border border-white/20 bg-white/8 px-4 py-2.5
+         text-sm font-semibold text-white transition hover:bg-white/15
          disabled:pointer-events-none disabled:opacity-45;
 }
 
 .cp-button-accent {
-  @apply inline-flex items-center justify-center rounded-[12px] bg-[#3182f6] px-4 py-3 text-sm font-bold text-white
-         transition hover:bg-[#1b64da] active:bg-[#1957c2]
+  @apply inline-flex items-center justify-center rounded-[10px] bg-[#0d9488] px-4 py-2.5 text-sm font-semibold text-white
+         transition hover:bg-[#0f766e] active:bg-[#115e59]
          disabled:pointer-events-none disabled:bg-[#d1d6db];
 }
 
-/* ─── Subtle labels (small caps, used as section eyebrows) ─────────── */
+/* ─── Subtle labels (quiet section eyebrows, sentence case) ────────── */
 .cp-subtle-label {
-  @apply text-[11px] font-bold uppercase tracking-[0.16em] text-[#8b95a1];
+  @apply text-xs font-semibold tracking-[0.01em] text-[#8b95a1];
 }
 
 /* ─── Metric tiles ─────────────────────────────────────────────────── */
 .cp-metric-tile {
-  @apply rounded-[16px] border border-[#e5e8eb] bg-white p-4;
+  @apply rounded-[12px] border border-transparent bg-[#f4f6f8] p-4;
 }
 
 .cp-metric-tile-dark {
-  @apply rounded-[16px] border border-white/15 bg-white/8 p-4;
+  @apply rounded-[12px] border border-white/12 bg-white/8 p-4;
 }
 
 .cp-toolbar {
-  @apply flex flex-wrap items-center gap-2 rounded-[14px] border border-[#e5e8eb] bg-white p-1.5;
+  @apply flex flex-wrap items-center gap-2 rounded-[12px] border border-[#e8ebef] bg-white p-1.5;
 }
 
 /* ─── Layout helpers ───────────────────────────────────────────────── */
@@ -244,7 +243,7 @@ textarea {
 }
 
 .cp-rail-panel {
-  @apply rounded-[16px] border border-[#e5e8eb] bg-white p-4;
+  @apply rounded-[14px] border border-[#e8ebef] bg-white p-4;
 }
 
 .cp-data-row {
@@ -252,11 +251,11 @@ textarea {
 }
 
 .cp-list-row {
-  @apply rounded-[14px] border border-[#e5e8eb] bg-white px-4 py-3 transition hover:border-[#d1d6db] hover:bg-[#f9fafb];
+  @apply rounded-[12px] border border-[#e8ebef] bg-white px-4 py-3 transition hover:border-[#d1d6db] hover:bg-[#f9fafb];
 }
 
 .cp-list-row-active {
-  @apply border-[#3182f6] bg-[#e8f2ff];
+  @apply border-[#0d9488] bg-[#eef8f5];
 }
 
 /* ─── Motion ───────────────────────────────────────────────────────── */
@@ -302,7 +301,7 @@ textarea {
 
 /* ─── Focus ring (Toss Blue, accessible) ──────────────────────────── */
 :focus-visible {
-  outline: 2px solid #3182f6;
+  outline: 2px solid #0d9488;
   outline-offset: 2px;
   border-radius: 6px;
 }
@@ -311,14 +310,14 @@ a:focus-visible,
 button:focus-visible,
 [role="button"]:focus-visible,
 [tabindex]:focus-visible {
-  outline: 2px solid #3182f6;
+  outline: 2px solid #0d9488;
   outline-offset: 2px;
 }
 
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid rgba(49, 130, 246, 0.6);
+  outline: 2px solid rgba(13, 148, 136, 0.6);
   outline-offset: 0;
 }
 

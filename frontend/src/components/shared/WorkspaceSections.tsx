@@ -62,6 +62,14 @@ type WorkspaceSectionNavProps = {
   disabledSectionIds?: string[];
 };
 
+function StepCheckIcon() {
+  return (
+    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-3 w-3" aria-hidden="true">
+      <path d="M2.5 6.5 5 9l4.5-5.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 export function WorkspaceSectionNav({
   sections,
   activeSectionId,
@@ -73,52 +81,53 @@ export function WorkspaceSectionNav({
   const activeSection: WorkspaceSection = sections[activeIndex] ?? sections[0]!;
 
   return (
-    <section className="surface-card-soft px-4 py-3">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <div className="cp-subtle-label">Workflow</div>
-          <div className="mt-2 text-sm font-medium text-slate-700">
-            Step {activeIndex + 1} of {sections.length}
-          </div>
-        </div>
-        <div className="text-xs leading-6 text-slate-500">
-          {activeSection?.summary}
-        </div>
-      </div>
-
-      <div className="mt-4 grid gap-2 lg:grid-cols-[repeat(auto-fit,minmax(150px,1fr))]">
+    <section className="surface-card-soft flex flex-col gap-2 px-4 py-2.5 sm:flex-row sm:items-center sm:justify-between">
+      <nav aria-label="Workflow steps" className="flex flex-wrap items-center gap-1">
         {sections.map((section, index) => {
           const active = section.id === activeSectionId;
+          const done = index < activeIndex;
           const disabled = !active && disabledSectionIds.includes(section.id);
           return (
-            <button
-              type="button"
-              key={section.id}
-              onClick={() => !disabled && onSelect(section.id)}
-              disabled={disabled}
-              className={`rounded-[16px] border px-3 py-3 text-left transition ${
-                active
-                  ? 'border-slate-950 bg-white text-[#191f28] shadow-[0_6px_16px_rgba(15,23,42,0.06)]'
-                  : disabled
-                    ? 'cursor-not-allowed border-slate-200/80 bg-slate-50/70 text-slate-300'
-                    : 'border-slate-200/90 bg-transparent text-slate-500 hover:border-slate-300 hover:bg-white/72'
-              }`}
-            >
-              <div className="flex items-center gap-2">
+            <div key={section.id} className="flex items-center">
+              {index > 0 ? <div className="mx-1.5 h-px w-4 bg-[#e5e8eb]" aria-hidden="true" /> : null}
+              <button
+                type="button"
+                onClick={() => !disabled && onSelect(section.id)}
+                disabled={disabled}
+                aria-current={active ? 'step' : undefined}
+                className={`flex items-center gap-2 rounded-full py-1.5 pl-1.5 pr-3 transition ${
+                  active
+                    ? 'bg-[#eef8f5]'
+                    : disabled
+                      ? 'cursor-not-allowed opacity-45'
+                      : 'hover:bg-[#f4f6f8]'
+                }`}
+              >
                 <span
-                  className={`inline-flex h-6 min-w-6 items-center justify-center rounded-full px-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] ${
-                    active ? 'bg-slate-950 text-white' : 'bg-slate-100 text-slate-500'
+                  className={`inline-flex h-5 w-5 items-center justify-center rounded-full text-[11px] font-semibold ${
+                    active
+                      ? 'bg-[#0d9488] text-white'
+                      : done
+                        ? 'bg-[#191f28] text-white'
+                        : 'bg-[#f2f4f6] text-[#8b95a1]'
                   }`}
                 >
-                  {String(index + 1).padStart(2, '0')}
+                  {done ? <StepCheckIcon /> : index + 1}
                 </span>
-                <div className="font-semibold">{section.label}</div>
-              </div>
-              {active ? <div className="mt-2 text-xs leading-5 text-slate-500">{section.summary}</div> : null}
-            </button>
+                <span
+                  className={`text-sm ${
+                    active ? 'font-semibold text-[#191f28]' : done ? 'font-medium text-[#4e5968]' : 'font-medium text-[#8b95a1]'
+                  }`}
+                >
+                  {section.label}
+                </span>
+              </button>
+            </div>
           );
         })}
-      </div>
+      </nav>
+
+      <div className="hidden max-w-[320px] truncate text-xs text-[#8b95a1] xl:block">{activeSection?.summary}</div>
     </section>
   );
 }
@@ -143,34 +152,30 @@ export function WorkspaceSectionFooter({
   canGoNext,
 }: WorkspaceSectionFooterProps) {
   return (
-    <section className="surface-card-soft px-4 py-3">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <div className="cp-subtle-label">Continue</div>
-          <div className="mt-2 font-semibold text-[#191f28]">{activeSection.label}</div>
-          <div className="mt-1 text-xs leading-5 text-slate-500">
-            Step {activeIndex + 1} of {totalSections}. {activeSection.summary}
-          </div>
-        </div>
+    <section className="surface-card-soft mt-auto flex items-center justify-between gap-4 px-4 py-2.5">
+      <div className="min-w-0 truncate text-sm text-[#8b95a1]">
+        Step {activeIndex + 1} of {totalSections}
+        <span className="mx-1.5 text-[#d1d6db]">·</span>
+        <span className="font-medium text-[#4e5968]">{activeSection.label}</span>
+      </div>
 
-        <div className="flex w-full gap-2 sm:w-auto">
-          <button
-            type="button"
-            onClick={onPrevious}
-            disabled={!canGoPrevious}
-            className="cp-button-secondary flex-1 px-4 py-2.5 text-sm disabled:opacity-35 sm:flex-none"
-          >
-            Back
-          </button>
-          <button
-            type="button"
-            onClick={onNext}
-            disabled={!canGoNext}
-            className="cp-button-primary flex-1 px-4 py-2.5 text-sm disabled:opacity-35 sm:flex-none"
-          >
-            Next
-          </button>
-        </div>
+      <div className="flex flex-none gap-2">
+        <button
+          type="button"
+          onClick={onPrevious}
+          disabled={!canGoPrevious}
+          className="cp-button-secondary px-4 disabled:opacity-35"
+        >
+          Back
+        </button>
+        <button
+          type="button"
+          onClick={onNext}
+          disabled={!canGoNext}
+          className="cp-button-primary px-5 disabled:opacity-35"
+        >
+          Next
+        </button>
       </div>
     </section>
   );

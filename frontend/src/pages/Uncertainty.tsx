@@ -57,7 +57,7 @@ function FieldBlock({
 function ChartFallback() {
   return (
     <div className="flex h-full min-h-[280px] items-center justify-center gap-3 rounded-[24px] border border-slate-200 bg-slate-50/80 text-center">
-      <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#3182f6] border-t-transparent" />
+      <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#0d9488] border-t-transparent" />
       <div className="text-sm text-slate-600">Loading range chart...</div>
     </div>
   );
@@ -216,10 +216,10 @@ export default function Uncertainty() {
   const histData = result
     ? [
         { range: `${fmtBound(toDisplay(result.min))}-${fmtBound(toDisplay(result.p5))}`, value: 5, fill: '#4e5968' },
-        { range: `${fmtBound(toDisplay(result.p5))}-${fmtBound(toDisplay(result.p25))}`, value: 20, fill: '#3182f6' },
-        { range: `${fmtBound(toDisplay(result.p25))}-${fmtBound(toDisplay(result.median))}`, value: 25, fill: '#3182f6' },
-        { range: `${fmtBound(toDisplay(result.median))}-${fmtBound(toDisplay(result.p75))}`, value: 25, fill: '#3182f6' },
-        { range: `${fmtBound(toDisplay(result.p75))}-${fmtBound(toDisplay(result.p95))}`, value: 20, fill: '#3182f6' },
+        { range: `${fmtBound(toDisplay(result.p5))}-${fmtBound(toDisplay(result.p25))}`, value: 20, fill: '#0d9488' },
+        { range: `${fmtBound(toDisplay(result.p25))}-${fmtBound(toDisplay(result.median))}`, value: 25, fill: '#0d9488' },
+        { range: `${fmtBound(toDisplay(result.median))}-${fmtBound(toDisplay(result.p75))}`, value: 25, fill: '#0d9488' },
+        { range: `${fmtBound(toDisplay(result.p75))}-${fmtBound(toDisplay(result.p95))}`, value: 20, fill: '#0d9488' },
         { range: `${fmtBound(toDisplay(result.p95))}-${fmtBound(toDisplay(result.max))}`, value: 5, fill: '#4e5968' },
       ]
     : [];
@@ -247,7 +247,7 @@ export default function Uncertainty() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-1 flex-col gap-4">
       <WorkspaceSectionNav
         sections={RANGE_SECTIONS}
         activeSectionId={activeSectionId}
@@ -256,12 +256,11 @@ export default function Uncertainty() {
       />
 
       {activeSection.id === 'case' ? (
-        <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.06s' }}>
+        <section className="surface-card cp-enter flex-1 overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.06s' }}>
           <div className="border-b border-slate-900/8 pb-5">
-            <div className="cp-subtle-label">Estimate Range</div>
-            <h2 className="cp-heading-xl mt-2">Read the uncertainty around the same estimate case.</h2>
-            <p className="cp-body-copy mt-2 max-w-2xl">
-              This page uses the current draft from Cost Estimate. Edit the catalyst case there, then run the range here.
+            <h2 className="cp-heading-xl">Estimate Range</h2>
+            <p className="cp-body-copy mt-1.5 max-w-2xl">
+              Monte Carlo range around the current Cost Estimate draft. Edit the catalyst case there, then run the range here.
             </p>
           </div>
 
