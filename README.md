@@ -29,6 +29,8 @@ Get the installer from the [latest release](https://github.com/hyunjin-kor/CatPr
 
 The app works offline out of the box, falling back to indexed and manual prices. Live price feeds only need an API key if you want them (see below).
 
+From v1.3.13 the app keeps itself current: it checks GitHub Releases on startup, downloads updates in the background, and offers a restart prompt. The binary is unsigned, so Windows SmartScreen may warn on first install — choose "More info → Run anyway".
+
 ## What it does
 
 - Estimates catalyst selling cost with the Step Method for preparation-route costing, following the CatCost methodology published by NREL
@@ -38,6 +40,7 @@ The app works offline out of the box, falling back to indexed and manual prices.
 - Runs Monte Carlo uncertainty analysis so you get a cost range, not just a point estimate
 - Adds an optional spent-catalyst recovery credit to thermocatalyst runs
 - Escalates historical prices to the current year with ChemPPI and CEPCI indices
+- Exports the result — cost ledger, price evidence, Monte Carlo range — to Excel-friendly CSV
 
 ## How a session goes
 
