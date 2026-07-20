@@ -1,6 +1,6 @@
 # Project Links
 
-Last verified: 2026-05-12
+Last verified: 2026-07-20
 
 This page tracks CatPrice's external connection points. Only verified links are listed as active.
 
@@ -11,7 +11,7 @@ This page tracks CatPrice's external connection points. Only verified links are 
 | GitHub repository | https://github.com/hyunjin-kor/CatPrice | Active public repository |
 | Issues | https://github.com/hyunjin-kor/CatPrice/issues | Active |
 | Releases index | https://github.com/hyunjin-kor/CatPrice/releases | Active |
-| Latest release (per package.json) | https://github.com/hyunjin-kor/CatPrice/releases/tag/v1.3.7 | Re-verify with `gh release list -L 1` before quoting |
+| Latest release | https://github.com/hyunjin-kor/CatPrice/releases/latest | Redirects to the newest tag; re-verify with `gh release list -L 1` before quoting a specific version |
 | Source repository clone URL | https://github.com/hyunjin-kor/CatPrice.git | Active |
 
 ## Not Yet Connected
@@ -27,10 +27,10 @@ This page tracks CatPrice's external connection points. Only verified links are 
 
 Single source of truth: `package.json`, `pyproject.toml`, `frontend/package.json` must agree.
 
-- Current package version: `1.3.8`
-- Python package version: `1.3.8`
-- Frontend package version: `1.3.8`
-- Latest verified GitHub release: `v1.3.7` (published 2026-05-08, verified via `gh release view v1.3.7` on 2026-05-08); `v1.3.8` is a prepared bump that has not been tagged yet
+- Current package version: `1.3.9`
+- Python package version: `1.3.9`
+- Frontend package version: `1.3.9`
+- Latest verified GitHub release: `v1.3.9` (published 2026-05-12, verified via `gh release list -L 1` on 2026-07-20)
 - Asset name pattern: `CatPrice.Setup.<version>.exe` (installer), `CatPrice-win-unpacked.zip` (portable)
 
 The published GitHub release tag may lag behind the package version when a bump has not yet been tagged. To re-verify, run `gh release list -L 1` against the repo.

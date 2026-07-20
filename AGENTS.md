@@ -14,10 +14,10 @@
 - **Differentiator**: CatCost-derived methodology, but with automatic live market-price refresh and a modern web/desktop UI.
 - **Academic citations**: Baddour et al. 2018, Van Allsburg et al. 2022.
 
-### 0.1 Current implementation status (as of 2026-04-26)
+### 0.1 Current implementation status (as of 2026-07-20)
 
 - **Remote repository**: `https://github.com/hyunjin-kor/CatPrice`
-- **Latest verified release**: `v1.1.13`
+- **Latest verified release**: `v1.3.9` (re-verify with `gh release list -L 1` before quoting)
 - **Current desktop shell**: Electron (`electron/`, `dist-electron/`)
 - **Frontend stack**: React 19 + TypeScript + Vite
 - **Backend stack**: FastAPI + SQLModel + SQLite
@@ -584,7 +584,7 @@ GET    /api/health                 Server status + last price-update time
 
 ## 6. Development phases (Codex work units)
 
-> **Historical reference.** Phases 1–5 below were the original Codex work plan. The current repo state (v1.3.4, 2026-05) has implemented the bulk of every phase plus material that was never on the original list (LCA, decision engine, electrocatalyst layer model, curated USGS proxy library, source-evidence tagging, multi-family benchmark library). Use `git log --oneline` and the `## 3.1 Live additions` section above for the current ground truth; treat the lists below as the seed plan, not an open backlog.
+> **Historical reference.** Phases 1–5 below were the original Codex work plan. The current repo state (v1.3.9, 2026-07) has implemented the bulk of every phase plus material that was never on the original list (LCA, decision engine, electrocatalyst layer model, curated USGS proxy library, source-evidence tagging, multi-family benchmark library). Use `git log --oneline` and the `## 3.1 Live additions` section above for the current ground truth; treat the lists below as the seed plan, not an open backlog.
 
 ### Phase 1: Calculation engine core (MVP)
 ```

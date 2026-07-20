@@ -5,7 +5,7 @@ CatPrice is a desktop catalyst cost application. The Electron shell, local FastA
 ## Project Links
 
 - GitHub repository: [hyunjin-kor/CatPrice](https://github.com/hyunjin-kor/CatPrice)
-- Latest release: [v1.3.4](https://github.com/hyunjin-kor/CatPrice/releases/tag/v1.3.4)
+- Latest release: [GitHub Releases](https://github.com/hyunjin-kor/CatPrice/releases/latest)
 - Link map and Claude handoff notes: [`project-links.md`](project-links.md)
 
 ## Focus
