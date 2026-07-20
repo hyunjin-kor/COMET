@@ -333,7 +333,7 @@ async function main() {
     await page.waitForSelector('text=Choose the workflow before you edit the recipe.');
     await captureSelectorSliceFromText(
       page,
-      'main > div > div.min-w-0.pb-2',
+      'main > div > div:last-child',
       'Choose the workflow before you edit the recipe.',
       'screen-cost-estimate-type.png',
       390,
@@ -347,10 +347,10 @@ async function main() {
     await page.waitForSelector('text=Define the catalyst recipe.');
     await captureSelectorSliceFromText(
       page,
-      'main > div > div.min-w-0.pb-2',
+      'main > div > div:last-child',
       'Define the catalyst recipe.',
       'screen-cost-estimate-composition.png',
-      1160,
+      900,
     );
     await page.close();
   }
@@ -361,7 +361,7 @@ async function main() {
     await page.waitForSelector('text=Choose the preparation basis.');
     await captureSelectorSliceFromText(
       page,
-      'main > div > div.min-w-0.pb-2',
+      'main > div > div:last-child',
       'Choose the preparation basis.',
       'screen-cost-estimate-preparation.png',
       1180,
@@ -396,7 +396,7 @@ async function main() {
   logStep('live metal prices');
   {
     const page = await preparePage(context, draftSnapshot, resultSnapshot, '/prices?feed=quotes');
-    await page.waitForSelector('text=Monitor live and indexed metal price basis.');
+    await page.waitForSelector('text=Scan the tracked symbols');
     await page.locator('button').filter({ hasText: 'Platinum' }).first().click();
     await waitForAppReady(page);
     await captureSelectorBox(page, '.cp-split-workspace > section:first-child', 'screen-live-metal-prices-overview.png');
@@ -425,21 +425,21 @@ async function main() {
   logStep('source library');
   {
     const page = await preparePage(context, draftSnapshot, resultSnapshot, '/library?library=materials');
-    await page.waitForSelector('text=Inspect material sources, step rates, and route templates.');
-    await captureSelectorSliceFromText(page, 'main > div > div.min-w-0.pb-2', 'Search', 'screen-source-library.png', 940);
+    await page.waitForSelector('text=Material sources, step rates');
+    await captureSelectorSliceFromText(page, 'main > div > div:last-child', 'Search', 'screen-source-library.png', 940);
     await page.close();
   }
 
   logStep('estimate range');
   {
     const page = await preparePage(context, draftSnapshot, resultSnapshot, '/uncertainty');
-    await page.waitForSelector('text=Read the uncertainty around the same estimate case.');
+    await page.waitForSelector('text=Monte Carlo range around');
     await page.getByRole('button', { name: /Run estimate range/ }).click();
     await page.waitForSelector('text=Percentile-weighted price spread');
     await waitForAppReady(page);
     await page.mouse.move(18, 18);
     await page.waitForTimeout(150);
-    await captureSelectorSliceFromText(page, 'main > div > div.min-w-0.pb-2', 'Baseline', 'screen-estimate-range.png', 845);
+    await captureSelectorSliceFromText(page, 'main > div > div:last-child', 'Baseline', 'screen-estimate-range.png', 845);
     await page.close();
   }
 

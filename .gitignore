@@ -54,3 +54,7 @@ CodexLauncher.vbs
 scripts/create_codex_shortcut.ps1
 scripts/export_codex_icon.py
 scripts/launch_codex.ps1
+
+# Local-only workspace (archives, scratch)
+_local/
+capture.log
