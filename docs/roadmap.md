@@ -11,7 +11,7 @@ The app is used in a research context, so the biggest near-term win is making it
 - **Zenodo DOI** — done (2026-07-20): every release from v1.3.10 on is archived automatically; concept DOI `10.5281/zenodo.21451931`.
 - **`CITATION.cff`** — done: GitHub shows a "Cite this repository" button.
 - **Hosted documentation**: publish `docs/` with MkDocs Material on GitHub Pages. The methodology page in particular deserves a readable home — it is the strongest argument for trusting the numbers.
-- **Tighten the FCC validation band**: the USY-FCC case currently passes at ±25% because the large-scale slurry route needs a public USY precursor proxy. Sourcing one (USGS / vendor public pages) and bringing the band back to ±20% closes the last gap against the published reference cases.
+- **Tighten the FCC validation band** — done (2026-07-21): the v1.3.12 step-library and escalation fixes brought the USY-FCC deviation to about -13%, so the test band was tightened from ±25% to ±20% without needing a proprietary precursor proxy. All three published reference cases now share the ±20% band.
 
 ## Phase 2 — Distribution (make it easy to keep)
 

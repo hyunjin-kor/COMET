@@ -91,7 +91,7 @@ class TestStepMethodVerification:
             chemppi_escalation=1.0,
         )
         assert result["scale"] == "large"
-        assert result["estimated_price_per_lb"] == pytest.approx(2.41, rel=0.25)
+        assert result["estimated_price_per_lb"] == pytest.approx(2.41, rel=0.20)
 
     def test_relative_ordering(self):
         """Larger orders should have lower per-unit processing costs."""
