@@ -82,10 +82,12 @@ jobs:
         with:
           body: ${{ steps.notes.outputs.result }}
           generate_release_notes: false
-          # electron-builder writes the NSIS installer to disk with spaces
-          # ("CatPrice Setup 1.3.4.exe"). GitHub later sanitizes the asset
-          # name to "CatPrice.Setup.1.3.4.exe" on upload, but the disk-side
-          # glob has to use spaces (or this broader prefix-only pattern).
+          # nsis.artifactName pins the installer to the space-free
+          # "CatPrice.Setup.<version>.exe" pattern, so the disk name and the
+          # GitHub asset name are identical. latest.yml and the .blockmap are
+          # what electron-updater reads to detect and delta-download updates.
           files: |
             dist-electron/CatPrice*.exe
+            dist-electron/CatPrice*.exe.blockmap
             dist-electron/CatPrice-win-unpacked.zip
+            dist-electron/latest.yml

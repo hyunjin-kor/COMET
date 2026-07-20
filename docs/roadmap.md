@@ -15,7 +15,7 @@ The app is used in a research context, so the biggest near-term win is making it
 
 ## Phase 2 — Distribution (make it easy to keep)
 
-- **Auto-update**: wire `electron-updater` to GitHub Releases so users stop downloading installers by hand. This matters more with every release shipped.
+- **Auto-update** — done (2026-07-21): `electron-updater` checks GitHub Releases on startup, downloads in the background, and offers a restart prompt; releases ship `latest.yml` + blockmap alongside the installer from v1.3.13 on.
 - **Windows SmartScreen**: document the unsigned-binary warning honestly in the README; evaluate code signing when the user base justifies the certificate cost.
 - **Winget manifest**: `winget install CatPrice` is a cheap distribution channel once releases are stable.
 

@@ -8,6 +8,7 @@ const path = require('path');
 const { spawn } = require('child_process');
 const http = require('http');
 const fs = require('fs');
+const { autoUpdater } = require('electron-updater');
 
 // Prevent black-window rendering issues on some Windows GPU/driver setups.
 app.disableHardwareAcceleration();
@@ -544,6 +545,44 @@ p{color:#7099cc;font-size:14px;max-width:500px;text-align:center}
   }
 }
 
+// ─── Auto Update ──────────────────────────────────────────────────────────────
+function setupAutoUpdater() {
+  if (!app.isPackaged) return;
+
+  autoUpdater.on('error', (err) => {
+    // Offline or GitHub unreachable is normal for a desktop tool; log only.
+    debugLog(`Auto-update error: ${err.message}`);
+  });
+
+  autoUpdater.on('update-available', (info) => {
+    debugLog(`Update available: ${info.version} (current ${app.getVersion()})`);
+  });
+
+  autoUpdater.on('update-downloaded', (info) => {
+    debugLog(`Update downloaded: ${info.version}`);
+    if (!mainWindow || mainWindow.isDestroyed()) return;
+    dialog
+      .showMessageBox(mainWindow, {
+        type: 'info',
+        title: 'Update ready',
+        message: `CatPrice ${info.version} has been downloaded.`,
+        detail: 'Restart the app to apply the update. The current draft is kept for this session only, so finish or save your estimate first.',
+        buttons: ['Restart now', 'Later'],
+        defaultId: 0,
+        cancelId: 1,
+      })
+      .then(({ response }) => {
+        if (response === 0) {
+          autoUpdater.quitAndInstall();
+        }
+      });
+  });
+
+  autoUpdater.checkForUpdatesAndNotify().catch((err) => {
+    debugLog(`Auto-update check failed: ${err.message}`);
+  });
+}
+
 function showAbout() {
   dialog.showMessageBox(mainWindow, {
     type: 'info',
@@ -605,6 +644,8 @@ app.whenReady().then(() => {
   // Open the main window immediately. The frontend renders skeletons until
   // the FastAPI sidecar finishes booting, so a separate splash isn't needed.
   createMainWindow();
+
+  setupAutoUpdater();
 
   // Start the backend in parallel. Any failure surfaces as an error dialog
   // *after* the window is up, so the user can still see the app shell.
