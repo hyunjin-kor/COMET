@@ -61,8 +61,7 @@
         }
       ],
       "icon": "frontend/public/icon.ico",
-      "requestedExecutionLevel": "asInvoker",
-      "signAndEditExecutable": false
+      "requestedExecutionLevel": "asInvoker"
     },
     "nsis": {
       "artifactName": "${productName}.Setup.${version}.${ext}",
