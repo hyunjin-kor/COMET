@@ -8,7 +8,7 @@ from backend.core.constants import LB_PER_KG, TROY_OZ_PER_LB
 from backend.core.electrocatalyst import calculate_electrode_layer_cost
 from backend.core.lca import compute_catalyst_lca
 from backend.core.materials_calc import calculate_materials_cost_multi
-from backend.core.price_escalation import get_escalation_factor
+from backend.core.price_escalation import get_escalation_factor, latest_index_year
 from backend.core.spent_catalyst import calculate_metal_recovery_value
 from backend.core.step_method import calculate_step_method
 
@@ -32,7 +32,7 @@ def estimate_catalyst_cost(
     ga_overhead_pct: float = 0.05,
     sard_pct: float = 0.05,
     basis_year: int = 2017,
-    target_year: int = 2024,
+    target_year: int | None = None,
     include_spent_value: bool = False,
     reactor_type: str = "fixed",
     catalyst_bulk_density: float = 50.0,
@@ -45,6 +45,9 @@ def estimate_catalyst_cost(
     Supports both the current multi-component payload and the legacy
     single-metal flat payload used by older tests and API clients.
     """
+
+    if target_year is None:
+        target_year = latest_index_year("chemppi")
 
     legacy_input_summary: dict[str, float | str] = {}
     if components is None:
@@ -264,7 +267,7 @@ def estimate_catalyst_cost_simple(
     ga_overhead_pct: float = 0.05,
     sard_pct: float = 0.05,
     basis_year: int = 2017,
-    target_year: int = 2024,
+    target_year: int | None = None,
 ) -> dict:
     """Legacy single-metal wrapper used by the quick calculator."""
 

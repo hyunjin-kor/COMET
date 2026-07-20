@@ -34,6 +34,16 @@ def _load_index(index_type: str) -> dict[str, float]:
     return {str(k): _coerce_index_value(index_type, v) for k, v in data["annual"].items()}
 
 
+def latest_index_year(index_type: str = "chemppi") -> int:
+    """Latest year covered by the shipped index — the natural escalation target.
+
+    Reading it from the data keeps "today's basis" current whenever the index
+    file gains a new year (e.g. via the BLS updater) instead of trailing a
+    hardcoded constant.
+    """
+    return max(int(year) for year in _load_index(index_type))
+
+
 def escalate_cost(
     cost: float,
     from_year: int,

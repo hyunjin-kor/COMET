@@ -7,12 +7,12 @@ import logging
 from sqlmodel import Session, select
 
 from backend.core.constants import LB_PER_KG, TROY_OZ_PER_LB
-from backend.core.price_escalation import get_escalation_factor
+from backend.core.price_escalation import get_escalation_factor, latest_index_year
 from backend.models.material import Material
 from backend.models.metal_price import MetalPrice
 
 logger = logging.getLogger(__name__)
-DEFAULT_ESCALATION_TARGET_YEAR = 2024
+DEFAULT_ESCALATION_TARGET_YEAR = latest_index_year("chemppi")
 
 GRAMS_PER_LB = 453.59237
 MG_PER_LB = GRAMS_PER_LB * 1000.0

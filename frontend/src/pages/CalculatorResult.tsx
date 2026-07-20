@@ -891,7 +891,7 @@ export default function CalculatorResult() {
                   {material.escalation_factor != null && material.escalation_factor !== 1 && material.escalation_basis_year ? (
                     <div className="mt-3 rounded-[14px] border border-[#7950f2] bg-[#f3edff] px-3 py-2.5 text-xs leading-5 text-[#4d2eb5]">
                       <div className="font-bold uppercase tracking-[0.16em] text-[#4d2eb5]">
-                        Inflated to {material.escalation_target_year ?? 2024} basis
+                        Inflated to {material.escalation_target_year ?? new Date().getFullYear()} basis
                       </div>
                       <div className="mt-1 text-[#191f28]">
                         Original {material.escalation_basis_year} quote of{' '}
