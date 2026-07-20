@@ -1,7 +1,7 @@
 # CatPrice — Codex Development Framework
 
 > Master guide for AI-coding agents (Codex / Claude) working on this project.
-> Built on top of `CatPrice_Project.md`'s scope, with adopted ideas from
+> Built on the original project plan's scope, with adopted ideas from
 > GitHub benchmarking and the original CatCost methodology.
 
 ---
@@ -262,7 +262,7 @@ current layout — this list is a navigation aid, not a contract.
 - `backend/launcher.py`, `backend/paths.py`: PyInstaller-friendly resource resolution for the packaged sidecar
 - `backend/services/bls_updater.py`: ChemPPI auto-update from BLS API
 - `electron/preload.js`: contextBridge for window controls and menu IPC
-- `scripts/` highlights: `build_backend_bundle.ps1` (PyInstaller), `smoke_test_desktop.ps1`, `validate_catcost_data.py` (local-only, requires gitignored CatCost workbook), `capture_readme_screens.mjs`, `generate_app_icons.py`, `generate_social_preview.py`
+- `scripts/` highlights: `build_backend_bundle.ps1` (PyInstaller), `smoke_test_desktop.ps1`, `stop_catprice_processes.ps1`, `validate_catcost_data.py` (local-only, requires gitignored CatCost workbook), `capture_readme_screens.mjs`, `generate_app_icons.py`
 
 ---
 
