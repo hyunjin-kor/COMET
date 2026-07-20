@@ -27,11 +27,11 @@ This page tracks CatPrice's external connection points. Only verified links are 
 
 Single source of truth: `package.json`, `pyproject.toml`, `frontend/package.json` must agree.
 
-- Current package version: `1.3.12`
-- Python package version: `1.3.12`
-- Frontend package version: `1.3.12`
-- Latest verified GitHub release: `v1.3.12` (published 2026-07-20, verified via `gh release view v1.3.12` on 2026-07-20; every release is archived on Zenodo under concept DOI `10.5281/zenodo.21451931`)
-- Asset name pattern: `CatPrice.Setup.<version>.exe` (installer), `CatPrice-win-unpacked.zip` (portable)
+- Current package version: `1.3.13`
+- Python package version: `1.3.13`
+- Frontend package version: `1.3.13`
+- Latest verified GitHub release: `v1.3.13` (published 2026-07-20, verified via `gh release view v1.3.13` on 2026-07-21; every release is archived on Zenodo under concept DOI `10.5281/zenodo.21451931`)
+- Asset name pattern: `CatPrice.Setup.<version>.exe` (installer), `CatPrice-win-unpacked.zip` (portable), plus `latest.yml` and `CatPrice.Setup.<version>.exe.blockmap` (auto-update metadata, from v1.3.13 on)
 
 The published GitHub release tag may lag behind the package version when a bump has not yet been tagged. To re-verify, run `gh release list -L 1` against the repo.
 
