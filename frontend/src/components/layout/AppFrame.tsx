@@ -25,9 +25,6 @@ function RouteLoadingFallback() {
 
 export default function AppFrame() {
   const { hintsVisible, closeHints } = useKeyboardShortcuts();
-  // The Windows desktop shell adds a 38px custom titlebar above <main>;
-  // subtract it so short pages still end flush with the viewport.
-  const hasTitlebar = typeof window !== 'undefined' && window.catpriceDesktop?.platform === 'win32';
   const [sidebarCollapsed, setSidebarCollapsed] = useState(
     () => typeof window !== 'undefined' && window.localStorage.getItem(SIDEBAR_COLLAPSED_KEY) === '1',
   );
@@ -50,7 +47,7 @@ export default function AppFrame() {
         >
           <Sidebar collapsed={sidebarCollapsed} onToggleCollapsed={() => setSidebarCollapsed((value) => !value)} />
 
-          <div className={`flex min-w-0 flex-col ${hasTitlebar ? 'min-h-[calc(100vh-60px)]' : 'min-h-[calc(100vh-22px)]'}`}>
+          <div className="flex min-w-0 flex-col">
             <Suspense fallback={<RouteLoadingFallback />}>
               <Outlet />
             </Suspense>
