@@ -24,10 +24,11 @@ const BUCKETS: Record<FitSize, Bucket[]> = {
     { max: 99, font: 'clamp(1.2rem, 2.2vw, 1.9rem)' },
   ],
   lg: [
-    { max: 8,  font: 'clamp(2.0rem, 3.6vw, 3.4rem)' },
-    { max: 11, font: 'clamp(1.6rem, 2.8vw, 2.5rem)' },
-    { max: 14, font: 'clamp(1.3rem, 2.4vw, 2.0rem)' },
-    { max: 99, font: 'clamp(1.1rem, 2.0vw, 1.6rem)' },
+    { max: 6,  font: 'clamp(1.9rem, 3.4vw, 3.0rem)' },
+    { max: 8,  font: 'clamp(1.5rem, 2.6vw, 2.3rem)' },
+    { max: 11, font: 'clamp(1.3rem, 2.3vw, 1.9rem)' },
+    { max: 14, font: 'clamp(1.15rem, 2.1vw, 1.7rem)' },
+    { max: 99, font: 'clamp(1.0rem, 1.9vw, 1.5rem)' },
   ],
   md: [
     { max: 8,  font: 'clamp(1.6rem, 2.6vw, 2.4rem)' },

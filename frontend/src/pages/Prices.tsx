@@ -77,11 +77,15 @@ function formatSyncStamp(value: string | null) {
   });
 }
 
+function fmtConverted(value: number | null) {
+  if (value == null) return 'N/A';
+  if (Math.abs(value) >= 1) return `$${value.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
+  return `$${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 })}`;
+}
+
 function fmtPrice(price: number | null, rawUnit: string, displayUnit: Unit) {
   if (price == null) return 'N/A';
-  const converted = convertTrackedPrice(price, rawUnit, displayUnit);
-  if (Math.abs(converted) >= 1) return `$${converted.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
-  return `$${converted.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 })}`;
+  return fmtConverted(convertTrackedPrice(price, rawUnit, displayUnit));
 }
 
 function sourceDescription(row: MetalPrice) {
@@ -495,9 +499,9 @@ export default function Prices() {
           <div className="cp-subtle-label">Trend Evidence</div>
           <div className="mt-2 text-lg font-semibold text-[#191f28]">{selectedRow.name}</div>
           <div className="mt-3 space-y-1">
-            <InspectorRow label="Current" value={currentValue != null ? fmtPrice(currentValue, selectedRow.unit, unit) : 'N/A'} detail={displayTrackedUnit(selectedRow.unit, unit)} />
-            <InspectorRow label="Period high" value={periodHigh != null ? fmtPrice(periodHigh, selectedRow.unit, unit) : 'N/A'} />
-            <InspectorRow label="Period low" value={periodLow != null ? fmtPrice(periodLow, selectedRow.unit, unit) : 'N/A'} detail={historySource || 'Stored metal price series'} />
+            <InspectorRow label="Current" value={fmtConverted(currentValue)} detail={displayTrackedUnit(selectedRow.unit, unit)} />
+            <InspectorRow label="Period high" value={fmtConverted(periodHigh)} />
+            <InspectorRow label="Period low" value={fmtConverted(periodLow)} detail={historySource || 'Stored metal price series'} />
             <InspectorRow label="Direction" value={pctChange != null ? `${pctChange >= 0 ? '+' : ''}${pctChange.toFixed(1)}%` : 'N/A'} detail={`${PERIOD_LABELS[period]} window`} />
           </div>
         </section>
@@ -590,20 +594,20 @@ export default function Prices() {
                 <div className="mt-5 grid gap-3 sm:grid-cols-3">
                   <div className="cp-metric-tile-dark">
                     <div className="cp-subtle-label !text-slate-400">Current</div>
-                    <div className="mt-2 text-xl font-display text-white">{fmtPrice(displayHistory[displayHistory.length - 1]!.price, selectedRow?.unit ?? '$/lb', unit)}</div>
+                    <div className="mt-2 text-xl font-display text-white">{fmtConverted(displayHistory[displayHistory.length - 1]!.price)}</div>
                     <div className="mt-1 text-xs leading-5 text-slate-400">{selectedDisplayUnit}</div>
                   </div>
                   <div className="cp-metric-tile-dark">
                     <div className="cp-subtle-label !text-slate-400">Period high</div>
                     <div className="mt-2 text-xl font-display text-white">
-                      {fmtPrice(Math.max(...displayHistory.map((point) => point.high ?? point.price)), selectedRow?.unit ?? '$/lb', unit)}
+                      {fmtConverted(Math.max(...displayHistory.map((point) => point.high ?? point.price)))}
                     </div>
                     <div className="mt-1 text-xs leading-5 text-slate-400">Maximum observed value</div>
                   </div>
                   <div className="cp-metric-tile-dark">
                     <div className="cp-subtle-label !text-slate-400">Period low</div>
                     <div className="mt-2 text-xl font-display text-white">
-                      {fmtPrice(Math.min(...displayHistory.map((point) => point.low ?? point.price)), selectedRow?.unit ?? '$/lb', unit)}
+                      {fmtConverted(Math.min(...displayHistory.map((point) => point.low ?? point.price)))}
                     </div>
                     <div className="mt-1 text-xs leading-5 text-slate-400">{historySource || 'Stored metal price series'}</div>
                   </div>
