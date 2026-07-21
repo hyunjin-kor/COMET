@@ -423,7 +423,7 @@ export default function Library() {
             </div>
 
             <div className="cp-split-workspace mt-5">
-              <div className="overflow-hidden rounded-[28px] border border-slate-900/8 bg-white/58 backdrop-blur-xl">
+              <div className="flex max-h-[72vh] flex-col overflow-hidden rounded-[28px] border border-slate-900/8 bg-white/58 backdrop-blur-xl">
                 <div className="border-b border-slate-900/8 bg-slate-50/80 px-5 py-3 text-xs leading-6 text-slate-600">
                   Public URLs open directly when available. Historical bulk rows remain visible, but many do not have a stable public permalink.
                 </div>
@@ -454,7 +454,7 @@ export default function Library() {
                     ) : null}
                   </div>
                 ) : (
-                  <div className="max-h-[68vh] space-y-2 overflow-auto px-4 py-4">
+                  <div className="min-h-0 flex-1 space-y-2 overflow-auto px-4 py-4">
                     {sortedMaterials.map((material) => {
                       const active = selectedMaterial?.id === material.id;
                       return (
@@ -491,7 +491,7 @@ export default function Library() {
                 )}
               </div>
 
-              <div className="cp-inspector-rail">
+              <div className="cp-inspector-rail xl:max-h-[70vh] xl:overflow-auto">
                 <section className="cp-rail-panel">
                   <div className="cp-subtle-label">Source Detail</div>
                   <div className="mt-2 text-lg font-semibold text-[#191f28]">{selectedMaterial?.name ?? 'Choose a material row'}</div>
@@ -580,7 +580,7 @@ export default function Library() {
               )}
             </div>
 
-            <div className="cp-inspector-rail">
+            <div className="cp-inspector-rail xl:max-h-[70vh] xl:overflow-auto">
               <section className="cp-rail-panel">
                 <div className="cp-subtle-label">Step Detail</div>
                 <div className="mt-2 text-lg font-semibold text-[#191f28]">{selectedStep?.name ?? 'Choose a step row'}</div>

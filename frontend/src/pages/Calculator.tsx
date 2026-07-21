@@ -1829,7 +1829,7 @@ export default function Calculator() {
 
       {sectionState.activeSectionId !== 'type' ? renderWorkspaceSummary() : null}
 
-      <div className="flex flex-1 flex-col gap-4 [&>section]:flex-1">{activeWorkspaceSection}</div>
+      <div className="flex flex-1 flex-col gap-4">{activeWorkspaceSection}</div>
 
       <WorkspaceSectionFooter
         activeSection={sectionState.activeSection}
