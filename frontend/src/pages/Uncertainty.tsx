@@ -257,7 +257,7 @@ export default function Uncertainty() {
       />
 
       {activeSection.id === 'case' ? (
-        <section className="surface-card cp-enter flex-1 overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.06s' }}>
+        <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.06s' }}>
           <div className="border-b border-slate-900/8 pb-5">
             <h2 className="cp-heading-xl">Estimate Range</h2>
             <p className="cp-body-copy mt-1.5 max-w-2xl">
