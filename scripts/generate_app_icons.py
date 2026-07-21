@@ -1,6 +1,6 @@
 """Resize the master brand asset into the production icon set.
 
-Single source of truth: ``frontend/public/icon-source.png``. Replace
+Single source of truth: ``scripts/assets/icon-source.png``. Replace
 that one file when the brand icon changes; this script downscales it
 into every PNG / ICO output the desktop app and the docs reference,
 then trims a small uniform inset and applies an iOS-style rounded
@@ -36,7 +36,7 @@ from PIL import Image, ImageChops, ImageDraw
 ROOT = Path(__file__).resolve().parents[1]
 PUBLIC_DIR = ROOT / "frontend" / "public"
 ELECTRON_DIR = ROOT / "electron"
-SOURCE = PUBLIC_DIR / "icon-source.png"
+SOURCE = ROOT / "scripts" / "assets" / "icon-source.png"
 
 PNG_SIZES = (32, 128, 256, 512)
 ICO_SIZES = [(16, 16), (24, 24), (32, 32), (48, 48), (64, 64), (128, 128), (256, 256)]

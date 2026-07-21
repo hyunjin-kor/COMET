@@ -78,6 +78,12 @@ Build the preparation route from unit operations and pick the campaign scale.
 
 <img src="./docs/assets/screen-estimate-range.png" alt="Monte Carlo range" width="100%" />
 
+### Source library
+
+<img src="./docs/assets/screen-source-library.png" alt="Source library" width="100%" />
+
+Every price the calculator can use in one place — materials, step rates, and route templates — each with its quote basis, source, and freshness. Filter by category, catalyst domain, or application, and open the public source behind any row.
+
 Screenshots are regenerated from the running app with `scripts/capture_readme_screens.mjs`.
 
 ## Building from source
