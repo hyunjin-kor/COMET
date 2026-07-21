@@ -18,10 +18,4 @@ contextBridge.exposeInMainWorld('catpriceDesktop', {
     ipcRenderer.on('window-state-changed', handler);
     return () => ipcRenderer.removeListener('window-state-changed', handler);
   },
-
-  // IPC listeners (from main process)
-  onNewEstimate: (callback) => {
-    ipcRenderer.on('new-estimate', callback);
-    return () => ipcRenderer.removeListener('new-estimate', callback);
-  },
 });

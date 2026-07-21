@@ -9,7 +9,6 @@ declare global {
       closeWindow?: () => Promise<void>;
       isWindowMaximized?: () => Promise<boolean>;
       onWindowStateChanged?: (callback: (payload: { isMaximized: boolean }) => void) => () => void;
-      onNewEstimate?: (callback: (...args: unknown[]) => void) => () => void;
     };
   }
 }
