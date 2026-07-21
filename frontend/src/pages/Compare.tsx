@@ -248,7 +248,7 @@ export default function Compare() {
 
       {sectionState.activeSection.id === 'overview' ? (
         <section className="surface-card cp-enter overflow-hidden p-5 sm:p-6">
-          <div className="grid gap-4 xl:grid-cols-[minmax(0,1.1fr)_minmax(330px,0.9fr)] xl:items-start">
+          <div className="grid gap-4">
             <div className="surface-ink overflow-hidden p-5 sm:p-6">
               <h1 className="font-display text-[clamp(1.4rem,2vw,1.8rem)] leading-[1.2] text-white">Literature Benchmarks</h1>
               <p className="mt-2 text-sm text-white/60">Screen published routes before you edit the cost case.</p>
@@ -274,7 +274,7 @@ export default function Compare() {
             <div className="space-y-3">
               <div className="surface-ghost p-4">
                 <div className="cp-subtle-label">Benchmark family</div>
-                <div className="mt-3 flex flex-wrap gap-2">
+                <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                   {families.map((option) => (
                     <button type="button" key={option.family} onClick={() => handleFamilyChange(option.family)} className={`rounded-[18px] border px-3 py-2 text-left text-sm transition ${option.family === family ? 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e]' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}>
                       <div className="font-semibold">{option.title}</div>
