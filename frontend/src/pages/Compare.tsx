@@ -243,12 +243,12 @@ export default function Compare() {
   const updatedAt = benchmark.price_basis_updated_at ? new Date(benchmark.price_basis_updated_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true }) : 'Reference basis';
 
   return (
-    <div className="flex flex-1 flex-col gap-4">
+    <div className="flex flex-col gap-4">
       <WorkspaceSectionNav sections={REFERENCE_SECTIONS} activeSectionId={sectionState.activeSectionId} activeIndex={sectionState.activeIndex} onSelect={sectionState.setActiveSection} />
 
       {sectionState.activeSection.id === 'overview' ? (
         <section className="surface-card cp-enter overflow-hidden p-5 sm:p-6">
-          <div className="grid gap-4 xl:grid-cols-[minmax(0,1.1fr)_minmax(330px,0.9fr)]">
+          <div className="grid gap-4 xl:grid-cols-[minmax(0,1.1fr)_minmax(330px,0.9fr)] xl:items-start">
             <div className="surface-ink overflow-hidden p-5 sm:p-6">
               <h1 className="font-display text-[clamp(1.4rem,2vw,1.8rem)] leading-[1.2] text-white">Literature Benchmarks</h1>
               <p className="mt-2 text-sm text-white/60">Screen published routes before you edit the cost case.</p>

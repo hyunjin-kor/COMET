@@ -47,7 +47,7 @@ export default function AppFrame() {
         >
           <Sidebar collapsed={sidebarCollapsed} onToggleCollapsed={() => setSidebarCollapsed((value) => !value)} />
 
-          <div className="flex min-w-0 flex-col">
+          <div className="flex min-w-0 flex-col min-h-[calc(100vh-4.5rem)] [justify-content:safe_center]">
             <Suspense fallback={<RouteLoadingFallback />}>
               <Outlet />
             </Suspense>

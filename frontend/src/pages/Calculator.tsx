@@ -1807,7 +1807,7 @@ export default function Calculator() {
         );
 
   return (
-    <div className="flex flex-1 flex-col gap-4">
+    <div className="flex flex-col gap-4">
       <div className="flex items-end justify-between gap-4 px-1 pt-1">
         <div>
           <h2 className="cp-heading-xl">Cost Estimate</h2>
