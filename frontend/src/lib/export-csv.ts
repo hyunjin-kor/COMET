@@ -42,7 +42,7 @@ export function resultCsvFilename(snapshot: CalculatorResultSnapshot): string {
       ? snapshot.result.input_summary.composition
       : 'estimate';
   const date = snapshot.generatedAt.slice(0, 10);
-  return `catprice-result-${slugify(composition)}-${date}.csv`;
+  return `cattea-result-${slugify(composition)}-${date}.csv`;
 }
 
 export function buildResultCsv(snapshot: CalculatorResultSnapshot): string {
@@ -54,7 +54,7 @@ export function buildResultCsv(snapshot: CalculatorResultSnapshot): string {
 
   sections.push(
     rows(
-      ['CatPrice result export'],
+      ['CatTEA result export'],
       ['Composition', composition],
       ['Catalyst domain', String(result.input_summary.catalyst_domain ?? 'thermal')],
       ['Generated at', snapshot.generatedAt],
@@ -209,14 +209,14 @@ export function buildResultCsv(snapshot: CalculatorResultSnapshot): string {
 }
 
 export function rangeCsvFilename(result: EstimateRangeResult): string {
-  return `catprice-range-${slugify(result.composition)}.csv`;
+  return `cattea-range-${slugify(result.composition)}.csv`;
 }
 
 export function buildRangeCsv(result: EstimateRangeResult): string {
   const sections: string[] = [];
   sections.push(
     rows(
-      ['CatPrice estimate range export'],
+      ['CatTEA estimate range export'],
       ['Composition', result.composition],
       ['Catalyst domain', result.catalyst_domain],
       ['Application family', result.application_family],

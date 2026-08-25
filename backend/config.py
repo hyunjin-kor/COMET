@@ -6,11 +6,11 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
 
-    app_name: str = "CatPrice"
+    app_name: str = "CatTEA"
     debug: bool = False
 
     # Database
-    database_url: str = "sqlite:///./catprice.db"
+    database_url: str = "sqlite:///./cattea.db"
 
     # Metal price APIs
     metals_dev_api_key: str = ""

@@ -1,4 +1,4 @@
-# CatPrice — Codex Development Framework
+# CatTEA — Codex Development Framework
 
 > Master guide for AI-coding agents (Codex / Claude) working on this project.
 > Built on the original project plan's scope, with adopted ideas from
@@ -8,7 +8,7 @@
 
 ## 0. Project identity
 
-- **Name**: CatPrice (suggesting that the catalyst cost is "cracked" open and analyzed)
+- **Name**: CatTEA (Catalyst Techno-Economic Analysis)
 - **One-liner**: A desktop tool that estimates catalyst manufacturing cost from real-time metal market prices.
 - **License**: All rights reserved.
 - **Differentiator**: CatCost-derived methodology, but with automatic live market-price refresh and a modern web/desktop UI.
@@ -16,7 +16,7 @@
 
 ### 0.1 Current implementation status (as of 2026-07-20)
 
-- **Remote repository**: `https://github.com/hyunjin-kor/CatPrice`
+- **Remote repository**: `https://github.com/hyunjin-kor/CatTEA`
 - **Latest verified release**: `v1.3.12` (re-verify with `gh release list -L 1` before quoting)
 - **Current desktop shell**: Electron (`electron/`, `dist-electron/`)
 - **Frontend stack**: React 19 + TypeScript + Vite
@@ -31,7 +31,7 @@
 
 ### 1.1 Directly related projects
 
-| Project | Key idea | CatPrice adoption |
+| Project | Key idea | CatTEA adoption |
 |---------|----------|-------------------|
 | **NREL/catcost-data-tools** | Python tool for CatCost Excel↔JSON conversion | Reference Excel-parsing logic, keep the Materials Library JSON schema compatible. |
 | **ChemEngDPpy** | Python equipment sizing + CapEx/OpEx | Reference power-law equipment-cost correlations, implement Garrett/Peters factors. |
@@ -101,7 +101,7 @@ Docs:      Markdown docs in `docs/` (MkDocs Material is a candidate for a future
 ## 3. Project directory structure
 
 ```
-catprice/
+cattea/
 ├── AGENTS.md                          ← this file (Codex master guide)
 ├── README.md
 ├── LICENSE                            (All rights reserved)
@@ -262,7 +262,7 @@ current layout — this list is a navigation aid, not a contract.
 - `backend/launcher.py`, `backend/paths.py`: PyInstaller-friendly resource resolution for the packaged sidecar
 - `backend/services/bls_updater.py`: ChemPPI auto-update from BLS API
 - `electron/preload.js`: contextBridge for window controls and menu IPC
-- `scripts/` highlights: `build_backend_bundle.ps1` (PyInstaller), `smoke_test_desktop.ps1`, `stop_catprice_processes.ps1`, `validate_catcost_data.py` (local-only, requires gitignored CatCost workbook), `capture_readme_screens.mjs`, `generate_app_icons.py`
+- `scripts/` highlights: `build_backend_bundle.ps1` (PyInstaller), `smoke_test_desktop.ps1`, `stop_cattea_processes.ps1`, `validate_catcost_data.py` (local-only, requires gitignored CatCost workbook), `capture_readme_screens.mjs`, `generate_app_icons.py`
 
 ---
 

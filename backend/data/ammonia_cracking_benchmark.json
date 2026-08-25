@@ -4,7 +4,7 @@
   "catalyst_domain": "thermal",
   "application_family": "general",
   "reaction": "2 NH3 -> N2 + 3 H2",
-  "objective": "Optional literature-backed reference family for sanity-checking catalyst economics against a specific reaction window. CatPrice itself remains reaction-agnostic and uses these routes as starting points, not as the product boundary.",
+  "objective": "Optional literature-backed reference family for sanity-checking catalyst economics against a specific reaction window. CatTEA itself remains reaction-agnostic and uses these routes as starting points, not as the product boundary.",
   "decision_profiles": {
     "balanced": {
       "label": "Balanced",
@@ -119,7 +119,7 @@
       "price_usd": 73.5,
       "normalized_price_per_lb": 1666.81,
       "url": "https://www.sigmaaldrich.com/US/en/product/aldrich/203874",
-      "note": "Public reagent price used as a procurement sanity check; CatPrice still tracks Ni on a live metal basis for screening."
+      "note": "Public reagent price used as a procurement sanity check; CatTEA still tracks Ni on a live metal basis for screening."
     },
     {
       "id": "sigma-ru-chloride",

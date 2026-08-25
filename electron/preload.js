@@ -1,11 +1,11 @@
 /**
- * CatPrice Electron Preload Script
+ * CatTEA Electron Preload Script
  * Exposes safe IPC bridge to renderer process (React app)
  */
 
 const { contextBridge, ipcRenderer } = require('electron');
 
-contextBridge.exposeInMainWorld('catpriceDesktop', {
+contextBridge.exposeInMainWorld('catteaDesktop', {
   platform: process.platform,
 
   // Window controls

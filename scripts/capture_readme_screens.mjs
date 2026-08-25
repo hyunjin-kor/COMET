@@ -4,9 +4,9 @@ import process from 'node:process';
 import { spawnSync } from 'node:child_process';
 import { chromium } from 'playwright';
 
-const baseUrl = process.env.CATPRICE_CAPTURE_BASE_URL ?? 'http://127.0.0.1:4173';
+const baseUrl = process.env.CATTEA_CAPTURE_BASE_URL ?? 'http://127.0.0.1:4173';
 const outputDir = path.resolve(process.cwd(), 'docs', 'assets');
-const apiBaseUrl = process.env.CATPRICE_CAPTURE_API_URL ?? 'http://127.0.0.1:8765/api';
+const apiBaseUrl = process.env.CATTEA_CAPTURE_API_URL ?? 'http://127.0.0.1:8765/api';
 const LB_PER_KG = 2.20462;
 const TROY_OZ_PER_LB = 14.5833;
 
@@ -175,10 +175,10 @@ async function preparePage(context, draftSnapshot, resultSnapshot, route = '/') 
   const page = await context.newPage();
   page.setDefaultTimeout(45000);
   await page.addInitScript(({ draft, snapshot }) => {
-    localStorage.setItem('catprice_unit', 'kg');
+    localStorage.setItem('cattea_unit', 'kg');
     const apply = () => {
-      window.sessionStorage.setItem('catprice_calculator_draft', JSON.stringify(draft));
-      window.sessionStorage.setItem('catprice_calculator_result', JSON.stringify(snapshot));
+      window.sessionStorage.setItem('cattea_calculator_draft', JSON.stringify(draft));
+      window.sessionStorage.setItem('cattea_calculator_result', JSON.stringify(snapshot));
     };
     apply();
     const startedAt = Date.now();

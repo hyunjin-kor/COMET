@@ -2,9 +2,9 @@
 
 ## Launch Flow
 
-CatPrice desktop startup follows this order:
+CatTEA desktop startup follows this order:
 
-1. launch `CatPrice.exe`
+1. launch `CatTEA.exe`
 2. start or reuse the packaged FastAPI sidecar
 3. wait for `http://127.0.0.1:8765/api/health`
 4. open the packaged frontend
@@ -17,7 +17,7 @@ If startup stalls, the launcher log is the first place to check.
 The Electron launcher writes a startup log here:
 
 ```text
-C:\Users\<your-user>\AppData\Roaming\CatPrice\catprice-launcher.log
+C:\Users\<your-user>\AppData\Roaming\CatTEA\cattea-launcher.log
 ```
 
 Typical entries include:
@@ -36,12 +36,12 @@ The backend may already be running, or the frontend window may have failed to lo
 
 Check:
 
-- `catprice-launcher.log`
+- `cattea-launcher.log`
 - `http://127.0.0.1:8765/api/health`
 
 ### Packaging fails with `Access is denied`
 
-This usually means `CatPrice.exe` is still running while `electron-builder` tries to overwrite the old build.
+This usually means `CatTEA.exe` is still running while `electron-builder` tries to overwrite the old build.
 
 Use:
 

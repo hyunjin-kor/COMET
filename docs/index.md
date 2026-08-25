@@ -1,11 +1,11 @@
-# CatPrice Documentation
+# CatTEA Documentation
 
-CatPrice is a desktop catalyst cost application. The Electron shell, local FastAPI backend, calculation engine, and bundled datasets are all maintained in this repository.
+CatTEA is a desktop catalyst cost application. The Electron shell, local FastAPI backend, calculation engine, and bundled datasets are all maintained in this repository.
 
 ## Project Links
 
-- GitHub repository: [hyunjin-kor/CatPrice](https://github.com/hyunjin-kor/CatPrice)
-- Latest release: [GitHub Releases](https://github.com/hyunjin-kor/CatPrice/releases/latest)
+- GitHub repository: [hyunjin-kor/CatTEA](https://github.com/hyunjin-kor/CatTEA)
+- Latest release: [GitHub Releases](https://github.com/hyunjin-kor/CatTEA/releases/latest)
 - Link map and Claude handoff notes: [`project-links.md`](project-links.md)
 
 ## Focus

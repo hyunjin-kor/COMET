@@ -44,7 +44,7 @@ export default function KeyboardHints({ visible, onClose }: KeyboardHintsProps) 
         <h2 id="keyboard-hints-title" className="cp-heading-lg mt-2">
           Shortcuts
         </h2>
-        <p className="cp-body-copy mt-1">Quick keys for moving around CatPrice.</p>
+        <p className="cp-body-copy mt-1">Quick keys for moving around CatTEA.</p>
 
         <ul className="mt-5 space-y-2.5">
           {navigationItems.map((item, idx) => (

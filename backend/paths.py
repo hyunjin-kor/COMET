@@ -9,7 +9,7 @@ from pathlib import Path
 
 def app_root() -> Path:
     """Return the project/app root for source and frozen builds."""
-    env_root = os.getenv("CATPRICE_APP_ROOT")
+    env_root = os.getenv("CATTEA_APP_ROOT")
     if env_root:
         return Path(env_root).resolve()
 
@@ -23,7 +23,7 @@ def app_root() -> Path:
 
 def data_dir() -> Path:
     """Return the backend data directory."""
-    env_dir = os.getenv("CATPRICE_DATA_DIR")
+    env_dir = os.getenv("CATTEA_DATA_DIR")
     if env_dir:
         return Path(env_dir).resolve()
     return app_root() / "backend" / "data"

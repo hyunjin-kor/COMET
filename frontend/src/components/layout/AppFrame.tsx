@@ -5,7 +5,7 @@ import KeyboardHints from './KeyboardHints';
 import Sidebar from './Sidebar';
 import TopNavigation from './TopNavigation';
 
-const SIDEBAR_COLLAPSED_KEY = 'catprice.sidebar.collapsed';
+const SIDEBAR_COLLAPSED_KEY = 'cattea.sidebar.collapsed';
 
 function RouteLoadingFallback() {
   return (

@@ -7,8 +7,8 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
 $projectRoot = Split-Path -Parent $PSScriptRoot
-$packagedExe = Join-Path $projectRoot "dist-electron\win-unpacked\CatPrice.exe"
-$logPath = Join-Path $env:APPDATA "CatPrice\catprice-launcher.log"
+$packagedExe = Join-Path $projectRoot "dist-electron\win-unpacked\CatTEA.exe"
+$logPath = Join-Path $env:APPDATA "CatTEA\cattea-launcher.log"
 # Port 8765 must match BACKEND_PORT in electron/main.js (single source of truth).
 $healthUrl = "http://127.0.0.1:8765/api/health"
 $pricesUrl = "http://127.0.0.1:8765/api/prices"
@@ -93,20 +93,20 @@ if (-not (Test-Path $packagedExe)) {
     throw "Packaged desktop executable not found: $packagedExe"
 }
 
-& (Join-Path $PSScriptRoot "stop_catprice_processes.ps1") -Quiet
+& (Join-Path $PSScriptRoot "stop_cattea_processes.ps1") -Quiet
 Remove-Item $logPath -ErrorAction SilentlyContinue
 Assert-PortFree -Url $healthUrl
 
-Write-Host "[CatPrice] Launching packaged desktop app..."
+Write-Host "[CatTEA] Launching packaged desktop app..."
 Start-Process -FilePath $packagedExe | Out-Null
 
 $health = Wait-ForHttpOk -Url $healthUrl -TimeoutSeconds $TimeoutSeconds
 $healthData = $health.Content | ConvertFrom-Json
 
-$processes = @(Assert-ProcessRunning -Name "CatPrice")
-$windowCount = Wait-ForMainWindow -Name "CatPrice"
+$processes = @(Assert-ProcessRunning -Name "CatTEA")
+$windowCount = Wait-ForMainWindow -Name "CatTEA"
 
-Write-Host "[CatPrice] Re-launching app to verify single-instance recovery..."
+Write-Host "[CatTEA] Re-launching app to verify single-instance recovery..."
 Start-Process -FilePath $packagedExe | Out-Null
 Start-Sleep -Seconds 3
 
@@ -157,5 +157,5 @@ if (-not $relaunchLogged) {
 } | Format-List
 
 if (-not $LeaveRunning) {
-    & (Join-Path $PSScriptRoot "stop_catprice_processes.ps1") -Quiet
+    & (Join-Path $PSScriptRoot "stop_cattea_processes.ps1") -Quiet
 }

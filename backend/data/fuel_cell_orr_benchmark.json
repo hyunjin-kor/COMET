@@ -147,7 +147,7 @@
       "price_usd": 110.0,
       "normalized_price_per_lb": 49895.16,
       "url": "https://www.fuelcellstore.com/XT-Pt-20-XC-72R-Grade-S",
-      "note": "Public lab-scale Pt/C anchor. Commercial screening in CatPrice still follows live Pt feed plus route assumptions."
+      "note": "Public lab-scale Pt/C anchor. Commercial screening in CatTEA still follows live Pt feed plus route assumptions."
     },
     {
       "id": "sigma-cobalt-nitrate",
