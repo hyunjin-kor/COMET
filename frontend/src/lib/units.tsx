@@ -4,12 +4,12 @@ import { LB_PER_KG, type Unit } from './unit-conversion';
 
 export function UnitProvider({ children }: { children: ReactNode }) {
   const [unit, setUnit] = useState<Unit>(() =>
-    (localStorage.getItem('catprice_unit') as Unit) ?? 'kg'
+    (localStorage.getItem('cattea_unit') as Unit) ?? 'kg'
   );
 
   const toggle = () => setUnit(prev => {
     const next = prev === 'kg' ? 'lb' : 'kg';
-    localStorage.setItem('catprice_unit', next);
+    localStorage.setItem('cattea_unit', next);
     return next;
   });
 

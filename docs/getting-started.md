@@ -22,12 +22,12 @@ dist-electron\
 
 Primary local outputs:
 
-- `dist-electron\CatPrice Setup <version>.exe`
-- `dist-electron\win-unpacked\CatPrice.exe`
+- `dist-electron\CatTEA Setup <version>.exe`
+- `dist-electron\win-unpacked\CatTEA.exe`
 
-GitHub release assets follow the pattern `CatPrice.Setup.<version>.exe`, where `<version>` matches `package.json`.
+GitHub release assets follow the pattern `CatTEA.Setup.<version>.exe`, where `<version>` matches `package.json`.
 
-For normal distribution, the installer is enough. The packaged app bundles the local backend and the seed data files, and CatPrice initializes or updates the local SQLite database at startup.
+For normal distribution, the installer is enough. The packaged app bundles the local backend and the seed data files, and CatTEA initializes or updates the local SQLite database at startup.
 
 Before rebuilding, you can stop any running desktop instance with:
 
@@ -48,7 +48,7 @@ The Vite renderer appears at `http://localhost:5173`, but this is only a local d
 
 ### API Keys (Optional)
 
-CatPrice works without API keys using indexed or manual prices. For real-time prices:
+CatTEA works without API keys using indexed or manual prices. For real-time prices:
 
 | Key | Source | Free Tier |
 |-----|--------|-----------|
@@ -82,5 +82,5 @@ This verifies:
 The desktop launcher log is written to:
 
 ```text
-C:\Users\<your-user>\AppData\Roaming\CatPrice\catprice-launcher.log
+C:\Users\<your-user>\AppData\Roaming\CatTEA\cattea-launcher.log
 ```

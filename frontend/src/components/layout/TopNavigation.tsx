@@ -36,14 +36,14 @@ function CloseIcon() {
 export default function TopNavigation() {
   const { unit, toggle } = useUnit();
   const location = useLocation();
-  const isWindowsDesktop = typeof window !== 'undefined' && window.catpriceDesktop?.platform === 'win32';
+  const isWindowsDesktop = typeof window !== 'undefined' && window.catteaDesktop?.platform === 'win32';
   const [isMaximized, setIsMaximized] = useState(false);
 
   useEffect(() => {
     if (!isWindowsDesktop) return undefined;
 
-    void window.catpriceDesktop?.isWindowMaximized?.().then((value) => setIsMaximized(Boolean(value)));
-    const unsubscribe = window.catpriceDesktop?.onWindowStateChanged?.((payload) => {
+    void window.catteaDesktop?.isWindowMaximized?.().then((value) => setIsMaximized(Boolean(value)));
+    const unsubscribe = window.catteaDesktop?.onWindowStateChanged?.((payload) => {
       setIsMaximized(Boolean(payload.isMaximized));
     });
 
@@ -58,7 +58,7 @@ export default function TopNavigation() {
         <div className="drag-region relative flex h-[38px] items-center border-b border-[#e5e8eb] bg-white pl-3">
           <div className="flex min-w-0 items-center gap-2">
             <BrandMark className="h-5 w-5 flex-none" />
-            <span className="font-display text-[13px] leading-none text-[#191f28]">CatPrice</span>
+            <span className="font-display text-[13px] leading-none text-[#191f28]">CatTEA</span>
             {activeItem ? (
               <>
                 <span className="h-3.5 w-px bg-[#e5e8eb]" aria-hidden="true" />
@@ -70,7 +70,7 @@ export default function TopNavigation() {
           <div className="no-drag absolute right-0 top-0 flex h-full items-stretch" role="group" aria-label="Window controls">
             <button
               type="button"
-              onClick={() => window.catpriceDesktop?.minimizeWindow?.()}
+              onClick={() => window.catteaDesktop?.minimizeWindow?.()}
               className="flex w-12 items-center justify-center text-[#8b95a1] transition hover:bg-[#f2f4f6] hover:text-[#191f28]"
               title="Minimize"
               aria-label="Minimize window"
@@ -80,7 +80,7 @@ export default function TopNavigation() {
 
             <button
               type="button"
-              onClick={() => window.catpriceDesktop?.toggleMaximizeWindow?.()}
+              onClick={() => window.catteaDesktop?.toggleMaximizeWindow?.()}
               className="flex w-12 items-center justify-center text-[#8b95a1] transition hover:bg-[#f2f4f6] hover:text-[#191f28]"
               title={isMaximized ? 'Restore' : 'Maximize'}
               aria-label={isMaximized ? 'Restore window' : 'Maximize window'}
@@ -90,7 +90,7 @@ export default function TopNavigation() {
 
             <button
               type="button"
-              onClick={() => window.catpriceDesktop?.closeWindow?.()}
+              onClick={() => window.catteaDesktop?.closeWindow?.()}
               className="flex w-12 items-center justify-center text-[#8b95a1] transition hover:bg-[#f04452] hover:text-white"
               title="Close"
               aria-label="Close window"
@@ -121,7 +121,7 @@ export default function TopNavigation() {
               </div>
 
               <div className="min-w-0">
-                <div className="font-display text-[1.45rem] leading-none text-[#191f28]">CatPrice</div>
+                <div className="font-display text-[1.45rem] leading-none text-[#191f28]">CatTEA</div>
                 <div className="mt-0.5 text-xs text-[#8b95a1]">Evidence-first catalyst costing</div>
               </div>
             </div>

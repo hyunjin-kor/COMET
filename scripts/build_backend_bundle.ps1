@@ -5,8 +5,8 @@ $projectRoot = Split-Path -Parent $PSScriptRoot
 Set-Location $projectRoot
 
 function Resolve-Python {
-    if ($env:CATPRICE_PYTHON -and (Test-Path $env:CATPRICE_PYTHON)) {
-        return $env:CATPRICE_PYTHON
+    if ($env:CATTEA_PYTHON -and (Test-Path $env:CATTEA_PYTHON)) {
+        return $env:CATTEA_PYTHON
     }
 
     $candidates = @(
@@ -27,11 +27,11 @@ function Resolve-Python {
 
 $python = Resolve-Python
 
-Write-Host "[CatPrice] Using Python: $python"
+Write-Host "[CatTEA] Using Python: $python"
 
 cmd /c """$python"" -c ""import PyInstaller"" >nul 2>nul"
 if ($LASTEXITCODE -ne 0) {
-    Write-Host "[CatPrice] Installing PyInstaller..."
+    Write-Host "[CatTEA] Installing PyInstaller..."
     & $python -m pip install pyinstaller
     if ($LASTEXITCODE -ne 0) {
         throw "Failed to install PyInstaller"
@@ -44,18 +44,18 @@ $specPath = "build/pyinstaller-spec"
 $dataPath = Join-Path $projectRoot "backend\data"
 $entryPoint = Join-Path $projectRoot "backend\launcher.py"
 
-Get-Process CatPriceBackend -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+Get-Process CatTEABackend -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
 
 cmd /c "if exist ""$distPath"" rd /s /q ""$distPath"""
 cmd /c "if exist ""$workPath"" rd /s /q ""$workPath"""
 cmd /c "if exist ""$specPath"" rd /s /q ""$specPath"""
 
-Write-Host "[CatPrice] Building backend sidecar..."
+Write-Host "[CatTEA] Building backend sidecar..."
 
 & $python -m PyInstaller `
     --noconfirm `
     --onedir `
-    --name CatPriceBackend `
+    --name CatTEABackend `
     --paths . `
     --distpath $distPath `
     --workpath $workPath `
@@ -76,4 +76,4 @@ if ($LASTEXITCODE -ne 0) {
     throw "PyInstaller backend bundle failed"
 }
 
-Write-Host "[CatPrice] Backend sidecar ready at $distPath\CatPriceBackend"
+Write-Host "[CatTEA] Backend sidecar ready at $distPath\CatTEABackend"

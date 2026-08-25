@@ -1,11 +1,11 @@
-# CatPrice Frontend
+# CatTEA Frontend
 
-React/Vite renderer for the CatPrice desktop application.
+React/Vite renderer for the CatTEA desktop application.
 
 ## Project Links
 
-- Repository: https://github.com/hyunjin-kor/CatPrice
-- Latest release: https://github.com/hyunjin-kor/CatPrice/releases/tag/v1.1.13
+- Repository: https://github.com/hyunjin-kor/CatTEA
+- Latest release: https://github.com/hyunjin-kor/CatTEA/releases/tag/v1.1.13
 - Root handoff file for Claude: `../CLAUDE.md`
 
 ## Commands

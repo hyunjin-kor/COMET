@@ -3,7 +3,7 @@
 The CatCost workbook bundled for local development has invalid stylesheet XML,
 so ``openpyxl`` cannot load it reliably. These helpers read the workbook
 directly from the XLSX zip structure and expose small extraction utilities for
-the data that CatPrice consumes.
+the data that CatTEA consumes.
 """
 
 from __future__ import annotations

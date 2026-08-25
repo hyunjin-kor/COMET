@@ -5,7 +5,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        CatPrice has a locked stack and a focused scope (see [AGENTS.md](https://github.com/hyunjin-kor/CatPrice/blob/master/AGENTS.md) §2 and §3). Stack changes need an issue first; methodology changes have to keep the three CatCost validation cases within the tolerances in §7.
+        CatTEA has a locked stack and a focused scope (see [AGENTS.md](https://github.com/hyunjin-kor/CatTEA/blob/master/AGENTS.md) §2 and §3). Stack changes need an issue first; methodology changes have to keep the three CatCost validation cases within the tolerances in §7.
 
   - type: textarea
     id: problem

@@ -1,20 +1,20 @@
 # Release Notes
 
-The authoritative release log for CatPrice lives on GitHub:
+The authoritative release log for CatTEA lives on GitHub:
 
-**https://github.com/hyunjin-kor/CatPrice/releases**
+**https://github.com/hyunjin-kor/CatTEA/releases**
 
 Every tagged release (`vX.Y.Z`) carries the changelog, validation results,
 and download links for that version. The latest release also redirects via
 the repository's homepage URL:
 
-**https://github.com/hyunjin-kor/CatPrice/releases/latest**
+**https://github.com/hyunjin-kor/CatTEA/releases/latest**
 
 This file used to mirror release entries by hand and stopped at v1.1.13;
 it has been replaced by the GitHub Releases feed so there is exactly one
 source of truth. To find a specific version's notes, browse the
-[Releases page](https://github.com/hyunjin-kor/CatPrice/releases) or run:
+[Releases page](https://github.com/hyunjin-kor/CatTEA/releases) or run:
 
 ```bash
-gh release view <tag> --repo hyunjin-kor/CatPrice
+gh release view <tag> --repo hyunjin-kor/CatTEA
 ```

@@ -27,7 +27,7 @@ type SidebarProps = {
 export default function Sidebar({ collapsed, onToggleCollapsed }: SidebarProps) {
   const { unit, toggle } = useUnit();
   const location = useLocation();
-  const hasTitlebar = typeof window !== 'undefined' && window.catpriceDesktop?.platform === 'win32';
+  const hasTitlebar = typeof window !== 'undefined' && window.catteaDesktop?.platform === 'win32';
 
   return (
     <aside className="hidden lg:block">
@@ -37,7 +37,7 @@ export default function Sidebar({ collapsed, onToggleCollapsed }: SidebarProps) 
             <BrandMark className="h-9 w-9 flex-none" />
             {collapsed ? null : (
               <div className="min-w-0 flex-1">
-                <div className="font-display text-[1.2rem] leading-none text-[#191f28]">CatPrice</div>
+                <div className="font-display text-[1.2rem] leading-none text-[#191f28]">CatTEA</div>
                 <div className="mt-1 text-[11px] text-[#b0b8c1]">Catalyst cost workspace</div>
               </div>
             )}
