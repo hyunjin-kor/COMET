@@ -424,8 +424,6 @@ function createMainWindow() {
     {
       label: 'File',
       submenu: [
-        { label: 'New Estimate', accelerator: 'CmdOrCtrl+N', click: () => mainWindow.webContents.send('new-estimate') },
-        { type: 'separator' },
         { role: 'quit' },
       ],
     },
