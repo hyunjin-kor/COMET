@@ -235,9 +235,11 @@ function migrateLegacyDatabase() {
   const target = getDatabasePath();
   if (fs.existsSync(target)) return;
 
-  // appId is unchanged so installs upgrade in place, but Electron derives
-  // userData from productName, which both the CatTEA and COMET renames did
-  // change. Carry the most recent previous install's database over once.
+  // package.json pins appId to com.catprice.app through the CatTEA and COMET
+  // renames so installs upgrade in place instead of landing a second app; do
+  // not "correct" it to match the current name. Electron still derives userData
+  // from productName, which both renames did change, so carry the most recent
+  // previous install's database over once.
   const legacyCandidates = [
     path.join(app.getPath('appData'), 'CatTEA', 'cattea.db'),
     path.join(app.getPath('appData'), 'CatPrice', 'catprice.db'),
