@@ -1,13 +1,13 @@
 cff-version: 1.2.0
-message: "If you use CatTEA in your research, please cite it as below."
-title: "CatTEA: catalyst cost estimation from live metal market prices"
+message: "If you use COMET in your research, please cite it as below."
+title: "COMET: Catalyst Overall Manufacturing Estimation Tool"
 type: software
 authors:
   - family-names: "Kang"
     given-names: "Hyunjin"
-repository-code: "https://github.com/hyunjin-kor/CatTEA"
+repository-code: "https://github.com/hyunjin-kor/COMET"
 doi: "10.5281/zenodo.21451931"
-license-url: "https://github.com/hyunjin-kor/CatTEA/blob/master/LICENSE"
+license-url: "https://github.com/hyunjin-kor/COMET/blob/master/LICENSE"
 keywords:
   - catalysis
   - cost-estimation

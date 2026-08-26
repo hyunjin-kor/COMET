@@ -1,6 +1,6 @@
-# Contributing to CatTEA
+# Contributing to COMET
 
-Thanks for taking an interest. CatTEA is an independently developed
+Thanks for taking an interest. COMET is an independently developed
 desktop tool with a locked stack and a small surface area, so the
 contribution path is intentionally tight.
 
@@ -54,6 +54,6 @@ issue for vulnerabilities.
 
 ## License
 
-CatTEA is source-available, all rights reserved (`LICENSE`). By
+COMET is source-available, all rights reserved (`LICENSE`). By
 opening a PR you confirm that you authored the change and grant the
 maintainer permission to incorporate it under that license.

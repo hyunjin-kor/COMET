@@ -1,11 +1,11 @@
-# CatTEA Frontend
+# COMET Frontend
 
-React/Vite renderer for the CatTEA desktop application.
+React/Vite renderer for the COMET desktop application.
 
 ## Project Links
 
-- Repository: https://github.com/hyunjin-kor/CatTEA
-- Latest release: https://github.com/hyunjin-kor/CatTEA/releases/tag/v1.1.13
+- Repository: https://github.com/hyunjin-kor/COMET
+- Latest release: https://github.com/hyunjin-kor/COMET/releases/tag/v1.1.13
 - Root handoff file for Claude: `../CLAUDE.md`
 
 ## Commands

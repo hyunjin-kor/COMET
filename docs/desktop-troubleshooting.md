@@ -2,9 +2,9 @@
 
 ## Launch Flow
 
-CatTEA desktop startup follows this order:
+COMET desktop startup follows this order:
 
-1. launch `CatTEA.exe`
+1. launch `COMET.exe`
 2. start or reuse the packaged FastAPI sidecar
 3. wait for `http://127.0.0.1:8765/api/health`
 4. open the packaged frontend
@@ -17,7 +17,7 @@ If startup stalls, the launcher log is the first place to check.
 The Electron launcher writes a startup log here:
 
 ```text
-C:\Users\<your-user>\AppData\Roaming\CatTEA\cattea-launcher.log
+C:\Users\<your-user>\AppData\Roaming\COMET\comet-launcher.log
 ```
 
 Typical entries include:
@@ -36,12 +36,12 @@ The backend may already be running, or the frontend window may have failed to lo
 
 Check:
 
-- `cattea-launcher.log`
+- `comet-launcher.log`
 - `http://127.0.0.1:8765/api/health`
 
 ### Packaging fails with `Access is denied`
 
-This usually means `CatTEA.exe` is still running while `electron-builder` tries to overwrite the old build.
+This usually means `COMET.exe` is still running while `electron-builder` tries to overwrite the old build.
 
 Use:
 

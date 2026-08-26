@@ -90,8 +90,8 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="CatTEA API",
-    description="Loopback API sidecar for the CatTEA desktop app",
+    title="COMET API",
+    description="Loopback API sidecar for the COMET desktop app",
     version=APP_VERSION,
     lifespan=lifespan,
     docs_url="/docs" if settings.debug else None,

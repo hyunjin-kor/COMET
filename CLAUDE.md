@@ -1,6 +1,6 @@
-# CatTEA Claude Handoff
+# COMET Claude Handoff
 
-Entry point for Claude / Claude Code on CatTEA. Read this first, then `AGENTS.md`.
+Entry point for Claude / Claude Code on COMET. Read this first, then `AGENTS.md`.
 
 ## Read first
 
@@ -59,12 +59,12 @@ Bias toward caution on anything touching the calculation engine, price feeds, pa
 
 These are the *only* facts you may state without re-verification. Re-verify (`gh release list -L 1`, file read, etc.) before quoting in responses or commits.
 
-- **Project**: CatTEA
-- **Repository**: https://github.com/hyunjin-kor/CatTEA
+- **Project**: COMET
+- **Repository**: https://github.com/hyunjin-kor/COMET
 - **Default branch**: `master`
 - **Package version**: defined in `package.json`, `pyproject.toml`, `frontend/package.json` — read those files directly instead of quoting from this doc (snapshots go stale across releases)
-  - Installer name pattern: `CatTEA.Setup.<version>.exe`
-  - Portable archive: `CatTEA-win-unpacked.zip`
+  - Installer name pattern: `COMET.Setup.<version>.exe`
+  - Portable archive: `COMET-win-unpacked.zip`
 - **Public blog / homepage**: not configured in GitHub repo metadata
 - **License**: source-available, all rights reserved (see `LICENSE`)
 
@@ -77,7 +77,7 @@ The package version is *not* automatically a published GitHub release. Before qu
 - **Don't invent.** No fabricated source links, blog URLs, benchmark values, prices, citations, or release status. If unknown, say so or check.
 - **Don't commit secrets.** `.env.example` holds key names only; never real values.
 - **Treat `CatCost_v1-1-1/` as proprietary.** Don't redistribute its raw data. Re-source materials from public references (ICIS public, Sigma-Aldrich, USGS).
-- **CatTEA is independent.** Cite CatCost methodology academically; never claim CatCost ownership or NREL endorsement.
+- **COMET is independent.** Cite CatCost methodology academically; never claim CatCost ownership or NREL endorsement.
 - **Co-update versioned references.** When a release ships, update `docs/project-links.md`, `README.md`, `package.json`, and `pyproject.toml` together — never one alone. Verify asset names from the GitHub Releases API.
 - **Stay inside the locked stack** in `AGENTS.md` §2. Don't introduce a new framework, ORM, or build tool without asking.
 

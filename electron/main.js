@@ -1,5 +1,5 @@
 /**
- * CatTEA Electron Main Process
+ * COMET Electron Main Process
  * Launches the FastAPI backend as a sidecar and shows the React frontend
  */
 
@@ -19,7 +19,7 @@ app.disableHardwareAcceleration();
 //   - package.json (dev:backend, dev:frontend, electron:wait scripts)
 //   - frontend/src/lib/api.ts (file:// fallback URL)
 //   - scripts/smoke_test_desktop.ps1
-//   - scripts/stop_cattea_processes.ps1
+//   - scripts/stop_comet_processes.ps1
 const BACKEND_PORT = 8765;      // Avoid conflicts with other services
 const BACKEND_HOST = '127.0.0.1';
 const BACKEND_URL  = `http://${BACKEND_HOST}:${BACKEND_PORT}`;
@@ -102,7 +102,7 @@ function debugLog(message) {
       ? app.getPath('userData')
       : (process.env.TEMP || __dirname);
     fs.mkdirSync(baseDir, { recursive: true });
-    fs.appendFileSync(path.join(baseDir, 'cattea-launcher.log'), `${line}\n`);
+    fs.appendFileSync(path.join(baseDir, 'comet-launcher.log'), `${line}\n`);
   } catch (_error) {
     // Ignore file logging failures.
   }
@@ -172,8 +172,8 @@ function waitForBackend(timeoutMs) {
 // ─── Backend Detection ────────────────────────────────────────────────────────
 function getPythonExecutable() {
   // 1. Explicitly set via env var
-  if (process.env.CATTEA_PYTHON && fs.existsSync(process.env.CATTEA_PYTHON)) {
-    return process.env.CATTEA_PYTHON;
+  if (process.env.COMET_PYTHON && fs.existsSync(process.env.COMET_PYTHON)) {
+    return process.env.COMET_PYTHON;
   }
 
   // 2. Packaged app: bundled venv
@@ -216,17 +216,17 @@ function getBackendDir() {
 
 function getPackagedBackendExecutable() {
   const candidates = [
-    path.join(process.resourcesPath, 'backend-sidecar', 'CatTEABackend.exe'),
-    path.join(process.resourcesPath, 'backend-sidecar', 'CatTEABackend', 'CatTEABackend.exe'),
+    path.join(process.resourcesPath, 'backend-sidecar', 'COMETBackend.exe'),
+    path.join(process.resourcesPath, 'backend-sidecar', 'COMETBackend', 'COMETBackend.exe'),
   ];
   return candidates.find((candidate) => fs.existsSync(candidate)) || null;
 }
 
 function getDatabasePath() {
   if (app.isPackaged) {
-    return path.join(app.getPath('userData'), 'cattea.db');
+    return path.join(app.getPath('userData'), 'comet.db');
   }
-  return path.join(__dirname, '..', 'cattea.db');
+  return path.join(__dirname, '..', 'comet.db');
 }
 
 function migrateLegacyDatabase() {
@@ -236,15 +236,19 @@ function migrateLegacyDatabase() {
   if (fs.existsSync(target)) return;
 
   // appId is unchanged so installs upgrade in place, but Electron derives
-  // userData from productName, which the CatTEA rename did change. Carry the
-  // previous install's database over once.
-  const legacy = path.join(app.getPath('appData'), 'CatPrice', 'catprice.db');
-  if (!fs.existsSync(legacy)) return;
+  // userData from productName, which both the CatTEA and COMET renames did
+  // change. Carry the most recent previous install's database over once.
+  const legacyCandidates = [
+    path.join(app.getPath('appData'), 'CatTEA', 'cattea.db'),
+    path.join(app.getPath('appData'), 'CatPrice', 'catprice.db'),
+  ];
+  const legacy = legacyCandidates.find((candidate) => fs.existsSync(candidate));
+  if (!legacy) return;
 
   try {
     fs.mkdirSync(path.dirname(target), { recursive: true });
     fs.copyFileSync(legacy, target);
-    debugLog(`Migrated database from legacy CatPrice install: ${legacy}`);
+    debugLog(`Migrated database from legacy install: ${legacy}`);
   } catch (error) {
     debugLog(`Legacy database migration failed: ${error.message}`);
   }
@@ -344,7 +348,7 @@ async function startBackend() {
         const tail = stderrTail.join('\n');
         const portInUse = /10048|EADDRINUSE|address already in use/i.test(tail);
         const reason = portInUse
-          ? `Port ${BACKEND_PORT} is already in use by another process. Stop any running CatTEA or development backend (e.g. uvicorn) and try again.`
+          ? `Port ${BACKEND_PORT} is already in use by another process. Stop any running COMET or development backend (e.g. uvicorn) and try again.`
           : `Backend exited during startup (code ${code ?? 'unknown'}).${tail ? `\n\n${tail}` : ''}`;
         finishStartup(reject, new Error(reason));
       }
@@ -422,7 +426,7 @@ function createMainWindow() {
     height: 940,
     minWidth: 1120,
     minHeight: 720,
-    title: 'CatTEA | Catalyst Techno-Economic Analysis',
+    title: 'COMET | Catalyst Overall Manufacturing Estimation Tool',
     backgroundColor: '#fbf7f1',
     show: false,
     icon: path.join(__dirname, 'icon.png'),
@@ -464,7 +468,7 @@ function createMainWindow() {
     {
       label: 'Help',
       submenu: [
-        { label: 'About CatTEA', click: showAbout },
+        { label: 'About COMET', click: showAbout },
       ],
     },
   ]);
@@ -505,7 +509,7 @@ p{color:#7099cc;font-size:14px;max-width:500px;text-align:center}
 </style></head><body>
 <h1>Could not connect to backend</h1>
 <p>Failed to load <code>${url}</code><br><br>${desc}</p>
-<p>Try restarting the app. If the issue persists, check the launcher log in <code>%APPDATA%\\CatTEA\\cattea-launcher.log</code>.</p>
+<p>Try restarting the app. If the issue persists, check the launcher log in <code>%APPDATA%\\COMET\\comet-launcher.log</code>.</p>
 </body></html>`)}`)
       .catch(() => {});
   });
@@ -584,7 +588,7 @@ function setupAutoUpdater() {
       .showMessageBox(mainWindow, {
         type: 'info',
         title: 'Update ready',
-        message: `CatTEA ${info.version} has been downloaded.`,
+        message: `COMET ${info.version} has been downloaded.`,
         detail: 'Restart the app to apply the update. The current draft is kept for this session only, so finish or save your estimate first.',
         buttons: ['Restart now', 'Later'],
         defaultId: 0,
@@ -605,8 +609,8 @@ function setupAutoUpdater() {
 function showAbout() {
   dialog.showMessageBox(mainWindow, {
     type: 'info',
-    title: 'About CatTEA',
-    message: 'CatTEA | Catalyst Techno-Economic Analysis',
+    title: 'About COMET',
+    message: 'COMET | Catalyst Overall Manufacturing Estimation Tool',
     detail: [
       `Version ${app.getVersion()}`,
       '',
@@ -678,7 +682,7 @@ app.whenReady().then(() => {
       debugLog(`Backend startup failure: ${err.message}`);
       dialog.showErrorBox(
         'Backend not running',
-        `CatTEA could not start the local server.\n\n${err.message}\n\nMake sure Python 3.11+ is installed and dependencies are set up.\nRun: pip install .`
+        `COMET could not start the local server.\n\n${err.message}\n\nMake sure Python 3.11+ is installed and dependencies are set up.\nRun: pip install .`
       );
     });
 });
@@ -688,7 +692,7 @@ app.on('render-process-gone', (_event, webContents, details) => {
   if (mainWindow && webContents.id === mainWindow.webContents.id) {
     dialog.showErrorBox(
       'Renderer Error',
-      `The CatTEA window stopped responding (${details.reason}). Please restart the app.`
+      `The COMET window stopped responding (${details.reason}). Please restart the app.`
     );
   }
 });
@@ -723,7 +727,7 @@ app.on('before-quit', (event) => {
 // Prevent multiple instances
 const gotLock = app.requestSingleInstanceLock();
 if (!gotLock) {
-  debugLog('Another CatTEA instance already owns the single-instance lock');
+  debugLog('Another COMET instance already owns the single-instance lock');
   app.quit();
 } else {
   app.on('second-instance', () => {

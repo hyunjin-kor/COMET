@@ -1,11 +1,11 @@
-# CatTEA Documentation
+# COMET Documentation
 
-CatTEA is a desktop catalyst cost application. The Electron shell, local FastAPI backend, calculation engine, and bundled datasets are all maintained in this repository.
+COMET is a desktop catalyst cost application. The Electron shell, local FastAPI backend, calculation engine, and bundled datasets are all maintained in this repository.
 
 ## Project Links
 
-- GitHub repository: [hyunjin-kor/CatTEA](https://github.com/hyunjin-kor/CatTEA)
-- Latest release: [GitHub Releases](https://github.com/hyunjin-kor/CatTEA/releases/latest)
+- GitHub repository: [hyunjin-kor/COMET](https://github.com/hyunjin-kor/COMET)
+- Latest release: [GitHub Releases](https://github.com/hyunjin-kor/COMET/releases/latest)
 - Link map and Claude handoff notes: [`project-links.md`](project-links.md)
 
 ## Focus
