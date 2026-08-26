@@ -8,7 +8,7 @@
 
 ## 0. Project identity
 
-- **Name**: COMET (Catalyst Overall Manufacturing Estimation Tool)
+- **Name**: COMET: Catalyst Overall Manufacturing Estimation Tool
 - **One-liner**: A desktop tool that estimates catalyst manufacturing cost from real-time metal market prices.
 - **License**: All rights reserved.
 - **Differentiator**: CatCost-derived methodology, but with automatic live market-price refresh and a modern web/desktop UI.
