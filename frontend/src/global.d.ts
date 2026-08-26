@@ -2,7 +2,7 @@ export {};
 
 declare global {
   interface Window {
-    catteaDesktop?: {
+    cometDesktop?: {
       platform: string;
       minimizeWindow?: () => Promise<void>;
       toggleMaximizeWindow?: () => Promise<boolean>;

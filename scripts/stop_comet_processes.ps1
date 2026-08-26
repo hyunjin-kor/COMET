@@ -5,7 +5,7 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
-$processNames = @("CatTEA", "CatTEABackend")
+$processNames = @("COMET", "COMETBackend")
 $stoppedAny = $false
 
 foreach ($name in $processNames) {
@@ -16,7 +16,7 @@ foreach ($name in $processNames) {
 
     foreach ($process in $processes) {
         if (-not $Quiet) {
-            Write-Host "[CatTEA] Stopping $($process.ProcessName) (PID $($process.Id))"
+            Write-Host "[COMET] Stopping $($process.ProcessName) (PID $($process.Id))"
         }
 
         Stop-Process -Id $process.Id -Force -ErrorAction SilentlyContinue
@@ -35,21 +35,21 @@ try {
         $owner = Get-Process -Id $conn.OwningProcess -ErrorAction SilentlyContinue
         if (-not $owner) { continue }
         if (-not $Quiet) {
-            Write-Host "[CatTEA] Releasing port $port from $($owner.ProcessName) (PID $($owner.Id))"
+            Write-Host "[COMET] Releasing port $port from $($owner.ProcessName) (PID $($owner.Id))"
         }
         Stop-Process -Id $owner.Id -Force -ErrorAction SilentlyContinue
         $stoppedAny = $true
     }
 } catch {
     if (-not $Quiet) {
-        Write-Host "[CatTEA] Could not query port $port owner: $($_.Exception.Message)"
+        Write-Host "[COMET] Could not query port $port owner: $($_.Exception.Message)"
     }
 }
 
 if (-not $Quiet) {
     if ($stoppedAny) {
-        Write-Host "[CatTEA] Desktop processes stopped."
+        Write-Host "[COMET] Desktop processes stopped."
     } else {
-        Write-Host "[CatTEA] No CatTEA desktop processes were running."
+        Write-Host "[COMET] No COMET desktop processes were running."
     }
 }

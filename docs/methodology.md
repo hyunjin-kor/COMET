@@ -1,10 +1,10 @@
 # Methodology
 
-CatTEA implements the catalyst cost estimation methodology from the CatCost framework (Baddour et al. 2018, Van Allsburg et al. 2022).
+COMET implements the catalyst cost estimation methodology from the CatCost framework (Baddour et al. 2018, Van Allsburg et al. 2022).
 
 ## Current Scope
 
-CatTEA currently exposes four research-facing layers in the shipped product:
+COMET currently exposes four research-facing layers in the shipped product:
 
 1. `materials and live price basis`
    Material rows can resolve against live feeds, indexed references, literature rows, or vendor rows.
@@ -68,7 +68,7 @@ Net reclaimed value accounts for:
 - Metal losses during refining
 - Recovery processing costs (thermal oxidation, incoming inspection, refining charges)
 
-In the CatTEA UI this is exposed as an optional `recovery scenario` for thermocatalyst cases. It is intended for early screening only.
+In the COMET UI this is exposed as an optional `recovery scenario` for thermocatalyst cases. It is intended for early screening only.
 
 ## Research Extensions Already Implemented
 

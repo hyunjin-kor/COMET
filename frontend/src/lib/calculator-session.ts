@@ -59,8 +59,8 @@ export type CalculatorBenchmarkPreset = Pick<
   'slug' | 'title' | 'archetype' | 'screening_basis' | 'screening_summary' | 'catalyst_domain' | 'application_family' | 'route' | 'scores' | 'decision_notes'
 >;
 
-const DRAFT_KEY = 'cattea_calculator_draft';
-const RESULT_KEY = 'cattea_calculator_result';
+const DRAFT_KEY = 'comet_calculator_draft';
+const RESULT_KEY = 'comet_calculator_result';
 
 function canUseStorage(): boolean {
   return typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';

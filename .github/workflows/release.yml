@@ -62,7 +62,7 @@ jobs:
 
       - name: Archive unpacked desktop build
         shell: powershell
-        run: Compress-Archive -Path dist-electron\win-unpacked\* -DestinationPath dist-electron\CatTEA-win-unpacked.zip
+        run: Compress-Archive -Path dist-electron\win-unpacked\* -DestinationPath dist-electron\COMET-win-unpacked.zip
 
       - name: Generate release notes
         id: notes
@@ -83,11 +83,11 @@ jobs:
           body: ${{ steps.notes.outputs.result }}
           generate_release_notes: false
           # nsis.artifactName pins the installer to the space-free
-          # "CatTEA.Setup.<version>.exe" pattern, so the disk name and the
+          # "COMET.Setup.<version>.exe" pattern, so the disk name and the
           # GitHub asset name are identical. latest.yml and the .blockmap are
           # what electron-updater reads to detect and delta-download updates.
           files: |
-            dist-electron/CatTEA*.exe
-            dist-electron/CatTEA*.exe.blockmap
-            dist-electron/CatTEA-win-unpacked.zip
+            dist-electron/COMET*.exe
+            dist-electron/COMET*.exe.blockmap
+            dist-electron/COMET-win-unpacked.zip
             dist-electron/latest.yml

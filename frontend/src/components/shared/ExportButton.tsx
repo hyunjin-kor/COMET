@@ -21,12 +21,12 @@ function downloadBlob(content: BlobPart, type: string, filename: string) {
 }
 
 function sanitizeFileStem(value: string) {
-  return value.trim().replace(/[^a-z0-9-_]+/gi, '-').replace(/^-+|-+$/g, '') || 'cattea-estimate';
+  return value.trim().replace(/[^a-z0-9-_]+/gi, '-').replace(/^-+|-+$/g, '') || 'comet-estimate';
 }
 
 export default function ExportButton({
   estimateId,
-  fileStem = 'cattea-estimate',
+  fileStem = 'comet-estimate',
   className = '',
   disabled = false,
 }: ExportButtonProps) {

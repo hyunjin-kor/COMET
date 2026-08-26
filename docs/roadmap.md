@@ -2,7 +2,7 @@
 
 Last updated: 2026-07-20 (v1.3.9)
 
-CatTEA currently does one thing well: local catalyst cost screening on Windows, validated against the published CatCost reference cases. The next stage of the project is about three things — being citable, being easier to trust, and answering more of the questions a catalysis researcher actually has. The phases below are ordered by leverage, not by difficulty.
+COMET currently does one thing well: local catalyst cost screening on Windows, validated against the published CatCost reference cases. The next stage of the project is about three things — being citable, being easier to trust, and answering more of the questions a catalysis researcher actually has. The phases below are ordered by leverage, not by difficulty.
 
 ## Phase 1 — Credibility (make it citable)
 
@@ -17,7 +17,7 @@ The app is used in a research context, so the biggest near-term win is making it
 
 - **Auto-update** — done (2026-07-21): `electron-updater` checks GitHub Releases on startup, downloads in the background, and offers a restart prompt; releases ship `latest.yml` + blockmap alongside the installer from v1.3.13 on.
 - **Windows SmartScreen**: README documents the unsigned-binary warning as of v1.3.13; code signing remains open — evaluate when the user base justifies the certificate cost.
-- **Winget manifest**: `winget install CatTEA` is a cheap distribution channel once releases are stable.
+- **Winget manifest**: `winget install COMET` is a cheap distribution channel once releases are stable.
 
 ## Phase 3 — Capability (answer more questions)
 

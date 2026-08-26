@@ -2,17 +2,17 @@
 
 Last verified: 2026-07-20
 
-This page tracks CatTEA's external connection points. Only verified links are listed as active.
+This page tracks COMET's external connection points. Only verified links are listed as active.
 
 ## Active Links
 
 | Area | Link | Status |
 | --- | --- | --- |
-| GitHub repository | https://github.com/hyunjin-kor/CatTEA | Active public repository |
-| Issues | https://github.com/hyunjin-kor/CatTEA/issues | Active |
-| Releases index | https://github.com/hyunjin-kor/CatTEA/releases | Active |
-| Latest release | https://github.com/hyunjin-kor/CatTEA/releases/latest | Redirects to the newest tag; re-verify with `gh release list -L 1` before quoting a specific version |
-| Source repository clone URL | https://github.com/hyunjin-kor/CatTEA.git | Active |
+| GitHub repository | https://github.com/hyunjin-kor/COMET | Active public repository |
+| Issues | https://github.com/hyunjin-kor/COMET/issues | Active |
+| Releases index | https://github.com/hyunjin-kor/COMET/releases | Active |
+| Latest release | https://github.com/hyunjin-kor/COMET/releases/latest | Redirects to the newest tag; re-verify with `gh release list -L 1` before quoting a specific version |
+| Source repository clone URL | https://github.com/hyunjin-kor/COMET.git | Active |
 | Zenodo DOI (all versions) | https://doi.org/10.5281/zenodo.21451931 | Active; auto-archives each new GitHub release |
 
 ## Not Yet Connected
@@ -31,7 +31,7 @@ Single source of truth: `package.json`, `pyproject.toml`, `frontend/package.json
 - Python package version: `1.3.18`
 - Frontend package version: `1.3.18`
 - Latest verified GitHub release: `v1.3.18` (published 2026-07-21, verified via `gh release view v1.3.18` on 2026-07-21; every release is archived on Zenodo under concept DOI `10.5281/zenodo.21451931`)
-- Asset name pattern: `CatTEA.Setup.<version>.exe` (installer), `CatTEA-win-unpacked.zip` (portable), plus `latest.yml` and `CatTEA.Setup.<version>.exe.blockmap` (auto-update metadata, from v1.3.13 on)
+- Asset name pattern: `COMET.Setup.<version>.exe` (installer), `COMET-win-unpacked.zip` (portable), plus `latest.yml` and `COMET.Setup.<version>.exe.blockmap` (auto-update metadata, from v1.3.13 on)
 
 The published GitHub release tag may lag behind the package version when a bump has not yet been tagged. To re-verify, run `gh release list -L 1` against the repo.
 

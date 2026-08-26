@@ -1,8 +1,12 @@
 <p align="center">
-  <img src="./frontend/public/icon-256x256.png" width="128" alt="CatTEA app icon" />
+  <img src="./frontend/public/icon-256x256.png" width="128" alt="COMET app icon" />
 </p>
 
-<h1 align="center">CatTEA</h1>
+<h1 align="center">COMET</h1>
+
+<p align="center">
+  <em>Catalyst Overall Manufacturing Estimation Tool</em>
+</p>
 
 <p align="center">
   <strong>Estimate what a catalyst costs to make, using live metal prices.</strong>
@@ -12,7 +16,7 @@
   <a href="https://doi.org/10.5281/zenodo.21451931"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.21451931.svg" alt="DOI" /></a>
 </p>
 
-CatTEA (Catalyst Techno-Economic Analysis) is a Windows desktop app for early-stage catalyst cost screening. You describe a catalyst — composition, support, preparation route — and it returns a manufacturing cost estimate built on current metal prices, published costing methodology, and a curated materials library. Everything runs locally: the app bundles its own calculation backend and database, so there is no server to set up and no account to create.
+COMET (Catalyst Overall Manufacturing Estimation Tool) is a Windows desktop app for early-stage catalyst cost screening. You describe a catalyst — composition, support, preparation route — and it returns a manufacturing cost estimate built on current metal prices, published costing methodology, and a curated materials library. Everything runs locally: the app bundles its own calculation backend and database, so there is no server to set up and no account to create.
 
 It is aimed at catalysis researchers who want a quick, defensible answer to questions like:
 
@@ -22,10 +26,10 @@ It is aimed at catalysis researchers who want a quick, defensible answer to ques
 
 ## Download
 
-Get the installer from the [latest release](https://github.com/hyunjin-kor/CatTEA/releases/latest):
+Get the installer from the [latest release](https://github.com/hyunjin-kor/COMET/releases/latest):
 
-- `CatTEA.Setup.<version>.exe` — recommended for most users
-- `CatTEA-win-unpacked.zip` — portable version, runs without installation
+- `COMET.Setup.<version>.exe` — recommended for most users
+- `COMET-win-unpacked.zip` — portable version, runs without installation
 
 The app works offline out of the box, falling back to indexed and manual prices. Live price feeds only need an API key if you want them (see below).
 
@@ -96,7 +100,7 @@ npm run dev      # development: Electron shell + FastAPI sidecar + Vite renderer
 npm run build    # packaged installer under dist-electron\
 ```
 
-The build produces `dist-electron\CatTEA Setup <version>.exe` and an unpacked app at `dist-electron\win-unpacked\CatTEA.exe`. Running instances are stopped automatically before a rebuild, or manually with `npm run desktop:stop`.
+The build produces `dist-electron\COMET Setup <version>.exe` and an unpacked app at `dist-electron\win-unpacked\COMET.exe`. Running instances are stopped automatically before a rebuild, or manually with `npm run desktop:stop`.
 
 ## Tests
 
@@ -110,7 +114,7 @@ The engine is validated against the three published CatCost reference cases (2 w
 
 ## Optional API keys
 
-CatTEA runs without any keys. Add them only if you want live price feeds:
+COMET runs without any keys. Add them only if you want live price feeds:
 
 ```env
 METALS_DEV_API_KEY=your_key      # metals.dev, free tier available
@@ -120,14 +124,14 @@ BLS_API_KEY=your_key             # bls.gov, free with registration
 
 ## Method basis
 
-CatTEA is an independent implementation. It cites the CatCost methodology academically but does not redistribute CatCost source data, and it is not affiliated with or endorsed by NREL.
+COMET is an independent implementation. It cites the CatCost methodology academically but does not redistribute CatCost source data, and it is not affiliated with or endorsed by NREL.
 
 - Baddour, F. G., et al. (2018). *Journal of the American Chemical Society*.
 - Van Allsburg, K. M., et al. (2022). Early-stage evaluation of catalyst manufacturing cost and environmental impact using CatCost. *Nature Catalysis*.
 
 Benchmark- and route-specific references are attached to the datasets inside the app.
 
-To cite CatTEA itself, use the Zenodo DOI [10.5281/zenodo.21451931](https://doi.org/10.5281/zenodo.21451931) or GitHub's "Cite this repository" button.
+To cite COMET itself, use the Zenodo DOI [10.5281/zenodo.21451931](https://doi.org/10.5281/zenodo.21451931) or GitHub's "Cite this repository" button.
 
 ## Roadmap
 
