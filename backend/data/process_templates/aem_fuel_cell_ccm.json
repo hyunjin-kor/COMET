@@ -48,5 +48,7 @@
     "https://www.fuelcellstore.com/versogen-piperion-aem-self-supporting-40um-73800014",
     "https://www.fuelcellstore.com/versogen-piperion-dispersion-5wt-74820000",
     "https://www.fuelcellstore.com/sustainion-xa-9-ionomer-ethanol"
-  ]
+  ],
+  "confidence": "vendor_quote",
+  "quote_year": null
 }

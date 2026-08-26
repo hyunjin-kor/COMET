@@ -48,5 +48,7 @@
     "https://www.fuelcellstore.com/sustainion-x37-50-grade-rt-membrane",
     "https://www.fuelcellstore.com/pdt-50-eptfe-reinforced-aem-78010057",
     "https://www.fuelcellstore.com/sustainion-xa-9-ionomer-ethanol"
-  ]
+  ],
+  "confidence": "vendor_quote",
+  "quote_year": null
 }

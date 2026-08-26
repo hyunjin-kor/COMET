@@ -3,7 +3,11 @@
   "name": "PGM on Carbon Support",
   "description": "Precious group metal (Pt, Pd, Ru) deposited on activated carbon via incipient wetness impregnation.",
   "category": "Supported PGM",
-  "example_catalysts": ["Pt/C", "Pd/C", "Ru/C"],
+  "example_catalysts": [
+    "Pt/C",
+    "Pd/C",
+    "Ru/C"
+  ],
   "steps": [
     "mixer_slurry",
     "incipient_wetness",
@@ -11,7 +15,18 @@
     "dryer_batch_vacuum_tray"
   ],
   "typical_parameters": {
-    "metal_loading_wt_pct": {"min": 0.5, "max": 10, "default": 2},
-    "order_size_tons": {"min": 0.5, "max": 10, "default": 2}
-  }
+    "metal_loading_wt_pct": {
+      "min": 0.5,
+      "max": 10,
+      "default": 2
+    },
+    "order_size_tons": {
+      "min": 0.5,
+      "max": 10,
+      "default": 2
+    }
+  },
+  "confidence": "unsourced",
+  "reference_urls": [],
+  "quote_year": null
 }

@@ -1,6 +1,6 @@
 {
   "version": "1.1.1",
-  "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+  "source": "CatCost_v1-1-1.xlsx, Step Library sheet (default origin; per-entry `source` is authoritative and is replaced as each rate is re-anchored to a public reference)",
   "basis_year": 2017,
   "basis_currency": "USD",
   "scale_thresholds": {
@@ -17,7 +17,11 @@
       "cost_medium": 150.0,
       "cost_large": null,
       "note": "N/A at large scale",
-      "basis": "$/hr, mid-2017"
+      "basis": "$/hr, mid-2017",
+      "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+      "reference_url": null,
+      "quote_year": 2017,
+      "confidence": "toller_survey"
     },
     {
       "name": "Crystallizer",
@@ -26,7 +30,11 @@
       "cost_medium": 200.0,
       "cost_large": 300.0,
       "note": "-",
-      "basis": "$/hr, mid-2017"
+      "basis": "$/hr, mid-2017",
+      "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+      "reference_url": null,
+      "quote_year": 2017,
+      "confidence": "toller_survey"
     },
     {
       "name": "Dryer, batch vacuum tray",
@@ -35,7 +43,11 @@
       "cost_medium": null,
       "cost_large": null,
       "note": "Small scale only",
-      "basis": "$/hr, mid-2017"
+      "basis": "$/hr, mid-2017",
+      "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+      "reference_url": null,
+      "quote_year": 2017,
+      "confidence": "toller_survey"
     },
     {
       "name": "Dryer, rotary (40–100 °C)",
@@ -44,7 +56,11 @@
       "cost_medium": 100.0,
       "cost_large": 200.0,
       "note": "-",
-      "basis": "$/hr, mid-2017"
+      "basis": "$/hr, mid-2017",
+      "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+      "reference_url": null,
+      "quote_year": 2017,
+      "confidence": "toller_survey"
     },
     {
       "name": "Dryer, rotary (100–300 °C)",
@@ -53,7 +69,11 @@
       "cost_medium": 150.0,
       "cost_large": 300.0,
       "note": "For higher temp use kiln",
-      "basis": "$/hr, mid-2017"
+      "basis": "$/hr, mid-2017",
+      "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+      "reference_url": null,
+      "quote_year": 2017,
+      "confidence": "toller_survey"
     },
     {
       "name": "Dryer, spray",
@@ -62,7 +82,11 @@
       "cost_medium": 300.0,
       "cost_large": 550.0,
       "note": "Substitute with rotary dryer at small scale",
-      "basis": "$/hr, mid-2017"
+      "basis": "$/hr, mid-2017",
+      "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+      "reference_url": null,
+      "quote_year": 2017,
+      "confidence": "toller_survey"
     },
     {
       "name": "Extruder, with feeder",
@@ -71,7 +95,11 @@
       "cost_medium": 200.0,
       "cost_large": 425.0,
       "note": "Bonnot",
-      "basis": "$/hr, mid-2017"
+      "basis": "$/hr, mid-2017",
+      "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+      "reference_url": null,
+      "quote_year": 2017,
+      "confidence": "toller_survey"
     },
     {
       "name": "Filter, belt vacuum",
@@ -80,7 +108,11 @@
       "cost_medium": 175.0,
       "cost_large": 400.0,
       "note": "-",
-      "basis": "$/hr, mid-2017"
+      "basis": "$/hr, mid-2017",
+      "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+      "reference_url": null,
+      "quote_year": 2017,
+      "confidence": "toller_survey"
     },
     {
       "name": "Filter, plate and frame",
@@ -89,7 +121,11 @@
       "cost_medium": null,
       "cost_large": null,
       "note": "Substitute with belt or rotary vacuum at M/L scale",
-      "basis": "$/hr, mid-2017"
+      "basis": "$/hr, mid-2017",
+      "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+      "reference_url": null,
+      "quote_year": 2017,
+      "confidence": "toller_survey"
     },
     {
       "name": "Filter, rotary vacuum",
@@ -98,7 +134,11 @@
       "cost_medium": 100.0,
       "cost_large": 300.0,
       "note": "Substitute with plate and frame at small scale",
-      "basis": "$/hr, mid-2017"
+      "basis": "$/hr, mid-2017",
+      "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+      "reference_url": null,
+      "quote_year": 2017,
+      "confidence": "toller_survey"
     },
     {
       "name": "Flare",
@@ -107,7 +147,11 @@
       "cost_medium": 75.0,
       "cost_large": 150.0,
       "note": "-",
-      "basis": "$/hr, mid-2017"
+      "basis": "$/hr, mid-2017",
+      "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+      "reference_url": null,
+      "quote_year": 2017,
+      "confidence": "toller_survey"
     },
     {
       "name": "Incipient wetness (impregnation)",
@@ -116,7 +160,11 @@
       "cost_medium": 100.0,
       "cost_large": 200.0,
       "note": "-",
-      "basis": "$/hr, mid-2017"
+      "basis": "$/hr, mid-2017",
+      "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+      "reference_url": null,
+      "quote_year": 2017,
+      "confidence": "toller_survey"
     },
     {
       "name": "Kiln, batch (300–1290 °C)",
@@ -125,7 +173,11 @@
       "cost_medium": null,
       "cost_large": null,
       "note": "A.k.a. calciner. Sub with continuous kiln at M/L scale",
-      "basis": "$/hr, mid-2017"
+      "basis": "$/hr, mid-2017",
+      "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+      "reference_url": null,
+      "quote_year": 2017,
+      "confidence": "toller_survey"
     },
     {
       "name": "Kiln, continuous direct (300–1290 °C)",
@@ -134,7 +186,11 @@
       "cost_medium": 225.0,
       "cost_large": 400.0,
       "note": "A.k.a. calciner. Sub with batch kiln at small scale",
-      "basis": "$/hr, mid-2017"
+      "basis": "$/hr, mid-2017",
+      "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+      "reference_url": null,
+      "quote_year": 2017,
+      "confidence": "toller_survey"
     },
     {
       "name": "Kiln, continuous indirect (300–1290 °C)",
@@ -143,7 +199,11 @@
       "cost_medium": 175.0,
       "cost_large": 325.0,
       "note": "A.k.a. calciner. Sub with batch kiln at small scale",
-      "basis": "$/hr, mid-2017"
+      "basis": "$/hr, mid-2017",
+      "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+      "reference_url": null,
+      "quote_year": 2017,
+      "confidence": "toller_survey"
     },
     {
       "name": "Mill",
@@ -152,7 +212,11 @@
       "cost_medium": 100.0,
       "cost_large": 200.0,
       "note": "-",
-      "basis": "$/hr, mid-2017"
+      "basis": "$/hr, mid-2017",
+      "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+      "reference_url": null,
+      "quote_year": 2017,
+      "confidence": "toller_survey"
     },
     {
       "name": "Mixer, dry blender",
@@ -161,7 +225,11 @@
       "cost_medium": 100.0,
       "cost_large": 200.0,
       "note": "-",
-      "basis": "$/hr, mid-2017"
+      "basis": "$/hr, mid-2017",
+      "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+      "reference_url": null,
+      "quote_year": 2017,
+      "confidence": "toller_survey"
     },
     {
       "name": "Mixer, slurry",
@@ -170,7 +238,11 @@
       "cost_medium": 100.0,
       "cost_large": 200.0,
       "note": "Muller",
-      "basis": "$/hr, mid-2017"
+      "basis": "$/hr, mid-2017",
+      "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+      "reference_url": null,
+      "quote_year": 2017,
+      "confidence": "toller_survey"
     },
     {
       "name": "Membrane pretreatment (CatCost proxy)",
@@ -179,7 +251,11 @@
       "cost_medium": 60.0,
       "cost_large": 200.0,
       "note": "Proxy mapped to reactor_simple for acid wash, rinse, and soak conditioning.",
-      "basis": "$/hr, mid-2017 proxy"
+      "basis": "$/hr, mid-2017 proxy",
+      "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+      "reference_url": null,
+      "quote_year": 2017,
+      "confidence": "proxy"
     },
     {
       "name": "Substrate pretreatment (CatCost proxy)",
@@ -188,7 +264,11 @@
       "cost_medium": 60.0,
       "cost_large": 200.0,
       "note": "Proxy mapped to reactor_simple for wetting, cleaning, and surface prep.",
-      "basis": "$/hr, mid-2017 proxy"
+      "basis": "$/hr, mid-2017 proxy",
+      "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+      "reference_url": null,
+      "quote_year": 2017,
+      "confidence": "proxy"
     },
     {
       "name": "Ion-exchange conversion (CatCost proxy)",
@@ -197,7 +277,11 @@
       "cost_medium": 60.0,
       "cost_large": 200.0,
       "note": "Proxy mapped to reactor_simple for chloride, carbonate, or hydroxide-form conversion soaks.",
-      "basis": "$/hr, mid-2017 proxy"
+      "basis": "$/hr, mid-2017 proxy",
+      "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+      "reference_url": null,
+      "quote_year": 2017,
+      "confidence": "proxy"
     },
     {
       "name": "Ionomer ink homogenization (CatCost proxy)",
@@ -206,7 +290,11 @@
       "cost_medium": 100.0,
       "cost_large": 200.0,
       "note": "Proxy mapped to mixer_slurry for catalyst-ink blending and recirculation.",
-      "basis": "$/hr, mid-2017 proxy"
+      "basis": "$/hr, mid-2017 proxy",
+      "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+      "reference_url": null,
+      "quote_year": 2017,
+      "confidence": "proxy"
     },
     {
       "name": "Ultrasonic dispersion (CatCost proxy)",
@@ -215,7 +303,11 @@
       "cost_medium": 100.0,
       "cost_large": 200.0,
       "note": "Proxy mapped to mixer_slurry for deagglomeration and ink conditioning.",
-      "basis": "$/hr, mid-2017 proxy"
+      "basis": "$/hr, mid-2017 proxy",
+      "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+      "reference_url": null,
+      "quote_year": 2017,
+      "confidence": "proxy"
     },
     {
       "name": "CCM coating pass (CatCost proxy)",
@@ -224,7 +316,11 @@
       "cost_medium": 100.0,
       "cost_large": 200.0,
       "note": "Proxy mapped to incipient_wetness for liquid deposition per coating pass.",
-      "basis": "$/hr, mid-2017 proxy"
+      "basis": "$/hr, mid-2017 proxy",
+      "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+      "reference_url": null,
+      "quote_year": 2017,
+      "confidence": "proxy"
     },
     {
       "name": "Electrode drying, low temperature (CatCost proxy)",
@@ -233,7 +329,11 @@
       "cost_medium": 100.0,
       "cost_large": 200.0,
       "note": "Proxy mapped to dryer_rotary_40_100C for coated-layer drying below 100 C.",
-      "basis": "$/hr, mid-2017 proxy"
+      "basis": "$/hr, mid-2017 proxy",
+      "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+      "reference_url": null,
+      "quote_year": 2017,
+      "confidence": "proxy"
     },
     {
       "name": "Hot press lamination (CatCost proxy)",
@@ -242,7 +342,11 @@
       "cost_medium": 200.0,
       "cost_large": 425.0,
       "note": "Proxy mapped to extruder_with_feeder for lamination/press consolidation.",
-      "basis": "$/hr, mid-2017 proxy"
+      "basis": "$/hr, mid-2017 proxy",
+      "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+      "reference_url": null,
+      "quote_year": 2017,
+      "confidence": "proxy"
     },
     {
       "name": "Reactor, simple (mixing)",
@@ -251,7 +355,11 @@
       "cost_medium": 60.0,
       "cost_large": 200.0,
       "note": "-",
-      "basis": "$/hr, mid-2017"
+      "basis": "$/hr, mid-2017",
+      "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+      "reference_url": null,
+      "quote_year": 2017,
+      "confidence": "toller_survey"
     },
     {
       "name": "Reactor, multistep",
@@ -260,7 +368,11 @@
       "cost_medium": 175.0,
       "cost_large": 600.0,
       "note": "-",
-      "basis": "$/hr, mid-2017"
+      "basis": "$/hr, mid-2017",
+      "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+      "reference_url": null,
+      "quote_year": 2017,
+      "confidence": "toller_survey"
     },
     {
       "name": "Electrochemical break-in (CatCost proxy)",
@@ -269,7 +381,11 @@
       "cost_medium": 60.0,
       "cost_large": 200.0,
       "note": "Proxy mapped to reactor_simple for activation, wet-up, and conditioning.",
-      "basis": "$/hr, mid-2017 proxy"
+      "basis": "$/hr, mid-2017 proxy",
+      "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+      "reference_url": null,
+      "quote_year": 2017,
+      "confidence": "proxy"
     },
     {
       "name": "Scrubber, NOx",
@@ -278,7 +394,11 @@
       "cost_medium": 75.0,
       "cost_large": 200.0,
       "note": "-",
-      "basis": "$/hr, mid-2017"
+      "basis": "$/hr, mid-2017",
+      "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+      "reference_url": null,
+      "quote_year": 2017,
+      "confidence": "toller_survey"
     }
   ]
 }
