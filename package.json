@@ -30,7 +30,6 @@
     "pack:smoke": "npm run pack && npm run smoke:desktop"
   },
   "build": {
-    "//appId": "Kept as com.catprice.app through the CatTEA and COMET renames so existing installs upgrade in place instead of installing a second app",
     "appId": "com.catprice.app",
     "productName": "COMET",
     "copyright": "Copyright 2026 hyunjin.kang",
