@@ -3,7 +3,10 @@
   "name": "FCC Catalyst (Zeolite-based)",
   "description": "Fluid catalytic cracking catalyst based on USY zeolite in clay/alumina matrix, produced by spray drying.",
   "category": "FCC/Zeolite",
-  "example_catalysts": ["USY-FCC", "ZSM-5/Al2O3"],
+  "example_catalysts": [
+    "USY-FCC",
+    "ZSM-5/Al2O3"
+  ],
   "steps": [
     "mixer_slurry",
     "reactor_simple",
@@ -14,7 +17,18 @@
     "scrubber_nox"
   ],
   "typical_parameters": {
-    "zeolite_content_wt_pct": {"min": 15, "max": 40, "default": 30},
-    "order_size_tons": {"min": 50, "max": 500, "default": 200}
-  }
+    "zeolite_content_wt_pct": {
+      "min": 15,
+      "max": 40,
+      "default": 30
+    },
+    "order_size_tons": {
+      "min": 50,
+      "max": 500,
+      "default": 200
+    }
+  },
+  "confidence": "unsourced",
+  "reference_urls": [],
+  "quote_year": null
 }

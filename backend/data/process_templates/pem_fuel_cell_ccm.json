@@ -47,5 +47,7 @@
     "https://www.fuelcellstore.com/pfsa-d50u-proton-exchange-membrane-87010020",
     "https://www.fuelcellstore.com/pfsa-dispersion-d5-758000100",
     "https://www.fuelcellstore.com/hydrogen-air-mea"
-  ]
+  ],
+  "confidence": "vendor_quote",
+  "quote_year": null
 }

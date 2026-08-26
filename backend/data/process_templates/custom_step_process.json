@@ -6,5 +6,8 @@
   "example_catalysts": [],
   "steps": [],
   "step_quantities": [],
-  "source": "CatCost_v1-1-1.xlsx, 3a Step Method sheet"
+  "source": "CatCost_v1-1-1.xlsx, 3a Step Method sheet",
+  "confidence": "toller_survey",
+  "reference_urls": [],
+  "quote_year": 2017
 }
