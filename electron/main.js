@@ -426,7 +426,7 @@ function createMainWindow() {
     height: 940,
     minWidth: 1120,
     minHeight: 720,
-    title: 'COMET | Catalyst Overall Manufacturing Estimation Tool',
+    title: 'COMET: Catalyst Overall Manufacturing Estimation Tool',
     backgroundColor: '#fbf7f1',
     show: false,
     icon: path.join(__dirname, 'icon.png'),
@@ -610,7 +610,7 @@ function showAbout() {
   dialog.showMessageBox(mainWindow, {
     type: 'info',
     title: 'About COMET',
-    message: 'COMET | Catalyst Overall Manufacturing Estimation Tool',
+    message: 'COMET: Catalyst Overall Manufacturing Estimation Tool',
     detail: [
       `Version ${app.getVersion()}`,
       '',

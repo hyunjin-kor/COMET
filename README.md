@@ -16,7 +16,7 @@
   <a href="https://doi.org/10.5281/zenodo.21451931"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.21451931.svg" alt="DOI" /></a>
 </p>
 
-COMET (Catalyst Overall Manufacturing Estimation Tool) is a Windows desktop app for early-stage catalyst cost screening. You describe a catalyst — composition, support, preparation route — and it returns a manufacturing cost estimate built on current metal prices, published costing methodology, and a curated materials library. Everything runs locally: the app bundles its own calculation backend and database, so there is no server to set up and no account to create.
+**COMET: Catalyst Overall Manufacturing Estimation Tool** is a Windows desktop app for early-stage catalyst cost screening. You describe a catalyst — composition, support, preparation route — and it returns a manufacturing cost estimate built on current metal prices, published costing methodology, and a curated materials library. Everything runs locally: the app bundles its own calculation backend and database, so there is no server to set up and no account to create.
 
 It is aimed at catalysis researchers who want a quick, defensible answer to questions like:
 
