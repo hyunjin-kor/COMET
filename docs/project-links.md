@@ -30,7 +30,7 @@ Single source of truth: `package.json`, `pyproject.toml`, `frontend/package.json
 - Current package version: `1.3.20`
 - Python package version: `1.3.20`
 - Frontend package version: `1.3.20`
-- Latest verified GitHub release: `v1.3.19` (published 2026-08-26, verified via `gh release view v1.3.19` on 2026-08-26; every release is archived on Zenodo under concept DOI `10.5281/zenodo.21451931`)
+- Latest verified GitHub release: `v1.3.20` (published 2026-08-27, verified via `gh release view v1.3.20` on 2026-08-27; every release is archived on Zenodo under concept DOI `10.5281/zenodo.21451931`)
 - Asset name pattern: `COMET.Setup.<version>.exe` (installer), `COMET-win-unpacked.zip` (portable), plus `latest.yml` and `COMET.Setup.<version>.exe.blockmap` (auto-update metadata, from v1.3.13 on)
 
 The published GitHub release tag may lag behind the package version when a bump has not yet been tagged. To re-verify, run `gh release list -L 1` against the repo.
