@@ -1,7 +1,7 @@
 {
   "id": "wet_impregnation_metal_oxide",
-  "name": "Wet Impregnation - Metal on Oxide Support",
-  "description": "Standard incipient wetness impregnation of metal precursor on oxide support (Al2O3, SiO2, TiO2), followed by drying and calcination.",
+  "name": "Incipient Wetness Impregnation - Metal on Oxide Support",
+  "description": "Incipient wetness (dry) impregnation: precursor solution equal to the support pore volume, so there is no excess liquid to separate. Followed by drying and calcination. Compare with the excess-solution route, which adds filtration and loses precursor to the mother liquor.",
   "category": "Supported Metal",
   "example_catalysts": [
     "Ni/Al2O3",
@@ -33,7 +33,49 @@
       "default": 20
     }
   },
-  "confidence": "unsourced",
-  "reference_urls": [],
-  "quote_year": null
+  "confidence": "literature",
+  "reference_urls": [
+    "https://doi.org/10.1021/acs.iecr.6c01082"
+  ],
+  "quote_year": 2026,
+  "route_note": "Renamed from 'Wet Impregnation'. The step list has never contained a filtration stage, which is the defining difference between the two routes, so the previous name described a route this template does not model.",
+  "source": "Jimenez et al., Industrial Catalyst Impregnation: Modern Equipment, Techniques, and Scaling Challenges, Ind. Eng. Chem. Res. 65, 12447 (2026)",
+  "step_quantities": [
+    {
+      "step": "mixer_slurry",
+      "template_step_name": "Mixer, slurry",
+      "quantity": 1.0,
+      "note": "Precursor solution make-up"
+    },
+    {
+      "step": "incipient_wetness",
+      "template_step_name": "Incipient wetness (impregnation)",
+      "quantity": 1.0,
+      "note": "Solution volume matched to support pore volume"
+    },
+    {
+      "step": "dryer_rotary_100_300C",
+      "template_step_name": "Dryer, rotary (100-300 C)",
+      "quantity": 1.0,
+      "note": "-"
+    },
+    {
+      "step": "kiln_continuous_indirect",
+      "template_step_name": "Kiln, continuous indirect (300-1290 C)",
+      "quantity": 1.0,
+      "note": "Calcination. Sub with batch kiln at small scale"
+    },
+    {
+      "step": "mill",
+      "template_step_name": "Mill",
+      "quantity": 1.0,
+      "note": "-"
+    },
+    {
+      "step": "scrubber_nox",
+      "template_step_name": "Scrubber, NOx",
+      "quantity": 1.0,
+      "note": "Nitrate decomposition off-gas"
+    }
+  ]
 }

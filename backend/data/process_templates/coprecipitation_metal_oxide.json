@@ -1,0 +1,73 @@
+{
+  "id": "coprecipitation_metal_oxide",
+  "name": "Co-precipitation - Metal on Oxide Support",
+  "description": "Metal and support nitrates are co-precipitated with base to a target pH, then filtered, washed, dried and calcined. Reference preparation: 10 wt% Ni/Al2O3 precipitated with NH4OH to pH 8, dried at 105 C, calcined at 750 C for 3 h.",
+  "example_catalysts": [
+    "Ni/Al2O3",
+    "Cu/ZnO/Al2O3",
+    "Co/Al2O3"
+  ],
+  "steps": [
+    "mixer_slurry",
+    "reactor_simple",
+    "filter_rotary_vacuum",
+    "dryer_rotary_100_300C",
+    "kiln_continuous_indirect",
+    "mill",
+    "scrubber_nox"
+  ],
+  "step_quantities": [
+    {
+      "step": "mixer_slurry",
+      "template_step_name": "Mixer, slurry",
+      "quantity": 1.0,
+      "note": "Mixed nitrate solution make-up"
+    },
+    {
+      "step": "reactor_simple",
+      "template_step_name": "Reactor, simple (mixing)",
+      "quantity": 1.0,
+      "note": "Precipitation with base to target pH"
+    },
+    {
+      "step": "filter_rotary_vacuum",
+      "template_step_name": "Filter, rotary vacuum",
+      "quantity": 1.0,
+      "note": "Filtration and washing of the precipitate"
+    },
+    {
+      "step": "dryer_rotary_100_300C",
+      "template_step_name": "Dryer, rotary (100-300 C)",
+      "quantity": 1.0,
+      "note": "105 C overnight in the reference preparation"
+    },
+    {
+      "step": "kiln_continuous_indirect",
+      "template_step_name": "Kiln, continuous indirect (300-1290 C)",
+      "quantity": 1.0,
+      "note": "750 C for 3 h in the reference preparation"
+    },
+    {
+      "step": "mill",
+      "template_step_name": "Mill",
+      "quantity": 1.0,
+      "note": "-"
+    },
+    {
+      "step": "scrubber_nox",
+      "template_step_name": "Scrubber, NOx",
+      "quantity": 1.0,
+      "note": "Nitrate decomposition off-gas"
+    }
+  ],
+  "route_note": "Adds a precipitation stage plus filtration and washing relative to incipient wetness, and consumes a base reagent the impregnation routes do not.",
+  "source": "Co-precipitation, impregnation and sol-gel preparation of Ni catalysts for pyrolysis-catalytic steam reforming of waste plastics, Appl. Catal. B 239, 565 (2018)",
+  "reference_urls": [
+    "https://doi.org/10.1016/j.apcatb.2018.07.075"
+  ],
+  "category": "Supported Metal",
+  "catalyst_domain": "thermal",
+  "application_family": "general",
+  "confidence": "literature",
+  "quote_year": 2026
+}

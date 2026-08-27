@@ -1,0 +1,73 @@
+{
+  "id": "excess_solution_impregnation_metal_oxide",
+  "name": "Excess-Solution (Wet) Impregnation - Metal on Oxide Support",
+  "description": "The support is slurried in an excess volume of precursor solution and equilibrated, then separated by filtration/decantation before drying and activation.",
+  "example_catalysts": [
+    "Ni/Al2O3",
+    "Co/Al2O3",
+    "Cu/SiO2"
+  ],
+  "steps": [
+    "mixer_slurry",
+    "reactor_simple",
+    "filter_rotary_vacuum",
+    "dryer_rotary_100_300C",
+    "kiln_continuous_indirect",
+    "mill",
+    "scrubber_nox"
+  ],
+  "step_quantities": [
+    {
+      "step": "mixer_slurry",
+      "template_step_name": "Mixer, slurry",
+      "quantity": 1.0,
+      "note": "Support slurried in excess precursor solution"
+    },
+    {
+      "step": "reactor_simple",
+      "template_step_name": "Reactor, simple (mixing)",
+      "quantity": 1.0,
+      "note": "Equilibration hold - stirred tank"
+    },
+    {
+      "step": "filter_rotary_vacuum",
+      "template_step_name": "Filter, rotary vacuum",
+      "quantity": 1.0,
+      "note": "Solid-liquid separation. Sub with plate and frame at small scale"
+    },
+    {
+      "step": "dryer_rotary_100_300C",
+      "template_step_name": "Dryer, rotary (100-300 C)",
+      "quantity": 1.0,
+      "note": "-"
+    },
+    {
+      "step": "kiln_continuous_indirect",
+      "template_step_name": "Kiln, continuous indirect (300-1290 C)",
+      "quantity": 1.0,
+      "note": "Calcination. Sub with batch kiln at small scale"
+    },
+    {
+      "step": "mill",
+      "template_step_name": "Mill",
+      "quantity": 1.0,
+      "note": "-"
+    },
+    {
+      "step": "scrubber_nox",
+      "template_step_name": "Scrubber, NOx",
+      "quantity": 1.0,
+      "note": "Nitrate decomposition off-gas"
+    }
+  ],
+  "route_note": "Costs more than incipient wetness for the same loading: it needs downstream solid-liquid separation, carries a larger solvent inventory, and loses precursor with the mother liquor. Precursor loss is a raw-material effect the step model does not yet price - only the extra equipment time is captured here.",
+  "source": "Jimenez et al., Industrial Catalyst Impregnation: Modern Equipment, Techniques, and Scaling Challenges, Ind. Eng. Chem. Res. 65, 12447 (2026)",
+  "reference_urls": [
+    "https://doi.org/10.1021/acs.iecr.6c01082"
+  ],
+  "category": "Supported Metal",
+  "catalyst_domain": "thermal",
+  "application_family": "general",
+  "confidence": "literature",
+  "quote_year": 2026
+}
