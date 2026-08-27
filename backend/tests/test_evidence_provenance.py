@@ -102,8 +102,13 @@ def test_proxy_steps_are_the_known_set():
 
 
 def test_unsourced_templates_are_the_known_set():
-    """The three templates with no provenance at all, tracked so they cannot grow."""
-    expected = {"metal_pgm_carbon.json", "wet_impregnation_metal_oxide.json", "zeolite_fcc.json"}
+    """Templates with no provenance at all, tracked so they cannot grow.
+
+    Was three. The two impregnation routes now cite the ACS impregnation review;
+    zeolite_fcc still has nothing, and no zeolite manufacturing source has been
+    retrieved yet, so inventing one for it would defeat the point of this file.
+    """
+    expected = {"zeolite_fcc.json"}
     actual = {name for name, t in load_templates() if t["confidence"] == "unsourced"}
     assert actual == expected, (
         f"unsourced set changed: added {sorted(actual - expected)}, removed {sorted(expected - actual)}"

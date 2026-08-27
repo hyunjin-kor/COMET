@@ -1,0 +1,66 @@
+{
+  "id": "sol_gel_metal_oxide",
+  "name": "Sol-Gel - Metal on Oxide Support",
+  "description": "Metal alkoxide is hydrolysed and condensed in alcohol with the metal precursor, then gelled, dried and calcined. Reference preparation: 10 wt% Ni/Al2O3 from aluminium tri-sec-butoxide in absolute ethanol.",
+  "example_catalysts": [
+    "Ni/Al2O3",
+    "Pt/SiO2",
+    "Co/SiO2"
+  ],
+  "steps": [
+    "mixer_slurry",
+    "reactor_multistep",
+    "dryer_rotary_40_100C",
+    "kiln_continuous_indirect",
+    "mill",
+    "scrubber_nox"
+  ],
+  "step_quantities": [
+    {
+      "step": "mixer_slurry",
+      "template_step_name": "Mixer, slurry",
+      "quantity": 1.0,
+      "note": "Alkoxide dissolved in alcohol with the metal precursor"
+    },
+    {
+      "step": "reactor_multistep",
+      "template_step_name": "Reactor, multistep",
+      "quantity": 1.0,
+      "note": "Hydrolysis, condensation and gelation"
+    },
+    {
+      "step": "dryer_rotary_40_100C",
+      "template_step_name": "Dryer, rotary (40-100 C)",
+      "quantity": 1.0,
+      "note": "Gel drying - low temperature to limit cracking"
+    },
+    {
+      "step": "kiln_continuous_indirect",
+      "template_step_name": "Kiln, continuous indirect (300-1290 C)",
+      "quantity": 1.0,
+      "note": "Calcination"
+    },
+    {
+      "step": "mill",
+      "template_step_name": "Mill",
+      "quantity": 1.0,
+      "note": "-"
+    },
+    {
+      "step": "scrubber_nox",
+      "template_step_name": "Scrubber, NOx",
+      "quantity": 1.0,
+      "note": "Off-gas from precursor decomposition"
+    }
+  ],
+  "route_note": "The cost driver is the raw material, not the equipment: a metal alkoxide and a large alcohol volume replace an aqueous nitrate solution. The step library has no solvent-recovery operation, so the alcohol inventory is not yet priced and this route is understated against the aqueous ones.",
+  "source": "Co-precipitation, impregnation and sol-gel preparation of Ni catalysts for pyrolysis-catalytic steam reforming of waste plastics, Appl. Catal. B 239, 565 (2018)",
+  "reference_urls": [
+    "https://doi.org/10.1016/j.apcatb.2018.07.075"
+  ],
+  "category": "Supported Metal",
+  "catalyst_domain": "thermal",
+  "application_family": "general",
+  "confidence": "literature",
+  "quote_year": 2026
+}
