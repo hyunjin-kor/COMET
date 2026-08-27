@@ -58,3 +58,6 @@ scripts/launch_codex.ps1
 # Local-only workspace (archives, scratch)
 _local/
 capture.log
+
+# Bundled font license must ship with the font (OFL requirement), despite *.txt above
+!frontend/src/assets/fonts/OFL.txt

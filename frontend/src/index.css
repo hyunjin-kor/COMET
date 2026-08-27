@@ -1,5 +1,16 @@
 @import "tailwindcss";
 
+/* Bundled so the packaged app renders identically offline. Loading this from a
+   CDN meant a desktop app phoned out on every launch and fell back to whatever
+   the machine happened to have installed when it could not. License: OFL.txt. */
+@font-face {
+  font-family: "Pretendard Variable";
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  src: url("./assets/fonts/PretendardVariable.woff2") format("woff2-variations");
+}
+
 /* ──────────────────────────────────────────────────────────────────────
    COMET design tokens.
    - All-light chrome: white cards and a white rail on a cool gray canvas.
