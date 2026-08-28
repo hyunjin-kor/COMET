@@ -137,6 +137,7 @@ export interface ElectrodeCostInput {
   ionomer_solids_fraction?: number;
   substrate_cost_per_cm2?: number;
   membrane_cost_per_cm2?: number;
+  manufacturing_scenario?: 'rnd_batch' | 'pilot_roll_to_roll';
 }
 
 export interface CostInput {
@@ -196,6 +197,18 @@ export interface CostResult {
     ionomer_cost_usd: number;
     substrate_cost_usd: number;
     membrane_cost_usd: number;
+    manufacturing_cost_usd?: number;
+    manufacturing?: {
+      scenario: string;
+      label: string;
+      usd_per_cm2: number;
+      eur_per_m2: number;
+      eur_to_usd: number;
+      fx_basis: string;
+      source: string;
+      reference_url: string;
+      confidence: string;
+    } | null;
     total_cost_usd: number;
     cost_per_cm2_usd: number;
     cost_per_m2_usd: number;

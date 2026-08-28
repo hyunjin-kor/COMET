@@ -2,8 +2,20 @@
 
 from __future__ import annotations
 
+import json
+from functools import lru_cache
+from pathlib import Path
+
 GRAMS_PER_LB = 453.59237
 CM2_PER_M2 = 10_000
+
+_MEA_MANUFACTURING_PATH = Path(__file__).resolve().parents[1] / "data" / "mea_manufacturing.json"
+
+
+@lru_cache(maxsize=1)
+def load_mea_manufacturing() -> dict:
+    """MEA manufacturing scenarios derived from Hog et al. 2026 (see the data file)."""
+    return json.loads(_MEA_MANUFACTURING_PATH.read_text(encoding="utf-8"))
 
 
 def calculate_electrode_layer_cost(
@@ -19,6 +31,7 @@ def calculate_electrode_layer_cost(
     substrate_cost_per_cm2: float = 0.0,
     membrane_cost_per_cm2: float = 0.0,
     application_family: str = "general",
+    manufacturing_scenario: str | None = None,
 ) -> dict:
     """Estimate area-based coating cost for a single electrocatalyst layer."""
 
@@ -52,7 +65,34 @@ def calculate_electrode_layer_cost(
 
     substrate_cost_usd = substrate_cost_per_cm2 * active_area_cm2
     membrane_cost_usd = membrane_cost_per_cm2 * active_area_cm2
-    total_cost_usd = catalyst_cost_usd + ionomer_cost_usd + substrate_cost_usd + membrane_cost_usd
+
+    manufacturing_cost_usd = 0.0
+    manufacturing_detail = None
+    if manufacturing_scenario:
+        data = load_mea_manufacturing()
+        scenario = data["scenarios"].get(manufacturing_scenario)
+        if scenario is None:
+            raise ValueError(
+                f"unknown manufacturing_scenario {manufacturing_scenario!r}; "
+                f"expected one of {sorted(data['scenarios'])}"
+            )
+        manufacturing_cost_usd = scenario["manufacturing_usd_per_cm2"] * active_area_cm2
+        manufacturing_detail = {
+            "scenario": manufacturing_scenario,
+            "label": scenario["label"],
+            "usd_per_cm2": scenario["manufacturing_usd_per_cm2"],
+            "eur_per_m2": scenario["manufacturing_eur_per_m2"],
+            "eur_to_usd": data["currency_conversion"]["eur_to_usd"],
+            "fx_basis": data["currency_conversion"]["basis"],
+            "source": data["source"],
+            "reference_url": data["reference_url"],
+            "confidence": data["confidence"],
+        }
+
+    total_cost_usd = (
+        catalyst_cost_usd + ionomer_cost_usd + substrate_cost_usd + membrane_cost_usd
+        + manufacturing_cost_usd
+    )
     cost_per_cm2_usd = total_cost_usd / active_area_cm2
 
     return {
@@ -68,6 +108,8 @@ def calculate_electrode_layer_cost(
         "ionomer_cost_usd": round(ionomer_cost_usd, 6),
         "substrate_cost_usd": round(substrate_cost_usd, 6),
         "membrane_cost_usd": round(membrane_cost_usd, 6),
+        "manufacturing_cost_usd": round(manufacturing_cost_usd, 6),
+        "manufacturing": manufacturing_detail,
         "total_cost_usd": round(total_cost_usd, 6),
         "cost_per_cm2_usd": round(cost_per_cm2_usd, 6),
         "cost_per_m2_usd": round(cost_per_cm2_usd * CM2_PER_M2, 2),
@@ -76,5 +118,6 @@ def calculate_electrode_layer_cost(
             {"label": "Ionomer", "cost_usd": round(ionomer_cost_usd, 6)},
             {"label": "Substrate / GDL", "cost_usd": round(substrate_cost_usd, 6)},
             {"label": "Membrane", "cost_usd": round(membrane_cost_usd, 6)},
+            {"label": "Manufacturing (equipment, labor, facility)", "cost_usd": round(manufacturing_cost_usd, 6)},
         ],
     }

@@ -28,7 +28,11 @@
       "default": 200
     }
   },
-  "confidence": "unsourced",
-  "reference_urls": [],
-  "quote_year": null
+  "confidence": "literature",
+  "reference_urls": [
+    "https://doi.org/10.1039/C5CS00376H"
+  ],
+  "quote_year": 2015,
+  "source": "Vogt & Weckhuysen, Fluid catalytic cracking: recent developments on the grand old lady of zeolite catalysis, Chem. Soc. Rev. 44, 7342-7370 (2015)",
+  "route_note": "Citation grounds the route structure - FCC catalysts are spray-dried microspheres of USY zeolite in a clay/alumina matrix with binder - not the hourly rates, which remain the step library's own."
 }

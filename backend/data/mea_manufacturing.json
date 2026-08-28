@@ -1,0 +1,41 @@
+{
+  "description": "Area-based MEA manufacturing (non-consumable) cost scenarios. Derived from the published per-area totals and consumable shares of a bottom-up SEMI E35 cost-of-ownership study of CCM/MEA production at Fraunhofer ISE. Consumables (catalyst powder, ionomer, membrane, GDL, sub-gasket) are excluded here because COMET prices them separately as materials; what remains is equipment, labor and facility.",
+  "source": "Hog et al., Techno-Economic Assessment of Manufacturing Membrane Electrode Assemblies for PEM Fuel Cells: Focus on Coating Technologies, Fuel Cells (2026)",
+  "reference_url": "https://doi.org/10.1002/fuce.70058",
+  "confidence": "derived",
+  "quote_year": 2025,
+  "currency_conversion": {
+    "eur_to_usd": 1.1306,
+    "basis": "2025 annual average EUR/USD market rate",
+    "source_url": "https://www.exchange-rates.org/exchange-rate-history/eur-usd-2025",
+    "note": "Paper expresses all costs in 2025 euros; converted once at the annual average. No inflation adjustment applied - values are stated in 2025 USD."
+  },
+  "derivation": "manufacturing_usd_per_m2 = total_eur_per_m2_active * (1 - consumable_share) * eur_to_usd. Total and consumable share are stated in the paper's own text for each scenario (MEA7L, per m2 of active area).",
+  "limitations": "Two published operating points only; the paper does not provide a continuous scale curve, so intermediate production volumes are not interpolated. Figures are for PEM fuel cell MEA7L production (ink mixing through assembly) and are applied per cm2 of active area.",
+  "scenarios": {
+    "rnd_batch": {
+      "label": "R&D batch line",
+      "detail": "251 working days/yr at 8 h, 1 FTE, 22.9% utilization, batch length up to 500 m",
+      "total_eur_per_m2_active": 2086.0,
+      "consumable_share": 0.48,
+      "manufacturing_eur_per_m2": 1084.72,
+      "manufacturing_usd_per_m2": 1226.38,
+      "manufacturing_usd_per_cm2": 0.122638
+    },
+    "pilot_roll_to_roll": {
+      "label": "Pilot roll-to-roll line",
+      "detail": "355 working days/yr at 24 h, 5 FTE, 97.3% utilization, batch length up to 1250 m",
+      "total_eur_per_m2_active": 512.0,
+      "consumable_share": 0.9,
+      "manufacturing_eur_per_m2": 51.2,
+      "manufacturing_usd_per_m2": 57.89,
+      "manufacturing_usd_per_cm2": 0.005789
+    }
+  },
+  "reference_yields": {
+    "note": "Stage yields reported by the same study, recorded for reference; not yet applied by the calculator.",
+    "ccm": {"rnd": 0.91, "pilot": 0.94},
+    "gdl": {"rnd": 0.96, "pilot": 0.99},
+    "sub_gasket": {"rnd": 0.98, "pilot": 0.995}
+  }
+}

@@ -178,7 +178,7 @@ class TestValidation:
 
 
 class TestResultShape:
-    def test_breakdown_lists_four_canonical_lines(self):
+    def test_breakdown_lists_canonical_lines(self):
         """The breakdown list is consumed by the UI: shape must be stable."""
         result = calculate_electrode_layer_cost(
             **_bare_layer(
@@ -189,7 +189,13 @@ class TestResultShape:
             )
         )
         labels = [item["label"] for item in result["breakdown"]]
-        assert labels == ["Catalyst powder", "Ionomer", "Substrate / GDL", "Membrane"]
+        assert labels == [
+            "Catalyst powder",
+            "Ionomer",
+            "Substrate / GDL",
+            "Membrane",
+            "Manufacturing (equipment, labor, facility)",
+        ]
 
         breakdown_total = sum(item["cost_usd"] for item in result["breakdown"])
         assert breakdown_total == pytest.approx(result["total_cost_usd"], rel=1e-4)

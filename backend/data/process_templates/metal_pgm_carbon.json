@@ -1,7 +1,7 @@
 {
   "id": "metal_pgm_carbon",
   "name": "PGM on Carbon Support",
-  "description": "Precious group metal (Pt, Pd, Ru) deposited on activated carbon via incipient wetness impregnation.",
+  "description": "Precious group metal (Pt, Pd, Ru) deposited on activated carbon from solution in a stirred slurry, recovered by filtration, then vacuum dried. Slurry-phase excess-solution practice: carbon supports are difficult to wet uniformly, which is the textbook case for working in excess solution rather than at incipient wetness.",
   "category": "Supported PGM",
   "example_catalysts": [
     "Pt/C",
@@ -32,5 +32,5 @@
   ],
   "quote_year": 2026,
   "source": "Jimenez et al., Industrial Catalyst Impregnation: Modern Equipment, Techniques, and Scaling Challenges, Ind. Eng. Chem. Res. 65, 12447 (2026)",
-  "route_note": "The step list slurries the support and then filters, which is excess-solution practice, while the description says incipient wetness. Flagged rather than changed: deciding which one this template is meant to be is a chemistry call, not a cleanup."
+  "route_note": "Description previously said incipient wetness while the step list slurries and filters. The steps carry the cost and match excess-solution practice on carbon (slurry, filtration, mother-liquor handling), so the words were corrected to match the steps, not the steps to the words."
 }

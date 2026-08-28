@@ -366,6 +366,8 @@ def resolve_electrode_materials(session: Session, raw: dict | None) -> tuple[dic
         "substrate_cost_per_cm2": float(raw.get("substrate_cost_per_cm2", 0.0)),
         "membrane_cost_per_cm2": float(raw.get("membrane_cost_per_cm2", 0.0)),
     }
+    if raw.get("manufacturing_scenario"):
+        payload["manufacturing_scenario"] = raw["manufacturing_scenario"]
     if raw.get("ionomer_price_per_ml") is not None:
         payload["ionomer_price_per_ml"] = float(raw["ionomer_price_per_ml"])
     if raw.get("ionomer_price_per_kg_solids") is not None:
