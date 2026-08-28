@@ -71,6 +71,12 @@ _ELEMENT_NAME_TO_SYMBOL = {
     "zinc": "Zn",
 }
 _SUPPORT_IDENTITY_RULES = (
+    # Zeolite rules must precede the plain oxide rules: zeolite names often
+    # carry their SiO2/Al2O3 ratio, which would otherwise match "al2o3".
+    (("zsm-5",), "ZSM-5"),
+    (("usy",), "USY"),
+    (("beta zeolite", "zeolite beta"), "Beta zeolite"),
+    (("sapo-34",), "SAPO-34"),
     (("silica-alumina", "sio2-al2o3"), "SiO2-Al2O3"),
     (("al2o3", "alumina", "aluminum oxide", "aluminium oxide"), "Al2O3"),
     (("ceo2", "ceria", "cerium oxide"), "CeO2"),
@@ -79,9 +85,6 @@ _SUPPORT_IDENTITY_RULES = (
     (("zro2", "zirconia", "zirconium oxide"), "ZrO2"),
     (("sio2", "silica"), "SiO2"),
     (("carbon black", "activated carbon", "carbon support", "graphitic carbon"), "Carbon"),
-    (("zsm-5",), "ZSM-5"),
-    (("usy",), "USY"),
-    (("beta zeolite", "zeolite beta"), "Beta zeolite"),
 )
 
 

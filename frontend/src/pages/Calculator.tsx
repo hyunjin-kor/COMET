@@ -225,6 +225,10 @@ function dedupeThermalOptions(options: ThermalSelectionOption[]) {
 }
 
 function compactThermalOptionLabel(option: ThermalSelectionOption) {
+  // Research-pack vendor quotes can sit orders of magnitude above bulk
+  // indexes (e.g. lab ZSM-5 at ~$474/kg vs the ~$4/kg trade statistic), so
+  // flag them right in the selector instead of only in the price field.
+  if (option.price_scope === 'vendor_lab') return `${option.display_name} (lab price)`;
   return option.display_name;
 }
 
