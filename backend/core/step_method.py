@@ -30,6 +30,8 @@ def determine_scale(order_size_tons: float) -> str:
     Returns:
         Scale string: "small", "medium", or "large".
     """
+    if order_size_tons < SCALE_THRESHOLDS["small"][0]:
+        return "small"
     for scale, (lo, hi) in SCALE_THRESHOLDS.items():
         if lo <= order_size_tons < hi:
             return scale

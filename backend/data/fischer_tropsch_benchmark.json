@@ -248,10 +248,13 @@
           "name": "Re",
           "wt_pct": 0.5,
           "pricing": {
-            "type": "market_feed",
-            "symbol": "Re",
-            "precursor_markup": 1.1,
-            "note": "Live Re feed with a precursor / conversion markup."
+            "type": "fixed",
+            "price_per_lb": 621.42,
+            "evidence_label": "USGS rhenium metal proxy",
+            "evidence_tier": "public_index",
+            "confidence_score": 74,
+            "transparency": "public_index",
+            "note": "Annual average rhenium metal pellet price 2024, $1,370/kg = $621.42/lb (USGS MCS 2025). Replaces a live-feed reference to a symbol the price service does not carry. Former live-feed precursor markup (1.10) folded out; the public quote stands alone."
           }
         },
         {

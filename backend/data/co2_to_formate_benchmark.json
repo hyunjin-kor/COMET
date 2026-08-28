@@ -124,13 +124,13 @@
       "steps": [
         "mixer_slurry",
         "reactor_multistep",
-        "filter_rotary_vacuum",
+        "filter_plate_frame",
         "dryer_batch_vacuum_tray",
         "dryer_rotary_40_100C"
       ],
       "non_step_cost_per_lb": 1.4,
       "route_confidence": 80,
-      "route_note": "Homogeneous Ir-pincer route with the highest documented per-Ir turnovers; Ir economics dominate the cost basis."
+      "route_note": "Homogeneous Ir-pincer route with the highest documented per-Ir turnovers; Ir economics dominate the cost basis. Small-scale step availability: filter_rotary_vacuum swapped for filter_plate_frame."
     },
     {
       "id": "ru-pincer-co2fa-route",
@@ -159,13 +159,13 @@
       "steps": [
         "mixer_slurry",
         "reactor_multistep",
-        "filter_rotary_vacuum",
+        "filter_plate_frame",
         "dryer_batch_vacuum_tray",
         "dryer_rotary_40_100C"
       ],
       "non_step_cost_per_lb": 1.2,
       "route_confidence": 78,
-      "route_note": "Ru-pincer alternative to the Ir baseline; Ru is meaningfully cheaper than Ir but turnover frequency is typically lower."
+      "route_note": "Ru-pincer alternative to the Ir baseline; Ru is meaningfully cheaper than Ir but turnover frequency is typically lower. Small-scale step availability: filter_rotary_vacuum swapped for filter_plate_frame."
     },
     {
       "id": "pdag-ndc-co2fa-route",
@@ -194,15 +194,15 @@
       "steps": [
         "mixer_slurry",
         "incipient_wetness",
-        "filter_rotary_vacuum",
+        "filter_plate_frame",
         "dryer_rotary_100_300C",
-        "kiln_continuous_indirect",
+        "kiln_batch",
         "reactor_simple",
         "mill"
       ],
       "non_step_cost_per_lb": 0.94,
       "route_confidence": 76,
-      "route_note": "Heterogeneous PdAg on N-doped carbon for CO2-to-formate; alloy and N-functionalisation control selectivity over CO byproduct."
+      "route_note": "Heterogeneous PdAg on N-doped carbon for CO2-to-formate; alloy and N-functionalisation control selectivity over CO byproduct. Small-scale step availability: filter_rotary_vacuum swapped for filter_plate_frame; kiln_continuous_indirect swapped for kiln_batch."
     }
   ],
   "candidates": [

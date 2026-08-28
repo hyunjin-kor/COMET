@@ -1,0 +1,450 @@
+{
+  "family": "ammonia-synthesis",
+  "title": "Ammonia synthesis reference family",
+  "catalyst_domain": "thermal",
+  "application_family": "general",
+  "reaction": "N2 + 3 H2 -> 2 NH3",
+  "objective": "Optional literature-backed reference family for sanity-checking catalyst economics for Haber-Bosch and emerging low-temperature ammonia synthesis. COMET itself remains reaction-agnostic and this family is a screening aid, not a process design.",
+  "decision_profiles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Balance economics, source confidence, route confidence, and performance.",
+      "weights": {
+        "economics": 0.45,
+        "evidence": 0.2,
+        "route": 0.2,
+        "performance": 0.15
+      }
+    },
+    "cost-first": {
+      "label": "Cost-first",
+      "description": "Bias ranking toward selling cost while keeping route and evidence guardrails.",
+      "weights": {
+        "economics": 0.6,
+        "evidence": 0.15,
+        "route": 0.15,
+        "performance": 0.1
+      }
+    },
+    "evidence-first": {
+      "label": "Evidence-first",
+      "description": "Reward transparent, higher-confidence pricing and more reproducible routes.",
+      "weights": {
+        "economics": 0.35,
+        "evidence": 0.35,
+        "route": 0.15,
+        "performance": 0.15
+      }
+    }
+  },
+  "citations": [
+    {
+      "id": "humphreys-aesr-2021",
+      "label": "Adv. Energy Sustain. Res. 2021",
+      "url": "https://doi.org/10.1002/aesr.202000043",
+      "kind": "literature",
+      "note": "Review with commercial fused-iron composition table (Fe3O4 balance with ~2.4% Al2O3, 1.4% CaO, 0.6% K2O, 0.34% SiO2, 0.3% MgO), operating windows, and the 1600 C fusion recipe."
+    },
+    {
+      "id": "kandemir-angew-2013",
+      "label": "Angew. Chem. Int. Ed. 2013",
+      "url": "https://doi.org/10.1002/anie.201305812",
+      "kind": "literature",
+      "note": "Fusion-promotion preparation of the industrial iron catalyst and its working structure at 425 C and 75 bar."
+    },
+    {
+      "id": "liu-cjc-2014",
+      "label": "Chinese J. Catal. 2014",
+      "url": "https://doi.org/10.1016/S1872-2067(14)60118-2",
+      "kind": "literature",
+      "note": "Centennial review of iron catalyst practice, covering the magnetite-to-wustite precursor evolution."
+    },
+    {
+      "id": "liu-cattod-2020",
+      "label": "Catal. Today 2020",
+      "url": "https://doi.org/10.1016/j.cattod.2019.10.031",
+      "kind": "literature",
+      "note": "Wustite (Fe1-xO) commercial catalyst development with roughly 70% higher activity than magnetite-based analogues."
+    },
+    {
+      "id": "pernicone-apcata-2003",
+      "label": "Appl. Catal. A 2003",
+      "url": "https://doi.org/10.1016/s0926-860x(03)00313-2",
+      "kind": "literature",
+      "note": "Wustite as a new precursor of industrial ammonia synthesis catalysts."
+    },
+    {
+      "id": "brown-catl-2014",
+      "label": "Catal. Lett. 2014",
+      "url": "https://doi.org/10.1007/s10562-014-1226-4",
+      "kind": "literature",
+      "note": "History and composition of the commercial KAAP catalyst: ca 8 wt% Ru with Cs and Ba promoters on graphitized carbon, including the three-stage support treatment."
+    },
+    {
+      "id": "forni-apcata-1999",
+      "label": "Appl. Catal. A 1999",
+      "url": "https://doi.org/10.1016/S0926-860X(99)00144-1",
+      "kind": "literature",
+      "note": "Ba/Cs/K promoter screening on carbon-supported Ru for ammonia synthesis."
+    },
+    {
+      "id": "rossetti-apcata-2007",
+      "label": "Appl. Catal. A 2007",
+      "url": "https://doi.org/10.1016/j.apcata.2007.02.022",
+      "kind": "literature",
+      "note": "Promoter state and activation behaviour of Cs-, Ba- and K-promoted Ru/C catalysts."
+    },
+    {
+      "id": "kaap-review-nano-2023",
+      "label": "Nanomaterials 2023",
+      "url": "https://doi.org/10.3390/nano13222914",
+      "kind": "literature",
+      "note": "Review placing the KAAP window at 370-400 C and 50-100 bar with 40-50% per-pass yields."
+    },
+    {
+      "id": "kitano-natchem-2012",
+      "label": "Nature Chem. 2012",
+      "url": "https://doi.org/10.1038/nchem.1476",
+      "kind": "literature",
+      "note": "Foundational Ru/C12A7 electride ammonia synthesis catalyst."
+    },
+    {
+      "id": "kitano-ncomms-2015",
+      "label": "Nature Commun. 2015",
+      "url": "https://doi.org/10.1038/ncomms7731",
+      "kind": "literature",
+      "note": "Electride catalyst conditions (250-400 C, 0.1 MPa) and Ru3(CO)12 CVD preparation."
+    },
+    {
+      "id": "kitano-angew-2018",
+      "label": "Angew. Chem. Int. Ed. 2018",
+      "url": "https://doi.org/10.1002/anie.201712398",
+      "kind": "literature",
+      "note": "Ru-Ba core-shell on Ca(NH2)2 giving efficient synthesis below 300 C at 0.9 MPa."
+    },
+    {
+      "id": "hattori-ncomms-2020",
+      "label": "Nature Commun. 2020",
+      "url": "https://doi.org/10.1038/s41467-020-15868-8",
+      "kind": "literature",
+      "note": "12 wt% Ru on CaFH (CaF2-CaH2 solid solution) synthesizing ammonia from 50 C with Ea of about 20 kJ/mol."
+    },
+    {
+      "id": "appl-ullmann-2011",
+      "label": "Ullmann's Encyclopedia 2011",
+      "url": "https://doi.org/10.1002/14356007.o02_o11",
+      "kind": "literature",
+      "note": "Standard industrial reference for ammonia production processes, catalyst manufacture and synthesis-loop operation."
+    },
+    {
+      "id": "liu-book-2013",
+      "label": "World Scientific 2013",
+      "url": "https://doi.org/10.1142/8199",
+      "kind": "literature",
+      "note": "Book-length treatment of fused-iron (magnetite and wustite) ammonia catalyst manufacturing practice."
+    }
+  ],
+  "catalog_quotes": [],
+  "route_templates": [
+    {
+      "id": "fused-magnetite",
+      "name": "Oxide-melt fusion of promoted magnetite",
+      "manufacturing_mode": "Fused granulate, fixed-bed converter charge",
+      "preprocess": [
+        "Magnetite, promoter oxide and carbonate batching",
+        "Dry blend homogenization"
+      ],
+      "synthesis": [
+        "Oxide-melt fusion at ~1600 C",
+        "Controlled cooling of the fused block"
+      ],
+      "postprocess": [
+        "Crushing and sieving to 1-2 mm granulate",
+        "Careful reduction in syngas to alpha-Fe (or pre-reduction and passivation)"
+      ],
+      "quality_gates": [
+        "Promoter distribution check",
+        "Granulate size fraction",
+        "Reduced-state activity spot test"
+      ],
+      "steps": [
+        "mixer_dry_blender",
+        "kiln_continuous_direct",
+        "mill",
+        "reactor_simple"
+      ],
+      "non_step_cost_per_lb": 0.35,
+      "route_confidence": 78,
+      "route_note": "The 1600 C oxide-melt fusion is proxied by the direct-fired continuous kiln, the closest step in the library; a dedicated electric fusion furnace runs hotter than the toller basis, so treat the step cost as a floor."
+    },
+    {
+      "id": "ru-graphite-kaap",
+      "name": "Graphitized-carbon Ru with Cs/Ba promotion",
+      "manufacturing_mode": "Fixed-bed pellet catalyst (KAAP-type)",
+      "preprocess": [
+        "High-surface graphite heat treatment (graphitization and oxygen etch)",
+        "Ruthenium and promoter salt solution make-up"
+      ],
+      "synthesis": [
+        "Ru deposition onto the treated carbon",
+        "Sequential Cs/Ba nitrite impregnation"
+      ],
+      "postprocess": [
+        "Low-temperature drying",
+        "Hydrogen activation converting promoters to the working state"
+      ],
+      "quality_gates": [
+        "Ru loading confirmation (~8 wt%)",
+        "Promoter ratio check",
+        "Methanation-loss and attrition screening"
+      ],
+      "steps": [
+        "kiln_continuous_indirect",
+        "mixer_slurry",
+        "incipient_wetness",
+        "dryer_rotary_40_100C",
+        "reactor_simple"
+      ],
+      "non_step_cost_per_lb": 0.6,
+      "route_confidence": 68,
+      "route_note": "Support graphitization runs near 1500-2000 C, above the indirect-kiln toller basis used as its proxy; the promoter impregnation chain itself is standard."
+    },
+    {
+      "id": "low-temp-hydride-cvd",
+      "name": "Hydride-fluoride support with Ru CVD",
+      "manufacturing_mode": "Lab-scale powder, moisture-sensitive handling",
+      "preprocess": [
+        "CaH2 and fluoride precursor dry blending under inert atmosphere"
+      ],
+      "synthesis": [
+        "Support solid-solution formation at ~340 C in hydrogen",
+        "Ru(acac)3 chemical vapor deposition at 260 C"
+      ],
+      "postprocess": [
+        "Hydrogen treatment at 340 C to the working state"
+      ],
+      "quality_gates": [
+        "Ru loading confirmation (12 wt%)",
+        "Moisture exclusion audit",
+        "Low-temperature activity spot test"
+      ],
+      "steps": [
+        "mixer_dry_blender",
+        "reactor_multistep",
+        "reactor_simple"
+      ],
+      "non_step_cost_per_lb": 1.0,
+      "route_confidence": 55,
+      "route_note": "CVD and air-free hydride handling have no direct step-library analogue; the multistep reactor rate is the closest proxy, so route economics are indicative only."
+    }
+  ],
+  "candidates": [
+    {
+      "slug": "fused-iron-baseline",
+      "title": "Promoted fused-iron (magnetite/wustite) baseline",
+      "archetype": "Industrial baseline",
+      "screening_basis": "engineering_proxy",
+      "summary": "The century-old Haber-Bosch workhorse: fused Fe3O4 (or wustite Fe1-xO) with a few percent of K2O, Al2O3 and CaO promoters, reduced in situ to alpha-Fe and run at 400-500 C and 100-300 bar.",
+      "route_template_id": "fused-magnetite",
+      "order_size_tons": 20,
+      "performance_index": 70,
+      "manufacturing_readiness": 97,
+      "screening_exactness": 80,
+      "temperature_window_c": [
+        400,
+        500
+      ],
+      "literature_basis_ids": [
+        "humphreys-aesr-2021",
+        "kandemir-angew-2013",
+        "liu-cjc-2014",
+        "liu-cattod-2020",
+        "pernicone-apcata-2003",
+        "appl-ullmann-2011",
+        "liu-book-2013"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Cheapest active metal in the family and a fully de-risked manufacturing chain; the cost of ownership sits in compression duty, not the catalyst.",
+        "Wustite variants trade the same formulation for ~70% higher activity, so the screen's iron term is conservative."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Fe",
+          "wt_pct": 68.6,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Fe",
+            "precursor_markup": 1.0,
+            "note": "Iron term on a contained-metal basis (Fe3O4 balance of the formulation is ~72.4% Fe). Magnetite ore feed trades below refined iron, so refined-Fe parity is a conservative screen."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Al2O3",
+          "wt_pct": 2.4,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.2676,
+            "evidence_label": "USGS industrial alumina proxy",
+            "evidence_tier": "public_index",
+            "confidence_score": 72,
+            "transparency": "public_index",
+            "note": "2025 USGS alumina import value; structural promoter loading from the commercial composition table. Alumina is the structural promoter of the fused formulation, carried in the support role."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "K2O",
+          "wt_pct": 0.6,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.2722,
+            "evidence_label": "USGS potash MOP, K2O-equivalent basis",
+            "evidence_tier": "public_index",
+            "confidence_score": 70,
+            "transparency": "public_index",
+            "note": "2025e f.o.b. mine muriate-of-potash price, $600/t of K2O equivalent (USGS MCS Feb 2026); introduced industrially as potassium nitrate, so this is a floor."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "CaO-MgO-SiO2 minor oxide package",
+          "wt_pct": 2.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.1,
+            "evidence_label": "Minor oxide package proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 55,
+            "transparency": "derived_index",
+            "note": "Quicklime, magnesia and silica minors at ~2 wt% combined; commodity oxides priced as a package because the term is immaterial to the screen."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "ru-graphite-kaap",
+      "title": "Cs/Ba-promoted Ru on graphitized carbon (KAAP-type)",
+      "archetype": "Second-generation commercial",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "About 8 wt% Ru with cesium and barium promoters on graphitized high-surface carbon runs milder loops (370-400 C, 50-100 bar) with 40-50% per-pass yields at a large precious-metal premium.",
+      "route_template_id": "ru-graphite-kaap",
+      "order_size_tons": 20,
+      "performance_index": 82,
+      "manufacturing_readiness": 85,
+      "screening_exactness": 72,
+      "temperature_window_c": [
+        370,
+        400
+      ],
+      "literature_basis_ids": [
+        "brown-catl-2014",
+        "forni-apcata-1999",
+        "rossetti-apcata-2007",
+        "kaap-review-nano-2023"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Commercially proven since the 1990s; choose it when milder loop pressure is worth the Ru inventory.",
+        "Promoter loadings are not disclosed in the open literature, so the Cs-Ba package weight is a screening assumption priced at cesium parity (conservative, barium is far cheaper)."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Ru",
+          "wt_pct": 8.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ru",
+            "precursor_markup": 1.15,
+            "note": "Live Ru feed with a precursor conversion markup; loading of ca 8 wt% is source-quoted for the commercial KAAP catalyst."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "Cs-Ba promoter package",
+          "wt_pct": 5.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 346.94,
+            "evidence_label": "Sigma-Aldrich Cs2CO3, contained-Cs basis",
+            "evidence_tier": "vendor_public",
+            "confidence_score": 60,
+            "transparency": "public_list_price",
+            "note": "Sigma 441902 cesium carbonate 500 g list $312 = $0.765/g contained Cs = $346.94/lb; package weight is a screening assumption (loadings undisclosed) priced at Cs parity, which is conservative because barium salts are far cheaper. USGS MCS 2026 states no commercial bulk cesium market exists."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Carbon",
+          "wt_pct": 87.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.6,
+            "evidence_label": "Graphitized carbon screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 56,
+            "transparency": "derived_index",
+            "note": "Graphitized high-surface carbon support. Bracketed by public references: UN Comtrade 2024 U.S. carbon-black import unit value ~$1.88/kg (~$0.85/lb rubber grade) and Fuel Cell Store Vulcan XC-72R lab retail ~$950/kg; the 1770-2270 K graphitization premium sits on top of the commodity floor."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "ru-cafh-lowtemp",
+      "title": "Ru/CaFH low-temperature architecture",
+      "archetype": "Emerging low-temperature",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "12 wt% Ru on a CaF2-CaH2 solid solution synthesizes ammonia from as low as 50 C (Ea ~20 kJ/mol), pointing at electrolysis-coupled low-pressure loops, but the air-free CVD manufacturing chain is lab-bound.",
+      "route_template_id": "low-temp-hydride-cvd",
+      "order_size_tons": 20,
+      "performance_index": 90,
+      "manufacturing_readiness": 35,
+      "screening_exactness": 60,
+      "temperature_window_c": [
+        50,
+        340
+      ],
+      "literature_basis_ids": [
+        "hattori-ncomms-2020",
+        "kitano-natchem-2012",
+        "kitano-ncomms-2015",
+        "kitano-angew-2018"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Family performance ceiling for low-temperature operation; screen it to bound what the emerging class could cost, not as a procurement option.",
+        "Support economics are the dominant unknown: CaH2-grade hydride chemistry has no public bulk market."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Ru",
+          "wt_pct": 12.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ru",
+            "precursor_markup": 1.25,
+            "note": "Live Ru feed with a higher markup for the Ru(acac)3 CVD precursor route; 12 wt% loading is source-quoted."
+          }
+        },
+        {
+          "role": "support",
+          "name": "CaFH hydride-fluoride support",
+          "wt_pct": 88.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 5.0,
+            "evidence_label": "Specialty hydride support proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 45,
+            "transparency": "derived_index",
+            "note": "CaF2-CaH2 solid solution has no public bulk market; the proxy spans fluorspar commodity economics and calcium-hydride reagent pricing and should be treated as indicative only."
+          }
+        }
+      ]
+    }
+  ]
+}

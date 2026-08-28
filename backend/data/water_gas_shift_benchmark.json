@@ -93,6 +93,34 @@
       "url": "https://doi.org/10.1126/science.1192449",
       "kind": "literature",
       "note": "Zhai, Pierre et al.: alkali-stabilized Pt-OHx species as the catalytically active phase for low-temperature WGS, refining the picture of Pt/oxide interfacial sites."
+    },
+    {
+      "id": "ratnasamy-catrev-2009",
+      "label": "Catalysis Reviews 2009",
+      "url": "https://doi.org/10.1080/01614940903048661",
+      "kind": "literature",
+      "note": "Standard industrial water-gas shift review covering the Fe-Cr high-temperature shift class."
+    },
+    {
+      "id": "zhu-htwgs-acscatal-2016",
+      "label": "ACS Catalysis 2016",
+      "url": "https://doi.org/10.1021/acscatal.5b02594",
+      "kind": "literature",
+      "note": "Review of iron-based high-temperature WGS catalysts: hematite-to-magnetite activation, Cr2O3 textural stabilization, Cu promotion, 350-450 C window."
+    },
+    {
+      "id": "gaber-apr-2019",
+      "label": "Applied Petrochemical Research 2019",
+      "url": "https://doi.org/10.1007/s13203-018-0222-9",
+      "kind": "literature",
+      "note": "Source of the 88/9/2.6 wt% Fe2O3/Cr2O3/CuO pellet composition and the 310-460 C operating window."
+    },
+    {
+      "id": "zhu-promoters-acscatal-2016",
+      "label": "ACS Catalysis 2016",
+      "url": "https://doi.org/10.1021/acscatal.6b00698",
+      "kind": "literature",
+      "note": "Cr and Cu promotion mechanisms of iron-oxide HT-WGS catalysts with the ammonia-assisted co-precipitation preparation."
     }
   ],
   "catalog_quotes": [],
@@ -204,6 +232,41 @@
       "non_step_cost_per_lb": 1.02,
       "route_confidence": 74,
       "route_note": "High-performance low-temperature WGS route used when hydrogen purity and colder operation justify a PGM premium."
+    },
+    {
+      "id": "fe-cr-coprecipitation",
+      "name": "Fe-Cr-Cu co-precipitation with pelletizing",
+      "manufacturing_mode": "Pelletized fixed-bed catalyst",
+      "preprocess": [
+        "Fe/Cr/Cu nitrate solution make-up",
+        "Precipitant (ammonia) dosing check"
+      ],
+      "synthesis": [
+        "Ammonia-assisted co-precipitation of the mixed hydroxides",
+        "Aging and washing of the precipitate"
+      ],
+      "postprocess": [
+        "Vacuum filtration",
+        "Rotary drying",
+        "Calcination near 400 C to the hematite phase",
+        "Pelletizing to tablets"
+      ],
+      "quality_gates": [
+        "Fe/Cr/Cu ratio confirmation",
+        "Crush strength",
+        "Shift-activity spot test after in-service magnetite activation"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "reactor_multistep",
+        "filter_rotary_vacuum",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "ball_forming"
+      ],
+      "non_step_cost_per_lb": 0.55,
+      "route_confidence": 90,
+      "route_note": "One of the oldest continuously practiced industrial catalyst manufacturing chains; hematite converts to the active magnetite in service, so no reduction step is charged."
     }
   ],
   "candidates": [
@@ -372,6 +435,71 @@
             "confidence_score": 74,
             "transparency": "public_index",
             "note": "2025 USGS cerium-oxide price used as a bulk support proxy."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "fe-cr-hts",
+      "title": "Fe2O3-Cr2O3(-CuO) high-temperature shift",
+      "archetype": "Industrial HTS baseline",
+      "screening_basis": "engineering_proxy",
+      "summary": "Pelletized 88/9/2.6 wt% Fe2O3/Cr2O3/CuO runs the high-temperature shift at 310-460 C; hematite activates to magnetite in service with chromia as the sintering stabilizer and copper as the chemical promoter.",
+      "route_template_id": "fe-cr-coprecipitation",
+      "order_size_tons": 20,
+      "performance_index": 72,
+      "manufacturing_readiness": 97,
+      "screening_exactness": 82,
+      "temperature_window_c": [
+        310,
+        460
+      ],
+      "literature_basis_ids": [
+        "ratnasamy-catrev-2009",
+        "zhu-htwgs-acscatal-2016",
+        "gaber-apr-2019",
+        "zhu-promoters-acscatal-2016"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "The upstream stage of the industrial two-stage shift: cheapest metals in the family and a fully de-risked route, equilibrium-limited at its higher operating temperature.",
+        "Hexavalent-chromium handling during manufacture is a compliance cost outside this screen; noted, not priced."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Fe",
+          "wt_pct": 61.6,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Fe",
+            "precursor_markup": 1.0,
+            "note": "Contained-iron basis of the 88 wt% Fe2O3 fraction; iron-oxide feed trades below refined iron, so refined-Fe parity is a conservative screen."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Cr2O3",
+          "wt_pct": 9.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.5,
+            "evidence_label": "Chromic oxide screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 58,
+            "transparency": "derived_index",
+            "note": "Pigment-grade chromic oxide proxy, bounded above by contained-Cr value at the USGS refined chromium price ($5.6/lb Cr = $3.83/lb Cr2O3) and informed below by ferrochrome economics ($1.8/lb Cr content, USGS 2025). Chromia is the documented textural stabilizer of the HTS formulation, carried in the support role."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "Cu",
+          "wt_pct": 2.1,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Cu",
+            "precursor_markup": 1.1,
+            "note": "Contained-copper basis of the 2.6 wt% CuO promoter with a mild precursor conversion markup."
           }
         }
       ]

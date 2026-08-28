@@ -159,13 +159,13 @@
       "steps": [
         "mixer_dry_blender",
         "kiln_batch",
-        "filter_rotary_vacuum",
+        "filter_plate_frame",
         "dryer_rotary_100_300C",
         "mill"
       ],
       "non_step_cost_per_lb": 0.7,
       "route_confidence": 78,
-      "route_note": "Metal-free polymer photocatalyst route, attractive when avoiding metal-based active phases is the program goal."
+      "route_note": "Metal-free polymer photocatalyst route, attractive when avoiding metal-based active phases is the program goal. Small-scale step availability: filter_rotary_vacuum swapped for filter_plate_frame."
     },
     {
       "id": "pt-tio2-cocatalyst-route",
@@ -194,14 +194,14 @@
       "steps": [
         "mixer_slurry",
         "incipient_wetness",
-        "filter_rotary_vacuum",
+        "filter_plate_frame",
         "dryer_rotary_100_300C",
-        "kiln_continuous_indirect",
+        "kiln_batch",
         "mill"
       ],
       "non_step_cost_per_lb": 0.74,
       "route_confidence": 82,
-      "route_note": "Pt cocatalyst on TiO2 route, established way to boost H2 evolution rate over the bare-oxide baseline at the cost of precious-metal exposure."
+      "route_note": "Pt cocatalyst on TiO2 route, established way to boost H2 evolution rate over the bare-oxide baseline at the cost of precious-metal exposure. Small-scale step availability: filter_rotary_vacuum swapped for filter_plate_frame; kiln_continuous_indirect swapped for kiln_batch."
     }
   ],
   "candidates": [
