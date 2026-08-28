@@ -245,7 +245,7 @@
             "evidence_tier": "engineering_proxy",
             "confidence_score": 66,
             "transparency": "derived_proxy",
-            "note": "Anatase TiO2 cost held on engineering proxy comparable to commercial photocatalyst-grade titania (matches PWC family)."
+            "note": "Anatase TiO2 cost held on engineering proxy comparable to commercial photocatalyst-grade titania (matches PWC family). USGS MCS 2026 TiO2 pigment import index (2025e $3,200/t, ~$1.45/lb) is the public pigment-grade floor; photocatalytic anatase grades trade above it."
           }
         }
       ]

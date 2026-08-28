@@ -242,7 +242,7 @@
             "evidence_tier": "engineering_proxy",
             "confidence_score": 66,
             "transparency": "derived_proxy",
-            "note": "Anatase TiO2 powder cost held on an engineering proxy comparable to commercial photocatalyst-grade titania."
+            "note": "Anatase TiO2 powder cost held on an engineering proxy comparable to commercial photocatalyst-grade titania. USGS MCS 2026 TiO2 pigment import index (2025e $3,200/t, ~$1.45/lb) is the public pigment-grade floor; photocatalytic anatase grades trade above it."
           }
         }
       ]
@@ -337,7 +337,7 @@
             "evidence_tier": "engineering_proxy",
             "confidence_score": 66,
             "transparency": "derived_proxy",
-            "note": "Anatase TiO2 base powder cost held on an engineering proxy comparable to the bare TiO2 baseline."
+            "note": "Anatase TiO2 base powder cost held on an engineering proxy comparable to the bare TiO2 baseline. USGS MCS 2026 TiO2 pigment import index (2025e $3,200/t, ~$1.45/lb) is the public pigment-grade floor; photocatalytic anatase grades trade above it."
           }
         }
       ]

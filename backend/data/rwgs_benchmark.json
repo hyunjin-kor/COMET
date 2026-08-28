@@ -306,12 +306,12 @@
           "wt_pct": 98.0,
           "pricing": {
             "type": "fixed",
-            "price_per_lb": 0.8,
-            "evidence_label": "TiO2 engineering proxy",
-            "evidence_tier": "engineering_proxy",
-            "confidence_score": 60,
-            "transparency": "derived_index",
-            "note": "Titania support term kept on a conservative engineering proxy to avoid reagent-pack distortion."
+            "price_per_lb": 1.4515,
+            "evidence_label": "USGS TiO2 pigment import index",
+            "evidence_tier": "public_index",
+            "confidence_score": 72,
+            "transparency": "public_index",
+            "note": "2025e landed duty-paid unit value of U.S. TiO2 pigment imports, $3,200/t (USGS MCS Feb 2026)."
           }
         }
       ]

@@ -262,7 +262,7 @@
             "evidence_tier": "engineering_proxy",
             "confidence_score": 70,
             "transparency": "derived_proxy",
-            "note": "Alpha-alumina support cost held on engineering proxy; alpha phase carries a small premium over gamma."
+            "note": "Alpha-alumina support cost held on engineering proxy; alpha phase carries a small premium over gamma. USGS MCS 2026 metallurgical alumina (2025e $590/t import value, ~$0.27/lb) is the public floor; calcined alpha-grade premium retained."
           }
         }
       ]
@@ -310,12 +310,12 @@
           "wt_pct": 0.05,
           "pricing": {
             "type": "fixed",
-            "price_per_lb": 320.0,
-            "evidence_label": "Cesium promoter screening proxy",
-            "evidence_tier": "engineering_proxy",
-            "confidence_score": 58,
-            "transparency": "derived_proxy",
-            "note": "Cs salt cost held on a derived screening proxy reflecting bulk cesium salt pricing."
+            "price_per_lb": 346.94,
+            "evidence_label": "Sigma-Aldrich Cs2CO3, contained-Cs basis",
+            "evidence_tier": "vendor_public",
+            "confidence_score": 63,
+            "transparency": "public_list_price",
+            "note": "Sigma 441902 cesium carbonate 500 g list $312 = $0.624/g; / 0.8158 Cs mass fraction = $0.765/g contained Cs = $346.94/lb. USGS MCS 2026 states no commercial bulk cesium market exists."
           }
         },
         {
@@ -329,7 +329,7 @@
             "evidence_tier": "engineering_proxy",
             "confidence_score": 70,
             "transparency": "derived_proxy",
-            "note": "Alpha-alumina support cost held on engineering proxy."
+            "note": "Alpha-alumina support cost held on engineering proxy. USGS MCS 2026 metallurgical alumina (2025e $590/t import value, ~$0.27/lb) is the public floor; calcined alpha-grade premium retained."
           }
         }
       ]
@@ -375,12 +375,12 @@
           "wt_pct": 0.05,
           "pricing": {
             "type": "fixed",
-            "price_per_lb": 320.0,
-            "evidence_label": "Cesium promoter screening proxy",
-            "evidence_tier": "engineering_proxy",
-            "confidence_score": 58,
-            "transparency": "derived_proxy",
-            "note": "Cs salt cost held on the same derived screening proxy as the Ag-Cs candidate."
+            "price_per_lb": 346.94,
+            "evidence_label": "Sigma-Aldrich Cs2CO3, contained-Cs basis",
+            "evidence_tier": "vendor_public",
+            "confidence_score": 63,
+            "transparency": "public_list_price",
+            "note": "Sigma 441902 cesium carbonate 500 g list $312 = $0.624/g; / 0.8158 Cs mass fraction = $0.765/g contained Cs = $346.94/lb. USGS MCS 2026 states no commercial bulk cesium market exists."
           }
         },
         {
@@ -405,7 +405,7 @@
             "evidence_tier": "engineering_proxy",
             "confidence_score": 70,
             "transparency": "derived_proxy",
-            "note": "Alpha-alumina support cost held on engineering proxy."
+            "note": "Alpha-alumina support cost held on engineering proxy. USGS MCS 2026 metallurgical alumina (2025e $590/t import value, ~$0.27/lb) is the public floor; calcined alpha-grade premium retained."
           }
         }
       ]

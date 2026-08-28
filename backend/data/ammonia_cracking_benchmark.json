@@ -283,7 +283,10 @@
       "performance_index": 63,
       "manufacturing_readiness": 91,
       "screening_exactness": 60,
-      "temperature_window_c": [550, 700],
+      "temperature_window_c": [
+        550,
+        700
+      ],
       "literature_basis_ids": [
         "patched-ni-fe-ncomms-2015",
         "hea-ammonia-ncomms-2019",
@@ -321,7 +324,7 @@
             "evidence_tier": "engineering_proxy",
             "confidence_score": 64,
             "transparency": "derived_index",
-            "note": "Industrial support screening proxy retained to avoid lab-pack alumina distortion."
+            "note": "Industrial support screening proxy retained to avoid lab-pack alumina distortion. USGS MCS 2026 metallurgical alumina (2025e $590/t import value, ~$0.27/lb) is the public floor; catalyst-grade premium retained."
           }
         }
       ]
@@ -337,7 +340,10 @@
       "performance_index": 84,
       "manufacturing_readiness": 61,
       "screening_exactness": 67,
-      "temperature_window_c": [475, 650],
+      "temperature_window_c": [
+        475,
+        650
+      ],
       "literature_basis_ids": [
         "hea-ammonia-ncomms-2019",
         "ni-ceo2x-ncomms-2025",
@@ -372,12 +378,12 @@
           "wt_pct": 15.0,
           "pricing": {
             "type": "fixed",
-            "price_per_lb": 2.0,
-            "evidence_label": "Ceria screening proxy",
-            "evidence_tier": "engineering_proxy",
-            "confidence_score": 66,
-            "transparency": "derived_index",
-            "note": "Ceria promoter priced with a conservative engineering proxy; Sigma quote retained as a procurement anchor."
+            "price_per_lb": 0.7756,
+            "evidence_label": "USGS ceria proxy",
+            "evidence_tier": "public_index",
+            "confidence_score": 74,
+            "transparency": "public_index",
+            "note": "2025 USGS cerium-oxide price used as a bulk support/promoter proxy."
           }
         },
         {
@@ -391,7 +397,7 @@
             "evidence_tier": "engineering_proxy",
             "confidence_score": 63,
             "transparency": "derived_index",
-            "note": "MgO support uses a screening proxy rather than reagent-pack pricing."
+            "note": "MgO support uses a screening proxy rather than reagent-pack pricing. USGS MCS 2025/2026 publish no magnesia unit price; Sigma 342793 lab price ($0.38/g) is the public ceiling reference."
           }
         }
       ]
@@ -407,7 +413,10 @@
       "performance_index": 96,
       "manufacturing_readiness": 74,
       "screening_exactness": 84,
-      "temperature_window_c": [400, 575],
+      "temperature_window_c": [
+        400,
+        575
+      ],
       "literature_basis_ids": [
         "ru-mgo-nature-2023",
         "gan-ru-ncomms-2024",
@@ -445,7 +454,7 @@
             "evidence_tier": "engineering_proxy",
             "confidence_score": 63,
             "transparency": "derived_index",
-            "note": "Support cost kept on an engineering basis even though a public Sigma quote is attached for transparency."
+            "note": "Support cost kept on an engineering basis even though a public Sigma quote is attached for transparency. USGS MCS 2025/2026 publish no magnesia unit price; Sigma 342793 lab price ($0.38/g) is the public ceiling reference."
           }
         }
       ]

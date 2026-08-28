@@ -282,7 +282,7 @@
             "evidence_tier": "engineering_proxy",
             "confidence_score": 70,
             "transparency": "derived_proxy",
-            "note": "Gamma-alumina support cost held on an engineering proxy comparable to commercial Sasol / BASF alumina ranges."
+            "note": "Gamma-alumina support cost held on an engineering proxy comparable to commercial Sasol / BASF alumina ranges. USGS MCS 2026 metallurgical alumina (2025e $590/t import value, ~$0.27/lb) is the public floor; catalyst-grade premium retained."
           }
         }
       ]

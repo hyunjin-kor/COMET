@@ -248,12 +248,12 @@
           "wt_pct": 25.0,
           "pricing": {
             "type": "fixed",
-            "price_per_lb": 0.4,
-            "evidence_label": "ZnO industrial screening proxy",
-            "evidence_tier": "engineering_proxy",
-            "confidence_score": 58,
+            "price_per_lb": 1.1965,
+            "evidence_label": "USGS zinc-derived ZnO floor",
+            "evidence_tier": "public_index",
+            "confidence_score": 68,
             "transparency": "derived_index",
-            "note": "ZnO term kept on an engineering proxy until a clearer public bulk oxide basis is curated."
+            "note": "USGS MCS 2026 North American SHG zinc, 2025e $1.49/lb, x 0.803 Zn mass fraction of ZnO = $1.20/lb contained-metal floor; oxide conversion cost not included."
           }
         },
         {
