@@ -259,12 +259,12 @@
           "wt_pct": 25.0,
           "pricing": {
             "type": "fixed",
-            "price_per_lb": 0.4,
-            "evidence_label": "ZnO industrial screening proxy",
-            "evidence_tier": "engineering_proxy",
-            "confidence_score": 58,
+            "price_per_lb": 1.1965,
+            "evidence_label": "USGS zinc-derived ZnO floor",
+            "evidence_tier": "public_index",
+            "confidence_score": 68,
             "transparency": "derived_index",
-            "note": "ZnO promoter term is held on an engineering proxy because the current library has more transparent precursor quotes than bulk oxide market boards."
+            "note": "USGS MCS 2026 North American SHG zinc, 2025e $1.49/lb, x 0.803 Zn mass fraction of ZnO = $1.20/lb contained-metal floor; oxide conversion cost not included."
           }
         },
         {
@@ -331,7 +331,7 @@
             "evidence_tier": "engineering_proxy",
             "confidence_score": 57,
             "transparency": "derived_index",
-            "note": "Zirconia-side support term uses a conservative engineering proxy because a direct bulk public price was not verified in this pass."
+            "note": "Zirconia-side support term uses a conservative engineering proxy because a direct bulk public price was not verified in this pass. USGS MCS 2026 zircon (2025e ~$1,900/t imported, ~66% ZrO2) implies ~$1.31/lb contained ZrO2, corroborating this proxy as a floor."
           }
         },
         {
@@ -345,7 +345,7 @@
             "evidence_tier": "engineering_proxy",
             "confidence_score": 60,
             "transparency": "derived_index",
-            "note": "Basic support term held on a conservative engineering proxy to avoid reagent-pack distortion."
+            "note": "Basic support term held on a conservative engineering proxy to avoid reagent-pack distortion. USGS MCS 2025/2026 publish no magnesia unit price; Sigma 342793 lab price ($0.38/g) is the public ceiling reference."
           }
         }
       ]
@@ -402,7 +402,7 @@
             "evidence_tier": "engineering_proxy",
             "confidence_score": 57,
             "transparency": "derived_index",
-            "note": "Zirconia term remains a conservative engineering proxy pending a cleaner public bulk quote."
+            "note": "Zirconia term remains a conservative engineering proxy pending a cleaner public bulk quote. USGS MCS 2026 zircon (2025e ~$1,900/t imported, ~66% ZrO2) implies ~$1.31/lb contained ZrO2, corroborating this proxy as a floor."
           }
         }
       ]

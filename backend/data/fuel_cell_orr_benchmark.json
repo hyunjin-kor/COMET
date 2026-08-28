@@ -294,7 +294,10 @@
       "performance_index": 72,
       "manufacturing_readiness": 93,
       "screening_exactness": 84,
-      "temperature_window_c": [60, 95],
+      "temperature_window_c": [
+        60,
+        95
+      ],
       "literature_basis_ids": [
         "debe-nature-2012",
         "orr-review-ncomms-2021",
@@ -332,7 +335,7 @@
             "evidence_tier": "engineering_proxy",
             "confidence_score": 68,
             "transparency": "derived_index",
-            "note": "Carbon support retained on an engineering proxy basis while catalog Pt/C powder quotes remain visible as anchors."
+            "note": "Carbon support retained on an engineering proxy basis while catalog Pt/C powder quotes remain visible as anchors. Bracketed by public references: UN Comtrade 2024 U.S. carbon-black import unit value ~$1.88/kg (~$0.85/lb rubber grade) and Fuel Cell Store Vulcan XC-72R lab retail ~$950/kg."
           }
         }
       ]
@@ -348,7 +351,10 @@
       "performance_index": 93,
       "manufacturing_readiness": 80,
       "screening_exactness": 79,
-      "temperature_window_c": [60, 95],
+      "temperature_window_c": [
+        60,
+        95
+      ],
       "literature_basis_ids": [
         "debe-nature-2012",
         "orr-review-ncomms-2021",
@@ -398,7 +404,7 @@
             "evidence_tier": "engineering_proxy",
             "confidence_score": 68,
             "transparency": "derived_index",
-            "note": "Carbon support kept on an engineering basis to avoid vendor-lab distortion in the support term."
+            "note": "Carbon support kept on an engineering basis to avoid vendor-lab distortion in the support term. Bracketed by public references: UN Comtrade 2024 U.S. carbon-black import unit value ~$1.88/kg (~$0.85/lb rubber grade) and Fuel Cell Store Vulcan XC-72R lab retail ~$950/kg."
           }
         }
       ]
@@ -414,7 +420,10 @@
       "performance_index": 85,
       "manufacturing_readiness": 65,
       "screening_exactness": 70,
-      "temperature_window_c": [60, 95],
+      "temperature_window_c": [
+        60,
+        95
+      ],
       "literature_basis_ids": [
         "fen-c-natcatal-2019",
         "fen-c-nenergy-2022",
@@ -450,7 +459,7 @@
             "evidence_tier": "engineering_proxy",
             "confidence_score": 66,
             "transparency": "derived_index",
-            "note": "Carbon host and nitrogen-source costs are grouped into a conservative proxy while the route premium captures pyrolysis and acid-wash overhead."
+            "note": "Carbon host and nitrogen-source costs are grouped into a conservative proxy while the route premium captures pyrolysis and acid-wash overhead. Bracketed by public references: UN Comtrade 2024 U.S. carbon-black import unit value ~$1.88/kg (~$0.85/lb rubber grade) and Fuel Cell Store Vulcan XC-72R lab retail ~$950/kg."
           }
         }
       ]

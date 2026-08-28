@@ -308,7 +308,7 @@
             "evidence_tier": "engineering_proxy",
             "confidence_score": 57,
             "transparency": "derived_proxy",
-            "note": "Manganese-oxide support term held on an engineering proxy until a clearer public bulk oxide basis is curated."
+            "note": "Manganese-oxide support term held on an engineering proxy until a clearer public bulk oxide basis is curated. USGS MCS 2026 manganese ore (2025e $4.50/mtu CIF China) implies ~$0.20/lb contained Mn as the public floor."
           }
         }
       ]
