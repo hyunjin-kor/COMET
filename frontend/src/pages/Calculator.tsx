@@ -109,6 +109,7 @@ type ElectrocatalystDraft = {
   catalystLoadingMgCm2: number;
   ionomerToCatalystRatio: number;
   templateId: string;
+  manufacturingScenario: '' | 'rnd_batch' | 'pilot_roll_to_roll';
 };
 
 function uid() {
@@ -133,6 +134,7 @@ const defaultElectrocatalystConfig = (): ElectrocatalystDraft => ({
   catalystLoadingMgCm2: 0.5,
   ionomerToCatalystRatio: 0.8,
   templateId: 'pem_fuel_cell_ccm',
+  manufacturingScenario: '',
 });
 
 function createBlankRow(role: CalculatorRow['role'], wtPct = 0): CalculatorRow {
@@ -486,7 +488,7 @@ export default function Calculator() {
   const [steps, setSteps] = useState<string[]>(() => storedDraft?.steps?.length ? storedDraft.steps : DEFAULT_STEPS);
   const [catalystDomain, setCatalystDomain] = useState<'thermal' | 'electrocatalyst'>(() => storedDraft?.catalystDomain ?? 'thermal');
   const [applicationFamily, setApplicationFamily] = useState<ApplicationFamily>(() => storedDraft?.applicationFamily ?? 'fuel_cell');
-  const [electrocatalystConfig, setElectrocatalystConfig] = useState<ElectrocatalystDraft>(() => storedDraft?.electrocatalystConfig ?? defaultElectrocatalystConfig());
+  const [electrocatalystConfig, setElectrocatalystConfig] = useState<ElectrocatalystDraft>(() => ({ ...defaultElectrocatalystConfig(), ...storedDraft?.electrocatalystConfig }));
   const [orderSize, setOrderSize] = useState<number>(() => storedDraft?.orderSize ?? 20);
   const [includeSpentValue, setIncludeSpentValue] = useState<boolean>(() => storedDraft?.includeSpentValue ?? false);
   const [reactorType, setReactorType] = useState<'fixed' | 'slurry'>(() => storedDraft?.reactorType ?? 'fixed');
@@ -996,6 +998,7 @@ export default function Calculator() {
             active_area_cm2: electrocatalystConfig.activeAreaCm2,
             catalyst_loading_mg_cm2: electrocatalystConfig.catalystLoadingMgCm2,
             ionomer_to_catalyst_ratio: electrocatalystConfig.ionomerToCatalystRatio,
+            manufacturing_scenario: electrocatalystConfig.manufacturingScenario || undefined,
           },
         };
       } else {
@@ -1235,6 +1238,16 @@ export default function Calculator() {
                   <input type="number" min="0" step="0.05" value={electrocatalystConfig.ionomerToCatalystRatio} onChange={(event) => updateElectroConfig({ ionomerToCatalystRatio: Number(event.target.value) })} className="input-base max-w-[180px] text-right font-mono" />
                   <span className="text-xs text-slate-500">dry ionomer mass / catalyst powder mass</span>
                 </div>
+              </label>
+
+              <label className="block sm:col-span-2">
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Manufacturing scenario</div>
+                <select value={electrocatalystConfig.manufacturingScenario} onChange={(event) => updateElectroConfig({ manufacturingScenario: event.target.value as ElectrocatalystDraft['manufacturingScenario'] })} className="input-base mt-2">
+                  <option value="">Materials only (no line cost)</option>
+                  <option value="rnd_batch">R&amp;D batch line — $0.123/cm² (Hog 2026)</option>
+                  <option value="pilot_roll_to_roll">Pilot roll-to-roll — $0.006/cm² (Hog 2026)</option>
+                </select>
+                <div className="mt-1 text-xs text-slate-500">Adds equipment, labor, and facility cost per cm² of active area. EUR→USD at 1.1306 (2025 avg).</div>
               </label>
 
               <label className="block sm:col-span-2">

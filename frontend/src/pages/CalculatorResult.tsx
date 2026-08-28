@@ -425,6 +425,18 @@ export default function CalculatorResult() {
               <MetricTile label="Electrode total" value={formatPrice(electrodeModel.total_cost_usd)} detail="For selected active area" />
               <MetricTile label="Stack density" value={`${formatPrice(electrodeModel.cost_per_cm2_usd)}/cm²`} detail={`${formatPrice(electrodeModel.cost_per_m2_usd)}/m²`} />
             </div>
+            {electrodeModel.manufacturing ? (
+              <div className="mt-4 rounded-[16px] border border-slate-200 bg-slate-50/80 p-4 text-xs leading-6 text-slate-600">
+                <div className="cp-subtle-label">Manufacturing line cost</div>
+                <div className="mt-1">
+                  {electrodeModel.manufacturing.label}: {formatPrice(electrodeModel.manufacturing_cost_usd ?? 0)} added
+                  ({electrodeModel.manufacturing.usd_per_cm2.toFixed(4)} $/cm² — equipment, labor, facility; consumables stay priced as materials).
+                  Derived from {electrodeModel.manufacturing.eur_per_m2.toFixed(1)} €/m² at EUR→USD {electrodeModel.manufacturing.eur_to_usd}
+                  {' '}({electrodeModel.manufacturing.fx_basis}).{' '}
+                  <a className="underline" href={electrodeModel.manufacturing.reference_url} target="_blank" rel="noreferrer">Source</a>
+                </div>
+              </div>
+            ) : null}
           </div>
         ) : null}
 

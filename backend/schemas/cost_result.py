@@ -77,6 +77,8 @@ class ElectrodeLayerResult(BaseModel):
     ionomer_cost_usd: float
     substrate_cost_usd: float
     membrane_cost_usd: float
+    manufacturing_cost_usd: float = 0.0
+    manufacturing: dict | None = None
     total_cost_usd: float
     cost_per_cm2_usd: float
     cost_per_m2_usd: float

@@ -104,11 +104,11 @@ def test_proxy_steps_are_the_known_set():
 def test_unsourced_templates_are_the_known_set():
     """Templates with no provenance at all, tracked so they cannot grow.
 
-    Was three. The two impregnation routes now cite the ACS impregnation review;
-    zeolite_fcc still has nothing, and no zeolite manufacturing source has been
-    retrieved yet, so inventing one for it would defeat the point of this file.
+    Was three, then one, now empty: the impregnation routes cite the ACS
+    impregnation review and zeolite_fcc cites the standard FCC review for its
+    route structure. Any name appearing here again is a regression.
     """
-    expected = {"zeolite_fcc.json"}
+    expected: set[str] = set()
     actual = {name for name, t in load_templates() if t["confidence"] == "unsourced"}
     assert actual == expected, (
         f"unsourced set changed: added {sorted(actual - expected)}, removed {sorted(expected - actual)}"

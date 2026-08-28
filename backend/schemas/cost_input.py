@@ -70,6 +70,13 @@ class ElectrodeCostInput(BaseModel):
     ionomer_solids_fraction: float = Field(default=0.05, gt=0, le=1)
     substrate_cost_per_cm2: float = Field(default=0.0, ge=0)
     membrane_cost_per_cm2: float = Field(default=0.0, ge=0)
+    manufacturing_scenario: Literal["rnd_batch", "pilot_roll_to_roll"] | None = Field(
+        default=None,
+        description=(
+            "Adds an area-based MEA manufacturing (equipment, labor, facility) cost "
+            "derived from Hog et al. 2026; consumables stay priced as materials."
+        ),
+    )
 
 
 class CostCalculationRequest(BaseModel):

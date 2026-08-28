@@ -182,11 +182,21 @@ def estimate_catalyst_cost(
             substrate_cost_per_cm2=float(electrode_input.get("substrate_cost_per_cm2", 0.0)),
             membrane_cost_per_cm2=float(electrode_input.get("membrane_cost_per_cm2", 0.0)),
             application_family=electrode_input.get("application_family", application_family),
+            manufacturing_scenario=electrode_input.get("manufacturing_scenario"),
         )
-        warnings.append(
-            "Electrocatalyst results now include area-based catalyst, ionomer, membrane, and substrate "
-            "costs, but roll-to-roll line throughput, yield losses, and stack assembly remain CatCost proxy estimates."
-        )
+        if electrode_model.get("manufacturing"):
+            warnings.append(
+                "MEA manufacturing cost uses the "
+                f"{electrode_model['manufacturing']['label']} operating point from Hog et al. 2026 "
+                f"(EUR->USD at {electrode_model['manufacturing']['eur_to_usd']}, 2025 annual average); "
+                "stage yield losses are not yet applied."
+            )
+        else:
+            warnings.append(
+                "Electrocatalyst results now include area-based catalyst, ionomer, membrane, and substrate "
+                "costs, but line throughput and stack assembly are not costed. Select a manufacturing "
+                "scenario to add an equipment/labor/facility estimate per cm2."
+            )
         if primary_component["role"] == "active_catalyst":
             composition = primary_component["name"]
         else:
