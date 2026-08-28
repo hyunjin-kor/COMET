@@ -34,7 +34,14 @@
       "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
       "reference_url": null,
       "quote_year": 2017,
-      "confidence": "toller_survey"
+      "confidence": "toller_survey",
+      "loh_crosscheck": {
+        "small": 43.8,
+        "medium": 55.76,
+        "large": 82.96,
+        "basis": "mid-2017 $/hr bottom-up floor (annualized installed capital + fixed charges + labor share); excludes utilities and toller margin, so the toller rate must sit at or above it. Derivation and sizing in loh2002_step_anchors.json",
+        "reference_url": "https://www.osti.gov/biblio/797810/"
+      }
     },
     {
       "name": "Dryer, batch vacuum tray",
@@ -47,7 +54,14 @@
       "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
       "reference_url": null,
       "quote_year": 2017,
-      "confidence": "toller_survey"
+      "confidence": "toller_survey",
+      "loh_crosscheck": {
+        "small": 39.12,
+        "medium": null,
+        "large": null,
+        "basis": "mid-2017 $/hr bottom-up floor (annualized installed capital + fixed charges + labor share); excludes utilities and toller margin, so the toller rate must sit at or above it. Derivation and sizing in loh2002_step_anchors.json",
+        "reference_url": "https://www.osti.gov/biblio/797810/"
+      }
     },
     {
       "name": "Dryer, rotary (40–100 °C)",
@@ -60,7 +74,14 @@
       "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
       "reference_url": null,
       "quote_year": 2017,
-      "confidence": "toller_survey"
+      "confidence": "toller_survey",
+      "loh_crosscheck": {
+        "small": 40.3,
+        "medium": 44.78,
+        "large": 65.38,
+        "basis": "mid-2017 $/hr bottom-up floor (annualized installed capital + fixed charges + labor share); excludes utilities and toller margin, so the toller rate must sit at or above it. Derivation and sizing in loh2002_step_anchors.json",
+        "reference_url": "https://www.osti.gov/biblio/797810/"
+      }
     },
     {
       "name": "Dryer, rotary (100–300 °C)",
@@ -73,7 +94,14 @@
       "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
       "reference_url": null,
       "quote_year": 2017,
-      "confidence": "toller_survey"
+      "confidence": "toller_survey",
+      "loh_crosscheck": {
+        "small": 40.3,
+        "medium": 44.78,
+        "large": 65.38,
+        "basis": "mid-2017 $/hr bottom-up floor (annualized installed capital + fixed charges + labor share); excludes utilities and toller margin, so the toller rate must sit at or above it. Derivation and sizing in loh2002_step_anchors.json",
+        "reference_url": "https://www.osti.gov/biblio/797810/"
+      }
     },
     {
       "name": "Dryer, spray",
@@ -125,7 +153,14 @@
       "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
       "reference_url": null,
       "quote_year": 2017,
-      "confidence": "toller_survey"
+      "confidence": "toller_survey",
+      "loh_crosscheck": {
+        "small": 44.9,
+        "medium": null,
+        "large": null,
+        "basis": "mid-2017 $/hr bottom-up floor (annualized installed capital + fixed charges + labor share); excludes utilities and toller margin, so the toller rate must sit at or above it. Derivation and sizing in loh2002_step_anchors.json",
+        "reference_url": "https://www.osti.gov/biblio/797810/"
+      }
     },
     {
       "name": "Filter, rotary vacuum",
@@ -138,7 +173,14 @@
       "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
       "reference_url": null,
       "quote_year": 2017,
-      "confidence": "toller_survey"
+      "confidence": "toller_survey",
+      "loh_crosscheck": {
+        "small": null,
+        "medium": 43.06,
+        "large": 46.24,
+        "basis": "mid-2017 $/hr bottom-up floor (annualized installed capital + fixed charges + labor share); excludes utilities and toller margin, so the toller rate must sit at or above it. Derivation and sizing in loh2002_step_anchors.json",
+        "reference_url": "https://www.osti.gov/biblio/797810/"
+      }
     },
     {
       "name": "Flare",
@@ -164,7 +206,14 @@
       "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
       "reference_url": null,
       "quote_year": 2017,
-      "confidence": "toller_survey"
+      "confidence": "toller_survey",
+      "loh_crosscheck": {
+        "small": 41.14,
+        "medium": 43.4,
+        "large": 46.33,
+        "basis": "mid-2017 $/hr bottom-up floor (annualized installed capital + fixed charges + labor share); excludes utilities and toller margin, so the toller rate must sit at or above it. Derivation and sizing in loh2002_step_anchors.json",
+        "reference_url": "https://www.osti.gov/biblio/797810/"
+      }
     },
     {
       "name": "Kiln, batch (300–1290 °C)",
@@ -216,7 +265,14 @@
       "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
       "reference_url": null,
       "quote_year": 2017,
-      "confidence": "toller_survey"
+      "confidence": "toller_survey",
+      "loh_crosscheck": {
+        "small": 41.21,
+        "medium": 45.26,
+        "large": 52.33,
+        "basis": "mid-2017 $/hr bottom-up floor (annualized installed capital + fixed charges + labor share); excludes utilities and toller margin, so the toller rate must sit at or above it. Derivation and sizing in loh2002_step_anchors.json",
+        "reference_url": "https://www.osti.gov/biblio/797810/"
+      }
     },
     {
       "name": "Mixer, dry blender",
@@ -242,7 +298,14 @@
       "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
       "reference_url": null,
       "quote_year": 2017,
-      "confidence": "toller_survey"
+      "confidence": "toller_survey",
+      "loh_crosscheck": {
+        "small": 42.17,
+        "medium": 45.61,
+        "large": null,
+        "basis": "mid-2017 $/hr bottom-up floor (annualized installed capital + fixed charges + labor share); excludes utilities and toller margin, so the toller rate must sit at or above it. Derivation and sizing in loh2002_step_anchors.json",
+        "reference_url": "https://www.osti.gov/biblio/797810/"
+      }
     },
     {
       "name": "Membrane pretreatment (CatCost proxy)",
