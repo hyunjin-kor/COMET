@@ -58,7 +58,9 @@ export default function TopNavigation() {
         <div className="drag-region relative flex h-[38px] items-center border-b border-[#e5e8eb] bg-white pl-3">
           <div className="flex min-w-0 items-center gap-2">
             <BrandMark className="h-5 w-5 flex-none" />
-            <span className="font-display text-[13px] leading-none text-[#191f28]">COMET</span>
+            <span className="flex-none font-display text-[13px] leading-none text-[#191f28]">
+              COMET<span className="font-normal text-[#8b95a1]">: Catalyst Overall Manufacturing Estimation Tool</span>
+            </span>
             {activeItem ? (
               <>
                 <span className="h-3.5 w-px bg-[#e5e8eb]" aria-hidden="true" />
