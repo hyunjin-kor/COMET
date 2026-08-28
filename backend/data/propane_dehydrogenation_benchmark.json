@@ -107,6 +107,27 @@
       "url": "https://doi.org/10.1002/cplu.202100560",
       "kind": "literature",
       "note": "Nakaya, Furukawa et al.: tailoring single-atom platinum for selective and stable catalysts in PDH, surveying the Pt-SA design space for ultra-low Pt loading."
+    },
+    {
+      "id": "sattler-chemrev-2014",
+      "label": "Chem. Rev. 2014",
+      "url": "https://doi.org/10.1021/cr5002436",
+      "kind": "literature",
+      "note": "Canonical light-alkane dehydrogenation review covering the CrOx/Al2O3 Catofin system."
+    },
+    {
+      "id": "otroshchenko-csr-2021",
+      "label": "Chem. Soc. Rev. 2021",
+      "url": "https://doi.org/10.1039/D0CS01140A",
+      "kind": "literature",
+      "note": "Status review of propane and isobutane dehydrogenation over metal-oxide catalysts."
+    },
+    {
+      "id": "crox-mesoal-nano-2017",
+      "label": "Nanomaterials 2017",
+      "url": "https://doi.org/10.3390/nano7090249",
+      "kind": "literature",
+      "note": "States the Catofin formulation as 18-20 wt% CrOx on gamma-Al2O3 doped with 1-2 wt% K or Na, prepared by aqueous chromium impregnation."
     }
   ],
   "catalog_quotes": [],
@@ -219,6 +240,40 @@
       "non_step_cost_per_lb": 0.7,
       "route_confidence": 72,
       "route_note": "BN-ODHP route is non-oxidative-PDH alternative trading reactor heat duty for an oxidative pathway with high propylene selectivity."
+    },
+    {
+      "id": "crox-alumina-impregnation",
+      "name": "Chromia impregnation on alumina with shaping",
+      "manufacturing_mode": "Tableted fixed-bed catalyst, cyclic Houdry operation",
+      "preprocess": [
+        "Alumina support pre-dry and sieve",
+        "Aqueous chromium and alkali solution make-up"
+      ],
+      "synthesis": [
+        "Slurry or incipient-wetness chromium loading",
+        "Alkali promoter co-impregnation"
+      ],
+      "postprocess": [
+        "Rotary drying",
+        "Indirect calcination to the working chromia phase",
+        "Milling and shaping to tablets"
+      ],
+      "quality_gates": [
+        "Cr loading confirmation (18-20 wt%)",
+        "Alkali dose check",
+        "Cycle-stability spot test across regeneration"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "mill",
+        "extruder_with_feeder"
+      ],
+      "non_step_cost_per_lb": 0.6,
+      "route_confidence": 88,
+      "route_note": "Decades-old industrial impregnation chain; no reduction step because the chromia catalyst cycles between oxidized and working states in the Houdry sequence."
     }
   ],
   "candidates": [
@@ -265,10 +320,13 @@
           "name": "Sn",
           "wt_pct": 0.5,
           "pricing": {
-            "type": "market_feed",
-            "symbol": "Sn",
-            "precursor_markup": 1.1,
-            "note": "Live Sn feed with a precursor / conversion markup."
+            "type": "fixed",
+            "price_per_lb": 14.0,
+            "evidence_label": "USGS refined tin proxy",
+            "evidence_tier": "public_index",
+            "confidence_score": 74,
+            "transparency": "public_index",
+            "note": "Annual average LME cash tin price 2024, $14.0/lb (USGS MCS 2025). Replaces a live-feed reference to a symbol the price service does not carry. Former live-feed precursor markup (1.10) folded out; the public quote stands alone."
           }
         },
         {
@@ -330,10 +388,13 @@
           "name": "Zn",
           "wt_pct": 1.0,
           "pricing": {
-            "type": "market_feed",
-            "symbol": "Zn",
-            "precursor_markup": 1.1,
-            "note": "Live Zn feed with a precursor / conversion markup for intermetallic formation."
+            "type": "fixed",
+            "price_per_lb": 1.3,
+            "evidence_label": "USGS refined zinc proxy",
+            "evidence_tier": "public_index",
+            "confidence_score": 74,
+            "transparency": "public_index",
+            "note": "2025e annual average LME cash zinc price, $1.30/lb (USGS MCS 2026). Replaces a live-feed reference to a symbol the price service does not carry. Former live-feed precursor markup (1.10) folded out; the public quote stands alone."
           }
         },
         {
@@ -347,7 +408,7 @@
             "evidence_tier": "engineering_proxy",
             "confidence_score": 64,
             "transparency": "derived_proxy",
-            "note": "Mesoporous silicalite-1 support cost held on a derived screening proxy reflecting templated synthesis overhead."
+            "note": "Mesoporous silicalite-1 support cost held on a derived screening proxy reflecting templated synthesis overhead. UN Comtrade HS 2842.10 synthetic-silicate imports averaged $4.07/kg in 2024; hierarchical MFI carries a templating premium above that floor, so the proxy is retained."
           }
         }
       ]
@@ -380,7 +441,7 @@
         {
           "role": "active_catalyst",
           "name": "h-BN",
-          "wt_pct": 100,
+          "wt_pct": 100.0,
           "pricing": {
             "type": "fixed",
             "price_per_lb": 18.0,
@@ -388,7 +449,77 @@
             "evidence_tier": "engineering_proxy",
             "confidence_score": 60,
             "transparency": "derived_proxy",
-            "note": "Hexagonal boron-nitride catalyst cost held on a derived screening proxy reflecting BN powder grade and surface-conditioning overhead."
+            "note": "Hexagonal boron-nitride catalyst cost held on a derived screening proxy reflecting BN powder grade and surface-conditioning overhead. Public ceiling reference: Sigma 255475 h-BN lab price $2.62/g."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "crox-alumina-catofin",
+      "title": "CrOx/Al2O3 (Catofin-type)",
+      "archetype": "Industrial chromia workhorse",
+      "screening_basis": "engineering_proxy",
+      "summary": "18-20 wt% chromia on alumina with 1-2 wt% alkali runs the cyclic Catofin dehydrogenation at 540-650 C, trading Pt-free economics for cyclic regeneration and chromium handling constraints.",
+      "route_template_id": "crox-alumina-impregnation",
+      "order_size_tons": 50,
+      "performance_index": 80,
+      "manufacturing_readiness": 96,
+      "screening_exactness": 80,
+      "temperature_window_c": [
+        540,
+        650
+      ],
+      "literature_basis_ids": [
+        "sattler-chemrev-2014",
+        "otroshchenko-csr-2021",
+        "crox-mesoal-nano-2017"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "The Pt-free industrial reference: pick it when metal inventory dominates the decision and cyclic operation is acceptable.",
+        "Chromium environmental-handling burden is a real cost outside this screen; noted, not priced."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Cr2O3",
+          "wt_pct": 19.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.5,
+            "evidence_label": "Chromic oxide screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 58,
+            "transparency": "derived_index",
+            "note": "Pigment-grade chromic oxide proxy, bounded above by contained-Cr value at the USGS refined chromium price ($5.6/lb Cr = $3.83/lb Cr2O3) and informed below by ferrochrome economics ($1.8/lb Cr content, USGS 2025)."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "K2O",
+          "wt_pct": 1.5,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.2722,
+            "evidence_label": "USGS potash MOP, K2O-equivalent basis",
+            "evidence_tier": "public_index",
+            "confidence_score": 70,
+            "transparency": "public_index",
+            "note": "2025e f.o.b. mine muriate-of-potash price, $600/t of K2O equivalent (USGS MCS Feb 2026)."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Al2O3",
+          "wt_pct": 79.5,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.2676,
+            "evidence_label": "USGS industrial alumina proxy",
+            "evidence_tier": "public_index",
+            "confidence_score": 72,
+            "transparency": "public_index",
+            "note": "2025 USGS alumina import value used as a bulk oxide support proxy."
           }
         }
       ]

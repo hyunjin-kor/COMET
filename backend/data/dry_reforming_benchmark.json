@@ -305,7 +305,7 @@
             "evidence_tier": "engineering_proxy",
             "confidence_score": 60,
             "transparency": "derived_index",
-            "note": "Structured zeolite support term retained as a conservative engineering proxy pending a cleaner public bulk quote."
+            "note": "Structured zeolite support term retained as a conservative engineering proxy pending a cleaner public bulk quote. Bracketed by USGS natural zeolite ($200/t 2024 average ex-works, ~$0.09/lb) and the UN Comtrade synthetic-silicate import average ($4.07/kg, ~$1.85/lb)."
           }
         }
       ]

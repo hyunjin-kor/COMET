@@ -105,7 +105,13 @@ def estimate_catalyst_cost(
     supports = [component for component in components if component["role"] == "support"]
     if not active_metals:
         raise ValueError("At least one active_metal or active_catalyst component is required")
-    if catalyst_domain != "electrocatalyst" and not supports:
+    # Bulk catalysts (active_catalyst: zeolites, photocatalysts, carbons) and
+    # molecular catalysts (ligand) are legitimately self-supported.
+    self_supported = any(
+        component["role"] in {"active_catalyst", "co_active_catalyst", "ligand"}
+        for component in components
+    )
+    if catalyst_domain != "electrocatalyst" and not supports and not self_supported:
         raise ValueError("At least one support component is required")
 
     materials = calculate_materials_cost_multi(components)

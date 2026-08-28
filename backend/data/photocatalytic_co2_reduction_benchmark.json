@@ -162,13 +162,13 @@
         "mixer_dry_blender",
         "kiln_batch",
         "crystallizer",
-        "filter_rotary_vacuum",
+        "filter_plate_frame",
         "dryer_rotary_100_300C",
         "mill"
       ],
       "non_step_cost_per_lb": 0.86,
       "route_confidence": 76,
-      "route_note": "Z-scheme g-C3N4 / SnS2 route, attractive when visible-light operation is required and tunable redox-band alignment is desired."
+      "route_note": "Z-scheme g-C3N4 / SnS2 route, attractive when visible-light operation is required and tunable redox-band alignment is desired. Small-scale step availability: filter_rotary_vacuum swapped for filter_plate_frame."
     },
     {
       "id": "cu2o-mof-co2-route",
@@ -197,14 +197,14 @@
       "steps": [
         "mixer_slurry",
         "crystallizer",
-        "filter_rotary_vacuum",
+        "filter_plate_frame",
         "dryer_rotary_100_300C",
-        "kiln_continuous_indirect",
+        "kiln_batch",
         "mill"
       ],
       "non_step_cost_per_lb": 1.1,
       "route_confidence": 70,
-      "route_note": "MOF-derived Cu2O heterojunction route, an emerging high-surface-area option whose route maturity and MOF cost are the main risks."
+      "route_note": "MOF-derived Cu2O heterojunction route, an emerging high-surface-area option whose route maturity and MOF cost are the main risks. Small-scale step availability: filter_rotary_vacuum swapped for filter_plate_frame; kiln_continuous_indirect swapped for kiln_batch."
     }
   ],
   "candidates": [
@@ -295,10 +295,13 @@
           "name": "SnS2",
           "wt_pct": 40.0,
           "pricing": {
-            "type": "market_feed",
-            "symbol": "Sn",
-            "precursor_markup": 1.15,
-            "note": "Sn pricing via market feed with a precursor / conversion markup for SnS2 active phase."
+            "type": "fixed",
+            "price_per_lb": 8.62,
+            "evidence_label": "USGS tin-derived SnS2 floor",
+            "evidence_tier": "public_index",
+            "confidence_score": 66,
+            "transparency": "derived_index",
+            "note": "USGS 2024 LME tin $14.0/lb x 0.616 Sn mass fraction of SnS2 = $8.62/lb contained-metal floor; sulfidation cost not included. Replaces a live-feed reference to a symbol the price service does not carry. Former live-feed precursor markup (1.15) folded out; the public quote stands alone."
           }
         }
       ]

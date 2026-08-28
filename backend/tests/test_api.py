@@ -1473,6 +1473,8 @@ class TestDecision:
         assert "fuel-cell-orr" in families
         assert "aem-electrolyzer-oer" in families
         assert "pem-electrolyzer-oer" in families
+        assert "methane-pyrolysis" in families
+        assert "ammonia-synthesis" in families
         assert all("catalyst_domain" in item for item in data["families"])
 
     def test_get_unknown_benchmark_family_returns_clean_404_detail(self, client):
@@ -1490,6 +1492,53 @@ class TestDecision:
         assert data["decision_profile"]["id"] == "balanced"
         assert data["catalyst_domain"] == "thermal"
         assert all("scores" in candidate for candidate in data["candidates"])
+
+    def test_get_methane_pyrolysis_benchmark(self, client):
+        resp = client.get("/api/decision/benchmarks/methane-pyrolysis")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["winner"] is not None
+        assert data["catalyst_domain"] == "thermal"
+        assert len(data["candidates"]) >= 3
+        assert any(candidate["slug"] == "activated-carbon-autocatalytic" for candidate in data["candidates"])
+
+    def test_get_ammonia_synthesis_benchmark(self, client):
+        resp = client.get("/api/decision/benchmarks/ammonia-synthesis")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["winner"] is not None
+        assert data["catalyst_domain"] == "thermal"
+        assert len(data["candidates"]) >= 3
+        assert any(candidate["slug"] == "fused-iron-baseline" for candidate in data["candidates"])
+
+    def test_expanded_families_carry_the_new_candidates(self, client):
+        for family, slug in (
+            ("propane-dehydrogenation", "crox-alumina-catofin"),
+            ("water-gas-shift", "fe-cr-hts"),
+            ("ammonia-cracking", "co-mgo-la2o3"),
+        ):
+            resp = client.get(f"/api/decision/benchmarks/{family}")
+            assert resp.status_code == 200
+            data = resp.json()
+            assert len(data["candidates"]) >= 4
+            assert any(candidate["slug"] == slug for candidate in data["candidates"]), family
+
+    def test_every_listed_family_evaluates(self, client):
+        """Every family the API lists must evaluate cleanly.
+
+        Guards against silently broken families: a component referencing a
+        market-feed symbol the price service does not carry, or a candidate
+        without the roles the cost engine requires, used to surface only as a
+        404 when that family was opened.
+        """
+        families = [item["family"] for item in client.get("/api/decision/benchmarks").json()["families"]]
+        assert len(families) >= 26
+        for family in families:
+            resp = client.get(f"/api/decision/benchmarks/{family}")
+            assert resp.status_code == 200, f"{family} failed to evaluate"
+            data = resp.json()
+            assert data["winner"] is not None, family
+            assert data["candidates"], family
 
     def test_get_fuel_cell_orr_benchmark(self, client):
         resp = client.get("/api/decision/benchmarks/fuel-cell-orr")

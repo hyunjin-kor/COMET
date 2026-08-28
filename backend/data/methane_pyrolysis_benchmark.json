@@ -1,0 +1,365 @@
+{
+  "family": "methane-pyrolysis",
+  "title": "Methane pyrolysis (turquoise hydrogen) reference family",
+  "catalyst_domain": "thermal",
+  "application_family": "general",
+  "reaction": "CH4 -> C + 2 H2",
+  "objective": "Optional literature-backed reference family for sanity-checking catalyst economics for catalytic methane decomposition to hydrogen and solid carbon. COMET itself remains reaction-agnostic and this family is a screening aid, not a process design.",
+  "decision_profiles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Balance economics, source confidence, route confidence, and performance.",
+      "weights": {
+        "economics": 0.45,
+        "evidence": 0.2,
+        "route": 0.2,
+        "performance": 0.15
+      }
+    },
+    "cost-first": {
+      "label": "Cost-first",
+      "description": "Bias ranking toward selling cost while keeping route and evidence guardrails.",
+      "weights": {
+        "economics": 0.6,
+        "evidence": 0.15,
+        "route": 0.15,
+        "performance": 0.1
+      }
+    },
+    "evidence-first": {
+      "label": "Evidence-first",
+      "description": "Reward transparent, higher-confidence pricing and more reproducible routes.",
+      "weights": {
+        "economics": 0.35,
+        "evidence": 0.35,
+        "route": 0.15,
+        "performance": 0.15
+      }
+    }
+  },
+  "citations": [
+    {
+      "id": "ni-sio2-loading-ijhe-2007",
+      "label": "Int. J. Hydrogen Energy 2007",
+      "url": "https://doi.org/10.1016/j.ijhydene.2007.01.007",
+      "kind": "literature",
+      "note": "Ni/SiO2 screened at 5-90 wt% Ni for methane decomposition; ~32% CH4 conversion at 600 C for 30 wt% Ni, activity rising with loading."
+    },
+    {
+      "id": "ni-solgel-cattod-2002",
+      "label": "Catalysis Today 2002",
+      "url": "https://doi.org/10.1016/S0920-5861(02)00248-1",
+      "kind": "literature",
+      "note": "Heterophase sol-gel 85-90 wt% Ni(Fe)-SiO2 catalysts; carbon capacity up to 384 g C per g Ni; nickel-silicate impurities drive deactivation."
+    },
+    {
+      "id": "ni-cu-sio2-rscadv-2016",
+      "label": "RSC Advances 2016",
+      "url": "https://doi.org/10.1039/C6RA05782A",
+      "kind": "literature",
+      "note": "65% Ni - 10% Cu - SiO2 shows Cu promotion extending catalyst life at higher decomposition temperatures."
+    },
+    {
+      "id": "fe-alumina-apcatb-2017",
+      "label": "Applied Catalysis B 2017",
+      "url": "https://doi.org/10.1016/j.apcatb.2017.02.052",
+      "kind": "literature",
+      "note": "Fused 65 wt% and impregnated 20 wt% Fe-Al2O3 catalysts; 750 C identified as the optimum reduction and reaction temperature."
+    },
+    {
+      "id": "fe-loading-jccs-2015",
+      "label": "J. Chinese Chemical Society 2015",
+      "url": "https://doi.org/10.1002/jccs.201500052",
+      "kind": "literature",
+      "note": "15-60 wt% Fe on Al2O3, MgO and TiO2; 60% Fe/Al2O3 the best with 69% CH4 conversion at 700 C after 500 C reduction."
+    },
+    {
+      "id": "fe-companion-ijhe-2015",
+      "label": "Int. J. Hydrogen Energy 2015",
+      "url": "https://doi.org/10.1016/j.ijhydene.2014.10.058",
+      "kind": "literature",
+      "note": "Companion Fe-catalyst loading and temperature study for methane decomposition to COx-free hydrogen."
+    },
+    {
+      "id": "carbon-screen-cattod-2005",
+      "label": "Catalysis Today 2005",
+      "url": "https://doi.org/10.1016/j.cattod.2005.02.018",
+      "kind": "literature",
+      "note": "Broad screen of carbon catalysts; activated carbons and carbon blacks are the most active and stable classes, ~26% conversion at 850 C on BP1300."
+    },
+    {
+      "id": "ac-kinetics-ijhe-2004",
+      "label": "Int. J. Hydrogen Energy 2004",
+      "url": "https://doi.org/10.1016/S0360-3199(03)00111-3",
+      "kind": "literature",
+      "note": "Activated-carbon kinetics: reaction order ~0.5 in CH4; deactivation by pore-mouth blocking from deposited carbon."
+    },
+    {
+      "id": "cb-deactivation-ijhe-2008",
+      "label": "Int. J. Hydrogen Energy 2008",
+      "url": "https://doi.org/10.1016/j.ijhydene.2008.05.072",
+      "kind": "literature",
+      "note": "Carbon blacks deactivate more slowly than microporous activated carbons during methane decomposition."
+    },
+    {
+      "id": "pyrolysis-review-iecr-2021",
+      "label": "Ind. Eng. Chem. Res. 2021",
+      "url": "https://doi.org/10.1021/acs.iecr.1c01679",
+      "kind": "literature",
+      "note": "Methane pyrolysis for zero-emission hydrogen: metal, carbon and molten-media routes reviewed as a bridge technology."
+    },
+    {
+      "id": "pyrolysis-review-energies-2021",
+      "label": "Energies 2021",
+      "url": "https://doi.org/10.3390/en14113107",
+      "kind": "literature",
+      "note": "Review comparing metallic and carbonaceous catalytic pyrolysis with molten-media approaches framed around coking and deactivation."
+    }
+  ],
+  "catalog_quotes": [],
+  "route_templates": [
+    {
+      "id": "high-load-ni-precipitation",
+      "name": "High-loading Ni sol-gel / precipitation",
+      "manufacturing_mode": "Fixed-bed or fluidized powder catalyst",
+      "preprocess": [
+        "Silica sol and nickel-salt solution make-up",
+        "Gelation ratio and pH check"
+      ],
+      "synthesis": [
+        "Heterophase sol-gel co-gelation of Ni with silica binder",
+        "Aging and washing of the gel"
+      ],
+      "postprocess": [
+        "Vacuum filtration",
+        "Rotary drying",
+        "Indirect calcination",
+        "Hydrogen reduction to metallic Ni"
+      ],
+      "quality_gates": [
+        "Ni loading confirmation (60-90 wt%)",
+        "Nickel-silicate impurity check below ~2 wt%",
+        "Carbon capacity spot test"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "filter_rotary_vacuum",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple"
+      ],
+      "non_step_cost_per_lb": 0.5,
+      "route_confidence": 72,
+      "route_note": "Sol-gel co-gelation at 85-90 wt% metal is documented but less standard than impregnation; silicate impurity control is the route risk."
+    },
+    {
+      "id": "fe-alumina-impregnation",
+      "name": "Wet impregnation of Fe on alumina",
+      "manufacturing_mode": "Fixed-bed pellet catalyst",
+      "preprocess": [
+        "Support pre-dry and sieve",
+        "Iron-salt solution make-up"
+      ],
+      "synthesis": [
+        "Slurry or incipient-wetness loading of the iron salt",
+        "Aging after deposition"
+      ],
+      "postprocess": [
+        "Rotary drying",
+        "Indirect calcination",
+        "Hydrogen reduction at ~500 C"
+      ],
+      "quality_gates": [
+        "Fe loading confirmation",
+        "Surface area and crush strength",
+        "Methane conversion spot test"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple"
+      ],
+      "non_step_cost_per_lb": 0.42,
+      "route_confidence": 85,
+      "route_note": "Standard oxide impregnation chain shared with the other supported-metal families; the most transferable route in this family."
+    },
+    {
+      "id": "carbon-catalyst-conditioning",
+      "name": "Carbon catalyst milling and conditioning",
+      "manufacturing_mode": "Fluidized or moving-bed consumable carbon",
+      "preprocess": [
+        "Incoming activated-carbon or carbon-black grade check"
+      ],
+      "synthesis": [
+        "Milling and classification to the target particle size"
+      ],
+      "postprocess": [
+        "Low-temperature drying before charge"
+      ],
+      "quality_gates": [
+        "Particle size distribution",
+        "Surface area check",
+        "Moisture below handling limit"
+      ],
+      "steps": [
+        "mill",
+        "dryer_rotary_40_100C"
+      ],
+      "non_step_cost_per_lb": 0.1,
+      "route_confidence": 92,
+      "route_note": "The catalyst is a purchased commodity carbon that only needs sizing and drying; it is consumed with the carbon product."
+    }
+  ],
+  "candidates": [
+    {
+      "slug": "ni-sio2-highload",
+      "title": "High-loading Ni/SiO2",
+      "archetype": "Moderate-temperature workhorse",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "60-90 wt% Ni on silica runs methane decomposition at 500-700 C with high carbon capacity per gram of nickel but carbon-limited lifetime.",
+      "route_template_id": "high-load-ni-precipitation",
+      "order_size_tons": 20,
+      "performance_index": 72,
+      "manufacturing_readiness": 68,
+      "screening_exactness": 70,
+      "temperature_window_c": [
+        500,
+        700
+      ],
+      "literature_basis_ids": [
+        "ni-sio2-loading-ijhe-2007",
+        "ni-solgel-cattod-2002",
+        "ni-cu-sio2-rscadv-2016"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Best fit when moderate temperature and high hydrogen purity matter more than catalyst lifetime.",
+        "Economics hinge on nickel recovery from the spent carbon-metal composite; the screen prices fresh catalyst only."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Ni",
+          "wt_pct": 75.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ni",
+            "precursor_markup": 1.1,
+            "note": "Live Ni feed with a mild precursor conversion markup; literature loadings span 60-90 wt%, screened at the midpoint."
+          }
+        },
+        {
+          "role": "support",
+          "name": "SiO2",
+          "wt_pct": 25.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.1,
+            "evidence_label": "SiO2 screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 57,
+            "transparency": "derived_index",
+            "note": "Precipitated/sol-gel silica binder term held on the family-standard engineering proxy; USGS industrial sand ($36/t, 2025e) is not grade-representative."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "fe-alumina-pyrolysis",
+      "title": "Fe/Al2O3 higher-temperature route",
+      "archetype": "Cheap-metal high-conversion route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "~60-65 wt% Fe on alumina trades higher operating temperature (700-900 C) for cheaper metal and higher equilibrium conversion, with nanotube-type carbon as the co-product.",
+      "route_template_id": "fe-alumina-impregnation",
+      "order_size_tons": 20,
+      "performance_index": 78,
+      "manufacturing_readiness": 82,
+      "screening_exactness": 74,
+      "temperature_window_c": [
+        700,
+        900
+      ],
+      "literature_basis_ids": [
+        "fe-alumina-apcatb-2017",
+        "fe-loading-jccs-2015",
+        "fe-companion-ijhe-2015"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Preferred anchor when metal cost dominates: iron is the cheapest active metal in the family and 69% conversion at 700 C is documented.",
+        "Higher furnace duty than the Ni route is a process cost outside this catalyst screen."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Fe",
+          "wt_pct": 62.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Fe",
+            "precursor_markup": 1.15,
+            "note": "Live Fe feed with a precursor conversion markup; literature optimum sits at ~60-65 wt% Fe on alumina."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Al2O3",
+          "wt_pct": 38.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.2676,
+            "evidence_label": "USGS industrial alumina proxy",
+            "evidence_tier": "public_index",
+            "confidence_score": 72,
+            "transparency": "public_index",
+            "note": "2025 USGS alumina import value used as a bulk oxide support proxy."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "activated-carbon-autocatalytic",
+      "title": "Activated-carbon consumable catalyst",
+      "archetype": "Commodity consumable",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Activated carbon or carbon black catalyzes methane decomposition at 850-950 C with no metal at all; the catalyst is consumed alongside the carbon product and replaced continuously.",
+      "route_template_id": "carbon-catalyst-conditioning",
+      "order_size_tons": 20,
+      "performance_index": 60,
+      "manufacturing_readiness": 92,
+      "screening_exactness": 66,
+      "temperature_window_c": [
+        850,
+        950
+      ],
+      "literature_basis_ids": [
+        "carbon-screen-cattod-2005",
+        "ac-kinetics-ijhe-2004",
+        "cb-deactivation-ijhe-2008"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Lowest catalyst cost and trivially manufacturable, but conversion (25-40%) and deactivation by pore blocking cap performance.",
+        "Continuous make-up consumption means the screen's per-pound price is closer to an operating cost than a one-time charge."
+      ],
+      "components": [
+        {
+          "role": "active_catalyst",
+          "name": "Activated carbon",
+          "wt_pct": 100.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.2247,
+            "evidence_label": "UN Comtrade activated-carbon import unit value",
+            "evidence_tier": "public_index",
+            "confidence_score": 70,
+            "transparency": "public_index",
+            "note": "2024 U.S. imports of HS 380210: $240.27M / 88.93M kg = $2.70/kg CIF average. Carbon blacks are the cheaper sibling class (~$1.88/kg on HS 280300) and deactivate more slowly."
+          }
+        }
+      ]
+    }
+  ]
+}
