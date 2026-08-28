@@ -1,0 +1,150 @@
+{
+  "description": "Public-evidence cross-checks for the toller-survey step rates. For each mapped step a bottom-up FLOOR hourly rate is derived from the installed equipment costs published in DOE/NETL-2002/1169 (Loh 2002). The floor covers annualized installed capital, fixed charges, and an attended-labor share; utilities, consumables and toller margin are deliberately excluded, so a valid toller rate must sit at or above its floor. The floors corroborate the CatCost rates without replacing them: the report's stated curve accuracy (+50%/-30%) is wider than the toller survey's, so swapping values would increase uncertainty, not reduce it.",
+  "report": {
+    "citation": "Loh, H.P., Lyons, J., White, C.W. III, 'Process Equipment Cost Estimation, Final Report', DOE/NETL-2002/1169, U.S. Department of Energy, National Energy Technology Laboratory, January 2002",
+    "reference_url": "https://www.osti.gov/biblio/797810/",
+    "mirror_urls": [
+      "https://digital.library.unt.edu/ark:/67531/metadc741278/",
+      "https://web.archive.org/web/20250206112857/https://www.osti.gov/servlets/purl/797810"
+    ],
+    "local_copy": "backend/data/references/DOE-NETL-2002-1169_Loh_process_equipment_cost.pdf (not committed - the repo gitignores *.pdf; re-fetch from a mirror URL if absent)",
+    "retrieval_note": "osti.gov drops TCP connections from non-US networks (DNS and ICMP respond, port 443 is filtered); the PDF was retrieved 2026-08-28 from the Internet Archive capture of the OSTI download URL and verified against the UNT catalog metadata (410 KB, 78 pages).",
+    "quote_year": 2002,
+    "cost_basis": "1st quarter 1998 USD (report p.3); installed costs from Appendix B include setting labor and installation bulks",
+    "stated_accuracy": "order-of-magnitude +50%/-30%, budget +30%/-15% (report p.3)"
+  },
+  "method": {
+    "formula": "floor_usd_per_hr = installed_1998 * (cepci_2017 / cepci_1998) * (crf + maintenance_frac + taxes_frac + insurance_frac) / annual_hours + operators_per_step * labor_rate_usd_per_hr * (1 + plant_overhead_frac)",
+    "result_basis": "mid-2017 USD/hr, matching the STEP_COSTS basis so the engine's ChemPPI escalation applies identically to rate and floor",
+    "constants": {
+      "cepci_1998": 390.0,
+      "cepci_2017": 567.5,
+      "cepci_source": "backend/data/cepci.json (annual CEPCI)",
+      "crf_interest": 0.1,
+      "crf_years": 10,
+      "crf_note": "capital recovery factor i(1+i)^n/((1+i)^n-1), the standard preliminary-estimate annualization",
+      "maintenance_frac": 0.05,
+      "taxes_frac": 0.025,
+      "insurance_frac": 0.008,
+      "fixed_charge_source": "backend/data/opex_factors.json (M&R 5% of FCI, local taxes 2.5% of FCI, insurance 0.8% of FCI)",
+      "annual_hours": 8000,
+      "operators_per_step": 0.5,
+      "labor_rate_usd_per_hr": 48.0,
+      "plant_overhead_frac": 0.6,
+      "labor_source": "backend/data/opex_factors.json (direct labor $48/hr; plant overhead 60% of labor line)",
+      "labor_note": "one operator assumed to attend two concurrent steps"
+    },
+    "tier_duty_basis": "small 1 t/day, medium 10 t/day, large 150 t/day at 24 h/day (backend/core/constants.py PRODUCTION_RATES, HOURS_PER_DAY)"
+  },
+  "equipment_points": {
+    "ball_mill_3x3_7p5hp": {"installed_1998": 62900.0, "description": "Ball mill 3 ft x 3 ft, 7.5 hp", "report_page": 63},
+    "ball_mill_5x5_50hp": {"installed_1998": 153500.0, "description": "Ball mill 5 ft x 5 ft, 50 hp", "report_page": 63},
+    "ball_mill_200hp": {"installed_1998": 311700.0, "description": "Ball mill, 200 hp", "report_page": 63},
+    "rotary_dryer_100sqft": {"installed_1998": 42400.0, "description": "Direct contact rotary dryer, 100 sq ft", "report_page": 64},
+    "rotary_dryer_400sqft": {"installed_1998": 142800.0, "description": "Direct contact rotary dryer, 400 sq ft", "report_page": 64},
+    "rotary_dryer_2000sqft": {"installed_1998": 603500.0, "description": "Direct contact rotary dryer, 2000 sq ft", "report_page": 64},
+    "tray_batch_dryer_90sqft": {"installed_1998": 16000.0, "description": "Atmospheric tray batch dryer, 90 sq ft", "report_page": 64},
+    "plate_frame_filter_10cuft": {"installed_1998": 145500.0, "description": "Automatic plate and frame filter, 10 cu ft frame capacity", "report_page": 66},
+    "drum_filter_100sqft": {"installed_1998": 104200.0, "description": "Drum (vacuum) filter, 100 sq ft", "report_page": 66},
+    "drum_filter_500sqft": {"installed_1998": 175400.0, "description": "Drum (vacuum) filter, 500 sq ft", "report_page": 66},
+    "agitator_2hp": {"installed_1998": 9500.0, "description": "Agitator, 2 hp", "report_page": 67},
+    "agitator_10hp": {"installed_1998": 15900.0, "description": "Agitator, 10 hp", "report_page": 67},
+    "agitator_25hp": {"installed_1998": 21600.0, "description": "Agitator, 25 hp", "report_page": 67},
+    "agitator_50hp": {"installed_1998": 37700.0, "description": "Agitator, 50 hp", "report_page": 67},
+    "vertical_vessel_100gal_15psig": {"installed_1998": 51800.0, "description": "Vertical vessel, 100 gal, 15 psig", "report_page": 52},
+    "vertical_vessel_500gal_15psig": {"installed_1998": 68400.0, "description": "Vertical vessel, 500 gal, 15 psig", "report_page": 52},
+    "vertical_vessel_1000gal_15psig": {"installed_1998": 96000.0, "description": "Vertical vessel, 1000 gal, 15 psig", "report_page": 52},
+    "vertical_vessel_5000gal_15psig": {"installed_1998": 139700.0, "description": "Vertical vessel, 5000 gal, 15 psig", "report_page": 52},
+    "evaporator_vertical_100sqft": {"installed_1998": 120800.0, "description": "Standard vertical tube evaporator, 100 sq ft", "report_page": 61},
+    "evaporator_vertical_1000sqft": {"installed_1998": 388400.0, "description": "Standard vertical tube evaporator, 1000 sq ft", "report_page": 61},
+    "evaporator_vertical_6000sqft": {"installed_1998": 997000.0, "description": "Standard vertical tube evaporator, 6000 sq ft", "report_page": 61}
+  },
+  "steps": {
+    "mill": {
+      "maps_to": "Ball mill (curve p.23, table p.63)",
+      "tiers": {
+        "small": {"equipment": ["ball_mill_3x3_7p5hp"], "sizing": "1 t/day = 42 kg/h; smallest tabulated ball mill", "derived_floor_usd_per_hr": 41.21, "status": "corroborated"},
+        "medium": {"equipment": ["ball_mill_5x5_50hp"], "sizing": "10 t/day = 0.42 t/h", "derived_floor_usd_per_hr": 45.26, "status": "corroborated"},
+        "large": {"equipment": ["ball_mill_200hp"], "sizing": "150 t/day = 6.3 t/h", "derived_floor_usd_per_hr": 52.33, "status": "corroborated"}
+      }
+    },
+    "dryer_rotary_40_100C": {
+      "maps_to": "Direct contact rotary dryer (curve p.24, table p.64)",
+      "tiers": {
+        "small": {"equipment": ["rotary_dryer_100sqft"], "sizing": "smallest tabulated area; 1 t/day duty sits at the curve floor, so the floor is conservative-high on capital", "derived_floor_usd_per_hr": 40.3, "status": "corroborated"},
+        "medium": {"equipment": ["rotary_dryer_400sqft"], "sizing": "drying area scaled with evaporative duty at 10 t/day", "derived_floor_usd_per_hr": 44.78, "status": "corroborated"},
+        "large": {"equipment": ["rotary_dryer_2000sqft"], "sizing": "largest tabulated area at 150 t/day", "derived_floor_usd_per_hr": 65.38, "status": "corroborated"}
+      }
+    },
+    "dryer_rotary_100_300C": {
+      "maps_to": "Direct contact rotary dryer (curve p.24, table p.64)",
+      "note": "same equipment points as the 40-100C band: the fuel-duty difference between the temperature bands is a utility cost, which the floor excludes by construction",
+      "tiers": {
+        "small": {"equipment": ["rotary_dryer_100sqft"], "sizing": "smallest tabulated area", "derived_floor_usd_per_hr": 40.3, "status": "corroborated"},
+        "medium": {"equipment": ["rotary_dryer_400sqft"], "sizing": "drying area scaled with evaporative duty at 10 t/day", "derived_floor_usd_per_hr": 44.78, "status": "corroborated"},
+        "large": {"equipment": ["rotary_dryer_2000sqft"], "sizing": "largest tabulated area at 150 t/day", "derived_floor_usd_per_hr": 65.38, "status": "corroborated"}
+      }
+    },
+    "dryer_batch_vacuum_tray": {
+      "maps_to": "Atmospheric tray batch dryer (curve p.24, table p.64)",
+      "note": "vacuum construction costs more than the atmospheric proxy, so the floor is conservative-low",
+      "tiers": {
+        "small": {"equipment": ["tray_batch_dryer_90sqft"], "sizing": "90 sq ft tray area for 1 t/day batch drying", "derived_floor_usd_per_hr": 39.12, "status": "corroborated"}
+      }
+    },
+    "filter_plate_frame": {
+      "maps_to": "Automatic plate and frame filter (curve p.26, table p.66)",
+      "tiers": {
+        "small": {"equipment": ["plate_frame_filter_10cuft"], "sizing": "smallest tabulated frame capacity (10 cu ft) covers 1 t/day of solids", "derived_floor_usd_per_hr": 44.9, "status": "corroborated"}
+      }
+    },
+    "filter_rotary_vacuum": {
+      "maps_to": "Drum (vacuum) filter (curve p.26, table p.66)",
+      "tiers": {
+        "medium": {"equipment": ["drum_filter_100sqft"], "sizing": "10 t/day at the report's default 0.5 t/day per sq ft needs ~20 sq ft; smallest tabulated drum is 100 sq ft (curve floor, conservative-high)", "derived_floor_usd_per_hr": 43.06, "status": "corroborated"},
+        "large": {"equipment": ["drum_filter_500sqft"], "sizing": "150 t/day at 0.5 t/day per sq ft needs ~300 sq ft; next tabulated size up is 500 sq ft", "derived_floor_usd_per_hr": 46.24, "status": "corroborated"}
+      }
+    },
+    "mixer_slurry": {
+      "maps_to": "Agitator + vertical vessel, 15 psig (curves p.5 and p.27, tables p.52 and p.67)",
+      "tiers": {
+        "small": {"equipment": ["vertical_vessel_500gal_15psig", "agitator_10hp"], "sizing": "1 t/day solids at ~20 wt% slurry is ~1250 gal/day, batched in a 500 gal working vessel", "derived_floor_usd_per_hr": 42.17, "status": "corroborated"},
+        "medium": {"equipment": ["vertical_vessel_5000gal_15psig", "agitator_25hp"], "sizing": "10 t/day slurry duty in a 5000 gal vessel", "derived_floor_usd_per_hr": 45.61, "status": "corroborated"},
+        "large": {"status": "out_of_range", "sizing": "150 t/day slurry duty exceeds the largest tabulated vertical vessel (5000 gal); no floor derived"}
+      }
+    },
+    "incipient_wetness": {
+      "maps_to": "Agitator + vertical vessel, 15 psig (curves p.5 and p.27, tables p.52 and p.67)",
+      "note": "liquid duty is pore volume only (~0.5-1 L per kg support), so vessels stay small relative to slurry mixing",
+      "tiers": {
+        "small": {"equipment": ["vertical_vessel_100gal_15psig", "agitator_2hp"], "sizing": "1 t/day at ~0.8 L/kg is ~210 gal/day of solution", "derived_floor_usd_per_hr": 41.14, "status": "corroborated"},
+        "medium": {"equipment": ["vertical_vessel_1000gal_15psig", "agitator_10hp"], "sizing": "10 t/day at ~0.8 L/kg is ~2100 gal/day, batched", "derived_floor_usd_per_hr": 43.4, "status": "corroborated"},
+        "large": {"equipment": ["vertical_vessel_5000gal_15psig", "agitator_50hp"], "sizing": "150 t/day at ~0.8 L/kg is ~32000 gal/day across repeated 5000 gal batches", "derived_floor_usd_per_hr": 46.33, "status": "corroborated"}
+      }
+    },
+    "crystallizer": {
+      "maps_to": "Standard vertical tube evaporator as evaporative-crystallizer body (curve p.21, table p.61)",
+      "note": "an evaporative crystallizer is approximated by the evaporator body; internals specific to crystallization are not priced by the report",
+      "tiers": {
+        "small": {"equipment": ["evaporator_vertical_100sqft"], "sizing": "smallest tabulated area for 1 t/day", "derived_floor_usd_per_hr": 43.8, "status": "corroborated"},
+        "medium": {"equipment": ["evaporator_vertical_1000sqft"], "sizing": "heat-transfer area scaled with evaporative duty at 10 t/day", "derived_floor_usd_per_hr": 55.76, "status": "corroborated"},
+        "large": {"equipment": ["evaporator_vertical_6000sqft"], "sizing": "largest tabulated vertical-tube area at 150 t/day", "derived_floor_usd_per_hr": 82.96, "status": "corroborated"}
+      }
+    }
+  },
+  "unmapped_steps": {
+    "kiln_batch": "no calciner or kiln among the report's 31 equipment types",
+    "kiln_continuous_direct": "no calciner or kiln among the report's 31 equipment types",
+    "kiln_continuous_indirect": "no calciner or kiln among the report's 31 equipment types",
+    "dryer_spray": "no spray dryer among the report's dryer types (rotary, drum, tray)",
+    "filter_belt_vacuum": "no belt filter among the report's filter types",
+    "ball_forming": "no forming or agglomeration equipment in the report",
+    "extruder_with_feeder": "no extruder in the report",
+    "mixer_dry_blender": "no dry solids blender in the report; the propeller agitator is not a valid proxy",
+    "flare": "no flare in the report",
+    "reactor_simple": "rate is attendance-dominated: the floor's fixed labor share (0.5 operator) already exceeds the small-tier rate, so the floor construction is uninformative here",
+    "reactor_multistep": "multi-vessel train sizing would stack unsourced assumptions; not derived",
+    "scrubber_nox": "rate is attendance-dominated: the floor's fixed labor share (0.5 operator) already exceeds the small-tier rate, so the floor construction is uninformative here",
+    "_proxy_steps": "the nine MEA proxy steps are tracked as a separate debt in test_evidence_provenance.py and are out of scope for thermocatalyst equipment anchoring"
+  }
+}
