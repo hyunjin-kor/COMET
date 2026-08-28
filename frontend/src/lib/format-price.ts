@@ -2,17 +2,22 @@
 
 /**
  * Render a price value as a USD string with en-US thousand separators.
- * Prices >= $1 round to whole dollars (e.g. `$1,235`) so the UI doesn't get
- * cluttered with cents. Sub-$1 prices keep 2-4 decimal places so cheap
- * materials (e.g. $0.05/lb alumina) don't collapse to "$0". Returns `'$0'`
- * for non-finite input.
+ * Precision grades with magnitude so small prices keep their information
+ * (a $1.47/cm2 electrode must not display as "$1") while large ones stay
+ * uncluttered: >= $100 whole dollars, $10-100 one decimal, $1-10 two
+ * decimals, sub-$1 keeps 2-4 decimal places. Trailing zeros are trimmed.
+ * Returns `'$0'` for non-finite input.
  */
 export function formatPrice(value: number | null | undefined): string {
   if (value == null || !Number.isFinite(value)) return '$0';
   const abs = Math.abs(value);
   let body: string;
-  if (abs >= 1) {
+  if (abs >= 100) {
     body = value.toLocaleString('en-US', { maximumFractionDigits: 0 });
+  } else if (abs >= 10) {
+    body = value.toLocaleString('en-US', { maximumFractionDigits: 1 });
+  } else if (abs >= 1) {
+    body = value.toLocaleString('en-US', { maximumFractionDigits: 2 });
   } else {
     body = value.toLocaleString('en-US', {
       minimumFractionDigits: 2,

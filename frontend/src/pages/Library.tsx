@@ -3,6 +3,7 @@ import { SkeletonListRows } from '../components/shared/Skeleton';
 import { WorkspaceSectionFooter, WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
 import {
   type CatalystDomain,
+  fetchMaterialCategories,
   fetchMaterials,
   fetchSteps,
   fetchTemplates,
@@ -39,7 +40,7 @@ function compareMaterials(a: MaterialItem, b: MaterialItem, key: SortKey): numbe
   return a.name.localeCompare(b.name);
 }
 
-const CATEGORIES = ['Precious Metal / PGM', 'Base Metal', 'Support', 'Chemical', 'Chemical / Solvent'];
+const FALLBACK_CATEGORIES = ['Precious Metal / PGM', 'Base Metal', 'Support', 'Chemical', 'Chemical / Solvent'];
 const APPLICATION_OPTIONS = [
   { value: '', label: 'All applications' },
   { value: 'general', label: 'General' },
@@ -201,6 +202,7 @@ export default function Library() {
   const [templates, setTemplates] = useState<ProcessTemplate[]>([]);
   const [steps, setSteps] = useState<StepLibraryItem[]>([]);
   const [category, setCategory] = useState('');
+  const [categories, setCategories] = useState<string[]>(FALLBACK_CATEGORIES);
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [catalystDomain, setCatalystDomain] = useState<'' | CatalystDomain>('');
@@ -233,6 +235,18 @@ export default function Library() {
 
   useEffect(() => {
     let cancelled = false;
+    fetchMaterialCategories()
+      .then((values) => {
+        if (!cancelled && values.length > 0) setCategories(values);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
 
     async function loadData() {
       setLoading(true);
@@ -244,6 +258,7 @@ export default function Library() {
             debouncedSearch || undefined,
             catalystDomain || undefined,
             applicationFamily || undefined,
+            1000,
           );
           if (!cancelled) {
             setMaterials(data);
@@ -354,7 +369,7 @@ export default function Library() {
                 <div className="mt-2">
                   <select value={category} onChange={(event) => setCategory(event.target.value)} className="input-base">
                     <option value="">All categories</option>
-                    {CATEGORIES.map((value) => (
+                    {categories.map((value) => (
                       <option key={value} value={value}>
                         {value}
                       </option>

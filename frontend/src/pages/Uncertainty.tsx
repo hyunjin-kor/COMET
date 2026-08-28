@@ -76,6 +76,20 @@ function thermalRowSummary(rows: CalculatorRow[], role: 'active_metal' | 'promot
     .join(' + ');
 }
 
+function thermalSupportSummary(rows: CalculatorRow[]) {
+  // A single support row auto-balances at run time; the stored wt% can be
+  // stale, so re-derive it the same way the range input builder does.
+  const supportRows = rows.filter((row) => row.role === 'support' && row.name.trim().length > 0);
+  const onlySupport = supportRows[0];
+  if (supportRows.length !== 1 || !onlySupport) return thermalRowSummary(rows, 'support');
+  const nonSupportWt = rows
+    .filter((row) => row.role !== 'support' && row.name.trim().length > 0 && row.wt_pct > 0)
+    .reduce((sum, row) => sum + row.wt_pct, 0);
+  const balanced = Math.max(0, 100 - nonSupportWt);
+  if (balanced <= 0) return '';
+  return `${onlySupport.name} ${balanced.toFixed(1)} wt%`;
+}
+
 function describeDraftCase(draft: CalculatorDraft, snapshotComposition: string | null) {
   if (draft.catalystDomain === 'electrocatalyst') {
     return snapshotComposition || 'Current electrocatalyst stack from Cost Estimate';
@@ -83,7 +97,7 @@ function describeDraftCase(draft: CalculatorDraft, snapshotComposition: string |
 
   const active = thermalRowSummary(draft.rows, 'active_metal');
   const promoters = thermalRowSummary(draft.rows, 'promoter');
-  const supports = thermalRowSummary(draft.rows, 'support');
+  const supports = thermalSupportSummary(draft.rows);
 
   if (active && supports) {
     return promoters ? `${active} + ${promoters} on ${supports}` : `${active} on ${supports}`;
@@ -211,8 +225,8 @@ export default function Uncertainty() {
       ? String(latestSnapshot.result.input_summary.composition ?? '')
       : null;
   const caseSummary = draft ? describeDraftCase(draft, snapshotComposition) : 'No current Cost Estimate draft';
-  // Chart x-axis bar labels — Rule B price formatting (integer >= $1,
-  // 2-4 decimals < $1) without the leading "$" so labels stay compact.
+  // Chart x-axis bar labels — shared graded price formatting without the
+  // leading "$" so labels stay compact.
   const fmtBound = (v: number) => formatPrice(v).slice(1);
   const histData = result
     ? [

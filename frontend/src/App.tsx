@@ -1,5 +1,5 @@
 import { lazy } from 'react';
-import { BrowserRouter, HashRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import AppFrame from './components/layout/AppFrame';
 import { UnitProvider } from './lib/units';
 
@@ -31,6 +31,7 @@ export default function App() {
             <Route path="/uncertainty" element={<Uncertainty />} />
             <Route path="/capex" element={<CapEx />} />
             <Route path="/library" element={<Library />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>
       </Router>
