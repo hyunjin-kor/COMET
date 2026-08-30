@@ -1,4 +1,4 @@
-import type { ApplicationFamily, CostResult, DecisionCandidate } from './api';
+import type { ApplicationFamily, CostInput, CostResult, DecisionCandidate } from './api';
 
 export type CalculatorRole = 'active_metal' | 'active_catalyst' | 'promoter' | 'support';
 export type CalculatorSourceType = 'live' | 'indexed' | 'manual';
@@ -52,6 +52,7 @@ export interface CalculatorResultSnapshot {
   supportWtPct: number;
   generatedAt: string;
   benchmarkCandidate?: CalculatorBenchmarkPreset | null;
+  costInput?: CostInput | null;
 }
 
 export type CalculatorBenchmarkPreset = Pick<

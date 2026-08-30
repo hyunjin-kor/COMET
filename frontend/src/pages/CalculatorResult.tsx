@@ -7,7 +7,7 @@ import {
   useWorkspaceSections,
   type WorkspaceSection,
 } from '../components/shared/WorkspaceSections';
-import type { CostResult } from '../lib/api';
+import { saveEstimate, type CostResult } from '../lib/api';
 import { loadCalculatorResultSnapshot } from '../lib/calculator-session';
 import { buildResultCsv, downloadCsv, resultCsvFilename } from '../lib/export-csv';
 import { formatPrice } from '../lib/format-price';
@@ -140,6 +140,23 @@ export default function CalculatorResult() {
   const { unit, toDisplay, fmtLabel, catLabel } = useUnit();
   const sectionState = useWorkspaceSections(RESULT_SECTIONS, 'result');
   const [snapshot] = useState(() => loadCalculatorResultSnapshot());
+  const [saveName, setSaveName] = useState('');
+  const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved' | 'failed'>('idle');
+
+  async function handleSaveEstimate() {
+    if (!snapshot?.costInput || saveState === 'saving') return;
+    const name = saveName.trim()
+      || (typeof snapshot.result.input_summary.composition === 'string'
+        ? snapshot.result.input_summary.composition
+        : 'Untitled estimate');
+    setSaveState('saving');
+    try {
+      await saveEstimate(snapshot.costInput, name);
+      setSaveState('saved');
+    } catch {
+      setSaveState('failed');
+    }
+  }
 
   useLayoutEffect(() => {
     window.scrollTo(0, 0);
@@ -1011,7 +1028,24 @@ export default function CalculatorResult() {
               The estimate, route basis, and evidence in one place — grouped for reading, separate from the editing workspace.
             </p>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            {snapshotState.costInput ? (
+              <div className="flex items-center gap-2">
+                <input
+                  value={saveName}
+                  onChange={(event) => { setSaveName(event.target.value); if (saveState !== 'idle') setSaveState('idle'); }}
+                  placeholder="Estimate name"
+                  className="input-base w-44 px-3 py-2 text-sm"
+                />
+                <button
+                  onClick={() => void handleSaveEstimate()}
+                  disabled={saveState === 'saving'}
+                  className="cp-button-secondary px-4 py-2"
+                >
+                  {saveState === 'saving' ? 'Saving…' : saveState === 'saved' ? 'Saved ✓' : saveState === 'failed' ? 'Retry save' : 'Save estimate'}
+                </button>
+              </div>
+            ) : null}
             <button
               onClick={() => downloadCsv(resultCsvFilename(snapshotState), buildResultCsv(snapshotState))}
               className="cp-button-secondary px-4 py-2"
