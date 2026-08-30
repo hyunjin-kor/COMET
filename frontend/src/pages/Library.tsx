@@ -104,9 +104,9 @@ function applicationTone(application: string) {
   return 'border-slate-200 bg-white text-slate-600';
 }
 
-function formatPack(material: MaterialItem) {
-  if (!material.pack_quantity || !material.pack_unit) return 'Pack not stated';
-  return `${material.pack_quantity} ${material.pack_unit} pack`;
+function formatPack(material: MaterialItem, lang: 'en' | 'ko' = 'en') {
+  if (!material.pack_quantity || !material.pack_unit) return lang === 'ko' ? '포장 정보 없음' : 'Pack not stated';
+  return lang === 'ko' ? `${material.pack_quantity} ${material.pack_unit} 포장` : `${material.pack_quantity} ${material.pack_unit} pack`;
 }
 
 function formatRawPrice(material: MaterialItem) {
@@ -201,7 +201,7 @@ function InspectorRow({ label, value, detail }: { label: string; value: string; 
 
 export default function Library() {
   const { toDisplay, fmtLabel } = useUnit();
-  const { t } = useLang();
+  const { lang, t } = useLang();
   const sectionState = useWorkspaceSections(LIBRARY_SECTIONS, 'library');
   const tab = sectionState.activeSection.id as Tab;
   const [materials, setMaterials] = useState<MaterialItem[]>([]);
@@ -385,7 +385,7 @@ export default function Library() {
               </label>
 
               <label className="block">
-                <div className="cp-subtle-label">Catalyst domain</div>
+                <div className="cp-subtle-label">{t('Catalyst domain')}</div>
                 <div className="mt-2">
                   <select
                     value={catalystDomain}
@@ -394,7 +394,7 @@ export default function Library() {
                   >
                     {DOMAIN_OPTIONS.map((option) => (
                       <option key={option.value || 'all'} value={option.value}>
-                        {option.label}
+                        {t(option.label)}
                       </option>
                     ))}
                   </select>
@@ -402,7 +402,7 @@ export default function Library() {
               </label>
 
               <label className="block">
-                <div className="cp-subtle-label">Application</div>
+                <div className="cp-subtle-label">{t('Application')}</div>
                 <div className="mt-2">
                   <select
                     value={applicationFamily}
@@ -411,7 +411,7 @@ export default function Library() {
                   >
                     {APPLICATION_OPTIONS.map((option) => (
                       <option key={option.value || 'all'} value={option.value}>
-                        {option.label}
+                        {t(option.label)}
                       </option>
                     ))}
                   </select>
@@ -428,7 +428,7 @@ export default function Library() {
                   >
                     {sortOptions(fmtLabel).map((option) => (
                       <option key={option.value} value={option.value}>
-                        {option.label}
+                        {t(option.label)}
                       </option>
                     ))}
                   </select>
@@ -438,15 +438,15 @@ export default function Library() {
 
             <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
               <LibraryMetricTile label={t('Filtered rows')} value={String(materials.length)} detail={t('Material rows visible under the current filters.')} />
-              <LibraryMetricTile label="Ready to cost" value={String(usableCount)} detail={browseOnlyCount > 0 ? `${browseOnlyCount} more browse-only rows are listed for reference.` : 'Every visible row plugs into the calculator.'} />
-              <LibraryMetricTile label="Public source links" value={String(publicLinkCount)} detail="Rows that open a source page directly." />
-              <LibraryMetricTile label="Archive-only" value={String(historicalOnlyCount)} detail="Older bulk quotes without a stable public URL." />
+              <LibraryMetricTile label={t('Ready to cost')} value={String(usableCount)} detail={browseOnlyCount > 0 ? (lang === 'ko' ? `열람 전용 행 ${browseOnlyCount}건이 참고용으로 함께 표시됩니다.` : `${browseOnlyCount} more browse-only rows are listed for reference.`) : t('Every visible row plugs into the calculator.')} />
+              <LibraryMetricTile label={t('Public source links')} value={String(publicLinkCount)} detail={t('Rows that open a source page directly.')} />
+              <LibraryMetricTile label={t('Archive-only')} value={String(historicalOnlyCount)} detail={t('Older bulk quotes without a stable public URL.')} />
             </div>
 
             <div className="cp-split-workspace mt-5">
               <div className="flex max-h-[72vh] flex-col overflow-hidden rounded-[28px] border border-slate-900/8 bg-white/58 backdrop-blur-xl">
                 <div className="border-b border-slate-900/8 bg-slate-50/80 px-5 py-3 text-xs leading-6 text-slate-600">
-                  Public URLs open directly when available. Historical bulk rows remain visible, but many do not have a stable public permalink.
+                  {t('Public URLs open directly when available. Historical bulk rows remain visible, but many do not have a stable public permalink.')}
                 </div>
 
                 {loading ? (
@@ -499,24 +499,24 @@ export default function Library() {
                                     {formatPrice(toDisplay(material.normalized_price_per_lb))}{fmtLabel}
                                   </div>
                                   <div className="mt-1 text-xs text-slate-500">
-                                    {formatRawPrice(material)} · {formatPack(material)}
+                                    {formatRawPrice(material)} · {formatPack(material, lang)}
                                   </div>
                                 </>
                               ) : (
                                 <>
                                   <div className="font-mono text-slate-900">{formatRawPrice(material)}</div>
-                                  <div className="mt-1 text-xs text-slate-500">{formatPack(material)}</div>
+                                  <div className="mt-1 text-xs text-slate-500">{formatPack(material, lang)}</div>
                                 </>
                               )}
                             </div>
                           </div>
                           <div className="mt-3 flex flex-wrap gap-2">
-                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-medium ${usabilityTone(material)}`}>{usabilityLabel(material)}</span>
-                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-medium ${quoteYearTone(material.quote_year)}`}>{quoteYearLabel(material.quote_year)}</span>
-                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${domainTone(material.catalyst_domain)}`}>{domainLabel(material.catalyst_domain)}</span>
-                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${applicationTone(material.application_family)}`}>{applicationLabel(material.application_family)}</span>
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-medium ${usabilityTone(material)}`}>{t(usabilityLabel(material))}</span>
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-medium ${quoteYearTone(material.quote_year)}`}>{material.quote_year == null ? t('Year unknown') : (lang === 'ko' ? `${material.quote_year}년 견적` : quoteYearLabel(material.quote_year))}</span>
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${domainTone(material.catalyst_domain)}`}>{t(domainLabel(material.catalyst_domain))}</span>
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${applicationTone(material.application_family)}`}>{t(applicationLabel(material.application_family))}</span>
                             <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${categoryTone(material.category)}`}>{material.category || 'Uncategorised'}</span>
-                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-medium ${sourceTrustTone(material)}`}>{sourceTrustLabel(material)}</span>
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-medium ${sourceTrustTone(material)}`}>{t(sourceTrustLabel(material))}</span>
                           </div>
                         </button>
                       );
@@ -527,31 +527,31 @@ export default function Library() {
 
               <div className="cp-inspector-rail xl:max-h-[70vh] xl:overflow-auto">
                 <section className="cp-rail-panel">
-                  <div className="cp-subtle-label">Source Detail</div>
-                  <div className="mt-2 text-lg font-semibold text-[#191f28]">{selectedMaterial?.name ?? 'Choose a material row'}</div>
+                  <div className="cp-subtle-label">{t('Source Detail')}</div>
+                  <div className="mt-2 text-lg font-semibold text-[#191f28]">{selectedMaterial?.name ?? t('Choose a material row')}</div>
                   <div className="mt-3 flex flex-wrap gap-2">
-                    {selectedMaterial ? <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${domainTone(selectedMaterial.catalyst_domain)}`}>{domainLabel(selectedMaterial.catalyst_domain)}</span> : null}
-                    {selectedMaterial ? <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${applicationTone(selectedMaterial.application_family)}`}>{applicationLabel(selectedMaterial.application_family)}</span> : null}
+                    {selectedMaterial ? <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${domainTone(selectedMaterial.catalyst_domain)}`}>{t(domainLabel(selectedMaterial.catalyst_domain))}</span> : null}
+                    {selectedMaterial ? <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${applicationTone(selectedMaterial.application_family)}`}>{t(applicationLabel(selectedMaterial.application_family))}</span> : null}
                     {selectedMaterial ? <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${categoryTone(selectedMaterial.category)}`}>{selectedMaterial.category || 'Uncategorised'}</span> : null}
                   </div>
                   {selectedMaterial ? (
                     <>
                       <div className="mt-3 flex flex-wrap gap-2">
-                        <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-medium ${usabilityTone(selectedMaterial)}`}>{usabilityLabel(selectedMaterial)}</span>
+                        <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-medium ${usabilityTone(selectedMaterial)}`}>{t(usabilityLabel(selectedMaterial))}</span>
                       </div>
-                      <div className="mt-3 text-xs leading-5 text-slate-500">{usabilityHint(selectedMaterial)}</div>
+                      <div className="mt-3 text-xs leading-5 text-slate-500">{t(usabilityHint(selectedMaterial))}</div>
                       <div className="mt-4 space-y-1">
-                        <InspectorRow label="Quote" value={formatRawPrice(selectedMaterial)} detail={formatPack(selectedMaterial)} />
+                        <InspectorRow label={t('Quote')} value={formatRawPrice(selectedMaterial)} detail={formatPack(selectedMaterial, lang)} />
                         {selectedMaterial.is_calculator_usable && selectedMaterial.normalized_price_per_lb != null ? (
                           <InspectorRow
-                            label="In calculator"
+                            label={t('In calculator')}
                             value={`${formatPrice(toDisplay(selectedMaterial.normalized_price_per_lb))}${fmtLabel}`}
-                            detail="Normalized to a per-mass basis for the cost engine."
+                            detail={t('Normalized to a per-mass basis for the cost engine.')}
                           />
                         ) : null}
-                        <InspectorRow label="Source type" value={priceScopeLabel(selectedMaterial.price_scope)} detail={pricingBasisLabel(selectedMaterial.pricing_basis)} />
-                        <InspectorRow label="Quote year" value={selectedMaterial.quote_year ? String(selectedMaterial.quote_year) : 'N/A'} detail={selectedMaterial.quote_source || 'Source not stated'} />
-                        <InspectorRow label="Public link" value={sourceTrustLabel(selectedMaterial)} detail={selectedMaterial.reference_url ? 'Public URL available.' : 'Public URL not stored.'} />
+                        <InspectorRow label={t('Source type')} value={t(priceScopeLabel(selectedMaterial.price_scope))} detail={pricingBasisLabel(selectedMaterial.pricing_basis)} />
+                        <InspectorRow label={t('Quote year')} value={selectedMaterial.quote_year ? String(selectedMaterial.quote_year) : 'N/A'} detail={selectedMaterial.quote_source || t('Source not stated')} />
+                        <InspectorRow label={t('Public link')} value={t(sourceTrustLabel(selectedMaterial))} detail={selectedMaterial.reference_url ? t('Public URL available.') : t('Public URL not stored.')} />
                       </div>
                       {selectedMaterial.notes ? (
                         <div className="mt-3 rounded-[18px] border border-slate-900/8 bg-white/72 px-3 py-3 text-xs leading-6 text-slate-600">
@@ -560,12 +560,12 @@ export default function Library() {
                       ) : null}
                       {selectedMaterial.reference_url ? (
                         <a href={selectedMaterial.reference_url} target="_blank" rel="noreferrer" className="cp-button-secondary mt-3 w-full px-3 py-2 text-xs">
-                          Open source
+                          {t('Open source')}
                         </a>
                       ) : null}
                     </>
                   ) : (
-                    <div className="mt-3 text-xs leading-6 text-slate-500">Choose a row from the record list to inspect its source basis here.</div>
+                    <div className="mt-3 text-xs leading-6 text-slate-500">{t('Choose a row from the record list to inspect its source basis here.')}</div>
                   )}
                 </section>
               </div>
@@ -603,9 +603,9 @@ export default function Library() {
                           <span className="cp-chip">{step.key}</span>
                         </div>
                         <div className="mt-3 grid gap-2 sm:grid-cols-3">
-                          <div className="rounded-[16px] border border-slate-900/8 bg-white/72 px-3 py-2 text-xs text-slate-600">Small: {step.cost_small != null ? `${formatPrice(step.cost_small)}/hr` : 'N/A'}</div>
-                          <div className="rounded-[16px] border border-slate-900/8 bg-white/72 px-3 py-2 text-xs text-slate-600">Medium: {step.cost_medium != null ? `${formatPrice(step.cost_medium)}/hr` : 'N/A'}</div>
-                          <div className="rounded-[16px] border border-slate-900/8 bg-white/72 px-3 py-2 text-xs text-slate-600">Large: {step.cost_large != null ? `${formatPrice(step.cost_large)}/hr` : 'N/A'}</div>
+                          <div className="rounded-[16px] border border-slate-900/8 bg-white/72 px-3 py-2 text-xs text-slate-600">{t('Small')}: {step.cost_small != null ? `${formatPrice(step.cost_small)}/hr` : 'N/A'}</div>
+                          <div className="rounded-[16px] border border-slate-900/8 bg-white/72 px-3 py-2 text-xs text-slate-600">{t('Medium')}: {step.cost_medium != null ? `${formatPrice(step.cost_medium)}/hr` : 'N/A'}</div>
+                          <div className="rounded-[16px] border border-slate-900/8 bg-white/72 px-3 py-2 text-xs text-slate-600">{t('Large')}: {step.cost_large != null ? `${formatPrice(step.cost_large)}/hr` : 'N/A'}</div>
                         </div>
                       </button>
                     );
@@ -642,7 +642,7 @@ export default function Library() {
           <div className="mt-5 space-y-4">
             <div className="flex justify-end">
               <label className="block min-w-[220px]">
-                <div className="cp-subtle-label">Catalyst domain</div>
+                <div className="cp-subtle-label">{t('Catalyst domain')}</div>
                 <div className="mt-2">
                   <select
                     value={catalystDomain}
@@ -651,7 +651,7 @@ export default function Library() {
                   >
                     {DOMAIN_OPTIONS.map((option) => (
                       <option key={option.value || 'all'} value={option.value}>
-                        {option.label}
+                        {t(option.label)}
                       </option>
                     ))}
                   </select>
@@ -684,7 +684,7 @@ export default function Library() {
                           </div>
                           <div className="flex flex-wrap gap-2">
                             <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${domainTone(template.catalyst_domain)}`}>{domainLabel(template.catalyst_domain)}</span>
-                            <span className="cp-chip">{template.steps.length} steps</span>
+                            <span className="cp-chip">{lang === 'ko' ? `${template.steps.length}개 단계` : `${template.steps.length} steps`}</span>
                           </div>
                         </div>
                         <div className="mt-3 text-sm leading-7 text-slate-600">{template.description}</div>

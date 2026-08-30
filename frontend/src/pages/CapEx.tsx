@@ -180,26 +180,26 @@ export default function CapEx() {
                 />
               </div>
               <div className="mt-1 text-xs leading-5 text-slate-500">
-                Already-summed value of all purchased equipment. Use this when you have a vendor quote or a high-level scaling already done.
+                {t('Already-summed value of all purchased equipment. Use this when you have a vendor quote or a high-level scaling already done.')}
               </div>
             </label>
           </div>
         ) : (
           <div className="mt-5 space-y-3">
             <div className="rounded-[18px] border border-slate-200 bg-slate-50/80 px-4 py-3 text-xs leading-6 text-slate-600">
-              Each row is scaled via Cost = base_cost × (target/base)<sup>exponent</sup>. Use exponent 0.6 (six-tenths rule) as a default.
-              Live preview total: <span className="font-semibold text-[#191f28]">{formatUSD(equipmentSubtotal)}</span>.
+              {t('Each equipment line is scaled as Cost = base cost × (target size / base size)^exponent. Exponent 0.6 (six-tenths rule) is the usual default.')}{' '}
+              {t('Live preview total:')} <span className="font-semibold text-[#191f28]">{formatUSD(equipmentSubtotal)}</span>.
             </div>
             <div className="overflow-x-auto">
               <table className="min-w-full text-left text-xs">
                 <thead className="bg-slate-50 text-slate-600">
                   <tr>
-                    <th className="px-3 py-2 font-semibold">Name</th>
-                    <th className="px-3 py-2 font-semibold">Base cost ($)</th>
-                    <th className="px-3 py-2 font-semibold">Base size</th>
-                    <th className="px-3 py-2 font-semibold">Target size</th>
-                    <th className="px-3 py-2 font-semibold">Exponent</th>
-                    <th className="px-3 py-2 font-semibold">Qty</th>
+                    <th className="px-3 py-2 font-semibold">{t('Name')}</th>
+                    <th className="px-3 py-2 font-semibold">{t('Base cost ($)')}</th>
+                    <th className="px-3 py-2 font-semibold">{t('Base size')}</th>
+                    <th className="px-3 py-2 font-semibold">{t('Target size')}</th>
+                    <th className="px-3 py-2 font-semibold">{t('Exponent')}</th>
+                    <th className="px-3 py-2 font-semibold">{t('Qty')}</th>
                     <th className="px-3 py-2"></th>
                   </tr>
                 </thead>
@@ -270,7 +270,7 @@ export default function CapEx() {
                           disabled={equipmentRows.length <= 1}
                           className="cp-button-secondary px-2 py-1 text-[11px] disabled:cursor-not-allowed disabled:opacity-50"
                         >
-                          Remove
+                          {t('Remove')}
                         </button>
                       </td>
                     </tr>
@@ -279,7 +279,7 @@ export default function CapEx() {
               </table>
             </div>
             <button type="button" onClick={addRow} className="cp-button-secondary px-3 py-2 text-xs">
-              + Add equipment line
+              {t('+ Add equipment line')}
             </button>
           </div>
         )}
@@ -292,24 +292,24 @@ export default function CapEx() {
               onChange={(event) => setIncludeOpEx(event.target.checked)}
               className="h-4 w-4 rounded border-slate-300 text-[#0d9488] focus:ring-[#0d9488]"
             />
-            <span className="font-semibold">Layer annual OpEx on top</span>
+            <span className="font-semibold">{t('Layer annual OpEx on top')}</span>
           </label>
           {includeOpEx ? (
             <div className="mt-3 grid gap-3 sm:grid-cols-3">
               <label className="block">
-                <div className="cp-subtle-label">Direct labor ($/yr)</div>
+                <div className="cp-subtle-label">{t('Direct labor ($/yr)')}</div>
                 <div className="mt-2">
                   <input type="number" min={0} value={directLabor} onChange={(event) => setDirectLabor(Number(event.target.value))} className="input-base" />
                 </div>
               </label>
               <label className="block">
-                <div className="cp-subtle-label">Raw materials ($/yr)</div>
+                <div className="cp-subtle-label">{t('Raw materials ($/yr)')}</div>
                 <div className="mt-2">
                   <input type="number" min={0} value={rawMaterials} onChange={(event) => setRawMaterials(Number(event.target.value))} className="input-base" />
                 </div>
               </label>
               <label className="block">
-                <div className="cp-subtle-label">Utilities ($/yr)</div>
+                <div className="cp-subtle-label">{t('Utilities ($/yr)')}</div>
                 <div className="mt-2">
                   <input type="number" min={0} value={utilities} onChange={(event) => setUtilities(Number(event.target.value))} className="input-base" />
                 </div>
@@ -326,7 +326,7 @@ export default function CapEx() {
 
         <div className="mt-5">
           <button onClick={handleCalculate} disabled={loading} className="cp-button-primary disabled:opacity-60">
-            {loading ? 'Calculating...' : includeOpEx ? 'Calculate CapEx + OpEx' : 'Calculate CapEx'}
+            {loading ? t('Calculating...') : includeOpEx ? t('Calculate CapEx + OpEx') : t('Calculate CapEx')}
           </button>
         </div>
       </section>
@@ -335,8 +335,8 @@ export default function CapEx() {
         <section className="surface-card cp-enter overflow-hidden p-4 sm:p-5">
           <div className="grid gap-3 xl:grid-cols-[minmax(0,1.15fr)_repeat(3,minmax(0,1fr))]">
             <div className="min-w-0 overflow-hidden rounded-[20px] border border-[#191f28] bg-[#191f28] p-4 text-white shadow-[0_8px_24px_rgba(15,23,42,0.18)]">
-              <div className="cp-subtle-label !text-slate-400">Total Capital Investment</div>
-              <div className="mt-2 text-sm text-slate-300">CatCost Ch.7 factored estimate</div>
+              <div className="cp-subtle-label !text-slate-400">{t('Total Capital Investment')}</div>
+              <div className="mt-2 text-sm text-slate-300">{t('CatCost Ch.7 factored estimate')}</div>
               <div className="mt-4 text-3xl font-display">{formatUSD(result.summary.total_capital_investment_usd)}</div>
               <div className="mt-2 text-xs leading-6 text-slate-300">
                 FCI {formatUSD(result.summary.fixed_capital_investment_usd)} + working capital{' '}
@@ -349,17 +349,17 @@ export default function CapEx() {
               </div>
             </div>
             <MetricTile
-              label="Purchased equipment"
+              label={t('Purchased equipment')}
               value={formatUSD(result.capex.purchased_equipment)}
-              detail="Sum of equipment-line scaling, before factor expansion."
+              detail={t('Sum of equipment-line scaling, before factor expansion.')}
             />
             <MetricTile
-              label="Fixed Capital Investment"
+              label={t('Fixed Capital Investment')}
               value={formatUSD(result.capex.fixed_capital_investment)}
               detail={`Direct ${formatUSD(result.capex.direct_capital)} + indirect ${formatUSD(result.capex.indirect_capital)}`}
             />
             <MetricTile
-              label="Working capital"
+              label={t('Working capital')}
               value={formatUSD(result.capex.working_capital)}
               detail={`${(result.capex.working_capital / Math.max(result.capex.purchased_equipment, 1) * 100).toFixed(0)}% of PE — typical 70-89%`}
             />
@@ -367,19 +367,19 @@ export default function CapEx() {
 
           {result.equipment_resolution.length > 0 ? (
             <div className="mt-5 rounded-[24px] border border-slate-900/8 bg-white/58 p-4">
-              <div className="cp-subtle-label">Equipment scaling audit</div>
+              <div className="cp-subtle-label">{t('Equipment scaling audit')}</div>
               <div className="mt-3 overflow-x-auto">
                 <table className="min-w-full text-left text-xs">
                   <thead className="bg-slate-50 text-slate-600">
                     <tr>
-                      <th className="px-3 py-2 font-semibold">Name</th>
-                      <th className="px-3 py-2 text-right font-semibold">Base cost</th>
-                      <th className="px-3 py-2 text-right font-semibold">Base size</th>
-                      <th className="px-3 py-2 text-right font-semibold">Target size</th>
-                      <th className="px-3 py-2 text-right font-semibold">Exponent</th>
-                      <th className="px-3 py-2 text-right font-semibold">Qty</th>
-                      <th className="px-3 py-2 text-right font-semibold">Scaled unit</th>
-                      <th className="px-3 py-2 text-right font-semibold">Line total</th>
+                      <th className="px-3 py-2 font-semibold">{t('Name')}</th>
+                      <th className="px-3 py-2 text-right font-semibold">{t('Base cost')}</th>
+                      <th className="px-3 py-2 text-right font-semibold">{t('Base size')}</th>
+                      <th className="px-3 py-2 text-right font-semibold">{t('Target size')}</th>
+                      <th className="px-3 py-2 text-right font-semibold">{t('Exponent')}</th>
+                      <th className="px-3 py-2 text-right font-semibold">{t('Qty')}</th>
+                      <th className="px-3 py-2 text-right font-semibold">{t('Scaled unit')}</th>
+                      <th className="px-3 py-2 text-right font-semibold">{t('Line total')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -403,33 +403,33 @@ export default function CapEx() {
 
           <div className="mt-5 grid gap-4 xl:grid-cols-2">
             <div className="rounded-[24px] border border-slate-900/8 bg-white/58 p-4">
-              <div className="cp-subtle-label">Direct capital</div>
-              <div className="mt-2 cp-heading-sm">Inside the battery limits</div>
+              <div className="cp-subtle-label">{t('Direct capital')}</div>
+              <div className="mt-2 cp-heading-sm">{t('Inside the battery limits')}</div>
               <div className="mt-3 space-y-1">
-                <RailRow label="Purchased equipment" value={formatUSD(result.capex.purchased_equipment)} />
-                <RailRow label="Installation" value={formatUSD(result.capex.installation)} />
-                <RailRow label="Instrumentation & controls" value={formatUSD(result.capex.instrumentation)} />
-                <RailRow label="Piping" value={formatUSD(result.capex.piping)} />
-                <RailRow label="Electrical" value={formatUSD(result.capex.electrical)} />
-                <RailRow label="Buildings" value={formatUSD(result.capex.buildings)} />
-                <RailRow label="Yard improvements" value={formatUSD(result.capex.yard_improvements)} />
-                <RailRow label="Service facilities" value={formatUSD(result.capex.service_facilities)} />
-                <RailRow label="Land" value={formatUSD(result.capex.land)} />
-                <RailRow label="Direct subtotal" value={formatUSD(result.capex.direct_capital)} detail="Sum of direct capital lines" />
+                <RailRow label={t('Purchased equipment')} value={formatUSD(result.capex.purchased_equipment)} />
+                <RailRow label={t('Installation')} value={formatUSD(result.capex.installation)} />
+                <RailRow label={t('Instrumentation & controls')} value={formatUSD(result.capex.instrumentation)} />
+                <RailRow label={t('Piping')} value={formatUSD(result.capex.piping)} />
+                <RailRow label={t('Electrical')} value={formatUSD(result.capex.electrical)} />
+                <RailRow label={t('Buildings')} value={formatUSD(result.capex.buildings)} />
+                <RailRow label={t('Yard improvements')} value={formatUSD(result.capex.yard_improvements)} />
+                <RailRow label={t('Service facilities')} value={formatUSD(result.capex.service_facilities)} />
+                <RailRow label={t('Land')} value={formatUSD(result.capex.land)} />
+                <RailRow label={t('Direct subtotal')} value={formatUSD(result.capex.direct_capital)} detail={t('Sum of direct capital lines')} />
               </div>
             </div>
             <div className="rounded-[24px] border border-slate-900/8 bg-white/58 p-4">
-              <div className="cp-subtle-label">Indirect capital</div>
-              <div className="mt-2 cp-heading-sm">Engineering, contractor, contingency</div>
+              <div className="cp-subtle-label">{t('Indirect capital')}</div>
+              <div className="mt-2 cp-heading-sm">{t('Engineering, contractor, contingency')}</div>
               <div className="mt-3 space-y-1">
-                <RailRow label="Engineering & supervision" value={formatUSD(result.capex.engineering_supervision)} />
-                <RailRow label="Construction" value={formatUSD(result.capex.construction)} />
-                <RailRow label="Legal" value={formatUSD(result.capex.legal)} />
-                <RailRow label="Contractor's fee" value={formatUSD(result.capex.contractors_fee)} />
-                <RailRow label="Contingency" value={formatUSD(result.capex.contingency)} />
-                <RailRow label="Indirect subtotal" value={formatUSD(result.capex.indirect_capital)} detail="Sum of indirect capital lines" />
-                <RailRow label="Working capital" value={formatUSD(result.capex.working_capital)} detail="Carried separate from FCI" />
-                <RailRow label="Total Capital Investment" value={formatUSD(result.capex.total_capital_investment)} detail="FCI + working capital" />
+                <RailRow label={t('Engineering & supervision')} value={formatUSD(result.capex.engineering_supervision)} />
+                <RailRow label={t('Construction')} value={formatUSD(result.capex.construction)} />
+                <RailRow label={t('Legal')} value={formatUSD(result.capex.legal)} />
+                <RailRow label={t("Contractor's fee")} value={formatUSD(result.capex.contractors_fee)} />
+                <RailRow label={t('Contingency')} value={formatUSD(result.capex.contingency)} />
+                <RailRow label={t('Indirect subtotal')} value={formatUSD(result.capex.indirect_capital)} detail={t('Sum of indirect capital lines')} />
+                <RailRow label={t('Working capital')} value={formatUSD(result.capex.working_capital)} detail={t('Carried separate from FCI')} />
+                <RailRow label={t('Total Capital Investment')} value={formatUSD(result.capex.total_capital_investment)} detail={t('FCI + working capital')} />
               </div>
             </div>
           </div>
@@ -438,47 +438,47 @@ export default function CapEx() {
             <div className="mt-5 rounded-[24px] border border-emerald-200 bg-emerald-50/70 p-4">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <div>
-                  <div className="cp-subtle-label !text-emerald-700">Annual OpEx</div>
+                  <div className="cp-subtle-label !text-emerald-700">{t('Annual OpEx')}</div>
                   <div className="cp-heading-sm mt-2">
                     {formatUSD(result.opex.total_annual_opex)}/yr
                   </div>
                   <div className="mt-1 text-xs leading-6 text-emerald-900">
-                    Layered on top of CapEx using your direct-labor / raw-material / utilities inputs and CatCost Ch.7 factors.
+                    {t('Layered on top of CapEx using your direct-labor / raw-material / utilities inputs and CatCost Ch.7 factors.')}
                   </div>
                 </div>
               </div>
 
               <div className="mt-4 grid gap-4 lg:grid-cols-3">
                 <div className="rounded-[18px] border border-slate-200 bg-white/72 p-3">
-                  <div className="cp-subtle-label">Direct operating</div>
+                  <div className="cp-subtle-label">{t('Direct operating')}</div>
                   <div className="mt-2 space-y-1">
-                    <RailRow label="Raw materials" value={formatUSD(result.opex.raw_materials)} />
-                    <RailRow label="Direct labor" value={formatUSD(result.opex.direct_labor)} />
-                    <RailRow label="Supervisory & clerical" value={formatUSD(result.opex.supervisory_clerical)} />
-                    <RailRow label="Utilities" value={formatUSD(result.opex.utilities)} />
-                    <RailRow label="Laboratory" value={formatUSD(result.opex.laboratory)} />
-                    <RailRow label="Maintenance & repair" value={formatUSD(result.opex.maintenance_repair)} />
-                    <RailRow label="Operating supplies" value={formatUSD(result.opex.operating_supplies)} />
-                    <RailRow label="Direct subtotal" value={formatUSD(result.opex.direct_operating_total)} />
+                    <RailRow label={t('Raw materials')} value={formatUSD(result.opex.raw_materials)} />
+                    <RailRow label={t('Direct labor')} value={formatUSD(result.opex.direct_labor)} />
+                    <RailRow label={t('Supervisory & clerical')} value={formatUSD(result.opex.supervisory_clerical)} />
+                    <RailRow label={t('Utilities')} value={formatUSD(result.opex.utilities)} />
+                    <RailRow label={t('Laboratory')} value={formatUSD(result.opex.laboratory)} />
+                    <RailRow label={t('Maintenance & repair')} value={formatUSD(result.opex.maintenance_repair)} />
+                    <RailRow label={t('Operating supplies')} value={formatUSD(result.opex.operating_supplies)} />
+                    <RailRow label={t('Direct subtotal')} value={formatUSD(result.opex.direct_operating_total)} />
                   </div>
                 </div>
                 <div className="rounded-[18px] border border-slate-200 bg-white/72 p-3">
-                  <div className="cp-subtle-label">Fixed operating</div>
+                  <div className="cp-subtle-label">{t('Fixed operating')}</div>
                   <div className="mt-2 space-y-1">
-                    <RailRow label="Local taxes" value={formatUSD(result.opex.local_taxes)} />
-                    <RailRow label="Insurance" value={formatUSD(result.opex.insurance)} />
-                    <RailRow label="Rent" value={formatUSD(result.opex.rent)} />
-                    <RailRow label="Plant overhead" value={formatUSD(result.opex.plant_overhead)} />
-                    <RailRow label="Fixed subtotal" value={formatUSD(result.opex.fixed_operating_total)} />
+                    <RailRow label={t('Local taxes')} value={formatUSD(result.opex.local_taxes)} />
+                    <RailRow label={t('Insurance')} value={formatUSD(result.opex.insurance)} />
+                    <RailRow label={t('Rent')} value={formatUSD(result.opex.rent)} />
+                    <RailRow label={t('Plant overhead')} value={formatUSD(result.opex.plant_overhead)} />
+                    <RailRow label={t('Fixed subtotal')} value={formatUSD(result.opex.fixed_operating_total)} />
                   </div>
                 </div>
                 <div className="rounded-[18px] border border-slate-200 bg-white/72 p-3">
-                  <div className="cp-subtle-label">General expenses</div>
+                  <div className="cp-subtle-label">{t('General expenses')}</div>
                   <div className="mt-2 space-y-1">
-                    <RailRow label="Administration" value={formatUSD(result.opex.administration)} />
-                    <RailRow label="Distribution & marketing" value={formatUSD(result.opex.distribution_marketing)} />
-                    <RailRow label="R&D" value={formatUSD(result.opex.rnd)} />
-                    <RailRow label="G&A subtotal" value={formatUSD(result.opex.general_expenses_total)} />
+                    <RailRow label={t('Administration')} value={formatUSD(result.opex.administration)} />
+                    <RailRow label={t('Distribution & marketing')} value={formatUSD(result.opex.distribution_marketing)} />
+                    <RailRow label={t('R&D')} value={formatUSD(result.opex.rnd)} />
+                    <RailRow label={t('G&A subtotal')} value={formatUSD(result.opex.general_expenses_total)} />
                   </div>
                 </div>
               </div>

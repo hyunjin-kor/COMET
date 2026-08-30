@@ -112,7 +112,7 @@ export default function TopNavigation() {
       <div className="surface-card-soft overflow-hidden">
         <div className="drag-region border-b border-[#e5e8eb] px-4 pb-1.5 pt-[calc(env(titlebar-area-height,0px)+8px)]">
           <div className="flex items-center justify-between gap-3">
-            <div className="cp-subtle-label">Desktop Window</div>
+            <div className="cp-subtle-label">{t('Desktop Window')}</div>
             <div className="hidden h-6 w-28 rounded-full border border-[#e5e8eb] bg-[#f9fafb] xl:block" />
           </div>
         </div>

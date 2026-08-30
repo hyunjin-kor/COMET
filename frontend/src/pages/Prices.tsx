@@ -144,7 +144,7 @@ function DarkChartFallback({ label }: { label: string }) {
 
 export default function Prices() {
   const { unit } = useUnit();
-  const { t } = useLang();
+  const { lang, t } = useLang();
   const {
     activeSection,
     activeSectionId,
@@ -334,8 +334,8 @@ export default function Prices() {
     return (
       <div className="cp-inspector-rail">
         <section className="surface-ink overflow-hidden p-4">
-          <div className="cp-subtle-label !text-slate-400">Selected Quote</div>
-          <div className="mt-2 text-sm text-slate-300">{selectedRow.name}</div>
+          <div className="cp-subtle-label !text-slate-400">{t('Selected Quote')}</div>
+          <div className="mt-2 text-sm text-slate-300">{t(selectedRow.name)}</div>
           <div className="mt-3 flex items-end gap-3">
             <FitPriceText
               size="lg"
@@ -346,21 +346,21 @@ export default function Prices() {
           </div>
           <div className="mt-3 flex flex-wrap gap-2">
             <SourceBadge sourceType={selectedRow.source_type} />
-            <span className="cp-chip-dark">{selectedRow.evidence.label}</span>
+            <span className="cp-chip-dark">{t(selectedRow.evidence.label)}</span>
           </div>
           <button onClick={() => setActiveSection('history')} className="cp-button-ink mt-4 px-3 py-2 text-xs">
-            Open trend view
+            {t('Open trend view')}
           </button>
         </section>
 
         <section className="cp-rail-panel">
-          <div className="cp-subtle-label">Source Basis</div>
-          <div className="mt-2 text-lg font-semibold text-[#191f28]">Inspect trust before you read the number.</div>
+          <div className="cp-subtle-label">{t('Source Basis')}</div>
+          <div className="mt-2 text-lg font-semibold text-[#191f28]">{t('Inspect trust before you read the number.')}</div>
           <div className="mt-3 space-y-1">
-            <InspectorRow label="Acquisition" value={selectedRow.evidence.acquisition_mode} detail={sourceDescription(selectedRow)} />
-            <InspectorRow label="Confidence" value={String(selectedRow.evidence.confidence_score)} detail={selectedRow.evidence.transparency} />
+            <InspectorRow label={t('Acquisition')} value={selectedRow.evidence.acquisition_mode} detail={t(sourceDescription(selectedRow))} />
+            <InspectorRow label={t('Confidence')} value={String(selectedRow.evidence.confidence_score)} detail={selectedRow.evidence.transparency} />
             <InspectorRow label={t('Quote age')} value={selectedRow.evidence.freshness_status} detail={selectedRow.evidence.note} />
-            <InspectorRow label="Refresh target" value={selectedRow.evidence.freshness_target_hours != null ? `${selectedRow.evidence.freshness_target_hours} h` : 'N/A'} detail="Expected refresh horizon for this source type." />
+            <InspectorRow label={t('Refresh target')} value={selectedRow.evidence.freshness_target_hours != null ? `${selectedRow.evidence.freshness_target_hours} h` : 'N/A'} detail={t('Expected refresh horizon for this source type.')} />
           </div>
         </section>
 
@@ -395,7 +395,7 @@ export default function Prices() {
                 </div>
                 <div className="mt-1 text-xs leading-5 text-slate-500">
                   {latestFetchedAt
-                    ? `${liveQuoteCount} metals updated live ${formatSyncStamp(latestFetchedAt)}`
+                    ? (lang === 'ko' ? `금속 ${liveQuoteCount}종 실시간 갱신 ${formatSyncStamp(latestFetchedAt)}` : `${liveQuoteCount} metals updated live ${formatSyncStamp(latestFetchedAt)}`)
                     : t('Indexed and manual prices are available even before a live refresh.')}
                 </div>
               </div>
@@ -415,7 +415,7 @@ export default function Prices() {
           <div className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
             <StatusTile label={t('Tracked metals')} value={String(prices.length)} detail={t('Metals with a stored price basis.')} />
             <StatusTile label={t('Live coverage')} value={`${liveQuoteCount}/${prices.length}`} detail={t('Metals backed by current live sources.')} />
-            <StatusTile label={t('Indexed & manual quotes')} value={String(indexedQuoteCount + manualQuoteCount)} detail={`${indexedQuoteCount} indexed and ${manualQuoteCount} manual quotes remain usable.`} />
+            <StatusTile label={t('Indexed & manual quotes')} value={String(indexedQuoteCount + manualQuoteCount)} detail={lang === 'ko' ? `지수 ${indexedQuoteCount}건, 수동 ${manualQuoteCount}건 시세를 계속 사용할 수 있습니다.` : `${indexedQuoteCount} indexed and ${manualQuoteCount} manual quotes remain usable.`} />
             <StatusTile label={t('Needs review')} value={String(reviewFlagCount)} detail={t('Stale quotes or low-confidence sources worth checking.')} />
           </div>
 
@@ -431,8 +431,8 @@ export default function Prices() {
               return (
                 <div key={groupKey} className="surface-ghost overflow-hidden p-4">
                   <div className="mb-3 flex items-center justify-between gap-3">
-                    <div className="cp-subtle-label">{group.title}</div>
-                    <span className="cp-chip">{rows.length} metals</span>
+                    <div className="cp-subtle-label">{t(group.title)}</div>
+                    <span className="cp-chip">{lang === 'ko' ? `${rows.length}종` : `${rows.length} metals`}</span>
                   </div>
 
                   <div className="space-y-2">
@@ -454,9 +454,9 @@ export default function Prices() {
                               {row.symbol}
                             </span>
                             <div className="min-w-0">
-                              <div className="truncate font-semibold text-[#191f28]">{row.name}</div>
+                              <div className="truncate font-semibold text-[#191f28]">{t(row.name)}</div>
                               <div className="truncate text-xs text-slate-500">
-                                {sourceDescription(row)} / {row.evidence.label}
+                                {t(sourceDescription(row))} / {t(row.evidence.label)}
                               </div>
                             </div>
                           </div>
@@ -486,8 +486,8 @@ export default function Prices() {
       return (
         <div className="cp-inspector-rail">
           <section className="cp-rail-panel">
-            <div className="cp-subtle-label">Evidence Surface</div>
-            <div className="mt-2 text-lg font-semibold text-[#191f28]">Choose a symbol to inspect its history.</div>
+            <div className="cp-subtle-label">{t('Evidence Surface')}</div>
+            <div className="mt-2 text-lg font-semibold text-[#191f28]">{t('Choose a metal to inspect its history.')}</div>
           </section>
         </div>
       );
@@ -500,22 +500,22 @@ export default function Prices() {
     return (
       <div className="cp-inspector-rail">
         <section className="cp-rail-panel">
-          <div className="cp-subtle-label">Trend Evidence</div>
-          <div className="mt-2 text-lg font-semibold text-[#191f28]">{selectedRow.name}</div>
+          <div className="cp-subtle-label">{t('Trend Evidence')}</div>
+          <div className="mt-2 text-lg font-semibold text-[#191f28]">{t(selectedRow.name)}</div>
           <div className="mt-3 space-y-1">
             <InspectorRow label="Current" value={fmtConverted(currentValue)} detail={displayTrackedUnit(selectedRow.unit, unit)} />
-            <InspectorRow label="Period high" value={fmtConverted(periodHigh)} />
-            <InspectorRow label="Period low" value={fmtConverted(periodLow)} detail={historySource || 'Stored metal price series'} />
-            <InspectorRow label="Direction" value={pctChange != null ? `${pctChange >= 0 ? '+' : ''}${pctChange.toFixed(1)}%` : 'N/A'} detail={`${PERIOD_LABELS[period]} window`} />
+            <InspectorRow label={t('Period high')} value={fmtConverted(periodHigh)} />
+            <InspectorRow label={t('Period low')} value={fmtConverted(periodLow)} detail={historySource || t('Stored metal price series')} />
+            <InspectorRow label={t('Direction')} value={pctChange != null ? `${pctChange >= 0 ? '+' : ''}${pctChange.toFixed(1)}%` : 'N/A'} detail={lang === 'ko' ? `${PERIOD_LABELS[period]} 구간` : `${PERIOD_LABELS[period]} window`} />
           </div>
         </section>
 
         <section className="cp-rail-panel">
-          <div className="cp-subtle-label">Source Audit</div>
+          <div className="cp-subtle-label">{t('Source Audit')}</div>
           <div className="mt-3 space-y-1">
-            <InspectorRow label="Evidence tier" value={selectedRow.evidence.label} detail={selectedRow.evidence.note} />
-            <InspectorRow label="Transparency" value={selectedRow.evidence.transparency} detail={selectedRow.evidence.acquisition_mode} />
-            <InspectorRow label={t('Quote age')} value={selectedRow.evidence.freshness_status} detail={selectedRow.evidence.age_hours != null ? `${selectedRow.evidence.age_hours.toFixed(1)} h old` : 'Age not stored'} />
+            <InspectorRow label={t('Evidence tier')} value={t(selectedRow.evidence.label)} detail={selectedRow.evidence.note} />
+            <InspectorRow label={t('Transparency')} value={selectedRow.evidence.transparency} detail={selectedRow.evidence.acquisition_mode} />
+            <InspectorRow label={t('Quote age')} value={selectedRow.evidence.freshness_status} detail={selectedRow.evidence.age_hours != null ? (lang === 'ko' ? `${selectedRow.evidence.age_hours.toFixed(1)}시간 경과` : `${selectedRow.evidence.age_hours.toFixed(1)} h old`) : t('Age not stored')} />
           </div>
         </section>
       </div>
@@ -529,7 +529,7 @@ export default function Prices() {
           <div className="surface-ink overflow-hidden p-5">
           <div className="flex flex-col gap-4 border-b border-white/10 pb-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <div className="cp-subtle-label !text-slate-400">Selected Metal</div>
+              <div className="cp-subtle-label !text-slate-400">{t('Selected Metal')}</div>
               <h2 className="font-display mt-2 text-[clamp(1.75rem,2.4vw,2.35rem)] leading-[1.0] text-white">{selectedRow?.name ?? 'Choose a metal'}</h2>
               <div className="mt-2 flex flex-wrap items-center gap-2">
                 {selectedRow ? <SourceBadge sourceType={selectedRow.source_type} /> : null}
@@ -597,19 +597,19 @@ export default function Prices() {
 
                 <div className="mt-5 grid gap-3 sm:grid-cols-3">
                   <div className="cp-metric-tile-dark">
-                    <div className="cp-subtle-label !text-slate-400">Current</div>
+                    <div className="cp-subtle-label !text-slate-400">{t('Current')}</div>
                     <div className="mt-2 text-xl font-display text-white">{fmtConverted(displayHistory[displayHistory.length - 1]!.price)}</div>
                     <div className="mt-1 text-xs leading-5 text-slate-400">{selectedDisplayUnit}</div>
                   </div>
                   <div className="cp-metric-tile-dark">
-                    <div className="cp-subtle-label !text-slate-400">Period high</div>
+                    <div className="cp-subtle-label !text-slate-400">{t('Period high')}</div>
                     <div className="mt-2 text-xl font-display text-white">
                       {fmtConverted(Math.max(...displayHistory.map((point) => point.high ?? point.price)))}
                     </div>
-                    <div className="mt-1 text-xs leading-5 text-slate-400">Maximum observed value</div>
+                    <div className="mt-1 text-xs leading-5 text-slate-400">{t('Maximum observed value')}</div>
                   </div>
                   <div className="cp-metric-tile-dark">
-                    <div className="cp-subtle-label !text-slate-400">Period low</div>
+                    <div className="cp-subtle-label !text-slate-400">{t('Period low')}</div>
                     <div className="mt-2 text-xl font-display text-white">
                       {fmtConverted(Math.min(...displayHistory.map((point) => point.low ?? point.price)))}
                     </div>
@@ -620,12 +620,12 @@ export default function Prices() {
                 {selectedRow ? (
                   <div className="mt-4 grid gap-3 sm:grid-cols-3">
                     <div className="rounded-[22px] border border-white/10 bg-white/6 p-3">
-                      <div className="cp-subtle-label !text-slate-400">Evidence tier</div>
-                      <div className="mt-2 text-sm font-semibold text-white">{selectedRow.evidence.label}</div>
+                      <div className="cp-subtle-label !text-slate-400">{t('Evidence tier')}</div>
+                      <div className="mt-2 text-sm font-semibold text-white">{t(selectedRow.evidence.label)}</div>
                       <div className="mt-1 text-xs leading-5 text-slate-400">{selectedRow.evidence.note}</div>
                     </div>
                     <div className="rounded-[22px] border border-white/10 bg-white/6 p-3">
-                      <div className="cp-subtle-label !text-slate-400">Confidence</div>
+                      <div className="cp-subtle-label !text-slate-400">{t('Confidence')}</div>
                       <div className="mt-2 text-sm font-semibold text-white">{selectedRow.evidence.confidence_score}</div>
                       <div className="mt-1 text-xs leading-5 text-slate-400">{selectedRow.evidence.transparency}</div>
                     </div>

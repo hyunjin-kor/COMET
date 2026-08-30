@@ -241,11 +241,11 @@ function dedupeThermalOptions(options: ThermalSelectionOption[]) {
   return [...unique.values()].sort((left, right) => left.display_name.localeCompare(right.display_name));
 }
 
-function compactThermalOptionLabel(option: ThermalSelectionOption) {
+function compactThermalOptionLabel(option: ThermalSelectionOption, lang: 'en' | 'ko' = 'en') {
   // Research-pack vendor quotes can sit orders of magnitude above bulk
   // indexes (e.g. lab ZSM-5 at ~$474/kg vs the ~$4/kg trade statistic), so
   // flag them right in the selector instead of only in the price field.
-  if (option.price_scope === 'vendor_lab') return `${option.display_name} (lab price)`;
+  if (option.price_scope === 'vendor_lab') return `${option.display_name} ${lang === 'ko' ? '(실험실가)' : '(lab price)'}`;
   return option.display_name;
 }
 
@@ -937,19 +937,25 @@ export default function Calculator() {
       && activeElectroTemplate,
   );
   const thermalValidationMessage = thermalRows.length > maxThermalComponents
-    ? `Thermal formulations are capped at ${maxThermalComponents} total components including promoted supports.`
+    ? (lang === 'ko'
+      ? `열촉매 조성은 조촉매화 담체를 포함해 최대 ${maxThermalComponents}개 성분까지 가능합니다.`
+      : `Thermal formulations are capped at ${maxThermalComponents} total components including promoted supports.`)
     : incompleteThermalRows.length > 0
-      ? `Complete or remove ${incompleteThermalRows.length} unfinished composition row${incompleteThermalRows.length > 1 ? 's' : ''} before continuing.`
+      ? (lang === 'ko'
+        ? `계속하기 전에 미완성 조성 행 ${incompleteThermalRows.length}개를 완성하거나 삭제하세요.`
+        : `Complete or remove ${incompleteThermalRows.length} unfinished composition row${incompleteThermalRows.length > 1 ? 's' : ''} before continuing.`)
       : activeMetalCount === 0
-        ? 'Add at least one active metal before continuing.'
+        ? t('Add at least one active metal before continuing.')
         : !hasSupport
-          ? 'Add at least one support before continuing.'
+          ? t('Add at least one support before continuing.')
           : supportIsSplit
-            ? `When more than one support is used, the full formulation must sum to 100 wt%. Current total: ${totalThermalWt.toFixed(1)} wt%.`
+            ? (lang === 'ko'
+              ? `담체를 여러 개 쓸 때는 전체 조성이 100 wt%가 되어야 합니다. 현재 합계: ${totalThermalWt.toFixed(1)} wt%.`
+              : `When more than one support is used, the full formulation must sum to 100 wt%. Current total: ${totalThermalWt.toFixed(1)} wt%.`)
             : nonSupportWt >= 100
-              ? 'Active metals and promoters must stay below 100 wt% so support remains positive.'
-              : 'Enter a valid non-zero loading for the active portion of the formulation.';
-  const electrocatalystValidationMessage = 'Select catalyst powder, ionomer, membrane, substrate / GDL, and a preparation template before continuing.';
+              ? t('Active metals and promoters must stay below 100 wt% so support remains positive.')
+              : t('Enter a valid non-zero loading for the active portion of the formulation.');
+  const electrocatalystValidationMessage = t('Select catalyst powder, ionomer, membrane, substrate / GDL, and a preparation template before continuing.');
   const isCompositionSectionValid = catalystDomain === 'electrocatalyst' ? isElectroValid : isThermalValid;
   const isManufacturingSectionValid = isCompositionSectionValid && steps.length > 0;
   const isValid = catalystDomain === 'electrocatalyst' ? isElectroValid : isThermalValid;
@@ -1181,7 +1187,7 @@ export default function Calculator() {
     const option = findThermalOption(row.selection_key);
     const dotClass = row.source_type === 'live' ? 'bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.32)]' : row.source_type === 'indexed' ? 'bg-amber-500' : 'bg-slate-500';
     const className = `inline-flex items-center gap-2 rounded-full border px-3 py-2 text-xs font-semibold transition ${sourceTone(row.source_type)}`;
-    const content = <><span className={`h-2 w-2 rounded-full ${dotClass}`} /><span>{sourceTypeLabel(row.source_type)}</span></>;
+    const content = <><span className={`h-2 w-2 rounded-full ${dotClass}`} /><span>{t(sourceTypeLabel(row.source_type))}</span></>;
     if (!option || option.source_type === 'manual') return <span className={`${className} cursor-default`} title={row.source}>{content}</span>;
     const title = row.source_type === 'manual' ? `Manual input. Switch to ${sourceTypeLabel(option.source_type)} pricing from ${option.source}.` : `${row.source}. Switch back to manual input.`;
     return <button onClick={() => toggleRowSource(row.id)} title={title} className={className}>{content}</button>;
@@ -1201,9 +1207,9 @@ export default function Calculator() {
   function renderElectroMaterialCard(label: string, material: MaterialItem | null, fallback: string) {
     return (
       <div className="rounded-[24px] border border-slate-900/8 bg-white/72 p-4">
-        <div className="cp-subtle-label">{label}</div>
-        <div className="mt-2 font-semibold text-[#191f28]">{material?.name ?? fallback}</div>
-        <div className="mt-1 text-sm text-slate-600">{material ? materialQuoteLabel(material) : 'Select a library record to lock pricing.'}</div>
+        <div className="cp-subtle-label">{t(label)}</div>
+        <div className="mt-2 font-semibold text-[#191f28]">{material?.name ?? t(fallback)}</div>
+        <div className="mt-1 text-sm text-slate-600">{material ? materialQuoteLabel(material) : t('Select a library record to lock pricing.')}</div>
         {material ? (
           <div className="mt-2 space-y-2">
             <div className="text-xs leading-6 text-slate-500">
@@ -1223,7 +1229,7 @@ export default function Calculator() {
                 rel="noreferrer"
                 className="block text-xs text-sky-700 underline underline-offset-2"
               >
-                Open source
+                {t('Open source')}
               </a>
             ) : null}
           </div>
@@ -1441,8 +1447,8 @@ export default function Calculator() {
               <div key={row.id} className="surface-ghost p-4">
                 <div className="flex flex-wrap items-center gap-3">
                   <select value={row.selection_key ?? ''} onChange={(event) => selectThermalOption(row.id, event.target.value)} className="input-base min-w-[220px] flex-[1.6_1_320px] pr-10">
-                    <option value="">{role === 'active_metal' ? 'Select active metal or precursor' : 'Select promoter material'}</option>
-                    {selectionOptions.map((option) => <option key={option.selection_key} value={option.selection_key}>{compactThermalOptionLabel(option)}</option>)}
+                    <option value="">{role === 'active_metal' ? t('Select active metal or precursor') : t('Select promoter material')}</option>
+                    {selectionOptions.map((option) => <option key={option.selection_key} value={option.selection_key}>{compactThermalOptionLabel(option, lang)}</option>)}
                   </select>
                   <div className="flex flex-none items-center gap-2"><input type="number" step="0.1" min="0" max="100" value={row.wt_pct} onChange={(event) => updateRow(row.id, { wt_pct: Number(event.target.value) })} className="input-base w-28 text-right font-mono" /><span className="text-xs text-slate-500">wt%</span></div>
                   {sourceChip(row)}
@@ -1467,15 +1473,17 @@ export default function Calculator() {
       : rows.filter((row) => row.source_type === 'manual' && row.name.trim().length > 0).length;
     const recipeSummary = catalystDomain === 'electrocatalyst'
       ? `${selectedCatalystMaterial?.name ?? 'Catalyst'}, ${selectedIonomerMaterial?.name ?? 'Ionomer'}, ${selectedMembraneMaterial?.name ?? 'Membrane'}`
-      : `${activeMetalCount} active metal${activeMetalCount === 1 ? '' : 's'} / ${supportRows.length} support row${supportRows.length === 1 ? '' : 's'} / ${supportWtPct.toFixed(1)} wt% support`;
+      : lang === 'ko'
+        ? `활성 금속 ${activeMetalCount}종 / 담체 ${supportRows.length}행 / 담체 ${supportWtPct.toFixed(1)} wt%`
+        : `${activeMetalCount} active metal${activeMetalCount === 1 ? '' : 's'} / ${supportRows.length} support row${supportRows.length === 1 ? '' : 's'} / ${supportWtPct.toFixed(1)} wt% support`;
     const preparationSummary =
       catalystDomain === 'electrocatalyst'
-        ? activeElectroTemplate?.name ?? 'Select a preparation template'
-        : activeBenchmark?.route.name ?? 'Manual step selection';
+        ? activeElectroTemplate?.name ?? t('Select a preparation template')
+        : activeBenchmark?.route.name ?? t('Manual step selection');
     const recoverySummary = catalystDomain === 'thermal'
       ? includeSpentValue
-        ? `Recovery proxy on / ${reactorType} bed / ${catalystBulkDensity.toFixed(1)} lb/ft³`
-        : 'Recovery proxy off'
+        ? `${t('Recovery proxy on')} / ${reactorType === 'fixed' ? t('Fixed bed') : t('Slurry')} / ${catalystBulkDensity.toFixed(1)} lb/ft³`
+        : t('Recovery proxy off')
       : applicationFamilyLabel(applicationFamily);
 
     return (
@@ -1505,28 +1513,30 @@ export default function Calculator() {
                 }
                 detail={
                   pricesLoading
-                    ? 'Waiting for the local backend to publish live quotes.'
+                    ? t('Waiting for the local backend to publish live quotes.')
                     : pricesError
-                      ? 'Indexed and manual prices still apply. Refresh to retry the live sources.'
+                      ? t('Indexed and manual prices still apply. Refresh to retry the live sources.')
                       : pricesUpdatedAt
-                        ? `${liveFeedCount} live / ${indexedFeedCount} indexed prices updated ${pricesUpdatedAt.toLocaleTimeString('en-US', {
-                            hour: 'numeric',
-                            minute: '2-digit',
-                            hour12: true,
-                          })}`
-                        : 'Indexed and manual rows stay usable before the next live refresh.'
+                        ? lang === 'ko'
+                          ? `실시간 ${liveFeedCount}건 / 지수 ${indexedFeedCount}건 시세 갱신 ${pricesUpdatedAt.toLocaleTimeString('ko-KR', { hour: 'numeric', minute: '2-digit' })}`
+                          : `${liveFeedCount} live / ${indexedFeedCount} indexed prices updated ${pricesUpdatedAt.toLocaleTimeString('en-US', {
+                              hour: 'numeric',
+                              minute: '2-digit',
+                              hour12: true,
+                            })}`
+                        : t('Indexed and manual rows stay usable before the next live refresh.')
                 }
               />
-              <CompactValueRow label="Manual overrides" value={String(manualOverrideCount)} detail="Materials priced by hand instead of a tracked source." />
+              <CompactValueRow label={t('Manual overrides')} value={String(manualOverrideCount)} detail={t('Materials priced by hand instead of a tracked source.')} />
             </div>
           </div>
 
           <div className="rounded-[22px] border border-slate-900/8 bg-white/62 p-4">
             <div className="cp-subtle-label">{t('Current case')}</div>
-            <div className="mt-2 text-base font-semibold text-[#191f28]">{catalystDomainLabel(catalystDomain)}</div>
+            <div className="mt-2 text-base font-semibold text-[#191f28]">{t(catalystDomainLabel(catalystDomain))}</div>
             <div className="mt-2 text-sm leading-6 text-slate-600">{recipeSummary}</div>
             <div className="mt-3 flex flex-wrap gap-2">
-              <span className="cp-chip">{catalystDomainLabel(catalystDomain)}</span>
+              <span className="cp-chip">{t(catalystDomainLabel(catalystDomain))}</span>
               {catalystDomain === 'electrocatalyst' ? <span className="cp-chip">{applicationFamilyLabel(applicationFamily)}</span> : null}
               {activeBenchmark ? <span className="cp-chip">{activeBenchmark.title}</span> : null}
             </div>
@@ -1536,19 +1546,19 @@ export default function Calculator() {
             <div className="cp-subtle-label">{t('Preparation basis')}</div>
             <div className="mt-2 text-base font-semibold text-[#191f28]">{preparationSummary}</div>
             <div className="mt-2 space-y-1">
-              <CompactValueRow label={t('Campaign')} value={`${orderSize} tons`} detail={`${scale.label} scale / ${scale.rate}`} />
+              <CompactValueRow label={t('Campaign')} value={lang === 'ko' ? `${orderSize}톤` : `${orderSize} tons`} detail={lang === 'ko' ? `${t(scale.label)} 규모 / ${scale.rate}` : `${scale.label} scale / ${scale.rate}`} />
               <CompactValueRow
                 label={t('Steps')}
                 value={String(steps.length)}
-                detail={steps.length > 0 ? `${formatStepLabel(steps[0]!)}${steps.length > 1 ? ` +${steps.length - 1}` : ''}` : 'Choose at least one step'}
+                detail={steps.length > 0 ? `${t(formatStepLabel(steps[0]!))}${steps.length > 1 ? ` +${steps.length - 1}` : ''}` : t('Choose at least one unit operation')}
               />
               <CompactValueRow
                 label={catalystDomain === 'thermal' ? t('Recovery') : t('Application')}
                 value={recoverySummary}
                 detail={
                   catalystDomain === 'thermal'
-                    ? 'Optional spent catalyst value proxy for recovery-sensitive screening.'
-                    : 'Application family currently selected.'
+                    ? t('Optional spent catalyst value proxy for recovery-sensitive screening.')
+                    : t('Application family currently selected.')
                 }
               />
             </div>
@@ -1569,14 +1579,14 @@ export default function Calculator() {
                   className="min-w-0 text-white"
                 />
               ) : (
-                <div className="font-display text-[1.6rem] leading-none text-white">Pending</div>
+                <div className="font-display text-[1.6rem] leading-none text-white">{t('Pending')}</div>
               )}
               <div className="pb-1 text-sm text-slate-300">{latestSnapshotForCurrentCase ? fmtLabel : ''}</div>
             </div>
             <div className="mt-2 text-xs leading-6 text-slate-300">
               {latestSnapshotForCurrentCase
                 ? `Generated ${latestGenerated}. ${latestSnapshotForCurrentCase.selectedSupportName ?? 'Support'} remained the active basis.`
-                : 'No result for this catalyst class yet. Run the estimate once to populate this summary.'}
+                : t('No result for this catalyst class yet. Run the estimate once to populate this summary.')}
             </div>
           </div>
         </div>
@@ -1709,8 +1719,8 @@ export default function Calculator() {
             <div key={row.id} className="mt-3.5">
               <div className="flex flex-wrap items-center gap-3">
                 <select value={row.selection_key ?? ''} onChange={(event) => selectThermalOption(row.id, event.target.value)} className="input-base min-w-[220px] flex-[1.5_1_320px] pr-10">
-                  <option value="">Select support</option>
-                  {supportSelectionOptions.map((support) => <option key={support.selection_key} value={support.selection_key}>{compactThermalOptionLabel(support)}</option>)}
+                  <option value="">{t('Select support')}</option>
+                  {supportSelectionOptions.map((support) => <option key={support.selection_key} value={support.selection_key}>{compactThermalOptionLabel(support, lang)}</option>)}
                 </select>
                 {supportIsSplit ? (
                   <div className="flex flex-none items-center gap-2">
@@ -1718,18 +1728,20 @@ export default function Calculator() {
                     <span className="text-xs text-slate-500">wt%</span>
                   </div>
                 ) : (
-                  <div className="input-base flex min-w-[170px] flex-none items-center justify-between gap-3 bg-white/76"><span className="text-xs text-slate-500">Auto share</span><span className="font-mono text-[#191f28]">{supportWtPct.toFixed(1)} wt%</span></div>
+                  <div className="input-base flex min-w-[170px] flex-none items-center justify-between gap-3 bg-white/76"><span className="text-xs text-slate-500">{t('Auto share')}</span><span className="font-mono text-[#191f28]">{supportWtPct.toFixed(1)} wt%</span></div>
                 )}
                 {sourceChip(row)}
                 {priceField(row)}
                 {supportRows.length > 1 ? <button onClick={() => removeRow(row.id)} className="flex h-10 w-10 flex-none items-center justify-center rounded-[18px] border border-slate-300 bg-white/74 text-slate-400 transition hover:border-red-300 hover:bg-red-50 hover:text-red-700" aria-label="Remove support">x</button> : null}
               </div>
-              <div className="mt-3 text-xs text-slate-500">{row.name || 'Select a support record.'}</div>
+              <div className="mt-3 text-xs text-slate-500">{row.name || t('Select a support record.')}</div>
             </div>
           ))}
           <div className="mt-3 rounded-[18px] border border-slate-200 bg-white/76 px-4 py-3 text-xs leading-6 text-slate-600">
-            Total components: <span className="font-semibold text-[#191f28]">{thermalRows.length}</span> / {maxThermalComponents}.
-            {supportIsSplit ? ` Current formulation total: ${totalThermalWt.toFixed(1)} wt%.` : ` Support closes automatically at ${supportWtPct.toFixed(1)} wt%.`}
+            {t('Total components:')} <span className="font-semibold text-[#191f28]">{thermalRows.length}</span> / {maxThermalComponents}.
+            {supportIsSplit
+              ? (lang === 'ko' ? ` 현재 조성 합계: ${totalThermalWt.toFixed(1)} wt%.` : ` Current formulation total: ${totalThermalWt.toFixed(1)} wt%.`)
+              : (lang === 'ko' ? ` 담체가 ${supportWtPct.toFixed(1)} wt%로 자동 마감됩니다.` : ` Support closes automatically at ${supportWtPct.toFixed(1)} wt%.`)}
           </div>
         </div>
         </div>
@@ -1832,8 +1844,8 @@ export default function Calculator() {
         ) : null}
         <div className="surface-ghost p-3.5">
           <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-            <div><div className="cp-subtle-label">{t('Campaign size')}</div><div className="mt-3 flex flex-wrap items-center gap-3"><input type="number" min="1" step="1" value={orderSize} onChange={(event) => setOrderSize(Math.max(1, Number(event.target.value) || 1))} className="input-base w-32 text-center font-mono" /><span className="text-sm text-slate-500">{t('tons per campaign')}</span><span className={`rounded-full border px-3 py-1 text-xs font-semibold ${scale.classes}`}>{scale.label} / {scale.rate}</span></div></div>
-            <div className="cp-toolbar">{QUICK_ORDER_SIZES.map((size) => <button key={size} onClick={() => setOrderSize(size)} className={`rounded-[16px] px-3 py-2 text-xs font-semibold transition ${orderSize === size ? 'bg-slate-950 text-white' : 'text-slate-600 hover:bg-white hover:text-slate-900'}`}>{size} tons</button>)}</div>
+            <div><div className="cp-subtle-label">{t('Campaign size')}</div><div className="mt-3 flex flex-wrap items-center gap-3"><input type="number" min="1" step="1" value={orderSize} onChange={(event) => setOrderSize(Math.max(1, Number(event.target.value) || 1))} className="input-base w-32 text-center font-mono" /><span className="text-sm text-slate-500">{t('tons per campaign')}</span><span className={`rounded-full border px-3 py-1 text-xs font-semibold ${scale.classes}`}>{t(scale.label)} / {scale.rate}</span></div></div>
+            <div className="cp-toolbar">{QUICK_ORDER_SIZES.map((size) => <button key={size} onClick={() => setOrderSize(size)} className={`rounded-[16px] px-3 py-2 text-xs font-semibold transition ${orderSize === size ? 'bg-slate-950 text-white' : 'text-slate-600 hover:bg-white hover:text-slate-900'}`}>{lang === 'ko' ? `${size}톤` : `${size} tons`}</button>)}</div>
           </div>
         </div>
         <div className="grid gap-3 lg:grid-cols-2 xl:grid-cols-3">
@@ -1857,14 +1869,14 @@ export default function Calculator() {
                     const available = (step.scales as readonly Scale[]).includes(currentScale);
                     const checked = steps.includes(step.key);
                     const availabilityLabel = step.scales.length === 3 ? null : step.scales.map((item) => item.charAt(0).toUpperCase()).join('/');
-                    return <button key={step.key} onClick={() => available && toggleStep(step.key)} disabled={!available} title={available ? step.label : `Not available at ${scale.label.toLowerCase()} scale`} className={`rounded-[16px] border px-3 py-2 text-left text-sm transition ${!available ? 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400' : checked ? 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e]' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}><div className="flex items-center justify-between gap-3"><div className="font-medium">{step.label}</div>{checked ? <span className="rounded-full border border-[#0d9488] bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#0f766e]">On</span> : null}</div>{availabilityLabel ? <div className="mt-1 text-[10px] uppercase tracking-[0.18em] text-slate-400">{availabilityLabel}</div> : null}</button>;
+                    return <button key={step.key} onClick={() => available && toggleStep(step.key)} disabled={!available} title={available ? t(step.label) : `Not available at ${scale.label.toLowerCase()} scale`} className={`rounded-[16px] border px-3 py-2 text-left text-sm transition ${!available ? 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400' : checked ? 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e]' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}><div className="flex items-center justify-between gap-3"><div className="font-medium">{t(step.label)}</div>{checked ? <span className="rounded-full border border-[#0d9488] bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#0f766e]">On</span> : null}</div>{availabilityLabel ? <div className="mt-1 text-[10px] uppercase tracking-[0.18em] text-slate-400">{availabilityLabel}</div> : null}</button>;
                   })}
                 </div>
                 {selectedInCategory.length > 0 ? (
                   <div className="mt-3 flex flex-wrap gap-2">
                     {selectedInCategory.map((stepKey) => (
                       <span key={stepKey} className="rounded-full border border-slate-200 bg-white px-2.5 py-1 text-xs text-slate-600">
-                        {formatStepLabel(stepKey)}
+                        {t(formatStepLabel(stepKey))}
                       </span>
                     ))}
                   </div>
@@ -1942,10 +1954,14 @@ export default function Calculator() {
 
   const validationMessage = catalystDomain === 'electrocatalyst'
     ? isValid
-      ? `Electrocatalyst stack is ready: ${selectedCatalystMaterial?.name ?? 'catalyst'}, ${selectedIonomerMaterial?.name ?? 'ionomer'}, ${selectedMembraneMaterial?.name ?? 'membrane'}, and ${selectedSubstrateMaterial?.name ?? 'GDL'} are all sourced from the library.`
+      ? (lang === 'ko'
+        ? `전극 스택이 준비되었습니다: ${selectedCatalystMaterial?.name ?? 'catalyst'}, ${selectedIonomerMaterial?.name ?? 'ionomer'}, ${selectedMembraneMaterial?.name ?? 'membrane'}, ${selectedSubstrateMaterial?.name ?? 'GDL'} 모두 라이브러리에서 선택되었습니다.`
+        : `Electrocatalyst stack is ready: ${selectedCatalystMaterial?.name ?? 'catalyst'}, ${selectedIonomerMaterial?.name ?? 'ionomer'}, ${selectedMembraneMaterial?.name ?? 'membrane'}, and ${selectedSubstrateMaterial?.name ?? 'GDL'} are all sourced from the library.`)
       : electrocatalystValidationMessage
     : isValid
-      ? `Formulation balance is valid: ${nonSupportWt.toFixed(1)} wt% actives and promoters, ${supportWtPct.toFixed(1)} wt% support.`
+      ? (lang === 'ko'
+        ? `조성 균형이 유효합니다: 활성 금속·조촉매 ${nonSupportWt.toFixed(1)} wt%, 담체 ${supportWtPct.toFixed(1)} wt%.`
+        : `Formulation balance is valid: ${nonSupportWt.toFixed(1)} wt% actives and promoters, ${supportWtPct.toFixed(1)} wt% support.`)
       : thermalValidationMessage;
 
   const activeWorkspaceSection = sectionState.activeSection.id === 'type'
@@ -1958,19 +1974,21 @@ export default function Calculator() {
           <section className="surface-card p-4">
             <div className={`rounded-[24px] border px-4 py-4 text-sm ${isValid ? 'border-emerald-200 bg-emerald-50 text-emerald-800' : 'border-amber-200 bg-amber-50 text-amber-800'}`}>{validationMessage}</div>
             <div className="mt-4 grid gap-3 sm:grid-cols-3">
-              <MetricTile label="Catalyst type" value={catalystDomainLabel(catalystDomain)} detail="Current case basis" />
-              <MetricTile label="Preparation steps" value={String(steps.length)} detail={steps.length > 0 ? 'Ready for execution' : 'Choose at least one step'} />
-              <MetricTile label="Campaign basis" value={`${orderSize} tons`} detail={`${scale.label} / ${scale.rate}`} />
+              <MetricTile label={t('Catalyst type')} value={t(catalystDomainLabel(catalystDomain))} detail={t('Current case basis')} />
+              <MetricTile label={t('Preparation steps')} value={String(steps.length)} detail={steps.length > 0 ? t('Ready to run') : t('Choose at least one unit operation')} />
+              <MetricTile label={t('Campaign basis')} value={lang === 'ko' ? `${orderSize}톤` : `${orderSize} tons`} detail={`${t(scale.label)} / ${scale.rate}`} />
             </div>
             <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
               <button onClick={handleCalculate} disabled={loading || !isValid || steps.length === 0} className="cp-button-primary min-w-[250px]">{loading ? <><span className="mr-2 inline-flex h-4 w-4 animate-spin rounded-full border-2 border-slate-950 border-t-transparent" />{t('Running estimate')}</> : t('Run estimate')}</button>
               <div className="text-xs leading-6 text-slate-500">{t('The result screen opens separately and keeps this draft intact.')}</div>
             </div>
-            {error ? <div className="mt-4 rounded-[24px] border border-red-200 bg-red-50 px-4 py-4 text-sm text-red-700"><span className="font-semibold">Calculation failed.</span> {error}</div> : null}
+            {error ? <div className="mt-4 rounded-[24px] border border-red-200 bg-red-50 px-4 py-4 text-sm text-red-700"><span className="font-semibold">{t('Calculation failed.')}</span> {error}</div> : null}
             {loadedSavedName ? (
               <div className="mt-4 rounded-[24px] border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
-                Loaded saved estimate <span className="font-semibold">{loadedSavedName}</span> into the draft. Rows without a
-                library link were restored with their saved prices as manual inputs.
+                {lang === 'ko'
+                  ? <>저장된 계산 <span className="font-semibold">{loadedSavedName}</span>을(를) 초안으로 불러왔습니다. 라이브러리 링크가 없는 행은 저장된 가격을 수동 입력값으로 복원했습니다.</>
+                  : <>Loaded saved estimate <span className="font-semibold">{loadedSavedName}</span> into the draft. Rows without a
+                library link were restored with their saved prices as manual inputs.</>}
               </div>
             ) : null}
             {savedEstimates.length > 0 ? (
