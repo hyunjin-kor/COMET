@@ -21,6 +21,7 @@
     "electron:wait": "wait-on http://127.0.0.1:8765/api/health http://localhost:5173 && npm run electron:dev",
     "electron:dev": "cross-env NODE_ENV=development electron .",
     "desktop:stop": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/stop_comet_processes.ps1 -Quiet",
+    "web": "npm run build:frontend && npm run desktop:stop && uvicorn backend.main:app --host 127.0.0.1 --port 8765",
     "smoke:desktop": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/smoke_test_desktop.ps1",
     "build": "npm run build:frontend && npm run build:backend-sidecar && npm run electron:build",
     "build:frontend": "cd frontend && npm run build",

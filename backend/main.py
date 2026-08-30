@@ -4,11 +4,14 @@ import asyncio
 import logging
 from contextlib import asynccontextmanager
 from datetime import UTC, datetime
+from pathlib import Path
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from sqlmodel import Session
 
 from backend.config import settings
@@ -169,3 +172,30 @@ async def refresh_prices(request: Request, source: str | None = None):
         "prices_fetched": len(prices_data),
         "updated_at": _last_price_update.isoformat(),
     }
+
+
+# --- Browser mode -----------------------------------------------------------
+# When the built frontend exists in the repo (frontend/dist), serve it so the
+# whole app runs in a normal browser from this one process:
+#     npm run web   ->   http://localhost:8765
+# The packaged PyInstaller sidecar ships without that directory, so this stays
+# a no-op on the desktop build, where Electron loads the UI itself. The
+# catch-all is registered after every API router, so /api/* always wins.
+_FRONTEND_DIST = Path(__file__).resolve().parents[1] / "frontend" / "dist"
+
+if _FRONTEND_DIST.is_dir():
+    app.mount("/assets", StaticFiles(directory=_FRONTEND_DIST / "assets"), name="spa_assets")
+
+    # Paths that must stay 404 when their features are disabled (the debug-mode
+    # docs routes are registered before this catch-all, so they still win when
+    # enabled).
+    _RESERVED_PATHS = {"docs", "redoc", "openapi.json"}
+
+    @app.get("/{spa_path:path}", include_in_schema=False)
+    def serve_frontend(spa_path: str):
+        if spa_path in _RESERVED_PATHS:
+            raise HTTPException(status_code=404, detail="Not Found")
+        candidate = (_FRONTEND_DIST / spa_path).resolve()
+        if spa_path and candidate.is_file() and candidate.is_relative_to(_FRONTEND_DIST):
+            return FileResponse(candidate)
+        return FileResponse(_FRONTEND_DIST / "index.html")
