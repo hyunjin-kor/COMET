@@ -6,6 +6,9 @@ import {
   type ApplicationFamily,
   type CatalystDomain,
   calculateCost,
+  deleteSavedEstimate,
+  fetchSavedEstimate,
+  fetchSavedEstimates,
   fetchThermalCompositionOptions,
   fetchMaterials,
   fetchPrices,
@@ -13,6 +16,7 @@ import {
   refreshPrices as refreshPriceFeed,
   type ComponentInput,
   type CostInput,
+  type SavedEstimateSummary,
   type MaterialItem,
   type MetalPrice,
   type ProcessTemplate,
@@ -519,6 +523,9 @@ export default function Calculator() {
   const [electroMaterials, setElectroMaterials] = useState<MaterialItem[]>([]);
   const [electroTemplates, setElectroTemplates] = useState<ProcessTemplate[]>([]);
   const [thermalTemplates, setThermalTemplates] = useState<ProcessTemplate[]>([]);
+  const [savedEstimates, setSavedEstimates] = useState<SavedEstimateSummary[]>([]);
+  const [savedBusyId, setSavedBusyId] = useState<number | null>(null);
+  const [loadedSavedName, setLoadedSavedName] = useState<string | null>(null);
   const [latestSnapshot, setLatestSnapshot] = useState<CalculatorResultSnapshot | null>(() => loadCalculatorResultSnapshot());
   const [pricesUpdatedAt, setPricesUpdatedAt] = useState<Date | null>(() => storedDraft?.pricesUpdatedAt ? new Date(storedDraft.pricesUpdatedAt) : null);
   const [pricesLoading, setPricesLoading] = useState(true);
@@ -669,6 +676,13 @@ export default function Calculator() {
       .then((templates) => setThermalTemplates(templates.filter((template) => template.steps.length > 0)))
       .catch(() => setThermalTemplates([]));
   }, []);
+
+  useEffect(() => {
+    if (sectionState.activeSection.id !== 'result') return;
+    fetchSavedEstimates({ limit: 50 })
+      .then(setSavedEstimates)
+      .catch(() => setSavedEstimates([]));
+  }, [sectionState.activeSection.id]);
 
   useEffect(() => {
     if (catalystDomain !== 'electrocatalyst') return;
@@ -979,6 +993,57 @@ export default function Calculator() {
     sectionState.goNext();
   }
 
+  async function handleLoadSaved(summary: SavedEstimateSummary) {
+    if (summary.catalyst_domain !== 'thermal') return;
+    setSavedBusyId(summary.id);
+    try {
+      const detail = await fetchSavedEstimate(summary.id);
+      const input = detail.input as unknown as CostInput;
+      const nextRows: CalculatorRow[] = (input.components ?? [])
+        .filter((component) => component.role === 'active_metal' || component.role === 'promoter' || component.role === 'support')
+        .map((component) => {
+          const role = component.role as 'active_metal' | 'promoter' | 'support';
+          const selectionKey = component.material_key ? `library:${component.material_key}` : '';
+          const option = selectionKey ? findThermalOption(selectionKey) : undefined;
+          if (option) return createRowFromOption(role, option, component.wt_pct);
+          return {
+            id: uid(),
+            role,
+            name: component.name ?? '',
+            material_key: component.material_key ?? null,
+            symbol: null,
+            selection_key: '',
+            wt_pct: component.wt_pct,
+            price_per_lb: component.price_per_lb ?? 0,
+            source_type: 'manual' as const,
+            source: 'Saved estimate',
+          };
+        });
+      if (nextRows.length === 0) return;
+      setCatalystDomain('thermal');
+      setRows(nextRows);
+      setSteps(input.steps ?? []);
+      setOrderSize(input.order_size_tons ?? 20);
+      setLoadedSavedName(summary.name);
+    } catch {
+      setLoadedSavedName(null);
+    } finally {
+      setSavedBusyId(null);
+    }
+  }
+
+  async function handleDeleteSaved(id: number) {
+    setSavedBusyId(id);
+    try {
+      await deleteSavedEstimate(id);
+      setSavedEstimates(await fetchSavedEstimates({ limit: 50 }));
+    } catch {
+      // keep the current list on failure
+    } finally {
+      setSavedBusyId(null);
+    }
+  }
+
   function toggleRowSource(id: string) {
     setRows((previous) => previous.map((row) => {
       if (row.id !== id) return row;
@@ -1070,6 +1135,7 @@ export default function Calculator() {
         supportWtPct,
         generatedAt: new Date().toISOString(),
         benchmarkCandidate: selectedBenchmark,
+        costInput: input,
       };
 
       saveCalculatorResultSnapshot(snapshot);
@@ -1877,6 +1943,66 @@ export default function Calculator() {
               <div className="text-xs leading-6 text-slate-500">The result screen opens separately and keeps this draft intact.</div>
             </div>
             {error ? <div className="mt-4 rounded-[24px] border border-red-200 bg-red-50 px-4 py-4 text-sm text-red-700"><span className="font-semibold">Calculation failed.</span> {error}</div> : null}
+            {loadedSavedName ? (
+              <div className="mt-4 rounded-[24px] border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+                Loaded saved estimate <span className="font-semibold">{loadedSavedName}</span> into the draft. Rows without a
+                library link were restored with their saved prices as manual inputs.
+              </div>
+            ) : null}
+            {savedEstimates.length > 0 ? (
+              <div className="mt-4 surface-ghost p-3.5">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="cp-subtle-label">Saved estimates</div>
+                  <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+                    {savedEstimates.length} saved
+                  </div>
+                </div>
+                <div className="mt-2 text-xs leading-6 text-slate-500">
+                  Named cases saved from the result screen. Load restores the composition, steps, and order size into this draft.
+                </div>
+                <div className="mt-3 space-y-2">
+                  {savedEstimates.map((saved) => {
+                    const busy = savedBusyId === saved.id;
+                    const loadable = saved.catalyst_domain === 'thermal';
+                    return (
+                      <div key={saved.id} className="flex flex-wrap items-center justify-between gap-3 rounded-[16px] border border-slate-200 bg-white px-3.5 py-2.5">
+                        <div className="min-w-0">
+                          <div className="truncate text-sm font-semibold text-[#191f28]">{saved.name}</div>
+                          <div className="mt-0.5 text-xs text-slate-500">
+                            {saved.metal_symbol ? `${saved.metal_loading_wt_pct}% ${saved.metal_symbol}` : saved.catalyst_domain}
+                            {saved.support_name ? ` / ${saved.support_name}` : ''} · {saved.order_size_tons} tons ·{' '}
+                            {formatPrice(saved.estimated_price_per_lb)}/lb · {saved.created_at.slice(0, 10)}
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => void handleLoadSaved(saved)}
+                            disabled={busy || !loadable}
+                            title={loadable ? 'Restore this case into the draft' : 'Electrocatalyst estimates cannot be restored into the thermal draft yet'}
+                            className={`rounded-[14px] border px-3 py-1.5 text-xs font-semibold transition ${
+                              loadable
+                                ? 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e] hover:bg-[#d3efe9]'
+                                : 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400'
+                            }`}
+                          >
+                            {busy ? 'Working…' : 'Load'}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => void handleDeleteSaved(saved.id)}
+                            disabled={busy}
+                            className="rounded-[14px] border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-500 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : null}
           </section>
         );
 
