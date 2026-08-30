@@ -68,7 +68,19 @@ const ALL_STEPS = [
   { key: 'flare', label: 'Flare', category: 'Utilities', scales: ['small', 'medium', 'large'] },
   { key: 'scrubber_nox', label: 'NOx Scrubber', category: 'Utilities', scales: ['small', 'medium', 'large'] },
 ] as const;
-const STEP_CATEGORIES = [...new Set(ALL_STEPS.map((step) => step.category))];
+// MEA-proxy operations only meaningful for electrode workflows; hidden in the
+// thermal bucket view so oxide-catalyst routes are not cluttered with them.
+const ELECTRO_ONLY_STEPS = new Set([
+  'ionomer_ink_homogenization',
+  'ultrasonic_dispersion',
+  'ccm_coating_pass',
+  'membrane_pretreatment',
+  'substrate_pretreatment',
+  'ion_exchange_conversion',
+  'electrochemical_break_in',
+  'electrode_drying_low_temp',
+  'hot_press_lamination',
+]);
 const ELECTRO_APPLICATION_OPTIONS: Array<{ value: ApplicationFamily; label: string; detail: string }> = [
   { value: 'fuel_cell', label: 'Fuel Cell', detail: 'PEMFC and hydrogen-air MEA / CCM workflows.' },
   { value: 'electrolyzer', label: 'Electrolyzer', detail: 'PEM water electrolysis catalyst and membrane routes.' },
@@ -506,6 +518,7 @@ export default function Calculator() {
   const [thermalOptions, setThermalOptions] = useState<ThermalCompositionOptions | null>(null);
   const [electroMaterials, setElectroMaterials] = useState<MaterialItem[]>([]);
   const [electroTemplates, setElectroTemplates] = useState<ProcessTemplate[]>([]);
+  const [thermalTemplates, setThermalTemplates] = useState<ProcessTemplate[]>([]);
   const [latestSnapshot, setLatestSnapshot] = useState<CalculatorResultSnapshot | null>(() => loadCalculatorResultSnapshot());
   const [pricesUpdatedAt, setPricesUpdatedAt] = useState<Date | null>(() => storedDraft?.pricesUpdatedAt ? new Date(storedDraft.pricesUpdatedAt) : null);
   const [pricesLoading, setPricesLoading] = useState(true);
@@ -650,6 +663,12 @@ export default function Calculator() {
 
     void loadElectrocatalystReferences();
   }, [applicationFamily]);
+
+  useEffect(() => {
+    fetchTemplates('thermal')
+      .then((templates) => setThermalTemplates(templates.filter((template) => template.steps.length > 0)))
+      .catch(() => setThermalTemplates([]));
+  }, []);
 
   useEffect(() => {
     if (catalystDomain !== 'electrocatalyst') return;
@@ -1630,7 +1649,11 @@ export default function Calculator() {
   }
 
   function renderManufacturingSection() {
-    const selectedCategoryCount = STEP_CATEGORIES.filter(
+    const visibleSteps = catalystDomain === 'electrocatalyst'
+      ? [...ALL_STEPS]
+      : ALL_STEPS.filter((step) => !ELECTRO_ONLY_STEPS.has(step.key));
+    const visibleCategories = [...new Set(visibleSteps.map((step) => step.category))];
+    const selectedCategoryCount = visibleCategories.filter(
       (category) => selectedStepKeysForCategory(category, steps).length > 0,
     ).length;
 
@@ -1683,6 +1706,40 @@ export default function Calculator() {
             </div>
           </div>
         ) : null}
+        {catalystDomain === 'thermal' && thermalTemplates.length > 0 ? (
+          <div className="surface-ghost p-3.5">
+            <div className="flex items-center justify-between gap-3">
+              <div className="cp-subtle-label">Quick-apply a saved route</div>
+              <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+                {thermalTemplates.length} templates
+              </div>
+            </div>
+            <div className="mt-2 text-xs leading-6 text-slate-500">
+              One click loads the full step chain for a named preparation method — co-precipitation, sol-gel,
+              impregnation, zeolite synthesis and more. Steps stay editable afterward.
+            </div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {thermalTemplates.map((template) => {
+                const active = template.steps.length === steps.length
+                  && template.steps.every((key) => steps.includes(key));
+                return (
+                  <button
+                    key={template.id}
+                    onClick={() => setSteps([...template.steps])}
+                    title={`${template.description ? `${template.description} — ` : ''}${template.steps.map(formatStepLabel).join(' → ')}`}
+                    className={`rounded-[16px] border px-3 py-2 text-left text-sm transition ${
+                      active
+                        ? 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e]'
+                        : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
+                    }`}
+                  >
+                    {template.name}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        ) : null}
         <div className="surface-ghost p-3.5">
           <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
             <div><div className="cp-subtle-label">Order size</div><div className="mt-3 flex flex-wrap items-center gap-3"><input type="number" min="1" step="1" value={orderSize} onChange={(event) => setOrderSize(Math.max(1, Number(event.target.value) || 1))} className="input-base w-32 text-center font-mono" /><span className="text-sm text-slate-500">tons per campaign</span><span className={`rounded-full border px-3 py-1 text-xs font-semibold ${scale.classes}`}>{scale.label} / {scale.rate}</span></div></div>
@@ -1690,7 +1747,7 @@ export default function Calculator() {
           </div>
         </div>
         <div className="grid gap-3 lg:grid-cols-2 xl:grid-cols-3">
-          {STEP_CATEGORIES.map((category) => {
+          {visibleCategories.map((category) => {
             const selectedInCategory = selectedStepKeysForCategory(category, steps);
             return (
               <div key={category} className="surface-ghost p-3.5">
@@ -1706,7 +1763,7 @@ export default function Calculator() {
                 </div>
                 <div className="mt-2 text-xs leading-6 text-slate-500">Choose all operations that apply within this bucket.</div>
                 <div className="mt-3 flex flex-wrap gap-2">
-                  {ALL_STEPS.filter((step) => step.category === category).map((step) => {
+                  {visibleSteps.filter((step) => step.category === category).map((step) => {
                     const available = (step.scales as readonly Scale[]).includes(currentScale);
                     const checked = steps.includes(step.key);
                     const availabilityLabel = step.scales.length === 3 ? null : step.scales.map((item) => item.charAt(0).toUpperCase()).join('/');
