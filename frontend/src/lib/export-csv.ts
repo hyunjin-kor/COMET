@@ -58,7 +58,7 @@ export function buildResultCsv(snapshot: CalculatorResultSnapshot): string {
       ['Composition', composition],
       ['Catalyst domain', String(result.input_summary.catalyst_domain ?? 'thermal')],
       ['Generated at', snapshot.generatedAt],
-      ['Order size (tons)', snapshot.orderSize],
+      ['Campaign size (tons)', snapshot.orderSize],
       ['Campaign scale', step.scale],
       ['Campaign days', Number(step.campaign_days)],
     ),
@@ -78,13 +78,13 @@ export function buildResultCsv(snapshot: CalculatorResultSnapshot): string {
   );
 
   const ledger: CsvCell[][] = [
-    ['Cost ledger'],
+    ['Cost build-up'],
     ['Item', 'Cost ($/lb)'],
     ['Materials', result.materials.total_materials_cost_per_lb],
     ['Processing', Number(step.processing_cost_per_lb)],
   ];
-  if (typeof step.ga_per_lb === 'number') ledger.push(['G&A', step.ga_per_lb]);
-  if (typeof step.sard_per_lb === 'number') ledger.push(['S&ARD', step.sard_per_lb]);
+  if (typeof step.ga_per_lb === 'number') ledger.push(['Overhead (G&A)', step.ga_per_lb]);
+  if (typeof step.sard_per_lb === 'number') ledger.push(['Sales, admin & R&D (S&ARD)', step.sard_per_lb]);
   if (typeof step.margin_per_lb === 'number') {
     ledger.push([`Margin (${Number(step.margin_pct).toFixed(1)}%)`, step.margin_per_lb]);
   }

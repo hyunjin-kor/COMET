@@ -87,14 +87,14 @@ const ELECTRO_ONLY_STEPS = new Set([
   'hot_press_lamination',
 ]);
 const ELECTRO_APPLICATION_OPTIONS: Array<{ value: ApplicationFamily; label: string; detail: string }> = [
-  { value: 'fuel_cell', label: 'Fuel Cell', detail: 'PEMFC and hydrogen-air MEA / CCM workflows.' },
+  { value: 'fuel_cell', label: 'Fuel Cell', detail: 'PEMFC and hydrogen-air MEA / CCM routes.' },
   { value: 'electrolyzer', label: 'Electrolyzer', detail: 'PEM water electrolysis catalyst and membrane routes.' },
   { value: 'direct_methanol_fuel_cell', label: 'DMFC', detail: 'PtRu-centered methanol oxidation routes.' },
   { value: 'general', label: 'General', detail: 'Use when the application family is still undecided.' },
 ];
 const ESTIMATE_SECTIONS: WorkspaceSection[] = [
   { id: 'type', label: 'Catalyst Type', summary: 'Choose thermocatalyst or electrocatalyst.' },
-  { id: 'composition', label: 'Composition', summary: 'Set recipe rows or the electrode stack.' },
+  { id: 'composition', label: 'Composition', summary: 'Set the formulation or the electrode stack.' },
   { id: 'manufacturing', label: 'Preparation Method', summary: 'Set campaign scale and preparation steps.' },
   { id: 'result', label: 'Result', summary: 'Run the estimate and open the result screen.' },
 ];
@@ -937,7 +937,7 @@ export default function Calculator() {
       && activeElectroTemplate,
   );
   const thermalValidationMessage = thermalRows.length > maxThermalComponents
-    ? `Thermal workflow is capped at ${maxThermalComponents} total components including promoted supports.`
+    ? `Thermal formulations are capped at ${maxThermalComponents} total components including promoted supports.`
     : incompleteThermalRows.length > 0
       ? `Complete or remove ${incompleteThermalRows.length} unfinished composition row${incompleteThermalRows.length > 1 ? 's' : ''} before continuing.`
       : activeMetalCount === 0
@@ -945,10 +945,10 @@ export default function Calculator() {
         : !hasSupport
           ? 'Add at least one support before continuing.'
           : supportIsSplit
-            ? `When more than one support is used, the full recipe must sum to 100 wt%. Current total: ${totalThermalWt.toFixed(1)} wt%.`
+            ? `When more than one support is used, the full formulation must sum to 100 wt%. Current total: ${totalThermalWt.toFixed(1)} wt%.`
             : nonSupportWt >= 100
               ? 'Active metals and promoters must stay below 100 wt% so support remains positive.'
-              : 'Enter a valid non-zero loading for the active portion of the recipe.';
+              : 'Enter a valid non-zero loading for the active portion of the formulation.';
   const electrocatalystValidationMessage = 'Select catalyst powder, ionomer, membrane, substrate / GDL, and a preparation template before continuing.';
   const isCompositionSectionValid = catalystDomain === 'electrocatalyst' ? isElectroValid : isThermalValid;
   const isManufacturingSectionValid = isCompositionSectionValid && steps.length > 0;
@@ -1423,7 +1423,7 @@ export default function Calculator() {
     const items = rows.filter((row) => row.role === role);
     const selectionOptions = role === 'active_metal' ? activeMetalOptions : promoterOptions;
     const copy = role === 'active_metal'
-      ? { title: 'Active metals', description: 'Pick live metal feeds or library-backed material identities.', accent: 'bg-[#0d9488]', button: 'Add active metal', placeholder: 'At least one active metal is required.' }
+      ? { title: 'Active metals', description: 'Pick exchange-quoted metals or library-backed materials.', accent: 'bg-[#0d9488]', button: 'Add active metal', placeholder: 'At least one active metal is required.' }
       : { title: 'Promoters', description: 'Optional promoter rows use the same DB-backed thermal material bank.', accent: 'bg-[#8b95a1]', button: 'Add promoter', placeholder: 'No promoters added yet.' };
 
     return (
@@ -1496,9 +1496,9 @@ export default function Calculator() {
                   refreshing
                     ? t('Refreshing')
                     : pricesLoading
-                      ? t('Loading live feed')
+                      ? t('Loading live prices')
                       : pricesError
-                        ? t('Live feed unavailable')
+                        ? t('Live prices unavailable')
                         : pricesUpdatedAt
                           ? t('Ready')
                           : t('Pending')
@@ -1507,9 +1507,9 @@ export default function Calculator() {
                   pricesLoading
                     ? 'Waiting for the local backend to publish live quotes.'
                     : pricesError
-                      ? 'Indexed and manual rows still apply. Try Refresh to retry the live feed.'
+                      ? 'Indexed and manual prices still apply. Refresh to retry the live sources.'
                       : pricesUpdatedAt
-                        ? `${liveFeedCount} live / ${indexedFeedCount} indexed rows synced ${pricesUpdatedAt.toLocaleTimeString('en-US', {
+                        ? `${liveFeedCount} live / ${indexedFeedCount} indexed prices updated ${pricesUpdatedAt.toLocaleTimeString('en-US', {
                             hour: 'numeric',
                             minute: '2-digit',
                             hour12: true,
@@ -1517,7 +1517,7 @@ export default function Calculator() {
                         : 'Indexed and manual rows stay usable before the next live refresh.'
                 }
               />
-              <CompactValueRow label="Manual overrides" value={String(manualOverrideCount)} detail="Rows still detached from tracked feeds." />
+              <CompactValueRow label="Manual overrides" value={String(manualOverrideCount)} detail="Materials priced by hand instead of a tracked source." />
             </div>
           </div>
 
@@ -1543,12 +1543,12 @@ export default function Calculator() {
                 detail={steps.length > 0 ? `${formatStepLabel(steps[0]!)}${steps.length > 1 ? ` +${steps.length - 1}` : ''}` : 'Choose at least one step'}
               />
               <CompactValueRow
-                label={catalystDomain === 'thermal' ? t('Recovery') : t('Family')}
+                label={catalystDomain === 'thermal' ? t('Recovery') : t('Application')}
                 value={recoverySummary}
                 detail={
                   catalystDomain === 'thermal'
                     ? 'Optional spent catalyst value proxy for recovery-sensitive screening.'
-                    : 'Electrode stack family currently selected.'
+                    : 'Application family currently selected.'
                 }
               />
             </div>
@@ -1576,7 +1576,7 @@ export default function Calculator() {
             <div className="mt-2 text-xs leading-6 text-slate-300">
               {latestSnapshotForCurrentCase
                 ? `Generated ${latestGenerated}. ${latestSnapshotForCurrentCase.selectedSupportName ?? 'Support'} remained the active basis.`
-                : 'No matching result for this workflow yet. Run the estimate once to populate this summary.'}
+                : 'No result for this catalyst class yet. Run the estimate once to populate this summary.'}
             </div>
           </div>
         </div>
@@ -1589,7 +1589,7 @@ export default function Calculator() {
       <section className="surface-card p-5">
         <div>
           <div className="cp-subtle-label">{t('Catalyst type')}</div>
-          <h2 className="cp-heading-lg mt-2">{t('Choose the workflow before you edit the recipe.')}</h2>
+          <h2 className="cp-heading-lg mt-2">{t('Choose the catalyst class before you build the formulation.')}</h2>
           <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-600">
             {t('Thermocatalyst keeps bulk composition and support balance together. Electrocatalyst separates catalyst powder, ionomer, membrane, and substrate.')}
           </p>
@@ -1607,7 +1607,7 @@ export default function Calculator() {
               value: 'electrocatalyst' as const,
               title: 'Electrocatalyst',
               note: 'Split the electrode stack into catalyst powder, ionomer, membrane, and substrate.',
-              detail: 'Best for PEMFC, PEMWE, DMFC, and other electrode-preparation workflows.',
+              detail: 'Best for PEMFC, PEMWE, DMFC, and other electrode fabrication routes.',
             },
           ]).map((option) => {
             const active = catalystDomain === option.value;
@@ -1639,7 +1639,7 @@ export default function Calculator() {
         <div className="mt-4 rounded-[20px] border border-slate-200 bg-slate-50/80 px-4 py-3">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="text-sm leading-6 text-slate-600">
-              {t('Selected:')} <span className="font-semibold text-[#191f28]">{t(catalystDomainLabel(catalystDomain))}</span>. {t('Switching the workflow does not auto-advance.')}
+              {t('Selected:')} <span className="font-semibold text-[#191f28]">{t(catalystDomainLabel(catalystDomain))}</span>. {t('Switching the catalyst class does not advance to the next step.')}
             </div>
             <button
               type="button"
@@ -1679,9 +1679,9 @@ export default function Calculator() {
       <section className="surface-card p-5">
         <div>
           <div className="cp-subtle-label">{t('Composition')}</div>
-          <h2 className="cp-heading-lg mt-2">{t('Define the catalyst recipe.')}</h2>
+          <h2 className="cp-heading-lg mt-2">{t('Define the catalyst formulation.')}</h2>
           <p className="mt-2 text-sm leading-7 text-slate-600">
-            {t('Keep active metals and promoters explicit. A single support row auto-balances the recipe, and multiple support rows enable promoted-support formulations up to four total components.')}
+            {t('Keep active metals and promoters explicit. A single support row auto-balances the formulation, and multiple support rows enable promoted-support formulations up to four total components.')}
           </p>
         </div>
         {!isThermalValid ? (
@@ -1699,7 +1699,7 @@ export default function Calculator() {
               <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#0d9488]" /><h3 className="cp-heading-sm">{t('Support')}</h3></div>
               <p className="mt-1 text-xs leading-5 text-slate-500">
                 {supportIsSplit
-                  ? t('Promoted support is on. Enter each support wt% explicitly so the total recipe closes at 100 wt%.')
+                  ? t('Promoted support is on. Enter each support wt% explicitly so the total formulation closes at 100 wt%.')
                   : t('Single-support mode stays auto-balanced. Add a second support to split the support bed explicitly.')}
               </p>
             </div>
@@ -1729,7 +1729,7 @@ export default function Calculator() {
           ))}
           <div className="mt-3 rounded-[18px] border border-slate-200 bg-white/76 px-4 py-3 text-xs leading-6 text-slate-600">
             Total components: <span className="font-semibold text-[#191f28]">{thermalRows.length}</span> / {maxThermalComponents}.
-            {supportIsSplit ? ` Current recipe total: ${totalThermalWt.toFixed(1)} wt%.` : ` Support closes automatically at ${supportWtPct.toFixed(1)} wt%.`}
+            {supportIsSplit ? ` Current formulation total: ${totalThermalWt.toFixed(1)} wt%.` : ` Support closes automatically at ${supportWtPct.toFixed(1)} wt%.`}
           </div>
         </div>
         </div>
@@ -1761,28 +1761,28 @@ export default function Calculator() {
         <div className="mt-5 space-y-4">
         <div className="grid gap-3 lg:grid-cols-3">
           <div className="rounded-[20px] border border-slate-200 bg-white/82 px-4 py-3">
-            <div className="cp-subtle-label">{t('Selection mode')}</div>
-            <div className="mt-2 text-sm font-semibold text-[#191f28]">{t('Choose all operations that apply')}</div>
+            <div className="cp-subtle-label">{t('Route building')}</div>
+            <div className="mt-2 text-sm font-semibold text-[#191f28]">{t('Select every unit operation that applies')}</div>
             <div className="mt-1 text-xs leading-6 text-slate-500">
-              {t('This screen builds a full route, not a one-choice wizard.')}
+              {t('You are assembling the full preparation route, not choosing a single option.')}
             </div>
           </div>
           <div className="rounded-[20px] border border-slate-200 bg-white/82 px-4 py-3">
-            <div className="cp-subtle-label">{t('Bucket logic')}</div>
-            <div className="mt-2 text-sm font-semibold text-[#191f28]">{t('One bucket can hold multiple steps')}</div>
+            <div className="cp-subtle-label">{t('Operation groups')}</div>
+            <div className="mt-2 text-sm font-semibold text-[#191f28]">{t('One group can hold several unit operations')}</div>
             <div className="mt-1 text-xs leading-6 text-slate-500">
-              {t('Saved thermal and electrochemical templates often stack several operations inside the same bucket.')}
+              {t('Saved thermal and electrochemical routes often include several operations from the same group.')}
             </div>
           </div>
           <div className="rounded-[20px] border border-[#0d9488] bg-[#e6f5f2] px-4 py-3">
             <div className="cp-subtle-label !text-[#0f766e]">{t('Current route')}</div>
             <div className="mt-2 text-sm font-semibold text-[#191f28]">
               {lang === 'ko'
-                ? `${selectedCategoryCount}개 버킷에서 ${steps.length}개 단계 선택됨`
-                : `${steps.length} selected step${steps.length === 1 ? '' : 's'} across ${selectedCategoryCount} bucket${selectedCategoryCount === 1 ? '' : 's'}`}
+                ? `${selectedCategoryCount}개 그룹에서 단위 공정 ${steps.length}개 선택됨`
+                : `${steps.length} unit operation${steps.length === 1 ? '' : 's'} across ${selectedCategoryCount} group${selectedCategoryCount === 1 ? '' : 's'}`}
             </div>
             <div className="mt-1 text-xs leading-6 text-slate-500">
-              {t('Add or remove operations until the route matches the actual lab or pilot workflow.')}
+              {t('Add or remove operations until the route matches the actual lab or pilot procedure.')}
             </div>
           </div>
         </div>
@@ -1800,13 +1800,13 @@ export default function Calculator() {
         {catalystDomain === 'thermal' && thermalTemplates.length > 0 ? (
           <div className="surface-ghost p-3.5">
             <div className="flex items-center justify-between gap-3">
-              <div className="cp-subtle-label">{t('Quick-apply a saved route')}</div>
+              <div className="cp-subtle-label">{t('Start from a standard method')}</div>
               <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
-                {thermalTemplates.length} {t('templates')}
+                {thermalTemplates.length} {t('methods')}
               </div>
             </div>
             <div className="mt-2 text-xs leading-6 text-slate-500">
-              {t('One click loads the full step chain for a named preparation method — co-precipitation, sol-gel, impregnation, zeolite synthesis and more. Steps stay editable afterward.')}
+              {t('Loads the full unit-operation sequence for a named preparation method — co-precipitation, sol-gel, impregnation, zeolite synthesis and more. Operations stay editable afterward.')}
             </div>
             <div className="mt-3 flex flex-wrap gap-2">
               {thermalTemplates.map((template) => {
@@ -1832,7 +1832,7 @@ export default function Calculator() {
         ) : null}
         <div className="surface-ghost p-3.5">
           <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-            <div><div className="cp-subtle-label">{t('Order size')}</div><div className="mt-3 flex flex-wrap items-center gap-3"><input type="number" min="1" step="1" value={orderSize} onChange={(event) => setOrderSize(Math.max(1, Number(event.target.value) || 1))} className="input-base w-32 text-center font-mono" /><span className="text-sm text-slate-500">{t('tons per campaign')}</span><span className={`rounded-full border px-3 py-1 text-xs font-semibold ${scale.classes}`}>{scale.label} / {scale.rate}</span></div></div>
+            <div><div className="cp-subtle-label">{t('Campaign size')}</div><div className="mt-3 flex flex-wrap items-center gap-3"><input type="number" min="1" step="1" value={orderSize} onChange={(event) => setOrderSize(Math.max(1, Number(event.target.value) || 1))} className="input-base w-32 text-center font-mono" /><span className="text-sm text-slate-500">{t('tons per campaign')}</span><span className={`rounded-full border px-3 py-1 text-xs font-semibold ${scale.classes}`}>{scale.label} / {scale.rate}</span></div></div>
             <div className="cp-toolbar">{QUICK_ORDER_SIZES.map((size) => <button key={size} onClick={() => setOrderSize(size)} className={`rounded-[16px] px-3 py-2 text-xs font-semibold transition ${orderSize === size ? 'bg-slate-950 text-white' : 'text-slate-600 hover:bg-white hover:text-slate-900'}`}>{size} tons</button>)}</div>
           </div>
         </div>
@@ -1851,7 +1851,7 @@ export default function Calculator() {
                     {lang === 'ko' ? `${selectedInCategory.length}개 선택` : `${selectedInCategory.length} selected`}
                   </div>
                 </div>
-                <div className="mt-2 text-xs leading-6 text-slate-500">{t('Choose all operations that apply within this bucket.')}</div>
+                <div className="mt-2 text-xs leading-6 text-slate-500">{t('Select every operation your route uses in this group.')}</div>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {visibleSteps.filter((step) => step.category === category).map((step) => {
                     const available = (step.scales as readonly Scale[]).includes(currentScale);
@@ -1945,7 +1945,7 @@ export default function Calculator() {
       ? `Electrocatalyst stack is ready: ${selectedCatalystMaterial?.name ?? 'catalyst'}, ${selectedIonomerMaterial?.name ?? 'ionomer'}, ${selectedMembraneMaterial?.name ?? 'membrane'}, and ${selectedSubstrateMaterial?.name ?? 'GDL'} are all sourced from the library.`
       : electrocatalystValidationMessage
     : isValid
-      ? `Recipe balance is valid: ${nonSupportWt.toFixed(1)} wt% actives and promoters, ${supportWtPct.toFixed(1)} wt% support.`
+      ? `Formulation balance is valid: ${nonSupportWt.toFixed(1)} wt% actives and promoters, ${supportWtPct.toFixed(1)} wt% support.`
       : thermalValidationMessage;
 
   const activeWorkspaceSection = sectionState.activeSection.id === 'type'
@@ -1982,7 +1982,7 @@ export default function Calculator() {
                   </div>
                 </div>
                 <div className="mt-2 text-xs leading-6 text-slate-500">
-                  {t('Named cases saved from the result screen. Load restores the composition, steps, and order size into this draft.')}
+                  {t('Named cases saved from the result screen. Load restores the composition, unit operations, and campaign size into this draft.')}
                 </div>
                 <div className="mt-3 space-y-2">
                   {savedEstimates.map((saved) => {
@@ -2037,8 +2037,8 @@ export default function Calculator() {
           <h2 className="cp-heading-xl">{t('Cost Estimate')}</h2>
           <p className="mt-1 text-sm text-[#8b95a1]">
             {catalystDomain === 'electrocatalyst'
-              ? t('Choose the workflow, build the stack, set the preparation basis, then run the result.')
-              : t('Choose the workflow, define the recipe, set the preparation basis, then run the result.')}
+              ? t('Choose the catalyst class, build the electrode stack, set the preparation basis, then run the estimate.')
+              : t('Choose the catalyst class, define the formulation, set the preparation basis, then run the estimate.')}
           </p>
         </div>
       </div>

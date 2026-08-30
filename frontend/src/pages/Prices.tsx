@@ -359,16 +359,16 @@ export default function Prices() {
           <div className="mt-3 space-y-1">
             <InspectorRow label="Acquisition" value={selectedRow.evidence.acquisition_mode} detail={sourceDescription(selectedRow)} />
             <InspectorRow label="Confidence" value={String(selectedRow.evidence.confidence_score)} detail={selectedRow.evidence.transparency} />
-            <InspectorRow label="Freshness" value={selectedRow.evidence.freshness_status} detail={selectedRow.evidence.note} />
+            <InspectorRow label={t('Quote age')} value={selectedRow.evidence.freshness_status} detail={selectedRow.evidence.note} />
             <InspectorRow label="Refresh target" value={selectedRow.evidence.freshness_target_hours != null ? `${selectedRow.evidence.freshness_target_hours} h` : 'N/A'} detail="Expected refresh horizon for this source type." />
           </div>
         </section>
 
         <section className="cp-rail-panel">
-          <div className="cp-subtle-label">{t('Feed Coverage')}</div>
+          <div className="cp-subtle-label">{t('Price Coverage')}</div>
           <div className="mt-3 grid gap-2 sm:grid-cols-2 xl:grid-cols-1">
-            <StatusTile label={t('Tracked symbols')} value={String(prices.length)} detail={t('Metals visible in the desktop feed.')} />
-            <StatusTile label={t('Needs review')} value={String(reviewFlagCount)} detail={t('Freshness or confidence flags worth checking.')} />
+            <StatusTile label={t('Tracked metals')} value={String(prices.length)} detail={t('Metals with a stored price basis.')} />
+            <StatusTile label={t('Needs review')} value={String(reviewFlagCount)} detail={t('Stale quotes or low-confidence sources worth checking.')} />
           </div>
         </section>
       </div>
@@ -383,7 +383,7 @@ export default function Prices() {
             <div>
               <h2 className="cp-heading-xl">{t('Live Metal Prices')}</h2>
               <p className="cp-body-copy mt-1.5 max-w-2xl">
-                {t('Scan the tracked symbols, then inspect evidence, freshness, and source quality for the selected metal.')}
+                {t('Scan the tracked metals, then inspect the evidence, quote age, and source quality for the selected metal.')}
               </p>
             </div>
 
@@ -395,7 +395,7 @@ export default function Prices() {
                 </div>
                 <div className="mt-1 text-xs leading-5 text-slate-500">
                   {latestFetchedAt
-                    ? `${liveQuoteCount} live symbols synced ${formatSyncStamp(latestFetchedAt)}`
+                    ? `${liveQuoteCount} metals updated live ${formatSyncStamp(latestFetchedAt)}`
                     : t('Indexed and manual prices are available even before a live refresh.')}
                 </div>
               </div>
@@ -413,10 +413,10 @@ export default function Prices() {
           ) : null}
 
           <div className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-            <StatusTile label={t('Tracked symbols')} value={String(prices.length)} detail={t('Metals visible in the desktop feed.')} />
-            <StatusTile label={t('Live coverage')} value={`${liveQuoteCount}/${prices.length}`} detail={t('Symbols backed by current live sources.')} />
-            <StatusTile label={t('Fallback rows')} value={String(indexedQuoteCount + manualQuoteCount)} detail={`${indexedQuoteCount} indexed and ${manualQuoteCount} manual rows remain usable.`} />
-            <StatusTile label={t('Needs review')} value={String(reviewFlagCount)} detail={t('Freshness or confidence flags worth checking.')} />
+            <StatusTile label={t('Tracked metals')} value={String(prices.length)} detail={t('Metals with a stored price basis.')} />
+            <StatusTile label={t('Live coverage')} value={`${liveQuoteCount}/${prices.length}`} detail={t('Metals backed by current live sources.')} />
+            <StatusTile label={t('Indexed & manual quotes')} value={String(indexedQuoteCount + manualQuoteCount)} detail={`${indexedQuoteCount} indexed and ${manualQuoteCount} manual quotes remain usable.`} />
+            <StatusTile label={t('Needs review')} value={String(reviewFlagCount)} detail={t('Stale quotes or low-confidence sources worth checking.')} />
           </div>
 
           <div className="space-y-4">
@@ -432,7 +432,7 @@ export default function Prices() {
                 <div key={groupKey} className="surface-ghost overflow-hidden p-4">
                   <div className="mb-3 flex items-center justify-between gap-3">
                     <div className="cp-subtle-label">{group.title}</div>
-                    <span className="cp-chip">{rows.length} symbols</span>
+                    <span className="cp-chip">{rows.length} metals</span>
                   </div>
 
                   <div className="space-y-2">
@@ -515,7 +515,7 @@ export default function Prices() {
           <div className="mt-3 space-y-1">
             <InspectorRow label="Evidence tier" value={selectedRow.evidence.label} detail={selectedRow.evidence.note} />
             <InspectorRow label="Transparency" value={selectedRow.evidence.transparency} detail={selectedRow.evidence.acquisition_mode} />
-            <InspectorRow label="Freshness" value={selectedRow.evidence.freshness_status} detail={selectedRow.evidence.age_hours != null ? `${selectedRow.evidence.age_hours.toFixed(1)} h old` : 'Age not stored'} />
+            <InspectorRow label={t('Quote age')} value={selectedRow.evidence.freshness_status} detail={selectedRow.evidence.age_hours != null ? `${selectedRow.evidence.age_hours.toFixed(1)} h old` : 'Age not stored'} />
           </div>
         </section>
       </div>
@@ -630,7 +630,7 @@ export default function Prices() {
                       <div className="mt-1 text-xs leading-5 text-slate-400">{selectedRow.evidence.transparency}</div>
                     </div>
                     <div className="rounded-[22px] border border-white/10 bg-white/6 p-3">
-                      <div className="cp-subtle-label !text-slate-400">Freshness</div>
+                      <div className="cp-subtle-label !text-slate-400">{t('Quote age')}</div>
                       <div className="mt-2 text-sm font-semibold text-white">{selectedRow.evidence.freshness_status}</div>
                       <div className="mt-1 text-xs leading-5 text-slate-400">{selectedRow.evidence.acquisition_mode}</div>
                     </div>

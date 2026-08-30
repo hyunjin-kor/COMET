@@ -285,7 +285,7 @@ export default function Uncertainty() {
             <div className="mt-5 rounded-[24px] border border-amber-200 bg-amber-50/80 px-5 py-5 text-sm text-amber-900">
               <div className="font-semibold">No valid Cost Estimate draft is ready.</div>
               <div className="mt-2 leading-6">
-                Build the catalyst case first, then come back here to quantify the price range around the same workflow.
+                Build the catalyst case first, then come back here to quantify the price range around that same case.
               </div>
               <button onClick={() => navigate('/')} className="cp-button-secondary mt-4 px-4 py-2">
                 Open Cost Estimate
@@ -298,7 +298,7 @@ export default function Uncertainty() {
                   <div className="cp-subtle-label">Current case</div>
                   <div className="mt-2 text-base font-semibold text-[#191f28]">{caseSummary}</div>
                   <div className="mt-1 text-xs leading-6 text-slate-500">
-                    {draft.catalystDomain === 'electrocatalyst' ? 'Electrocatalyst stack' : 'Thermocatalyst recipe'}
+                    {draft.catalystDomain === 'electrocatalyst' ? 'Electrocatalyst stack' : 'Thermocatalyst formulation'}
                   </div>
                 </div>
                 <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
@@ -379,7 +379,7 @@ export default function Uncertainty() {
                   </FieldBlock>
                 )}
 
-                <FieldBlock label="Order size band" hint="+/- %">
+                <FieldBlock label="Campaign size band" hint="+/- %">
                   <input
                     type="number"
                     step="1"
@@ -407,7 +407,7 @@ export default function Uncertainty() {
                 </div>
                 <div className="cp-metric-tile">
                   <div className="cp-subtle-label">Interpretation</div>
-                  <div className="mt-2 text-lg font-semibold text-[#191f28]">Estimate spread, not a new recipe</div>
+                  <div className="mt-2 text-lg font-semibold text-[#191f28]">Estimate spread, not a new formulation</div>
                   <div className="mt-1 text-xs leading-5 text-slate-500">Use this to read cost confidence around the existing route.</div>
                 </div>
               </div>
@@ -493,7 +493,7 @@ export default function Uncertainty() {
               </div>
 
               <div className="mt-5 rounded-[28px] border border-slate-900/8 bg-white/62 p-5 backdrop-blur-xl">
-                <div className="cp-subtle-label">{t('Distribution sketch')}</div>
+                <div className="cp-subtle-label">{t('Simulated distribution')}</div>
                 <div className="cp-heading-lg mt-2">Percentile-weighted price spread</div>
 
                 <div className="mt-5 h-[280px]">

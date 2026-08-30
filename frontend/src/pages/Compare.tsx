@@ -271,14 +271,14 @@ export default function Compare() {
                   <div className="cp-metric-tile-dark"><div className="cp-subtle-label !text-slate-400">{t('Top route')}</div><div className="mt-2 text-xl font-display text-white">{winner.title}</div></div>
                   <div className="cp-metric-tile-dark"><div className="cp-subtle-label !text-slate-400">{winner.summary.economics_basis_label}</div><div className="mt-2 text-xl font-display text-white">{benchmarkCostValue(winner)}</div><div className="mt-1 text-xs text-slate-400">{benchmarkCostDetail(winner)}</div></div>
                   <div className="cp-metric-tile-dark"><div className="cp-subtle-label !text-slate-400">{t('Evidence')}</div><div className="mt-2 text-xl font-display text-white">{winner.scores.evidence.toFixed(1)}</div></div>
-                  <div className="cp-metric-tile-dark"><div className="cp-subtle-label !text-slate-400">{t('Family bank')}</div><div className="mt-2 text-xl font-display text-white">{benchmark.citations.length}</div><div className="mt-1 text-xs text-slate-400">{t('Public benchmark links in the active family')}</div></div>
+                  <div className="cp-metric-tile-dark"><div className="cp-subtle-label !text-slate-400">{t('Literature bank')}</div><div className="mt-2 text-xl font-display text-white">{benchmark.citations.length}</div><div className="mt-1 text-xs text-slate-400">{t('Public benchmark links in the active reaction family')}</div></div>
                 </div>
               ) : null}
             </div>
 
             <div className="space-y-3">
               <div className="surface-ghost p-4">
-                <div className="cp-subtle-label">{t('Benchmark family')}</div>
+                <div className="cp-subtle-label">{t('Reaction family')}</div>
                 <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                   {families.map((option) => (
                     <button type="button" key={option.family} onClick={() => handleFamilyChange(option.family)} className={`rounded-[18px] border px-3 py-2 text-left text-sm transition ${option.family === family ? 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e]' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}>
@@ -339,10 +339,10 @@ export default function Compare() {
             <MetricTile label="Route extras" value={formatPrice(toDisplay(activeCandidate.summary.route_extra_cost_per_lb))} detail="QA + activation + route overhead" />
           </div>
           <div className="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-            <MetricTile label="Evidence anchors" value={String(activeCandidate.literature_basis.length)} detail="Direct links supporting the selected route." />
-            <MetricTile label="Family bank" value={String(benchmark.citations.length)} detail="Higher-level references visible across the family." />
-            <MetricTile label="Screening basis" value={screeningBasisLabel(activeCandidate.screening_basis)} detail="How this route is framed in the benchmark set." />
-            <MetricTile label="Ranking profile" value={benchmark.decision_profile.label} detail="Current weighting logic for ranking." />
+            <MetricTile label={t('Key evidence')} value={String(activeCandidate.literature_basis.length)} detail="Direct links supporting the selected route." />
+            <MetricTile label={t('Literature bank')} value={String(benchmark.citations.length)} detail="Higher-level references visible across the reaction family." />
+            <MetricTile label={t('Screening basis')} value={screeningBasisLabel(activeCandidate.screening_basis)} detail="How this route is framed in the benchmark set." />
+            <MetricTile label={t('Ranking profile')} value={benchmark.decision_profile.label} detail="Current weighting logic for ranking." />
           </div>
           <div className="mt-4 grid gap-4 xl:grid-cols-[minmax(0,1.02fr)_minmax(320px,0.98fr)]">
             <div className="space-y-4">
@@ -354,13 +354,13 @@ export default function Compare() {
                 <div className="mt-4 grid gap-3 md:grid-cols-3">{([['Preprocess', activeCandidate.route.preprocess], ['Synthesis', activeCandidate.route.synthesis], ['Postprocess', activeCandidate.route.postprocess]] as Array<[string, string[]]>).map(([label, items]) => <div key={label} className="rounded-[22px] border border-slate-900/8 bg-white/64 p-3"><div className="cp-subtle-label">{label}</div><div className="mt-3 space-y-2">{items.map((item) => <div key={item} className="text-sm leading-6 text-slate-700">{item}</div>)}</div></div>)}</div>
               </div>
               <div className="surface-ghost p-4">
-                <div className="cp-subtle-label">Reference notes</div>
+                <div className="cp-subtle-label">{t('Reference notes')}</div>
                 <div className="mt-3 space-y-2">{activeCandidate.decision_notes.map((note) => <div key={note} className="rounded-[18px] border border-slate-900/8 bg-white/64 px-3 py-2 text-sm leading-6 text-slate-700">{note}</div>)}</div>
               </div>
             </div>
             <div className="space-y-4">
               <div className="surface-ghost p-4">
-                <div className="cp-subtle-label">Evidence anchors</div>
+                <div className="cp-subtle-label">{t('Key evidence')}</div>
                 <div className="mt-3 space-y-3">{activeCandidate.literature_basis.map((item) => <a key={item.id} href={item.url} target="_blank" rel="noreferrer" className="block rounded-[18px] border border-slate-900/8 bg-white/64 px-3 py-3 transition hover:bg-white"><div className="font-semibold text-[#191f28]">{item.label}</div><div className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-400">{item.kind}</div><div className="mt-2 text-sm leading-6 text-slate-600">{item.note}</div></a>)}</div>
               </div>
               <div className="surface-ghost p-4">

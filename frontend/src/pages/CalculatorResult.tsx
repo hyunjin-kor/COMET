@@ -242,14 +242,14 @@ export default function CalculatorResult() {
     },
     typeof result.step_method.ga_per_lb === 'number'
       ? {
-          label: 'G&A',
+          label: 'Overhead (G&A)',
           value: `${formatPrice(toDisplay(Number(result.step_method.ga_per_lb)))}${fmtLabel}`,
           detail: 'General and administrative overhead',
         }
       : null,
     typeof result.step_method.sard_per_lb === 'number'
       ? {
-          label: 'S&ARD',
+          label: 'Sales, admin & R&D (S&ARD)',
           value: `${formatPrice(toDisplay(Number(result.step_method.sard_per_lb)))}${fmtLabel}`,
           detail: 'Selling, administrative, and R&D uplift',
         }
@@ -274,7 +274,7 @@ export default function CalculatorResult() {
       value: `${formatPrice(toDisplay(Number(result.step_method.processing_cost_per_lb)))}${fmtLabel}`,
     },
     {
-      label: 'G&A + margin',
+      label: 'Overhead + margin',
       share: Math.max(0, 100 - result.summary.materials_pct - result.summary.processing_pct),
       value: 'Included',
     },
@@ -333,7 +333,7 @@ export default function CalculatorResult() {
           </div>
 
           <div className="rounded-[22px] border border-slate-900/8 bg-white/62 p-4">
-            <div className="cp-subtle-label">{t('Cost ledger')}</div>
+            <div className="cp-subtle-label">{t('Cost build-up')}</div>
             <div className="mt-3 space-y-1">
               {ledgerRows.map((row) => (
                 <RailRow key={row.label} label={row.label} value={row.value} detail={row.detail} />
@@ -552,7 +552,7 @@ export default function CalculatorResult() {
 
         <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
           <MetricTile label="Active metals" value={String(snapshotState.activeMetalCount)} detail="Named active inputs" />
-          <MetricTile label="Recipe load" value={`${snapshotState.nonSupportWt.toFixed(1)} wt%`} detail={`Support closes at ${snapshotState.supportWtPct.toFixed(1)} wt%`} />
+          <MetricTile label="Active-phase loading" value={`${snapshotState.nonSupportWt.toFixed(1)} wt%`} detail={`Support closes at ${snapshotState.supportWtPct.toFixed(1)} wt%`} />
           <MetricTile label="Support" value={snapshotState.selectedSupportName ?? 'Pending'} detail="Current support basis" />
           <MetricTile label="Preparation steps" value={String(snapshotState.stepLabels.length)} detail="Selected preparation steps" />
         </div>
@@ -581,7 +581,7 @@ export default function CalculatorResult() {
           </div>
 
           <div className="rounded-[24px] border border-slate-900/8 bg-white/58 p-4">
-            <div className="cp-heading-sm">{t('Breakdown wheel')}</div>
+            <div className="cp-heading-sm">{t('Cost breakdown')}</div>
             <div className="mt-1 text-xs text-slate-500">{t('Materials, processing, and selling adjustments.')}</div>
             <div className="mt-4 h-[240px]">
               <Suspense fallback={<ChartFallback />}>
@@ -999,7 +999,7 @@ export default function CalculatorResult() {
                         .
                       </div>
                       <div className="mt-1 text-[#4e5968]">
-                        Offline fallback: <span className="font-mono">{formatPrice(material.live_override.fallback_price)} {material.live_override.fallback_price_unit}</span> from {material.live_override.fallback_source}
+                        Offline reference price: <span className="font-mono">{formatPrice(material.live_override.fallback_price)} {material.live_override.fallback_price_unit}</span> from {material.live_override.fallback_source}
                         {material.live_override.fallback_quote_year ? ` (${material.live_override.fallback_quote_year})` : ''}
                         .
                       </div>
