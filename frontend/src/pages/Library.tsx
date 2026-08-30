@@ -364,7 +364,7 @@ export default function Library() {
                   <input
                     value={search}
                     onChange={(event) => setSearch(event.target.value)}
-                    placeholder={t('Search materials, formulas, or symbols')}
+                    placeholder={t('Search by material, formula, or element')}
                     className="input-base"
                   />
                 </div>

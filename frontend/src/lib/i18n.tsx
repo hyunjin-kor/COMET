@@ -35,29 +35,29 @@ const KO: Record<string, string> = {
   'Preparation Method': '제조법',
   'Result': '결과',
   'Choose thermocatalyst or electrocatalyst.': '열촉매 또는 전기촉매를 선택하세요.',
-  'Set recipe rows or the electrode stack.': '조성 또는 전극 스택을 설정하세요.',
-  'Set campaign scale and preparation steps.': '생산 규모와 제조 스텝을 설정하세요.',
+  'Set the formulation or the electrode stack.': '조성 또는 전극 스택을 설정하세요.',
+  'Set campaign scale and preparation steps.': '생산 규모와 제조 단계를 설정하세요.',
   'Run the estimate and open the result screen.': '계산을 실행하고 결과 화면을 여세요.',
-  'Choose the workflow, define the recipe, set the preparation basis, then run the result.':
-    '워크플로를 고르고, 조성을 정의하고, 제조 기준을 설정한 뒤 결과를 실행하세요.',
-  'Choose the workflow, build the stack, set the preparation basis, then run the result.':
-    '워크플로를 고르고, 전극 스택을 구성하고, 제조 기준을 설정한 뒤 결과를 실행하세요.',
+  'Choose the catalyst class, define the formulation, set the preparation basis, then run the estimate.':
+    '촉매 유형을 고르고, 조성을 정의하고, 제조 기준을 설정한 뒤 계산을 실행하세요.',
+  'Choose the catalyst class, build the electrode stack, set the preparation basis, then run the estimate.':
+    '촉매 유형을 고르고, 전극 스택을 구성하고, 제조 기준을 설정한 뒤 계산을 실행하세요.',
   'Catalyst type': '촉매 유형',
-  'Choose the workflow before you edit the recipe.': '조성을 편집하기 전에 워크플로를 선택하세요.',
+  'Choose the catalyst class before you build the formulation.': '조성을 구성하기 전에 촉매 유형을 먼저 선택하세요.',
   'Thermocatalyst': '열촉매',
   'Electrocatalyst': '전기촉매',
   'Selected': '선택됨',
   'Choose': '선택',
   'Use bulk composition, support share, and plant-style preparation steps in one estimate.':
-    '벌크 조성, 담체 비율, 플랜트식 제조 스텝을 하나의 계산으로 다룹니다.',
+    '벌크 조성, 담체 비율, 플랜트식 제조 공정을 하나의 계산으로 다룹니다.',
   'Best for supported metal catalysts, mixed oxides, zeolites, and reforming or cracking routes.':
     '담지 금속 촉매, 혼합 산화물, 제올라이트, 개질·크래킹 공정에 적합합니다.',
   'Split the electrode stack into catalyst powder, ionomer, membrane, and substrate.':
     '전극 스택을 촉매 분말, 아이오노머, 멤브레인, 기재로 나눠 계산합니다.',
-  'Best for PEMFC, PEMWE, DMFC, and other electrode-preparation workflows.':
-    'PEMFC, PEMWE, DMFC 등 전극 제조 워크플로에 적합합니다.',
-  'Switching the workflow does not auto-advance.': '워크플로를 바꿔도 자동으로 넘어가지 않습니다.',
-  'Define the catalyst recipe.': '촉매 조성을 정의하세요.',
+  'Best for PEMFC, PEMWE, DMFC, and other electrode fabrication routes.':
+    'PEMFC, PEMWE, DMFC 등 전극 제조 공정에 적합합니다.',
+  'Switching the catalyst class does not advance to the next step.': '촉매 유형을 바꿔도 다음 단계로 자동 이동하지 않습니다.',
+  'Define the catalyst formulation.': '촉매 조성을 정의하세요.',
   'Active metals': '활성 금속',
   'Promoters': '조촉매',
   'Support': '담체',
@@ -68,18 +68,18 @@ const KO: Record<string, string> = {
   'Remove row': '행 삭제',
   'Choose the preparation basis.': '제조 기준을 선택하세요.',
   'Preparation method': '제조법',
-  'Selection mode': '선택 방식',
-  'Choose all operations that apply': '해당하는 공정을 모두 선택',
-  'This screen builds a full route, not a one-choice wizard.': '이 화면은 단일 선택이 아니라 전체 공정 루트를 구성합니다.',
-  'Bucket logic': '그룹 구성',
-  'One bucket can hold multiple steps': '한 그룹에 여러 스텝을 담을 수 있습니다',
+  'Route building': '루트 구성',
+  'Select every unit operation that applies': '해당하는 단위 공정을 모두 선택하세요',
+  'You are assembling the full preparation route, not choosing a single option.': '단일 선택이 아니라 전체 제조 루트를 구성하는 화면입니다.',
+  'Operation groups': '공정 그룹',
+  'One group can hold several unit operations': '한 그룹에 여러 단위 공정이 들어갈 수 있습니다',
   'Current route': '현재 루트',
-  'Order size': '주문 규모',
+  'Campaign size': '캠페인 규모',
   'tons per campaign': '톤/캠페인',
-  'Quick-apply a saved route': '저장된 루트 바로 적용',
-  'templates': '개 템플릿',
-  'One click loads the full step chain for a named preparation method — co-precipitation, sol-gel, impregnation, zeolite synthesis and more. Steps stay editable afterward.':
-    '공침, 졸-겔, 함침, 제올라이트 합성 등 이름 있는 제조법의 전체 스텝 체인을 클릭 한 번으로 불러옵니다. 이후에도 자유롭게 수정할 수 있습니다.',
+  'Start from a standard method': '표준 제조법에서 시작',
+  'methods': '개 제조법',
+  'Loads the full unit-operation sequence for a named preparation method — co-precipitation, sol-gel, impregnation, zeolite synthesis and more. Operations stay editable afterward.':
+    '공침, 졸-겔, 함침, 제올라이트 합성 등 이름 있는 제조법의 단위 공정 순서를 그대로 불러옵니다. 이후에도 자유롭게 수정할 수 있습니다.',
   'Mixing': '혼합',
   'Impregnation': '함침',
   'Reaction': '반응',
@@ -89,7 +89,7 @@ const KO: Record<string, string> = {
   'Forming': '성형',
   'Size Reduction': '분쇄',
   'Utilities': '유틸리티',
-  'Choose all operations that apply within this bucket.': '이 그룹에서 해당하는 공정을 모두 선택하세요.',
+  'Select every operation your route uses in this group.': '이 그룹에서 루트에 쓰이는 공정을 모두 선택하세요.',
   'selected': '선택',
   'Run estimate': '계산 실행',
   'Running estimate': '계산 중',
@@ -97,8 +97,8 @@ const KO: Record<string, string> = {
   'Calculation failed.': '계산에 실패했습니다.',
   'Saved estimates': '저장된 계산',
   'saved': '개 저장됨',
-  'Named cases saved from the result screen. Load restores the composition, steps, and order size into this draft.':
-    '결과 화면에서 이름을 붙여 저장한 케이스입니다. 불러오기는 조성·스텝·주문 규모를 이 초안으로 복원합니다.',
+  'Named cases saved from the result screen. Load restores the composition, unit operations, and campaign size into this draft.':
+    '결과 화면에서 이름을 붙여 저장한 케이스입니다. 불러오기는 조성·단위 공정·캠페인 규모를 이 초안으로 복원합니다.',
   'Load': '불러오기',
   'Delete': '삭제',
   'Working…': '처리 중…',
@@ -111,7 +111,7 @@ const KO: Record<string, string> = {
   'Status': '상태',
   'Current case': '현재 케이스',
   'Campaign': '캠페인',
-  'Steps': '스텝',
+  'Steps': '단위 공정',
   'Latest result': '최근 결과',
   'Open': '열기',
   'Pending': '대기',
@@ -129,7 +129,7 @@ const KO: Record<string, string> = {
   'Final result': '최종 결과',
   'Estimated selling price': '추정 판매가',
   'Estimated electrode cost': '추정 전극 원가',
-  'Cost ledger': '원가 내역',
+  'Cost build-up': '원가 내역',
   'Materials': '원재료',
   'Processing': '가공',
   'Evidence': '근거',
@@ -140,25 +140,25 @@ const KO: Record<string, string> = {
   'Overview': '개요',
   'Candidates': '후보',
   'Detail': '상세',
-  'Choose family and ranking logic.': '반응군과 랭킹 기준을 선택하세요.',
+  'Choose family and ranking logic.': '반응군과 순위 기준을 선택하세요.',
   'Scan the current route stack.': '현재 후보들을 살펴보세요.',
   'Read the selected route deeply.': '선택한 루트를 자세히 읽어보세요.',
   'Screen published routes before you edit the cost case.': '원가 케이스를 편집하기 전에 발표된 공정 루트를 스크리닝하세요.',
-  'Benchmark family': '벤치마크 반응군',
-  'Ranking profile': '랭킹 프로필',
+  'Reaction family': '반응군',
+  'Ranking profile': '순위 기준',
   'Balanced': '균형',
   'Cost-first': '비용 우선',
   'Evidence-first': '근거 우선',
   'Top route': '1위 루트',
   'Landed catalyst': '실효 촉매 단가',
   'Electrode layer': '전극층',
-  'Family bank': '반응군 문헌',
+  'Literature bank': '반응군 문헌',
   'Published routes': '발표된 루트',
   'How do these routes compare right now?': '지금 이 루트들은 어떻게 비교될까요?',
   'candidates': '개 후보',
   'Selected reference route': '선택된 참조 루트',
   'Load into cost estimate': '원가 계산으로 불러오기',
-  'Evidence anchors': '핵심 근거',
+  'Key evidence': '핵심 근거',
   'Family literature bank': '반응군 문헌 목록',
   'Screening basis': '스크리닝 기준',
   'Reference notes': '참고 노트',
@@ -167,12 +167,12 @@ const KO: Record<string, string> = {
   'Postprocess': '후처리',
   'Route extras': '루트 부대비용',
   'Raw material stack': '원재료 구성',
-  'Step-method operations': '스텝법 가공비',
+  'Step-method operations': '스텝법(Step Method) 가공비',
   'Score': '점수',
 
   // Library
   'Material sources, step rates, and route templates in one place, with the quote basis behind every number.':
-    '재료 출처, 스텝 요율, 공정 템플릿을 한곳에 모았습니다 — 모든 숫자에 견적 근거가 붙어 있습니다.',
+    '재료 출처, 단위 공정 요율, 제조법 템플릿을 한곳에 모았습니다 — 모든 숫자에 견적 근거가 붙어 있습니다.',
   'Templates': '템플릿',
   'Search': '검색',
   'Category filter': '분류 필터',
@@ -196,15 +196,16 @@ const KO: Record<string, string> = {
   'History': '이력',
   'Choose the metal price to inspect.': '확인할 금속 시세를 선택하세요.',
   'Read source quality, freshness, and trend.': '출처 품질, 최신성, 추세를 확인하세요.',
-  'Scan the tracked symbols, then inspect evidence, freshness, and source quality for the selected metal.':
-    '추적 중인 금속을 훑어보고, 선택한 금속의 근거·최신성·출처 품질을 확인하세요.',
+  'Scan the tracked metals, then inspect the evidence, quote age, and source quality for the selected metal.':
+    '추적 중인 금속을 훑어보고, 선택한 금속의 근거·시세 경과·출처 품질을 확인하세요.',
   'Quote Status': '시세 상태',
-  'Tracked symbols': '추적 금속',
+  'Tracked metals': '추적 금속',
   'Live coverage': '실시간 커버리지',
-  'Fallback rows': '대체 행',
+  'Indexed & manual quotes': '지수·수동 시세',
   'Needs review': '점검 필요',
   'Refresh quotes': '시세 새로고침',
-  'Feed Coverage': '피드 커버리지',
+  'Price Coverage': '시세 커버리지',
+  'Quote age': '시세 경과',
 
   // Uncertainty
   'Current Case': '현재 케이스',
@@ -217,7 +218,7 @@ const KO: Record<string, string> = {
   'Median': '중앙값',
   'Range width': '범위 폭',
   'Std dev': '표준편차',
-  'Distribution sketch': '분포 스케치',
+  'Simulated distribution': '시뮬레이션 분포',
 
   // CapEx
   'Factor purchased equipment into FCI and TCI using Peters & Timmerhaus Lang factors, then optionally layer annual OpEx on top.':
@@ -235,13 +236,13 @@ const KO: Record<string, string> = {
   'Build the electrode stack.': '전극 스택을 구성하세요.',
   'Choose the stored material records first, then tune the geometric inputs used for area-based costing.':
     '저장된 재료 레코드를 먼저 고른 뒤, 면적 기준 원가 계산에 쓰이는 기하 입력값을 조정하세요.',
-  'Keep active metals and promoters explicit. A single support row auto-balances the recipe, and multiple support rows enable promoted-support formulations up to four total components.':
+  'Keep active metals and promoters explicit. A single support row auto-balances the formulation, and multiple support rows enable promoted-support formulations up to four total components.':
     '활성 금속과 조촉매는 명시적으로 입력합니다. 담체가 한 행이면 자동으로 잔량을 채우고, 여러 행이면 최대 4성분까지 조촉매화 담체 조성을 만들 수 있습니다.',
-  'Promoted support is on. Enter each support wt% explicitly so the total recipe closes at 100 wt%.':
+  'Promoted support is on. Enter each support wt% explicitly so the total formulation closes at 100 wt%.':
     '복합 담체 모드입니다. 전체 조성이 100 wt%가 되도록 각 담체의 wt%를 직접 입력하세요.',
   'Single-support mode stays auto-balanced. Add a second support to split the support bed explicitly.':
     '단일 담체 모드에서는 잔량이 자동으로 채워집니다. 담체를 나누려면 두 번째 담체를 추가하세요.',
-  'Pick live metal feeds or library-backed material identities.': '실시간 금속 시세 또는 라이브러리 기반 재료를 선택하세요.',
+  'Pick exchange-quoted metals or library-backed materials.': '시세 연동 금속 또는 라이브러리 기반 재료를 선택하세요.',
   'Optional promoter rows use the same DB-backed thermal material bank.': '조촉매 행도 같은 DB 기반 재료 뱅크를 사용합니다.',
   'At least one active metal is required.': '활성 금속이 최소 한 개 필요합니다.',
 
@@ -268,13 +269,13 @@ const KO: Record<string, string> = {
 
   // Calculator - preparation method section
   'Templates add pretreatment, coating, drying, lamination, and break-in steps. Adjust them if the lab route differs.':
-    '템플릿은 전처리, 코팅, 건조, 라미네이션, 브레이크인 스텝을 추가합니다. 실험실 공정과 다르면 수정하세요.',
+    '템플릿은 전처리, 코팅, 건조, 라미네이션, 브레이크인 단계를 추가합니다. 실험실 공정과 다르면 수정하세요.',
   'Pick the industrial steps that best approximate the synthesis route, then let campaign size set the scale basis.':
-    '합성 공정에 가장 가까운 산업 스텝을 고르면, 캠페인 규모가 스케일 기준을 결정합니다.',
-  'Saved thermal and electrochemical templates often stack several operations inside the same bucket.':
-    '저장된 열·전기화학 템플릿은 같은 그룹 안에 여러 공정을 함께 담는 경우가 많습니다.',
-  'Add or remove operations until the route matches the actual lab or pilot workflow.':
-    '실제 실험실 또는 파일럿 워크플로와 일치할 때까지 공정을 추가하거나 제거하세요.',
+    '합성 경로에 가장 가까운 산업 단위 공정을 고르면, 캠페인 규모가 스케일 기준을 결정합니다.',
+  'Saved thermal and electrochemical routes often include several operations from the same group.':
+    '저장된 열·전기화학 루트는 같은 그룹의 공정을 여러 개 포함하는 경우가 많습니다.',
+  'Add or remove operations until the route matches the actual lab or pilot procedure.':
+    '실제 실험실 또는 파일럿 절차와 일치할 때까지 공정을 추가하거나 제거하세요.',
   'Recovery on': '회수 적용',
   'Optional spent catalyst value proxy': '폐촉매 가치 프록시 (선택)',
   'Use this when the catalyst contains recoverable metal and end-of-life value matters to the screening decision.':
@@ -290,11 +291,10 @@ const KO: Record<string, string> = {
     '회수 가치가 상업성 판단을 바꾸는 Pt, Pd, Rh, Ru, Ir, Ni, Co 공정에 적합합니다.',
 
   // Calculator - status rail
-  'Loading live feed': '실시간 피드 로딩 중',
-  'Live feed unavailable': '실시간 피드 사용 불가',
+  'Loading live prices': '실시간 시세 불러오는 중',
+  'Live prices unavailable': '실시간 시세 사용 불가',
   'Ready': '준비됨',
   'Recovery': '회수',
-  'Family': '반응군',
 
   // Result page - sections and labels
   'Headline price, scope, and active warnings.': '핵심 가격, 범위, 활성 경고를 봅니다.',
@@ -305,25 +305,25 @@ const KO: Record<string, string> = {
   'Direct workspace route': '워크스페이스 직접 구성 루트',
   'Separate route logic from raw inputs.': '공정 로직과 원료 입력을 분리해서 봅니다.',
   'This surface is for campaign scale, selected preparation steps, route metadata, and the main cost split.':
-    '이 화면은 캠페인 규모, 선택된 제조 스텝, 루트 메타데이터, 주요 비용 분할을 보여줍니다.',
+    '이 화면은 캠페인 규모, 선택된 제조 단계, 루트 정보, 주요 비용 분할을 보여줍니다.',
   'Cost Structure': '비용 구조',
   'Materials versus processing': '원재료 대 가공비',
-  'Breakdown wheel': '비용 분해 차트',
+  'Cost breakdown': '원가 구성',
   'Materials, processing, and selling adjustments.': '원재료, 가공, 판매 조정 항목입니다.',
-  'Preparation Steps': '제조 스텝',
+  'Preparation Steps': '제조 단계',
   'Reference baseline': '참조 기준',
   'No LCA data attached to this estimate.': '이 계산에는 LCA 데이터가 없습니다.',
   'Re-run the estimate to compute cradle-to-gate impact.': '크래들-투-게이트 영향을 계산하려면 계산을 다시 실행하세요.',
   'Cradle-to-gate impact per kg of catalyst': '촉매 kg당 크래들-투-게이트 영향',
   'Weighted-average over the wt% composition. Manufacturing-step emissions are not included in this version — only embodied material impact.':
-    'wt% 조성 가중 평균입니다. 이 버전에는 제조 스텝 배출은 포함되지 않고, 재료 내재 영향만 포함됩니다.',
+    'wt% 조성 가중 평균입니다. 이 버전에는 제조 공정 배출은 포함되지 않고, 재료 내재 영향만 포함됩니다.',
   'Resolved material sources and normalization': '확정된 재료 출처와 정규화',
   'Each record shows raw quote, pack basis, normalization basis, and public link status when available.':
     '각 레코드는 원 견적, 포장 기준, 정규화 기준, 공개 링크 상태를 보여줍니다.',
 
   // Library sections
   'Source rows with quote and trust metadata.': '견적·신뢰도 메타데이터가 붙은 출처 행입니다.',
-  'Hourly step rates by campaign scale.': '캠페인 규모별 시간당 스텝 요율입니다.',
+  'Hourly step rates by campaign scale.': '생산 규모별 단위 공정 시간당 요율입니다.',
   'Route templates and processing stages.': '공정 루트 템플릿과 처리 단계입니다.',
 
   // Uncertainty
@@ -332,7 +332,7 @@ const KO: Record<string, string> = {
     '이 결과는 원가 계산과 동일한 촉매 초안과 제조 루트를 사용합니다.',
 
   // Compare
-  'Public benchmark links in the active family': '현재 반응군의 공개 벤치마크 링크 수',
+  'Public benchmark links in the active reaction family': '현재 반응군의 공개 벤치마크 링크 수',
 
   // Prices - status strip
   'Refreshing live quotes': '실시간 시세 새로고침 중',
@@ -340,9 +340,9 @@ const KO: Record<string, string> = {
   'Stored pricing basis': '저장된 가격 기준',
   'Indexed and manual prices are available even before a live refresh.': '실시간 새로고침 전에도 지수·수동 가격을 사용할 수 있습니다.',
   'Refreshing now': '새로고침 중',
-  'Metals visible in the desktop feed.': '피드에 표시되는 금속 수입니다.',
-  'Freshness or confidence flags worth checking.': '최신성 또는 신뢰도 확인이 필요한 행입니다.',
-  'Symbols backed by current live sources.': '현재 실시간 출처가 있는 금속입니다.',
+  'Metals with a stored price basis.': '가격 기준이 저장된 금속 수입니다.',
+  'Stale quotes or low-confidence sources worth checking.': '오래된 시세이거나 신뢰도가 낮은 출처입니다.',
+  'Metals backed by current live sources.': '현재 실시간 출처가 있는 금속입니다.',
 
   // Uncertainty - stat tiles
   'Baseline source': '기준값 출처',
@@ -353,7 +353,7 @@ const KO: Record<string, string> = {
   '50th percentile': '50번째 백분위',
 
   // Library - filters
-  'Search materials, formulas, or symbols': '재료, 화학식, 심볼 검색',
+  'Search by material, formula, or element': '재료명, 화학식, 원소로 검색',
   'Material rows visible under the current filters.': '현재 필터에서 표시되는 재료 행 수입니다.',
 
   // CapEx - inputs
