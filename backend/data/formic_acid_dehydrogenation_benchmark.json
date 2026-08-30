@@ -244,7 +244,7 @@
             "evidence_tier": "engineering_proxy",
             "confidence_score": 60,
             "transparency": "derived_proxy",
-            "note": "Activated-carbon support price held on an engineering proxy for hydrogen-carrier screening. Bracketed by public references: UN Comtrade 2024 U.S. carbon-black import unit value ~$1.88/kg (~$0.85/lb rubber grade) and Fuel Cell Store Vulcan XC-72R lab retail ~$950/kg."
+            "note": "Activated-carbon support price held on an engineering proxy for hydrogen-carrier screening. Bracketed by public references: UN Comtrade 2024 U.S. carbon-black import unit value ~$1.88/kg (~$0.85/lb rubber grade) and Fuel Cell Store Vulcan XC-72R lab retail ~$950/kg. Bulk conductive/acetylene battery grades cluster at $5,000-7,000/t in marketplace offers (MOQ 1-2 t), the tier between rubber grade and lab retail."
           }
         }
       ]
@@ -357,7 +357,7 @@
             "evidence_tier": "engineering_proxy",
             "confidence_score": 60,
             "transparency": "derived_proxy",
-            "note": "Activated-carbon support price held on an engineering proxy for hydrogen-carrier screening. Bracketed by public references: UN Comtrade 2024 U.S. carbon-black import unit value ~$1.88/kg (~$0.85/lb rubber grade) and Fuel Cell Store Vulcan XC-72R lab retail ~$950/kg."
+            "note": "Activated-carbon support price held on an engineering proxy for hydrogen-carrier screening. Bracketed by public references: UN Comtrade 2024 U.S. carbon-black import unit value ~$1.88/kg (~$0.85/lb rubber grade) and Fuel Cell Store Vulcan XC-72R lab retail ~$950/kg. Bulk conductive/acetylene battery grades cluster at $5,000-7,000/t in marketplace offers (MOQ 1-2 t), the tier between rubber grade and lab retail."
           }
         }
       ]

@@ -317,7 +317,7 @@
             "evidence_tier": "engineering_proxy",
             "confidence_score": 70,
             "transparency": "derived_proxy",
-            "note": "Gamma-alumina support cost held on engineering proxy. USGS MCS 2026 metallurgical alumina (2025e $590/t import value, ~$0.27/lb) is the public floor; catalyst-grade premium retained."
+            "note": "Gamma-alumina support cost held on engineering proxy. USGS MCS 2026 metallurgical alumina (2025e $590/t import value, ~$0.27/lb) is the public floor; catalyst-grade premium retained. UN Comtrade 2024: calcined alumina (HS 281820) averaged $0.60/kg with specialty flows to $3.64/kg; catalyst-carrier activated/gamma alumina marketplace offers run $800-1,700/t."
           }
         }
       ]
