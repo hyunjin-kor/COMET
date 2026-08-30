@@ -12,17 +12,20 @@ import {
   type StepLibraryItem,
 } from '../lib/api';
 import { formatPrice } from '../lib/format-price';
+import { useUnit } from '../lib/use-unit';
 
 type Tab = 'materials' | 'steps' | 'templates';
 type SortKey = 'name' | 'year_desc' | 'year_asc' | 'price_desc' | 'price_asc';
 
-const SORT_OPTIONS: Array<{ value: SortKey; label: string }> = [
-  { value: 'name', label: 'Name (A-Z)' },
-  { value: 'year_desc', label: 'Quote year (newest)' },
-  { value: 'year_asc', label: 'Quote year (oldest)' },
-  { value: 'price_desc', label: 'In-calculator $/lb (high-low)' },
-  { value: 'price_asc', label: 'In-calculator $/lb (low-high)' },
-];
+function sortOptions(fmtLabel: string): Array<{ value: SortKey; label: string }> {
+  return [
+    { value: 'name', label: 'Name (A-Z)' },
+    { value: 'year_desc', label: 'Quote year (newest)' },
+    { value: 'year_asc', label: 'Quote year (oldest)' },
+    { value: 'price_desc', label: `In-calculator $${fmtLabel} (high-low)` },
+    { value: 'price_asc', label: `In-calculator $${fmtLabel} (low-high)` },
+  ];
+}
 
 function compareMaterials(a: MaterialItem, b: MaterialItem, key: SortKey): number {
   if (key === 'year_desc' || key === 'year_asc') {
@@ -196,6 +199,7 @@ function InspectorRow({ label, value, detail }: { label: string; value: string; 
 }
 
 export default function Library() {
+  const { toDisplay, fmtLabel } = useUnit();
   const sectionState = useWorkspaceSections(LIBRARY_SECTIONS, 'library');
   const tab = sectionState.activeSection.id as Tab;
   const [materials, setMaterials] = useState<MaterialItem[]>([]);
@@ -420,7 +424,7 @@ export default function Library() {
                     onChange={(event) => setSortKey(event.target.value as SortKey)}
                     className="input-base"
                   >
-                    {SORT_OPTIONS.map((option) => (
+                    {sortOptions(fmtLabel).map((option) => (
                       <option key={option.value} value={option.value}>
                         {option.label}
                       </option>
@@ -487,8 +491,21 @@ export default function Library() {
                               {material.notes ? <div className="mt-1 text-xs leading-5 text-slate-500">{material.notes}</div> : null}
                             </div>
                             <div className="text-left lg:text-right">
-                              <div className="font-mono text-slate-900">{formatRawPrice(material)}</div>
-                              <div className="mt-1 text-xs text-slate-500">{formatPack(material)}</div>
+                              {material.normalized_price_per_lb != null ? (
+                                <>
+                                  <div className="font-mono text-slate-900">
+                                    {formatPrice(toDisplay(material.normalized_price_per_lb))}{fmtLabel}
+                                  </div>
+                                  <div className="mt-1 text-xs text-slate-500">
+                                    {formatRawPrice(material)} · {formatPack(material)}
+                                  </div>
+                                </>
+                              ) : (
+                                <>
+                                  <div className="font-mono text-slate-900">{formatRawPrice(material)}</div>
+                                  <div className="mt-1 text-xs text-slate-500">{formatPack(material)}</div>
+                                </>
+                              )}
                             </div>
                           </div>
                           <div className="mt-3 flex flex-wrap gap-2">
@@ -526,8 +543,8 @@ export default function Library() {
                         {selectedMaterial.is_calculator_usable && selectedMaterial.normalized_price_per_lb != null ? (
                           <InspectorRow
                             label="In calculator"
-                            value={`${formatPrice(selectedMaterial.normalized_price_per_lb)}/lb`}
-                            detail="Normalized to a per-pound basis for the cost engine."
+                            value={`${formatPrice(toDisplay(selectedMaterial.normalized_price_per_lb))}${fmtLabel}`}
+                            detail="Normalized to a per-mass basis for the cost engine."
                           />
                         ) : null}
                         <InspectorRow label="Source type" value={priceScopeLabel(selectedMaterial.price_scope)} detail={pricingBasisLabel(selectedMaterial.pricing_basis)} />

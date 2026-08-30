@@ -8,6 +8,7 @@ import {
   type WorkspaceSection,
 } from '../components/shared/WorkspaceSections';
 import { saveEstimate, type CostResult } from '../lib/api';
+import { LB_PER_KG, TROY_OZ_PER_LB } from '../lib/unit-conversion';
 import { loadCalculatorResultSnapshot } from '../lib/calculator-session';
 import { buildResultCsv, downloadCsv, resultCsvFilename } from '../lib/export-csv';
 import { formatPrice } from '../lib/format-price';
@@ -133,6 +134,15 @@ function ChartFallback() {
       <div className="text-sm text-slate-600">Loading breakdown chart...</div>
     </div>
   );
+}
+
+function quotePerLb(price: number, unitLabel: string | null | undefined): number | null {
+  if (price == null || !unitLabel) return null;
+  if (unitLabel === '$/lb') return price;
+  if (unitLabel === '$/kg') return price / LB_PER_KG;
+  if (unitLabel === '$/troy_oz') return price * TROY_OZ_PER_LB;
+  if (unitLabel === '$/g') return price * 453.59237;
+  return null;
 }
 
 export default function CalculatorResult() {
@@ -903,6 +913,11 @@ export default function CalculatorResult() {
                       <div className="font-mono text-slate-900">
                         {formatPrice(material.price)} {material.price_unit}
                       </div>
+                      {material.normalized_price_per_lb != null && material.price_unit !== `$${fmtLabel}` ? (
+                        <div className="mt-0.5 font-mono text-xs text-slate-500">
+                          ≈ {formatPrice(toDisplay(material.normalized_price_per_lb))}{fmtLabel} in calculator
+                        </div>
+                      ) : null}
                       <div className="mt-1 text-xs text-slate-500">
                         {material.quote_source}
                         {material.quote_year ? ` / ${material.quote_year}` : ''}
@@ -951,11 +966,11 @@ export default function CalculatorResult() {
                       </div>
                       <div className="mt-1 text-[#191f28]">
                         Original {material.escalation_basis_year} quote of{' '}
-                        <span className="font-mono font-semibold">{formatPrice(material.raw_price_per_lb ?? material.price)}/lb</span>{' '}
+                        <span className="font-mono font-semibold">{formatPrice(toDisplay(material.raw_price_per_lb ?? material.price))}{fmtLabel}</span>{' '}
                         is multiplied by ChemPPI factor{' '}
                         <span className="font-mono font-semibold">×{material.escalation_factor.toFixed(2)}</span>{' '}
                         to land at the in-calculator value{' '}
-                        <span className="font-mono font-semibold">{formatPrice(material.normalized_price_per_lb ?? 0)}/lb</span>.
+                        <span className="font-mono font-semibold">{formatPrice(toDisplay(material.normalized_price_per_lb ?? 0))}{fmtLabel}</span>.
                       </div>
                       <div className="mt-1 text-[#4e5968]">
                         ChemPPI tracks chemical-manufacturing producer prices and is the same index CatCost uses for materials and operating costs.
@@ -970,6 +985,12 @@ export default function CalculatorResult() {
                       <div className="mt-1 text-[#191f28]">
                         Catalyst price uses the latest <span className="font-semibold">{material.live_override.live_source}</span> quote
                         of <span className="font-mono font-semibold">{formatPrice(material.live_override.live_price)} {material.live_override.live_price_unit}</span>
+                        {(() => {
+                          const perLb = quotePerLb(material.live_override.live_price, material.live_override.live_price_unit);
+                          return perLb != null && material.live_override.live_price_unit !== `$${fmtLabel}`
+                            ? <> (≈ <span className="font-mono font-semibold">{formatPrice(toDisplay(perLb))}{fmtLabel}</span>)</>
+                            : null;
+                        })()}
                         {material.live_override.live_fetched_at
                           ? ` (fetched ${new Date(material.live_override.live_fetched_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })})`
                           : ''}
