@@ -86,6 +86,27 @@
       "url": "https://doi.org/10.1039/c7cc06041f",
       "kind": "literature",
       "note": "Merle, Le Quemener et al.: well-defined silica-supported bipodal molybdenum oxo alkyl complexes as a model of the active sites of industrial olefin metathesis catalysts."
+    },
+    {
+      "id": "taoufik-angew-2007",
+      "label": "Angew. Chem. Int. Ed. 2007",
+      "url": "https://doi.org/10.1002/anie.200701199",
+      "kind": "literature",
+      "note": "Supported tungsten hydride on alumina converts ethylene directly to propylene in one continuous-flow reactor via trifunctional single-site catalysis."
+    },
+    {
+      "id": "metathesis-oxides-acscatal-2014",
+      "label": "ACS Catal. 2014",
+      "url": "https://doi.org/10.1021/cs500528h",
+      "kind": "literature",
+      "note": "Review of supported ReOx, MoOx and WOx metathesis catalysts."
+    },
+    {
+      "id": "mol-jmca-2004",
+      "label": "J. Mol. Catal. A 2004",
+      "url": "https://doi.org/10.1016/j.molcata.2003.10.049",
+      "kind": "literature",
+      "note": "Industrial applications of olefin metathesis."
     }
   ],
   "catalog_quotes": [],
@@ -202,6 +223,33 @@
       "non_step_cost_per_lb": 0.7,
       "route_confidence": 80,
       "route_note": "MoO3 / silica-alumina emerging metathesis route; intermediate-temperature option between Re2O7 (mild) and WO3 (high-T)."
+    },
+    {
+      "id": "somc-w-h",
+      "name": "Surface-organometallic tungsten hydride grafting",
+      "manufacturing_mode": "Air-free powder, packaged under inert",
+      "preprocess": [
+        "High-temperature dehydroxylation of the alumina support"
+      ],
+      "synthesis": [
+        "Grafting of the tungsten organometallic precursor under inert atmosphere",
+        "Hydrogen treatment forming surface W-H"
+      ],
+      "postprocess": [
+        "Inert-atmosphere drying and packaging"
+      ],
+      "quality_gates": [
+        "Surface-species confirmation (IR/NMR protocol)",
+        "Air-exclusion audit",
+        "Ethylene-to-propylene spot test"
+      ],
+      "steps": [
+        "reactor_multistep",
+        "dryer_rotary_40_100C"
+      ],
+      "non_step_cost_per_lb": 1.2,
+      "route_confidence": 50,
+      "route_note": "Surface organometallic chemistry has no direct step-library analogue; the multistep-reactor rate proxies the grafting train and the air-free handling burden sits in the non-step charge."
     }
   ],
   "candidates": [
@@ -361,6 +409,59 @@
             "confidence_score": 66,
             "transparency": "derived_proxy",
             "note": "Silica-alumina mixed support cost held on engineering proxy averaged between silica and alumina baselines."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "w-h-alumina",
+      "title": "W-H/Al2O3 single-site hydride",
+      "archetype": "Single-site direct route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "A grafted tungsten hydride that dimerizes, isomerizes and cross-metathesizes in one bed - direct ethylene-to-propylene without a butene co-feed, at surface-organometallic manufacturing cost.",
+      "route_template_id": "somc-w-h",
+      "order_size_tons": 2,
+      "performance_index": 78,
+      "manufacturing_readiness": 40,
+      "screening_exactness": 60,
+      "temperature_window_c": [
+        120,
+        250
+      ],
+      "literature_basis_ids": [
+        "taoufik-angew-2007",
+        "metathesis-oxides-acscatal-2014",
+        "mol-jmca-2004"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Screens the feed-simplification upside (no 2-butene loop) against a lab-bound air-free synthesis.",
+        "Operating conditions are not stated in the fetched abstract; the window shown is the mild band this chemistry targets. W loading screened at 4 wt%."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "W",
+          "wt_pct": 4.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "W",
+            "precursor_markup": 1.4,
+            "note": "Live W feed with an elevated markup for the organometallic precursor route; loading is a screening assumption."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Al2O3",
+          "wt_pct": 96.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.2676,
+            "evidence_label": "USGS industrial alumina proxy",
+            "evidence_tier": "public_index",
+            "confidence_score": 72,
+            "transparency": "public_index",
+            "note": "2025 USGS alumina import value used as a bulk oxide support proxy."
           }
         }
       ]

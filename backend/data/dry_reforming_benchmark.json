@@ -93,6 +93,20 @@
       "url": "https://doi.org/10.1126/science.aah7161",
       "kind": "literature",
       "note": "Buelens, Galvita et al.: super-dry reforming of methane intensifies CO2 utilization by coupling Ni catalysis with a CaO/Fe2O3 redox cycle."
+    },
+    {
+      "id": "zhang-jcat-2007",
+      "label": "J. Catal. 2007",
+      "url": "https://doi.org/10.1016/j.jcat.2007.05.004",
+      "kind": "literature",
+      "note": "Ni-Co/Al-Mg-O bimetallic: 2000-hour stable dry reforming at 750 C with very low carbon formation."
+    },
+    {
+      "id": "nico-kinetics-iecr-2009",
+      "label": "Ind. Eng. Chem. Res. 2009",
+      "url": "https://doi.org/10.1021/ie801078p",
+      "kind": "literature",
+      "note": "Intrinsic kinetics of CH4-CO2 reforming over the Ni-Co/Al-Mg-O catalyst."
     }
   ],
   "catalog_quotes": [],
@@ -203,6 +217,40 @@
       "non_step_cost_per_lb": 1.06,
       "route_confidence": 69,
       "route_note": "Premium DRM route used when activity and anti-coking performance justify noble-metal exposure."
+    },
+    {
+      "id": "nico-coprecipitation-drm",
+      "name": "Ni-Co co-precipitation on Al-Mg oxide",
+      "manufacturing_mode": "Fixed-bed pellet catalyst",
+      "preprocess": [
+        "Ni, Co, Al and Mg nitrate solution make-up",
+        "Precipitant dosing"
+      ],
+      "synthesis": [
+        "One-pot co-precipitation of the mixed hydroxide",
+        "Aging"
+      ],
+      "postprocess": [
+        "Vacuum filtration and washing",
+        "Drying and calcination to the composite oxide",
+        "High-temperature reduction forming the Ni-Co alloy"
+      ],
+      "quality_gates": [
+        "Ni/Co ratio confirmation",
+        "Alloy-formation check",
+        "Carbon-formation spot test at 750 C"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "reactor_multistep",
+        "filter_rotary_vacuum",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple"
+      ],
+      "non_step_cost_per_lb": 0.5,
+      "route_confidence": 82,
+      "route_note": "Standard co-precipitation chain; the 2000-hour stability record was earned at reduced metal loadings, which the screen uses."
     }
   ],
   "candidates": [
@@ -358,6 +406,69 @@
             "confidence_score": 74,
             "transparency": "public_index",
             "note": "2025 USGS cerium-oxide price used as a bulk oxygen-storage support proxy."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "ni-co-almgo",
+      "title": "Ni-Co/Al-Mg-O bimetallic",
+      "archetype": "Coke-resistant base-metal alloy",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "A promoter-free nickel-cobalt alloy on a magnesia-alumina composite that ran dry reforming for 2000 hours at 750 C with almost no carbon - stability bought with formulation, not precious metal.",
+      "route_template_id": "nico-coprecipitation-drm",
+      "order_size_tons": 20,
+      "performance_index": 84,
+      "manufacturing_readiness": 84,
+      "screening_exactness": 76,
+      "temperature_window_c": [
+        700,
+        800
+      ],
+      "literature_basis_ids": [
+        "zhang-jcat-2007",
+        "nico-kinetics-iecr-2009"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "The scalable coking answer beside single-site, zeolite-confined and iridium strategies.",
+        "Metal terms screened at the stability-optimized loadings (~4 wt% Ni, ~5.5 wt% Co on a mass basis from the reported molar loadings)."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Ni",
+          "wt_pct": 4.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ni",
+            "precursor_markup": 1.1,
+            "note": "Live Ni feed; stability-optimized reduced loading from the 2000-h study."
+          }
+        },
+        {
+          "role": "active_metal",
+          "name": "Co",
+          "wt_pct": 5.5,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Co",
+            "precursor_markup": 1.1,
+            "note": "Live Co feed; stability-optimized reduced loading from the 2000-h study."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Al-Mg composite oxide",
+          "wt_pct": 90.5,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.3,
+            "evidence_label": "Al-Mg oxide support proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 60,
+            "transparency": "derived_index",
+            "note": "Composite of alumina and magnesia, both carrying UN Comtrade public floors (calcined alumina $0.60/kg, magnesia $0.52/kg); the proxy sits just above the blend floor."
           }
         }
       ]

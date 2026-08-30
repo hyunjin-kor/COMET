@@ -86,6 +86,20 @@
       "url": "https://doi.org/10.1021/jacs.9b02132",
       "kind": "literature",
       "note": "Jorgensen, Gronbeck: selective acetylene hydrogenation over single-atom-alloy nanoparticles by kinetic Monte Carlo, providing first-principles-grounded selectivity predictions."
+    },
+    {
+      "id": "studt-science-2008",
+      "label": "Science 2008",
+      "url": "https://doi.org/10.1126/science.1156660",
+      "kind": "literature",
+      "note": "DFT screening discovers, and experiment confirms, Ni-Zn alloys matching Pd-Ag selectivity for acetylene hydrogenation with abundant metals."
+    },
+    {
+      "id": "spanjers-jcat-2014",
+      "label": "J. Catal. 2014",
+      "url": "https://doi.org/10.1016/j.jcat.2014.05.007",
+      "kind": "literature",
+      "note": "Zinc inclusion into Ni suppresses green-oil oligomerization during acetylene semi-hydrogenation."
     }
   ],
   "catalog_quotes": [],
@@ -381,6 +395,72 @@
             "confidence_score": 70,
             "transparency": "derived_proxy",
             "note": "Gamma-alumina support cost held on an engineering proxy comparable to commercial alumina ranges. USGS MCS 2026 metallurgical alumina (2025e $590/t import value, ~$0.27/lb) is the public floor; catalyst-grade premium retained. UN Comtrade 2024: calcined alumina (HS 281820) averaged $0.60/kg with specialty flows to $3.64/kg; catalyst-carrier activated/gamma alumina marketplace offers run $800-1,700/t."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "nizn-intermetallic",
+      "title": "NiZn intermetallic (non-Pd)",
+      "archetype": "Non-precious alternative",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "The computationally discovered nickel-zinc alloy that matches Pd-Ag selectivity for front-end acetylene removal using two abundant metals - the family's hedge against palladium prices.",
+      "route_template_id": "pd-alumina-sha-route",
+      "order_size_tons": 20,
+      "performance_index": 76,
+      "manufacturing_readiness": 66,
+      "screening_exactness": 68,
+      "temperature_window_c": [
+        100,
+        200
+      ],
+      "literature_basis_ids": [
+        "studt-science-2008",
+        "spanjers-jcat-2014"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Removes the palladium term entirely; commercial maturity, not chemistry, is what holds the score down.",
+        "Ni/Zn loadings are screening assumptions (15/5 wt%): the cited abstracts establish the alloy strategy without weight loadings."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Ni",
+          "wt_pct": 15.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ni",
+            "precursor_markup": 1.1,
+            "note": "Live Ni feed; loading is a screening assumption."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "Zn",
+          "wt_pct": 5.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.3,
+            "evidence_label": "USGS refined zinc proxy",
+            "evidence_tier": "public_index",
+            "confidence_score": 74,
+            "transparency": "public_index",
+            "note": "2025e annual average LME cash zinc price, $1.30/lb (USGS MCS 2026)."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Al2O3",
+          "wt_pct": 80.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.2676,
+            "evidence_label": "USGS industrial alumina proxy",
+            "evidence_tier": "public_index",
+            "confidence_score": 72,
+            "transparency": "public_index",
+            "note": "2025 USGS alumina import value used as a bulk oxide support proxy."
           }
         }
       ]

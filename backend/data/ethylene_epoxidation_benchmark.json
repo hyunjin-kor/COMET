@@ -93,6 +93,20 @@
       "url": "https://doi.org/10.1016/j.mcat.2017.08.007",
       "kind": "literature",
       "note": "Ren and Xu: origin of enhanced ethylene oxide selectivity by Cs-promoted silver catalyst, complementary to Linic 2004 mechanism."
+    },
+    {
+      "id": "jankowiak-jcat-2005a",
+      "label": "J. Catal. 2005",
+      "url": "https://doi.org/10.1016/j.jcat.2005.10.018",
+      "kind": "literature",
+      "note": "Jankowiak and Barteau part 1: Cu-Ag bimetallics on alpha-alumina reach up to ~1.5x the ethylene-oxide selectivity of pure silver."
+    },
+    {
+      "id": "jankowiak-jcat-2005b",
+      "label": "J. Catal. 2005",
+      "url": "https://doi.org/10.1016/j.jcat.2005.10.017",
+      "kind": "literature",
+      "note": "Part 2: with Cs and Cl promotion the Cu-Ag catalyst holds up to 15 selectivity points over promoted Ag at comparable conversion."
     }
   ],
   "catalog_quotes": [],
@@ -409,6 +423,83 @@
             "confidence_score": 70,
             "transparency": "derived_proxy",
             "note": "Alpha-alumina support cost held on engineering proxy. USGS MCS 2026 metallurgical alumina (2025e $590/t import value, ~$0.27/lb) is the public floor; calcined alpha-grade premium retained. UN Comtrade 2024: fused corundum (HS 281810) trades at ~$0.70-0.94/kg on the largest flows; calcined specialty alumina reaches $3.64/kg."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "cu-ag-bimetallic",
+      "title": "Cu-Ag/alpha-Al2O3 (DFT-designed alloy)",
+      "archetype": "Alloy selectivity lever",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Sub-monolayer copper on silver - the first-principles-designed epoxidation alloy - lifts EO selectivity up to 15 points over promoted silver once the standard Cs/Cl package is added on top.",
+      "route_template_id": "agcs-eo-route",
+      "order_size_tons": 20,
+      "performance_index": 86,
+      "manufacturing_readiness": 68,
+      "screening_exactness": 72,
+      "temperature_window_c": [
+        220,
+        280
+      ],
+      "literature_basis_ids": [
+        "jankowiak-jcat-2005a",
+        "jankowiak-jcat-2005b"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "The only non-pure-silver chemistry beside three Ag/Al2O3 generations; the copper add costs essentially nothing against the silver inventory.",
+        "Modern commercial multi-promoter recipes live in patents; this is the best peer-reviewed alloy archetype."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Ag",
+          "wt_pct": 14.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ag",
+            "precursor_markup": 1.1,
+            "note": "Live Ag feed with a mild precursor markup at a typical epoxidation loading."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "Cu",
+          "wt_pct": 0.7,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Cu",
+            "precursor_markup": 1.1,
+            "note": "Sub-monolayer copper modifier on the silver surface."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "Cs",
+          "wt_pct": 0.3,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 346.94,
+            "evidence_label": "Sigma-Aldrich Cs2CO3, contained-Cs basis",
+            "evidence_tier": "vendor_public",
+            "confidence_score": 63,
+            "transparency": "public_list_price",
+            "note": "Sigma 441902 cesium carbonate 500 g list $312 = $0.765/g contained Cs = $346.94/lb. USGS MCS 2026 states no commercial bulk cesium market exists."
+          }
+        },
+        {
+          "role": "support",
+          "name": "alpha-Al2O3",
+          "wt_pct": 85.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.1,
+            "evidence_label": "Calcined alpha-alumina proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 60,
+            "transparency": "derived_index",
+            "note": "USGS MCS 2026 metallurgical alumina (2025e $590/t, ~$0.27/lb) is the public floor; UN Comtrade fused corundum (HS 281810) trades at ~$0.70-0.94/kg. Calcined alpha-grade premium retained."
           }
         }
       ]

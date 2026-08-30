@@ -86,6 +86,27 @@
       "url": "https://doi.org/10.1039/d4gc02298j",
       "kind": "literature",
       "note": "Jiang, Shu et al.: efficient HDO of lignin-derived phenolic compounds under acid-free conditions over carbon-supported NiMo catalysts."
+    },
+    {
+      "id": "wildschut-iecr-2009",
+      "label": "Ind. Eng. Chem. Res. 2009",
+      "url": "https://doi.org/10.1021/ie9006003",
+      "kind": "literature",
+      "note": "Noble-metal HDO screening on real pyrolysis oil where Ru/C outperforms sulfided NiMo and CoMo."
+    },
+    {
+      "id": "wildschut-ees-2010",
+      "label": "Energy Environ. Sci. 2010",
+      "url": "https://doi.org/10.1039/b923170f",
+      "kind": "literature",
+      "note": "5 wt% Ru/C at 350 C and 200 bar: oil yields to ~65 wt% and deoxygenation to 90 wt%."
+    },
+    {
+      "id": "elliott-ef-2007",
+      "label": "Energy & Fuels 2007",
+      "url": "https://doi.org/10.1021/ef070044u",
+      "kind": "literature",
+      "note": "Historical developments in bio-oil hydroprocessing."
     }
   ],
   "catalog_quotes": [],
@@ -380,6 +401,59 @@
             "confidence_score": 70,
             "transparency": "public_index",
             "note": "2024 U.S. imports of HS 380210: $240.27M / 88.93M kg = $2.70/kg CIF average."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "ru-carbon-hdo",
+      "title": "Ru/C noble-metal route",
+      "archetype": "Noble metal on carbon",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Five percent ruthenium on activated carbon upgrades real pyrolysis oil at 350 C and 200 bar to ~65 wt% oil yield with 90 wt% deoxygenation, beating the sulfide baselines without sulfur management.",
+      "route_template_id": "nimo-carbon-hdo-route",
+      "order_size_tons": 20,
+      "performance_index": 88,
+      "manufacturing_readiness": 82,
+      "screening_exactness": 80,
+      "temperature_window_c": [
+        250,
+        350
+      ],
+      "literature_basis_ids": [
+        "wildschut-iecr-2009",
+        "wildschut-ees-2010",
+        "elliott-ef-2007"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "The sulfur-free premium option proven on real (not model) bio-oil; ruthenium inventory is the whole cost story.",
+        "Rides the family's existing carbon-impregnation route."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Ru",
+          "wt_pct": 5.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ru",
+            "precursor_markup": 1.2,
+            "note": "Live Ru feed with a precursor markup; 5 wt% loading is source-quoted."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Activated carbon",
+          "wt_pct": 95.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.2247,
+            "evidence_label": "UN Comtrade activated-carbon import unit value",
+            "evidence_tier": "public_index",
+            "confidence_score": 70,
+            "transparency": "public_index",
+            "note": "2024 U.S. imports of HS 380210: $2.70/kg CIF average."
           }
         }
       ]

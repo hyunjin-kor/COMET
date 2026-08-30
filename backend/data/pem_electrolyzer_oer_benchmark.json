@@ -170,6 +170,27 @@
       "url": "https://www.fuelcellstore.com/titanium-frit",
       "kind": "catalog",
       "note": "Public titanium frit quote used for interface-engineered PEM anode routes."
+    },
+    {
+      "id": "iro2-tio2-acscatal-2017",
+      "label": "ACS Catal. 2017",
+      "url": "https://doi.org/10.1021/acscatal.6b03246",
+      "kind": "literature",
+      "note": "Adams-fusion IrO2-TiO2 (about 40 mol% Ir, 245 m2/g): improved acidic OER activity and stability over the commercial benchmark."
+    },
+    {
+      "id": "ir-loading-jes-2018",
+      "label": "J. Electrochem. Soc. 2018",
+      "url": "https://doi.org/10.1149/2.0641805jes",
+      "kind": "literature",
+      "note": "Voltage-loss analysis fixes the practical anode window at 1-2 mgIr/cm2 across 0.20-5.41 mg/cm2 tested."
+    },
+    {
+      "id": "ionomer-iro2tio2-jes-2016",
+      "label": "J. Electrochem. Soc. 2016",
+      "url": "https://doi.org/10.1149/2.0231611jes",
+      "kind": "literature",
+      "note": "Ionomer-content optimization in IrO2/TiO2 anode layers."
     }
   ],
   "catalog_quotes": [
@@ -372,7 +393,10 @@
       "performance_index": 78,
       "manufacturing_readiness": 93,
       "screening_exactness": 86,
-      "temperature_window_c": [55, 80],
+      "temperature_window_c": [
+        55,
+        80
+      ],
       "literature_basis_ids": [
         "taox-iro2-ncomms-2023",
         "support-free-irhy-ncomms-2025",
@@ -428,7 +452,10 @@
       "performance_index": 91,
       "manufacturing_readiness": 80,
       "screening_exactness": 82,
-      "temperature_window_c": [55, 80],
+      "temperature_window_c": [
+        55,
+        80
+      ],
       "literature_basis_ids": [
         "taox-iro2-ncomms-2023",
         "ir-o-mn-ncomms-2025",
@@ -484,7 +511,10 @@
       "performance_index": 84,
       "manufacturing_readiness": 70,
       "screening_exactness": 77,
-      "temperature_window_c": [50, 80],
+      "temperature_window_c": [
+        50,
+        80
+      ],
       "literature_basis_ids": [
         "ru-sulfate-ncomms-2023",
         "ru-confinement-ncomms-2024",
@@ -530,6 +560,69 @@
           }
         }
       ]
+    },
+    {
+      "slug": "iro2-tio2-supported",
+      "title": "IrO2/TiO2 supported anode",
+      "archetype": "Commercial dilution strategy",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Nanometric iridium oxide dispersed in a titania matrix - the commercial route to lower iridium per square centimeter, with the device-level 1-2 mgIr/cm2 loading window documented.",
+      "route_template_id": "pem-irox-standard-ccm",
+      "order_size_tons": 20,
+      "performance_index": 88,
+      "manufacturing_readiness": 86,
+      "screening_exactness": 80,
+      "temperature_window_c": [
+        50,
+        80
+      ],
+      "literature_basis_ids": [
+        "iro2-tio2-acscatal-2017",
+        "ir-loading-jes-2018",
+        "ionomer-iro2tio2-jes-2016"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "The middle path between the pure-IrO2 baseline and the exploratory low-Ir entries: proven dilution on a public-priced support.",
+        "Adams-fusion synthesis (molten NaNO3) rides the family's standard route with its markup carried on the iridium term."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Ir",
+          "wt_pct": 40.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ir",
+            "precursor_markup": 1.25,
+            "note": "Live Ir feed with an Adams-fusion precursor markup; ~40 mol% Ir composition is source-quoted."
+          }
+        },
+        {
+          "role": "support",
+          "name": "TiO2",
+          "wt_pct": 60.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.4515,
+            "evidence_label": "USGS TiO2 pigment import index",
+            "evidence_tier": "public_index",
+            "confidence_score": 72,
+            "transparency": "public_index",
+            "note": "2025e landed duty-paid unit value of U.S. TiO2 pigment imports, $3,200/t (USGS MCS Feb 2026)."
+          }
+        }
+      ],
+      "electrode_defaults": {
+        "application_family": "electrolyzer",
+        "catalyst_material_key": "fcs:xt-iridium-oxide-s",
+        "ionomer_material_key": "fcs:pfsa-d5",
+        "membrane_material_key": "fcs:pfsa-d50r",
+        "substrate_material_key": "fcs:ti-ptl-ultrathin",
+        "active_area_cm2": 25,
+        "catalyst_loading_mg_cm2": 1.5,
+        "ionomer_to_catalyst_ratio": 0.25
+      }
     }
   ]
 }

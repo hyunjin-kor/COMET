@@ -1,0 +1,407 @@
+{
+  "family": "co-prox",
+  "title": "Preferential CO oxidation (PROX) reference family",
+  "catalyst_domain": "thermal",
+  "application_family": "general",
+  "reaction": "CO + 1/2 O2 -> CO2 (in excess H2)",
+  "objective": "Optional literature-backed reference family for sanity-checking catalyst economics for preferential CO oxidation, the reformate clean-up step that protects PEM fuel-cell anodes. COMET itself remains reaction-agnostic and this family is a screening aid, not a process design.",
+  "decision_profiles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Balance economics, source confidence, route confidence, and performance.",
+      "weights": {
+        "economics": 0.45,
+        "evidence": 0.2,
+        "route": 0.2,
+        "performance": 0.15
+      }
+    },
+    "cost-first": {
+      "label": "Cost-first",
+      "description": "Bias ranking toward selling cost while keeping route and evidence guardrails.",
+      "weights": {
+        "economics": 0.6,
+        "evidence": 0.15,
+        "route": 0.15,
+        "performance": 0.1
+      }
+    },
+    "evidence-first": {
+      "label": "Evidence-first",
+      "description": "Reward transparent, higher-confidence pricing and more reproducible routes.",
+      "weights": {
+        "economics": 0.35,
+        "evidence": 0.35,
+        "route": 0.15,
+        "performance": 0.15
+      }
+    }
+  },
+  "citations": [
+    {
+      "id": "prox-pgm-review-acscatal-2012",
+      "label": "ACS Catal. 2012",
+      "url": "https://doi.org/10.1021/cs200418w",
+      "kind": "literature",
+      "note": "Review of preferential CO oxidation over platinum-group-metal catalysts."
+    },
+    {
+      "id": "co-removal-review-cattod-2009",
+      "label": "Catal. Today 2009",
+      "url": "https://doi.org/10.1016/j.cattod.2008.06.027",
+      "kind": "literature",
+      "note": "Park's review of selective CO removal from hydrogen-rich streams."
+    },
+    {
+      "id": "kahlich-pt-jcat-1997",
+      "label": "J. Catal. 1997",
+      "url": "https://doi.org/10.1006/jcat.1997.1781",
+      "kind": "literature",
+      "note": "Benchmark Pt/Al2O3 PROX kinetics: ~80% CO conversion near 200 C, Ea 71 kJ/mol, orders -0.4 in CO and +0.8 in O2."
+    },
+    {
+      "id": "fe-pt-monolith-cattod-2000",
+      "label": "Catal. Today 2000",
+      "url": "https://doi.org/10.1016/s0920-5861(00)00426-0",
+      "kind": "literature",
+      "note": "Fe-oxide-promoted Pt monolith for fuel-cell PROX: 68% CO conversion at 90 C vs 13% unpromoted."
+    },
+    {
+      "id": "fe-pt-structure-apcata-2002",
+      "label": "Appl. Catal. A 2002",
+      "url": "https://doi.org/10.1016/s0926-860x(01)00915-2",
+      "kind": "literature",
+      "note": "Structural study of the Fe-oxide-promoted Pt/alumina PROX catalyst."
+    },
+    {
+      "id": "oh-sinkevitch-jcat-1993",
+      "label": "J. Catal. 1993",
+      "url": "https://doi.org/10.1006/jcat.1993.1205",
+      "kind": "literature",
+      "note": "Oh and Sinkevitch's original selective-CO-oxidation screening for fuel-cell feeds."
+    },
+    {
+      "id": "haruta-jcat-1993",
+      "label": "J. Catal. 1993",
+      "url": "https://doi.org/10.1006/jcat.1993.1322",
+      "kind": "literature",
+      "note": "Haruta's foundational size/support rules for low-temperature CO oxidation on sub-4-nm gold."
+    },
+    {
+      "id": "schubert-catl-2001",
+      "label": "Catal. Lett. 2001",
+      "url": "https://doi.org/10.1023/a:1012365710979",
+      "kind": "literature",
+      "note": "PROX-specific screening of Au on seven supports at 80 C: reducible-oxide supports up to 10x more active; carbonate deactivation identified."
+    },
+    {
+      "id": "kahlich-au-jcat-1999",
+      "label": "J. Catal. 1999",
+      "url": "https://doi.org/10.1006/jcat.1998.2333",
+      "kind": "literature",
+      "note": "Au/alpha-Fe2O3 PROX kinetics at 40-100 C: ~75% selectivity at 80 C, Ea 31 kJ/mol."
+    },
+    {
+      "id": "haruta-chemlett-1987",
+      "label": "Chem. Lett. 1987",
+      "url": "https://doi.org/10.1246/cl.1987.405",
+      "kind": "literature",
+      "note": "The original far-below-0-C gold CO-oxidation communication."
+    },
+    {
+      "id": "avgouropoulos-catl-2001",
+      "label": "Catal. Lett. 2001",
+      "url": "https://doi.org/10.1023/a:1009013029842",
+      "kind": "literature",
+      "note": "Coprecipitated CuO-CeO2 PROX: very active, exceptionally selective, resistant to CO2 and H2O."
+    },
+    {
+      "id": "prox-comparison-cattod-2002",
+      "label": "Catal. Today 2002",
+      "url": "https://doi.org/10.1016/s0920-5861(02)00058-5",
+      "kind": "literature",
+      "note": "Head-to-head Pt vs Au vs CuO-CeO2 comparison under realistic reformate feeds."
+    },
+    {
+      "id": "combustion-cuoceo2-apcata-2003",
+      "label": "Appl. Catal. A 2003",
+      "url": "https://doi.org/10.1016/s0926-860x(02)00558-6",
+      "kind": "literature",
+      "note": "Urea-nitrate combustion synthesis of CuO-CeO2 with copper-content optimization."
+    }
+  ],
+  "catalog_quotes": [],
+  "route_templates": [
+    {
+      "id": "pt-fe-washcoat-monolith",
+      "name": "Pt-Fe impregnation with monolith washcoating",
+      "manufacturing_mode": "Washcoated cordierite honeycomb for fuel processors",
+      "preprocess": [
+        "Gamma-alumina washcoat slurry preparation",
+        "Pt and Fe salt solution make-up"
+      ],
+      "synthesis": [
+        "Impregnation of the alumina with Pt then Fe promoter"
+      ],
+      "postprocess": [
+        "Washcoating onto the honeycomb",
+        "Drying and calcination",
+        "Reduction in H2 before service"
+      ],
+      "quality_gates": [
+        "Pt loading confirmation",
+        "Low-temperature CO light-off spot test",
+        "Washcoat adhesion"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "dryer_rotary_40_100C",
+        "kiln_batch",
+        "reactor_simple"
+      ],
+      "non_step_cost_per_lb": 0.7,
+      "route_confidence": 84,
+      "route_note": "Deployed washcoated on ceramic honeycombs in commercial fuel processors per the cited monolith study. Small-scale step availability: continuous units swapped for their batch/small siblings."
+    },
+    {
+      "id": "au-deposition-precipitation",
+      "name": "Chloride-free gold deposition-precipitation",
+      "manufacturing_mode": "Powder or washcoat, strict size control",
+      "preprocess": [
+        "Support slurry preparation (TiO2, CeO2 or Fe2O3)",
+        "HAuCl4 solution make-up with pH control"
+      ],
+      "synthesis": [
+        "Deposition-precipitation of gold at controlled pH",
+        "Chloride-free washing"
+      ],
+      "postprocess": [
+        "Drying",
+        "Air calcination fixing sub-4-nm hemispherical Au"
+      ],
+      "quality_gates": [
+        "Au particle size below 4 nm",
+        "Residual chloride check",
+        "Carbonate-deactivation watch in QC protocol"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "reactor_multistep",
+        "filter_plate_frame",
+        "dryer_rotary_40_100C",
+        "kiln_batch"
+      ],
+      "non_step_cost_per_lb": 0.8,
+      "route_confidence": 70,
+      "route_note": "Chloride-free deposition-precipitation and sub-4-nm size control are the documented make-or-break constraints for nanogold. Small-scale step availability: continuous units swapped for their batch/small siblings."
+    },
+    {
+      "id": "cuo-ceo2-combustion",
+      "name": "Urea-nitrate combustion of CuO-CeO2",
+      "manufacturing_mode": "Nanocrystalline powder, formed after synthesis",
+      "preprocess": [
+        "Copper and cerium nitrate solution make-up",
+        "Urea dosing to the target fuel ratio"
+      ],
+      "synthesis": [
+        "Urea-nitrate combustion to nanocrystalline mixed oxide"
+      ],
+      "postprocess": [
+        "Milling and sieving",
+        "Calcination trim",
+        "Forming"
+      ],
+      "quality_gates": [
+        "Cu content confirmation",
+        "CO2/H2O tolerance spot test",
+        "Surface-area check"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "kiln_batch",
+        "mill",
+        "dryer_rotary_100_300C"
+      ],
+      "non_step_cost_per_lb": 0.4,
+      "route_confidence": 76,
+      "route_note": "Combustion synthesis is documented as simple and fast to a nanocrystalline product; the direct-fired kiln proxies the combustion/ignition stage. Small-scale step availability: continuous units swapped for their batch/small siblings."
+    }
+  ],
+  "candidates": [
+    {
+      "slug": "pt-fe-alumina",
+      "title": "Fe-promoted Pt/Al2O3 (fuel-processor standard)",
+      "archetype": "PGM commercial baseline",
+      "screening_basis": "engineering_proxy",
+      "summary": "0.5 wt% Pt on alumina with an iron-oxide promoter, washcoated on honeycombs: the deployed fuel-processor PROX catalyst, with Fe promotion pulling operation from ~200 C down to 90 C.",
+      "route_template_id": "pt-fe-washcoat-monolith",
+      "order_size_tons": 2,
+      "performance_index": 80,
+      "manufacturing_readiness": 92,
+      "screening_exactness": 78,
+      "temperature_window_c": [
+        90,
+        250
+      ],
+      "literature_basis_ids": [
+        "kahlich-pt-jcat-1997",
+        "fe-pt-monolith-cattod-2000",
+        "fe-pt-structure-apcata-2002",
+        "oh-sinkevitch-jcat-1993",
+        "prox-pgm-review-acscatal-2012"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "The de-risked choice with the deepest kinetics record; platinum inventory is the cost driver at sub-percent loadings.",
+        "Fe promoter screened at 0.5 wt%: the promotion effect is source-quoted, its exact loading is not."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Pt",
+          "wt_pct": 0.5,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Pt",
+            "precursor_markup": 1.15,
+            "note": "Live Pt feed with a precursor conversion markup; 0.5 wt% loading is source-quoted for the benchmark kinetics catalyst."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "Fe",
+          "wt_pct": 0.5,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Fe",
+            "precursor_markup": 1.3,
+            "note": "Iron-oxide promoter on a contained-metal basis; loading is a screening assumption."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Al2O3",
+          "wt_pct": 99.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.2676,
+            "evidence_label": "USGS industrial alumina proxy",
+            "evidence_tier": "public_index",
+            "confidence_score": 72,
+            "transparency": "public_index",
+            "note": "2025 USGS alumina import value used as a bulk oxide support proxy."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "au-tio2-nanogold",
+      "title": "Au/TiO2 nanogold (low-temperature)",
+      "archetype": "Low-temperature nanogold",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Sub-4-nm gold on titania from chloride-free deposition-precipitation runs PROX below 100 C - the Haruta-lineage low-temperature option, bought with strict size control and carbonate-deactivation management.",
+      "route_template_id": "au-deposition-precipitation",
+      "order_size_tons": 2,
+      "performance_index": 84,
+      "manufacturing_readiness": 68,
+      "screening_exactness": 70,
+      "temperature_window_c": [
+        20,
+        100
+      ],
+      "literature_basis_ids": [
+        "haruta-jcat-1993",
+        "schubert-catl-2001",
+        "kahlich-au-jcat-1999",
+        "haruta-chemlett-1987",
+        "co-removal-review-cattod-2009"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Wins when the reformate train needs sub-100-C operation; loses on manufacturing tolerance (size control) and long-term carbonate deactivation.",
+        "Au loading screened at 2 wt%: class-typical (1-5 wt%), not stated in the fetched abstracts."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Au",
+          "wt_pct": 2.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Au",
+            "precursor_markup": 1.2,
+            "note": "Live Au feed with a markup for the chloroauric-acid route; loading is a class-typical screening assumption."
+          }
+        },
+        {
+          "role": "support",
+          "name": "TiO2",
+          "wt_pct": 98.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.4515,
+            "evidence_label": "USGS TiO2 pigment import index",
+            "evidence_tier": "public_index",
+            "confidence_score": 72,
+            "transparency": "public_index",
+            "note": "2025e landed duty-paid unit value of U.S. TiO2 pigment imports, $3,200/t (USGS MCS Feb 2026)."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "cuo-ceo2",
+      "title": "CuO-CeO2 (base-metal option)",
+      "archetype": "Base-metal cost option",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Coprecipitated or combustion-made copper-ceria: very active and exceptionally selective PROX without any noble metal, tolerant of CO2 and water in realistic reformate.",
+      "route_template_id": "cuo-ceo2-combustion",
+      "order_size_tons": 2,
+      "performance_index": 74,
+      "manufacturing_readiness": 84,
+      "screening_exactness": 72,
+      "temperature_window_c": [
+        100,
+        180
+      ],
+      "literature_basis_ids": [
+        "avgouropoulos-catl-2001",
+        "prox-comparison-cattod-2002",
+        "combustion-cuoceo2-apcata-2003"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "The cost play: both oxides carry public prices and the combustion route is fast; accepts a narrower optimal window than nanogold below 100 C.",
+        "CuO screened at 7 wt%: the optimization exists in the cited full texts, the exact optimum was not abstract-verified."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Cu",
+          "wt_pct": 5.6,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Cu",
+            "precursor_markup": 1.1,
+            "note": "Contained-copper basis of a ~7 wt% CuO loading with a mild precursor markup."
+          }
+        },
+        {
+          "role": "support",
+          "name": "CeO2",
+          "wt_pct": 93.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.7756,
+            "evidence_label": "USGS ceria proxy",
+            "evidence_tier": "public_index",
+            "confidence_score": 74,
+            "transparency": "public_index",
+            "note": "2025 USGS cerium-oxide price used as a bulk support proxy."
+          }
+        }
+      ]
+    }
+  ]
+}

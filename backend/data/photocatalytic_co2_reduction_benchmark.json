@@ -93,6 +93,27 @@
       "url": "https://doi.org/10.1016/j.matt.2022.07.033",
       "kind": "literature",
       "note": "Ozin: accelerated optochemical engineering solutions to CO2 photocatalysis for a sustainable future, framing scale-up paths and reactor architecture."
+    },
+    {
+      "id": "bivo4-ethanol-catcomm-2009",
+      "label": "Catal. Commun. 2009",
+      "url": "https://doi.org/10.1016/j.catcom.2009.10.010",
+      "kind": "literature",
+      "note": "Selective ethanol formation from CO2 over monoclinic BiVO4 in aqueous suspension."
+    },
+    {
+      "id": "bivo4-methanol-catcomm-2012",
+      "label": "Catal. Commun. 2012",
+      "url": "https://doi.org/10.1016/j.catcom.2012.08.008",
+      "kind": "literature",
+      "note": "Selective methanol from CO2 over BiVO4 under visible irradiation."
+    },
+    {
+      "id": "kudo-jacs-1999",
+      "label": "J. Am. Chem. Soc. 1999",
+      "url": "https://doi.org/10.1021/ja992541y",
+      "kind": "literature",
+      "note": "Phase-controlled BiVO4: the monoclinic form with a 2.4 eV gap is the visible-light-active phase."
     }
   ],
   "catalog_quotes": [],
@@ -205,6 +226,36 @@
       "non_step_cost_per_lb": 1.1,
       "route_confidence": 70,
       "route_note": "MOF-derived Cu2O heterojunction route, an emerging high-surface-area option whose route maturity and MOF cost are the main risks. Small-scale step availability: filter_rotary_vacuum swapped for filter_plate_frame; kiln_continuous_indirect swapped for kiln_batch."
+    },
+    {
+      "id": "aqueous-precip-photocat",
+      "name": "Aqueous precipitation of phase-controlled BiVO4",
+      "manufacturing_mode": "Powder photocatalyst",
+      "preprocess": [
+        "Bismuth nitrate and vanadate solution make-up at the phase-setting V:Bi ratio"
+      ],
+      "synthesis": [
+        "Room-temperature aqueous reaction / coprecipitation to monoclinic BiVO4"
+      ],
+      "postprocess": [
+        "Plate-and-frame filtration and washing",
+        "Drying",
+        "Mild calcination trim"
+      ],
+      "quality_gates": [
+        "Monoclinic-phase confirmation (XRD)",
+        "Band-gap check (~2.4 eV)",
+        "Visible-light activity spot test"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "filter_plate_frame",
+        "dryer_rotary_40_100C",
+        "kiln_batch"
+      ],
+      "non_step_cost_per_lb": 0.35,
+      "route_confidence": 80,
+      "route_note": "A benign aqueous route; phase control is a composition knob (V:Bi ratio), not an exotic process step."
     }
   ],
   "candidates": [
@@ -354,6 +405,48 @@
             "confidence_score": 56,
             "transparency": "derived_proxy",
             "note": "MOF host cost held on a derived screening proxy reflecting linker / metal-cluster synthesis overhead."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "bivo4-visible",
+      "title": "Monoclinic BiVO4 (visible-light oxide)",
+      "archetype": "Cheap-element visible absorber",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Single-phase monoclinic bismuth vanadate absorbs visible light at a 2.4 eV gap and reduces CO2 to methanol or ethanol in plain water suspensions - a one-compound, benign-synthesis alternative to the composite systems.",
+      "route_template_id": "aqueous-precip-photocat",
+      "order_size_tons": 2,
+      "performance_index": 68,
+      "manufacturing_readiness": 80,
+      "screening_exactness": 70,
+      "temperature_window_c": [
+        20,
+        60
+      ],
+      "literature_basis_ids": [
+        "bivo4-ethanol-catcomm-2009",
+        "bivo4-methanol-catcomm-2012",
+        "kudo-jacs-1999"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "The visible-light single-oxide option beside UV-only titania and two heterojunction builds.",
+        "Priced on the contained-metal floor of its two elements, both public-quoted."
+      ],
+      "components": [
+        {
+          "role": "active_catalyst",
+          "name": "BiVO4",
+          "wt_pct": 100.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 14.43,
+            "evidence_label": "USGS-derived BiVO4 contained-metal floor",
+            "evidence_tier": "public_index",
+            "confidence_score": 66,
+            "transparency": "derived_index",
+            "note": "Contained-metal floor: 0.645 Bi mass fraction x USGS bismuth $20/lb + 0.157 V mass fraction x V basis $9.73/lb (from USGS V2O5 $5.45/lb at 56% V) = $14.43/lb; synthesis conversion cost not included."
           }
         }
       ]

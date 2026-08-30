@@ -86,6 +86,27 @@
       "url": "https://doi.org/10.1016/j.chempr.2018.11.020",
       "kind": "literature",
       "note": "Wang, Xia et al.: Fischer-Tropsch synthesis steps into the solar era, demonstrating syngas-to-lower-olefin conversion under photothermal conditions."
+    },
+    {
+      "id": "bukur-iecr-1990",
+      "label": "Ind. Eng. Chem. Res. 1990",
+      "url": "https://doi.org/10.1021/ie00098a008",
+      "kind": "literature",
+      "note": "Bukur's systematic K/Cu promoter study on precipitated iron: both raise FT and WGS activity, potassium shifts selectivity to heavier products."
+    },
+    {
+      "id": "dry-cattod-2002",
+      "label": "Catal. Today 2002",
+      "url": "https://doi.org/10.1016/s0920-5861(01)00453-9",
+      "kind": "literature",
+      "note": "Dry's account of the Fischer-Tropsch process 1950-2000, documenting industrial precipitated-iron practice."
+    },
+    {
+      "id": "desmit-csr-2008",
+      "label": "Chem. Soc. Rev. 2008",
+      "url": "https://doi.org/10.1039/b805427d",
+      "kind": "literature",
+      "note": "Iron-FT phase behavior and deactivation chemistry review."
     }
   ],
   "catalog_quotes": [],
@@ -203,6 +224,42 @@
       "non_step_cost_per_lb": 0.96,
       "route_confidence": 76,
       "route_note": "Cobalt on CNT support; structured carbon increases Co dispersion at the cost of CNT support overhead."
+    },
+    {
+      "id": "fe-precipitation-fts",
+      "name": "Continuous iron precipitation with K/Cu promotion",
+      "manufacturing_mode": "Precipitated bulk catalyst for slurry or fixed-bed FT",
+      "preprocess": [
+        "Iron and copper nitrate solution make-up",
+        "Precipitant dosing"
+      ],
+      "synthesis": [
+        "Continuous co-precipitation of the iron (hydr)oxide",
+        "Aging"
+      ],
+      "postprocess": [
+        "Vacuum filtration and nitrate-free washing",
+        "Potassium carbonate impregnation",
+        "Drying and calcination",
+        "Activation in CO or syngas"
+      ],
+      "quality_gates": [
+        "K and Cu dose confirmation",
+        "Phase check after activation",
+        "Alpha-value spot test"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "reactor_multistep",
+        "filter_rotary_vacuum",
+        "incipient_wetness",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "reactor_simple"
+      ],
+      "non_step_cost_per_lb": 0.5,
+      "route_confidence": 90,
+      "route_note": "The Sasol-lineage industrial chain; the cheapest FT catalyst class per pound of metal."
     }
   ],
   "candidates": [
@@ -387,6 +444,84 @@
             "confidence_score": 58,
             "transparency": "derived_proxy",
             "note": "Multi-walled CNT support cost held on engineering proxy reflecting structured-carbon premium."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "fe-cu-k-precipitated",
+      "title": "Precipitated Fe-Cu-K (Sasol-class)",
+      "archetype": "Industrial bulk-iron baseline",
+      "screening_basis": "engineering_proxy",
+      "summary": "The classic precipitated-iron FT catalyst with copper for reducibility and potassium for chain growth - the cheapest, most industrially proven formulation in the family.",
+      "route_template_id": "fe-precipitation-fts",
+      "order_size_tons": 20,
+      "performance_index": 76,
+      "manufacturing_readiness": 96,
+      "screening_exactness": 80,
+      "temperature_window_c": [
+        235,
+        265
+      ],
+      "literature_basis_ids": [
+        "bukur-iecr-1990",
+        "dry-cattod-2002",
+        "desmit-csr-2008"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "The bulk-iron economics anchor beside two supported-cobalt systems and a model iron catalyst.",
+        "Promoter levels follow Bukur's parts-per-100-Fe convention translated to a mass basis for the screen."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Fe",
+          "wt_pct": 88.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Fe",
+            "precursor_markup": 1.0,
+            "note": "Bulk precipitated iron on a contained-metal basis; iron-salt feed trades below refined iron, so parity is conservative."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "Cu",
+          "wt_pct": 3.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Cu",
+            "precursor_markup": 1.1,
+            "note": "Reduction promoter at the classic parts-per-100-Fe level."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "K2O",
+          "wt_pct": 4.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.2722,
+            "evidence_label": "USGS potash MOP, K2O-equivalent basis",
+            "evidence_tier": "public_index",
+            "confidence_score": 70,
+            "transparency": "public_index",
+            "note": "2025e f.o.b. mine muriate-of-potash price, $600/t of K2O equivalent (USGS MCS Feb 2026)."
+          }
+        },
+        {
+          "role": "support",
+          "name": "SiO2",
+          "wt_pct": 5.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.1,
+            "evidence_label": "SiO2 binder proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 57,
+            "transparency": "derived_index",
+            "note": "Precipitated-silica binder term held on the family-standard engineering proxy; USGS industrial sand is not grade-representative."
           }
         }
       ]
