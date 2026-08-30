@@ -93,6 +93,27 @@
       "url": "https://doi.org/10.1038/s41929-019-0242-6",
       "kind": "literature",
       "note": "Hisatomi and Domen: reaction systems for solar hydrogen production via water splitting with particulate semiconductor photocatalysts, framing scale-up paths and operating constraints."
+    },
+    {
+      "id": "srtio3-nature-2020",
+      "label": "Nature 2020",
+      "url": "https://doi.org/10.1038/s41586-020-2278-9",
+      "kind": "literature",
+      "note": "Al-doped SrTiO3 with facet-selective Rh/Cr2O3 and CoOOH cocatalysts splits water at up to 96% external quantum efficiency at 350-360 nm."
+    },
+    {
+      "id": "panel-joule-2018",
+      "label": "Joule 2018",
+      "url": "https://doi.org/10.1016/j.joule.2017.12.009",
+      "kind": "literature",
+      "note": "Panel-scale particulate water-splitting reactors demonstrated."
+    },
+    {
+      "id": "flux-al-jmca-2016",
+      "label": "J. Mater. Chem. A 2016",
+      "url": "https://doi.org/10.1039/C5TA04843E",
+      "kind": "literature",
+      "note": "Flux-mediated aluminum doping of SrTiO3 in molten SrCl2."
     }
   ],
   "catalog_quotes": [],
@@ -202,6 +223,38 @@
       "non_step_cost_per_lb": 0.74,
       "route_confidence": 82,
       "route_note": "Pt cocatalyst on TiO2 route, established way to boost H2 evolution rate over the bare-oxide baseline at the cost of precious-metal exposure. Small-scale step availability: filter_rotary_vacuum swapped for filter_plate_frame; kiln_continuous_indirect swapped for kiln_batch."
+    },
+    {
+      "id": "flux-photodeposition",
+      "name": "Flux doping with dual cocatalyst photodeposition",
+      "manufacturing_mode": "Powder photocatalyst for immobilized panels",
+      "preprocess": [
+        "SrTiO3 and aluminum-source batching with SrCl2 flux"
+      ],
+      "synthesis": [
+        "Molten-flux treatment doping Al into SrTiO3",
+        "Flux wash-out"
+      ],
+      "postprocess": [
+        "Photodeposition of Rh then the Cr2O3 shell",
+        "Photodeposition of CoOOH",
+        "Drying and panel formulation"
+      ],
+      "quality_gates": [
+        "Al-doping confirmation",
+        "Cocatalyst placement check",
+        "Quantum-efficiency spot test"
+      ],
+      "steps": [
+        "mixer_dry_blender",
+        "kiln_batch",
+        "filter_plate_frame",
+        "mixer_slurry",
+        "dryer_rotary_40_100C"
+      ],
+      "non_step_cost_per_lb": 0.9,
+      "route_confidence": 64,
+      "route_note": "The molten-SrCl2 flux stage is proxied by the batch kiln and the photodeposition baths by the slurry mixer; both proxies understate the dedicated equipment."
     }
   ],
   "candidates": [
@@ -338,6 +391,70 @@
             "confidence_score": 66,
             "transparency": "derived_proxy",
             "note": "Anatase TiO2 base powder cost held on an engineering proxy comparable to the bare TiO2 baseline. USGS MCS 2026 TiO2 pigment import index (2025e $3,200/t, ~$1.45/lb) is the public pigment-grade floor; photocatalytic anatase grades trade above it."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "srtio3-al-qe-benchmark",
+      "title": "SrTiO3:Al with Rh/Cr2O3 + CoOOH",
+      "archetype": "Quantum-efficiency benchmark",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "The field's efficiency reference: aluminum-doped strontium titanate with facet-placed cocatalysts reaching near-unity internal quantum efficiency for overall water splitting.",
+      "route_template_id": "flux-photodeposition",
+      "order_size_tons": 2,
+      "performance_index": 96,
+      "manufacturing_readiness": 52,
+      "screening_exactness": 72,
+      "temperature_window_c": [
+        20,
+        60
+      ],
+      "literature_basis_ids": [
+        "srtio3-nature-2020",
+        "panel-joule-2018",
+        "flux-al-jmca-2016"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Screens what the QE ceiling costs: a rhodium term at one weight percent dominates an otherwise commodity oxide.",
+        "UV-only absorption is the documented limitation - efficiency, not solar coverage, is what this candidate benchmarks."
+      ],
+      "components": [
+        {
+          "role": "active_catalyst",
+          "name": "SrTiO3:Al",
+          "wt_pct": 98.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 2.0,
+            "evidence_label": "Strontium titanate proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 55,
+            "transparency": "derived_index",
+            "note": "SrTiO3 proxy informed by the USGS TiO2 pigment index ($1.45/lb) and commodity strontium carbonate; flux-processing premium retained. No public SrTiO3 quote was verified."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "Rh",
+          "wt_pct": 1.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Rh",
+            "precursor_markup": 1.3,
+            "note": "Rh/Cr2O3 core-shell cocatalyst term on a contained-Rh basis; photodeposition precursor markup applied."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "Co",
+          "wt_pct": 1.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Co",
+            "precursor_markup": 1.2,
+            "note": "CoOOH oxygen-evolution cocatalyst on a contained-Co basis."
           }
         }
       ]

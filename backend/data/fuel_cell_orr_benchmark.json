@@ -135,6 +135,27 @@
       "url": "https://www.sigmaaldrich.com/US/en/product/sigald/239267",
       "kind": "catalog",
       "note": "Public cobalt nitrate quote used as a transparent precursor anchor for Pt-Co route screening."
+    },
+    {
+      "id": "ptni-octahedra-nl-2013",
+      "label": "Nano Letters 2013",
+      "url": "https://doi.org/10.1021/nl401881z",
+      "kind": "literature",
+      "note": "9 nm Pt-Ni octahedra with clean {111} facets: record 3.3 A/mgPt mass activity at 0.9 V."
+    },
+    {
+      "id": "ptni-nanoframes-science-2014",
+      "label": "Science 2014",
+      "url": "https://doi.org/10.1126/science.1249061",
+      "kind": "literature",
+      "note": "Pt3Ni nanoframes with Pt-skin surfaces: 36x mass activity over commercial Pt/C."
+    },
+    {
+      "id": "pt3ni-surface-science-2007",
+      "label": "Science 2007",
+      "url": "https://doi.org/10.1126/science.1135941",
+      "kind": "literature",
+      "note": "The Pt3Ni(111) surface origin of the ORR activity gain."
     }
   ],
   "catalog_quotes": [
@@ -460,6 +481,70 @@
             "confidence_score": 66,
             "transparency": "derived_index",
             "note": "Carbon host and nitrogen-source costs are grouped into a conservative proxy while the route premium captures pyrolysis and acid-wash overhead. Bracketed by public references: UN Comtrade 2024 U.S. carbon-black import unit value ~$1.88/kg (~$0.85/lb rubber grade) and Fuel Cell Store Vulcan XC-72R lab retail ~$950/kg. Bulk conductive/acetylene battery grades cluster at $5,000-7,000/t in marketplace offers (MOQ 1-2 t), the tier between rubber grade and lab retail."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "ptni-octahedra",
+      "title": "PtNi octahedra (mass-activity ceiling)",
+      "archetype": "Shape-controlled alloy bound",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Shape-controlled platinum-nickel octahedra put the family's platinum-thrifting ceiling on record at 3.3 A/mgPt - an order of magnitude over Pt/C - bought with solvothermal synthesis discipline.",
+      "route_template_id": "pem-ptco-alloy-ccm",
+      "order_size_tons": 20,
+      "performance_index": 95,
+      "manufacturing_readiness": 55,
+      "screening_exactness": 74,
+      "temperature_window_c": [
+        60,
+        90
+      ],
+      "literature_basis_ids": [
+        "ptni-octahedra-nl-2013",
+        "ptni-nanoframes-science-2014",
+        "pt3ni-surface-science-2007"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Screens the upper bound of Pt-mass reduction between the Pt/C baseline, the PtCo intermetallic and the PGM-free entry.",
+        "Solvothermal shape control (W(CO)6-steered growth, surfactant stripping) is the readiness discount; the material bill itself is ordinary."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Pt",
+          "wt_pct": 70.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Pt",
+            "precursor_markup": 1.35,
+            "note": "Live Pt feed with an elevated markup for the solvothermal shape-controlled route."
+          }
+        },
+        {
+          "role": "active_metal",
+          "name": "Ni",
+          "wt_pct": 10.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ni",
+            "precursor_markup": 1.2,
+            "note": "Alloying nickel on a contained-metal basis."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Carbon",
+          "wt_pct": 20.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.6,
+            "evidence_label": "Conductive carbon screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 57,
+            "transparency": "derived_index",
+            "note": "Carbon-black dispersal support for the shaped alloy particles. Bracketed by UN Comtrade rubber-grade carbon black (~$0.85/lb), conductive/acetylene bulk offers ($5,000-7,000/t) and lab retail (~$950/kg)."
           }
         }
       ]

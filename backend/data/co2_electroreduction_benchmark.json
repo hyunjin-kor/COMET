@@ -121,6 +121,20 @@
       "url": "https://doi.org/10.1126/science.aay4217",
       "kind": "literature",
       "note": "Garcia de Arquer, Dinh et al.: CO2 electrolysis to multicarbon products at activities greater than 1 A/cm2, demonstrating gas-diffusion-electrode operation at industrial currents."
+    },
+    {
+      "id": "ag-sustainion-entech-2017",
+      "label": "Energy Technology 2017",
+      "url": "https://doi.org/10.1002/ente.201600636",
+      "kind": "literature",
+      "note": "Silver cathode with an imidazolium (Sustainion) membrane: ~95% CO selectivity, >100 mA/cm2 at 3 V, six months of continuous operation."
+    },
+    {
+      "id": "ag-products-pccp-2014",
+      "label": "Phys. Chem. Chem. Phys. 2014",
+      "url": "https://doi.org/10.1039/c4cp00692e",
+      "kind": "literature",
+      "note": "Potential-dependent CO2-reduction product spectrum on metallic silver."
     }
   ],
   "catalog_quotes": [],
@@ -393,6 +407,44 @@
             "confidence_score": 74,
             "transparency": "public_index",
             "note": "Annual average LME cash tin price 2024, $14.0/lb (USGS MCS 2025). Replaces a live-feed reference to a symbol the price service does not carry. Former live-feed precursor markup (1.10) folded out; the public quote stands alone."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "ag-co-mea",
+      "title": "Ag CO-selective MEA cathode",
+      "archetype": "Industrial CO route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Silver gas-diffusion cathodes in imidazolium-membrane MEAs hold ~95% CO selectivity for months at industrially relevant current - the scale-up metal of record for CO, between costly gold and multicarbon copper.",
+      "route_template_id": "au-co-co2rr-route",
+      "order_size_tons": 20,
+      "performance_index": 86,
+      "manufacturing_readiness": 84,
+      "screening_exactness": 78,
+      "temperature_window_c": [
+        20,
+        60
+      ],
+      "literature_basis_ids": [
+        "ag-sustainion-entech-2017",
+        "ag-products-pccp-2014"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "The demonstrated-durability CO option: silver at roughly one-eightieth of gold's price with six-month continuous operation on record.",
+        "The Sustainion membrane term is part of the electrode stack, priced by the calculator's membrane row rather than this component list."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Ag",
+          "wt_pct": 100.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ag",
+            "precursor_markup": 1.2,
+            "note": "Silver nanopowder cathode on a contained-metal basis with an ink-route markup."
           }
         }
       ]

@@ -1475,6 +1475,10 @@ class TestDecision:
         assert "pem-electrolyzer-oer" in families
         assert "methane-pyrolysis" in families
         assert "ammonia-synthesis" in families
+        assert "steam-methane-reforming" in families
+        assert "nh3-scr" in families
+        assert "co-prox" in families
+        assert "syngas-methanol" in families
         assert all("catalyst_domain" in item for item in data["families"])
 
     def test_get_unknown_benchmark_family_returns_clean_404_detail(self, client):
@@ -1532,7 +1536,7 @@ class TestDecision:
         404 when that family was opened.
         """
         families = [item["family"] for item in client.get("/api/decision/benchmarks").json()["families"]]
-        assert len(families) >= 26
+        assert len(families) >= 30
         for family in families:
             resp = client.get(f"/api/decision/benchmarks/{family}")
             assert resp.status_code == 200, f"{family} failed to evaluate"

@@ -86,6 +86,27 @@
       "url": "https://doi.org/10.1038/s41929-018-0125-2",
       "kind": "literature",
       "note": "Arora, Nieskens et al.: lifetime improvement in MTO catalysis over chabazite materials by high-pressure H2 co-feeds, establishing co-feed as a deactivation-mitigation lever."
+    },
+    {
+      "id": "nano-sapo-jpcc-2013",
+      "label": "J. Phys. Chem. C 2013",
+      "url": "https://doi.org/10.1021/jp312857p",
+      "kind": "literature",
+      "note": "SAPO-34 crystal-size series from 8 um to nanosheets: the 20 nm crystals give the longest MTO lifetime and lowest coking rate."
+    },
+    {
+      "id": "nano-sapo-pccp-2013",
+      "label": "Phys. Chem. Chem. Phys. 2013",
+      "url": "https://doi.org/10.1039/c3cp52247d",
+      "kind": "literature",
+      "note": "Microwave-synthesized 20 nm SAPO-34 outlives conventional hydrothermal SAPO-34; silicon distribution controls selectivity."
+    },
+    {
+      "id": "mto-review-acscatal-2015",
+      "label": "ACS Catal. 2015",
+      "url": "https://doi.org/10.1021/acscatal.5b00007",
+      "kind": "literature",
+      "note": "MTO from fundamentals to commercialization (DMTO fluidized-bed context)."
     }
   ],
   "catalog_quotes": [],
@@ -338,6 +359,48 @@
             "confidence_score": 62,
             "transparency": "public_index",
             "note": "2024 U.S. imports of HS 2842.10 (the synthetic-zeolite trade code): $143.53M / 35.27M kg = $4.07/kg CIF. Code is broader than zeolites alone; bulk marketplace ZSM-5 offers at $4.50-5.50/kg corroborate the level."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "nano-sapo-34",
+      "title": "Nanosized SAPO-34 (lifetime play)",
+      "archetype": "Nano-morphology premium",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Shrinking SAPO-34 crystals to ~20 nm slashes the diffusion path, cutting coking and extending MTO lifetime - the same chabazite chemistry bought with a premium synthesis.",
+      "route_template_id": "sapo-34-mto-route",
+      "order_size_tons": 20,
+      "performance_index": 88,
+      "manufacturing_readiness": 62,
+      "screening_exactness": 70,
+      "temperature_window_c": [
+        400,
+        500
+      ],
+      "literature_basis_ids": [
+        "nano-sapo-jpcc-2013",
+        "nano-sapo-pccp-2013",
+        "mto-review-acscatal-2015"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Benchmarks what nano-morphology is worth against the standard SAPO-34: same material bill, longer life, harder synthesis.",
+        "Operating temperature/WHSV are not stated in the fetched abstracts; the window shown is the standard MTO band."
+      ],
+      "components": [
+        {
+          "role": "active_catalyst",
+          "name": "SAPO-34 chabazite (nano)",
+          "wt_pct": 100.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 8.5,
+            "evidence_label": "SAPO-34 screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 55,
+            "transparency": "derived_proxy",
+            "note": "Same material proxy as the baseline SAPO-34; the nano-synthesis premium is carried in route confidence, not the material price. Public bracket: marketplace SAPO-34 at $5.50/kg and ACS Material lab packs at $1,782/kg."
           }
         }
       ]

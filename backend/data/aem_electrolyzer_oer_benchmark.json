@@ -121,6 +121,20 @@
       "url": "https://doi.org/10.1021/ja502379c",
       "kind": "literature",
       "note": "Trotochaud, Young, Ranney and Boettcher: nickel-iron oxyhydroxide OER electrocatalysts, clarifying the role of intentional and incidental Fe incorporation in alkaline activity."
+    },
+    {
+      "id": "nico2o4-angew-2016",
+      "label": "Angew. Chem. Int. Ed. 2016",
+      "url": "https://doi.org/10.1002/anie.201600525",
+      "kind": "literature",
+      "note": "Hierarchical NiCo2O4 hollow microcuboids for bifunctional overall water splitting: 1.65 V at 10 mA/cm2 in the two-electrode cell."
+    },
+    {
+      "id": "co3o4-size-jpcc-2009",
+      "label": "J. Phys. Chem. C 2009",
+      "url": "https://doi.org/10.1021/jp904022e",
+      "kind": "literature",
+      "note": "Size-dependent Co3O4 nanoparticle OER anodes in 1 M KOH: 328 mV overpotential at 10 mA/cm2 for 5.9 nm particles."
     }
   ],
   "catalog_quotes": [],
@@ -395,6 +409,64 @@
           }
         }
       ]
+    },
+    {
+      "slug": "nico2o4-spinel",
+      "title": "NiCo2O4 spinel anode",
+      "archetype": "Co-spinel PGM-free anode",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Co-precipitated nickel cobaltite spinel: the cobalt-based PGM-free anode axis, running alkaline OER at 1.65 V full-cell for 10 mA/cm2 with commodity-oxide manufacturing.",
+      "route_template_id": "alkaline-nife-ldh-route",
+      "order_size_tons": 20,
+      "performance_index": 74,
+      "manufacturing_readiness": 80,
+      "screening_exactness": 70,
+      "temperature_window_c": [
+        40,
+        80
+      ],
+      "literature_basis_ids": [
+        "nico2o4-angew-2016",
+        "co3o4-size-jpcc-2009"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Adds the cobalt raw-material axis to a family that is otherwise all NiFe - the screen now prices Fe-vs-Co sensitivity directly.",
+        "Rides the family's co-precipitation/calcination route."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Ni",
+          "wt_pct": 24.4,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ni",
+            "precursor_markup": 1.15,
+            "note": "Contained-nickel basis of the NiCo2O4 stoichiometry."
+          }
+        },
+        {
+          "role": "active_metal",
+          "name": "Co",
+          "wt_pct": 49.1,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Co",
+            "precursor_markup": 1.15,
+            "note": "Contained-cobalt basis of the NiCo2O4 stoichiometry; the cost-dominant term."
+          }
+        }
+      ],
+      "electrode_defaults": {
+        "application_family": "electrolyzer",
+        "ionomer_material_key": "fcs:sustainion-xa9-25ml",
+        "membrane_material_key": "fcs:sustainion-x37-50-rt",
+        "substrate_material_key": "fcs:nickel-fiber-felt",
+        "active_area_cm2": 25,
+        "catalyst_loading_mg_cm2": 2.0,
+        "ionomer_to_catalyst_ratio": 0.15
+      }
     }
   ]
 }

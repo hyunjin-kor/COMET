@@ -1,0 +1,222 @@
+{
+  "family": "syngas-methanol",
+  "title": "Syngas-to-methanol reference family",
+  "catalyst_domain": "thermal",
+  "application_family": "general",
+  "reaction": "CO + 2 H2 -> CH3OH (with CO2 + 3 H2 -> CH3OH + H2O)",
+  "objective": "Optional literature-backed reference family for sanity-checking catalyst economics for industrial methanol synthesis from CO/CO2/H2 syngas, distinct from the pure-CO2 feed family. COMET itself remains reaction-agnostic and this family is a screening aid, not a process design.",
+  "decision_profiles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Balance economics, source confidence, route confidence, and performance.",
+      "weights": {"economics": 0.45, "evidence": 0.2, "route": 0.2, "performance": 0.15}
+    },
+    "cost-first": {
+      "label": "Cost-first",
+      "description": "Bias ranking toward selling cost while keeping route and evidence guardrails.",
+      "weights": {"economics": 0.6, "evidence": 0.15, "route": 0.15, "performance": 0.1}
+    },
+    "evidence-first": {
+      "label": "Evidence-first",
+      "description": "Reward transparent, higher-confidence pricing and more reproducible routes.",
+      "weights": {"economics": 0.35, "evidence": 0.35, "route": 0.15, "performance": 0.15}
+    }
+  },
+  "citations": [
+    {"id": "chinchen-applcatal-1988", "label": "Applied Catalysis 1988", "url": "https://doi.org/10.1016/s0166-9834(00)80103-7", "kind": "literature", "note": "The ICI industrial-practice review consolidating methanol-synthesis kinetics and mechanism over Cu/ZnO/Al2O3."},
+    {"id": "baltes-jcat-2008", "label": "J. Catal. 2008", "url": "https://doi.org/10.1016/j.jcat.2008.07.004", "kind": "literature", "note": "Coprecipitation pH/temperature-to-activity map for Cu/ZnO/Al2O3 under commercial-like CO/CO2/H2 testing."},
+    {"id": "behrens-science-2012", "label": "Science 2012", "url": "https://doi.org/10.1126/science.1219831", "kind": "literature", "note": "The active site of the industrial catalyst: Zn-decorated Cu steps with bulk defects."},
+    {"id": "bozzano-pecs-2016", "label": "Prog. Energy Combust. Sci. 2016", "url": "https://doi.org/10.1016/j.pecs.2016.06.001", "kind": "literature", "note": "Process and technology review of industrial methanol synthesis."},
+    {"id": "sehested-jcat-2019", "label": "J. Catal. 2019", "url": "https://doi.org/10.1016/j.jcat.2019.02.002", "kind": "literature", "note": "Industrial catalyst-development directions for methanol synthesis."},
+    {"id": "hansen-hetcat-2008", "label": "Handbook of Heterogeneous Catalysis 2008", "url": "https://doi.org/10.1002/9783527610044.hetcat0148", "kind": "literature", "note": "Hansen and Hojlund Nielsen's methanol-synthesis chapter, the standard industrial reference."},
+    {"id": "ota-jcat-2012", "label": "J. Catal. 2012", "url": "https://doi.org/10.1016/j.jcat.2012.05.020", "kind": "literature", "note": "Hydrotalcite-derived Pd2Ga and PdZn intermetallic methanol-synthesis catalysts."},
+    {"id": "bahruji-jcat-2016", "label": "J. Catal. 2016", "url": "https://doi.org/10.1016/j.jcat.2016.03.017", "kind": "literature", "note": "1-5 wt% Pd/ZnO: PdZn alloy suppresses reverse water-gas shift, 60% methanol selectivity at 250 C and 20 bar."},
+    {"id": "zabilskiy-angew-2021", "label": "Angew. Chem. Int. Ed. 2021", "url": "https://doi.org/10.1002/anie.202103087", "kind": "literature", "note": "PdZn/ZnO mechanism: ZnO activates CO2 while the alloy supplies hydrogen; 443 g MeOH per kg catalyst per hour at 260 C and 50 bar."},
+    {"id": "saito-apcata-1996", "label": "Appl. Catal. A 1996", "url": "https://doi.org/10.1016/0926-860X(95)00305-3", "kind": "literature", "note": "Multicomponent Cu/ZnO promoter classification (Ga2O3, Al2O3, ZrO2, Cr2O3) with long-term stability; best catalyst ~51 wt% Cu, 22 wt% Zn."},
+    {"id": "toyir-apcatb-2001", "label": "Appl. Catal. B 2001", "url": "https://doi.org/10.1016/S0926-3373(00)00205-8", "kind": "literature", "note": "Ga-promoted Cu on ZnO: highly effective methanol catalyst with strong support/promoter dependence."},
+    {"id": "kuld-science-2016", "label": "Science 2016", "url": "https://doi.org/10.1126/science.aaf0718", "kind": "literature", "note": "Quantified Zn-coverage promotion of Cu: methanol activity rises ~3x from 0.04 to 0.47 Zn coverage."}
+  ],
+  "catalog_quotes": [],
+  "route_templates": [
+    {
+      "id": "cza-coprecipitation-pellet",
+      "name": "Controlled-pH co-precipitation with pelletizing",
+      "manufacturing_mode": "Pelletized fixed-bed catalyst",
+      "preprocess": [
+        "Cu/Zn/Al nitrate solution make-up",
+        "Sodium-carbonate precipitant dosing at controlled pH and temperature"
+      ],
+      "synthesis": [
+        "Co-precipitation to the zincian-malachite precursor",
+        "Aging of the precipitate"
+      ],
+      "postprocess": [
+        "Filtration and sodium-free washing",
+        "Drying and calcination near 300 C",
+        "Pelletizing",
+        "Slow reduction in dilute hydrogen (in situ or pre-reduced)"
+      ],
+      "quality_gates": [
+        "Precipitation pH/temperature log within the Baltes activity window",
+        "Residual sodium check",
+        "Crush strength and methanol activity spot test"
+      ],
+      "steps": ["mixer_slurry", "reactor_multistep", "filter_rotary_vacuum", "dryer_rotary_100_300C", "kiln_continuous_indirect", "ball_forming", "reactor_simple"],
+      "non_step_cost_per_lb": 0.55,
+      "route_confidence": 92,
+      "route_note": "The documented industrial chain: precipitation pH and temperature are the activity-controlling variables, and activation is a slow reduction in ~2-3 vol% H2."
+    },
+    {
+      "id": "pd-zno-alloy",
+      "name": "Pd on ZnO with high-temperature alloying",
+      "manufacturing_mode": "Fixed-bed pellet or powder catalyst",
+      "preprocess": [
+        "Chloride-managed Pd precursor or PVA-stabilized Pd colloid preparation",
+        "ZnO support conditioning"
+      ],
+      "synthesis": [
+        "Sol-immobilisation or incipient-wetness deposition of Pd onto ZnO"
+      ],
+      "postprocess": [
+        "Filtration and washing",
+        "Drying near 120 C",
+        "High-temperature reduction (~400 C) forming the PdZn alloy"
+      ],
+      "quality_gates": [
+        "Pd loading confirmation (1-5 wt%)",
+        "PdZn alloy-phase check",
+        "RWGS-suppression spot test"
+      ],
+      "steps": ["mixer_slurry", "filter_rotary_vacuum", "dryer_rotary_40_100C", "reactor_simple"],
+      "non_step_cost_per_lb": 0.65,
+      "route_confidence": 74,
+      "route_note": "The selectivity-giving PdZn alloy forms only on high-temperature pre-reduction; chloride residues must be avoided, favoring the sol route."
+    },
+    {
+      "id": "promoted-cza-coprecipitation",
+      "name": "Ga/Zr-promoted co-precipitation",
+      "manufacturing_mode": "Pelletized fixed-bed catalyst",
+      "preprocess": [
+        "Cu/Zn nitrate solution make-up with Ga or Zr promoter nitrate",
+        "Precipitant dosing"
+      ],
+      "synthesis": [
+        "Co-precipitation of the promoted precursor",
+        "Aging"
+      ],
+      "postprocess": [
+        "Filtration and washing",
+        "Drying and calcination",
+        "Forming",
+        "Reduction in dilute hydrogen"
+      ],
+      "quality_gates": [
+        "Promoter incorporation check",
+        "Cu dispersion measurement",
+        "Long-run stability spot test"
+      ],
+      "steps": ["mixer_slurry", "reactor_multistep", "filter_rotary_vacuum", "dryer_rotary_100_300C", "kiln_continuous_indirect", "ball_forming", "reactor_simple"],
+      "non_step_cost_per_lb": 0.6,
+      "route_confidence": 84,
+      "route_note": "Same chain as the baseline with the promoter salt added at precipitation; promoters split into dispersion-raising and specific-activity-raising classes per the cited study."
+    }
+  ],
+  "candidates": [
+    {
+      "slug": "cza-industrial",
+      "title": "Cu/ZnO/Al2O3 (industrial workhorse)",
+      "archetype": "Industrial baseline",
+      "screening_basis": "engineering_proxy",
+      "summary": "The co-precipitated 60/30/10-class CuO/ZnO/Al2O3 catalyst behind essentially all commercial methanol, run at 240-260 C and 50-100 bar with Zn-decorated Cu steps as the active site.",
+      "route_template_id": "cza-coprecipitation-pellet",
+      "order_size_tons": 20,
+      "performance_index": 82,
+      "manufacturing_readiness": 98,
+      "screening_exactness": 84,
+      "temperature_window_c": [240, 260],
+      "literature_basis_ids": ["chinchen-applcatal-1988", "baltes-jcat-2008", "behrens-science-2012", "bozzano-pecs-2016", "sehested-jcat-2019", "hansen-hetcat-2008"],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "The reference economics of the family: cheap metals, the deepest industrial record in this database, and manufacturing quality riding on precipitation control.",
+        "Composition screened at the 60/30/10 CuO/ZnO/Al2O3 class figure quoted in the open-access review; Saito's best coprecipitate (51 wt% Cu, 22 wt% Zn metal basis) is consistent."
+      ],
+      "components": [
+        {"role": "active_metal", "name": "Cu", "wt_pct": 48.0, "pricing": {
+          "type": "market_feed", "symbol": "Cu", "precursor_markup": 1.08,
+          "note": "Contained-copper basis of a ~60 wt% CuO loading with a mild precursor conversion markup."}},
+        {"role": "promoter", "name": "ZnO", "wt_pct": 30.0, "pricing": {
+          "type": "fixed", "price_per_lb": 1.1965, "evidence_label": "USGS zinc-derived ZnO floor",
+          "evidence_tier": "public_index", "confidence_score": 68, "transparency": "derived_index",
+          "note": "USGS MCS 2026 North American SHG zinc, 2025e $1.49/lb, x 0.803 Zn mass fraction of ZnO = $1.20/lb contained-metal floor; oxide conversion cost not included."}},
+        {"role": "support", "name": "Al2O3", "wt_pct": 10.0, "pricing": {
+          "type": "fixed", "price_per_lb": 0.2676, "evidence_label": "USGS industrial alumina proxy",
+          "evidence_tier": "public_index", "confidence_score": 72, "transparency": "public_index",
+          "note": "2025 USGS alumina import value used as the structural-promoter term."}}
+      ]
+    },
+    {
+      "slug": "pd-zno-intermetallic",
+      "title": "Pd/ZnO intermetallic alternative",
+      "archetype": "Noble-metal selectivity route",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "1-5 wt% Pd alloyed into PdZn on zinc oxide suppresses reverse water-gas shift, delivering up to 443 g methanol per kg catalyst per hour at 260 C and 50 bar in CO2-rich feeds.",
+      "route_template_id": "pd-zno-alloy",
+      "order_size_tons": 20,
+      "performance_index": 78,
+      "manufacturing_readiness": 70,
+      "screening_exactness": 74,
+      "temperature_window_c": [250, 270],
+      "literature_basis_ids": ["ota-jcat-2012", "bahruji-jcat-2016", "zabilskiy-angew-2021"],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Screen it to bound what RWGS suppression is worth: palladium restricts the route to niche duty against the copper baseline.",
+        "Performance evidence is from CO2-rich feeds; it supports the archetype but is not a pure-CO syngas benchmark."
+      ],
+      "components": [
+        {"role": "active_metal", "name": "Pd", "wt_pct": 2.5, "pricing": {
+          "type": "market_feed", "symbol": "Pd", "precursor_markup": 1.2,
+          "note": "Live Pd feed with a markup for the chloride-managed colloid route; 1-5 wt% loadings are source-quoted."}},
+        {"role": "support", "name": "ZnO", "wt_pct": 97.5, "pricing": {
+          "type": "fixed", "price_per_lb": 1.1965, "evidence_label": "USGS zinc-derived ZnO floor",
+          "evidence_tier": "public_index", "confidence_score": 68, "transparency": "derived_index",
+          "note": "USGS MCS 2026 North American SHG zinc, 2025e $1.49/lb, x 0.803 Zn mass fraction of ZnO = $1.20/lb contained-metal floor."}}
+      ]
+    },
+    {
+      "slug": "ga-promoted-cza",
+      "title": "Ga-promoted Cu/ZnO (Zn-coverage engineering)",
+      "archetype": "Promoted advance",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Gallium (or zirconium) promotion of the copper-zinc system tunes Zn coverage on Cu - the lever Science 2016 quantified at ~3x activity - for a modest promoter cost on top of the industrial chain.",
+      "route_template_id": "promoted-cza-coprecipitation",
+      "order_size_tons": 20,
+      "performance_index": 86,
+      "manufacturing_readiness": 82,
+      "screening_exactness": 76,
+      "temperature_window_c": [240, 270],
+      "literature_basis_ids": ["saito-apcata-1996", "toyir-apcatb-2001", "kuld-science-2016"],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "The incremental-upgrade play: same plant chain as the baseline, activity and stability bought with a few percent of promoter oxide.",
+        "Gallium is the expensive promoter choice; the same route carries ZrO2 promotion at commodity cost if the Ga term dominates the screen."
+      ],
+      "components": [
+        {"role": "active_metal", "name": "Cu", "wt_pct": 47.0, "pricing": {
+          "type": "market_feed", "symbol": "Cu", "precursor_markup": 1.08,
+          "note": "Contained-copper basis with a mild precursor conversion markup."}},
+        {"role": "promoter", "name": "ZnO", "wt_pct": 25.0, "pricing": {
+          "type": "fixed", "price_per_lb": 1.1965, "evidence_label": "USGS zinc-derived ZnO floor",
+          "evidence_tier": "public_index", "confidence_score": 68, "transparency": "derived_index",
+          "note": "USGS MCS 2026 zinc-derived contained-metal floor for the ZnO term."}},
+        {"role": "promoter", "name": "Ga2O3", "wt_pct": 3.0, "pricing": {
+          "type": "fixed", "price_per_lb": 195.7, "evidence_label": "USGS gallium-derived Ga2O3 floor",
+          "evidence_tier": "public_index", "confidence_score": 66, "transparency": "derived_index",
+          "note": "USGS 2025 refined gallium import value $580/kg = $263.1/lb x 0.744 Ga mass fraction of Ga2O3 = $195.7/lb contained-metal floor; oxide conversion cost not included."}},
+        {"role": "support", "name": "Al2O3", "wt_pct": 25.0, "pricing": {
+          "type": "fixed", "price_per_lb": 0.2676, "evidence_label": "USGS industrial alumina proxy",
+          "evidence_tier": "public_index", "confidence_score": 72, "transparency": "public_index",
+          "note": "2025 USGS alumina import value used as the balance-of-formulation oxide term."}}
+      ]
+    }
+  ]
+}

@@ -86,6 +86,20 @@
       "url": "https://doi.org/10.1038/s41467-022-33637-7",
       "kind": "literature",
       "note": "Goetz, Bender et al.: predictive control of selective secondary alcohol oxidation of glycerol on NiOOH; landmark non-noble alkaline anode demonstration."
+    },
+    {
+      "id": "ptbi-dha-acscatal-2012",
+      "label": "ACS Catal. 2012",
+      "url": "https://doi.org/10.1021/cs200599g",
+      "kind": "literature",
+      "note": "Bismuth ad-atoms on platinum switch glycerol electrooxidation to 100% dihydroxyacetone selectivity at the right potential."
+    },
+    {
+      "id": "bi-modified-apcatb-2011",
+      "label": "Appl. Catal. B 2011",
+      "url": "https://doi.org/10.1016/j.apcatb.2011.08.020",
+      "kind": "literature",
+      "note": "Bismuth surface modification of Pt and Pd nanoparticles for glycerol electrooxidation."
     }
   ],
   "catalog_quotes": [],
@@ -382,6 +396,72 @@
             "symbol": "Ni",
             "precursor_markup": 1.15,
             "note": "Live Ni feed with a precursor / conversion markup; NiOOH active phase derives from Ni substrate oxidation."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "pt-bi-dha",
+      "title": "Pt-Bi DHA-selective anode",
+      "archetype": "Product-selectivity lever",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Sub-monolayer bismuth on platinum steers glycerol oxidation to 100% dihydroxyacetone - the only candidate in the family with a documented value-product selectivity switch, changing what the anode earns.",
+      "route_template_id": "pt-c-glycerol-route",
+      "order_size_tons": 20,
+      "performance_index": 82,
+      "manufacturing_readiness": 70,
+      "screening_exactness": 72,
+      "temperature_window_c": [
+        20,
+        60
+      ],
+      "literature_basis_ids": [
+        "ptbi-dha-acscatal-2012",
+        "bi-modified-apcatb-2011"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "DHA sells far above generic oxidation products; this candidate screens the selectivity economics the other three cannot.",
+        "The bismuth modifier is irreversibly adsorbed onto commercial Pt/C, so the route is the family's standard chain plus a bath step."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Pt",
+          "wt_pct": 47.5,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Pt",
+            "precursor_markup": 1.2,
+            "note": "Live Pt feed for the underlying Pt/C catalyst."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "Bi",
+          "wt_pct": 2.5,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 20.0,
+            "evidence_label": "USGS refined bismuth proxy",
+            "evidence_tier": "public_index",
+            "confidence_score": 74,
+            "transparency": "public_index",
+            "note": "2025e annual average refined bismuth price, $20/lb (USGS MCS 2026)."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Carbon",
+          "wt_pct": 50.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 1.5,
+            "evidence_label": "Conductive carbon screening proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 57,
+            "transparency": "derived_index",
+            "note": "Vulcan-class conductive support. Bracketed by UN Comtrade rubber-grade carbon black (~$0.85/lb), conductive/acetylene bulk offers ($5,000-7,000/t) and lab retail (~$950/kg)."
           }
         }
       ]

@@ -142,6 +142,27 @@
       "url": "https://doi.org/10.1142/8199",
       "kind": "literature",
       "note": "Book-length treatment of fused-iron (magnetite and wustite) ammonia catalyst manufacturing practice."
+    },
+    {
+      "id": "jacobsen-jacs-2001",
+      "label": "J. Am. Chem. Soc. 2001",
+      "url": "https://doi.org/10.1021/ja010963d",
+      "kind": "literature",
+      "note": "Catalyst design by interpolation: CoMo nitride predicted and confirmed as the Fe/Ru optimum for ammonia synthesis."
+    },
+    {
+      "id": "kojima-apcata-2001a",
+      "label": "Appl. Catal. A 2001",
+      "url": "https://doi.org/10.1016/s0926-860x(01)00529-4",
+      "kind": "literature",
+      "note": "Kojima and Aika part 1: preparation and characterization of Co3Mo3N ammonia catalysts."
+    },
+    {
+      "id": "kojima-apcata-2001b",
+      "label": "Appl. Catal. A 2001",
+      "url": "https://doi.org/10.1016/s0926-860x(01)00626-3",
+      "kind": "literature",
+      "note": "Kojima and Aika part 2: kinetics of Cs-promoted Co3Mo3N; ~3x commercial-Fe rate at 673 K reported in the literature record."
     }
   ],
   "catalog_quotes": [],
@@ -236,6 +257,40 @@
       "non_step_cost_per_lb": 1.0,
       "route_confidence": 55,
       "route_note": "CVD and air-free hydride handling have no direct step-library analogue; the multistep reactor rate is the closest proxy, so route economics are indicative only."
+    },
+    {
+      "id": "nitride-tpn",
+      "name": "Cobalt molybdate nitridation with Cs promotion",
+      "manufacturing_mode": "Bulk nitride powder, fixed-bed charge",
+      "preprocess": [
+        "Ammonium molybdate and cobalt nitrate co-dissolution",
+        "Evaporation to the cobalt molybdate precursor"
+      ],
+      "synthesis": [
+        "Calcination to the mixed oxide",
+        "Temperature-programmed nitridation in flowing ammonia to Co3Mo3N"
+      ],
+      "postprocess": [
+        "Cesium salt impregnation",
+        "Low-temperature drying",
+        "Passivation and re-activation in synthesis gas"
+      ],
+      "quality_gates": [
+        "Nitride phase confirmation (XRD)",
+        "Cs dose check",
+        "Synthesis-rate spot test at 673 K"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "incipient_wetness",
+        "dryer_rotary_40_100C",
+        "reactor_simple"
+      ],
+      "non_step_cost_per_lb": 0.6,
+      "route_confidence": 66,
+      "route_note": "The ammonia-flow nitridation is proxied by the indirect kiln, which understates the dedicated TPN furnace; treat the step cost as a floor."
     }
   ],
   "candidates": [
@@ -442,6 +497,70 @@
             "confidence_score": 45,
             "transparency": "derived_index",
             "note": "CaF2-CaH2 solid solution has no public bulk market; the proxy spans fluorspar commodity economics and calcium-hydride reagent pricing and should be treated as indicative only."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "cs-co3mo3n",
+      "title": "Cs-promoted Co3Mo3N nitride",
+      "archetype": "Beyond-Fe/Ru nitride",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "The interpolation-designed ternary nitride: bulk Co3Mo3N with a cesium promoter, reported around three times the commercial-iron rate at 673 K and atmospheric test pressure.",
+      "route_template_id": "nitride-tpn",
+      "order_size_tons": 20,
+      "performance_index": 80,
+      "manufacturing_readiness": 55,
+      "screening_exactness": 68,
+      "temperature_window_c": [
+        350,
+        500
+      ],
+      "literature_basis_ids": [
+        "jacobsen-jacs-2001",
+        "kojima-apcata-2001a",
+        "kojima-apcata-2001b"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "The only non-Fe, non-Ru chemistry in the family; molybdenum inventory dominates the material term.",
+        "The 3x-Fe rate figure comes from literature excerpts quoting the primary papers, not from an abstract read directly - treat as indicative."
+      ],
+      "components": [
+        {
+          "role": "active_catalyst",
+          "name": "Mo (Co3Mo3N lattice)",
+          "wt_pct": 60.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Mo",
+            "precursor_markup": 1.1,
+            "note": "Contained-molybdenum basis of the Co3Mo3N stoichiometry (60.1 wt% Mo) with a mild precursor markup."
+          }
+        },
+        {
+          "role": "active_metal",
+          "name": "Co",
+          "wt_pct": 37.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Co",
+            "precursor_markup": 1.1,
+            "note": "Contained-cobalt basis of the Co3Mo3N stoichiometry (36.9 wt% Co)."
+          }
+        },
+        {
+          "role": "promoter",
+          "name": "Cs",
+          "wt_pct": 2.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 346.94,
+            "evidence_label": "Sigma-Aldrich Cs2CO3, contained-Cs basis",
+            "evidence_tier": "vendor_public",
+            "confidence_score": 63,
+            "transparency": "public_list_price",
+            "note": "Sigma 441902 cesium carbonate 500 g list $312 = $0.765/g contained Cs = $346.94/lb. USGS MCS 2026 states no commercial bulk cesium market exists."
           }
         }
       ]

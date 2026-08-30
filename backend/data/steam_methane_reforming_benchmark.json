@@ -1,0 +1,218 @@
+{
+  "family": "steam-methane-reforming",
+  "title": "Steam methane reforming (SMR) reference family",
+  "catalyst_domain": "thermal",
+  "application_family": "general",
+  "reaction": "CH4 + H2O -> CO + 3 H2",
+  "objective": "Optional literature-backed reference family for sanity-checking catalyst economics for steam reforming of natural gas, the dominant industrial hydrogen route. COMET itself remains reaction-agnostic and this family is a screening aid, not a process design.",
+  "decision_profiles": {
+    "balanced": {
+      "label": "Balanced",
+      "description": "Balance economics, source confidence, route confidence, and performance.",
+      "weights": {"economics": 0.45, "evidence": 0.2, "route": 0.2, "performance": 0.15}
+    },
+    "cost-first": {
+      "label": "Cost-first",
+      "description": "Bias ranking toward selling cost while keeping route and evidence guardrails.",
+      "weights": {"economics": 0.6, "evidence": 0.15, "route": 0.15, "performance": 0.1}
+    },
+    "evidence-first": {
+      "label": "Evidence-first",
+      "description": "Reward transparent, higher-confidence pricing and more reproducible routes.",
+      "weights": {"economics": 0.35, "evidence": 0.35, "route": 0.15, "performance": 0.15}
+    }
+  },
+  "citations": [
+    {"id": "rostrup-advcatal-2002", "label": "Adv. Catal. 2002", "url": "https://doi.org/10.1016/S0360-0564(02)47006-X", "kind": "literature", "note": "Rostrup-Nielsen, Sehested and Norskov's classic review of hydrogen and synthesis gas by steam and CO2 reforming."},
+    {"id": "topsoe-jngse-2011", "label": "J. Nat. Gas Sci. Eng. 2011", "url": "https://doi.org/10.1016/j.jngse.2011.03.004", "kind": "literature", "note": "Industrial review of natural-gas-to-synthesis-gas catalysts and process concepts from Topsoe authors."},
+    {"id": "sehested-cattod-2006", "label": "Catal. Today 2006", "url": "https://doi.org/10.1016/j.cattod.2005.10.002", "kind": "literature", "note": "The four industrial challenges of Ni steam-reforming catalysts: sintering, carbon, sulfur poisoning and activity."},
+    {"id": "xu-froment-aiche-1989", "label": "AIChE J. 1989", "url": "https://doi.org/10.1002/aic.690350109", "kind": "literature", "note": "Canonical Xu-Froment intrinsic kinetics for methane steam reforming on Ni/MgAl2O4."},
+    {"id": "commercial-ni-caal-energies-2020", "label": "Energies 2020", "url": "https://doi.org/10.3390/en13112792", "kind": "literature", "note": "Commercial Ni/calcium-aluminate reforming catalysts (JM 25-4Q / 57-4Q) with Ca and K additions characterized under reforming duty."},
+    {"id": "smr-activity-ranking-jcat-2008", "label": "J. Catal. 2008", "url": "https://doi.org/10.1016/j.jcat.2008.08.003", "kind": "literature", "note": "First-principles plus experimental activity ranking of transition metals (Ru, Rh, Ni) for steam reforming."},
+    {"id": "rh-size-jcat-2011", "label": "J. Catal. 2011", "url": "https://doi.org/10.1016/j.jcat.2011.03.015", "kind": "literature", "note": "Rh particle-size effects in steam methane reforming."},
+    {"id": "rh-compact-jecs-2017", "label": "J. Eur. Ceram. Soc. 2017", "url": "https://doi.org/10.1016/j.jeurceramsoc.2017.04.011", "kind": "literature", "note": "2-4 wt% Rh catalysts incorporated in compact hollow-fibre membrane reformers."},
+    {"id": "ru-alumina-apcata-2005", "label": "Appl. Catal. A 2005", "url": "https://doi.org/10.1016/j.apcata.2004.12.003", "kind": "literature", "note": "Kinetics of methane steam reforming over Mn-promoted Ru/Al2O3."},
+    {"id": "nikolla-jcat-2007", "label": "J. Catal. 2007", "url": "https://doi.org/10.1016/j.jcat.2007.04.020", "kind": "literature", "note": "Nikolla, Schwank and Linic: Sn/Ni surface alloys give long-term coking stability in reforming duty."},
+    {"id": "au-ni-science-1998", "label": "Science 1998", "url": "https://doi.org/10.1126/science.279.5358.1913", "kind": "literature", "note": "Designed Au-Ni surface alloy steam-reforming catalyst, the landmark alloy-design precedent."},
+    {"id": "ni-cezro2-apcata-2003", "label": "Appl. Catal. A 2003", "url": "https://doi.org/10.1016/S0926-860X(03)00359-4", "kind": "literature", "note": "Ni/Ce-ZrO2/theta-Al2O3 catalysts for methane reforming as the reducible-support alternative."},
+    {"id": "smr-modern-catalysts-2020", "label": "Catalysts 2020", "url": "https://doi.org/10.3390/catal10030352", "kind": "literature", "note": "Modern review of Ni-based SMR catalysts and engineering issues."}
+  ],
+  "catalog_quotes": [],
+  "route_templates": [
+    {
+      "id": "ni-caal-impregnation-forming",
+      "name": "Ni impregnation on calcium aluminate with ring forming",
+      "manufacturing_mode": "Shaped rings/pellets for tubular reformers",
+      "preprocess": [
+        "Calcium-aluminate or alpha-alumina carrier calcination and sizing",
+        "Nickel-nitrate solution make-up with Ca/K promoter dosing"
+      ],
+      "synthesis": [
+        "Impregnation of the carrier with the nickel solution",
+        "Promoter co-impregnation"
+      ],
+      "postprocess": [
+        "Rotary drying",
+        "Calcination to NiO",
+        "Forming into rings/shaped pellets",
+        "In-situ reduction in the reformer (charged as NiO)"
+      ],
+      "quality_gates": [
+        "NiO loading confirmation (~18-19 wt%)",
+        "Crush strength for tall reformer tubes",
+        "Alkali dose check"
+      ],
+      "steps": ["mixer_slurry", "incipient_wetness", "dryer_rotary_100_300C", "kiln_continuous_indirect", "extruder_with_feeder", "ball_forming"],
+      "non_step_cost_per_lb": 0.5,
+      "route_confidence": 88,
+      "route_note": "Century-scale industrial practice; commercial catalysts ship as shaped NiO and reduce in situ, so no reduction step is charged."
+    },
+    {
+      "id": "rh-eggshell-washcoat",
+      "name": "Rh egg-shell impregnation for compact reformers",
+      "manufacturing_mode": "Egg-shell pellets or washcoated structured substrates",
+      "preprocess": [
+        "Alumina sphere or structured-substrate preparation",
+        "Dilute rhodium salt solution make-up"
+      ],
+      "synthesis": [
+        "Controlled egg-shell impregnation of Rh onto the outer shell"
+      ],
+      "postprocess": [
+        "Low-temperature drying",
+        "Calcination",
+        "Reduction to metallic Rh"
+      ],
+      "quality_gates": [
+        "Rh loading confirmation (0.5-2 wt%)",
+        "Shell-thickness check",
+        "Light-off activity spot test"
+      ],
+      "steps": ["mixer_slurry", "incipient_wetness", "dryer_rotary_40_100C", "kiln_batch", "reactor_simple"],
+      "non_step_cost_per_lb": 0.6,
+      "route_confidence": 78,
+      "route_note": "Egg-shell control keeps costly Rh at the pellet exterior where the reaction runs; batch kiln matches the small compact-duty campaign scale."
+    },
+    {
+      "id": "sn-ni-alloy-impregnation",
+      "name": "Sn/Ni surface-alloy impregnation",
+      "manufacturing_mode": "Fixed-bed pellet catalyst",
+      "preprocess": [
+        "Support pre-dry and sieve",
+        "Nickel and tin salt solution make-up"
+      ],
+      "synthesis": [
+        "Nickel impregnation",
+        "Trace-tin co-impregnation targeting a surface alloy"
+      ],
+      "postprocess": [
+        "Rotary drying",
+        "Calcination",
+        "High-temperature reduction forming the Sn/Ni surface alloy"
+      ],
+      "quality_gates": [
+        "Ni and Sn loading confirmation",
+        "Alloy-formation check (chemisorption/XRD)",
+        "Carbon-limit spot test at low steam-to-carbon"
+      ],
+      "steps": ["mixer_slurry", "incipient_wetness", "dryer_rotary_100_300C", "kiln_continuous_indirect", "reactor_simple"],
+      "non_step_cost_per_lb": 0.48,
+      "route_confidence": 72,
+      "route_note": "Same impregnation chain as the baseline plus a trace-metal step; the surface-alloy anneal is folded into the reduction."
+    }
+  ],
+  "candidates": [
+    {
+      "slug": "ni-calcium-aluminate",
+      "title": "Ni on calcium aluminate (industrial baseline)",
+      "archetype": "Industrial baseline",
+      "screening_basis": "engineering_proxy",
+      "summary": "~18-19 wt% NiO on a calcium-aluminate carrier with Ca/K additions - the tubular-reformer workhorse, run at 600-950 C and elevated pressure with steam-to-carbon control against coking.",
+      "route_template_id": "ni-caal-impregnation-forming",
+      "order_size_tons": 20,
+      "performance_index": 74,
+      "manufacturing_readiness": 97,
+      "screening_exactness": 82,
+      "temperature_window_c": [600, 950],
+      "literature_basis_ids": ["topsoe-jngse-2011", "sehested-cattod-2006", "xu-froment-aiche-1989", "commercial-ni-caal-energies-2020", "rostrup-advcatal-2002"],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "The reference economics for hydrogen at scale: cheap metal, fully de-risked manufacture, lifetime governed by sintering/carbon/sulfur rather than catalyst price.",
+        "Composition basis: 18-19 wt% NiO rows documented in the cited characterization studies; K linkage to naphtha duty is industrial practice not re-verified from a primary abstract."
+      ],
+      "components": [
+        {"role": "active_metal", "name": "Ni", "wt_pct": 14.5, "pricing": {
+          "type": "market_feed", "symbol": "Ni", "precursor_markup": 1.1,
+          "note": "Contained-nickel basis of an ~18.5 wt% NiO loading with a mild precursor conversion markup."}},
+        {"role": "promoter", "name": "K2O", "wt_pct": 0.5, "pricing": {
+          "type": "fixed", "price_per_lb": 0.2722, "evidence_label": "USGS potash MOP, K2O-equivalent basis",
+          "evidence_tier": "public_index", "confidence_score": 70, "transparency": "public_index",
+          "note": "2025e f.o.b. mine muriate-of-potash price, $600/t of K2O equivalent (USGS MCS Feb 2026)."}},
+        {"role": "support", "name": "Calcium aluminate carrier", "wt_pct": 85.0, "pricing": {
+          "type": "fixed", "price_per_lb": 0.35, "evidence_label": "Calcium-aluminate carrier proxy",
+          "evidence_tier": "engineering_proxy", "confidence_score": 58, "transparency": "derived_index",
+          "note": "Refractory calcium-aluminate carrier proxy, informed by the USGS alumina floor (~$0.27/lb) plus cement-chemistry processing; no public carrier-grade quote was verified."}}
+      ]
+    },
+    {
+      "slug": "rh-alumina-compact",
+      "title": "Rh/Al2O3 compact-reformer route",
+      "archetype": "Noble-metal compact duty",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "0.5-2 wt% Rh on alumina for compact and membrane reformers: highest per-site activity in the Ru/Rh/Ni ranking, bought at rhodium prices and justified where reactor volume, not catalyst cost, dominates.",
+      "route_template_id": "rh-eggshell-washcoat",
+      "order_size_tons": 2,
+      "performance_index": 88,
+      "manufacturing_readiness": 78,
+      "screening_exactness": 74,
+      "temperature_window_c": [600, 800],
+      "literature_basis_ids": ["smr-activity-ranking-jcat-2008", "rh-size-jcat-2011", "rh-compact-jecs-2017", "ru-alumina-apcata-2005"],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Pick when compactness or membrane integration outweighs metal cost; the small order size reflects the niche duty.",
+        "Loading screened at 1 wt% Rh, inside the 0.5-2 wt% band the compact-reformer literature documents."
+      ],
+      "components": [
+        {"role": "active_metal", "name": "Rh", "wt_pct": 1.0, "pricing": {
+          "type": "market_feed", "symbol": "Rh", "precursor_markup": 1.15,
+          "note": "Live Rh feed with a precursor conversion markup; loadings of 0.5-2 wt% are source-quoted for compact duty."}},
+        {"role": "support", "name": "Al2O3", "wt_pct": 99.0, "pricing": {
+          "type": "fixed", "price_per_lb": 0.2676, "evidence_label": "USGS industrial alumina proxy",
+          "evidence_tier": "public_index", "confidence_score": 72, "transparency": "public_index",
+          "note": "2025 USGS alumina import value used as a bulk oxide support proxy."}}
+      ]
+    },
+    {
+      "slug": "sn-ni-coking-resistant",
+      "title": "Sn/Ni surface alloy (coking-resistant)",
+      "archetype": "Carbon-limit advance",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Trace tin alloyed into supported nickel suppresses carbon nucleation, extending stable operation at low steam-to-carbon ratios where the plain Ni baseline cokes.",
+      "route_template_id": "sn-ni-alloy-impregnation",
+      "order_size_tons": 20,
+      "performance_index": 78,
+      "manufacturing_readiness": 72,
+      "screening_exactness": 66,
+      "temperature_window_c": [600, 900],
+      "literature_basis_ids": ["nikolla-jcat-2007", "au-ni-science-1998", "ni-cezro2-apcata-2003", "smr-modern-catalysts-2020"],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "The alloy-design answer to the baseline's carbon limit at nearly base-metal economics.",
+        "Sn and Ni loadings are screening assumptions (15 wt% Ni, 0.5 wt% Sn): the cited abstracts establish the trace-Sn surface-alloy strategy but do not state weight loadings."
+      ],
+      "components": [
+        {"role": "active_metal", "name": "Ni", "wt_pct": 15.0, "pricing": {
+          "type": "market_feed", "symbol": "Ni", "precursor_markup": 1.1,
+          "note": "Live Ni feed; loading is a screening assumption within normal reforming practice."}},
+        {"role": "promoter", "name": "Sn", "wt_pct": 0.5, "pricing": {
+          "type": "fixed", "price_per_lb": 14.0, "evidence_label": "USGS refined tin proxy",
+          "evidence_tier": "public_index", "confidence_score": 74, "transparency": "public_index",
+          "note": "Annual average LME cash tin price 2024, $14.0/lb (USGS MCS 2025)."}},
+        {"role": "support", "name": "Al2O3", "wt_pct": 84.5, "pricing": {
+          "type": "fixed", "price_per_lb": 0.2676, "evidence_label": "USGS industrial alumina proxy",
+          "evidence_tier": "public_index", "confidence_score": 72, "transparency": "public_index",
+          "note": "2025 USGS alumina import value used as a bulk oxide support proxy."}}
+      ]
+    }
+  ]
+}

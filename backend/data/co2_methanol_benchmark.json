@@ -100,6 +100,20 @@
       "url": "https://doi.org/10.1021/jacs.6b05791",
       "kind": "literature",
       "note": "Kattel, Yan, Yang and Liu: optimising binding energies of key intermediates for CO2 hydrogenation to methanol over oxide-supported copper catalysts."
+    },
+    {
+      "id": "frei-ncomms-2019",
+      "label": "Nat. Commun. 2019",
+      "url": "https://doi.org/10.1038/s41467-019-11349-9",
+      "kind": "literature",
+      "note": "0.75 wt% Pd on In2O3: methanol space-time yield 0.96 g/(h gcat) at 78% selectivity, 553 K and 5 MPa, stable over 500 h."
+    },
+    {
+      "id": "rui-apcatb-2017",
+      "label": "Appl. Catal. B 2017",
+      "url": "https://doi.org/10.1016/j.apcatb.2017.06.069",
+      "kind": "literature",
+      "note": "Pd/In2O3 with oxygen-vacancy engineering: 20% CO2 conversion, ~70% methanol selectivity at 573 K and 5 MPa."
     }
   ],
   "catalog_quotes": [],
@@ -403,6 +417,58 @@
             "confidence_score": 57,
             "transparency": "derived_index",
             "note": "Zirconia term remains a conservative engineering proxy pending a cleaner public bulk quote. USGS MCS 2026 zircon (2025e ~$1,900/t imported, ~66% ZrO2) implies ~$1.31/lb contained ZrO2, corroborating this proxy as a floor."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "pd-in2o3",
+      "title": "Pd/In2O3 promoted oxide",
+      "archetype": "Noble-promoted reducible oxide",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Three-quarters of a weight percent of palladium on indium oxide unlocks record methanol productivity (0.96 g/(h gcat) at 78% selectivity, 500-h stable) by feeding hydrogen to the vacancy chemistry the plain oxide already has.",
+      "route_template_id": "cza-co-precipitation",
+      "order_size_tons": 20,
+      "performance_index": 92,
+      "manufacturing_readiness": 68,
+      "screening_exactness": 80,
+      "temperature_window_c": [
+        280,
+        300
+      ],
+      "literature_basis_ids": [
+        "frei-ncomms-2019",
+        "rui-apcatb-2017"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "The performance ceiling of the oxide branch; indium inventory, not palladium, dominates the material term.",
+        "Screened on the family's co-precipitation chain, matching the source preparation."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Pd",
+          "wt_pct": 0.75,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Pd",
+            "precursor_markup": 1.2,
+            "note": "Live Pd feed with a precursor markup; 0.75 wt% loading is source-quoted."
+          }
+        },
+        {
+          "role": "support",
+          "name": "In2O3",
+          "wt_pct": 99.25,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 146.65,
+            "evidence_label": "USGS indium-derived In2O3 floor",
+            "evidence_tier": "public_index",
+            "confidence_score": 70,
+            "transparency": "derived_index",
+            "note": "2025 USGS refined indium $176.90/lb x 0.829 In mass fraction of In2O3 = $146.65/lb contained-metal floor; oxide conversion cost not included."
           }
         }
       ]

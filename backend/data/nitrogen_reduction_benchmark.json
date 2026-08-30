@@ -86,6 +86,27 @@
       "url": "https://doi.org/10.1016/j.joule.2023.07.019",
       "kind": "literature",
       "note": "Hou, Deng et al.: membrane electrode assembly for lithium-mediated nitrogen reduction, mapping the technical roadmap from batch to continuous flow operation."
+    },
+    {
+      "id": "li-shuttle-science-2021",
+      "label": "Science 2021",
+      "url": "https://doi.org/10.1126/science.abg2371",
+      "kind": "literature",
+      "note": "Phosphonium proton shuttle in lithium-mediated NRR: 69% faradaic efficiency over multi-day runs."
+    },
+    {
+      "id": "li-flow-science-2023",
+      "label": "Science 2023",
+      "url": "https://doi.org/10.1126/science.adf4403",
+      "kind": "literature",
+      "note": "Continuous-flow 25 cm2 lithium-mediated electrolyzer with a hydrogen-oxidation anode: 61% faradaic efficiency at ambient pressure."
+    },
+    {
+      "id": "nrr-rigor-nature-2019",
+      "label": "Nature 2019",
+      "url": "https://doi.org/10.1038/s41586-019-1260-x",
+      "kind": "literature",
+      "note": "The rigorous quantitative-isotope protocol that separates real NRR from false positives."
     }
   ],
   "catalog_quotes": [],
@@ -350,6 +371,48 @@
             "symbol": "Cu",
             "precursor_markup": 1.1,
             "note": "Live Cu feed with a precursor / conversion markup for aqueous research-stage cathode screening."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "li-flow-shuttle",
+      "title": "Li-mediated flow cell with proton shuttle",
+      "archetype": "Scaled Li-mediated advance",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "The continuous-flow, isotope-verified evolution of lithium-mediated NRR: 25 cm2 gas-diffusion electrodes, a regenerable phosphonium proton shuttle, and the only credible scale-up economics in the field.",
+      "route_template_id": "li-mediated-nrr-route",
+      "order_size_tons": 2,
+      "performance_index": 78,
+      "manufacturing_readiness": 45,
+      "screening_exactness": 66,
+      "temperature_window_c": [
+        20,
+        60
+      ],
+      "literature_basis_ids": [
+        "li-shuttle-science-2021",
+        "li-flow-science-2023",
+        "nrr-rigor-nature-2019"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Upgrades the family's Li-mediated line from batch proof-of-concept to continuous flow with isotope-grade verification.",
+        "The Pt-Au hydrogen-oxidation anode and pressurized handling are stack costs outside this catalyst-charge screen."
+      ],
+      "components": [
+        {
+          "role": "active_catalyst",
+          "name": "Li-mediated GDE assembly (Li salt + phosphonium shuttle)",
+          "wt_pct": 100.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 25.0,
+            "evidence_label": "Li-electrolyte system proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 45,
+            "transparency": "derived_proxy",
+            "note": "Composite charge of lithium salt, ether electrolyte and the regenerable tetraalkylphosphonium shuttle; no public quote exists for the assembly and the term is indicative only."
           }
         }
       ]

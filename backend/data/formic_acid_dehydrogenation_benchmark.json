@@ -86,6 +86,20 @@
       "url": "https://doi.org/10.1039/c5cs00618j",
       "kind": "literature",
       "note": "Mellmann, Sponholz, Junge and Beller: foundational review of formic acid as a hydrogen-storage medium, surveying homogeneous catalysts for selective H2 release."
+    },
+    {
+      "id": "gu-jacs-2011",
+      "label": "J. Am. Chem. Soc. 2011",
+      "url": "https://doi.org/10.1021/ja200122f",
+      "kind": "literature",
+      "note": "Au-Pd nanoparticles in amine-grafted MIL-101: complete formic-acid-to-hydrogen conversion with strong CO-poisoning resistance."
+    },
+    {
+      "id": "zhou-chemcomm-2008",
+      "label": "Chem. Commun. 2008",
+      "url": "https://doi.org/10.1039/b803661f",
+      "kind": "literature",
+      "note": "The original Pd-Au/C high-quality-hydrogen paper, further improved by ceria hydrate addition."
     }
   ],
   "catalog_quotes": [],
@@ -195,6 +209,37 @@
       "non_step_cost_per_lb": 1.02,
       "route_confidence": 76,
       "route_note": "High-performance premium route when cleaner gas-phase H2 release matters more than absolute catalyst cost."
+    },
+    {
+      "id": "mof-immobilization-fad",
+      "name": "MOF synthesis with bimetallic immobilization",
+      "manufacturing_mode": "Powder catalyst for aqueous batch service",
+      "preprocess": [
+        "Hydrothermal MIL-101 synthesis",
+        "Ethylenediamine grafting onto open Cr sites"
+      ],
+      "synthesis": [
+        "Impregnation with Au and Pd precursors",
+        "Reduction to alloyed nanoparticles inside the pores"
+      ],
+      "postprocess": [
+        "Plate-and-frame filtration and washing",
+        "Low-temperature drying"
+      ],
+      "quality_gates": [
+        "Alloy composition check",
+        "CO-free hydrogen spot test",
+        "Recyclability check"
+      ],
+      "steps": [
+        "mixer_slurry",
+        "reactor_multistep",
+        "filter_plate_frame",
+        "dryer_rotary_40_100C"
+      ],
+      "non_step_cost_per_lb": 0.8,
+      "route_confidence": 62,
+      "route_note": "The MOF host synthesis dominates cost and is priced inside the material term; the hydrothermal stage rides on the multistep-reactor rate."
     }
   ],
   "candidates": [
@@ -358,6 +403,69 @@
             "confidence_score": 60,
             "transparency": "derived_proxy",
             "note": "Activated-carbon support price held on an engineering proxy for hydrogen-carrier screening. Bracketed by public references: UN Comtrade 2024 U.S. carbon-black import unit value ~$1.88/kg (~$0.85/lb rubber grade) and Fuel Cell Store Vulcan XC-72R lab retail ~$950/kg. Bulk conductive/acetylene battery grades cluster at $5,000-7,000/t in marketplace offers (MOQ 1-2 t), the tier between rubber grade and lab retail."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "aupd-mil101",
+      "title": "Au-Pd in amine-grafted MIL-101",
+      "archetype": "MOF-immobilized bimetallic",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "Gold-palladium alloy particles locked inside an amine-functionalized MOF deliver CO-free hydrogen from formic acid with the poisoning resistance the monometallic systems lack.",
+      "route_template_id": "mof-immobilization-fad",
+      "order_size_tons": 2,
+      "performance_index": 82,
+      "manufacturing_readiness": 55,
+      "screening_exactness": 66,
+      "temperature_window_c": [
+        25,
+        90
+      ],
+      "literature_basis_ids": [
+        "gu-jacs-2011",
+        "zhou-chemcomm-2008"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Adds the Au-bimetallic + functionalized-porous-support archetype next to Pd/C, single-atom Co and Pt-Mo.",
+        "Operating temperatures sit in the papers' bodies, not the abstracts; the window shown is the ambient-to-mild band the chemistry targets."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Au",
+          "wt_pct": 2.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Au",
+            "precursor_markup": 1.2,
+            "note": "Live Au feed with a precursor markup for the chloroauric route."
+          }
+        },
+        {
+          "role": "active_metal",
+          "name": "Pd",
+          "wt_pct": 2.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Pd",
+            "precursor_markup": 1.2,
+            "note": "Live Pd feed with a precursor markup."
+          }
+        },
+        {
+          "role": "support",
+          "name": "MOF host (ED-MIL-101)",
+          "wt_pct": 96.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 35.0,
+            "evidence_label": "MOF host proxy",
+            "evidence_tier": "engineering_proxy",
+            "confidence_score": 50,
+            "transparency": "derived_proxy",
+            "note": "Amine-grafted MIL-101 host held on the family MOF proxy; no public bulk MOF quote exists and lab quotes overstate scaled production."
           }
         }
       ]

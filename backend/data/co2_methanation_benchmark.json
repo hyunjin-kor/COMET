@@ -100,6 +100,20 @@
       "url": "https://doi.org/10.1021/acscatal.7b04469",
       "kind": "literature",
       "note": "Guo, Mei, Yuan et al.: low-temperature CO2 methanation over CeO2-supported Ru single atoms, nanoclusters and nanoparticles, comparing how active-site geometry tunes the selectivity-activity trade-off."
+    },
+    {
+      "id": "tada-niceo2-ijhe-2012",
+      "label": "Int. J. Hydrogen Energy 2012",
+      "url": "https://doi.org/10.1016/j.ijhydene.2011.12.122",
+      "kind": "literature",
+      "note": "Ni/CeO2 reaches near-equilibrium CO2 conversion from 300 C with ~100% CH4 selectivity, clearly ahead of Ni/alpha-Al2O3."
+    },
+    {
+      "id": "aldana-cattod-2013",
+      "label": "Catal. Today 2013",
+      "url": "https://doi.org/10.1016/j.cattod.2013.02.019",
+      "kind": "literature",
+      "note": "Operando-IR mechanism on Ni/ceria-zirconia: low-temperature methanation runs through formates on the ceria surface."
     }
   ],
   "catalog_quotes": [],
@@ -360,6 +374,58 @@
             "confidence_score": 55,
             "transparency": "derived_proxy",
             "note": "Layered sodium titanate support cost held on an engineering proxy until a public bulk basis is curated."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "ni-ceo2-lowtemp",
+      "title": "Ni/CeO2 low-temperature route",
+      "archetype": "Reducible-support base metal",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "10 wt% nickel on ceria reaches near-equilibrium Sabatier conversion from 300 C with essentially complete methane selectivity - the base-metal answer to low-temperature duty.",
+      "route_template_id": "ni-oxide-methanation-route",
+      "order_size_tons": 20,
+      "performance_index": 82,
+      "manufacturing_readiness": 88,
+      "screening_exactness": 78,
+      "temperature_window_c": [
+        250,
+        400
+      ],
+      "literature_basis_ids": [
+        "tada-niceo2-ijhe-2012",
+        "aldana-cattod-2013"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "Same impregnation chain as the alumina baseline with the support upgraded to a public-priced reducible oxide.",
+        "Wins low-temperature duty without paying for ruthenium; ceria supply risk is the watch item."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Ni",
+          "wt_pct": 10.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ni",
+            "precursor_markup": 1.1,
+            "note": "Live Ni feed with a mild precursor conversion markup; 10 wt% loading is source-quoted."
+          }
+        },
+        {
+          "role": "support",
+          "name": "CeO2",
+          "wt_pct": 90.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 0.7756,
+            "evidence_label": "USGS ceria proxy",
+            "evidence_tier": "public_index",
+            "confidence_score": 74,
+            "transparency": "public_index",
+            "note": "2025 USGS cerium-oxide price used as a bulk support proxy."
           }
         }
       ]

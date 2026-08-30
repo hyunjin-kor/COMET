@@ -114,6 +114,13 @@
       "url": "https://doi.org/10.3390/en14113107",
       "kind": "literature",
       "note": "Review comparing metallic and carbonaceous catalytic pyrolysis with molten-media approaches framed around coking and deactivation."
+    },
+    {
+      "id": "upham-science-2017",
+      "label": "Science 2017",
+      "url": "https://doi.org/10.1126/science.aao5023",
+      "kind": "literature",
+      "note": "27% Ni - 73% Bi molten alloy bubble column: 95% methane conversion at 1065 C with floating solid carbon skimmed off - no coking deactivation."
     }
   ],
   "catalog_quotes": [],
@@ -210,6 +217,31 @@
       "non_step_cost_per_lb": 0.1,
       "route_confidence": 92,
       "route_note": "The catalyst is a purchased commodity carbon that only needs sizing and drying; it is consumed with the carbon product."
+    },
+    {
+      "id": "molten-alloy-charge",
+      "name": "Molten Ni-Bi alloy charging",
+      "manufacturing_mode": "Bubble-column liquid-metal charge",
+      "preprocess": [
+        "Bismuth ingot and nickel shot batching to 27:73"
+      ],
+      "synthesis": [
+        "Melting and homogenization under inert gas"
+      ],
+      "postprocess": [
+        "Heat-up to operating temperature in the column (process-side)"
+      ],
+      "quality_gates": [
+        "Alloy composition confirmation",
+        "Melt-level and skimmer readiness"
+      ],
+      "steps": [
+        "mixer_dry_blender",
+        "reactor_simple"
+      ],
+      "non_step_cost_per_lb": 0.15,
+      "route_confidence": 60,
+      "route_note": "The catalyst is a melt prepared essentially by charging and melting; column heat-up is process equipment outside this screen, so the route cost is deliberately minimal."
     }
   ],
   "candidates": [
@@ -357,6 +389,58 @@
             "confidence_score": 70,
             "transparency": "public_index",
             "note": "2024 U.S. imports of HS 380210: $240.27M / 88.93M kg = $2.70/kg CIF average. Carbon blacks are the cheaper sibling class (~$1.88/kg on HS 280300) and deactivate more slowly."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "molten-ni-bi",
+      "title": "Molten Ni-Bi alloy media",
+      "archetype": "Liquid-metal media",
+      "screening_basis": "literature_architecture_proxy",
+      "summary": "A 27:73 nickel-bismuth melt runs methane pyrolysis at 1065 C with 95% conversion and carbon that floats out instead of coking - a categorically different, long-lived catalyst charge.",
+      "route_template_id": "molten-alloy-charge",
+      "order_size_tons": 20,
+      "performance_index": 88,
+      "manufacturing_readiness": 58,
+      "screening_exactness": 74,
+      "temperature_window_c": [
+        1000,
+        1100
+      ],
+      "literature_basis_ids": [
+        "upham-science-2017",
+        "pyrolysis-review-energies-2021"
+      ],
+      "catalog_quote_ids": [],
+      "decision_notes": [
+        "The melt is a one-time inventory rather than a consumable, so the per-pound screen overstates its lifetime cost - noted, not modeled.",
+        "Bismuth dominates the material term at the 73 wt% melt fraction."
+      ],
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Ni",
+          "wt_pct": 27.0,
+          "pricing": {
+            "type": "market_feed",
+            "symbol": "Ni",
+            "precursor_markup": 1.0,
+            "note": "Nickel shot charged into the melt at refined-metal parity."
+          }
+        },
+        {
+          "role": "support",
+          "name": "Bi",
+          "wt_pct": 73.0,
+          "pricing": {
+            "type": "fixed",
+            "price_per_lb": 20.0,
+            "evidence_label": "USGS refined bismuth proxy",
+            "evidence_tier": "public_index",
+            "confidence_score": 74,
+            "transparency": "public_index",
+            "note": "2025e annual average refined bismuth price, $20/lb (USGS MCS 2026)."
           }
         }
       ]
