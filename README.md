@@ -1,11 +1,5 @@
 <p align="center">
-  <img src="./frontend/public/icon-256x256.png" width="128" alt="COMET app icon" />
-</p>
-
-<h1 align="center">COMET</h1>
-
-<p align="center">
-  <em>Catalyst Overall Manufacturing Estimation Tool</em>
+  <img src="./docs/assets/hero-banner.png" alt="COMET — Catalyst Overall Manufacturing Estimation Tool" width="100%" />
 </p>
 
 <p align="center">
@@ -13,7 +7,18 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/hyunjin-kor/COMET/releases/latest"><img src="https://img.shields.io/github/v/release/hyunjin-kor/COMET?label=download&color=2ea44f" alt="Latest release" /></a>
+  <img src="https://img.shields.io/badge/platform-Windows-0078d4" alt="Windows" />
   <a href="https://doi.org/10.5281/zenodo.21451931"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.21451931.svg" alt="DOI" /></a>
+  <img src="https://img.shields.io/badge/license-source--available-lightgrey" alt="License: source-available" />
+</p>
+
+<p align="center">
+  <a href="https://github.com/hyunjin-kor/COMET/releases/latest"><b>Download</b></a> ·
+  <a href="#what-it-does">What it does</a> ·
+  <a href="#screens">Screens</a> ·
+  <a href="#method-basis">Method basis</a> ·
+  <a href="docs/roadmap.md">Roadmap</a>
 </p>
 
 **COMET: Catalyst Overall Manufacturing Estimation Tool** is a Windows desktop app for early-stage catalyst cost screening. You describe a catalyst — composition, support, preparation route — and it returns a manufacturing cost estimate built on current metal prices, published costing methodology, and a curated materials library. Everything runs locally: the app bundles its own calculation backend and database, so there is no server to set up and no account to create.
@@ -23,6 +28,10 @@ It is aimed at catalysis researchers who want a quick, defensible answer to ques
 - How much does a metal price swing change my catalyst cost?
 - Which part of the recipe drives the cost — the metal, the support, or the preparation route?
 - How does my composition compare against published catalysts for the same reaction?
+
+## The name
+
+A comet nucleus is an irregular, pitted, porous sphere — the same geometry as a catalyst pellet, and the same kind of rough surface where the interesting chemistry happens. That resemblance is where the name came from, and the rest of it fits too: COMET checks a candidate against established commercial catalysts, so a promising new one can be spotted early, arriving out of a field of known benchmarks.
 
 ## Download
 
