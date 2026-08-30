@@ -274,15 +274,27 @@ export default function CalculatorResult() {
             <div className="mt-4 flex items-end gap-3">
               <FitPriceText
                 size="xl"
-                text={formatPrice(toDisplay(result.summary.estimated_price_per_lb))}
+                text={electrodeModel
+                  ? formatPrice(electrodeModel.cost_per_cm2_usd)
+                  : formatPrice(toDisplay(result.summary.estimated_price_per_lb))}
                 className="min-w-0 text-white"
               />
-              <div className="pb-1 text-base text-slate-300">{fmtLabel}</div>
+              <div className="pb-1 text-base text-slate-300">{electrodeModel ? '/cm²' : fmtLabel}</div>
             </div>
             <div className="mt-2 text-xs leading-6 text-slate-300">
-              Net cost {formatPrice(toDisplay(result.summary.net_cost_per_lb))}
-              {fmtLabel} before selling margin treatment. Alternate view {formatPrice(altPrice)}
-              {altLabel}.
+              {electrodeModel ? (
+                <>
+                  Electrode-stack cost per cm² of active area ({electrodeModel.active_area_cm2.toFixed(1)} cm² modeled).
+                  Per-mass view {formatPrice(toDisplay(result.summary.estimated_price_per_lb))}
+                  {fmtLabel} on vendor-pack material prices.
+                </>
+              ) : (
+                <>
+                  Net cost {formatPrice(toDisplay(result.summary.net_cost_per_lb))}
+                  {fmtLabel} before selling margin treatment. Alternate view {formatPrice(altPrice)}
+                  {altLabel}.
+                </>
+              )}
             </div>
             <div className="mt-3 flex flex-wrap gap-2">
               <span className="cp-chip-dark">{catalystDomain}</span>
@@ -362,19 +374,33 @@ export default function CalculatorResult() {
         <div className="grid gap-3 xl:grid-cols-[minmax(0,1.18fr)_minmax(320px,0.82fr)]">
           <div className="surface-ink relative overflow-hidden p-5 sm:p-6">
             <div className="relative min-w-0">
-              <div className="cp-subtle-label !text-slate-400">Estimated selling price</div>
+              <div className="cp-subtle-label !text-slate-400">
+                {electrodeModel ? 'Estimated electrode cost' : 'Estimated selling price'}
+              </div>
               <div className="mt-2 text-sm text-slate-300">{composition}</div>
               <div className="mt-4 flex flex-wrap items-end gap-3">
                 <FitPriceText
                   size="xl"
-                  text={formatPrice(toDisplay(result.summary.estimated_price_per_lb))}
+                  text={electrodeModel
+                    ? formatPrice(electrodeModel.cost_per_cm2_usd)
+                    : formatPrice(toDisplay(result.summary.estimated_price_per_lb))}
                   className="min-w-0 text-white"
                 />
-                <div className="pb-2 text-xl text-slate-300">{fmtLabel}</div>
+                <div className="pb-2 text-xl text-slate-300">{electrodeModel ? '/cm²' : fmtLabel}</div>
               </div>
               <div className="mt-3 text-sm text-slate-300">
-                Net cost {formatPrice(toDisplay(result.summary.net_cost_per_lb))}
-                {fmtLabel} before selling margin treatment.
+                {electrodeModel ? (
+                  <>
+                    Electrode-stack cost per cm² of active area. Per-mass view{' '}
+                    {formatPrice(toDisplay(result.summary.estimated_price_per_lb))}
+                    {fmtLabel} on vendor-pack material prices.
+                  </>
+                ) : (
+                  <>
+                    Net cost {formatPrice(toDisplay(result.summary.net_cost_per_lb))}
+                    {fmtLabel} before selling margin treatment.
+                  </>
+                )}
               </div>
               <div className="mt-4 flex flex-wrap gap-2">
                 <span className="cp-chip-dark">{catalystDomain}</span>
