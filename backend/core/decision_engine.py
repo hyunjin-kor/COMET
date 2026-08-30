@@ -27,6 +27,12 @@ def _load_catalogs() -> dict[str, dict[str, Any]]:
     return catalogs
 
 
+def list_benchmark_catalogs() -> list[dict[str, Any]]:
+    """Return the raw benchmark catalogs (family metadata plus candidates)."""
+
+    return list(_load_catalogs().values())
+
+
 def list_benchmark_families() -> list[dict[str, Any]]:
     """Return the optional reference families available to the UI."""
 

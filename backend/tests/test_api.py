@@ -1,7 +1,7 @@
 """FastAPI endpoint integration tests."""
 
 import json
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 
 import pytest
 from sqlmodel import select
@@ -692,6 +692,70 @@ class TestPrices:
         resp = client.get("/api/prices/Ni/history?from=2025-03-01&to=2025-02-01")
         assert resp.status_code == 422
         assert resp.json()["detail"] == "'from' must be on or before 'to'"
+
+    def test_trends_covers_all_tracked_symbols(self, client, session, monkeypatch):
+        from backend.routers import prices as prices_router
+
+        async def fake_fetch_history(symbol: str, period: str = "1y"):
+            if symbol == "Pt":
+                return [
+                    {"date": "2026-08-01", "price": 1000.0, "open": 1000.0, "high": 1005.0, "low": 995.0},
+                    {"date": "2026-08-02", "price": 1010.0, "open": 1010.0, "high": 1015.0, "low": 1005.0},
+                    {"date": "2026-08-03", "price": 1050.0, "open": 1050.0, "high": 1055.0, "low": 1045.0},
+                ]
+            return []
+
+        monkeypatch.setattr(prices_router, "fetch_history", fake_fetch_history)
+        monkeypatch.setattr(prices_router, "_trends_cache", {})
+
+        recent = datetime.now()
+        session.add_all([
+            MetalPrice(symbol="Rh", name="Rhodium", price=5000.0, unit="$/troy_oz",
+                       source="Kitco (live)", fetched_at=recent - timedelta(days=2)),
+            MetalPrice(symbol="Rh", name="Rhodium", price=5100.0, unit="$/troy_oz",
+                       source="Kitco (live)", fetched_at=recent),
+        ])
+        session.commit()
+
+        resp = client.get("/api/prices/trends?period=3mo")
+        assert resp.status_code == 200
+        payload = resp.json()
+        assert payload["period"] == "3mo"
+        trends = payload["trends"]
+        assert set(trends) == set(prices_router.TRACKED_SYMBOLS)
+
+        pt = trends["Pt"]
+        assert pt["source"] == "Yahoo Finance"
+        assert pt["count"] == 3
+        assert pt["change_pct"] == pytest.approx(5.0)
+        assert pt["high"] == 1050.0 and pt["low"] == 1000.0
+        assert [point["date"] for point in pt["points"]] == ["2026-08-01", "2026-08-02", "2026-08-03"]
+
+        rh = trends["Rh"]
+        assert rh["source"] == "DB cache"
+        assert rh["count"] == 2
+        assert rh["change_pct"] == pytest.approx(2.0)
+
+    def test_trends_rejects_bad_period(self, client):
+        resp = client.get("/api/prices/trends?period=9y")
+        assert resp.status_code == 422
+
+    def test_usage_maps_metals_to_reaction_families(self, client):
+        resp = client.get("/api/prices/usage")
+        assert resp.status_code == 200
+        usage = resp.json()["usage"]
+        from backend.routers.prices import TRACKED_SYMBOLS
+
+        assert set(usage) == set(TRACKED_SYMBOLS)
+        assert usage["Pt"], "Pt should appear in at least one benchmark family"
+        assert usage["Ni"], "Ni should appear in at least one benchmark family"
+        for entries in usage.values():
+            for entry in entries:
+                assert entry["family"] and entry["title"]
+        # The acronym stoplist must keep water-gas shift (no tungsten candidates)
+        # from counting as tungsten usage.
+        w_families = {entry["family"] for entry in usage["W"]}
+        assert "water-gas-shift" not in w_families
 
 
 class TestMaterials:

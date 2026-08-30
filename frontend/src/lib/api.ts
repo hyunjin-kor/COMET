@@ -456,6 +456,35 @@ export const fetchPriceHistory = (symbol: string, query: PriceHistoryQuery = {})
   return request<PriceHistoryResponse>(`/prices/${symbol}/history?${params.toString()}`);
 };
 
+export interface PriceTrend {
+  symbol: string;
+  source: string;
+  count: number;
+  first: number | null;
+  last: number | null;
+  high: number | null;
+  low: number | null;
+  change_pct: number | null;
+  points: Array<{ date: string; price: number }>;
+}
+
+export interface PriceTrendsResponse {
+  period: string;
+  trends: Record<string, PriceTrend>;
+}
+
+export const fetchPriceTrends = (period: NonNullable<PriceHistoryQuery['period']> = '3mo') =>
+  request<PriceTrendsResponse>(`/prices/trends?period=${period}`);
+
+export interface PriceUsageEntry {
+  family: string;
+  title: string;
+  reaction: string;
+}
+
+export const fetchPriceUsage = () =>
+  request<{ usage: Record<string, PriceUsageEntry[]> }>('/prices/usage');
+
 // Materials
 export interface MaterialItem {
   id: string | number;
