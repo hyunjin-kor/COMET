@@ -1971,7 +1971,7 @@ export default function Calculator() {
                           <div className="mt-0.5 text-xs text-slate-500">
                             {saved.metal_symbol ? `${saved.metal_loading_wt_pct}% ${saved.metal_symbol}` : saved.catalyst_domain}
                             {saved.support_name ? ` / ${saved.support_name}` : ''} · {saved.order_size_tons} tons ·{' '}
-                            {formatPrice(saved.estimated_price_per_lb)}/lb · {saved.created_at.slice(0, 10)}
+                            {formatPrice(toDisplay(saved.estimated_price_per_lb))}{fmtLabel} · {saved.created_at.slice(0, 10)}
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
