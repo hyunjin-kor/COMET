@@ -593,6 +593,21 @@ const KO: Record<string, string> = {
   'Evidence Surface': '근거 요약',
   'Choose a metal to inspect its history.': '이력을 확인할 금속을 선택하세요.',
   'Age not stored': '경과 시간 미기재',
+  'Change basis': '등락 기준',
+  'Biggest movers': '최대 등락',
+  'History accumulating': '이력 수집 중',
+  'Used in reaction families': '이 금속을 쓰는 반응군',
+  'Benchmark families whose candidate compositions name this metal.': '후보 조성에 이 금속이 등장하는 벤치마크 반응군입니다.',
+  'Period return': '기간 수익률',
+  'Annualized volatility': '연환산 변동성',
+  'Std dev of daily returns, annualized (√252).': '일간 수익률 표준편차의 연환산값(√252)입니다.',
+  'Position in period range': '기간 범위 내 위치',
+  'Relative performance': '상대 성과',
+  'Compare metals rebased to 100': '100 기준으로 정규화해 금속 비교',
+  'Every series starts at 100 at the window open, so metals with very different absolute prices stay comparable.':
+    '모든 시계열이 구간 시작 시점에 100에서 출발하므로, 절대 가격이 크게 다른 금속끼리도 비교할 수 있습니다.',
+  'Only metals with enough stored history appear here; non-exchange metals join as local snapshots accumulate.':
+    '저장된 이력이 충분한 금속만 표시됩니다. 거래소 시세가 없는 금속은 로컬 스냅숏이 쌓이면 추가됩니다.',
   'Indexed reference aligned with CatCost-style library pricing': 'CatCost 방식 라이브러리 가격과 정렬된 지수 참조',
   'Manual price input': '수동 가격 입력값',
 

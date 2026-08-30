@@ -2,17 +2,31 @@
 
 from __future__ import annotations
 
-from datetime import date
+import asyncio
+import re
+import time
+from datetime import date, timedelta
+from functools import lru_cache
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import Session, select
 
+from backend.core.decision_engine import list_benchmark_catalogs
 from backend.core.price_evidence import describe_price_evidence
 from backend.core.price_fetcher import fetch_history, get_reference_prices
 from backend.database import get_session
 from backend.models.metal_price import MetalPrice
 
 router = APIRouter(prefix="/api/prices", tags=["prices"])
+
+TRACKED_SYMBOLS = ["Pt", "Pd", "Rh", "Ru", "Ir", "Au", "Ag", "Ni", "Co", "Cu", "Al", "Mo", "W", "Fe"]
+
+_PERIOD_DAYS = {"1mo": 31, "3mo": 92, "6mo": 183, "1y": 366, "2y": 731, "5y": 1827}
+
+# Trend payloads are cached per period so reopening the page (or switching
+# the change basis back and forth) does not re-hit the Yahoo chart API.
+_TRENDS_TTL_SECONDS = 600.0
+_trends_cache: dict[str, tuple[float, dict]] = {}
 
 
 def _normalize(symbol: str) -> str:
@@ -117,6 +131,141 @@ def get_all_prices(session: Session = Depends(get_session)):
     # Sort: live prices first, then alphabetical
     result.sort(key=lambda x: (0 if x["source_type"] == "live" else 1, x["symbol"]))
     return result
+
+
+def _downsample(points: list[dict], limit: int = 60) -> list[dict]:
+    """Thin a daily series to at most `limit` points, always keeping the last one."""
+
+    if len(points) <= limit:
+        return points
+    stride = (len(points) - 1) / (limit - 1)
+    picked = [points[round(i * stride)] for i in range(limit - 1)]
+    picked.append(points[-1])
+    return picked
+
+
+def _dedupe_by_date(points: list[dict]) -> list[dict]:
+    by_date: dict[str, dict] = {}
+    for point in points:
+        by_date[point["date"]] = point
+    return [by_date[key] for key in sorted(by_date)]
+
+
+async def _symbol_trend(symbol: str, period: str, session: Session) -> dict:
+    history = await fetch_history(symbol, period)
+    source = "Yahoo Finance"
+    if not history:
+        source = "DB cache"
+        cutoff = date.today() - timedelta(days=_PERIOD_DAYS.get(period, 366))
+        stmt = (
+            select(MetalPrice)
+            .where(MetalPrice.symbol == symbol)
+            .order_by(MetalPrice.fetched_at.asc())
+            .limit(500)
+        )
+        history = [
+            {"date": p.fetched_at.strftime("%Y-%m-%d"), "price": p.price}
+            for p in session.exec(stmt).all()
+            if p.fetched_at.date() >= cutoff
+        ]
+
+    points = _dedupe_by_date([{"date": row["date"], "price": row["price"]} for row in history])
+    prices = [point["price"] for point in points]
+    first = prices[0] if prices else None
+    last = prices[-1] if prices else None
+    change_pct = ((last - first) / first * 100) if first and last is not None and first != 0 else None
+    return {
+        "symbol": symbol,
+        "source": source,
+        "count": len(points),
+        "first": first,
+        "last": last,
+        "high": max(prices) if prices else None,
+        "low": min(prices) if prices else None,
+        "change_pct": change_pct,
+        "points": _downsample(points),
+    }
+
+
+@router.get("/trends")
+async def get_price_trends(
+    period: str = Query(default="3mo", pattern="^(1mo|3mo|6mo|1y|2y|5y)$"),
+    session: Session = Depends(get_session),
+):
+    """Compact per-symbol trend series and change stats for every tracked metal.
+
+    Yahoo-backed symbols come from the chart API; the rest fall back to the
+    per-refresh snapshots accumulated in the local DB (deduplicated by day),
+    so change figures are only reported for series with real depth.
+    """
+
+    cached = _trends_cache.get(period)
+    if cached and time.monotonic() - cached[0] < _TRENDS_TTL_SECONDS:
+        return cached[1]
+
+    trends = await asyncio.gather(
+        *[_symbol_trend(symbol, period, session) for symbol in TRACKED_SYMBOLS]
+    )
+    payload = {"period": period, "trends": {trend["symbol"]: trend for trend in trends}}
+    _trends_cache[period] = (time.monotonic(), payload)
+    return payload
+
+
+# Tokens that look like element symbols but are route/reaction acronyms in
+# benchmark candidate names (WGS, USY w/ RE, PEM, ...). Skipped during the scan.
+_USAGE_STOPWORDS = {
+    "AEM", "CCM", "FCC", "FTS", "GDE", "GDL", "HDO", "HER", "LDH", "MEA", "MTH",
+    "MTO", "NRR", "OER", "ORR", "PDH", "PEM", "PGM", "PROX", "RE", "SCR", "SMR",
+    "USY", "WGS", "RWGS",
+}
+_SYMBOL_PATTERNS = {
+    symbol: re.compile(rf"(?<![A-Za-z]){symbol}(?![a-z])") for symbol in TRACKED_SYMBOLS
+}
+_ELEMENT_NAMES = {
+    "Pt": "platinum", "Pd": "palladium", "Rh": "rhodium", "Ru": "ruthenium",
+    "Ir": "iridium", "Au": "gold", "Ag": "silver", "Ni": "nickel",
+    "Co": "cobalt", "Cu": "copper", "Al": "aluminum", "Mo": "molybdenum",
+    "W": "tungsten", "Fe": "iron",
+}
+
+
+@lru_cache(maxsize=1)
+def _usage_map() -> dict[str, list[dict]]:
+    usage: dict[str, list[dict]] = {symbol: [] for symbol in TRACKED_SYMBOLS}
+    for catalog in list_benchmark_catalogs():
+        texts: list[str] = []
+        for candidate in catalog.get("candidates", []):
+            texts.append(str(candidate.get("title", "")))
+            for component in candidate.get("components", []):
+                texts.append(str(component.get("name", "")))
+        matched: set[str] = set()
+        for text in texts:
+            lowered = text.lower()
+            tokens = [token for token in re.split(r"[^A-Za-z0-9]+", text) if token]
+            for symbol in TRACKED_SYMBOLS:
+                if symbol in matched:
+                    continue
+                if any(
+                    token not in _USAGE_STOPWORDS and _SYMBOL_PATTERNS[symbol].search(token)
+                    for token in tokens
+                ) or _ELEMENT_NAMES[symbol] in lowered:
+                    matched.add(symbol)
+        entry = {
+            "family": catalog["family"],
+            "title": catalog["title"],
+            "reaction": catalog.get("reaction", ""),
+        }
+        for symbol in matched:
+            usage[symbol].append(entry)
+    return usage
+
+
+@router.get("/usage")
+def get_price_usage():
+    """Map each tracked metal to the reaction families whose benchmark
+    candidates name it in a composition or candidate title."""
+
+    return {"usage": _usage_map()}
 
 
 @router.get("/{symbol}")
