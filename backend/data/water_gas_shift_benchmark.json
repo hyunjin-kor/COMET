@@ -483,12 +483,12 @@
           "wt_pct": 9.0,
           "pricing": {
             "type": "fixed",
-            "price_per_lb": 1.5,
-            "evidence_label": "Chromic oxide screening proxy",
-            "evidence_tier": "engineering_proxy",
-            "confidence_score": 58,
-            "transparency": "derived_index",
-            "note": "Pigment-grade chromic oxide proxy, bounded above by contained-Cr value at the USGS refined chromium price ($5.6/lb Cr = $3.83/lb Cr2O3) and informed below by ferrochrome economics ($1.8/lb Cr content, USGS 2025). Chromia is the documented textural stabilizer of the HTS formulation, carried in the support role."
+            "price_per_lb": 2.5651,
+            "evidence_label": "UN Comtrade chromium-oxide import unit value",
+            "evidence_tier": "public_index",
+            "confidence_score": 70,
+            "transparency": "public_index",
+            "note": "2024 U.S. imports of HS 281990 (chromium oxides and hydroxides excl. trioxide): $16.45M / 2.91M kg = $5.66/kg CIF. Chromia is the documented textural stabilizer of the HTS formulation, carried in the support role."
           }
         },
         {

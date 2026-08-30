@@ -345,7 +345,7 @@
             "evidence_tier": "engineering_proxy",
             "confidence_score": 64,
             "transparency": "derived_index",
-            "note": "Industrial support screening proxy retained to avoid lab-pack alumina distortion. USGS MCS 2026 metallurgical alumina (2025e $590/t import value, ~$0.27/lb) is the public floor; catalyst-grade premium retained."
+            "note": "Industrial support screening proxy retained to avoid lab-pack alumina distortion. USGS MCS 2026 metallurgical alumina (2025e $590/t import value, ~$0.27/lb) is the public floor; catalyst-grade premium retained. UN Comtrade 2024: calcined alumina (HS 281820) averaged $0.60/kg with specialty flows to $3.64/kg; catalyst-carrier activated/gamma alumina marketplace offers run $800-1,700/t."
           }
         }
       ]
@@ -418,7 +418,7 @@
             "evidence_tier": "engineering_proxy",
             "confidence_score": 63,
             "transparency": "derived_index",
-            "note": "MgO support uses a screening proxy rather than reagent-pack pricing. USGS MCS 2025/2026 publish no magnesia unit price; Sigma 342793 lab price ($0.38/g) is the public ceiling reference."
+            "note": "MgO support uses a screening proxy rather than reagent-pack pricing. UN Comtrade 2024 magnesia imports (HS 251990) averaged $0.52/kg (China $0.39/kg; high-purity flows to $4.10/kg), bracketing this proxy from below; Sigma 342793 lab price ($0.38/g) is the packaged ceiling."
           }
         }
       ]
@@ -475,7 +475,7 @@
             "evidence_tier": "engineering_proxy",
             "confidence_score": 63,
             "transparency": "derived_index",
-            "note": "Support cost kept on an engineering basis even though a public Sigma quote is attached for transparency. USGS MCS 2025/2026 publish no magnesia unit price; Sigma 342793 lab price ($0.38/g) is the public ceiling reference."
+            "note": "Support cost kept on an engineering basis even though a public Sigma quote is attached for transparency. UN Comtrade 2024 magnesia imports (HS 251990) averaged $0.52/kg (China $0.39/kg; high-purity flows to $4.10/kg), bracketing this proxy from below; Sigma 342793 lab price ($0.38/g) is the packaged ceiling."
           }
         }
       ]
@@ -528,7 +528,7 @@
             "evidence_tier": "engineering_proxy",
             "confidence_score": 60,
             "transparency": "derived_index",
-            "note": "Basic support term held on a conservative engineering proxy. USGS MCS 2025/2026 publish no magnesia unit price; Sigma 342793 lab price ($0.38/g) is the public ceiling reference."
+            "note": "Basic support term held on a conservative engineering proxy. UN Comtrade 2024 magnesia imports (HS 251990) averaged $0.52/kg (China $0.39/kg; high-purity flows to $4.10/kg), bracketing this proxy from below; Sigma 342793 lab price ($0.38/g) is the packaged ceiling."
           }
         },
         {

@@ -345,7 +345,7 @@
             "evidence_tier": "engineering_proxy",
             "confidence_score": 60,
             "transparency": "derived_index",
-            "note": "Basic support term held on a conservative engineering proxy to avoid reagent-pack distortion. USGS MCS 2025/2026 publish no magnesia unit price; Sigma 342793 lab price ($0.38/g) is the public ceiling reference."
+            "note": "Basic support term held on a conservative engineering proxy to avoid reagent-pack distortion. UN Comtrade 2024 magnesia imports (HS 251990) averaged $0.52/kg (China $0.39/kg; high-purity flows to $4.10/kg), bracketing this proxy from below; Sigma 342793 lab price ($0.38/g) is the packaged ceiling."
           }
         }
       ]
