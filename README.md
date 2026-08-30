@@ -97,6 +97,7 @@ Requires Python 3.11+, Node.js 18+, and Windows for desktop packaging.
 ```bash
 npm install
 npm run dev      # development: Electron shell + FastAPI sidecar + Vite renderer
+npm run web      # browser mode: build the frontend, then serve the whole app at http://localhost:8765
 npm run build    # packaged installer under dist-electron\
 ```
 
