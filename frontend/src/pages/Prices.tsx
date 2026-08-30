@@ -4,6 +4,7 @@ import { SkeletonListRows, SkeletonTile } from '../components/shared/Skeleton';
 import { WorkspaceSectionFooter, WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
 import { fetchPriceHistory, fetchPrices, refreshPrices, type MetalPrice } from '../lib/api';
 import { LB_PER_KG, TROY_OZ_PER_KG, TROY_OZ_PER_LB, type Unit } from '../lib/unit-conversion';
+import { useLang } from '../lib/i18n';
 import { useUnit } from '../lib/use-unit';
 
 const MetalTrendChart = lazy(() => import('../components/charts/MetalTrendChart'));
@@ -143,6 +144,7 @@ function DarkChartFallback({ label }: { label: string }) {
 
 export default function Prices() {
   const { unit } = useUnit();
+  const { t } = useLang();
   const {
     activeSection,
     activeSectionId,
@@ -363,10 +365,10 @@ export default function Prices() {
         </section>
 
         <section className="cp-rail-panel">
-          <div className="cp-subtle-label">Feed Coverage</div>
+          <div className="cp-subtle-label">{t('Feed Coverage')}</div>
           <div className="mt-3 grid gap-2 sm:grid-cols-2 xl:grid-cols-1">
-            <StatusTile label="Tracked symbols" value={String(prices.length)} detail="Metals visible in the desktop feed." />
-            <StatusTile label="Needs review" value={String(reviewFlagCount)} detail="Freshness or confidence flags worth checking." />
+            <StatusTile label={t('Tracked symbols')} value={String(prices.length)} detail={t('Metals visible in the desktop feed.')} />
+            <StatusTile label={t('Needs review')} value={String(reviewFlagCount)} detail={t('Freshness or confidence flags worth checking.')} />
           </div>
         </section>
       </div>
@@ -379,27 +381,27 @@ export default function Prices() {
         <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.06s' }}>
           <div className="mb-5 flex flex-col gap-4 border-b border-slate-900/8 pb-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <h2 className="cp-heading-xl">Live Metal Prices</h2>
+              <h2 className="cp-heading-xl">{t('Live Metal Prices')}</h2>
               <p className="cp-body-copy mt-1.5 max-w-2xl">
-                Scan the tracked symbols, then inspect evidence, freshness, and source quality for the selected metal.
+                {t('Scan the tracked symbols, then inspect evidence, freshness, and source quality for the selected metal.')}
               </p>
             </div>
 
             <div className="flex min-w-[280px] flex-col gap-2 rounded-[22px] border border-slate-200 bg-white/76 px-4 py-3 sm:items-end">
-              <div className="cp-subtle-label">Quote Status</div>
+              <div className="cp-subtle-label">{t('Quote Status')}</div>
               <div className="text-right">
                 <div className="text-sm font-semibold text-[#191f28]">
-                  {refreshing ? 'Refreshing live quotes' : latestFetchedAt ? 'Live quotes loaded' : 'Stored pricing basis'}
+                  {refreshing ? t('Refreshing live quotes') : latestFetchedAt ? t('Live quotes loaded') : t('Stored pricing basis')}
                 </div>
                 <div className="mt-1 text-xs leading-5 text-slate-500">
                   {latestFetchedAt
                     ? `${liveQuoteCount} live symbols synced ${formatSyncStamp(latestFetchedAt)}`
-                    : 'Indexed and manual prices are available even before a live refresh.'}
+                    : t('Indexed and manual prices are available even before a live refresh.')}
                 </div>
               </div>
               <button onClick={handleRefresh} disabled={refreshing} className="cp-button-secondary px-4 py-2.5 text-sm">
                 <span className={`mr-2 inline-flex h-4 w-4 rounded-full border-2 border-current border-t-transparent ${refreshing ? 'animate-spin' : ''}`} />
-                {refreshing ? 'Refreshing now' : 'Refresh quotes'}
+                {refreshing ? t('Refreshing now') : t('Refresh quotes')}
               </button>
             </div>
           </div>
@@ -411,10 +413,10 @@ export default function Prices() {
           ) : null}
 
           <div className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-            <StatusTile label="Tracked symbols" value={String(prices.length)} detail="Metals visible in the desktop feed." />
-            <StatusTile label="Live coverage" value={`${liveQuoteCount}/${prices.length}`} detail="Symbols backed by current live sources." />
-            <StatusTile label="Fallback rows" value={String(indexedQuoteCount + manualQuoteCount)} detail={`${indexedQuoteCount} indexed and ${manualQuoteCount} manual rows remain usable.`} />
-            <StatusTile label="Needs review" value={String(reviewFlagCount)} detail="Freshness or confidence flags worth checking." />
+            <StatusTile label={t('Tracked symbols')} value={String(prices.length)} detail={t('Metals visible in the desktop feed.')} />
+            <StatusTile label={t('Live coverage')} value={`${liveQuoteCount}/${prices.length}`} detail={t('Symbols backed by current live sources.')} />
+            <StatusTile label={t('Fallback rows')} value={String(indexedQuoteCount + manualQuoteCount)} detail={`${indexedQuoteCount} indexed and ${manualQuoteCount} manual rows remain usable.`} />
+            <StatusTile label={t('Needs review')} value={String(reviewFlagCount)} detail={t('Freshness or confidence flags worth checking.')} />
           </div>
 
           <div className="space-y-4">

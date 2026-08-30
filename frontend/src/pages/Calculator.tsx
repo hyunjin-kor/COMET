@@ -33,6 +33,7 @@ import {
   type CalculatorRow,
 } from '../lib/calculator-session';
 import { formatPrice } from '../lib/format-price';
+import { useLang } from '../lib/i18n';
 import { LB_PER_KG, TROY_OZ_PER_LB } from '../lib/unit-conversion';
 import { useUnit } from '../lib/use-unit';
 
@@ -502,6 +503,7 @@ function CompactValueRow({ label, value, detail }: { label: string; value: strin
 export default function Calculator() {
   const navigate = useNavigate();
   const { toDisplay, toInternal, fmtLabel } = useUnit();
+  const { lang, t } = useLang();
   const sectionState = useWorkspaceSections(ESTIMATE_SECTIONS, 'estimate');
   const storedDraft = loadCalculatorDraft();
   const [rows, setRows] = useState<CalculatorRow[]>(() => storedDraft?.rows?.length ? storedDraft.rows : defaultRows());
@@ -1236,17 +1238,17 @@ export default function Calculator() {
         <div className="surface-ghost p-4">
           <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_320px] xl:items-start">
             <div>
-              <div className="cp-subtle-label">Electrode stack</div>
-              <div className="cp-heading-lg mt-2">Set the stack first, then price the preparation method.</div>
+              <div className="cp-subtle-label">{t('Electrode stack')}</div>
+              <div className="cp-heading-lg mt-2">{t('Set the stack first, then price the preparation method.')}</div>
               <p className="mt-2 text-sm leading-7 text-slate-600">
-                Catalyst powder, ionomer, membrane, and substrate each keep their own source record.
+                {t('Catalyst powder, ionomer, membrane, and substrate each keep their own source record.')}
               </p>
               <p className="mt-2 text-xs leading-6 text-slate-500">
-                Defaults prefer higher-confidence literature or sourced vendor rows when they exist.
+                {t('Defaults prefer higher-confidence literature or sourced vendor rows when they exist.')}
               </p>
             </div>
             <div className="rounded-[24px] border border-slate-900/8 bg-white/72 p-4">
-              <div className="cp-subtle-label">Application family</div>
+              <div className="cp-subtle-label">{t('Application family')}</div>
               <div className="mt-3 grid gap-2">
                 {ELECTRO_APPLICATION_OPTIONS.map((option) => (
                   <button
@@ -1271,10 +1273,10 @@ export default function Calculator() {
 
         <div className="grid gap-4 xl:grid-cols-2">
           <div className="surface-ghost p-4">
-            <div className="cp-subtle-label">Material stack</div>
+            <div className="cp-subtle-label">{t('Material stack')}</div>
             <div className="mt-3 grid gap-3">
               <label className="block">
-                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Catalyst powder</div>
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{t('Catalyst powder')}</div>
                 <select value={electrocatalystConfig.catalystMaterialKey} onChange={(event) => updateElectroConfig({ catalystMaterialKey: event.target.value })} className="input-base mt-2">
                   <option value="">Select catalyst powder</option>
                   {catalystPowders.map((material) => (
@@ -1286,7 +1288,7 @@ export default function Calculator() {
               </label>
 
               <label className="block">
-                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Ionomer</div>
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{t('Ionomer')}</div>
                 <select value={electrocatalystConfig.ionomerMaterialKey} onChange={(event) => updateElectroConfig({ ionomerMaterialKey: event.target.value })} className="input-base mt-2">
                   <option value="">Select ionomer</option>
                   {ionomerOptions.map((material) => (
@@ -1298,7 +1300,7 @@ export default function Calculator() {
               </label>
 
               <label className="block">
-                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Membrane</div>
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{t('Membrane')}</div>
                 <select value={electrocatalystConfig.membraneMaterialKey} onChange={(event) => updateElectroConfig({ membraneMaterialKey: event.target.value })} className="input-base mt-2">
                   <option value="">Select membrane</option>
                   {membraneOptions.map((material) => (
@@ -1310,7 +1312,7 @@ export default function Calculator() {
               </label>
 
               <label className="block">
-                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Substrate / GDL</div>
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{t('Substrate / GDL')}</div>
                 <select value={electrocatalystConfig.substrateMaterialKey} onChange={(event) => updateElectroConfig({ substrateMaterialKey: event.target.value })} className="input-base mt-2">
                   <option value="">Select substrate / GDL</option>
                   {substrateOptions.map((material) => (
@@ -1324,10 +1326,10 @@ export default function Calculator() {
           </div>
 
           <div className="surface-ghost p-4">
-            <div className="cp-subtle-label">Electrode geometry</div>
+            <div className="cp-subtle-label">{t('Electrode geometry')}</div>
             <div className="mt-3 grid gap-3 sm:grid-cols-2">
               <label className="block">
-                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Active area</div>
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{t('Active area')}</div>
                 <div className="mt-2 flex items-center gap-2">
                   <input type="number" min="1" step="0.1" value={electrocatalystConfig.activeAreaCm2} onChange={(event) => updateElectroConfig({ activeAreaCm2: Number(event.target.value) })} className="input-base text-right font-mono" />
                   <span className="text-xs text-slate-500">cm²</span>
@@ -1383,7 +1385,7 @@ export default function Calculator() {
 
         {activeElectroTemplate ? (
           <div className="rounded-[24px] border border-emerald-200 bg-emerald-50/80 p-4">
-            <div className="cp-subtle-label !text-emerald-700">Selected preparation template</div>
+            <div className="cp-subtle-label !text-emerald-700">{t('Selected preparation template')}</div>
             <div className="mt-2 cp-heading-sm">{activeElectroTemplate.name}</div>
             <div className="mt-2 text-sm leading-6 text-emerald-900">{activeElectroTemplate.description}</div>
             <div className="mt-3 flex flex-wrap gap-2">
@@ -1393,19 +1395,19 @@ export default function Calculator() {
             </div>
             <div className="mt-4 grid gap-3 lg:grid-cols-3">
               <div>
-                <div className="cp-subtle-label !text-emerald-700">Pre-treatment</div>
+                <div className="cp-subtle-label !text-emerald-700">{t('Pre-treatment')}</div>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {(activeElectroTemplate.preprocess ?? []).map((item) => <span key={item} className="cp-chip">{item}</span>)}
                 </div>
               </div>
               <div>
-                <div className="cp-subtle-label !text-emerald-700">Synthesis / coating</div>
+                <div className="cp-subtle-label !text-emerald-700">{t('Synthesis / coating')}</div>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {(activeElectroTemplate.synthesis ?? []).map((item) => <span key={item} className="cp-chip">{item}</span>)}
                 </div>
               </div>
               <div>
-                <div className="cp-subtle-label !text-emerald-700">Post-treatment</div>
+                <div className="cp-subtle-label !text-emerald-700">{t('Post-treatment')}</div>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {(activeElectroTemplate.postprocess ?? []).map((item) => <span key={item} className="cp-chip">{item}</span>)}
                 </div>
@@ -1428,12 +1430,12 @@ export default function Calculator() {
       <div className="space-y-3">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <div className="flex items-center gap-2"><span className={`h-2.5 w-2.5 rounded-full ${copy.accent}`} /><h3 className="cp-heading-sm">{copy.title}</h3></div>
-            <p className="mt-1 text-xs leading-6 text-slate-500">{copy.description}</p>
+            <div className="flex items-center gap-2"><span className={`h-2.5 w-2.5 rounded-full ${copy.accent}`} /><h3 className="cp-heading-sm">{t(copy.title)}</h3></div>
+            <p className="mt-1 text-xs leading-6 text-slate-500">{t(copy.description)}</p>
           </div>
-          <button onClick={() => addRow(role)} disabled={thermalRows.length >= maxThermalComponents} className="cp-button-secondary px-3 py-2 text-xs disabled:cursor-not-allowed disabled:opacity-45">{copy.button}</button>
+          <button onClick={() => addRow(role)} disabled={thermalRows.length >= maxThermalComponents} className="cp-button-secondary px-3 py-2 text-xs disabled:cursor-not-allowed disabled:opacity-45">{t(copy.button)}</button>
         </div>
-        {items.length === 0 ? <div className="rounded-[24px] border border-dashed border-slate-300 bg-white/44 px-4 py-4 text-sm text-slate-500">{copy.placeholder}</div> : (
+        {items.length === 0 ? <div className="rounded-[24px] border border-dashed border-slate-300 bg-white/44 px-4 py-4 text-sm text-slate-500">{t(copy.placeholder)}</div> : (
           <div className="space-y-3">
             {items.map((row) => (
               <div key={row.id} className="surface-ghost p-4">
@@ -1481,25 +1483,25 @@ export default function Calculator() {
         <div className="grid gap-3 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)]">
           <div className="rounded-[22px] border border-slate-900/8 bg-white/62 p-4">
             <div className="flex items-start justify-between gap-3">
-              <div className="cp-subtle-label">Price basis</div>
+              <div className="cp-subtle-label">{t('Price basis')}</div>
               <button onClick={syncPrices} disabled={refreshing} className="cp-button-secondary px-3 py-2 text-xs">
                 <span className={`mr-2 inline-flex h-3.5 w-3.5 rounded-full border-2 border-current border-t-transparent ${refreshing ? 'animate-spin' : ''}`} />
-                {refreshing ? 'Refreshing' : 'Refresh'}
+                {refreshing ? t('Refreshing') : t('Refresh')}
               </button>
             </div>
             <div className="mt-3 space-y-1">
               <CompactValueRow
-                label="Status"
+                label={t('Status')}
                 value={
                   refreshing
-                    ? 'Refreshing'
+                    ? t('Refreshing')
                     : pricesLoading
-                      ? 'Loading live feed'
+                      ? t('Loading live feed')
                       : pricesError
-                        ? 'Live feed unavailable'
+                        ? t('Live feed unavailable')
                         : pricesUpdatedAt
-                          ? 'Ready'
-                          : 'Pending'
+                          ? t('Ready')
+                          : t('Pending')
                 }
                 detail={
                   pricesLoading
@@ -1520,7 +1522,7 @@ export default function Calculator() {
           </div>
 
           <div className="rounded-[22px] border border-slate-900/8 bg-white/62 p-4">
-            <div className="cp-subtle-label">Current case</div>
+            <div className="cp-subtle-label">{t('Current case')}</div>
             <div className="mt-2 text-base font-semibold text-[#191f28]">{catalystDomainLabel(catalystDomain)}</div>
             <div className="mt-2 text-sm leading-6 text-slate-600">{recipeSummary}</div>
             <div className="mt-3 flex flex-wrap gap-2">
@@ -1531,17 +1533,17 @@ export default function Calculator() {
           </div>
 
           <div className="rounded-[22px] border border-slate-900/8 bg-white/62 p-4">
-            <div className="cp-subtle-label">Preparation basis</div>
+            <div className="cp-subtle-label">{t('Preparation basis')}</div>
             <div className="mt-2 text-base font-semibold text-[#191f28]">{preparationSummary}</div>
             <div className="mt-2 space-y-1">
-              <CompactValueRow label="Campaign" value={`${orderSize} tons`} detail={`${scale.label} scale / ${scale.rate}`} />
+              <CompactValueRow label={t('Campaign')} value={`${orderSize} tons`} detail={`${scale.label} scale / ${scale.rate}`} />
               <CompactValueRow
-                label="Steps"
+                label={t('Steps')}
                 value={String(steps.length)}
                 detail={steps.length > 0 ? `${formatStepLabel(steps[0]!)}${steps.length > 1 ? ` +${steps.length - 1}` : ''}` : 'Choose at least one step'}
               />
               <CompactValueRow
-                label={catalystDomain === 'thermal' ? 'Recovery' : 'Family'}
+                label={catalystDomain === 'thermal' ? t('Recovery') : t('Family')}
                 value={recoverySummary}
                 detail={
                   catalystDomain === 'thermal'
@@ -1554,9 +1556,9 @@ export default function Calculator() {
 
           <div className="rounded-[20px] border border-[#191f28] bg-[#191f28] p-4 text-white shadow-[0_8px_24px_rgba(15,23,42,0.18)]">
             <div className="flex items-start justify-between gap-3">
-              <div className="cp-subtle-label !text-slate-400">Latest result</div>
+              <div className="cp-subtle-label !text-slate-400">{t('Latest result')}</div>
               <button onClick={() => navigate('/calculator/result')} disabled={!latestSnapshotForCurrentCase} className="cp-button-ink px-3 py-2 text-xs">
-                Open
+                {t('Open')}
               </button>
             </div>
             <div className="mt-3 flex items-end gap-2">
@@ -1586,10 +1588,10 @@ export default function Calculator() {
     return (
       <section className="surface-card p-5">
         <div>
-          <div className="cp-subtle-label">Catalyst type</div>
-          <h2 className="cp-heading-lg mt-2">Choose the workflow before you edit the recipe.</h2>
+          <div className="cp-subtle-label">{t('Catalyst type')}</div>
+          <h2 className="cp-heading-lg mt-2">{t('Choose the workflow before you edit the recipe.')}</h2>
           <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-600">
-            Thermocatalyst keeps bulk composition and support balance together. Electrocatalyst separates catalyst powder, ionomer, membrane, and substrate.
+            {t('Thermocatalyst keeps bulk composition and support balance together. Electrocatalyst separates catalyst powder, ionomer, membrane, and substrate.')}
           </p>
         </div>
 
@@ -1620,15 +1622,15 @@ export default function Calculator() {
                 }`}
               >
                 <div className="flex items-center justify-between gap-3">
-                  <div className="cp-heading-sm">{option.title}</div>
+                  <div className="cp-heading-sm">{t(option.title)}</div>
                   <span className={`inline-flex h-6 min-w-6 items-center justify-center rounded-full px-2 text-[10px] font-semibold uppercase tracking-[0.16em] ${
                     active ? 'bg-slate-950 text-white' : 'bg-slate-100 text-slate-500'
                   }`}>
-                    {active ? 'Selected' : 'Choose'}
+                    {active ? t('Selected') : t('Choose')}
                   </span>
                 </div>
-                <div className="mt-3 text-sm leading-6 text-slate-700">{option.note}</div>
-                <div className="mt-2 text-xs leading-6 text-slate-500">{option.detail}</div>
+                <div className="mt-3 text-sm leading-6 text-slate-700">{t(option.note)}</div>
+                <div className="mt-2 text-xs leading-6 text-slate-500">{t(option.detail)}</div>
               </button>
             );
           })}
@@ -1637,14 +1639,14 @@ export default function Calculator() {
         <div className="mt-4 rounded-[20px] border border-slate-200 bg-slate-50/80 px-4 py-3">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="text-sm leading-6 text-slate-600">
-              Selected: <span className="font-semibold text-[#191f28]">{catalystDomainLabel(catalystDomain)}</span>. Switching the workflow does not auto-advance.
+              {t('Selected:')} <span className="font-semibold text-[#191f28]">{t(catalystDomainLabel(catalystDomain))}</span>. {t('Switching the workflow does not auto-advance.')}
             </div>
             <button
               type="button"
               onClick={handleEstimateNext}
               className="cp-button-primary flex-none px-4 py-2 text-xs"
             >
-              Next: Composition →
+              {t('Next: Composition →')}
             </button>
           </div>
         </div>
@@ -1657,10 +1659,10 @@ export default function Calculator() {
       return (
         <section className="surface-card p-5">
           <div>
-            <div className="cp-subtle-label">Composition</div>
-            <h2 className="cp-heading-lg mt-2">Build the electrode stack.</h2>
+            <div className="cp-subtle-label">{t('Composition')}</div>
+            <h2 className="cp-heading-lg mt-2">{t('Build the electrode stack.')}</h2>
             <p className="mt-2 text-sm leading-7 text-slate-600">
-              Choose the stored material records first, then tune the geometric inputs used for area-based costing.
+              {t('Choose the stored material records first, then tune the geometric inputs used for area-based costing.')}
             </p>
           </div>
           {!isElectroValid ? (
@@ -1676,10 +1678,10 @@ export default function Calculator() {
     return (
       <section className="surface-card p-5">
         <div>
-          <div className="cp-subtle-label">Composition</div>
-          <h2 className="cp-heading-lg mt-2">Define the catalyst recipe.</h2>
+          <div className="cp-subtle-label">{t('Composition')}</div>
+          <h2 className="cp-heading-lg mt-2">{t('Define the catalyst recipe.')}</h2>
           <p className="mt-2 text-sm leading-7 text-slate-600">
-            Keep active metals and promoters explicit. A single support row auto-balances the recipe, and multiple support rows enable promoted-support formulations up to four total components.
+            {t('Keep active metals and promoters explicit. A single support row auto-balances the recipe, and multiple support rows enable promoted-support formulations up to four total components.')}
           </p>
         </div>
         {!isThermalValid ? (
@@ -1694,14 +1696,14 @@ export default function Calculator() {
         <div className="surface-ghost p-3.5">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#0d9488]" /><h3 className="cp-heading-sm">Support</h3></div>
+              <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#0d9488]" /><h3 className="cp-heading-sm">{t('Support')}</h3></div>
               <p className="mt-1 text-xs leading-5 text-slate-500">
                 {supportIsSplit
-                  ? 'Promoted support is on. Enter each support wt% explicitly so the total recipe closes at 100 wt%.'
-                  : 'Single-support mode stays auto-balanced. Add a second support to split the support bed explicitly.'}
+                  ? t('Promoted support is on. Enter each support wt% explicitly so the total recipe closes at 100 wt%.')
+                  : t('Single-support mode stays auto-balanced. Add a second support to split the support bed explicitly.')}
               </p>
             </div>
-            <button onClick={() => addRow('support')} disabled={thermalRows.length >= maxThermalComponents} className="cp-button-secondary px-3 py-2 text-xs disabled:cursor-not-allowed disabled:opacity-45">Add support</button>
+            <button onClick={() => addRow('support')} disabled={thermalRows.length >= maxThermalComponents} className="cp-button-secondary px-3 py-2 text-xs disabled:cursor-not-allowed disabled:opacity-45">{t('Add support')}</button>
           </div>
           {supportRows.map((row) => (
             <div key={row.id} className="mt-3.5">
@@ -1747,44 +1749,46 @@ export default function Calculator() {
     return (
       <section className="surface-card p-5">
         <div>
-          <div className="cp-subtle-label">Preparation method</div>
-          <h2 className="cp-heading-lg mt-2">Choose the preparation basis.</h2>
+          <div className="cp-subtle-label">{t('Preparation method')}</div>
+          <h2 className="cp-heading-lg mt-2">{t('Choose the preparation basis.')}</h2>
           <p className="mt-2 text-sm leading-7 text-slate-600">
             {catalystDomain === 'electrocatalyst'
-              ? 'Templates add pretreatment, coating, drying, lamination, and break-in steps. Adjust them if the lab route differs.'
-              : 'Pick the industrial steps that best approximate the synthesis route, then let campaign size set the scale basis.'}
+              ? t('Templates add pretreatment, coating, drying, lamination, and break-in steps. Adjust them if the lab route differs.')
+              : t('Pick the industrial steps that best approximate the synthesis route, then let campaign size set the scale basis.')}
           </p>
         </div>
 
         <div className="mt-5 space-y-4">
         <div className="grid gap-3 lg:grid-cols-3">
           <div className="rounded-[20px] border border-slate-200 bg-white/82 px-4 py-3">
-            <div className="cp-subtle-label">Selection mode</div>
-            <div className="mt-2 text-sm font-semibold text-[#191f28]">Choose all operations that apply</div>
+            <div className="cp-subtle-label">{t('Selection mode')}</div>
+            <div className="mt-2 text-sm font-semibold text-[#191f28]">{t('Choose all operations that apply')}</div>
             <div className="mt-1 text-xs leading-6 text-slate-500">
-              This screen builds a full route, not a one-choice wizard.
+              {t('This screen builds a full route, not a one-choice wizard.')}
             </div>
           </div>
           <div className="rounded-[20px] border border-slate-200 bg-white/82 px-4 py-3">
-            <div className="cp-subtle-label">Bucket logic</div>
-            <div className="mt-2 text-sm font-semibold text-[#191f28]">One bucket can hold multiple steps</div>
+            <div className="cp-subtle-label">{t('Bucket logic')}</div>
+            <div className="mt-2 text-sm font-semibold text-[#191f28]">{t('One bucket can hold multiple steps')}</div>
             <div className="mt-1 text-xs leading-6 text-slate-500">
-              Saved thermal and electrochemical templates often stack several operations inside the same bucket.
+              {t('Saved thermal and electrochemical templates often stack several operations inside the same bucket.')}
             </div>
           </div>
           <div className="rounded-[20px] border border-[#0d9488] bg-[#e6f5f2] px-4 py-3">
-            <div className="cp-subtle-label !text-[#0f766e]">Current route</div>
+            <div className="cp-subtle-label !text-[#0f766e]">{t('Current route')}</div>
             <div className="mt-2 text-sm font-semibold text-[#191f28]">
-              {steps.length} selected step{steps.length === 1 ? '' : 's'} across {selectedCategoryCount} bucket{selectedCategoryCount === 1 ? '' : 's'}
+              {lang === 'ko'
+                ? `${selectedCategoryCount}개 버킷에서 ${steps.length}개 단계 선택됨`
+                : `${steps.length} selected step${steps.length === 1 ? '' : 's'} across ${selectedCategoryCount} bucket${selectedCategoryCount === 1 ? '' : 's'}`}
             </div>
             <div className="mt-1 text-xs leading-6 text-slate-500">
-              Add or remove operations until the route matches the actual lab or pilot workflow.
+              {t('Add or remove operations until the route matches the actual lab or pilot workflow.')}
             </div>
           </div>
         </div>
         {activeBenchmark ? (
           <div className="rounded-[24px] border border-emerald-200 bg-emerald-50/80 px-4 py-4 text-sm text-emerald-900">
-            <div className="cp-subtle-label !text-emerald-700">Loaded reference baseline</div>
+            <div className="cp-subtle-label !text-emerald-700">{t('Loaded reference baseline')}</div>
             <div className="mt-2 font-semibold">{activeBenchmark.route.name}</div>
             <div className="mt-2 leading-6">{activeBenchmark.screening_summary}</div>
             <div className="mt-3 flex flex-wrap gap-2">
@@ -1796,14 +1800,13 @@ export default function Calculator() {
         {catalystDomain === 'thermal' && thermalTemplates.length > 0 ? (
           <div className="surface-ghost p-3.5">
             <div className="flex items-center justify-between gap-3">
-              <div className="cp-subtle-label">Quick-apply a saved route</div>
+              <div className="cp-subtle-label">{t('Quick-apply a saved route')}</div>
               <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
-                {thermalTemplates.length} templates
+                {thermalTemplates.length} {t('templates')}
               </div>
             </div>
             <div className="mt-2 text-xs leading-6 text-slate-500">
-              One click loads the full step chain for a named preparation method — co-precipitation, sol-gel,
-              impregnation, zeolite synthesis and more. Steps stay editable afterward.
+              {t('One click loads the full step chain for a named preparation method — co-precipitation, sol-gel, impregnation, zeolite synthesis and more. Steps stay editable afterward.')}
             </div>
             <div className="mt-3 flex flex-wrap gap-2">
               {thermalTemplates.map((template) => {
@@ -1829,7 +1832,7 @@ export default function Calculator() {
         ) : null}
         <div className="surface-ghost p-3.5">
           <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-            <div><div className="cp-subtle-label">Order size</div><div className="mt-3 flex flex-wrap items-center gap-3"><input type="number" min="1" step="1" value={orderSize} onChange={(event) => setOrderSize(Math.max(1, Number(event.target.value) || 1))} className="input-base w-32 text-center font-mono" /><span className="text-sm text-slate-500">tons per campaign</span><span className={`rounded-full border px-3 py-1 text-xs font-semibold ${scale.classes}`}>{scale.label} / {scale.rate}</span></div></div>
+            <div><div className="cp-subtle-label">{t('Order size')}</div><div className="mt-3 flex flex-wrap items-center gap-3"><input type="number" min="1" step="1" value={orderSize} onChange={(event) => setOrderSize(Math.max(1, Number(event.target.value) || 1))} className="input-base w-32 text-center font-mono" /><span className="text-sm text-slate-500">{t('tons per campaign')}</span><span className={`rounded-full border px-3 py-1 text-xs font-semibold ${scale.classes}`}>{scale.label} / {scale.rate}</span></div></div>
             <div className="cp-toolbar">{QUICK_ORDER_SIZES.map((size) => <button key={size} onClick={() => setOrderSize(size)} className={`rounded-[16px] px-3 py-2 text-xs font-semibold transition ${orderSize === size ? 'bg-slate-950 text-white' : 'text-slate-600 hover:bg-white hover:text-slate-900'}`}>{size} tons</button>)}</div>
           </div>
         </div>
@@ -1839,16 +1842,16 @@ export default function Calculator() {
             return (
               <div key={category} className="surface-ghost p-3.5">
                 <div className="flex items-center justify-between gap-3">
-                  <div className="cp-subtle-label">{category}</div>
+                  <div className="cp-subtle-label">{t(category)}</div>
                   <div className={`rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] ${
                     selectedInCategory.length > 0
                       ? 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e]'
                       : 'border-slate-200 bg-white text-slate-400'
                   }`}>
-                    {selectedInCategory.length} selected
+                    {lang === 'ko' ? `${selectedInCategory.length}개 선택` : `${selectedInCategory.length} selected`}
                   </div>
                 </div>
-                <div className="mt-2 text-xs leading-6 text-slate-500">Choose all operations that apply within this bucket.</div>
+                <div className="mt-2 text-xs leading-6 text-slate-500">{t('Choose all operations that apply within this bucket.')}</div>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {visibleSteps.filter((step) => step.category === category).map((step) => {
                     const available = (step.scales as readonly Scale[]).includes(currentScale);
@@ -1874,13 +1877,13 @@ export default function Calculator() {
           <div className="rounded-[24px] border border-slate-900/8 bg-white/72 p-4">
             <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
               <div className="max-w-2xl">
-                <div className="cp-subtle-label">Recovery scenario</div>
-                <div className="cp-heading-sm mt-2">Optional spent catalyst value proxy</div>
+                <div className="cp-subtle-label">{t('Recovery scenario')}</div>
+                <div className="cp-heading-sm mt-2">{t('Optional spent catalyst value proxy')}</div>
                 <p className="mt-2 text-sm leading-7 text-slate-600">
-                  Use this when the catalyst contains recoverable metal and end-of-life value matters to the screening decision.
+                  {t('Use this when the catalyst contains recoverable metal and end-of-life value matters to the screening decision.')}
                 </p>
                 <p className="mt-2 text-xs leading-6 text-slate-500">
-                  Current engine includes support loss, reactor-type loss, refining loss, and recovery cost. Full deactivation and regeneration-cycle modeling is not yet included.
+                  {t('Current engine includes support loss, reactor-type loss, refining loss, and recovery cost. Full deactivation and regeneration-cycle modeling is not yet included.')}
                 </p>
               </div>
               <button
@@ -1891,25 +1894,25 @@ export default function Calculator() {
                     : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
                 }`}
               >
-                {includeSpentValue ? 'Recovery on' : 'Recovery off'}
+                {includeSpentValue ? t('Recovery on') : t('Recovery off')}
               </button>
             </div>
 
             <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
               <label className="block">
-                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Reactor type</div>
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{t('Reactor type')}</div>
                 <select
                   value={reactorType}
                   onChange={(event) => setReactorType(event.target.value as 'fixed' | 'slurry')}
                   className="input-base mt-2"
                 >
-                  <option value="fixed">Fixed bed</option>
-                  <option value="slurry">Slurry</option>
+                  <option value="fixed">{t('Fixed bed')}</option>
+                  <option value="slurry">{t('Slurry')}</option>
                 </select>
               </label>
 
               <label className="block">
-                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Bulk density</div>
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{t('Bulk density')}</div>
                 <div className="mt-2 flex items-center gap-2">
                   <input
                     type="number"
@@ -1924,9 +1927,9 @@ export default function Calculator() {
               </label>
 
               <div className="rounded-[18px] border border-slate-200 bg-slate-50/80 px-4 py-3">
-                <div className="cp-subtle-label">Screening use</div>
+                <div className="cp-subtle-label">{t('Screening use')}</div>
                 <div className="mt-2 text-sm leading-6 text-slate-700">
-                  Best for Pt, Pd, Rh, Ru, Ir, Ni, and Co routes where salvage value changes the commercial basis.
+                  {t('Best for Pt, Pd, Rh, Ru, Ir, Ni, and Co routes where salvage value changes the commercial basis.')}
                 </div>
               </div>
             </div>
@@ -1960,8 +1963,8 @@ export default function Calculator() {
               <MetricTile label="Campaign basis" value={`${orderSize} tons`} detail={`${scale.label} / ${scale.rate}`} />
             </div>
             <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <button onClick={handleCalculate} disabled={loading || !isValid || steps.length === 0} className="cp-button-primary min-w-[250px]">{loading ? <><span className="mr-2 inline-flex h-4 w-4 animate-spin rounded-full border-2 border-slate-950 border-t-transparent" />Running estimate</> : 'Run estimate'}</button>
-              <div className="text-xs leading-6 text-slate-500">The result screen opens separately and keeps this draft intact.</div>
+              <button onClick={handleCalculate} disabled={loading || !isValid || steps.length === 0} className="cp-button-primary min-w-[250px]">{loading ? <><span className="mr-2 inline-flex h-4 w-4 animate-spin rounded-full border-2 border-slate-950 border-t-transparent" />{t('Running estimate')}</> : t('Run estimate')}</button>
+              <div className="text-xs leading-6 text-slate-500">{t('The result screen opens separately and keeps this draft intact.')}</div>
             </div>
             {error ? <div className="mt-4 rounded-[24px] border border-red-200 bg-red-50 px-4 py-4 text-sm text-red-700"><span className="font-semibold">Calculation failed.</span> {error}</div> : null}
             {loadedSavedName ? (
@@ -1973,13 +1976,13 @@ export default function Calculator() {
             {savedEstimates.length > 0 ? (
               <div className="mt-4 surface-ghost p-3.5">
                 <div className="flex items-center justify-between gap-3">
-                  <div className="cp-subtle-label">Saved estimates</div>
+                  <div className="cp-subtle-label">{t('Saved estimates')}</div>
                   <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
-                    {savedEstimates.length} saved
+                    {savedEstimates.length} {t('saved')}
                   </div>
                 </div>
                 <div className="mt-2 text-xs leading-6 text-slate-500">
-                  Named cases saved from the result screen. Load restores the composition, steps, and order size into this draft.
+                  {t('Named cases saved from the result screen. Load restores the composition, steps, and order size into this draft.')}
                 </div>
                 <div className="mt-3 space-y-2">
                   {savedEstimates.map((saved) => {
@@ -2007,7 +2010,7 @@ export default function Calculator() {
                                 : 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400'
                             }`}
                           >
-                            {busy ? 'Working…' : 'Load'}
+                            {busy ? t('Working…') : t('Load')}
                           </button>
                           <button
                             type="button"
@@ -2015,7 +2018,7 @@ export default function Calculator() {
                             disabled={busy}
                             className="rounded-[14px] border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-500 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
                           >
-                            Delete
+                            {t('Delete')}
                           </button>
                         </div>
                       </div>
@@ -2031,11 +2034,11 @@ export default function Calculator() {
     <div className="flex flex-col gap-4">
       <div className="flex items-end justify-between gap-4 px-1 pt-1">
         <div>
-          <h2 className="cp-heading-xl">Cost Estimate</h2>
+          <h2 className="cp-heading-xl">{t('Cost Estimate')}</h2>
           <p className="mt-1 text-sm text-[#8b95a1]">
             {catalystDomain === 'electrocatalyst'
-              ? 'Choose the workflow, build the stack, set the preparation basis, then run the result.'
-              : 'Choose the workflow, define the recipe, set the preparation basis, then run the result.'}
+              ? t('Choose the workflow, build the stack, set the preparation basis, then run the result.')
+              : t('Choose the workflow, define the recipe, set the preparation basis, then run the result.')}
           </p>
         </div>
       </div>

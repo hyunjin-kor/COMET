@@ -1,4 +1,5 @@
 import { NavLink, useLocation } from 'react-router-dom';
+import { useLang } from '../../lib/i18n';
 import { useUnit } from '../../lib/use-unit';
 import BrandMark from './BrandMark';
 import { isNavigationPathActive, navigationItems } from './navigation';
@@ -26,6 +27,7 @@ type SidebarProps = {
 
 export default function Sidebar({ collapsed, onToggleCollapsed }: SidebarProps) {
   const { unit, toggle } = useUnit();
+  const { lang, toggle: toggleLang, t } = useLang();
   const location = useLocation();
   const hasTitlebar = typeof window !== 'undefined' && window.cometDesktop?.platform === 'win32';
 
@@ -38,7 +40,7 @@ export default function Sidebar({ collapsed, onToggleCollapsed }: SidebarProps) 
             {collapsed ? null : (
               <div className="min-w-0 flex-1">
                 <div className="font-display text-[1.2rem] leading-none text-[#191f28]">COMET</div>
-                <div className="mt-1 text-[11px] text-[#b0b8c1]">Catalyst cost workspace</div>
+                <div className="mt-1 text-[11px] text-[#b0b8c1]">{t('Catalyst cost workspace')}</div>
               </div>
             )}
             <button
@@ -62,7 +64,7 @@ export default function Sidebar({ collapsed, onToggleCollapsed }: SidebarProps) 
                   key={item.to}
                   to={item.to}
                   aria-current={isActive ? 'page' : undefined}
-                  title={collapsed ? item.label : undefined}
+                  title={collapsed ? t(item.label) : undefined}
                   className={`group relative flex items-center rounded-[10px] transition ${
                     collapsed ? 'justify-center px-0 py-2.5' : 'gap-3 px-3 py-2.5'
                   } ${isActive ? 'bg-[#eef8f5]' : 'hover:bg-[#f4f6f7]'}`}
@@ -76,14 +78,14 @@ export default function Sidebar({ collapsed, onToggleCollapsed }: SidebarProps) 
                     }`}
                   />
                   {collapsed ? (
-                    <span className="sr-only">{item.label}</span>
+                    <span className="sr-only">{t(item.label)}</span>
                   ) : (
                     <div
                       className={`min-w-0 truncate text-sm transition ${
                         isActive ? 'font-semibold text-[#0f766e]' : 'font-medium text-[#4e5968] group-hover:text-[#191f28]'
                       }`}
                     >
-                      {item.label}
+                      {t(item.label)}
                     </div>
                   )}
                 </NavLink>
@@ -92,22 +94,32 @@ export default function Sidebar({ collapsed, onToggleCollapsed }: SidebarProps) 
           </nav>
 
           {collapsed ? (
-            <div className="border-t border-[#f2f4f6] pb-1 pt-3">
+            <div className="flex flex-col items-center gap-2 border-t border-[#f2f4f6] pb-1 pt-3">
               <button
                 type="button"
                 onClick={toggle}
-                className="no-drag mx-auto flex h-8 w-10 items-center justify-center rounded-full bg-[#eef1f2] text-xs font-semibold text-[#0f766e] transition hover:bg-[#e6f5f2]"
+                className="no-drag flex h-8 w-10 items-center justify-center rounded-full bg-[#eef1f2] text-xs font-semibold text-[#0f766e] transition hover:bg-[#e6f5f2]"
                 title={`Display unit: ${unit} (click to switch)`}
                 aria-label={`Toggle output units, currently ${unit}`}
                 aria-pressed={unit === 'lb'}
               >
                 {unit}
               </button>
+              <button
+                type="button"
+                onClick={toggleLang}
+                className="no-drag flex h-8 w-10 items-center justify-center rounded-full bg-[#eef1f2] text-xs font-semibold text-[#0f766e] transition hover:bg-[#e6f5f2]"
+                title={`Language: ${lang === 'en' ? 'English' : '한국어'} (click to switch)`}
+                aria-label={`Toggle language, currently ${lang === 'en' ? 'English' : 'Korean'}`}
+                aria-pressed={lang === 'ko'}
+              >
+                {lang === 'en' ? 'EN' : '한'}
+              </button>
             </div>
           ) : (
-            <div className="border-t border-[#f2f4f6] px-1.5 pb-1 pt-4">
+            <div className="space-y-3 border-t border-[#f2f4f6] px-1.5 pb-1 pt-4">
               <div className="flex items-center justify-between gap-3">
-                <div className="text-xs font-medium text-[#8b95a1]">Display unit</div>
+                <div className="text-xs font-medium text-[#8b95a1]">{t('Display unit')}</div>
 
                 <button
                   type="button"
@@ -132,6 +144,35 @@ export default function Sidebar({ collapsed, onToggleCollapsed }: SidebarProps) 
                     }`}
                   >
                     lb
+                  </span>
+                </button>
+              </div>
+              <div className="flex items-center justify-between gap-3">
+                <div className="text-xs font-medium text-[#8b95a1]">{t('Language')}</div>
+
+                <button
+                  type="button"
+                  onClick={toggleLang}
+                  className="no-drag flex items-center rounded-full bg-[#eef1f2] p-0.5"
+                  title="Toggle language"
+                  aria-label={`Toggle language, currently ${lang === 'en' ? 'English' : 'Korean'}`}
+                  aria-pressed={lang === 'ko'}
+                >
+                  <span
+                    aria-hidden="true"
+                    className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
+                      lang === 'en' ? 'bg-[#0d9488] text-white' : 'text-[#8b95a1]'
+                    }`}
+                  >
+                    EN
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
+                      lang === 'ko' ? 'bg-[#0d9488] text-white' : 'text-[#8b95a1]'
+                    }`}
+                  >
+                    한국어
                   </span>
                 </button>
               </div>

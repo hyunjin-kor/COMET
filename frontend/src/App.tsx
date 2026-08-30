@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 import { BrowserRouter, HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import AppFrame from './components/layout/AppFrame';
+import { LangProvider } from './lib/i18n';
 import { UnitProvider } from './lib/units';
 
 const Calculator = lazy(() => import('./pages/Calculator'));
@@ -18,6 +19,7 @@ export default function App() {
       : BrowserRouter;
 
   return (
+    <LangProvider>
     <UnitProvider>
       <Router>
         <Routes>
@@ -37,5 +39,6 @@ export default function App() {
         </Routes>
       </Router>
     </UnitProvider>
+    </LangProvider>
   );
 }

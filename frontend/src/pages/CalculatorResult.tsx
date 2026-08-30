@@ -12,6 +12,7 @@ import { LB_PER_KG, TROY_OZ_PER_LB } from '../lib/unit-conversion';
 import { loadCalculatorResultSnapshot } from '../lib/calculator-session';
 import { buildResultCsv, downloadCsv, resultCsvFilename } from '../lib/export-csv';
 import { formatPrice } from '../lib/format-price';
+import { useLang } from '../lib/i18n';
 import { useUnit } from '../lib/use-unit';
 
 const ResultBreakdownPieChart = lazy(() => import('../components/charts/ResultBreakdownPieChart'));
@@ -148,6 +149,7 @@ function quotePerLb(price: number, unitLabel: string | null | undefined): number
 export default function CalculatorResult() {
   const navigate = useNavigate();
   const { unit, toDisplay, fmtLabel, catLabel } = useUnit();
+  const { t } = useLang();
   const sectionState = useWorkspaceSections(RESULT_SECTIONS, 'result');
   const [snapshot] = useState(() => loadCalculatorResultSnapshot());
   const [saveName, setSaveName] = useState('');
@@ -296,7 +298,7 @@ export default function CalculatorResult() {
       <section className="surface-card p-4">
         <div className="grid gap-3 xl:grid-cols-[minmax(0,1.15fr)_repeat(3,minmax(0,1fr))]">
           <div className="min-w-0 overflow-hidden rounded-[20px] border border-[#191f28] bg-[#191f28] p-4 text-white shadow-[0_8px_24px_rgba(15,23,42,0.18)]">
-            <div className="cp-subtle-label !text-slate-400">Final result</div>
+            <div className="cp-subtle-label !text-slate-400">{t('Final result')}</div>
             <div className="mt-2 text-sm text-slate-300">{composition}</div>
             <div className="mt-4 flex items-end gap-3">
               <FitPriceText
@@ -331,7 +333,7 @@ export default function CalculatorResult() {
           </div>
 
           <div className="rounded-[22px] border border-slate-900/8 bg-white/62 p-4">
-            <div className="cp-subtle-label">Cost ledger</div>
+            <div className="cp-subtle-label">{t('Cost ledger')}</div>
             <div className="mt-3 space-y-1">
               {ledgerRows.map((row) => (
                 <RailRow key={row.label} label={row.label} value={row.value} detail={row.detail} />
@@ -340,7 +342,7 @@ export default function CalculatorResult() {
           </div>
 
           <div className="rounded-[22px] border border-slate-900/8 bg-white/62 p-4">
-            <div className="cp-subtle-label">Evidence</div>
+            <div className="cp-subtle-label">{t('Evidence')}</div>
             <div className="mt-3 space-y-1">
               <RailRow
                 label="Public links"
@@ -368,9 +370,9 @@ export default function CalculatorResult() {
           </div>
 
           <div className="rounded-[22px] border border-slate-900/8 bg-white/62 p-4">
-            <div className="cp-subtle-label">Preparation basis</div>
+            <div className="cp-subtle-label">{t('Preparation basis')}</div>
             <div className="mt-2 text-base font-semibold text-[#191f28]">
-              {routeSummary?.name ?? snapshotState.benchmarkCandidate?.route.name ?? 'Direct workspace route'}
+              {routeSummary?.name ?? snapshotState.benchmarkCandidate?.route.name ?? t('Direct workspace route')}
             </div>
             <div className="mt-3 space-y-1">
               <RailRow
@@ -402,7 +404,7 @@ export default function CalculatorResult() {
           <div className="surface-ink relative overflow-hidden p-5 sm:p-6">
             <div className="relative min-w-0">
               <div className="cp-subtle-label !text-slate-400">
-                {electrodeModel ? 'Estimated electrode cost' : 'Estimated selling price'}
+                {electrodeModel ? t('Estimated electrode cost') : t('Estimated selling price')}
               </div>
               <div className="mt-2 text-sm text-slate-300">{composition}</div>
               <div className="mt-4 flex flex-wrap items-end gap-3">
@@ -448,7 +450,7 @@ export default function CalculatorResult() {
 
         {result.warnings?.length ? (
           <div className="mt-4 rounded-[24px] border border-amber-200 bg-amber-50/80 p-4 text-sm text-amber-900">
-            <div className="cp-subtle-label !text-amber-700">Model Scope</div>
+            <div className="cp-subtle-label !text-amber-700">{t('Model Scope')}</div>
             <div className="mt-2 space-y-2">
               {result.warnings.map((warning) => (
                 <p key={warning} className="leading-6">
@@ -539,10 +541,10 @@ export default function CalculatorResult() {
       <section className="surface-card p-4">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <div className="cp-subtle-label">Preparation Method</div>
-            <div className="cp-heading-lg mt-2">Separate route logic from raw inputs.</div>
+            <div className="cp-subtle-label">{t('Preparation Method')}</div>
+            <div className="cp-heading-lg mt-2">{t('Separate route logic from raw inputs.')}</div>
             <div className="mt-1 text-xs leading-6 text-slate-500">
-              This surface is for campaign scale, selected preparation steps, route metadata, and the main cost split.
+              {t('This surface is for campaign scale, selected preparation steps, route metadata, and the main cost split.')}
             </div>
           </div>
           <span className="cp-chip">{result.materials.components.length} materials</span>
@@ -557,8 +559,8 @@ export default function CalculatorResult() {
 
         <div className="mt-4 grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(240px,0.88fr)]">
           <div className="rounded-[24px] border border-slate-900/8 bg-white/58 p-4">
-            <div className="cp-subtle-label">Cost Structure</div>
-            <div className="cp-heading-lg mt-2">Materials versus processing</div>
+            <div className="cp-subtle-label">{t('Cost Structure')}</div>
+            <div className="cp-heading-lg mt-2">{t('Materials versus processing')}</div>
             <div className="mt-4 space-y-3">
               {summaryRows.map((item, index) => (
                 <div key={item.label}>
@@ -579,8 +581,8 @@ export default function CalculatorResult() {
           </div>
 
           <div className="rounded-[24px] border border-slate-900/8 bg-white/58 p-4">
-            <div className="cp-heading-sm">Breakdown wheel</div>
-            <div className="mt-1 text-xs text-slate-500">Materials, processing, and selling adjustments.</div>
+            <div className="cp-heading-sm">{t('Breakdown wheel')}</div>
+            <div className="mt-1 text-xs text-slate-500">{t('Materials, processing, and selling adjustments.')}</div>
             <div className="mt-4 h-[240px]">
               <Suspense fallback={<ChartFallback />}>
                 <ResultBreakdownPieChart data={pieData} colors={CHART_COLORS} />
@@ -598,7 +600,7 @@ export default function CalculatorResult() {
         </div>
 
         <div className="mt-4 rounded-[24px] border border-slate-900/8 bg-white/58 p-4">
-          <div className="cp-subtle-label">Preparation Steps</div>
+          <div className="cp-subtle-label">{t('Preparation Steps')}</div>
           <div className="mt-3 flex flex-wrap gap-2">
             {snapshotState.stepLabels.map((label) => (
               <span key={label} className="cp-chip">
@@ -610,7 +612,7 @@ export default function CalculatorResult() {
 
         {snapshotState.benchmarkCandidate ? (
           <div className="mt-4 rounded-[24px] border border-emerald-200 bg-emerald-50/80 p-4">
-            <div className="cp-subtle-label !text-emerald-700">Reference baseline</div>
+            <div className="cp-subtle-label !text-emerald-700">{t('Reference baseline')}</div>
             <div className="mt-2 cp-heading-sm">{snapshotState.benchmarkCandidate.title}</div>
             <div className="mt-2 text-sm leading-6 text-emerald-900">{snapshotState.benchmarkCandidate.screening_summary}</div>
             <div className="mt-3 flex flex-wrap gap-2">
@@ -626,7 +628,7 @@ export default function CalculatorResult() {
 
         {routeSummary ? (
           <div className="mt-4 rounded-[24px] border border-sky-200 bg-sky-50/75 p-4">
-            <div className="cp-subtle-label !text-sky-700">Preparation method</div>
+            <div className="cp-subtle-label !text-sky-700">{t('Preparation method')}</div>
             <div className="mt-2 cp-heading-sm">{routeSummary.name}</div>
             <div className="mt-2 text-sm leading-6 text-sky-900">
               {routeSummary.route_note || 'Template-driven route metadata is attached to this estimate.'}
@@ -687,10 +689,10 @@ export default function CalculatorResult() {
     if (!lca) {
       return (
         <section className="surface-card p-4">
-          <div className="cp-subtle-label">Environmental</div>
-          <div className="cp-heading-lg mt-2">No LCA data attached to this estimate.</div>
+          <div className="cp-subtle-label">{t('Environmental')}</div>
+          <div className="cp-heading-lg mt-2">{t('No LCA data attached to this estimate.')}</div>
           <div className="mt-2 text-xs leading-6 text-slate-500">
-            Re-run the estimate to compute cradle-to-gate impact.
+            {t('Re-run the estimate to compute cradle-to-gate impact.')}
           </div>
         </section>
       );
@@ -706,10 +708,10 @@ export default function CalculatorResult() {
       <section className="surface-card p-4">
         <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0">
-            <div className="cp-subtle-label">Environmental</div>
-            <div className="cp-heading-lg mt-2">Cradle-to-gate impact per kg of catalyst</div>
+            <div className="cp-subtle-label">{t('Environmental')}</div>
+            <div className="cp-heading-lg mt-2">{t('Cradle-to-gate impact per kg of catalyst')}</div>
             <div className="mt-1 text-xs leading-6 text-slate-500">
-              Weighted-average over the wt% composition. Manufacturing-step emissions are not included in this version — only embodied material impact.
+              {t('Weighted-average over the wt% composition. Manufacturing-step emissions are not included in this version — only embodied material impact.')}
             </div>
           </div>
           <span className={`cp-chip shrink-0 ${dataGap > 0 ? 'border-amber-200 bg-amber-50 text-amber-700' : 'border-emerald-200 bg-emerald-50 text-emerald-700'}`}>
@@ -817,10 +819,10 @@ export default function CalculatorResult() {
       <section className="surface-card p-4">
         <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0">
-            <div className="cp-subtle-label">Evidence</div>
-            <div className="cp-heading-lg mt-2">Resolved material sources and normalization</div>
+            <div className="cp-subtle-label">{t('Evidence')}</div>
+            <div className="cp-heading-lg mt-2">{t('Resolved material sources and normalization')}</div>
             <div className="mt-1 text-xs leading-6 text-slate-500">
-              Each record shows raw quote, pack basis, normalization basis, and public link status when available.
+              {t('Each record shows raw quote, pack basis, normalization basis, and public link status when available.')}
             </div>
           </div>
           <span className="cp-chip shrink-0">{snapshotState.selectedSupportName ?? 'Support'}</span>
@@ -1044,9 +1046,9 @@ export default function CalculatorResult() {
       <section className="surface-card cp-enter overflow-hidden p-5 sm:p-6">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="cp-heading-xl">Result</h1>
+            <h1 className="cp-heading-xl">{t('Result')}</h1>
             <p className="cp-body-copy mt-1.5 max-w-2xl">
-              The estimate, route basis, and evidence in one place — grouped for reading, separate from the editing workspace.
+              {t('The estimate, route basis, and evidence in one place — grouped for reading, separate from the editing workspace.')}
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
@@ -1055,7 +1057,7 @@ export default function CalculatorResult() {
                 <input
                   value={saveName}
                   onChange={(event) => { setSaveName(event.target.value); if (saveState !== 'idle') setSaveState('idle'); }}
-                  placeholder="Estimate name"
+                  placeholder={t('Estimate name')}
                   className="input-base w-44 px-3 py-2 text-sm"
                 />
                 <button
@@ -1063,7 +1065,7 @@ export default function CalculatorResult() {
                   disabled={saveState === 'saving'}
                   className="cp-button-secondary px-4 py-2"
                 >
-                  {saveState === 'saving' ? 'Saving…' : saveState === 'saved' ? 'Saved ✓' : saveState === 'failed' ? 'Retry save' : 'Save estimate'}
+                  {saveState === 'saving' ? t('Saving…') : saveState === 'saved' ? t('Saved ✓') : saveState === 'failed' ? t('Retry save') : t('Save estimate')}
                 </button>
               </div>
             ) : null}
@@ -1071,10 +1073,10 @@ export default function CalculatorResult() {
               onClick={() => downloadCsv(resultCsvFilename(snapshotState), buildResultCsv(snapshotState))}
               className="cp-button-secondary px-4 py-2"
             >
-              Export CSV
+              {t('Export CSV')}
             </button>
             <button onClick={goBackToCalculator} className="cp-button-primary">
-              Back to cost estimate
+              {t('Back to cost estimate')}
             </button>
           </div>
         </div>

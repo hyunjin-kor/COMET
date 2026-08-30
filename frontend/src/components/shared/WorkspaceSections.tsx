@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { useLang } from '../../lib/i18n';
 
 export type WorkspaceSection = {
   id: string;
@@ -77,6 +78,7 @@ export function WorkspaceSectionNav({
   onSelect,
   disabledSectionIds = [],
 }: WorkspaceSectionNavProps) {
+  const { t } = useLang();
   if (sections.length === 0) return null;
   const activeSection: WorkspaceSection = sections[activeIndex] ?? sections[0]!;
 
@@ -119,7 +121,7 @@ export function WorkspaceSectionNav({
                     active ? 'font-semibold text-[#191f28]' : done ? 'font-medium text-[#4e5968]' : 'font-medium text-[#8b95a1]'
                   }`}
                 >
-                  {section.label}
+                  {t(section.label)}
                 </span>
               </button>
             </div>
@@ -127,7 +129,7 @@ export function WorkspaceSectionNav({
         })}
       </nav>
 
-      <div className="hidden max-w-[320px] truncate text-xs text-[#8b95a1] xl:block">{activeSection?.summary}</div>
+      <div className="hidden max-w-[320px] truncate text-xs text-[#8b95a1] xl:block">{activeSection ? t(activeSection.summary) : null}</div>
     </section>
   );
 }
@@ -151,12 +153,15 @@ export function WorkspaceSectionFooter({
   canGoPrevious,
   canGoNext,
 }: WorkspaceSectionFooterProps) {
+  const { lang, t } = useLang();
   return (
     <section className="surface-card-soft mt-auto flex items-center justify-between gap-4 px-4 py-2.5">
       <div className="min-w-0 truncate text-sm text-[#8b95a1]">
-        Step {activeIndex + 1} of {totalSections}
+        {lang === 'ko'
+          ? `${activeIndex + 1}/${totalSections} 단계`
+          : `Step ${activeIndex + 1} of ${totalSections}`}
         <span className="mx-1.5 text-[#d1d6db]">·</span>
-        <span className="font-medium text-[#4e5968]">{activeSection.label}</span>
+        <span className="font-medium text-[#4e5968]">{t(activeSection.label)}</span>
       </div>
 
       <div className="flex flex-none gap-2">
@@ -166,7 +171,7 @@ export function WorkspaceSectionFooter({
           disabled={!canGoPrevious}
           className="cp-button-secondary px-4 disabled:opacity-35"
         >
-          Back
+          {t('Back')}
         </button>
         <button
           type="button"
@@ -174,7 +179,7 @@ export function WorkspaceSectionFooter({
           disabled={!canGoNext}
           className="cp-button-primary px-5 disabled:opacity-35"
         >
-          Next
+          {t('Next')}
         </button>
       </div>
     </section>
