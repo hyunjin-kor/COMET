@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Skeleton } from '../components/shared/Skeleton';
 import { WorkspaceSectionFooter, WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
 import {
@@ -108,9 +108,10 @@ export default function Compare() {
   const navigate = useNavigate();
   const { toDisplay, fmtLabel } = useUnit();
   const sectionState = useWorkspaceSections(REFERENCE_SECTIONS, 'reference');
+  const { family: familyParam } = useParams();
   const [profile, setProfile] = useState<DecisionProfile>('balanced');
   const [families, setFamilies] = useState<BenchmarkFamilySummary[]>([]);
-  const [family, setFamily] = useState('');
+  const [family, setFamily] = useState(familyParam ?? '');
   const [benchmark, setBenchmark] = useState<DecisionBenchmark | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -120,6 +121,8 @@ export default function Compare() {
     setLoading(true);
     setError('');
     setFamily(nextFamily);
+    // Keep the URL shareable: /benchmarks/<family> deep-links back to this view.
+    navigate(`/benchmarks/${nextFamily}`, { replace: true });
   }
 
   function handleProfileChange(nextProfile: DecisionProfile) {

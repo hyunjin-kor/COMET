@@ -994,11 +994,32 @@ export default function Calculator() {
   }
 
   async function handleLoadSaved(summary: SavedEstimateSummary) {
-    if (summary.catalyst_domain !== 'thermal') return;
     setSavedBusyId(summary.id);
     try {
       const detail = await fetchSavedEstimate(summary.id);
       const input = detail.input as unknown as CostInput;
+
+      if (summary.catalyst_domain === 'electrocatalyst') {
+        const electrode = input.electrode_input;
+        if (!electrode) return;
+        setCatalystDomain('electrocatalyst');
+        if (electrode.application_family) setApplicationFamily(electrode.application_family as ApplicationFamily);
+        setElectrocatalystConfig((previous) => ({
+          ...previous,
+          templateId: input.template_id ?? previous.templateId,
+          catalystMaterialKey: electrode.catalyst_material_key ?? previous.catalystMaterialKey,
+          ionomerMaterialKey: electrode.ionomer_material_key ?? previous.ionomerMaterialKey,
+          membraneMaterialKey: electrode.membrane_material_key ?? previous.membraneMaterialKey,
+          substrateMaterialKey: electrode.substrate_material_key ?? previous.substrateMaterialKey,
+          activeAreaCm2: electrode.active_area_cm2 ?? previous.activeAreaCm2,
+          catalystLoadingMgCm2: electrode.catalyst_loading_mg_cm2 ?? previous.catalystLoadingMgCm2,
+          ionomerToCatalystRatio: electrode.ionomer_to_catalyst_ratio ?? previous.ionomerToCatalystRatio,
+          manufacturingScenario: electrode.manufacturing_scenario ?? '',
+        }));
+        setOrderSize(input.order_size_tons ?? 20);
+        setLoadedSavedName(summary.name);
+        return;
+      }
       const nextRows: CalculatorRow[] = (input.components ?? [])
         .filter((component) => component.role === 'active_metal' || component.role === 'promoter' || component.role === 'support')
         .map((component) => {
@@ -1963,7 +1984,7 @@ export default function Calculator() {
                 <div className="mt-3 space-y-2">
                   {savedEstimates.map((saved) => {
                     const busy = savedBusyId === saved.id;
-                    const loadable = saved.catalyst_domain === 'thermal';
+                    const loadable = true;
                     return (
                       <div key={saved.id} className="flex flex-wrap items-center justify-between gap-3 rounded-[16px] border border-slate-200 bg-white px-3.5 py-2.5">
                         <div className="min-w-0">
@@ -1979,7 +2000,7 @@ export default function Calculator() {
                             type="button"
                             onClick={() => void handleLoadSaved(saved)}
                             disabled={busy || !loadable}
-                            title={loadable ? 'Restore this case into the draft' : 'Electrocatalyst estimates cannot be restored into the thermal draft yet'}
+                            title="Restore this case into the draft"
                             className={`rounded-[14px] border px-3 py-1.5 text-xs font-semibold transition ${
                               loadable
                                 ? 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e] hover:bg-[#d3efe9]'

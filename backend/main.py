@@ -198,4 +198,12 @@ if _FRONTEND_DIST.is_dir():
         candidate = (_FRONTEND_DIST / spa_path).resolve()
         if spa_path and candidate.is_file() and candidate.is_relative_to(_FRONTEND_DIST):
             return FileResponse(candidate)
+        # The bundle is built with base './' for the Electron file:// loader, so
+        # nested SPA routes request assets as /<route>/assets/<file>; recover
+        # them by basename (hashed filenames make collisions a non-issue).
+        basename = Path(spa_path).name
+        if basename and "." in basename:
+            for fallback in (_FRONTEND_DIST / "assets" / basename, _FRONTEND_DIST / basename):
+                if fallback.is_file():
+                    return FileResponse(fallback)
         return FileResponse(_FRONTEND_DIST / "index.html")
