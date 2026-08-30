@@ -283,7 +283,9 @@ export default function Prices() {
   const indexedQuoteCount = prices.filter((row) => row.source_type === 'indexed').length;
   const manualQuoteCount = prices.filter((row) => row.source_type === 'manual').length;
   const reviewFlagCount = prices.filter(
-    (row) => row.evidence.freshness_status.toLowerCase() !== 'fresh' || row.evidence.confidence_score < 75,
+    // Backend freshness vocabulary is current / stale / reference — "current"
+    // is the healthy state; everything else deserves a look.
+    (row) => row.evidence.freshness_status.toLowerCase() !== 'current' || row.evidence.confidence_score < 75,
   ).length;
 
   if (loading) {
