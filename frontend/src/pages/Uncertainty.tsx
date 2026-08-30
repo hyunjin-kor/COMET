@@ -6,6 +6,7 @@ import { runEstimateRange, type CostInput, type EstimateRangeResult } from '../l
 import { loadCalculatorDraft, loadCalculatorResultSnapshot, type CalculatorDraft, type CalculatorRow } from '../lib/calculator-session';
 import { buildRangeCsv, downloadCsv, rangeCsvFilename } from '../lib/export-csv';
 import { formatPrice } from '../lib/format-price';
+import { useLang } from '../lib/i18n';
 import { useUnit } from '../lib/use-unit';
 
 const EstimateRangeBarChart = lazy(() => import('../components/charts/EstimateRangeBarChart'));
@@ -196,6 +197,7 @@ function buildRangeInputFromDraft(draft: CalculatorDraft): CostInput | null {
 export default function Uncertainty() {
   const navigate = useNavigate();
   const { toDisplay, fmtLabel } = useUnit();
+  const { t } = useLang();
   const draft = loadCalculatorDraft();
   const latestSnapshot = loadCalculatorResultSnapshot();
   const {
@@ -273,9 +275,9 @@ export default function Uncertainty() {
       {activeSection.id === 'case' ? (
         <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.06s' }}>
           <div className="border-b border-slate-900/8 pb-5">
-            <h2 className="cp-heading-xl">Estimate Range</h2>
+            <h2 className="cp-heading-xl">{t('Estimate Range')}</h2>
             <p className="cp-body-copy mt-1.5 max-w-2xl">
-              Monte Carlo range around the current Cost Estimate draft. Edit the catalyst case there, then run the range here.
+              {t('Monte Carlo range around the current Cost Estimate draft. Edit the catalyst case there, then run the range here.')}
             </p>
           </div>
 
@@ -392,7 +394,7 @@ export default function Uncertainty() {
 
               <div className="mt-5 grid gap-3 sm:grid-cols-3">
                 <div className="cp-metric-tile">
-                  <div className="cp-subtle-label">Baseline source</div>
+                  <div className="cp-subtle-label">{t('Baseline source')}</div>
                   <div className="mt-2 text-lg font-semibold text-[#191f28]">Current Cost Estimate draft</div>
                   <div className="mt-1 text-xs leading-5 text-slate-500">No separate metal-only form is used here anymore.</div>
                 </div>
@@ -439,25 +441,25 @@ export default function Uncertainty() {
             <div className="flex min-h-[420px] flex-col justify-between">
               <div>
                 <span className="section-kicker">Estimate Range</span>
-                <h2 className="cp-heading-xl mt-4">Run the current case to reveal the price spread.</h2>
+                <h2 className="cp-heading-xl mt-4">{t('Run the current case to reveal the price spread.')}</h2>
                 <p className="cp-body-copy mt-3 max-w-xl">
-                  This result uses the same catalyst draft and preparation route from Cost Estimate.
+                  {t('This result uses the same catalyst draft and preparation route from Cost Estimate.')}
                 </p>
               </div>
 
               <div className="grid gap-3 sm:grid-cols-3">
-                <StatTile label="Baseline" value="Pending" detail="Current estimate" />
-                <StatTile label="Mean" value="Pending" detail="Average simulated value" />
-                <StatTile label="P5-P95" value="Pending" detail="90% interval" />
+                <StatTile label={t('Baseline')} value={t('Pending')} detail={t('Current estimate')} />
+                <StatTile label={t('Mean')} value={t('Pending')} detail={t('Average simulated value')} />
+                <StatTile label="P5-P95" value={t('Pending')} detail={t('90% interval')} />
               </div>
             </div>
           ) : (
             <>
               <div className="surface-ink overflow-hidden p-5">
                 <div className="grid gap-3 sm:grid-cols-4">
-                  <StatTileDark label="Baseline" value={`${formatPrice(toDisplay(result.baseline_price_per_lb))}${fmtLabel}`} detail="Current estimate" />
-                  <StatTileDark label="Mean" value={`${formatPrice(toDisplay(result.mean))}${fmtLabel}`} detail="Average outcome" />
-                  <StatTileDark label="Median" value={`${formatPrice(toDisplay(result.median))}${fmtLabel}`} detail="50th percentile" />
+                  <StatTileDark label={t('Baseline')} value={`${formatPrice(toDisplay(result.baseline_price_per_lb))}${fmtLabel}`} detail={t('Current estimate')} />
+                  <StatTileDark label={t('Mean')} value={`${formatPrice(toDisplay(result.mean))}${fmtLabel}`} detail={t('Average outcome')} />
+                  <StatTileDark label={t('Median')} value={`${formatPrice(toDisplay(result.median))}${fmtLabel}`} detail={t('50th percentile')} />
                   <StatTileDark
                     label="P5-P95"
                     value={`${formatPrice(toDisplay(result.p5))}-${formatPrice(toDisplay(result.p95))}`}
@@ -475,14 +477,14 @@ export default function Uncertainty() {
                   </div>
                 </div>
                 <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
-                  <div className="cp-subtle-label">Range width</div>
+                  <div className="cp-subtle-label">{t('Range width')}</div>
                   <div className="mt-2 text-base font-semibold text-[#191f28]">
                     {formatPrice(toDisplay(result.p95 - result.p5))}{fmtLabel}
                   </div>
                   <div className="mt-1 text-xs leading-6 text-slate-500">P95 minus P5</div>
                 </div>
                 <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
-                  <div className="cp-subtle-label">Std dev</div>
+                  <div className="cp-subtle-label">{t('Std dev')}</div>
                   <div className="mt-2 text-base font-semibold text-[#191f28]">
                     {formatPrice(toDisplay(result.std))}{fmtLabel}
                   </div>
@@ -491,7 +493,7 @@ export default function Uncertainty() {
               </div>
 
               <div className="mt-5 rounded-[28px] border border-slate-900/8 bg-white/62 p-5 backdrop-blur-xl">
-                <div className="cp-subtle-label">Distribution sketch</div>
+                <div className="cp-subtle-label">{t('Distribution sketch')}</div>
                 <div className="cp-heading-lg mt-2">Percentile-weighted price spread</div>
 
                 <div className="mt-5 h-[280px]">

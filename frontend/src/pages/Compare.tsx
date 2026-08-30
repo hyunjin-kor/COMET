@@ -15,6 +15,7 @@ import {
   type CalculatorRow,
 } from '../lib/calculator-session';
 import { formatPrice } from '../lib/format-price';
+import { useLang } from '../lib/i18n';
 import { useUnit } from '../lib/use-unit';
 
 type DecisionProfile = 'balanced' | 'cost-first' | 'evidence-first';
@@ -107,6 +108,7 @@ function MetricTile({ label, value, detail }: { label: string; value: string; de
 export default function Compare() {
   const navigate = useNavigate();
   const { toDisplay, fmtLabel } = useUnit();
+  const { t } = useLang();
   const sectionState = useWorkspaceSections(REFERENCE_SECTIONS, 'reference');
   const { family: familyParam } = useParams();
   const [profile, setProfile] = useState<DecisionProfile>('balanced');
@@ -253,8 +255,8 @@ export default function Compare() {
         <section className="surface-card cp-enter overflow-hidden p-5 sm:p-6">
           <div className="grid gap-4">
             <div className="surface-ink overflow-hidden p-5 sm:p-6">
-              <h1 className="font-display text-[clamp(1.4rem,2vw,1.8rem)] leading-[1.2] text-white">Literature Benchmarks</h1>
-              <p className="mt-2 text-sm text-white/60">Screen published routes before you edit the cost case.</p>
+              <h1 className="font-display text-[clamp(1.4rem,2vw,1.8rem)] leading-[1.2] text-white">{t('Literature Benchmarks')}</h1>
+              <p className="mt-2 text-sm text-white/60">{t('Screen published routes before you edit the cost case.')}</p>
               <div className="mt-3 flex flex-wrap gap-2">
                 {activeFamily ? <span className="cp-chip-dark">{activeFamily.title}</span> : null}
                 {benchmark.reaction ? <span className="cp-chip-dark">{benchmark.reaction}</span> : null}
@@ -266,17 +268,17 @@ export default function Compare() {
               <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">{benchmark.objective}</p>
               {winner ? (
                 <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-                  <div className="cp-metric-tile-dark"><div className="cp-subtle-label !text-slate-400">Top route</div><div className="mt-2 text-xl font-display text-white">{winner.title}</div></div>
+                  <div className="cp-metric-tile-dark"><div className="cp-subtle-label !text-slate-400">{t('Top route')}</div><div className="mt-2 text-xl font-display text-white">{winner.title}</div></div>
                   <div className="cp-metric-tile-dark"><div className="cp-subtle-label !text-slate-400">{winner.summary.economics_basis_label}</div><div className="mt-2 text-xl font-display text-white">{benchmarkCostValue(winner)}</div><div className="mt-1 text-xs text-slate-400">{benchmarkCostDetail(winner)}</div></div>
-                  <div className="cp-metric-tile-dark"><div className="cp-subtle-label !text-slate-400">Evidence</div><div className="mt-2 text-xl font-display text-white">{winner.scores.evidence.toFixed(1)}</div></div>
-                  <div className="cp-metric-tile-dark"><div className="cp-subtle-label !text-slate-400">Family bank</div><div className="mt-2 text-xl font-display text-white">{benchmark.citations.length}</div><div className="mt-1 text-xs text-slate-400">Public benchmark links in the active family</div></div>
+                  <div className="cp-metric-tile-dark"><div className="cp-subtle-label !text-slate-400">{t('Evidence')}</div><div className="mt-2 text-xl font-display text-white">{winner.scores.evidence.toFixed(1)}</div></div>
+                  <div className="cp-metric-tile-dark"><div className="cp-subtle-label !text-slate-400">{t('Family bank')}</div><div className="mt-2 text-xl font-display text-white">{benchmark.citations.length}</div><div className="mt-1 text-xs text-slate-400">{t('Public benchmark links in the active family')}</div></div>
                 </div>
               ) : null}
             </div>
 
             <div className="space-y-3">
               <div className="surface-ghost p-4">
-                <div className="cp-subtle-label">Benchmark family</div>
+                <div className="cp-subtle-label">{t('Benchmark family')}</div>
                 <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                   {families.map((option) => (
                     <button type="button" key={option.family} onClick={() => handleFamilyChange(option.family)} className={`rounded-[18px] border px-3 py-2 text-left text-sm transition ${option.family === family ? 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e]' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}>
@@ -287,7 +289,7 @@ export default function Compare() {
                 </div>
               </div>
               <div className="surface-ghost p-4">
-                <div className="cp-subtle-label">Ranking profile</div>
+                <div className="cp-subtle-label">{t('Ranking profile')}</div>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {PROFILE_OPTIONS.map((option) => (
                     <button type="button" key={option.id} onClick={() => handleProfileChange(option.id)} className={`rounded-[18px] border px-3 py-2 text-left text-sm transition ${option.id === profile ? 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e]' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}>
@@ -327,8 +329,8 @@ export default function Compare() {
       {sectionState.activeSection.id === 'detail' ? (
         <section className="surface-card p-4">
           <div className="flex flex-col gap-3 border-b border-slate-900/8 pb-4 sm:flex-row sm:items-start sm:justify-between">
-            <div className="min-w-0"><div className="cp-subtle-label">Selected reference route</div><div className="cp-heading-lg mt-2">{activeCandidate.title}</div><div className="mt-1 text-sm text-slate-500">{activeCandidate.archetype}</div><div className="mt-2 flex flex-wrap gap-2"><span className="cp-chip">{catalystDomainLabel(activeCandidate.catalyst_domain)}</span><span className="cp-chip">{applicationFamilyLabel(activeCandidate.application_family)}</span></div></div>
-            <button type="button" onClick={() => loadIntoCalculator(activeCandidate)} className="cp-button-primary">Load into cost estimate</button>
+            <div className="min-w-0"><div className="cp-subtle-label">{t('Selected reference route')}</div><div className="cp-heading-lg mt-2">{activeCandidate.title}</div><div className="mt-1 text-sm text-slate-500">{activeCandidate.archetype}</div><div className="mt-2 flex flex-wrap gap-2"><span className="cp-chip">{catalystDomainLabel(activeCandidate.catalyst_domain)}</span><span className="cp-chip">{applicationFamilyLabel(activeCandidate.application_family)}</span></div></div>
+            <button type="button" onClick={() => loadIntoCalculator(activeCandidate)} className="cp-button-primary">{t('Load into cost estimate')}</button>
           </div>
           <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
             <MetricTile label={activeCandidate.summary.economics_basis_label} value={benchmarkCostValue(activeCandidate)} detail={benchmarkCostDetail(activeCandidate)} />

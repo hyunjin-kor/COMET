@@ -12,6 +12,7 @@ import {
   type StepLibraryItem,
 } from '../lib/api';
 import { formatPrice } from '../lib/format-price';
+import { useLang } from '../lib/i18n';
 import { useUnit } from '../lib/use-unit';
 
 type Tab = 'materials' | 'steps' | 'templates';
@@ -200,6 +201,7 @@ function InspectorRow({ label, value, detail }: { label: string; value: string; 
 
 export default function Library() {
   const { toDisplay, fmtLabel } = useUnit();
+  const { t } = useLang();
   const sectionState = useWorkspaceSections(LIBRARY_SECTIONS, 'library');
   const tab = sectionState.activeSection.id as Tab;
   const [materials, setMaterials] = useState<MaterialItem[]>([]);
@@ -331,9 +333,9 @@ export default function Library() {
       <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.06s' }}>
         <div className="flex flex-col gap-4 border-b border-slate-900/8 pb-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <h2 className="cp-heading-xl">Source Library</h2>
+            <h2 className="cp-heading-xl">{t('Source Library')}</h2>
             <p className="cp-body-copy mt-1.5 max-w-2xl">
-              Material sources, step rates, and route templates in one place, with the quote basis behind every number.
+              {t('Material sources, step rates, and route templates in one place, with the quote basis behind every number.')}
             </p>
           </div>
         </div>
@@ -357,22 +359,22 @@ export default function Library() {
           <>
             <div className="mt-5 grid gap-3 lg:grid-cols-[minmax(0,1fr)_repeat(4,200px)]">
               <label className="block">
-                <div className="cp-subtle-label">Search</div>
+                <div className="cp-subtle-label">{t('Search')}</div>
                 <div className="mt-2">
                   <input
                     value={search}
                     onChange={(event) => setSearch(event.target.value)}
-                    placeholder="Search materials, formulas, or symbols"
+                    placeholder={t('Search materials, formulas, or symbols')}
                     className="input-base"
                   />
                 </div>
               </label>
 
               <label className="block">
-                <div className="cp-subtle-label">Category filter</div>
+                <div className="cp-subtle-label">{t('Category filter')}</div>
                 <div className="mt-2">
                   <select value={category} onChange={(event) => setCategory(event.target.value)} className="input-base">
-                    <option value="">All categories</option>
+                    <option value="">{t('All categories')}</option>
                     {categories.map((value) => (
                       <option key={value} value={value}>
                         {value}
@@ -417,7 +419,7 @@ export default function Library() {
               </label>
 
               <label className="block">
-                <div className="cp-subtle-label">Sort by</div>
+                <div className="cp-subtle-label">{t('Sort by')}</div>
                 <div className="mt-2">
                   <select
                     value={sortKey}
@@ -435,7 +437,7 @@ export default function Library() {
             </div>
 
             <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-              <LibraryMetricTile label="Filtered rows" value={String(materials.length)} detail="Material rows visible under the current filters." />
+              <LibraryMetricTile label={t('Filtered rows')} value={String(materials.length)} detail={t('Material rows visible under the current filters.')} />
               <LibraryMetricTile label="Ready to cost" value={String(usableCount)} detail={browseOnlyCount > 0 ? `${browseOnlyCount} more browse-only rows are listed for reference.` : 'Every visible row plugs into the calculator.'} />
               <LibraryMetricTile label="Public source links" value={String(publicLinkCount)} detail="Rows that open a source page directly." />
               <LibraryMetricTile label="Archive-only" value={String(historicalOnlyCount)} detail="Older bulk quotes without a stable public URL." />

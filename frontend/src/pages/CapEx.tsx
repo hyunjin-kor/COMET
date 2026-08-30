@@ -5,6 +5,7 @@ import {
   type CapExResult,
   type EquipmentScalingItem,
 } from '../lib/api';
+import { useLang } from '../lib/i18n';
 
 type InputMode = 'lump_sum' | 'equipment_list';
 
@@ -49,6 +50,7 @@ function RailRow({ label, value, detail }: { label: string; value: string; detai
 }
 
 export default function CapEx() {
+  const { t } = useLang();
   const [mode, setMode] = useState<InputMode>('lump_sum');
   const [lumpCost, setLumpCost] = useState<number>(1_000_000);
   const [equipmentRows, setEquipmentRows] = useState<Array<{ id: string } & EquipmentScalingItem>>(
@@ -139,9 +141,9 @@ export default function CapEx() {
       <section className="surface-card cp-enter overflow-hidden px-5 py-6 sm:px-6" style={{ animationDelay: '0.06s' }}>
         <div className="flex flex-col gap-4 border-b border-slate-900/8 pb-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <h2 className="cp-heading-xl">Capital &amp; OpEx</h2>
+            <h2 className="cp-heading-xl">{t('Capital & OpEx')}</h2>
             <p className="cp-body-copy mt-1.5 max-w-2xl">
-              Factor purchased equipment into FCI and TCI using Peters &amp; Timmerhaus Lang factors, then optionally layer annual OpEx on top.
+              {t('Factor purchased equipment into FCI and TCI using Peters & Timmerhaus Lang factors, then optionally layer annual OpEx on top.')}
             </p>
           </div>
           <span className="cp-chip">CatCost Ch.7</span>
@@ -153,21 +155,21 @@ export default function CapEx() {
             onClick={() => setMode('lump_sum')}
             className={`rounded-full px-4 py-1.5 transition ${mode === 'lump_sum' ? 'bg-[#191f28] text-white' : 'text-slate-600 hover:text-[#191f28]'}`}
           >
-            Lump-sum equipment cost
+            {t('Lump-sum equipment cost')}
           </button>
           <button
             type="button"
             onClick={() => setMode('equipment_list')}
             className={`rounded-full px-4 py-1.5 transition ${mode === 'equipment_list' ? 'bg-[#191f28] text-white' : 'text-slate-600 hover:text-[#191f28]'}`}
           >
-            Equipment list (six-tenths rule)
+            {t('Equipment list (six-tenths rule)')}
           </button>
         </div>
 
         {mode === 'lump_sum' ? (
           <div className="mt-5 grid gap-3 lg:grid-cols-2">
             <label className="block">
-              <div className="cp-subtle-label">Purchased equipment cost (USD)</div>
+              <div className="cp-subtle-label">{t('Purchased equipment cost (USD)')}</div>
               <div className="mt-2">
                 <input
                   type="number"

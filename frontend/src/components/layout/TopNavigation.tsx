@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
+import { useLang } from '../../lib/i18n';
 import { useUnit } from '../../lib/use-unit';
 import BrandMark from './BrandMark';
 import { isNavigationPathActive, navigationItems } from './navigation';
@@ -35,6 +36,7 @@ function CloseIcon() {
 
 export default function TopNavigation() {
   const { unit, toggle } = useUnit();
+  const { lang, toggle: toggleLang, t } = useLang();
   const location = useLocation();
   const isWindowsDesktop = typeof window !== 'undefined' && window.cometDesktop?.platform === 'win32';
   const [isMaximized, setIsMaximized] = useState(false);
@@ -64,7 +66,7 @@ export default function TopNavigation() {
             {activeItem ? (
               <>
                 <span className="h-3.5 w-px bg-[#e5e8eb]" aria-hidden="true" />
-                <span className="truncate text-xs font-medium text-[#8b95a1]">{activeItem.label}</span>
+                <span className="truncate text-xs font-medium text-[#8b95a1]">{t(activeItem.label)}</span>
               </>
             ) : null}
           </div>
@@ -124,7 +126,7 @@ export default function TopNavigation() {
 
               <div className="min-w-0">
                 <div className="font-display text-[1.45rem] leading-none text-[#191f28]">COMET</div>
-                <div className="mt-0.5 text-xs text-[#8b95a1]">Evidence-first catalyst costing</div>
+                <div className="mt-0.5 text-xs text-[#8b95a1]">{t('Evidence-first catalyst costing')}</div>
               </div>
             </div>
 
@@ -153,6 +155,31 @@ export default function TopNavigation() {
                 lb
               </span>
             </button>
+            <button
+              type="button"
+              onClick={toggleLang}
+              className="flex items-center gap-1 rounded-full border border-[#e5e8eb] bg-[#f2f4f6] p-1"
+              title="Toggle language"
+              aria-label={`Toggle language, currently ${lang === 'en' ? 'English' : 'Korean'}`}
+              aria-pressed={lang === 'ko'}
+            >
+              <span
+                aria-hidden="true"
+                className={`rounded-full px-3 py-1.5 text-xs font-bold transition ${
+                  lang === 'en' ? 'bg-white text-[#191f28] shadow-[0_1px_3px_rgba(15,23,42,0.06)]' : 'text-[#8b95a1]'
+                }`}
+              >
+                EN
+              </span>
+              <span
+                aria-hidden="true"
+                className={`rounded-full px-3 py-1.5 text-xs font-bold transition ${
+                  lang === 'ko' ? 'bg-white text-[#191f28] shadow-[0_1px_3px_rgba(15,23,42,0.06)]' : 'text-[#8b95a1]'
+                }`}
+              >
+                한국어
+              </span>
+            </button>
           </div>
 
           <nav className="mt-3 flex gap-2 overflow-x-auto pb-1">
@@ -179,7 +206,7 @@ export default function TopNavigation() {
                     <item.Icon className="h-[18px] w-[18px]" />
                   </div>
 
-                  <div className="truncate text-sm font-bold text-[#191f28]">{item.label}</div>
+                  <div className="truncate text-sm font-bold text-[#191f28]">{t(item.label)}</div>
                 </NavLink>
               );
             })}
