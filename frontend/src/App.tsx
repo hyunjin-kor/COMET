@@ -26,6 +26,7 @@ export default function App() {
             <Route path="/calculator/result" element={<CalculatorResult />} />
             <Route path="/prices" element={<Prices />} />
             <Route path="/benchmarks" element={<Compare />} />
+            <Route path="/benchmarks/:family" element={<Compare />} />
             <Route path="/compare" element={<Compare />} />
             <Route path="/decision" element={<Compare />} />
             <Route path="/uncertainty" element={<Uncertainty />} />
