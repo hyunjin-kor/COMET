@@ -27,10 +27,10 @@ This page tracks COMET's external connection points. Only verified links are lis
 
 Single source of truth: `package.json`, `pyproject.toml`, `frontend/package.json` must agree.
 
-- Current package version: `1.3.23`
-- Python package version: `1.3.23`
-- Frontend package version: `1.3.23`
-- Latest verified GitHub release: `v1.3.23` (published 2026-08-31, verified via `gh release view v1.3.23` on 2026-09-01; every release is archived on Zenodo under concept DOI `10.5281/zenodo.21451931`)
+- Current package version: `1.3.24`
+- Python package version: `1.3.24`
+- Frontend package version: `1.3.24`
+- Latest verified GitHub release: `v1.3.24` (published 2026-08-31, verified via `gh release view v1.3.24` on 2026-09-01; every release is archived on Zenodo under concept DOI `10.5281/zenodo.21451931`)
 - Asset name pattern: `COMET.Setup.<version>.exe` (installer), `COMET-win-unpacked.zip` (portable), plus `latest.yml` and `COMET.Setup.<version>.exe.blockmap` (auto-update metadata, from v1.3.13 on)
 
 The published GitHub release tag may lag behind the package version when a bump has not yet been tagged. To re-verify, run `gh release list -L 1` against the repo.
