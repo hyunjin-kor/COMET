@@ -17,7 +17,7 @@
 ### 0.1 Current implementation status (as of 2026-08-26)
 
 - **Remote repository**: `https://github.com/hyunjin-kor/COMET`
-- **Latest verified release**: `v1.3.21` (verified 2026-08-28; re-verify with `gh release list -L 1` before quoting)
+- **Latest verified release**: `v1.3.22` (verified 2026-08-31; re-verify with `gh release list -L 1` before quoting)
 - **Current desktop shell**: Electron (`electron/`, `dist-electron/`)
 - **Frontend stack**: React 19 + TypeScript + Vite
 - **Backend stack**: FastAPI + SQLModel + SQLite
