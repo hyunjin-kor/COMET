@@ -25,7 +25,10 @@ from backend.models.metal_price import MetalPrice
 
 router = APIRouter(prefix="/api/prices", tags=["prices"])
 
-TRACKED_SYMBOLS = ["Pt", "Pd", "Rh", "Ru", "Ir", "Au", "Ag", "Ni", "Co", "Cu", "Al", "Mo", "W", "Fe"]
+TRACKED_SYMBOLS = [
+    "Pt", "Pd", "Rh", "Ru", "Ir", "Au", "Ag", "Ni", "Co", "Cu", "Al", "Mo", "W", "Fe",
+    "Zn", "Sn", "V", "Re",
+]
 
 _PERIOD_DAYS = {"1mo": 31, "3mo": 92, "6mo": 183, "1y": 366, "2y": 731, "5y": 1827}
 
@@ -49,6 +52,7 @@ def _is_live_source(source: str | None) -> bool:
             "Johnson Matthey",
             "Markets Insider",
             "MetalpriceAPI",
+            "Westmetall",
         )
     )
 
@@ -251,7 +255,8 @@ _ELEMENT_NAMES = {
     "Pt": "platinum", "Pd": "palladium", "Rh": "rhodium", "Ru": "ruthenium",
     "Ir": "iridium", "Au": "gold", "Ag": "silver", "Ni": "nickel",
     "Co": "cobalt", "Cu": "copper", "Al": "aluminum", "Mo": "molybdenum",
-    "W": "tungsten", "Fe": "iron",
+    "W": "tungsten", "Fe": "iron", "Zn": "zinc", "Sn": "tin",
+    "V": "vanadium", "Re": "rhenium",
 }
 
 

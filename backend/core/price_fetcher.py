@@ -48,6 +48,10 @@ _NAMES: dict[str, str] = {
     "Mo": "Molybdenum",
     "W": "Tungsten",
     "Fe": "Iron",
+    "Zn": "Zinc",
+    "Sn": "Tin",
+    "V": "Vanadium",
+    "Re": "Rhenium",
 }
 _UNITS: dict[str, str] = {
     "Au": "$/troy_oz",
@@ -64,6 +68,10 @@ _UNITS: dict[str, str] = {
     "Mo": "$/lb",
     "W": "$/lb",
     "Fe": "$/lb",
+    "Zn": "$/lb",
+    "Sn": "$/lb",
+    "V": "$/lb",
+    "Re": "$/lb",
 }
 
 # CatCost 2018 reference prices, escalated with ChemPPI when live data is unavailable.
@@ -96,9 +104,13 @@ def _utc_now_iso() -> str:
 # quote at any frequency, so the newest published government statistic beats
 # escalating the 2018 CatCost value across eight volatile years.
 _USGS_REF: dict[str, float] = {
-    "Co": 21.0,   # U.S. spot cathode, $/lb (Platts via USGS)
-    "Mo": 34.71,  # molybdic oxide $51/kg, contained-Mo basis
-    "W": 21.74,   # Rotterdam WO3 concentrate $380/mtu at 7.93 kg W per mtu
+    "Co": 21.0,    # U.S. spot cathode, $/lb (Platts via USGS)
+    "Mo": 34.71,   # molybdic oxide $51/kg, contained-Mo basis
+    "W": 21.74,    # Rotterdam WO3 concentrate $380/mtu at 7.93 kg W per mtu
+    "Zn": 1.30,    # LME cash 130 c/lb; fallback under the live Westmetall feed
+    "Sn": 15.00,   # LME cash 1,500 c/lb; fallback under the live Westmetall feed
+    "V": 8.96,     # V2O5 $5.02/lb at 56.0% contained V
+    "Re": 1179.4,  # metal powder, 99.99%, $2,600/kg
 }
 _USGS_SOURCE = "USGS MCS 2026 (2025 avg)"
 
@@ -496,17 +508,20 @@ async def fetch_markets_insider() -> dict[str, dict]:
 
 def get_reference_prices() -> dict[str, dict]:
     """Return all metals priced from the newest usable public reference."""
+    symbols = list(_CATCOST_REF) + [sym for sym in _USGS_REF if sym not in _CATCOST_REF]
     return {
         sym: {
             "name": _NAMES.get(sym, sym),
-            "price": _USGS_REF.get(sym, _escalate(base)),
+            "price": (
+                _USGS_REF[sym] if sym in _USGS_REF else _escalate(_CATCOST_REF[sym])
+            ),
             "unit": _UNITS.get(sym, "$/troy_oz"),
             "source": (
                 _USGS_SOURCE if sym in _USGS_REF else "CatCost 2018 + ChemPPI escalation"
             ),
             "fetched_at": None,
         }
-        for sym, base in _CATCOST_REF.items()
+        for sym in symbols
     }
 
 
@@ -524,12 +539,14 @@ async def fetch_all_prices() -> dict[str, dict]:
     kitco_task = asyncio.create_task(fetch_kitco())
     jm_task = asyncio.create_task(fetch_johnson_matthey())
     mi_task = asyncio.create_task(fetch_markets_insider())
+    wm_task = asyncio.create_task(fetch_westmetall())
 
-    yahoo_data, kitco_data, jm_data, mi_data = await asyncio.gather(
+    yahoo_data, kitco_data, jm_data, mi_data, wm_data = await asyncio.gather(
         yahoo_task,
         kitco_task,
         jm_task,
         mi_task,
+        wm_task,
         return_exceptions=True,
     )
 
@@ -562,6 +579,14 @@ async def fetch_all_prices() -> dict[str, dict]:
     else:
         logger.warning("Markets Insider failed: %s", mi_data)
 
+    if isinstance(wm_data, dict):
+        for sym, data in wm_data.items():
+            existing_src = results.get(sym, {}).get("source", "")
+            if "CatCost" in existing_src or "USGS" in existing_src:
+                results[sym] = data
+    else:
+        logger.warning("Westmetall failed: %s", wm_data)
+
     if settings.metalprice_api_key:
         try:
             backup = await fetch_metalprice_api()
@@ -578,7 +603,11 @@ async def fetch_all_prices() -> dict[str, dict]:
 
 
 JM_HISTORY_SYMBOLS = ("Ru", "Ir", "Rh", "Pd", "Pt")
-WESTMETALL_FIELDS: dict[str, str] = {"Ni": "LME_Ni_cash"}
+WESTMETALL_FIELDS: dict[str, str] = {
+    "Ni": "LME_Ni_cash",
+    "Zn": "LME_Zn_cash",
+    "Sn": "LME_Sn_cash",
+}
 
 
 async def fetch_johnson_matthey_history(start: date, end: date) -> dict[str, list[dict]]:
@@ -677,6 +706,24 @@ def _parse_westmetall_table(page: str) -> list[dict]:
         points.append({"date": day.isoformat(), "price": round(per_tonne / LB_PER_METRIC_TON, 4)})
     points.sort(key=lambda p: p["date"])
     return points
+
+
+async def fetch_westmetall() -> dict[str, dict]:
+    """Return the newest LME official settlement for each Westmetall metal."""
+    results: dict[str, dict] = {}
+    for symbol in WESTMETALL_FIELDS:
+        points = await fetch_westmetall_history(symbol)
+        if not points:
+            continue
+        latest = points[-1]
+        results[symbol] = {
+            "name": _NAMES.get(symbol, symbol),
+            "price": latest["price"],
+            "unit": _UNITS.get(symbol, "$/lb"),
+            "source": "Westmetall (LME settlement)",
+            "fetched_at": _utc_now_iso(),
+        }
+    return results
 
 
 async def fetch_history(symbol: str, period: str = "1y") -> list[dict]:

@@ -57,6 +57,16 @@ _SOURCE_RULES: list[dict[str, Any]] = [
         "note": "Supplier-published precious-metals board used as a direct industry anchor.",
     },
     {
+        "match": "Westmetall",
+        "tier": "exchange_mirror",
+        "confidence_score": 86,
+        "transparency": "screen_quote",
+        "acquisition_mode": "scrape",
+        "freshness_target_hours": 48,
+        "label": "Exchange settlement mirror",
+        "note": "LME official settlement republished by Westmetall; daily on exchange trading days.",
+    },
+    {
         "match": "Markets Insider",
         "tier": "screen_scrape",
         "confidence_score": 77,

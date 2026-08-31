@@ -142,7 +142,13 @@ def test_parse_westmetall_table_converts_metric_ton_to_lb():
 def test_reference_prices_use_usgs_anchors_for_co_mo_w():
     ref = get_reference_prices()
 
-    for sym, anchor in (("Co", 21.0), ("Mo", 34.71), ("W", 21.74)):
+    anchors = (
+        ("Co", 21.0), ("Mo", 34.71), ("W", 21.74),
+        ("Zn", 1.30), ("Sn", 15.0), ("V", 8.96), ("Re", 1179.4),
+    )
+    for sym, anchor in anchors:
         assert ref[sym]["price"] == anchor
         assert ref[sym]["source"] == "USGS MCS 2026 (2025 avg)"
     assert ref["Fe"]["source"] == "CatCost 2018 + ChemPPI escalation"
+    assert ref["Zn"]["unit"] == "$/lb"
+    assert ref["Re"]["name"] == "Rhenium"

@@ -338,13 +338,10 @@
           "name": "Zn",
           "wt_pct": 3.0,
           "pricing": {
-            "type": "fixed",
-            "price_per_lb": 1.3,
-            "evidence_label": "USGS refined zinc proxy",
-            "evidence_tier": "public_index",
-            "confidence_score": 74,
-            "transparency": "public_index",
-            "note": "2025e annual average LME cash zinc price, $1.30/lb (USGS MCS 2026). Replaces a live-feed reference to a symbol the price service does not carry. Former live-feed precursor markup (1.10) folded out; the public quote stands alone."
+            "type": "market_feed",
+            "symbol": "Zn",
+            "precursor_markup": 1.1,
+            "note": "Live Zn feed (LME settlement via Westmetall, USGS MCS fallback) with a precursor / conversion markup; upgraded from the fixed USGS LME-average proxy."
           }
         },
         {
