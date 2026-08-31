@@ -134,11 +134,14 @@ LOSSES_REFINING: dict[str, dict[str, float]] = {
     "Ru": {"high": 0.25, "low": 0.15, "avg": 0.200},
     "Au": {"avg": 0.10},
     "Ir": {"avg": 0.10},
+    "Ag": {"avg": 0.025},
     "Ni": {"avg": 0.20},
     "Co": {"avg": 0.20},
     "Cu": {"high": 0.25, "low": 0.15, "avg": 0.20},
     "W": {"high": 0.25, "low": 0.15, "avg": 0.20},
     "Mo": {"high": 0.30, "low": 0.20, "avg": 0.25},
+    "Fe": {"avg": 0.40},
+    "Al": {"avg": 0.70},
 }
 
 REFINING_CHARGES: dict[str, float] = {  # $/TrOz recovered
