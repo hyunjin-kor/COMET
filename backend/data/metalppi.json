@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0",
+  "source": "BLS series WPU1022 (annual averages computed from monthly observations, fetched via BLS API on 2026-08-31)",
+  "series_id": "WPU1022",
+  "description": "Producer Price Index - Primary nonferrous metals",
+  "annual": {
+    "2017": 186.5,
+    "2018": 193.7,
+    "2019": 184.3,
+    "2020": 191.4,
+    "2021": 245.2,
+    "2022": 256.6,
+    "2023": 243.0,
+    "2024": 264.3,
+    "2025": 357.4,
+    "2026": 547.2
+  }
+}

@@ -123,6 +123,11 @@ const TREND_PERIODS: TrendPeriod[] = ['1mo', '3mo', '6mo', '1y'];
 // series for non-exchange metals start at a couple of snapshots.
 const MIN_TREND_POINTS = 5;
 
+// A "DB cache" series is only our own snapshot log — the days the app happened
+// to be open — so it must never be read as a market trend.
+const isMarketTrend = (trend: PriceTrend) =>
+  trend.source !== 'DB cache' && trend.count >= MIN_TREND_POINTS && trend.change_pct != null;
+
 function fmtChangePct(pct: number) {
   const sign = pct >= 0 ? '+' : '−';
   return `${sign}${Math.abs(pct).toFixed(1)}%`;
@@ -432,13 +437,11 @@ export default function Prices() {
   ).length;
   const trendFor = (symbol: string): PriceTrend | null => {
     const trend = trends?.[symbol];
-    return trend && trend.count >= MIN_TREND_POINTS && trend.change_pct != null ? trend : null;
+    return trend && isMarketTrend(trend) ? trend : null;
   };
   const movers = useMemo(() => {
     if (!trends) return null;
-    const rows = Object.values(trends).filter(
-      (trend) => trend.count >= MIN_TREND_POINTS && trend.change_pct != null,
-    );
+    const rows = Object.values(trends).filter(isMarketTrend);
     if (rows.length < 2) return null;
     const sorted = [...rows].sort((a, b) => b.change_pct! - a.change_pct!);
     return { top: sorted[0]!, bottom: sorted[sorted.length - 1]! };
@@ -447,7 +450,7 @@ export default function Prices() {
     () =>
       trends
         ? Object.values(trends)
-            .filter((trend) => trend.count >= MIN_TREND_POINTS)
+            .filter(isMarketTrend)
             .map((trend) => trend.symbol)
         : [],
     [trends],
@@ -701,7 +704,9 @@ export default function Prices() {
                                 </span>
                               </>
                             ) : (
-                              <span className="text-xs text-slate-400">{t('History accumulating')}</span>
+                              <span className="text-xs text-slate-600">
+                                {row.source_type === 'live' ? t('History accumulating') : t('No market trend')}
+                              </span>
                             )}
                           </div>
 

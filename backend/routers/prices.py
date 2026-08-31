@@ -13,7 +13,13 @@ from sqlmodel import Session, select
 
 from backend.core.decision_engine import list_benchmark_catalogs
 from backend.core.price_evidence import describe_price_evidence
-from backend.core.price_fetcher import fetch_history, get_reference_prices
+from backend.core.price_fetcher import (
+    WESTMETALL_FIELDS,
+    fetch_history,
+    fetch_johnson_matthey_history,
+    fetch_westmetall_history,
+    get_reference_prices,
+)
 from backend.database import get_session
 from backend.models.metal_price import MetalPrice
 
@@ -151,21 +157,37 @@ def _dedupe_by_date(points: list[dict]) -> list[dict]:
     return [by_date[key] for key in sorted(by_date)]
 
 
-async def _symbol_trend(symbol: str, period: str, session: Session) -> dict:
+async def _symbol_trend(
+    symbol: str,
+    period: str,
+    session: Session,
+    jm_history: dict[str, list[dict]] | None = None,
+) -> dict:
     history = await fetch_history(symbol, period)
     source = "Yahoo Finance"
+    cutoff = date.today() - timedelta(days=_PERIOD_DAYS.get(period, 366))
+    if not history and jm_history and jm_history.get(symbol):
+        history = jm_history[symbol]
+        source = "Johnson Matthey"
+    if not history and symbol in WESTMETALL_FIELDS:
+        history = [
+            row
+            for row in await fetch_westmetall_history(symbol)
+            if date.fromisoformat(row["date"]) >= cutoff
+        ]
+        if history:
+            source = "Westmetall (LME)"
     if not history:
         source = "DB cache"
-        cutoff = date.today() - timedelta(days=_PERIOD_DAYS.get(period, 366))
         stmt = (
             select(MetalPrice)
             .where(MetalPrice.symbol == symbol)
-            .order_by(MetalPrice.fetched_at.asc())
+            .order_by(MetalPrice.fetched_at.desc())
             .limit(500)
         )
         history = [
             {"date": p.fetched_at.strftime("%Y-%m-%d"), "price": p.price}
-            for p in session.exec(stmt).all()
+            for p in reversed(session.exec(stmt).all())
             if p.fetched_at.date() >= cutoff
         ]
 
@@ -203,8 +225,12 @@ async def get_price_trends(
     if cached and time.monotonic() - cached[0] < _TRENDS_TTL_SECONDS:
         return cached[1]
 
+    # One JM request covers every PGM, so fetch it before fanning out.
+    jm_history = await fetch_johnson_matthey_history(
+        date.today() - timedelta(days=_PERIOD_DAYS.get(period, 366)), date.today()
+    )
     trends = await asyncio.gather(
-        *[_symbol_trend(symbol, period, session) for symbol in TRACKED_SYMBOLS]
+        *[_symbol_trend(symbol, period, session, jm_history) for symbol in TRACKED_SYMBOLS]
     )
     payload = {"period": period, "trends": {trend["symbol"]: trend for trend in trends}}
     _trends_cache[period] = (time.monotonic(), payload)
@@ -331,10 +357,10 @@ async def get_price_history(
     stmt = (
         select(MetalPrice)
         .where(MetalPrice.symbol == symbol)
-        .order_by(MetalPrice.fetched_at.asc())
+        .order_by(MetalPrice.fetched_at.desc())
         .limit(500)
     )
-    db_rows = session.exec(stmt).all()
+    db_rows = list(reversed(session.exec(stmt).all()))
     if db_rows:
         history = _filter_history_range(
             [

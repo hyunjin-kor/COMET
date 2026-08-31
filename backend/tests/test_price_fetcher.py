@@ -5,7 +5,9 @@ from backend.core.price_fetcher import (
     _extract_yahoo_history,
     _extract_yahoo_quote,
     _parse_johnson_matthey_current_prices,
+    _parse_johnson_matthey_history,
     _parse_markets_insider_quote,
+    _parse_westmetall_table,
 )
 
 
@@ -104,3 +106,33 @@ def test_parse_markets_insider_quote_converts_metric_ton_to_lb():
     assert quote["source"] == "Markets Insider (live)"
     assert math.isclose(quote["price"], 7.6276, rel_tol=1e-4)
     _assert_utc_timestamp(quote["fetched_at"])
+
+
+def test_parse_johnson_matthey_history_groups_and_sorts_by_symbol():
+    rows = [
+        {"metalCode": "Rh", "metalValueDate": "31/08/2026", "price": "9050", "metalName": "Rhodium"},
+        {"metalCode": "Rh", "metalValueDate": "02/03/2026", "price": "12050", "metalName": "Rhodium"},
+        {"metalCode": "Ir", "metalValueDate": "02/03/2026", "price": "6700", "metalName": "Iridium"},
+        {"metalCode": "Ir", "metalValueDate": "bad-date", "price": "1", "metalName": "Iridium"},
+    ]
+
+    series = _parse_johnson_matthey_history(rows)
+
+    assert [point["date"] for point in series["Rh"]] == ["2026-03-02", "2026-08-31"]
+    assert series["Rh"][-1]["price"] == 9050.0
+    assert len(series["Ir"]) == 1
+
+
+def test_parse_westmetall_table_converts_metric_ton_to_lb():
+    page = """
+    <table>
+      <tr><th>date</th><th>settlement</th></tr>
+      <tr><td>28. August 2026</td><td>16,850.00</td><td>17,000.00</td><td>268,362</td></tr>
+      <tr><td>27. August 2026</td><td>16,660.00</td><td>16,840.00</td><td>268,314</td></tr>
+    </table>
+    """
+
+    points = _parse_westmetall_table(page)
+
+    assert [point["date"] for point in points] == ["2026-08-27", "2026-08-28"]
+    assert math.isclose(points[-1]["price"], 16850.0 / 2204.62, rel_tol=1e-4)

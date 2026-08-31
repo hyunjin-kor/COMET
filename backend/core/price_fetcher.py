@@ -7,7 +7,7 @@ import html as html_lib
 import json
 import logging
 import re
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 
 import httpx
 
@@ -91,10 +91,17 @@ def _utc_now_iso() -> str:
     return datetime.now(UTC).isoformat()
 
 
-def _escalate(price_2018: float) -> float:
-    """Scale a 2018 price to today using the ChemPPI index."""
+# Metals whose CatCost reference is escalated with the primary nonferrous PPI
+# instead of ChemPPI: every metal we can measure live has risen far more since
+# 2018 (median x3.1) than the chemical index (x1.2) implies.
+METAL_PPI_SYMBOLS = frozenset({"Co", "Mo", "W"})
+
+
+def _escalate(price_2018: float, symbol: str | None = None) -> float:
+    """Scale a 2018 price to today using the PPI that fits the commodity."""
+    index_file = "metalppi.json" if symbol in METAL_PPI_SYMBOLS else "chemppi.json"
     try:
-        with open(_DATA_DIR / "chemppi.json", encoding="utf-8") as f:
+        with open(_DATA_DIR / index_file, encoding="utf-8") as f:
             annual = json.load(f).get("annual", {})
         base = float(annual.get("2018", 0))
         latest_year = max(int(year) for year in annual if annual[year])
@@ -102,7 +109,7 @@ def _escalate(price_2018: float) -> float:
         if base and latest:
             return round(price_2018 * (latest / base), 4)
     except (OSError, ValueError, json.JSONDecodeError) as exc:
-        logger.warning("ChemPPI escalation skipped (%s): %s", type(exc).__name__, exc)
+        logger.warning("%s escalation skipped (%s): %s", index_file, type(exc).__name__, exc)
     return price_2018
 
 
@@ -487,9 +494,13 @@ def get_reference_prices() -> dict[str, dict]:
     return {
         sym: {
             "name": _NAMES.get(sym, sym),
-            "price": _escalate(base),
+            "price": _escalate(base, sym),
             "unit": _UNITS.get(sym, "$/troy_oz"),
-            "source": "CatCost 2018 + ChemPPI escalation",
+            "source": (
+                "CatCost 2018 + metals PPI escalation"
+                if sym in METAL_PPI_SYMBOLS
+                else "CatCost 2018 + ChemPPI escalation"
+            ),
             "fetched_at": None,
         }
         for sym, base in _CATCOST_REF.items()
@@ -561,6 +572,108 @@ async def fetch_all_prices() -> dict[str, dict]:
     live_count = sum(1 for value in results.values() if "CatCost" not in value.get("source", ""))
     logger.info("fetch_all_prices: %d total, %d live", len(results), live_count)
     return results
+
+
+JM_HISTORY_SYMBOLS = ("Ru", "Ir", "Rh", "Pd", "Pt")
+WESTMETALL_FIELDS: dict[str, str] = {"Ni": "LME_Ni_cash"}
+
+
+async def fetch_johnson_matthey_history(start: date, end: date) -> dict[str, list[dict]]:
+    """Return daily Johnson Matthey base-price history for the five PGMs.
+
+    The chart portlet keeps its data behind a Liferay resource URL that the page
+    renders into `#getUrl`; posting the date range and metal codes to it returns
+    the whole daily series as JSON.
+    """
+    url = "https://matthey.com/products-and-markets/pgms-and-circularity/pgm-management"
+    try:
+        async with httpx.AsyncClient(timeout=30, follow_redirects=True, headers=_HTTP_HEADERS) as client:
+            page = (await client.get(url)).text
+            portlet = re.search(r'id="getPortletId"[^>]*value="([^"]+)"', page)
+            resource = re.search(r'id="getUrl"[^>]*>(.*?)</', page, re.S)
+            if not (portlet and resource):
+                logger.warning("Johnson Matthey history: portlet handles missing")
+                return {}
+            portlet_id = portlet.group(1)
+            payload = {
+                f"{portlet_id}selectedMetal{i}": code
+                for i, code in enumerate(JM_HISTORY_SYMBOLS)
+            }
+            payload[f"{portlet_id}start_Date"] = start.strftime("%d-%m-%Y")
+            payload[f"{portlet_id}end_Date"] = end.strftime("%d-%m-%Y")
+            resp = await client.post(
+                html_lib.unescape(resource.group(1).strip()),
+                data=payload,
+                headers={"X-Requested-With": "XMLHttpRequest"},
+            )
+            resp.raise_for_status()
+            rows = resp.json().get("metalList", [])
+    except (httpx.HTTPError, json.JSONDecodeError, KeyError, ValueError) as e:
+        logger.warning("Johnson Matthey history failed: %s", e)
+        return {}
+
+    series = _parse_johnson_matthey_history(rows)
+    logger.info(
+        "Johnson Matthey history: %s",
+        {sym: len(points) for sym, points in series.items()},
+    )
+    return series
+
+
+def _parse_johnson_matthey_history(rows: list[dict]) -> dict[str, list[dict]]:
+    """Group JM `metalList` rows into an ascending per-symbol daily series."""
+    series: dict[str, list[dict]] = {}
+    for row in rows:
+        try:
+            day = datetime.strptime(row["metalValueDate"], "%d/%m/%Y").date()
+            price = float(row["price"])
+        except (KeyError, TypeError, ValueError):
+            continue
+        series.setdefault(row.get("metalCode", ""), []).append(
+            {"date": day.isoformat(), "price": price}
+        )
+    for points in series.values():
+        points.sort(key=lambda p: p["date"])
+    return series
+
+
+async def fetch_westmetall_history(symbol: str) -> list[dict]:
+    """Return daily LME settlement history for a base metal, in the app's unit."""
+    field = WESTMETALL_FIELDS.get(symbol)
+    if not field:
+        return []
+    try:
+        async with httpx.AsyncClient(timeout=25, follow_redirects=True, headers=_HTTP_HEADERS) as client:
+            resp = await client.get(
+                "https://www.westmetall.com/en/markdaten.php",
+                params={"action": "table", "field": field},
+            )
+            resp.raise_for_status()
+            page = resp.text
+    except httpx.HTTPError as e:
+        logger.warning("Westmetall history(%s) failed: %s", symbol, e)
+        return []
+
+    points = _parse_westmetall_table(page)
+    logger.info("Westmetall history(%s): %d points", symbol, len(points))
+    return points
+
+
+def _parse_westmetall_table(page: str) -> list[dict]:
+    """Parse Westmetall's LME settlement table into ascending $/lb points."""
+    points: list[dict] = []
+    for row in re.findall(r"<tr[^>]*>(.*?)</tr>", page, re.S):
+        cells = [re.sub(r"<[^>]+>", "", c).strip() for c in re.findall(r"<td[^>]*>(.*?)</td>", row, re.S)]
+        if len(cells) < 2:
+            continue
+        try:
+            day = datetime.strptime(cells[0].replace(".", ""), "%d %B %Y").date()
+            per_tonne = float(cells[1].replace(",", ""))
+        except ValueError:
+            continue
+        points.append({"date": day.isoformat(), "price": round(per_tonne / LB_PER_METRIC_TON, 4)})
+    points.sort(key=lambda p: p["date"])
+    return points
 
 
 async def fetch_history(symbol: str, period: str = "1y") -> list[dict]:

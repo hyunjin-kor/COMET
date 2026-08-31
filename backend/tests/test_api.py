@@ -797,7 +797,15 @@ class TestPrices:
                 ]
             return []
 
+        async def fake_jm_history(start, end):
+            return {}
+
+        async def fake_westmetall_history(symbol: str):
+            return []
+
         monkeypatch.setattr(prices_router, "fetch_history", fake_fetch_history)
+        monkeypatch.setattr(prices_router, "fetch_johnson_matthey_history", fake_jm_history)
+        monkeypatch.setattr(prices_router, "fetch_westmetall_history", fake_westmetall_history)
         monkeypatch.setattr(prices_router, "_trends_cache", {})
 
         recent = datetime.now()
