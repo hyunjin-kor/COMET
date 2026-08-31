@@ -6,6 +6,7 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from backend.core.material_pricing import mass_price_to_per_lb
 from backend.core.price_escalation import latest_index_year
 
 PriceUnit = Literal["$/lb", "$/kg", "$/troy_oz"]
@@ -160,13 +161,14 @@ class CostCalculationRequest(BaseModel):
 
         assert self.metal_symbol is not None
         assert self.metal_loading_wt_pct is not None
+        assert self.metal_price is not None
         support_wt = max(0.0, 100.0 - self.metal_loading_wt_pct)
         components = [
             {
                 "role": "active_metal",
                 "name": self.metal_symbol,
                 "wt_pct": self.metal_loading_wt_pct,
-                "price_per_lb": 0.0,
+                "price_per_lb": mass_price_to_per_lb(self.metal_price, self.metal_price_unit),
                 "precursor_markup": self.precursor_markup,
             }
         ]
