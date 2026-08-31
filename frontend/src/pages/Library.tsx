@@ -182,7 +182,7 @@ function LibraryMetricTile({ label, value, detail }: { label: string; value: str
     <div className="rounded-[22px] border border-slate-900/8 bg-white/58 p-4">
       <div className="cp-subtle-label">{label}</div>
       <div className="mt-2 text-2xl font-display text-[#191f28]">{value}</div>
-      <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div>
+      <div className="mt-1 text-xs leading-5 text-slate-600">{detail}</div>
     </div>
   );
 }
@@ -192,7 +192,7 @@ function InspectorRow({ label, value, detail }: { label: string; value: string; 
     <div className="cp-data-row">
       <div>
         <div className="cp-subtle-label">{label}</div>
-        {detail ? <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div> : null}
+        {detail ? <div className="mt-1 text-xs leading-5 text-slate-600">{detail}</div> : null}
       </div>
       <div className="text-right text-sm font-semibold text-[#191f28]">{value}</div>
     </div>
@@ -454,10 +454,10 @@ export default function Library() {
                     <SkeletonListRows count={6} />
                   </div>
                 ) : sortedMaterials.length === 0 ? (
-                  <div className="flex flex-col items-start gap-3 px-5 py-8 text-sm text-slate-500">
+                  <div className="flex flex-col items-start gap-3 px-5 py-8 text-sm text-slate-600">
                     <div>
                       <div className="font-semibold text-[#191f28]">No materials match the current filters.</div>
-                      <div className="mt-1 text-xs leading-5 text-slate-500">
+                      <div className="mt-1 text-xs leading-5 text-slate-600">
                         Try clearing the search box or category filter to see the full library.
                       </div>
                     </div>
@@ -489,8 +489,8 @@ export default function Library() {
                           <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
                             <div className="min-w-0">
                               <div className="truncate font-semibold text-[#191f28]">{material.name}</div>
-                              <div className="truncate text-xs text-slate-500">{material.symbol || material.formula || 'No symbol'}</div>
-                              {material.notes ? <div className="mt-1 text-xs leading-5 text-slate-500">{material.notes}</div> : null}
+                              <div className="truncate text-xs text-slate-600">{material.symbol || material.formula || 'No symbol'}</div>
+                              {material.notes ? <div className="mt-1 text-xs leading-5 text-slate-600">{material.notes}</div> : null}
                             </div>
                             <div className="text-left lg:text-right">
                               {material.normalized_price_per_lb != null ? (
@@ -498,25 +498,25 @@ export default function Library() {
                                   <div className="font-mono text-slate-900">
                                     {formatPrice(toDisplay(material.normalized_price_per_lb))}{fmtLabel}
                                   </div>
-                                  <div className="mt-1 text-xs text-slate-500">
+                                  <div className="mt-1 text-xs text-slate-600">
                                     {formatRawPrice(material)} · {formatPack(material, lang)}
                                   </div>
                                 </>
                               ) : (
                                 <>
                                   <div className="font-mono text-slate-900">{formatRawPrice(material)}</div>
-                                  <div className="mt-1 text-xs text-slate-500">{formatPack(material, lang)}</div>
+                                  <div className="mt-1 text-xs text-slate-600">{formatPack(material, lang)}</div>
                                 </>
                               )}
                             </div>
                           </div>
                           <div className="mt-3 flex flex-wrap gap-2">
-                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-medium ${usabilityTone(material)}`}>{t(usabilityLabel(material))}</span>
-                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-medium ${quoteYearTone(material.quote_year)}`}>{material.quote_year == null ? t('Year unknown') : (lang === 'ko' ? `${material.quote_year}년 견적` : quoteYearLabel(material.quote_year))}</span>
-                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${domainTone(material.catalyst_domain)}`}>{t(domainLabel(material.catalyst_domain))}</span>
-                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${applicationTone(material.application_family)}`}>{t(applicationLabel(material.application_family))}</span>
-                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${categoryTone(material.category)}`}>{material.category || 'Uncategorised'}</span>
-                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-medium ${sourceTrustTone(material)}`}>{t(sourceTrustLabel(material))}</span>
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-medium ${usabilityTone(material)}`}>{t(usabilityLabel(material))}</span>
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-medium ${quoteYearTone(material.quote_year)}`}>{material.quote_year == null ? t('Year unknown') : (lang === 'ko' ? `${material.quote_year}년 견적` : quoteYearLabel(material.quote_year))}</span>
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${domainTone(material.catalyst_domain)}`}>{t(domainLabel(material.catalyst_domain))}</span>
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${applicationTone(material.application_family)}`}>{t(applicationLabel(material.application_family))}</span>
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${categoryTone(material.category)}`}>{material.category || 'Uncategorised'}</span>
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-medium ${sourceTrustTone(material)}`}>{t(sourceTrustLabel(material))}</span>
                           </div>
                         </button>
                       );
@@ -530,16 +530,16 @@ export default function Library() {
                   <div className="cp-subtle-label">{t('Source Detail')}</div>
                   <div className="mt-2 text-lg font-semibold text-[#191f28]">{selectedMaterial?.name ?? t('Choose a material row')}</div>
                   <div className="mt-3 flex flex-wrap gap-2">
-                    {selectedMaterial ? <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${domainTone(selectedMaterial.catalyst_domain)}`}>{t(domainLabel(selectedMaterial.catalyst_domain))}</span> : null}
-                    {selectedMaterial ? <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${applicationTone(selectedMaterial.application_family)}`}>{t(applicationLabel(selectedMaterial.application_family))}</span> : null}
-                    {selectedMaterial ? <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${categoryTone(selectedMaterial.category)}`}>{selectedMaterial.category || 'Uncategorised'}</span> : null}
+                    {selectedMaterial ? <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${domainTone(selectedMaterial.catalyst_domain)}`}>{t(domainLabel(selectedMaterial.catalyst_domain))}</span> : null}
+                    {selectedMaterial ? <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${applicationTone(selectedMaterial.application_family)}`}>{t(applicationLabel(selectedMaterial.application_family))}</span> : null}
+                    {selectedMaterial ? <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${categoryTone(selectedMaterial.category)}`}>{selectedMaterial.category || 'Uncategorised'}</span> : null}
                   </div>
                   {selectedMaterial ? (
                     <>
                       <div className="mt-3 flex flex-wrap gap-2">
-                        <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-medium ${usabilityTone(selectedMaterial)}`}>{t(usabilityLabel(selectedMaterial))}</span>
+                        <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-medium ${usabilityTone(selectedMaterial)}`}>{t(usabilityLabel(selectedMaterial))}</span>
                       </div>
-                      <div className="mt-3 text-xs leading-5 text-slate-500">{t(usabilityHint(selectedMaterial))}</div>
+                      <div className="mt-3 text-xs leading-5 text-slate-600">{t(usabilityHint(selectedMaterial))}</div>
                       <div className="mt-4 space-y-1">
                         <InspectorRow label={t('Quote')} value={formatRawPrice(selectedMaterial)} detail={formatPack(selectedMaterial, lang)} />
                         {selectedMaterial.is_calculator_usable && selectedMaterial.normalized_price_per_lb != null ? (
@@ -565,7 +565,7 @@ export default function Library() {
                       ) : null}
                     </>
                   ) : (
-                    <div className="mt-3 text-xs leading-6 text-slate-500">{t('Choose a row from the record list to inspect its source basis here.')}</div>
+                    <div className="mt-3 text-xs leading-6 text-slate-600">{t('Choose a row from the record list to inspect its source basis here.')}</div>
                   )}
                 </section>
               </div>
@@ -581,9 +581,9 @@ export default function Library() {
                   <SkeletonListRows count={6} />
                 </div>
               ) : steps.length === 0 ? (
-                <div className="px-5 py-8 text-sm text-slate-500">
+                <div className="px-5 py-8 text-sm text-slate-600">
                   <div className="font-semibold text-[#191f28]">No step rates loaded.</div>
-                  <div className="mt-1 text-xs leading-5 text-slate-500">The step library is empty — backend may not have published rates yet.</div>
+                  <div className="mt-1 text-xs leading-5 text-slate-600">The step library is empty — backend may not have published rates yet.</div>
                 </div>
               ) : (
                 <div className="max-h-[68vh] space-y-2 overflow-auto px-4 py-4">
@@ -598,7 +598,7 @@ export default function Library() {
                         <div className="flex items-start justify-between gap-3">
                           <div>
                             <div className="font-semibold text-[#191f28]">{step.name}</div>
-                            <div className="mt-1 text-xs text-slate-500">{step.basis}</div>
+                            <div className="mt-1 text-xs text-slate-600">{step.basis}</div>
                           </div>
                           <span className="cp-chip">{step.key}</span>
                         </div>
@@ -631,7 +631,7 @@ export default function Library() {
                     </div>
                   </>
                 ) : (
-                  <div className="mt-3 text-xs leading-6 text-slate-500">Choose a step to inspect the hourly-rate basis here.</div>
+                  <div className="mt-3 text-xs leading-6 text-slate-600">Choose a step to inspect the hourly-rate basis here.</div>
                 )}
               </section>
             </div>
@@ -664,9 +664,9 @@ export default function Library() {
                 {loading ? (
                   <SkeletonListRows count={4} />
                 ) : templates.length === 0 ? (
-                  <div className="rounded-[20px] border border-slate-200 bg-white/58 px-5 py-6 text-sm text-slate-500">
+                  <div className="rounded-[20px] border border-slate-200 bg-white/58 px-5 py-6 text-sm text-slate-600">
                     <div className="font-semibold text-[#191f28]">No route templates loaded.</div>
-                    <div className="mt-1 text-xs leading-5 text-slate-500">No templates are stored for the current catalyst-domain filter. Switch to "All domains" to widen the search.</div>
+                    <div className="mt-1 text-xs leading-5 text-slate-600">No templates are stored for the current catalyst-domain filter. Switch to "All domains" to widen the search.</div>
                   </div>
                 ) : (
                   templates.map((template) => {
@@ -683,7 +683,7 @@ export default function Library() {
                             <div className="cp-heading-sm mt-2">{template.name}</div>
                           </div>
                           <div className="flex flex-wrap gap-2">
-                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${domainTone(template.catalyst_domain)}`}>{domainLabel(template.catalyst_domain)}</span>
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${domainTone(template.catalyst_domain)}`}>{domainLabel(template.catalyst_domain)}</span>
                             <span className="cp-chip">{lang === 'ko' ? `${template.steps.length}개 단계` : `${template.steps.length} steps`}</span>
                           </div>
                         </div>
@@ -701,7 +701,7 @@ export default function Library() {
                   {selectedTemplate ? (
                     <>
                       <div className="mt-3 flex flex-wrap gap-2">
-                        <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${domainTone(selectedTemplate.catalyst_domain)}`}>{domainLabel(selectedTemplate.catalyst_domain)}</span>
+                        <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${domainTone(selectedTemplate.catalyst_domain)}`}>{domainLabel(selectedTemplate.catalyst_domain)}</span>
                         {selectedTemplate.application_family ? <span className="cp-chip">{applicationLabel(selectedTemplate.application_family)}</span> : null}
                         {selectedTemplate.manufacturing_mode ? <span className="cp-chip">{selectedTemplate.manufacturing_mode}</span> : null}
                       </div>
@@ -721,7 +721,7 @@ export default function Library() {
                       ) : null}
                     </>
                   ) : (
-                    <div className="mt-3 text-xs leading-6 text-slate-500">Choose a route template to inspect its preparation stages and audit fields here.</div>
+                    <div className="mt-3 text-xs leading-6 text-slate-600">Choose a route template to inspect its preparation stages and audit fields here.</div>
                   )}
                 </section>
               </div>

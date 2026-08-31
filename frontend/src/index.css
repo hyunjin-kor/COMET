@@ -37,7 +37,10 @@
   --ink-strong: #191f28;
   --ink: #333d4b;
   --ink-soft: #4e5968;
-  --ink-mute: #8b95a1;
+  /* ink-mute is the lightest tone that still carries body text at 4.5:1 on
+     white; ink-faint is below that bar, so it is for hairlines and decorative
+     icons only -- never for text. */
+  --ink-mute: #68727f;
   --ink-faint: #b0b8c1;
 
   /* Lines */
@@ -180,14 +183,14 @@ textarea {
 .input-base {
   @apply w-full min-w-0 rounded-[12px] border border-[#d1d6db] bg-white px-4 py-2.5
          text-sm text-[#191f28] outline-none transition
-         placeholder:text-[#b0b8c1]
+         placeholder:text-[#68727f]
          hover:border-[#8b95a1]
          focus:border-[#0d9488] focus:ring-4 focus:ring-[rgba(13,148,136,0.15)];
 }
 
 /* ─── Chips / tags ─────────────────────────────────────────────────── */
 .section-kicker {
-  @apply inline-flex items-center gap-1.5 text-xs font-semibold tracking-[0.01em] text-[#0d9488];
+  @apply inline-flex items-center gap-1.5 text-xs font-semibold tracking-[0.01em] text-[#0f766e];
 }
 
 .cp-chip {
@@ -202,8 +205,8 @@ textarea {
 
 /* ─── Buttons (Toss: solid blue primary, light gray secondary) ─────── */
 .cp-button-primary {
-  @apply inline-flex items-center justify-center rounded-[10px] bg-[#0d9488] px-4 py-2.5 text-sm font-semibold text-white
-         transition hover:bg-[#0f766e] active:bg-[#115e59]
+  @apply inline-flex items-center justify-center rounded-[10px] bg-[#0f766e] px-4 py-2.5 text-sm font-semibold text-white
+         transition hover:bg-[#115e59] active:bg-[#134e4a]
          disabled:pointer-events-none disabled:bg-[#d1d6db] disabled:text-white;
 }
 
@@ -221,14 +224,14 @@ textarea {
 }
 
 .cp-button-accent {
-  @apply inline-flex items-center justify-center rounded-[10px] bg-[#0d9488] px-4 py-2.5 text-sm font-semibold text-white
-         transition hover:bg-[#0f766e] active:bg-[#115e59]
+  @apply inline-flex items-center justify-center rounded-[10px] bg-[#0f766e] px-4 py-2.5 text-sm font-semibold text-white
+         transition hover:bg-[#115e59] active:bg-[#134e4a]
          disabled:pointer-events-none disabled:bg-[#d1d6db];
 }
 
 /* ─── Subtle labels (quiet section eyebrows, sentence case) ────────── */
 .cp-subtle-label {
-  @apply text-xs font-semibold tracking-[0.01em] text-[#8b95a1];
+  @apply text-xs font-semibold tracking-[0.01em] text-[#68727f];
 }
 
 /* ─── Metric tiles ─────────────────────────────────────────────────── */

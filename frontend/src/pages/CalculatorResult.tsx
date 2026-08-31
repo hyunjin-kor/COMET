@@ -122,7 +122,7 @@ function MetricTile({
     <div className={dark ? 'cp-metric-tile-dark' : 'cp-metric-tile'}>
       <div className={`cp-subtle-label ${dark ? '!text-slate-400' : ''}`}>{label}</div>
       <div className={`mt-2 text-2xl font-display ${dark ? 'text-white' : 'text-slate-900'}`}>{value}</div>
-      <div className={`mt-1 text-xs leading-5 ${dark ? 'text-slate-400' : 'text-slate-500'}`}>{detail}</div>
+      <div className={`mt-1 text-xs leading-5 ${dark ? 'text-slate-400' : 'text-slate-600'}`}>{detail}</div>
     </div>
   );
 }
@@ -132,7 +132,7 @@ function RailRow({ label, value, detail }: { label: string; value: string; detai
     <div className="cp-data-row">
       <div>
         <div className="cp-subtle-label">{label}</div>
-        {detail ? <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div> : null}
+        {detail ? <div className="mt-1 text-xs leading-5 text-slate-600">{detail}</div> : null}
       </div>
       <div className="text-right text-sm font-semibold text-[#191f28]">{value}</div>
     </div>
@@ -495,7 +495,7 @@ export default function CalculatorResult() {
               <div>
                 <div className="cp-subtle-label">{t('Electrode Stack')}</div>
                 <div className="cp-heading-sm mt-2">{t('Area-based electrocatalyst layer model')}</div>
-                <div className="mt-1 text-xs leading-6 text-slate-500">
+                <div className="mt-1 text-xs leading-6 text-slate-600">
                   {t('Catalyst powder, ionomer, membrane, and substrate are costed on an active-area basis and displayed alongside the powder estimate.')}
                 </div>
               </div>
@@ -571,7 +571,7 @@ export default function CalculatorResult() {
           <div>
             <div className="cp-subtle-label">{t('Preparation Method')}</div>
             <div className="cp-heading-lg mt-2">{t('Separate route logic from raw inputs.')}</div>
-            <div className="mt-1 text-xs leading-6 text-slate-500">
+            <div className="mt-1 text-xs leading-6 text-slate-600">
               {t('This surface is for campaign scale, selected preparation steps, route metadata, and the main cost split.')}
             </div>
           </div>
@@ -602,7 +602,7 @@ export default function CalculatorResult() {
                       style={{ width: `${Math.max(item.share, 4)}%`, backgroundColor: CHART_COLORS[index] }}
                     />
                   </div>
-                  <div className="mt-1 text-xs text-slate-500">{lang === 'ko' ? `비중 ${item.share.toFixed(1)}%` : `${item.share.toFixed(1)}% share`}</div>
+                  <div className="mt-1 text-xs text-slate-600">{lang === 'ko' ? `비중 ${item.share.toFixed(1)}%` : `${item.share.toFixed(1)}% share`}</div>
                 </div>
               ))}
             </div>
@@ -610,7 +610,7 @@ export default function CalculatorResult() {
 
           <div className="rounded-[24px] border border-slate-900/8 bg-white/58 p-4">
             <div className="cp-heading-sm">{t('Cost breakdown')}</div>
-            <div className="mt-1 text-xs text-slate-500">{t('Materials, processing, and selling adjustments.')}</div>
+            <div className="mt-1 text-xs text-slate-600">{t('Materials, processing, and selling adjustments.')}</div>
             <div className="mt-4 h-[240px]">
               <Suspense fallback={<ChartFallback />}>
                 <ResultBreakdownPieChart data={pieData} colors={CHART_COLORS} />
@@ -719,7 +719,7 @@ export default function CalculatorResult() {
         <section className="surface-card p-4">
           <div className="cp-subtle-label">{t('Environmental')}</div>
           <div className="cp-heading-lg mt-2">{t('No LCA data attached to this estimate.')}</div>
-          <div className="mt-2 text-xs leading-6 text-slate-500">
+          <div className="mt-2 text-xs leading-6 text-slate-600">
             {t('Re-run the estimate to compute cradle-to-gate impact.')}
           </div>
         </section>
@@ -738,7 +738,7 @@ export default function CalculatorResult() {
           <div className="min-w-0">
             <div className="cp-subtle-label">{t('Environmental')}</div>
             <div className="cp-heading-lg mt-2">{t('Cradle-to-gate impact per kg of catalyst')}</div>
-            <div className="mt-1 text-xs leading-6 text-slate-500">
+            <div className="mt-1 text-xs leading-6 text-slate-600">
               {t('Weighted-average over the wt% composition. Manufacturing-step emissions are not included in this version — only embodied material impact.')}
             </div>
           </div>
@@ -799,13 +799,13 @@ export default function CalculatorResult() {
                   <td className="px-3 py-2 font-semibold text-slate-900">
                     {entry.name}
                     {entry.matched_key && entry.matched_key !== entry.name ? (
-                      <span className="ml-1 text-[10px] text-slate-500">(via {entry.matched_key})</span>
+                      <span className="ml-1 text-xs text-slate-600">(via {entry.matched_key})</span>
                     ) : null}
                   </td>
                   <td className="px-3 py-2 text-slate-600">{entry.role ?? '—'}</td>
                   <td className="px-3 py-2 text-slate-600">{entry.wt_pct.toFixed(2)}</td>
                   <td className="px-3 py-2">
-                    <span className={`inline-flex rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.16em] ${lcaFactorStatusTone(entry.factor_status)}`}>
+                    <span className={`inline-flex rounded-full border px-2 py-0.5 text-xs font-semibold uppercase tracking-[0.16em] ${lcaFactorStatusTone(entry.factor_status)}`}>
                       {lcaFactorStatusLabel(entry.factor_status)}
                     </span>
                   </td>
@@ -832,11 +832,11 @@ export default function CalculatorResult() {
             {ref.table_of_origin}. Underlying LCI: {ref.underlying_lci_database}. Uncertainty: {ref.uncertainty_basis}. License: {ref.license}.
           </div>
           <div className="mt-2 text-xs">
-            <a href={ref.url} target="_blank" rel="noreferrer" className="text-[#0d9488] underline-offset-4 hover:underline">
+            <a href={ref.url} target="_blank" rel="noreferrer" className="text-[#0f766e] underline-offset-4 hover:underline">
               {t('Open the source paper')} (DOI {ref.doi})
             </a>
           </div>
-          <div className="mt-3 text-xs leading-6 text-slate-500">{ref.notes}</div>
+          <div className="mt-3 text-xs leading-6 text-slate-600">{ref.notes}</div>
         </div>
       </section>
     );
@@ -849,7 +849,7 @@ export default function CalculatorResult() {
           <div className="min-w-0">
             <div className="cp-subtle-label">{t('Evidence')}</div>
             <div className="cp-heading-lg mt-2">{t('Resolved material sources and normalization')}</div>
-            <div className="mt-1 text-xs leading-6 text-slate-500">
+            <div className="mt-1 text-xs leading-6 text-slate-600">
               {t('Each record shows raw quote, pack basis, normalization basis, and public link status when available.')}
             </div>
           </div>
@@ -884,7 +884,7 @@ export default function CalculatorResult() {
                     <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: CHART_COLORS[index % CHART_COLORS.length] }} />
                     <div className="cp-heading-sm">{component.name}</div>
                   </div>
-                  <div className="mt-1 text-[11px] uppercase tracking-[0.18em] text-slate-400">
+                  <div className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-400">
                     {component.role.replace('_', ' ')}
                   </div>
                 </div>
@@ -914,7 +914,7 @@ export default function CalculatorResult() {
               {catLabel}
             </span>
           </div>
-          <div className="mt-2 text-xs leading-6 text-slate-500">
+          <div className="mt-2 text-xs leading-6 text-slate-600">
             {t('CatCost-style step basis with backend escalation and selling adjustments applied in the calculation engine.')}
           </div>
         </div>
@@ -935,7 +935,7 @@ export default function CalculatorResult() {
                   <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                     <div className="min-w-0">
                       <div className="font-semibold text-[#191f28]">{material.name}</div>
-                      <div className="mt-1 text-xs text-slate-500">
+                      <div className="mt-1 text-xs text-slate-600">
                         {material.used_for} / {material.price_scope} / {material.pricing_basis}
                       </div>
                     </div>
@@ -944,17 +944,17 @@ export default function CalculatorResult() {
                         {formatPrice(material.price)} {material.price_unit}
                       </div>
                       {material.normalized_price_per_lb != null && material.price_unit !== `$${fmtLabel}` ? (
-                        <div className="mt-0.5 font-mono text-xs text-slate-500">
+                        <div className="mt-0.5 font-mono text-xs text-slate-600">
                           ≈ {formatPrice(toDisplay(material.normalized_price_per_lb))}{fmtLabel} {t('in calculator')}
                         </div>
                       ) : null}
-                      <div className="mt-1 text-xs text-slate-500">
+                      <div className="mt-1 text-xs text-slate-600">
                         {material.quote_source}
                         {material.quote_year ? ` / ${material.quote_year}` : ''}
                       </div>
                       <div className="mt-2 flex flex-wrap items-center gap-2 sm:justify-end">
                         <span
-                          className={`inline-flex rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] ${sourceRecordTone(material.price_scope, Boolean(material.reference_url))}`}
+                          className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.16em] ${sourceRecordTone(material.price_scope, Boolean(material.reference_url))}`}
                         >
                           {t(sourceRecordLabel(material.price_scope, Boolean(material.reference_url)))}
                         </span>
@@ -1041,7 +1041,7 @@ export default function CalculatorResult() {
                     </div>
                   ) : null}
                   {!material.reference_url ? (
-                    <div className="mt-2 text-xs leading-5 text-slate-500">
+                    <div className="mt-2 text-xs leading-5 text-slate-600">
                       {material.price_scope === 'historical_bulk'
                         ? 'Historical bulk row without a stable public permalink.'
                         : 'No public source URL stored for this row.'}

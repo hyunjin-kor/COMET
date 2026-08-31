@@ -106,19 +106,19 @@ export function WorkspaceSectionNav({
                 }`}
               >
                 <span
-                  className={`inline-flex h-5 w-5 items-center justify-center rounded-full text-[11px] font-semibold ${
+                  className={`inline-flex h-5 w-5 items-center justify-center rounded-full text-xs font-semibold ${
                     active
-                      ? 'bg-[#0d9488] text-white'
+                      ? 'bg-[#0f766e] text-white'
                       : done
                         ? 'bg-[#191f28] text-white'
-                        : 'bg-[#f2f4f6] text-[#8b95a1]'
+                        : 'bg-[#f2f4f6] text-[#5f6b7a]'
                   }`}
                 >
                   {done ? <StepCheckIcon /> : index + 1}
                 </span>
                 <span
                   className={`text-sm ${
-                    active ? 'font-semibold text-[#191f28]' : done ? 'font-medium text-[#4e5968]' : 'font-medium text-[#8b95a1]'
+                    active ? 'font-semibold text-[#191f28]' : done ? 'font-medium text-[#4e5968]' : 'font-medium text-[#68727f]'
                   }`}
                 >
                   {t(section.label)}
@@ -129,7 +129,7 @@ export function WorkspaceSectionNav({
         })}
       </nav>
 
-      <div className="hidden max-w-[320px] truncate text-xs text-[#8b95a1] xl:block">{activeSection ? t(activeSection.summary) : null}</div>
+      <div className="hidden max-w-[320px] truncate text-xs text-[#68727f] xl:block">{activeSection ? t(activeSection.summary) : null}</div>
     </section>
   );
 }
@@ -156,11 +156,11 @@ export function WorkspaceSectionFooter({
   const { lang, t } = useLang();
   return (
     <section className="surface-card-soft mt-auto flex items-center justify-between gap-4 px-4 py-2.5">
-      <div className="min-w-0 truncate text-sm text-[#8b95a1]">
+      <div className="min-w-0 truncate text-sm text-[#68727f]">
         {lang === 'ko'
           ? `${activeIndex + 1}/${totalSections} 단계`
           : `Step ${activeIndex + 1} of ${totalSections}`}
-        <span className="mx-1.5 text-[#d1d6db]">·</span>
+        <span className="mx-1.5 text-[#68727f]">·</span>
         <span className="font-medium text-[#4e5968]">{t(activeSection.label)}</span>
       </div>
 

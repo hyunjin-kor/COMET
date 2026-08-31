@@ -100,7 +100,7 @@ function MetricTile({ label, value, detail }: { label: string; value: string; de
       <div className="mt-2 text-[clamp(1.35rem,2vw,2rem)] leading-[1.08] font-display text-[#191f28] [overflow-wrap:anywhere]">
         {value}
       </div>
-      <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div>
+      <div className="mt-1 text-xs leading-5 text-slate-600">{detail}</div>
     </div>
   );
 }
@@ -283,7 +283,7 @@ export default function Compare() {
                   {families.map((option) => (
                     <button type="button" key={option.family} onClick={() => handleFamilyChange(option.family)} className={`rounded-[18px] border px-3 py-2 text-left text-sm transition ${option.family === family ? 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e]' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}>
                       <div className="font-semibold">{option.title}</div>
-                      <div className="mt-1 text-xs leading-5 text-slate-500">{t(catalystDomainLabel(option.catalyst_domain))} / {t(applicationFamilyLabel(option.application_family))}</div>
+                      <div className="mt-1 text-xs leading-5 text-slate-600">{t(catalystDomainLabel(option.catalyst_domain))} / {t(applicationFamilyLabel(option.application_family))}</div>
                     </button>
                   ))}
                 </div>
@@ -294,11 +294,11 @@ export default function Compare() {
                   {PROFILE_OPTIONS.map((option) => (
                     <button type="button" key={option.id} onClick={() => handleProfileChange(option.id)} className={`rounded-[18px] border px-3 py-2 text-left text-sm transition ${option.id === profile ? 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e]' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}>
                       <div className="font-semibold">{t(option.label)}</div>
-                      <div className="mt-1 text-xs leading-5 text-slate-500">{t(option.note)}</div>
+                      <div className="mt-1 text-xs leading-5 text-slate-600">{t(option.note)}</div>
                     </button>
                   ))}
                 </div>
-                <div className="mt-3 text-xs leading-6 text-slate-500">
+                <div className="mt-3 text-xs leading-6 text-slate-600">
                   {t('Profiles change weighting only. Candidate records and source links stay fixed.')}
                 </div>
               </div>
@@ -315,10 +315,10 @@ export default function Compare() {
               <button type="button" key={candidate.slug} onClick={() => { setActiveSlug(candidate.slug); sectionState.setActiveSection('detail'); }} className={`w-full rounded-[24px] border px-4 py-4 text-left transition ${activeCandidate.slug === candidate.slug ? 'border-emerald-200 bg-emerald-50/80' : 'border-slate-900/8 bg-white/64 hover:bg-white/88'}`}>
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                   <div className="min-w-0">
-                    <div className="flex items-center gap-3"><span className="flex h-9 w-9 items-center justify-center rounded-[16px] border border-slate-900/8 bg-white/72 text-sm font-semibold text-[#191f28]">{index + 1}</span><div className="min-w-0"><div className="truncate font-semibold text-[#191f28]">{candidate.title}</div><div className="mt-1 text-xs text-slate-500">{candidate.archetype}</div></div></div>
+                    <div className="flex items-center gap-3"><span className="flex h-9 w-9 items-center justify-center rounded-[16px] border border-slate-900/8 bg-white/72 text-sm font-semibold text-[#191f28]">{index + 1}</span><div className="min-w-0"><div className="truncate font-semibold text-[#191f28]">{candidate.title}</div><div className="mt-1 text-xs text-slate-600">{candidate.archetype}</div></div></div>
                     <div className="mt-3 text-sm leading-6 text-slate-600">{candidate.screening_summary}</div>
                   </div>
-                  <div className="grid shrink-0 gap-2 text-right sm:min-w-[150px]"><div><div className="cp-subtle-label">{t(candidate.summary.economics_basis_label)}</div><div className="mt-2 text-2xl font-display text-[#191f28]">{benchmarkCostValue(candidate)}</div><div className="text-xs text-slate-500">{benchmarkCostDetail(candidate)}</div></div><div className={`text-sm font-semibold ${scoreTone(candidate.scores.total)}`}>{t('Score')} {candidate.scores.total.toFixed(1)}</div></div>
+                  <div className="grid shrink-0 gap-2 text-right sm:min-w-[150px]"><div><div className="cp-subtle-label">{t(candidate.summary.economics_basis_label)}</div><div className="mt-2 text-2xl font-display text-[#191f28]">{benchmarkCostValue(candidate)}</div><div className="text-xs text-slate-600">{benchmarkCostDetail(candidate)}</div></div><div className={`text-sm font-semibold ${scoreTone(candidate.scores.total)}`}>{t('Score')} {candidate.scores.total.toFixed(1)}</div></div>
                 </div>
               </button>
             ))}
@@ -329,7 +329,7 @@ export default function Compare() {
       {sectionState.activeSection.id === 'detail' ? (
         <section className="surface-card p-4">
           <div className="flex flex-col gap-3 border-b border-slate-900/8 pb-4 sm:flex-row sm:items-start sm:justify-between">
-            <div className="min-w-0"><div className="cp-subtle-label">{t('Selected reference route')}</div><div className="cp-heading-lg mt-2">{activeCandidate.title}</div><div className="mt-1 text-sm text-slate-500">{activeCandidate.archetype}</div><div className="mt-2 flex flex-wrap gap-2"><span className="cp-chip">{t(catalystDomainLabel(activeCandidate.catalyst_domain))}</span><span className="cp-chip">{t(applicationFamilyLabel(activeCandidate.application_family))}</span></div></div>
+            <div className="min-w-0"><div className="cp-subtle-label">{t('Selected reference route')}</div><div className="cp-heading-lg mt-2">{activeCandidate.title}</div><div className="mt-1 text-sm text-slate-600">{activeCandidate.archetype}</div><div className="mt-2 flex flex-wrap gap-2"><span className="cp-chip">{t(catalystDomainLabel(activeCandidate.catalyst_domain))}</span><span className="cp-chip">{t(applicationFamilyLabel(activeCandidate.application_family))}</span></div></div>
             <button type="button" onClick={() => loadIntoCalculator(activeCandidate)} className="cp-button-primary">{t('Load into cost estimate')}</button>
           </div>
           <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">

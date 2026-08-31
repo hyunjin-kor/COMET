@@ -483,7 +483,7 @@ function MetricTile({ label, value, detail, dark = false }: { label: string; val
     <div className={dark ? 'cp-metric-tile-dark' : 'cp-metric-tile'}>
       <div className={`cp-subtle-label ${dark ? '!text-slate-400' : ''}`}>{label}</div>
       <div className={`mt-2 text-2xl font-display ${dark ? 'text-white' : 'text-slate-900'}`}>{value}</div>
-      <div className={`mt-1 text-xs leading-5 ${dark ? 'text-slate-400' : 'text-slate-500'}`}>{detail}</div>
+      <div className={`mt-1 text-xs leading-5 ${dark ? 'text-slate-400' : 'text-slate-600'}`}>{detail}</div>
     </div>
   );
 }
@@ -493,7 +493,7 @@ function CompactValueRow({ label, value, detail }: { label: string; value: strin
     <div className="cp-data-row">
       <div>
         <div className="cp-subtle-label">{label}</div>
-        {detail ? <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div> : null}
+        {detail ? <div className="mt-1 text-xs leading-5 text-slate-600">{detail}</div> : null}
       </div>
       <div className="text-right text-sm font-semibold text-[#191f28]">{value}</div>
     </div>
@@ -1197,9 +1197,9 @@ export default function Calculator() {
     const locked = row.source_type !== 'manual';
     return (
       <div className="flex flex-none items-center gap-2">
-        <span className="text-xs text-slate-500">$</span>
+        <span className="text-xs text-slate-600">$</span>
         <input type="number" step="0.01" min="0" value={toDisplay(row.price_per_lb).toFixed(2)} readOnly={locked} onChange={(event) => !locked && updateRow(row.id, { price_per_lb: toInternal(Number(event.target.value)) })} className={`input-base w-32 text-right font-mono ${priceTone(row.source_type)} ${locked ? 'cursor-not-allowed' : ''}`} />
-        <span className="text-xs text-slate-500">{fmtLabel}</span>
+        <span className="text-xs text-slate-600">{fmtLabel}</span>
       </div>
     );
   }
@@ -1212,12 +1212,12 @@ export default function Calculator() {
         <div className="mt-1 text-sm text-slate-600">{material ? materialQuoteLabel(material) : t('Select a library record to lock pricing.')}</div>
         {material ? (
           <div className="mt-2 space-y-2">
-            <div className="text-xs leading-6 text-slate-500">
+            <div className="text-xs leading-6 text-slate-600">
               {priceScopeLabel(material.price_scope)} / {pricingBasisDisplay(material.pricing_basis)}
               {material.quote_year ? ` / ${material.quote_year}` : ''}
               {material.quote_source ? ` / ${material.quote_source}` : ''}
             </div>
-            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] ${
+            <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.16em] ${
               material.reference_url ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : 'border-amber-200 bg-amber-50 text-amber-700'
             }`}>
               {materialSourceTrust(material)}
@@ -1249,7 +1249,7 @@ export default function Calculator() {
               <p className="mt-2 text-sm leading-7 text-slate-600">
                 {t('Catalyst powder, ionomer, membrane, and substrate each keep their own source record.')}
               </p>
-              <p className="mt-2 text-xs leading-6 text-slate-500">
+              <p className="mt-2 text-xs leading-6 text-slate-600">
                 {t('Defaults prefer higher-confidence literature or sourced vendor rows when they exist.')}
               </p>
             </div>
@@ -1267,7 +1267,7 @@ export default function Calculator() {
                     }`}
                   >
                     <div className="font-semibold">{option.label}</div>
-                    <div className={`mt-1 text-xs leading-5 ${applicationFamily === option.value ? 'text-slate-300' : 'text-slate-500'}`}>
+                    <div className={`mt-1 text-xs leading-5 ${applicationFamily === option.value ? 'text-slate-300' : 'text-slate-600'}`}>
                       {option.detail}
                     </div>
                   </button>
@@ -1282,7 +1282,7 @@ export default function Calculator() {
             <div className="cp-subtle-label">{t('Material stack')}</div>
             <div className="mt-3 grid gap-3">
               <label className="block">
-                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{t('Catalyst powder')}</div>
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">{t('Catalyst powder')}</div>
                 <select value={electrocatalystConfig.catalystMaterialKey} onChange={(event) => updateElectroConfig({ catalystMaterialKey: event.target.value })} className="input-base mt-2">
                   <option value="">Select catalyst powder</option>
                   {catalystPowders.map((material) => (
@@ -1294,7 +1294,7 @@ export default function Calculator() {
               </label>
 
               <label className="block">
-                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{t('Ionomer')}</div>
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">{t('Ionomer')}</div>
                 <select value={electrocatalystConfig.ionomerMaterialKey} onChange={(event) => updateElectroConfig({ ionomerMaterialKey: event.target.value })} className="input-base mt-2">
                   <option value="">Select ionomer</option>
                   {ionomerOptions.map((material) => (
@@ -1306,7 +1306,7 @@ export default function Calculator() {
               </label>
 
               <label className="block">
-                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{t('Membrane')}</div>
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">{t('Membrane')}</div>
                 <select value={electrocatalystConfig.membraneMaterialKey} onChange={(event) => updateElectroConfig({ membraneMaterialKey: event.target.value })} className="input-base mt-2">
                   <option value="">Select membrane</option>
                   {membraneOptions.map((material) => (
@@ -1318,7 +1318,7 @@ export default function Calculator() {
               </label>
 
               <label className="block">
-                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{t('Substrate / GDL')}</div>
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">{t('Substrate / GDL')}</div>
                 <select value={electrocatalystConfig.substrateMaterialKey} onChange={(event) => updateElectroConfig({ substrateMaterialKey: event.target.value })} className="input-base mt-2">
                   <option value="">Select substrate / GDL</option>
                   {substrateOptions.map((material) => (
@@ -1335,41 +1335,41 @@ export default function Calculator() {
             <div className="cp-subtle-label">{t('Electrode geometry')}</div>
             <div className="mt-3 grid gap-3 sm:grid-cols-2">
               <label className="block">
-                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{t('Active area')}</div>
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">{t('Active area')}</div>
                 <div className="mt-2 flex items-center gap-2">
                   <input type="number" min="1" step="0.1" value={electrocatalystConfig.activeAreaCm2} onChange={(event) => updateElectroConfig({ activeAreaCm2: Number(event.target.value) })} className="input-base text-right font-mono" />
-                  <span className="text-xs text-slate-500">cm²</span>
+                  <span className="text-xs text-slate-600">cm²</span>
                 </div>
               </label>
 
               <label className="block">
-                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Catalyst loading</div>
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">Catalyst loading</div>
                 <div className="mt-2 flex items-center gap-2">
                   <input type="number" min="0.01" step="0.01" value={electrocatalystConfig.catalystLoadingMgCm2} onChange={(event) => updateElectroConfig({ catalystLoadingMgCm2: Number(event.target.value) })} className="input-base text-right font-mono" />
-                  <span className="text-xs text-slate-500">mg/cm²</span>
+                  <span className="text-xs text-slate-600">mg/cm²</span>
                 </div>
               </label>
 
               <label className="block sm:col-span-2">
-                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Ionomer / catalyst ratio</div>
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">Ionomer / catalyst ratio</div>
                 <div className="mt-2 flex items-center gap-2">
                   <input type="number" min="0" step="0.05" value={electrocatalystConfig.ionomerToCatalystRatio} onChange={(event) => updateElectroConfig({ ionomerToCatalystRatio: Number(event.target.value) })} className="input-base max-w-[180px] text-right font-mono" />
-                  <span className="text-xs text-slate-500">dry ionomer mass / catalyst powder mass</span>
+                  <span className="text-xs text-slate-600">dry ionomer mass / catalyst powder mass</span>
                 </div>
               </label>
 
               <label className="block sm:col-span-2">
-                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Manufacturing scenario</div>
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">Manufacturing scenario</div>
                 <select value={electrocatalystConfig.manufacturingScenario} onChange={(event) => updateElectroConfig({ manufacturingScenario: event.target.value as ElectrocatalystDraft['manufacturingScenario'] })} className="input-base mt-2">
                   <option value="">Materials only (no line cost)</option>
                   <option value="rnd_batch">R&amp;D batch line — $0.123/cm² (Hog 2026)</option>
                   <option value="pilot_roll_to_roll">Pilot roll-to-roll — $0.006/cm² (Hog 2026)</option>
                 </select>
-                <div className="mt-1 text-xs text-slate-500">Adds equipment, labor, and facility cost per cm² of active area. EUR→USD at 1.1306 (2025 avg).</div>
+                <div className="mt-1 text-xs text-slate-600">Adds equipment, labor, and facility cost per cm² of active area. EUR→USD at 1.1306 (2025 avg).</div>
               </label>
 
               <label className="block sm:col-span-2">
-                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Preparation template</div>
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">Preparation template</div>
                 <select value={electrocatalystConfig.templateId} onChange={(event) => updateElectroConfig({ templateId: event.target.value })} className="input-base mt-2">
                   {electroTemplates.map((template) => (
                     <option key={template.id} value={template.id}>
@@ -1437,11 +1437,11 @@ export default function Calculator() {
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <div className="flex items-center gap-2"><span className={`h-2.5 w-2.5 rounded-full ${copy.accent}`} /><h3 className="cp-heading-sm">{t(copy.title)}</h3></div>
-            <p className="mt-1 text-xs leading-6 text-slate-500">{t(copy.description)}</p>
+            <p className="mt-1 text-xs leading-6 text-slate-600">{t(copy.description)}</p>
           </div>
           <button onClick={() => addRow(role)} disabled={thermalRows.length >= maxThermalComponents} className="cp-button-secondary px-3 py-2 text-xs disabled:cursor-not-allowed disabled:opacity-45">{t(copy.button)}</button>
         </div>
-        {items.length === 0 ? <div className="rounded-[24px] border border-dashed border-slate-300 bg-white/44 px-4 py-4 text-sm text-slate-500">{t(copy.placeholder)}</div> : (
+        {items.length === 0 ? <div className="rounded-[24px] border border-dashed border-slate-300 bg-white/44 px-4 py-4 text-sm text-slate-600">{t(copy.placeholder)}</div> : (
           <div className="space-y-3">
             {items.map((row) => (
               <div key={row.id} className="surface-ghost p-4">
@@ -1450,12 +1450,12 @@ export default function Calculator() {
                     <option value="">{role === 'active_metal' ? t('Select active metal or precursor') : t('Select promoter material')}</option>
                     {selectionOptions.map((option) => <option key={option.selection_key} value={option.selection_key}>{compactThermalOptionLabel(option, lang)}</option>)}
                   </select>
-                  <div className="flex flex-none items-center gap-2"><input type="number" step="0.1" min="0" max="100" value={row.wt_pct} onChange={(event) => updateRow(row.id, { wt_pct: Number(event.target.value) })} className="input-base w-28 text-right font-mono" /><span className="text-xs text-slate-500">wt%</span></div>
+                  <div className="flex flex-none items-center gap-2"><input type="number" step="0.1" min="0" max="100" value={row.wt_pct} onChange={(event) => updateRow(row.id, { wt_pct: Number(event.target.value) })} className="input-base w-28 text-right font-mono" /><span className="text-xs text-slate-600">wt%</span></div>
                   {sourceChip(row)}
                   {priceField(row)}
                   <button onClick={() => removeRow(row.id)} className="flex h-10 w-10 flex-none items-center justify-center rounded-[18px] border border-slate-300 bg-white/74 text-slate-400 transition hover:border-red-300 hover:bg-red-50 hover:text-red-700" aria-label="Remove row">x</button>
                 </div>
-                <div className="mt-3 text-xs text-slate-500">{row.name || 'Select a material record.'}</div>
+                <div className="mt-3 text-xs text-slate-600">{row.name || 'Select a material record.'}</div>
               </div>
             ))}
           </div>
@@ -1633,14 +1633,14 @@ export default function Calculator() {
               >
                 <div className="flex items-center justify-between gap-3">
                   <div className="cp-heading-sm">{t(option.title)}</div>
-                  <span className={`inline-flex h-6 min-w-6 items-center justify-center rounded-full px-2 text-[10px] font-semibold uppercase tracking-[0.16em] ${
-                    active ? 'bg-slate-950 text-white' : 'bg-slate-100 text-slate-500'
+                  <span className={`inline-flex h-6 min-w-6 items-center justify-center rounded-full px-2 text-xs font-semibold uppercase tracking-[0.16em] ${
+                    active ? 'bg-slate-950 text-white' : 'bg-slate-100 text-slate-600'
                   }`}>
                     {active ? t('Selected') : t('Choose')}
                   </span>
                 </div>
                 <div className="mt-3 text-sm leading-6 text-slate-700">{t(option.note)}</div>
-                <div className="mt-2 text-xs leading-6 text-slate-500">{t(option.detail)}</div>
+                <div className="mt-2 text-xs leading-6 text-slate-600">{t(option.detail)}</div>
               </button>
             );
           })}
@@ -1707,7 +1707,7 @@ export default function Calculator() {
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#0d9488]" /><h3 className="cp-heading-sm">{t('Support')}</h3></div>
-              <p className="mt-1 text-xs leading-5 text-slate-500">
+              <p className="mt-1 text-xs leading-5 text-slate-600">
                 {supportIsSplit
                   ? t('Promoted support is on. Enter each support wt% explicitly so the total formulation closes at 100 wt%.')
                   : t('Single-support mode stays auto-balanced. Add a second support to split the support bed explicitly.')}
@@ -1725,16 +1725,16 @@ export default function Calculator() {
                 {supportIsSplit ? (
                   <div className="flex flex-none items-center gap-2">
                     <input type="number" step="0.1" min="0" max="100" value={row.wt_pct} onChange={(event) => updateRow(row.id, { wt_pct: Number(event.target.value) })} className="input-base w-28 text-right font-mono" />
-                    <span className="text-xs text-slate-500">wt%</span>
+                    <span className="text-xs text-slate-600">wt%</span>
                   </div>
                 ) : (
-                  <div className="input-base flex min-w-[170px] flex-none items-center justify-between gap-3 bg-white/76"><span className="text-xs text-slate-500">{t('Auto share')}</span><span className="font-mono text-[#191f28]">{supportWtPct.toFixed(1)} wt%</span></div>
+                  <div className="input-base flex min-w-[170px] flex-none items-center justify-between gap-3 bg-white/76"><span className="text-xs text-slate-600">{t('Auto share')}</span><span className="font-mono text-[#191f28]">{supportWtPct.toFixed(1)} wt%</span></div>
                 )}
                 {sourceChip(row)}
                 {priceField(row)}
                 {supportRows.length > 1 ? <button onClick={() => removeRow(row.id)} className="flex h-10 w-10 flex-none items-center justify-center rounded-[18px] border border-slate-300 bg-white/74 text-slate-400 transition hover:border-red-300 hover:bg-red-50 hover:text-red-700" aria-label="Remove support">x</button> : null}
               </div>
-              <div className="mt-3 text-xs text-slate-500">{row.name || t('Select a support record.')}</div>
+              <div className="mt-3 text-xs text-slate-600">{row.name || t('Select a support record.')}</div>
             </div>
           ))}
           <div className="mt-3 rounded-[18px] border border-slate-200 bg-white/76 px-4 py-3 text-xs leading-6 text-slate-600">
@@ -1775,14 +1775,14 @@ export default function Calculator() {
           <div className="rounded-[20px] border border-slate-200 bg-white/82 px-4 py-3">
             <div className="cp-subtle-label">{t('Route building')}</div>
             <div className="mt-2 text-sm font-semibold text-[#191f28]">{t('Select every unit operation that applies')}</div>
-            <div className="mt-1 text-xs leading-6 text-slate-500">
+            <div className="mt-1 text-xs leading-6 text-slate-600">
               {t('You are assembling the full preparation route, not choosing a single option.')}
             </div>
           </div>
           <div className="rounded-[20px] border border-slate-200 bg-white/82 px-4 py-3">
             <div className="cp-subtle-label">{t('Operation groups')}</div>
             <div className="mt-2 text-sm font-semibold text-[#191f28]">{t('One group can hold several unit operations')}</div>
-            <div className="mt-1 text-xs leading-6 text-slate-500">
+            <div className="mt-1 text-xs leading-6 text-slate-600">
               {t('Saved thermal and electrochemical routes often include several operations from the same group.')}
             </div>
           </div>
@@ -1793,7 +1793,7 @@ export default function Calculator() {
                 ? `${selectedCategoryCount}개 그룹에서 단위 공정 ${steps.length}개 선택됨`
                 : `${steps.length} unit operation${steps.length === 1 ? '' : 's'} across ${selectedCategoryCount} group${selectedCategoryCount === 1 ? '' : 's'}`}
             </div>
-            <div className="mt-1 text-xs leading-6 text-slate-500">
+            <div className="mt-1 text-xs leading-6 text-slate-600">
               {t('Add or remove operations until the route matches the actual lab or pilot procedure.')}
             </div>
           </div>
@@ -1813,11 +1813,11 @@ export default function Calculator() {
           <div className="surface-ghost p-3.5">
             <div className="flex items-center justify-between gap-3">
               <div className="cp-subtle-label">{t('Start from a standard method')}</div>
-              <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+              <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
                 {thermalTemplates.length} {t('methods')}
               </div>
             </div>
-            <div className="mt-2 text-xs leading-6 text-slate-500">
+            <div className="mt-2 text-xs leading-6 text-slate-600">
               {t('Loads the full unit-operation sequence for a named preparation method — co-precipitation, sol-gel, impregnation, zeolite synthesis and more. Operations stay editable afterward.')}
             </div>
             <div className="mt-3 flex flex-wrap gap-2">
@@ -1844,7 +1844,7 @@ export default function Calculator() {
         ) : null}
         <div className="surface-ghost p-3.5">
           <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-            <div><div className="cp-subtle-label">{t('Campaign size')}</div><div className="mt-3 flex flex-wrap items-center gap-3"><input type="number" min="1" step="1" value={orderSize} onChange={(event) => setOrderSize(Math.max(1, Number(event.target.value) || 1))} className="input-base w-32 text-center font-mono" /><span className="text-sm text-slate-500">{t('tons per campaign')}</span><span className={`rounded-full border px-3 py-1 text-xs font-semibold ${scale.classes}`}>{t(scale.label)} / {scale.rate}</span></div></div>
+            <div><div className="cp-subtle-label">{t('Campaign size')}</div><div className="mt-3 flex flex-wrap items-center gap-3"><input type="number" min="1" step="1" value={orderSize} onChange={(event) => setOrderSize(Math.max(1, Number(event.target.value) || 1))} className="input-base w-32 text-center font-mono" /><span className="text-sm text-slate-600">{t('tons per campaign')}</span><span className={`rounded-full border px-3 py-1 text-xs font-semibold ${scale.classes}`}>{t(scale.label)} / {scale.rate}</span></div></div>
             <div className="cp-toolbar">{QUICK_ORDER_SIZES.map((size) => <button key={size} onClick={() => setOrderSize(size)} className={`rounded-[16px] px-3 py-2 text-xs font-semibold transition ${orderSize === size ? 'bg-slate-950 text-white' : 'text-slate-600 hover:bg-white hover:text-slate-900'}`}>{lang === 'ko' ? `${size}톤` : `${size} tons`}</button>)}</div>
           </div>
         </div>
@@ -1855,7 +1855,7 @@ export default function Calculator() {
               <div key={category} className="surface-ghost p-3.5">
                 <div className="flex items-center justify-between gap-3">
                   <div className="cp-subtle-label">{t(category)}</div>
-                  <div className={`rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] ${
+                  <div className={`rounded-full border px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${
                     selectedInCategory.length > 0
                       ? 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e]'
                       : 'border-slate-200 bg-white text-slate-400'
@@ -1863,13 +1863,13 @@ export default function Calculator() {
                     {lang === 'ko' ? `${selectedInCategory.length}개 선택` : `${selectedInCategory.length} selected`}
                   </div>
                 </div>
-                <div className="mt-2 text-xs leading-6 text-slate-500">{t('Select every operation your route uses in this group.')}</div>
+                <div className="mt-2 text-xs leading-6 text-slate-600">{t('Select every operation your route uses in this group.')}</div>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {visibleSteps.filter((step) => step.category === category).map((step) => {
                     const available = (step.scales as readonly Scale[]).includes(currentScale);
                     const checked = steps.includes(step.key);
                     const availabilityLabel = step.scales.length === 3 ? null : step.scales.map((item) => item.charAt(0).toUpperCase()).join('/');
-                    return <button key={step.key} onClick={() => available && toggleStep(step.key)} disabled={!available} title={available ? t(step.label) : `Not available at ${scale.label.toLowerCase()} scale`} className={`rounded-[16px] border px-3 py-2 text-left text-sm transition ${!available ? 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400' : checked ? 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e]' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}><div className="flex items-center justify-between gap-3"><div className="font-medium">{t(step.label)}</div>{checked ? <span className="rounded-full border border-[#0d9488] bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#0f766e]">On</span> : null}</div>{availabilityLabel ? <div className="mt-1 text-[10px] uppercase tracking-[0.18em] text-slate-400">{availabilityLabel}</div> : null}</button>;
+                    return <button key={step.key} onClick={() => available && toggleStep(step.key)} disabled={!available} title={available ? t(step.label) : `Not available at ${scale.label.toLowerCase()} scale`} className={`rounded-[16px] border px-3 py-2 text-left text-sm transition ${!available ? 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400' : checked ? 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e]' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}><div className="flex items-center justify-between gap-3"><div className="font-medium">{t(step.label)}</div>{checked ? <span className="rounded-full border border-[#0d9488] bg-white px-2 py-0.5 text-xs font-semibold uppercase tracking-[0.18em] text-[#0f766e]">On</span> : null}</div>{availabilityLabel ? <div className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-400">{availabilityLabel}</div> : null}</button>;
                   })}
                 </div>
                 {selectedInCategory.length > 0 ? (
@@ -1894,7 +1894,7 @@ export default function Calculator() {
                 <p className="mt-2 text-sm leading-7 text-slate-600">
                   {t('Use this when the catalyst contains recoverable metal and end-of-life value matters to the screening decision.')}
                 </p>
-                <p className="mt-2 text-xs leading-6 text-slate-500">
+                <p className="mt-2 text-xs leading-6 text-slate-600">
                   {t('Current engine includes support loss, reactor-type loss, refining loss, and recovery cost. Full deactivation and regeneration-cycle modeling is not yet included.')}
                 </p>
               </div>
@@ -1912,7 +1912,7 @@ export default function Calculator() {
 
             <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
               <label className="block">
-                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{t('Reactor type')}</div>
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">{t('Reactor type')}</div>
                 <select
                   value={reactorType}
                   onChange={(event) => setReactorType(event.target.value as 'fixed' | 'slurry')}
@@ -1924,7 +1924,7 @@ export default function Calculator() {
               </label>
 
               <label className="block">
-                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{t('Bulk density')}</div>
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">{t('Bulk density')}</div>
                 <div className="mt-2 flex items-center gap-2">
                   <input
                     type="number"
@@ -1934,7 +1934,7 @@ export default function Calculator() {
                     onChange={(event) => setCatalystBulkDensity(Math.max(1, Number(event.target.value) || 1))}
                     className="input-base w-full text-right font-mono"
                   />
-                  <span className="text-xs text-slate-500">lb/ft³</span>
+                  <span className="text-xs text-slate-600">lb/ft³</span>
                 </div>
               </label>
 
@@ -1980,7 +1980,7 @@ export default function Calculator() {
             </div>
             <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
               <button onClick={handleCalculate} disabled={loading || !isValid || steps.length === 0} className="cp-button-primary min-w-[250px]">{loading ? <><span className="mr-2 inline-flex h-4 w-4 animate-spin rounded-full border-2 border-slate-950 border-t-transparent" />{t('Running estimate')}</> : t('Run estimate')}</button>
-              <div className="text-xs leading-6 text-slate-500">{t('The result screen opens separately and keeps this draft intact.')}</div>
+              <div className="text-xs leading-6 text-slate-600">{t('The result screen opens separately and keeps this draft intact.')}</div>
             </div>
             {error ? <div className="mt-4 rounded-[24px] border border-red-200 bg-red-50 px-4 py-4 text-sm text-red-700"><span className="font-semibold">{t('Calculation failed.')}</span> {error}</div> : null}
             {loadedSavedName ? (
@@ -1995,11 +1995,11 @@ export default function Calculator() {
               <div className="mt-4 surface-ghost p-3.5">
                 <div className="flex items-center justify-between gap-3">
                   <div className="cp-subtle-label">{t('Saved estimates')}</div>
-                  <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+                  <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
                     {savedEstimates.length} {t('saved')}
                   </div>
                 </div>
-                <div className="mt-2 text-xs leading-6 text-slate-500">
+                <div className="mt-2 text-xs leading-6 text-slate-600">
                   {t('Named cases saved from the result screen. Load restores the composition, unit operations, and campaign size into this draft.')}
                 </div>
                 <div className="mt-3 space-y-2">
@@ -2010,7 +2010,7 @@ export default function Calculator() {
                       <div key={saved.id} className="flex flex-wrap items-center justify-between gap-3 rounded-[16px] border border-slate-200 bg-white px-3.5 py-2.5">
                         <div className="min-w-0">
                           <div className="truncate text-sm font-semibold text-[#191f28]">{saved.name}</div>
-                          <div className="mt-0.5 text-xs text-slate-500">
+                          <div className="mt-0.5 text-xs text-slate-600">
                             {saved.metal_symbol ? `${saved.metal_loading_wt_pct}% ${saved.metal_symbol}` : saved.catalyst_domain}
                             {saved.support_name ? ` / ${saved.support_name}` : ''} · {saved.order_size_tons} tons ·{' '}
                             {formatPrice(toDisplay(saved.estimated_price_per_lb))}{fmtLabel} · {saved.created_at.slice(0, 10)}
@@ -2034,7 +2034,7 @@ export default function Calculator() {
                             type="button"
                             onClick={() => void handleDeleteSaved(saved.id)}
                             disabled={busy}
-                            className="rounded-[14px] border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-500 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
+                            className="rounded-[14px] border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
                           >
                             {t('Delete')}
                           </button>
@@ -2053,7 +2053,7 @@ export default function Calculator() {
       <div className="flex items-end justify-between gap-4 px-1 pt-1">
         <div>
           <h2 className="cp-heading-xl">{t('Cost Estimate')}</h2>
-          <p className="mt-1 text-sm text-[#8b95a1]">
+          <p className="mt-1 text-sm text-[#68727f]">
             {catalystDomain === 'electrocatalyst'
               ? t('Choose the catalyst class, build the electrode stack, set the preparation basis, then run the estimate.')
               : t('Choose the catalyst class, define the formulation, set the preparation basis, then run the estimate.')}

@@ -40,13 +40,13 @@ export default function Sidebar({ collapsed, onToggleCollapsed }: SidebarProps) 
             {collapsed ? null : (
               <div className="min-w-0 flex-1">
                 <div className="font-display text-[1.2rem] leading-none text-[#191f28]">COMET</div>
-                <div className="mt-1 text-[11px] text-[#b0b8c1]">{t('Catalyst cost workspace')}</div>
+                <div className="mt-1 text-xs text-[#68727f]">{t('Catalyst cost workspace')}</div>
               </div>
             )}
             <button
               type="button"
               onClick={onToggleCollapsed}
-              className="no-drag flex h-7 w-7 flex-none items-center justify-center rounded-[8px] text-[#b0b8c1] transition hover:bg-[#f2f4f6] hover:text-[#4e5968]"
+              className="no-drag flex h-7 w-7 flex-none items-center justify-center rounded-[8px] text-[#8b95a1] transition hover:bg-[#f2f4f6] hover:text-[#4e5968]"
               title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
               aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
               aria-expanded={!collapsed}
@@ -74,7 +74,7 @@ export default function Sidebar({ collapsed, onToggleCollapsed }: SidebarProps) 
                   ) : null}
                   <item.Icon
                     className={`h-[18px] w-[18px] flex-none transition ${
-                      isActive ? 'text-[#0d9488]' : 'text-[#b0b8c1] group-hover:text-[#8b95a1]'
+                      isActive ? 'text-[#0d9488]' : 'text-[#8b95a1] group-hover:text-[#68727f]'
                     }`}
                   />
                   {collapsed ? (
@@ -119,7 +119,7 @@ export default function Sidebar({ collapsed, onToggleCollapsed }: SidebarProps) 
           ) : (
             <div className="space-y-3 border-t border-[#f2f4f6] px-1.5 pb-1 pt-4">
               <div className="flex items-center justify-between gap-3">
-                <div className="text-xs font-medium text-[#8b95a1]">{t('Display unit')}</div>
+                <div className="text-xs font-medium text-[#68727f]">{t('Display unit')}</div>
 
                 <button
                   type="button"
@@ -132,7 +132,7 @@ export default function Sidebar({ collapsed, onToggleCollapsed }: SidebarProps) 
                   <span
                     aria-hidden="true"
                     className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
-                      unit === 'kg' ? 'bg-[#0d9488] text-white' : 'text-[#8b95a1]'
+                      unit === 'kg' ? 'bg-[#0f766e] text-white' : 'text-[#5f6b7a]'
                     }`}
                   >
                     kg
@@ -140,7 +140,7 @@ export default function Sidebar({ collapsed, onToggleCollapsed }: SidebarProps) 
                   <span
                     aria-hidden="true"
                     className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
-                      unit === 'lb' ? 'bg-[#0d9488] text-white' : 'text-[#8b95a1]'
+                      unit === 'lb' ? 'bg-[#0f766e] text-white' : 'text-[#5f6b7a]'
                     }`}
                   >
                     lb
@@ -148,7 +148,7 @@ export default function Sidebar({ collapsed, onToggleCollapsed }: SidebarProps) 
                 </button>
               </div>
               <div className="flex items-center justify-between gap-3">
-                <div className="text-xs font-medium text-[#8b95a1]">{t('Language')}</div>
+                <div className="text-xs font-medium text-[#68727f]">{t('Language')}</div>
 
                 <button
                   type="button"
@@ -161,7 +161,7 @@ export default function Sidebar({ collapsed, onToggleCollapsed }: SidebarProps) 
                   <span
                     aria-hidden="true"
                     className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
-                      lang === 'en' ? 'bg-[#0d9488] text-white' : 'text-[#8b95a1]'
+                      lang === 'en' ? 'bg-[#0f766e] text-white' : 'text-[#5f6b7a]'
                     }`}
                   >
                     EN
@@ -169,7 +169,7 @@ export default function Sidebar({ collapsed, onToggleCollapsed }: SidebarProps) 
                   <span
                     aria-hidden="true"
                     className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
-                      lang === 'ko' ? 'bg-[#0d9488] text-white' : 'text-[#8b95a1]'
+                      lang === 'ko' ? 'bg-[#0f766e] text-white' : 'text-[#5f6b7a]'
                     }`}
                   >
                     한국어
