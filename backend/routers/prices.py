@@ -14,6 +14,7 @@ from sqlmodel import Session, select
 from backend.core.decision_engine import list_benchmark_catalogs
 from backend.core.price_evidence import describe_price_evidence
 from backend.core.price_fetcher import (
+    JM_HISTORY_SYMBOLS,
     WESTMETALL_FIELDS,
     fetch_history,
     fetch_johnson_matthey_history,
@@ -357,6 +358,40 @@ async def get_price_history(
             "count": len(filtered_history),
             "history": filtered_history,
         }
+
+    # Same market-series fallbacks the trends endpoint uses, so the detail
+    # chart and the sparkline never disagree about a metal's history.
+    cutoff = date.today() - timedelta(days=_PERIOD_DAYS.get(period, 366))
+    market_history: list[dict] = []
+    market_source = ""
+    if symbol in JM_HISTORY_SYMBOLS:
+        jm_series = await fetch_johnson_matthey_history(cutoff, date.today())
+        market_history = jm_series.get(symbol, [])
+        market_source = "Johnson Matthey"
+    elif symbol in WESTMETALL_FIELDS:
+        market_history = [
+            row
+            for row in await fetch_westmetall_history(symbol)
+            if date.fromisoformat(row["date"]) >= cutoff
+        ]
+        market_source = "Westmetall (LME)"
+    if market_history:
+        rows = [
+            {"date": row["date"], "price": row["price"], "open": row["price"],
+             "high": row["price"], "low": row["price"]}
+            for row in market_history
+        ]
+        filtered_history = _filter_history_range(rows, from_date, to_date)
+        # A from/to window predating the market series falls through to the
+        # DB snapshots instead of returning an empty chart.
+        if filtered_history:
+            return {
+                "symbol": symbol,
+                "period": period,
+                "source": market_source,
+                "count": len(filtered_history),
+                "history": filtered_history,
+            }
 
     # Fall back to DB collected history
     stmt = (

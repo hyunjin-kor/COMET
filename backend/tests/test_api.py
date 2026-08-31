@@ -780,6 +780,41 @@ class TestPrices:
         assert data["count"] == 2
         assert [row["date"] for row in data["history"]] == ["2025-02-01", "2025-02-28"]
 
+    def test_history_falls_back_to_market_series_like_trends(self, client, monkeypatch):
+        from backend.routers import prices as prices_router
+
+        async def fake_fetch_history(symbol: str, period: str = "1y"):
+            return []
+
+        async def fake_jm_history(start, end):
+            return {"Ir": [
+                {"date": "2026-08-01", "price": 7000.0},
+                {"date": "2026-08-02", "price": 7100.0},
+            ]}
+
+        async def fake_westmetall_history(symbol: str):
+            return [{"date": "2026-08-01", "price": 1.8}]
+
+        monkeypatch.setattr(prices_router, "fetch_history", fake_fetch_history)
+        monkeypatch.setattr(prices_router, "fetch_johnson_matthey_history", fake_jm_history)
+        monkeypatch.setattr(prices_router, "fetch_westmetall_history", fake_westmetall_history)
+
+        ir = client.get("/api/prices/Ir/history?period=3mo").json()
+        assert ir["source"] == "Johnson Matthey"
+        assert ir["count"] == 2
+        assert ir["history"][0] == {
+            "date": "2026-08-01", "price": 7000.0, "open": 7000.0, "high": 7000.0, "low": 7000.0,
+        }
+
+        zn = client.get("/api/prices/Zn/history?period=3mo").json()
+        assert zn["source"] == "Westmetall (LME)"
+        assert zn["count"] == 1
+
+        # A window that predates the market series must fall through to the
+        # DB path — with no DB rows seeded, that is a 404, not an empty chart.
+        stale = client.get("/api/prices/Ir/history?period=3mo&from=2025-01-01&to=2025-01-31")
+        assert stale.status_code == 404
+
     def test_get_price_history_rejects_inverted_date_range(self, client):
         resp = client.get("/api/prices/Ni/history?from=2025-03-01&to=2025-02-01")
         assert resp.status_code == 422
