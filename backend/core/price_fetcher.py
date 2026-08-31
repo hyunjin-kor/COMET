@@ -7,7 +7,7 @@ import html as html_lib
 import json
 import logging
 import re
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 
 import httpx
 
@@ -48,6 +48,10 @@ _NAMES: dict[str, str] = {
     "Mo": "Molybdenum",
     "W": "Tungsten",
     "Fe": "Iron",
+    "Zn": "Zinc",
+    "Sn": "Tin",
+    "V": "Vanadium",
+    "Re": "Rhenium",
 }
 _UNITS: dict[str, str] = {
     "Au": "$/troy_oz",
@@ -64,6 +68,10 @@ _UNITS: dict[str, str] = {
     "Mo": "$/lb",
     "W": "$/lb",
     "Fe": "$/lb",
+    "Zn": "$/lb",
+    "Sn": "$/lb",
+    "V": "$/lb",
+    "Re": "$/lb",
 }
 
 # CatCost 2018 reference prices, escalated with ChemPPI when live data is unavailable.
@@ -89,6 +97,22 @@ def _utc_now_iso() -> str:
     """Return the current UTC timestamp as a timezone-aware ISO string."""
 
     return datetime.now(UTC).isoformat()
+
+
+# Contained-metal bulk anchors from USGS Mineral Commodity Summaries 2026
+# (published February 2026; 2025 annual averages). These metals have no free
+# quote at any frequency, so the newest published government statistic beats
+# escalating the 2018 CatCost value across eight volatile years.
+_USGS_REF: dict[str, float] = {
+    "Co": 21.0,    # U.S. spot cathode, $/lb (Platts via USGS)
+    "Mo": 34.71,   # molybdic oxide $51/kg, contained-Mo basis
+    "W": 21.74,    # Rotterdam WO3 concentrate $380/mtu at 7.93 kg W per mtu
+    "Zn": 1.30,    # LME cash 130 c/lb; fallback under the live Westmetall feed
+    "Sn": 15.00,   # LME cash 1,500 c/lb; fallback under the live Westmetall feed
+    "V": 8.96,     # V2O5 $5.02/lb at 56.0% contained V
+    "Re": 1179.4,  # metal powder, 99.99%, $2,600/kg
+}
+_USGS_SOURCE = "USGS MCS 2026 (2025 avg)"
 
 
 def _escalate(price_2018: float) -> float:
@@ -483,16 +507,21 @@ async def fetch_markets_insider() -> dict[str, dict]:
 
 
 def get_reference_prices() -> dict[str, dict]:
-    """Return all metals with 2018 CatCost prices escalated by ChemPPI."""
+    """Return all metals priced from the newest usable public reference."""
+    symbols = list(_CATCOST_REF) + [sym for sym in _USGS_REF if sym not in _CATCOST_REF]
     return {
         sym: {
             "name": _NAMES.get(sym, sym),
-            "price": _escalate(base),
+            "price": (
+                _USGS_REF[sym] if sym in _USGS_REF else _escalate(_CATCOST_REF[sym])
+            ),
             "unit": _UNITS.get(sym, "$/troy_oz"),
-            "source": "CatCost 2018 + ChemPPI escalation",
+            "source": (
+                _USGS_SOURCE if sym in _USGS_REF else "CatCost 2018 + ChemPPI escalation"
+            ),
             "fetched_at": None,
         }
-        for sym, base in _CATCOST_REF.items()
+        for sym in symbols
     }
 
 
@@ -510,12 +539,14 @@ async def fetch_all_prices() -> dict[str, dict]:
     kitco_task = asyncio.create_task(fetch_kitco())
     jm_task = asyncio.create_task(fetch_johnson_matthey())
     mi_task = asyncio.create_task(fetch_markets_insider())
+    wm_task = asyncio.create_task(fetch_westmetall())
 
-    yahoo_data, kitco_data, jm_data, mi_data = await asyncio.gather(
+    yahoo_data, kitco_data, jm_data, mi_data, wm_data = await asyncio.gather(
         yahoo_task,
         kitco_task,
         jm_task,
         mi_task,
+        wm_task,
         return_exceptions=True,
     )
 
@@ -548,6 +579,14 @@ async def fetch_all_prices() -> dict[str, dict]:
     else:
         logger.warning("Markets Insider failed: %s", mi_data)
 
+    if isinstance(wm_data, dict):
+        for sym, data in wm_data.items():
+            existing_src = results.get(sym, {}).get("source", "")
+            if "CatCost" in existing_src or "USGS" in existing_src:
+                results[sym] = data
+    else:
+        logger.warning("Westmetall failed: %s", wm_data)
+
     if settings.metalprice_api_key:
         try:
             backup = await fetch_metalprice_api()
@@ -560,6 +599,130 @@ async def fetch_all_prices() -> dict[str, dict]:
 
     live_count = sum(1 for value in results.values() if "CatCost" not in value.get("source", ""))
     logger.info("fetch_all_prices: %d total, %d live", len(results), live_count)
+    return results
+
+
+JM_HISTORY_SYMBOLS = ("Ru", "Ir", "Rh", "Pd", "Pt")
+WESTMETALL_FIELDS: dict[str, str] = {
+    "Ni": "LME_Ni_cash",
+    "Zn": "LME_Zn_cash",
+    "Sn": "LME_Sn_cash",
+}
+
+
+async def fetch_johnson_matthey_history(start: date, end: date) -> dict[str, list[dict]]:
+    """Return daily Johnson Matthey base-price history for the five PGMs.
+
+    The chart portlet keeps its data behind a Liferay resource URL that the page
+    renders into `#getUrl`; posting the date range and metal codes to it returns
+    the whole daily series as JSON.
+    """
+    url = "https://matthey.com/products-and-markets/pgms-and-circularity/pgm-management"
+    try:
+        async with httpx.AsyncClient(timeout=30, follow_redirects=True, headers=_HTTP_HEADERS) as client:
+            page = (await client.get(url)).text
+            portlet = re.search(r'id="getPortletId"[^>]*value="([^"]+)"', page)
+            resource = re.search(r'id="getUrl"[^>]*>(.*?)</', page, re.S)
+            if not (portlet and resource):
+                logger.warning("Johnson Matthey history: portlet handles missing")
+                return {}
+            portlet_id = portlet.group(1)
+            payload = {
+                f"{portlet_id}selectedMetal{i}": code
+                for i, code in enumerate(JM_HISTORY_SYMBOLS)
+            }
+            payload[f"{portlet_id}start_Date"] = start.strftime("%d-%m-%Y")
+            payload[f"{portlet_id}end_Date"] = end.strftime("%d-%m-%Y")
+            resp = await client.post(
+                html_lib.unescape(resource.group(1).strip()),
+                data=payload,
+                headers={"X-Requested-With": "XMLHttpRequest"},
+            )
+            resp.raise_for_status()
+            rows = resp.json().get("metalList", [])
+    except (httpx.HTTPError, json.JSONDecodeError, KeyError, ValueError) as e:
+        logger.warning("Johnson Matthey history failed: %s", e)
+        return {}
+
+    series = _parse_johnson_matthey_history(rows)
+    logger.info(
+        "Johnson Matthey history: %s",
+        {sym: len(points) for sym, points in series.items()},
+    )
+    return series
+
+
+def _parse_johnson_matthey_history(rows: list[dict]) -> dict[str, list[dict]]:
+    """Group JM `metalList` rows into an ascending per-symbol daily series."""
+    series: dict[str, list[dict]] = {}
+    for row in rows:
+        try:
+            day = datetime.strptime(row["metalValueDate"], "%d/%m/%Y").date()
+            price = float(row["price"])
+        except (KeyError, TypeError, ValueError):
+            continue
+        series.setdefault(row.get("metalCode", ""), []).append(
+            {"date": day.isoformat(), "price": price}
+        )
+    for points in series.values():
+        points.sort(key=lambda p: p["date"])
+    return series
+
+
+async def fetch_westmetall_history(symbol: str) -> list[dict]:
+    """Return daily LME settlement history for a base metal, in the app's unit."""
+    field = WESTMETALL_FIELDS.get(symbol)
+    if not field:
+        return []
+    try:
+        async with httpx.AsyncClient(timeout=25, follow_redirects=True, headers=_HTTP_HEADERS) as client:
+            resp = await client.get(
+                "https://www.westmetall.com/en/markdaten.php",
+                params={"action": "table", "field": field},
+            )
+            resp.raise_for_status()
+            page = resp.text
+    except httpx.HTTPError as e:
+        logger.warning("Westmetall history(%s) failed: %s", symbol, e)
+        return []
+
+    points = _parse_westmetall_table(page)
+    logger.info("Westmetall history(%s): %d points", symbol, len(points))
+    return points
+
+
+def _parse_westmetall_table(page: str) -> list[dict]:
+    """Parse Westmetall's LME settlement table into ascending $/lb points."""
+    points: list[dict] = []
+    for row in re.findall(r"<tr[^>]*>(.*?)</tr>", page, re.S):
+        cells = [re.sub(r"<[^>]+>", "", c).strip() for c in re.findall(r"<td[^>]*>(.*?)</td>", row, re.S)]
+        if len(cells) < 2:
+            continue
+        try:
+            day = datetime.strptime(cells[0].replace(".", ""), "%d %B %Y").date()
+            per_tonne = float(cells[1].replace(",", ""))
+        except ValueError:
+            continue
+        points.append({"date": day.isoformat(), "price": round(per_tonne / LB_PER_METRIC_TON, 4)})
+    points.sort(key=lambda p: p["date"])
+    return points
+
+
+async def fetch_westmetall() -> dict[str, dict]:
+    """Return the newest LME official settlement for each Westmetall metal."""
+    results: dict[str, dict] = {}
+    for symbol in WESTMETALL_FIELDS:
+        points = await fetch_westmetall_history(symbol)
+        if not points:
+            continue
+        latest = points[-1]
+        results[symbol] = {
+            "name": _NAMES.get(symbol, symbol),
+            "price": latest["price"],
+            "unit": _UNITS.get(symbol, "$/lb"),
+            "source": "Westmetall (LME settlement)",
+            "fetched_at": _utc_now_iso(),
+        }
     return results
 
 

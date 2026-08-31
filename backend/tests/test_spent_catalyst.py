@@ -58,3 +58,36 @@ class TestMetalRecovery:
         )
         # Should use defaults and not crash
         assert result["V_metal_per_lb"] > 0
+
+    def test_precious_refining_charge_converts_troy_oz_to_lb(self):
+        result = calculate_metal_recovery_value(
+            metal_symbol="Pt",
+            metal_loading=0.02,
+            metal_spot_price=13860,
+            support="Carbon",
+            reactor_type="fixed",
+            catalyst_bulk_density=30.0,
+        )
+        # 14.5 $/TrOz x 14.5833 TrOz/lb x 0.02 lb metal/lb cat, net of losses
+        refining = 14.5 * 14.5833 * 0.02 * (1 - 0.025) * (1 - 0.02)
+        l_solids = 0.02 * (1 - 0.02) + 0.025 * 0.02
+        handling = (1 - l_solids) * (0.1375 + 104.5 / 30.0)
+        assert result["C_recovery_per_lb"] == pytest.approx(handling + refining, rel=1e-4)
+
+    def test_non_precious_salvage_uses_scrap_anchor_not_input_price(self):
+        result = calculate_metal_recovery_value(
+            metal_symbol="Fe",
+            metal_loading=0.30,
+            metal_spot_price=2.44,  # precursor-basis input price
+            support="SiO2",
+            reactor_type="fixed",
+            catalyst_bulk_density=55.0,
+        )
+        # Salvage must come from the $95/short-ton scrap anchor (escalated),
+        # not the precursor input: (1-0.03)(1-0.40) x 0.30 x ~0.06 $/lb
+        assert result["V_metal_per_lb"] < 0.05
+        assert result["loss_refining_pct"] == pytest.approx(40.0)
+        # and no phantom precious-metal refining charge
+        l_solids = 0.02 * 0.70 + 0.03 * 0.30
+        handling = (1 - l_solids) * (0.1375 + 115.5 / 55.0)
+        assert result["C_recovery_per_lb"] == pytest.approx(handling, rel=1e-4)

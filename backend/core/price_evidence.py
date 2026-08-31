@@ -57,6 +57,16 @@ _SOURCE_RULES: list[dict[str, Any]] = [
         "note": "Supplier-published precious-metals board used as a direct industry anchor.",
     },
     {
+        "match": "Westmetall",
+        "tier": "exchange_mirror",
+        "confidence_score": 86,
+        "transparency": "screen_quote",
+        "acquisition_mode": "scrape",
+        "freshness_target_hours": 48,
+        "label": "Exchange settlement mirror",
+        "note": "LME official settlement republished by Westmetall; daily on exchange trading days.",
+    },
+    {
         "match": "Markets Insider",
         "tier": "screen_scrape",
         "confidence_score": 77,
@@ -75,6 +85,19 @@ _SOURCE_RULES: list[dict[str, Any]] = [
         "freshness_target_hours": None,
         "label": "Indexed reference",
         "note": "Historical CatCost reference price escalated with ChemPPI rather than tracked live.",
+    },
+    {
+        "match": "USGS MCS",
+        "tier": "indexed_reference",
+        "confidence_score": 55,
+        "transparency": "public_index",
+        "acquisition_mode": "indexed",
+        "freshness_target_hours": None,
+        "label": "Government bulk reference",
+        "note": (
+            "Annual-average bulk price from the USGS Mineral Commodity Summaries; "
+            "no free quote at any frequency exists for this metal."
+        ),
     },
 ]
 

@@ -520,14 +520,20 @@ def calculate_metal_recovery_value(
     L_support_use = losses.get("support", 0.02)
     L_metal_ref = LOSSES_REFINING.get(metal_symbol, {}).get("avg", 0.10)
 
-    # V_metal (salvage value per lb catalyst)
+    # V_metal (salvage value per lb catalyst). Metals recovered as scrap
+    # rather than refined metal (currently Fe) price their salvage from the
+    # CatCost scrap anchor in backend/data/spent_catalyst.json
+    # (ChemPPI-escalated from its quote year), so a precursor-based input
+    # price cannot inflate the credit.
     V_metal = (1 - L_metal_use) * (1 - L_metal_ref) * metal_loading * metal_spot_price
 
     # C_recovery (cost to recover per lb catalyst)
     L_solids_use = L_support_use * (1 - metal_loading) + L_metal_use * metal_loading
     F_thermox = 0.1375  # avg of low(0.125) and high(0.15) $/lb
     F_incoming = 110     # avg $/ft^3 (depends on support)
-    F_refining = REFINING_CHARGES.get(metal_symbol, 15) * metal_loading
+    # Charges are $/TrOz of recovered metal and exist only for precious
+    # metals (non-precious anchors carry None -> no toll refining).
+    F_refining = (REFINING_CHARGES.get(metal_symbol) or 0) * TROY_OZ_PER_LB * metal_loading
 
     C_recovery = (1 - L_solids_use) * (F_thermox + F_incoming / catalyst_bulk_density) + \
                  F_refining * (1 - L_metal_use) * (1 - L_metal_ref)

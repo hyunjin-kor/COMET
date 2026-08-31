@@ -569,6 +569,7 @@ const KO: Record<string, string> = {
   'Screen-scraped quote': '화면 수집 시세',
   'Supplier board': '공급사 고시가',
   'Indexed reference': '지수 참조',
+  'Government bulk reference': '정부 통계 벌크 기준가',
 
   // Prices - inspector rails
   'Selected Quote': '선택된 시세',
@@ -596,6 +597,7 @@ const KO: Record<string, string> = {
   'Change basis': '등락 기준',
   'Biggest movers': '최대 등락',
   'History accumulating': '이력 수집 중',
+  'No market trend': '시장 추세 없음 (지수 기준)',
   'Used in reaction families': '이 금속을 쓰는 반응군',
   'Benchmark families whose candidate compositions name this metal.': '후보 조성에 이 금속이 등장하는 벤치마크 반응군입니다.',
   'Period return': '기간 수익률',

@@ -471,10 +471,13 @@
           "name": "Fe",
           "wt_pct": 61.6,
           "pricing": {
-            "type": "market_feed",
-            "symbol": "Fe",
-            "precursor_markup": 1.0,
-            "note": "Contained-iron basis of the 88 wt% Fe2O3 fraction; iron-oxide feed trades below refined iron, so refined-Fe parity is a conservative screen."
+            "type": "fixed",
+            "price_per_lb": 2.44,
+            "evidence_label": "Iron oxide precursor basis",
+            "evidence_tier": "public_index",
+            "confidence_score": 55,
+            "transparency": "derived_index",
+            "note": "Contained-Fe cost from bulk synthetic black iron oxide (ICIS 2006, $0.94/lb, CatCost library), ChemPPI-escalated. The scrap-iron market feed understates precursor chemistry ~40x, so Fe components price on a precursor basis."
           }
         },
         {
