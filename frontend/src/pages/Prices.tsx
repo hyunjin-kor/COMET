@@ -36,7 +36,7 @@ const GROUP_ORDER = ['PGM', 'Precious', 'Base'];
 const GROUPS: Record<string, { title: string; symbols: string[] }> = {
   PGM: { title: 'Platinum Group Metals', symbols: ['Pt', 'Pd', 'Rh', 'Ru', 'Ir'] },
   Precious: { title: 'Precious Metals', symbols: ['Au', 'Ag'] },
-  Base: { title: 'Industrial Metals', symbols: ['Ni', 'Co', 'Cu', 'Al', 'Mo', 'W', 'Fe'] },
+  Base: { title: 'Industrial Metals', symbols: ['Ni', 'Co', 'Cu', 'Al', 'Zn', 'Sn', 'Mo', 'W', 'V', 'Re', 'Fe'] },
 };
 
 // Data palette: brand teal for Pt, then visually distinct hues so PGM
