@@ -42,21 +42,32 @@ const GROUPS: Record<string, { title: string; symbols: string[] }> = {
 // Data palette: brand teal for Pt, then visually distinct hues so PGM
 // trend lines and avatars stay tellable apart.
 const METAL_COLORS: Record<string, string> = {
-  Pt: '#0d9488',
+  Pt: '#0f766e',
   Pd: '#0067ff',
-  Rh: '#d6409f',
+  Rh: '#b82f89',
   Ru: '#e8590c',
   Ir: '#7da7ff',
   Au: '#ffa800',
   Ag: '#8b95a1',
   Ni: '#22c55e',
   Co: '#0099ff',
-  Cu: '#f04452',
+  Cu: '#cf2233',
   Al: '#b0b8c1',
   Mo: '#7950f2',
   W: '#4e5968',
   Fe: '#fb6f5f',
 };
+
+/* Swatch colours span the luminance range, so the symbol needs whichever ink
+   reads on the one it lands on. 0.21 is where the two cross over. */
+function readableInk(background: string): string {
+  const channel = (offset: number) => {
+    const value = parseInt(background.slice(offset, offset + 2), 16) / 255;
+    return value <= 0.03928 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+  };
+  const luminance = 0.2126 * channel(1) + 0.7152 * channel(3) + 0.0722 * channel(5);
+  return luminance > 0.21 ? '#191f28' : '#ffffff';
+}
 
 const FEED_SECTIONS: WorkspaceSection[] = [
   { id: 'quotes', label: 'Prices', summary: 'Choose the metal price to inspect.' },
@@ -213,7 +224,7 @@ function StatusTile({ label, value, detail }: { label: string; value: string; de
     <div className="cp-metric-tile">
       <div className="cp-subtle-label">{label}</div>
       <div className="mt-1.5 text-2xl font-display text-[#191f28]">{value}</div>
-      <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div>
+      <div className="mt-1 text-xs leading-5 text-slate-600">{detail}</div>
     </div>
   );
 }
@@ -223,7 +234,7 @@ function InspectorRow({ label, value, detail }: { label: string; value: string; 
     <div className="cp-data-row">
       <div>
         <div className="cp-subtle-label">{label}</div>
-        {detail ? <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div> : null}
+        {detail ? <div className="mt-1 text-xs leading-5 text-slate-600">{detail}</div> : null}
       </div>
       <div className="text-right text-sm font-semibold text-[#191f28]">{value}</div>
     </div>
@@ -484,7 +495,7 @@ export default function Prices() {
           <section className="cp-rail-panel">
             <div className="cp-subtle-label">Evidence Surface</div>
             <div className="mt-2 text-lg font-semibold text-[#191f28]">Choose a tracked symbol.</div>
-            <div className="mt-2 text-xs leading-6 text-slate-500">The inspector keeps source quality, freshness, and normalization context visible.</div>
+            <div className="mt-2 text-xs leading-6 text-slate-600">The inspector keeps source quality, freshness, and normalization context visible.</div>
           </section>
         </div>
       );
@@ -526,7 +537,7 @@ export default function Prices() {
         {usage && selected && (usage[selected]?.length ?? 0) > 0 ? (
           <section className="cp-rail-panel">
             <div className="cp-subtle-label">{t('Used in reaction families')}</div>
-            <div className="mt-2 text-xs leading-5 text-slate-500">
+            <div className="mt-2 text-xs leading-5 text-slate-600">
               {t('Benchmark families whose candidate compositions name this metal.')}
             </div>
             <div className="mt-3 flex flex-wrap gap-2">
@@ -572,7 +583,7 @@ export default function Prices() {
                 <div className="text-sm font-semibold text-[#191f28]">
                   {refreshing ? t('Refreshing live quotes') : latestFetchedAt ? t('Live quotes loaded') : t('Stored pricing basis')}
                 </div>
-                <div className="mt-1 text-xs leading-5 text-slate-500">
+                <div className="mt-1 text-xs leading-5 text-slate-600">
                   {latestFetchedAt
                     ? (lang === 'ko' ? `금속 ${liveQuoteCount}종 실시간 갱신 ${formatSyncStamp(latestFetchedAt)}` : `${liveQuoteCount} metals updated live ${formatSyncStamp(latestFetchedAt)}`)
                     : t('Indexed and manual prices are available even before a live refresh.')}
@@ -607,7 +618,7 @@ export default function Prices() {
                     key={value}
                     onClick={() => setTrendPeriod(value)}
                     className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
-                      trendPeriod === value ? 'bg-white text-[#191f28] shadow-[0_1px_3px_rgba(15,23,42,0.08)]' : 'text-slate-500 hover:text-slate-700'
+                      trendPeriod === value ? 'bg-white text-[#191f28] shadow-[0_1px_3px_rgba(15,23,42,0.08)]' : 'text-slate-600 hover:text-slate-700'
                     }`}
                   >
                     {PERIOD_LABELS[value]}
@@ -617,7 +628,7 @@ export default function Prices() {
             </div>
             {movers ? (
               <div className="flex flex-wrap items-center gap-2">
-                <span className="text-xs text-slate-500">{t('Biggest movers')}</span>
+                <span className="text-xs text-slate-600">{t('Biggest movers')}</span>
                 <button
                   onClick={() => setSelected(movers.top.symbol)}
                   className={`rounded-full border px-3 py-1 font-mono text-xs font-semibold transition hover:opacity-80 ${changeTone(movers.top.change_pct!)}`}
@@ -665,14 +676,17 @@ export default function Prices() {
                         >
                           <div className="flex min-w-0 items-center gap-3">
                             <span
-                              className="flex h-10 w-10 items-center justify-center rounded-[18px] text-sm font-semibold text-[#191f28]"
-                              style={{ backgroundColor: METAL_COLORS[row.symbol] || '#0d9488' }}
+                              className="flex h-10 w-10 items-center justify-center rounded-[18px] text-sm font-semibold"
+                              style={{
+                                backgroundColor: METAL_COLORS[row.symbol] || '#0f766e',
+                                color: readableInk(METAL_COLORS[row.symbol] || '#0f766e'),
+                              }}
                             >
                               {row.symbol}
                             </span>
                             <div className="min-w-0">
                               <div className="truncate font-semibold text-[#191f28]">{t(row.name)}</div>
-                              <div className="truncate text-xs text-slate-500">
+                              <div className="truncate text-xs text-slate-600">
                                 {t(sourceDescription(row))} / {t(row.evidence.label)}
                               </div>
                             </div>
@@ -695,13 +709,13 @@ export default function Prices() {
 
                           <div className="text-left sm:text-right">
                             <div className="text-lg font-display text-[#191f28]">{fmtPrice(row.price, row.unit, unit)}</div>
-                            <div className="text-xs text-slate-500">
+                            <div className="text-xs text-slate-600">
                               {displayTrackedUnit(row.unit, unit)}
                               {row.unit === '$/troy_oz' && row.price != null
                                 ? ` · $${row.price.toLocaleString('en-US', { maximumFractionDigits: row.price >= 100 ? 0 : 2 })}/ozt`
                                 : ''}
                             </div>
-                            {quoteAge ? <div className="mt-0.5 text-[10px] text-slate-400">{quoteAge}</div> : null}
+                            {quoteAge ? <div className="mt-0.5 text-[11px] text-slate-600">{quoteAge}</div> : null}
                           </div>
                         </button>
                       );
@@ -788,7 +802,7 @@ export default function Prices() {
                   key={value}
                   onClick={() => setPeriod(value)}
                   className={`rounded-[16px] px-3 py-2 text-xs font-semibold transition ${
-                    period === value ? 'bg-[#0d9488] text-[#191f28]' : 'text-slate-300 hover:bg-white/8'
+                    period === value ? 'bg-[#0f766e] text-white' : 'text-slate-300 hover:bg-white/8'
                   }`}
                 >
                   {PERIOD_LABELS[value]}
@@ -916,7 +930,7 @@ export default function Prices() {
                 <div>
                   <div className="cp-subtle-label">{t('Relative performance')}</div>
                   <div className="cp-heading-sm mt-2">{t('Compare metals rebased to 100')}</div>
-                  <div className="mt-1 text-xs leading-6 text-slate-500">
+                  <div className="mt-1 text-xs leading-6 text-slate-600">
                     {t('Every series starts at 100 at the window open, so metals with very different absolute prices stay comparable.')}
                   </div>
                 </div>
@@ -926,7 +940,7 @@ export default function Prices() {
                       key={value}
                       onClick={() => setTrendPeriod(value)}
                       className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
-                        trendPeriod === value ? 'bg-white text-[#191f28] shadow-[0_1px_3px_rgba(15,23,42,0.08)]' : 'text-slate-500 hover:text-slate-700'
+                        trendPeriod === value ? 'bg-white text-[#191f28] shadow-[0_1px_3px_rgba(15,23,42,0.08)]' : 'text-slate-600 hover:text-slate-700'
                       }`}
                     >
                       {PERIOD_LABELS[value]}
@@ -953,7 +967,7 @@ export default function Prices() {
                       className={`flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold transition ${
                         isOn
                           ? 'border-transparent text-white'
-                          : 'border-slate-200 bg-white text-slate-500 hover:border-slate-300'
+                          : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
                       } ${isBase ? 'cursor-default' : ''}`}
                       style={isOn ? { backgroundColor: METAL_COLORS[symbol] || '#0d9488' } : undefined}
                     >

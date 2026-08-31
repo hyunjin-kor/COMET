@@ -31,7 +31,7 @@ function StatTile({ label, value, detail }: { label: string; value: string; deta
     <div className="cp-metric-tile">
       <div className="cp-subtle-label">{label}</div>
       <div className="mt-2 text-2xl font-display text-slate-900">{value}</div>
-      <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div>
+      <div className="mt-1 text-xs leading-5 text-slate-600">{detail}</div>
     </div>
   );
 }
@@ -307,19 +307,19 @@ export default function Uncertainty() {
                 <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
                   <div className="cp-subtle-label">{t('Current case')}</div>
                   <div className="mt-2 text-base font-semibold text-[#191f28]">{caseSummary}</div>
-                  <div className="mt-1 text-xs leading-6 text-slate-500">
+                  <div className="mt-1 text-xs leading-6 text-slate-600">
                     {draft.catalystDomain === 'electrocatalyst' ? t('Electrocatalyst stack') : t('Thermocatalyst formulation')}
                   </div>
                 </div>
                 <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
                   <div className="cp-subtle-label">{t('Preparation basis')}</div>
                   <div className="mt-2 text-base font-semibold text-[#191f28]">{lang === 'ko' ? `단위 공정 ${draft.steps.length}개` : `${draft.steps.length} unit operation${draft.steps.length === 1 ? '' : 's'}`}</div>
-                  <div className="mt-1 text-xs leading-6 text-slate-500">{draft.steps.map((key) => t(stepDisplayLabel(key))).join(', ') || t('No unit operations selected')}</div>
+                  <div className="mt-1 text-xs leading-6 text-slate-600">{draft.steps.map((key) => t(stepDisplayLabel(key))).join(', ') || t('No unit operations selected')}</div>
                 </div>
                 <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
                   <div className="cp-subtle-label">{t('Campaign scale')}</div>
                   <div className="mt-2 text-base font-semibold text-[#191f28]">{lang === 'ko' ? `${draft.orderSize}톤` : `${draft.orderSize} tons`}</div>
-                  <div className="mt-1 text-xs leading-6 text-slate-500">
+                  <div className="mt-1 text-xs leading-6 text-slate-600">
                     {t(applicationDisplay(draft.applicationFamily ?? 'general'))} / {t(domainDisplay(draft.catalystDomain))}
                   </div>
                 </div>
@@ -406,19 +406,19 @@ export default function Uncertainty() {
                 <div className="cp-metric-tile">
                   <div className="cp-subtle-label">{t('Baseline source')}</div>
                   <div className="mt-2 text-lg font-semibold text-[#191f28]">{t('Current Cost Estimate draft')}</div>
-                  <div className="mt-1 text-xs leading-5 text-slate-500">{t('No separate metal-only form is used here anymore.')}</div>
+                  <div className="mt-1 text-xs leading-5 text-slate-600">{t('No separate metal-only form is used here anymore.')}</div>
                 </div>
                 <div className="cp-metric-tile">
                   <div className="cp-subtle-label">{t('What moves')}</div>
                   <div className="mt-2 text-lg font-semibold text-[#191f28]">
                     {draft.catalystDomain === 'electrocatalyst' ? t('Catalyst + adjunct prices') : t('Active, promoter, and support prices')}
                   </div>
-                  <div className="mt-1 text-xs leading-5 text-slate-500">{t('The same case is re-run under sampled price and scale perturbations.')}</div>
+                  <div className="mt-1 text-xs leading-5 text-slate-600">{t('The same case is re-run under sampled price and scale perturbations.')}</div>
                 </div>
                 <div className="cp-metric-tile">
                   <div className="cp-subtle-label">{t('Interpretation')}</div>
                   <div className="mt-2 text-lg font-semibold text-[#191f28]">{t('Estimate spread, not a new formulation')}</div>
-                  <div className="mt-1 text-xs leading-5 text-slate-500">{t('Use this to read cost confidence around the existing route.')}</div>
+                  <div className="mt-1 text-xs leading-5 text-slate-600">{t('Use this to read cost confidence around the existing route.')}</div>
                 </div>
               </div>
 
@@ -482,7 +482,7 @@ export default function Uncertainty() {
                 <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
                   <div className="cp-subtle-label">{t('Case')}</div>
                   <div className="mt-2 text-base font-semibold text-[#191f28]">{result.composition}</div>
-                  <div className="mt-1 text-xs leading-6 text-slate-500">
+                  <div className="mt-1 text-xs leading-6 text-slate-600">
                     {t(domainDisplay(result.catalyst_domain))} / {t(applicationDisplay(result.application_family))}
                   </div>
                 </div>
@@ -491,14 +491,14 @@ export default function Uncertainty() {
                   <div className="mt-2 text-base font-semibold text-[#191f28]">
                     {formatPrice(toDisplay(result.p95 - result.p5))}{fmtLabel}
                   </div>
-                  <div className="mt-1 text-xs leading-6 text-slate-500">{t('P95 minus P5')}</div>
+                  <div className="mt-1 text-xs leading-6 text-slate-600">{t('P95 minus P5')}</div>
                 </div>
                 <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
                   <div className="cp-subtle-label">{t('Std dev')}</div>
                   <div className="mt-2 text-base font-semibold text-[#191f28]">
                     {formatPrice(toDisplay(result.std))}{fmtLabel}
                   </div>
-                  <div className="mt-1 text-xs leading-6 text-slate-500">{t('Distribution spread')}</div>
+                  <div className="mt-1 text-xs leading-6 text-slate-600">{t('Distribution spread')}</div>
                 </div>
               </div>
 

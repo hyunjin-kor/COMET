@@ -61,12 +61,12 @@ export default function TopNavigation() {
           <div className="flex min-w-0 items-center gap-2">
             <BrandMark className="h-5 w-5 flex-none" />
             <span className="flex-none font-display text-[13px] leading-none text-[#191f28]">
-              COMET<span className="font-normal text-[#8b95a1]">: Catalyst Overall Manufacturing Estimation Tool</span>
+              COMET<span className="font-normal text-[#68727f]">: Catalyst Overall Manufacturing Estimation Tool</span>
             </span>
             {activeItem ? (
               <>
                 <span className="h-3.5 w-px bg-[#e5e8eb]" aria-hidden="true" />
-                <span className="truncate text-xs font-medium text-[#8b95a1]">{t(activeItem.label)}</span>
+                <span className="truncate text-xs font-medium text-[#68727f]">{t(activeItem.label)}</span>
               </>
             ) : null}
           </div>
@@ -75,7 +75,7 @@ export default function TopNavigation() {
             <button
               type="button"
               onClick={() => window.cometDesktop?.minimizeWindow?.()}
-              className="flex w-12 items-center justify-center text-[#8b95a1] transition hover:bg-[#f2f4f6] hover:text-[#191f28]"
+              className="flex w-12 items-center justify-center text-[#68727f] transition hover:bg-[#f2f4f6] hover:text-[#191f28]"
               title="Minimize"
               aria-label="Minimize window"
             >
@@ -85,7 +85,7 @@ export default function TopNavigation() {
             <button
               type="button"
               onClick={() => window.cometDesktop?.toggleMaximizeWindow?.()}
-              className="flex w-12 items-center justify-center text-[#8b95a1] transition hover:bg-[#f2f4f6] hover:text-[#191f28]"
+              className="flex w-12 items-center justify-center text-[#68727f] transition hover:bg-[#f2f4f6] hover:text-[#191f28]"
               title={isMaximized ? 'Restore' : 'Maximize'}
               aria-label={isMaximized ? 'Restore window' : 'Maximize window'}
             >
@@ -95,7 +95,7 @@ export default function TopNavigation() {
             <button
               type="button"
               onClick={() => window.cometDesktop?.closeWindow?.()}
-              className="flex w-12 items-center justify-center text-[#8b95a1] transition hover:bg-[#f04452] hover:text-white"
+              className="flex w-12 items-center justify-center text-[#68727f] transition hover:bg-[#f04452] hover:text-white"
               title="Close"
               aria-label="Close window"
             >
@@ -126,7 +126,7 @@ export default function TopNavigation() {
 
               <div className="min-w-0">
                 <div className="font-display text-[1.45rem] leading-none text-[#191f28]">COMET</div>
-                <div className="mt-0.5 text-xs text-[#8b95a1]">{t('Evidence-first catalyst costing')}</div>
+                <div className="mt-0.5 text-xs text-[#68727f]">{t('Evidence-first catalyst costing')}</div>
               </div>
             </div>
 
@@ -141,7 +141,7 @@ export default function TopNavigation() {
               <span
                 aria-hidden="true"
                 className={`rounded-full px-3 py-1.5 text-xs font-bold transition ${
-                  unit === 'kg' ? 'bg-white text-[#191f28] shadow-[0_1px_3px_rgba(15,23,42,0.06)]' : 'text-[#8b95a1]'
+                  unit === 'kg' ? 'bg-white text-[#191f28] shadow-[0_1px_3px_rgba(15,23,42,0.06)]' : 'text-[#5f6b7a]'
                 }`}
               >
                 kg
@@ -149,7 +149,7 @@ export default function TopNavigation() {
               <span
                 aria-hidden="true"
                 className={`rounded-full px-3 py-1.5 text-xs font-bold transition ${
-                  unit === 'lb' ? 'bg-white text-[#191f28] shadow-[0_1px_3px_rgba(15,23,42,0.06)]' : 'text-[#8b95a1]'
+                  unit === 'lb' ? 'bg-white text-[#191f28] shadow-[0_1px_3px_rgba(15,23,42,0.06)]' : 'text-[#5f6b7a]'
                 }`}
               >
                 lb
@@ -166,7 +166,7 @@ export default function TopNavigation() {
               <span
                 aria-hidden="true"
                 className={`rounded-full px-3 py-1.5 text-xs font-bold transition ${
-                  lang === 'en' ? 'bg-white text-[#191f28] shadow-[0_1px_3px_rgba(15,23,42,0.06)]' : 'text-[#8b95a1]'
+                  lang === 'en' ? 'bg-white text-[#191f28] shadow-[0_1px_3px_rgba(15,23,42,0.06)]' : 'text-[#5f6b7a]'
                 }`}
               >
                 EN
@@ -174,7 +174,7 @@ export default function TopNavigation() {
               <span
                 aria-hidden="true"
                 className={`rounded-full px-3 py-1.5 text-xs font-bold transition ${
-                  lang === 'ko' ? 'bg-white text-[#191f28] shadow-[0_1px_3px_rgba(15,23,42,0.06)]' : 'text-[#8b95a1]'
+                  lang === 'ko' ? 'bg-white text-[#191f28] shadow-[0_1px_3px_rgba(15,23,42,0.06)]' : 'text-[#5f6b7a]'
                 }`}
               >
                 한국어
@@ -199,8 +199,8 @@ export default function TopNavigation() {
                   <div
                     className={`flex h-9 w-9 flex-none items-center justify-center rounded-[12px] transition ${
                       isActive
-                        ? 'bg-[#0d9488] text-white'
-                        : 'bg-[#f2f4f6] text-[#8b95a1] group-hover:text-[#4e5968]'
+                        ? 'bg-[#0f766e] text-white'
+                        : 'bg-[#f2f4f6] text-[#68727f] group-hover:text-[#4e5968]'
                     }`}
                   >
                     <item.Icon className="h-[18px] w-[18px]" />

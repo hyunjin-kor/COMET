@@ -32,7 +32,7 @@ function MetricTile({ label, value, detail, dark = false }: { label: string; val
     <div className={dark ? 'cp-metric-tile-dark' : 'cp-metric-tile'}>
       <div className={`cp-subtle-label ${dark ? '!text-slate-400' : ''}`}>{label}</div>
       <div className={`mt-2 text-2xl font-display ${dark ? 'text-white' : 'text-slate-900'}`}>{value}</div>
-      <div className={`mt-1 text-xs leading-5 ${dark ? 'text-slate-400' : 'text-slate-500'}`}>{detail}</div>
+      <div className={`mt-1 text-xs leading-5 ${dark ? 'text-slate-400' : 'text-slate-600'}`}>{detail}</div>
     </div>
   );
 }
@@ -42,7 +42,7 @@ function RailRow({ label, value, detail }: { label: string; value: string; detai
     <div className="cp-data-row">
       <div>
         <div className="cp-subtle-label">{label}</div>
-        {detail ? <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div> : null}
+        {detail ? <div className="mt-1 text-xs leading-5 text-slate-600">{detail}</div> : null}
       </div>
       <div className="text-right text-sm font-semibold text-[#191f28]">{value}</div>
     </div>
@@ -179,7 +179,7 @@ export default function CapEx() {
                   className="input-base"
                 />
               </div>
-              <div className="mt-1 text-xs leading-5 text-slate-500">
+              <div className="mt-1 text-xs leading-5 text-slate-600">
                 {t('Already-summed value of all purchased equipment. Use this when you have a vendor quote or a high-level scaling already done.')}
               </div>
             </label>
