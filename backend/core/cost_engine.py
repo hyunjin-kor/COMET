@@ -123,6 +123,18 @@ def estimate_catalyst_cost(
             "adjunct inputs were supplied for ionomer, membrane, or substrate costs."
         )
 
+    unpriced_actives = [
+        str(component["name"])
+        for component in active_metals
+        if float(component.get("price_per_lb") or 0.0) <= 0
+    ]
+    if unpriced_actives:
+        warnings.append(
+            "Active-phase component(s) priced at $0.00/lb: "
+            + ", ".join(unpriced_actives)
+            + ". Their raw-material cost is missing from this estimate."
+        )
+
     try:
         chemppi_factor = get_escalation_factor(basis_year, target_year, "chemppi")
     except KeyError:

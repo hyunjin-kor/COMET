@@ -7,6 +7,7 @@ import pytest
 from sqlmodel import select
 
 import backend.main as main_module
+from backend.core.constants import TROY_OZ_PER_LB
 from backend.models.material import Material
 from backend.models.metal_price import MetalPrice
 from backend.routers.catcost_import import MAX_IMPORT_BYTES
@@ -116,6 +117,71 @@ class TestCalculator:
         assert resp.status_code == 200
         data = resp.json()
         assert data["summary"]["estimated_price_per_lb"] > 0
+
+    def test_calculate_flat_payload_prices_the_active_metal(self, client):
+        resp = client.post("/api/calculate", json={
+            "metal_symbol": "Ni",
+            "metal_price": 7.50,
+            "metal_price_unit": "$/lb",
+            "metal_loading_wt_pct": 15.0,
+            "support_name": "Al2O3",
+            "support_price_per_lb": 0.50,
+            "steps": ["mixer_slurry"],
+            "order_size_tons": 10.0,
+        })
+        assert resp.status_code == 200
+        data = resp.json()
+        metal = next(
+            component
+            for component in data["materials"]["components"]
+            if component["role"] == "active_metal"
+        )
+        assert metal["name"] == "Ni"
+        assert metal["price_per_lb"] == pytest.approx(7.50)
+        assert metal["cost_per_lb_cat"] == pytest.approx(0.15 * 7.50)
+        assert metal["cost_pct"] > 70.0
+        assert data["materials"]["total_materials_cost_per_lb"] == pytest.approx(
+            0.15 * 7.50 + 0.85 * 0.50
+        )
+        assert data["warnings"] == []
+
+    def test_calculate_flat_payload_converts_troy_oz_metal_price(self, client):
+        resp = client.post("/api/calculate", json={
+            "metal_symbol": "Pt",
+            "metal_price": 1000.0,
+            "metal_price_unit": "$/troy_oz",
+            "metal_loading_wt_pct": 2.0,
+            "support_name": "Carbon",
+            "support_price_per_lb": 1.50,
+            "steps": ["mixer_slurry"],
+            "order_size_tons": 10.0,
+        })
+        assert resp.status_code == 200
+        data = resp.json()
+        metal = next(
+            component
+            for component in data["materials"]["components"]
+            if component["role"] == "active_metal"
+        )
+        assert metal["price_per_lb"] == pytest.approx(1000.0 * TROY_OZ_PER_LB, rel=1e-4)
+        assert metal["cost_per_lb_cat"] == pytest.approx(
+            0.02 * 1000.0 * TROY_OZ_PER_LB, rel=1e-4
+        )
+        assert metal["cost_pct"] > 90.0
+
+    def test_calculate_warns_when_active_component_has_no_price(self, client):
+        resp = client.post("/api/calculate", json={
+            "components": [
+                {"role": "active_metal", "name": "Ni", "wt_pct": 15.0, "price_per_lb": 0.0},
+                {"role": "support", "name": "Al2O3", "wt_pct": 85.0, "price_per_lb": 0.50},
+            ],
+            "steps": ["mixer_slurry"],
+            "order_size_tons": 10.0,
+        })
+        assert resp.status_code == 200
+        data = resp.json()
+        assert any("priced at $0.00/lb" in warning for warning in data["warnings"])
+        assert any("Ni" in warning for warning in data["warnings"])
 
     def test_calculate_invalid_step(self, client):
         resp = client.post("/api/calculate", json={
@@ -414,6 +480,32 @@ class TestCalculator:
 
 
 class TestUncertainty:
+    def test_uncertainty_flat_calculation_input_prices_the_active_metal(self, client):
+        flat = {
+            "metal_symbol": "Ni",
+            "metal_price": 7.50,
+            "metal_price_unit": "$/lb",
+            "metal_loading_wt_pct": 15.0,
+            "support_name": "Al2O3",
+            "support_price_per_lb": 0.50,
+            "steps": ["mixer_slurry"],
+            "order_size_tons": 10.0,
+        }
+        direct = client.post("/api/calculate", json=flat)
+        assert direct.status_code == 200
+        expected_baseline = direct.json()["summary"]["estimated_price_per_lb"]
+
+        resp = client.post("/api/uncertainty", json={
+            "calculation_input": flat,
+            "n_simulations": 250,
+        })
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["baseline_price_per_lb"] == pytest.approx(expected_baseline, rel=1e-3)
+        # A $0-priced active metal is skipped by the sampler, which collapsed the
+        # flat-payload spread to support-only variation (~0.26 for this case).
+        assert data["p95"] - data["p5"] > 0.5
+
     def test_uncertainty_uses_structured_thermal_calculation_input(self, client):
         resp = client.post("/api/uncertainty", json={
             "calculation_input": {
