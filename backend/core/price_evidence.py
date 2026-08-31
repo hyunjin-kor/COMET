@@ -77,16 +77,16 @@ _SOURCE_RULES: list[dict[str, Any]] = [
         "note": "Historical CatCost reference price escalated with ChemPPI rather than tracked live.",
     },
     {
-        "match": "CatCost 2018 + metals PPI escalation",
+        "match": "USGS MCS",
         "tier": "indexed_reference",
-        "confidence_score": 46,
-        "transparency": "derived_index",
+        "confidence_score": 55,
+        "transparency": "public_index",
         "acquisition_mode": "indexed",
         "freshness_target_hours": None,
-        "label": "Indexed reference",
+        "label": "Government bulk reference",
         "note": (
-            "Historical CatCost reference price escalated with the primary nonferrous "
-            "metals PPI; no free daily quote exists for this metal."
+            "Annual-average bulk price from the USGS Mineral Commodity Summaries; "
+            "no free quote at any frequency exists for this metal."
         ),
     },
 ]

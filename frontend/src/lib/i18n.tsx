@@ -569,6 +569,7 @@ const KO: Record<string, string> = {
   'Screen-scraped quote': '화면 수집 시세',
   'Supplier board': '공급사 고시가',
   'Indexed reference': '지수 참조',
+  'Government bulk reference': '정부 통계 벌크 기준가',
 
   // Prices - inspector rails
   'Selected Quote': '선택된 시세',

@@ -91,17 +91,22 @@ def _utc_now_iso() -> str:
     return datetime.now(UTC).isoformat()
 
 
-# Metals whose CatCost reference is escalated with the primary nonferrous PPI
-# instead of ChemPPI: every metal we can measure live has risen far more since
-# 2018 (median x3.1) than the chemical index (x1.2) implies.
-METAL_PPI_SYMBOLS = frozenset({"Co", "Mo", "W"})
+# Contained-metal bulk anchors from USGS Mineral Commodity Summaries 2026
+# (published February 2026; 2025 annual averages). These metals have no free
+# quote at any frequency, so the newest published government statistic beats
+# escalating the 2018 CatCost value across eight volatile years.
+_USGS_REF: dict[str, float] = {
+    "Co": 21.0,   # U.S. spot cathode, $/lb (Platts via USGS)
+    "Mo": 34.71,  # molybdic oxide $51/kg, contained-Mo basis
+    "W": 21.74,   # Rotterdam WO3 concentrate $380/mtu at 7.93 kg W per mtu
+}
+_USGS_SOURCE = "USGS MCS 2026 (2025 avg)"
 
 
-def _escalate(price_2018: float, symbol: str | None = None) -> float:
-    """Scale a 2018 price to today using the PPI that fits the commodity."""
-    index_file = "metalppi.json" if symbol in METAL_PPI_SYMBOLS else "chemppi.json"
+def _escalate(price_2018: float) -> float:
+    """Scale a 2018 price to today using the ChemPPI index."""
     try:
-        with open(_DATA_DIR / index_file, encoding="utf-8") as f:
+        with open(_DATA_DIR / "chemppi.json", encoding="utf-8") as f:
             annual = json.load(f).get("annual", {})
         base = float(annual.get("2018", 0))
         latest_year = max(int(year) for year in annual if annual[year])
@@ -109,7 +114,7 @@ def _escalate(price_2018: float, symbol: str | None = None) -> float:
         if base and latest:
             return round(price_2018 * (latest / base), 4)
     except (OSError, ValueError, json.JSONDecodeError) as exc:
-        logger.warning("%s escalation skipped (%s): %s", index_file, type(exc).__name__, exc)
+        logger.warning("ChemPPI escalation skipped (%s): %s", type(exc).__name__, exc)
     return price_2018
 
 
@@ -490,16 +495,14 @@ async def fetch_markets_insider() -> dict[str, dict]:
 
 
 def get_reference_prices() -> dict[str, dict]:
-    """Return all metals with 2018 CatCost prices escalated by ChemPPI."""
+    """Return all metals priced from the newest usable public reference."""
     return {
         sym: {
             "name": _NAMES.get(sym, sym),
-            "price": _escalate(base, sym),
+            "price": _USGS_REF.get(sym, _escalate(base)),
             "unit": _UNITS.get(sym, "$/troy_oz"),
             "source": (
-                "CatCost 2018 + metals PPI escalation"
-                if sym in METAL_PPI_SYMBOLS
-                else "CatCost 2018 + ChemPPI escalation"
+                _USGS_SOURCE if sym in _USGS_REF else "CatCost 2018 + ChemPPI escalation"
             ),
             "fetched_at": None,
         }

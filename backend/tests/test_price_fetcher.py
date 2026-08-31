@@ -8,6 +8,7 @@ from backend.core.price_fetcher import (
     _parse_johnson_matthey_history,
     _parse_markets_insider_quote,
     _parse_westmetall_table,
+    get_reference_prices,
 )
 
 
@@ -136,3 +137,12 @@ def test_parse_westmetall_table_converts_metric_ton_to_lb():
 
     assert [point["date"] for point in points] == ["2026-08-27", "2026-08-28"]
     assert math.isclose(points[-1]["price"], 16850.0 / 2204.62, rel_tol=1e-4)
+
+
+def test_reference_prices_use_usgs_anchors_for_co_mo_w():
+    ref = get_reference_prices()
+
+    for sym, anchor in (("Co", 21.0), ("Mo", 34.71), ("W", 21.74)):
+        assert ref[sym]["price"] == anchor
+        assert ref[sym]["source"] == "USGS MCS 2026 (2025 avg)"
+    assert ref["Fe"]["source"] == "CatCost 2018 + ChemPPI escalation"
