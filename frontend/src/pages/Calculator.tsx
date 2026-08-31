@@ -1217,7 +1217,7 @@ export default function Calculator() {
               {material.quote_year ? ` / ${material.quote_year}` : ''}
               {material.quote_source ? ` / ${material.quote_source}` : ''}
             </div>
-            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] ${
+            <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.16em] ${
               material.reference_url ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : 'border-amber-200 bg-amber-50 text-amber-700'
             }`}>
               {materialSourceTrust(material)}
@@ -1633,7 +1633,7 @@ export default function Calculator() {
               >
                 <div className="flex items-center justify-between gap-3">
                   <div className="cp-heading-sm">{t(option.title)}</div>
-                  <span className={`inline-flex h-6 min-w-6 items-center justify-center rounded-full px-2 text-[10px] font-semibold uppercase tracking-[0.16em] ${
+                  <span className={`inline-flex h-6 min-w-6 items-center justify-center rounded-full px-2 text-xs font-semibold uppercase tracking-[0.16em] ${
                     active ? 'bg-slate-950 text-white' : 'bg-slate-100 text-slate-600'
                   }`}>
                     {active ? t('Selected') : t('Choose')}
@@ -1813,7 +1813,7 @@ export default function Calculator() {
           <div className="surface-ghost p-3.5">
             <div className="flex items-center justify-between gap-3">
               <div className="cp-subtle-label">{t('Start from a standard method')}</div>
-              <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+              <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
                 {thermalTemplates.length} {t('methods')}
               </div>
             </div>
@@ -1855,7 +1855,7 @@ export default function Calculator() {
               <div key={category} className="surface-ghost p-3.5">
                 <div className="flex items-center justify-between gap-3">
                   <div className="cp-subtle-label">{t(category)}</div>
-                  <div className={`rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] ${
+                  <div className={`rounded-full border px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${
                     selectedInCategory.length > 0
                       ? 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e]'
                       : 'border-slate-200 bg-white text-slate-400'
@@ -1869,7 +1869,7 @@ export default function Calculator() {
                     const available = (step.scales as readonly Scale[]).includes(currentScale);
                     const checked = steps.includes(step.key);
                     const availabilityLabel = step.scales.length === 3 ? null : step.scales.map((item) => item.charAt(0).toUpperCase()).join('/');
-                    return <button key={step.key} onClick={() => available && toggleStep(step.key)} disabled={!available} title={available ? t(step.label) : `Not available at ${scale.label.toLowerCase()} scale`} className={`rounded-[16px] border px-3 py-2 text-left text-sm transition ${!available ? 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400' : checked ? 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e]' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}><div className="flex items-center justify-between gap-3"><div className="font-medium">{t(step.label)}</div>{checked ? <span className="rounded-full border border-[#0d9488] bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#0f766e]">On</span> : null}</div>{availabilityLabel ? <div className="mt-1 text-[10px] uppercase tracking-[0.18em] text-slate-400">{availabilityLabel}</div> : null}</button>;
+                    return <button key={step.key} onClick={() => available && toggleStep(step.key)} disabled={!available} title={available ? t(step.label) : `Not available at ${scale.label.toLowerCase()} scale`} className={`rounded-[16px] border px-3 py-2 text-left text-sm transition ${!available ? 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400' : checked ? 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e]' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}><div className="flex items-center justify-between gap-3"><div className="font-medium">{t(step.label)}</div>{checked ? <span className="rounded-full border border-[#0d9488] bg-white px-2 py-0.5 text-xs font-semibold uppercase tracking-[0.18em] text-[#0f766e]">On</span> : null}</div>{availabilityLabel ? <div className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-400">{availabilityLabel}</div> : null}</button>;
                   })}
                 </div>
                 {selectedInCategory.length > 0 ? (
@@ -1995,7 +1995,7 @@ export default function Calculator() {
               <div className="mt-4 surface-ghost p-3.5">
                 <div className="flex items-center justify-between gap-3">
                   <div className="cp-subtle-label">{t('Saved estimates')}</div>
-                  <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+                  <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
                     {savedEstimates.length} {t('saved')}
                   </div>
                 </div>

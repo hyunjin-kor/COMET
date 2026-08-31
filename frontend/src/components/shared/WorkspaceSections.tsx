@@ -106,7 +106,7 @@ export function WorkspaceSectionNav({
                 }`}
               >
                 <span
-                  className={`inline-flex h-5 w-5 items-center justify-center rounded-full text-[12px] font-semibold ${
+                  className={`inline-flex h-5 w-5 items-center justify-center rounded-full text-xs font-semibold ${
                     active
                       ? 'bg-[#0f766e] text-white'
                       : done
@@ -160,7 +160,7 @@ export function WorkspaceSectionFooter({
         {lang === 'ko'
           ? `${activeIndex + 1}/${totalSections} 단계`
           : `Step ${activeIndex + 1} of ${totalSections}`}
-        <span className="mx-1.5 text-[#8b95a1]">·</span>
+        <span className="mx-1.5 text-[#68727f]">·</span>
         <span className="font-medium text-[#4e5968]">{t(activeSection.label)}</span>
       </div>
 

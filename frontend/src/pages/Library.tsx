@@ -511,12 +511,12 @@ export default function Library() {
                             </div>
                           </div>
                           <div className="mt-3 flex flex-wrap gap-2">
-                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-medium ${usabilityTone(material)}`}>{t(usabilityLabel(material))}</span>
-                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-medium ${quoteYearTone(material.quote_year)}`}>{material.quote_year == null ? t('Year unknown') : (lang === 'ko' ? `${material.quote_year}년 견적` : quoteYearLabel(material.quote_year))}</span>
-                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${domainTone(material.catalyst_domain)}`}>{t(domainLabel(material.catalyst_domain))}</span>
-                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${applicationTone(material.application_family)}`}>{t(applicationLabel(material.application_family))}</span>
-                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${categoryTone(material.category)}`}>{material.category || 'Uncategorised'}</span>
-                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-medium ${sourceTrustTone(material)}`}>{t(sourceTrustLabel(material))}</span>
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-medium ${usabilityTone(material)}`}>{t(usabilityLabel(material))}</span>
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-medium ${quoteYearTone(material.quote_year)}`}>{material.quote_year == null ? t('Year unknown') : (lang === 'ko' ? `${material.quote_year}년 견적` : quoteYearLabel(material.quote_year))}</span>
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${domainTone(material.catalyst_domain)}`}>{t(domainLabel(material.catalyst_domain))}</span>
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${applicationTone(material.application_family)}`}>{t(applicationLabel(material.application_family))}</span>
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${categoryTone(material.category)}`}>{material.category || 'Uncategorised'}</span>
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-medium ${sourceTrustTone(material)}`}>{t(sourceTrustLabel(material))}</span>
                           </div>
                         </button>
                       );
@@ -530,14 +530,14 @@ export default function Library() {
                   <div className="cp-subtle-label">{t('Source Detail')}</div>
                   <div className="mt-2 text-lg font-semibold text-[#191f28]">{selectedMaterial?.name ?? t('Choose a material row')}</div>
                   <div className="mt-3 flex flex-wrap gap-2">
-                    {selectedMaterial ? <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${domainTone(selectedMaterial.catalyst_domain)}`}>{t(domainLabel(selectedMaterial.catalyst_domain))}</span> : null}
-                    {selectedMaterial ? <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${applicationTone(selectedMaterial.application_family)}`}>{t(applicationLabel(selectedMaterial.application_family))}</span> : null}
-                    {selectedMaterial ? <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${categoryTone(selectedMaterial.category)}`}>{selectedMaterial.category || 'Uncategorised'}</span> : null}
+                    {selectedMaterial ? <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${domainTone(selectedMaterial.catalyst_domain)}`}>{t(domainLabel(selectedMaterial.catalyst_domain))}</span> : null}
+                    {selectedMaterial ? <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${applicationTone(selectedMaterial.application_family)}`}>{t(applicationLabel(selectedMaterial.application_family))}</span> : null}
+                    {selectedMaterial ? <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${categoryTone(selectedMaterial.category)}`}>{selectedMaterial.category || 'Uncategorised'}</span> : null}
                   </div>
                   {selectedMaterial ? (
                     <>
                       <div className="mt-3 flex flex-wrap gap-2">
-                        <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-medium ${usabilityTone(selectedMaterial)}`}>{t(usabilityLabel(selectedMaterial))}</span>
+                        <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-medium ${usabilityTone(selectedMaterial)}`}>{t(usabilityLabel(selectedMaterial))}</span>
                       </div>
                       <div className="mt-3 text-xs leading-5 text-slate-600">{t(usabilityHint(selectedMaterial))}</div>
                       <div className="mt-4 space-y-1">
@@ -683,7 +683,7 @@ export default function Library() {
                             <div className="cp-heading-sm mt-2">{template.name}</div>
                           </div>
                           <div className="flex flex-wrap gap-2">
-                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${domainTone(template.catalyst_domain)}`}>{domainLabel(template.catalyst_domain)}</span>
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${domainTone(template.catalyst_domain)}`}>{domainLabel(template.catalyst_domain)}</span>
                             <span className="cp-chip">{lang === 'ko' ? `${template.steps.length}개 단계` : `${template.steps.length} steps`}</span>
                           </div>
                         </div>
@@ -701,7 +701,7 @@ export default function Library() {
                   {selectedTemplate ? (
                     <>
                       <div className="mt-3 flex flex-wrap gap-2">
-                        <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] ${domainTone(selectedTemplate.catalyst_domain)}`}>{domainLabel(selectedTemplate.catalyst_domain)}</span>
+                        <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${domainTone(selectedTemplate.catalyst_domain)}`}>{domainLabel(selectedTemplate.catalyst_domain)}</span>
                         {selectedTemplate.application_family ? <span className="cp-chip">{applicationLabel(selectedTemplate.application_family)}</span> : null}
                         {selectedTemplate.manufacturing_mode ? <span className="cp-chip">{selectedTemplate.manufacturing_mode}</span> : null}
                       </div>

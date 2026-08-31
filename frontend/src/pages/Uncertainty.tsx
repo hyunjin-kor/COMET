@@ -59,7 +59,7 @@ function FieldBlock({
     <label className="block">
       <div className="flex items-center justify-between gap-3">
         <span className="cp-subtle-label">{label}</span>
-        {hint ? <span className="text-[11px] text-slate-400">{hint}</span> : null}
+        {hint ? <span className="text-xs text-slate-400">{hint}</span> : null}
       </div>
       <div className="mt-2">{children}</div>
     </label>

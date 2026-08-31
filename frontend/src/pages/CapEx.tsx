@@ -268,7 +268,7 @@ export default function CapEx() {
                           type="button"
                           onClick={() => removeRow(row.id)}
                           disabled={equipmentRows.length <= 1}
-                          className="cp-button-secondary px-2 py-1 text-[11px] disabled:cursor-not-allowed disabled:opacity-50"
+                          className="cp-button-secondary px-2 py-1 text-xs disabled:cursor-not-allowed disabled:opacity-50"
                         >
                           {t('Remove')}
                         </button>

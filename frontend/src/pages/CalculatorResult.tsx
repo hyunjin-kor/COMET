@@ -799,13 +799,13 @@ export default function CalculatorResult() {
                   <td className="px-3 py-2 font-semibold text-slate-900">
                     {entry.name}
                     {entry.matched_key && entry.matched_key !== entry.name ? (
-                      <span className="ml-1 text-[10px] text-slate-600">(via {entry.matched_key})</span>
+                      <span className="ml-1 text-xs text-slate-600">(via {entry.matched_key})</span>
                     ) : null}
                   </td>
                   <td className="px-3 py-2 text-slate-600">{entry.role ?? '—'}</td>
                   <td className="px-3 py-2 text-slate-600">{entry.wt_pct.toFixed(2)}</td>
                   <td className="px-3 py-2">
-                    <span className={`inline-flex rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.16em] ${lcaFactorStatusTone(entry.factor_status)}`}>
+                    <span className={`inline-flex rounded-full border px-2 py-0.5 text-xs font-semibold uppercase tracking-[0.16em] ${lcaFactorStatusTone(entry.factor_status)}`}>
                       {lcaFactorStatusLabel(entry.factor_status)}
                     </span>
                   </td>
@@ -884,7 +884,7 @@ export default function CalculatorResult() {
                     <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: CHART_COLORS[index % CHART_COLORS.length] }} />
                     <div className="cp-heading-sm">{component.name}</div>
                   </div>
-                  <div className="mt-1 text-[11px] uppercase tracking-[0.18em] text-slate-400">
+                  <div className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-400">
                     {component.role.replace('_', ' ')}
                   </div>
                 </div>
@@ -954,7 +954,7 @@ export default function CalculatorResult() {
                       </div>
                       <div className="mt-2 flex flex-wrap items-center gap-2 sm:justify-end">
                         <span
-                          className={`inline-flex rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] ${sourceRecordTone(material.price_scope, Boolean(material.reference_url))}`}
+                          className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.16em] ${sourceRecordTone(material.price_scope, Boolean(material.reference_url))}`}
                         >
                           {t(sourceRecordLabel(material.price_scope, Boolean(material.reference_url)))}
                         </span>

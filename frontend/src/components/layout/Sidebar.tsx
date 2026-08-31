@@ -40,7 +40,7 @@ export default function Sidebar({ collapsed, onToggleCollapsed }: SidebarProps) 
             {collapsed ? null : (
               <div className="min-w-0 flex-1">
                 <div className="font-display text-[1.2rem] leading-none text-[#191f28]">COMET</div>
-                <div className="mt-1 text-[12px] text-[#68727f]">{t('Catalyst cost workspace')}</div>
+                <div className="mt-1 text-xs text-[#68727f]">{t('Catalyst cost workspace')}</div>
               </div>
             )}
             <button

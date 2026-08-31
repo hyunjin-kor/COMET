@@ -212,7 +212,7 @@ function SourceBadge({ sourceType }: { sourceType: MetalPrice['source_type'] }) 
         : { label: 'Manual', classes: 'border-slate-200 bg-white text-slate-600', dot: 'bg-slate-500' };
 
   return (
-    <span className={`inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] ${badge.classes}`}>
+    <span className={`inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${badge.classes}`}>
       <span className={`h-2 w-2 rounded-full ${badge.dot}`} />
       {badge.label}
     </span>
@@ -696,12 +696,12 @@ export default function Prices() {
                             {trend ? (
                               <>
                                 <Sparkline points={trend.points} color={trend.change_pct! >= 0 ? '#059669' : '#f04452'} />
-                                <span className={`rounded-full border px-2 py-0.5 font-mono text-[11px] font-semibold ${changeTone(trend.change_pct!)}`}>
+                                <span className={`rounded-full border px-2 py-0.5 font-mono text-xs font-semibold ${changeTone(trend.change_pct!)}`}>
                                   {fmtChangePct(trend.change_pct!)}
                                 </span>
                               </>
                             ) : (
-                              <span className="text-[11px] text-slate-400">{t('History accumulating')}</span>
+                              <span className="text-xs text-slate-400">{t('History accumulating')}</span>
                             )}
                           </div>
 
@@ -715,7 +715,7 @@ export default function Prices() {
                                 ? ` · $${row.price.toLocaleString('en-US', { maximumFractionDigits: row.price >= 100 ? 0 : 2 })}/ozt`
                                 : ''}
                             </div>
-                            {quoteAge ? <div className="mt-0.5 text-[11px] text-slate-600">{quoteAge}</div> : null}
+                            {quoteAge ? <div className="mt-0.5 text-xs text-slate-600">{quoteAge}</div> : null}
                           </div>
                         </button>
                       );
@@ -893,7 +893,7 @@ export default function Prices() {
                       current={displayHistory[displayHistory.length - 1]!.price}
                       color={METAL_COLORS[selected || 'Pt'] || '#0d9488'}
                     />
-                    <div className="mt-2 flex justify-between text-[10px] text-slate-400">
+                    <div className="mt-2 flex justify-between text-xs text-slate-400">
                       <span>{fmtConverted(Math.min(...displayHistory.map((point) => point.low ?? point.price)))}</span>
                       <span>{fmtConverted(Math.max(...displayHistory.map((point) => point.high ?? point.price)))}</span>
                     </div>
@@ -988,7 +988,7 @@ export default function Prices() {
                   />
                 </Suspense>
               </div>
-              <div className="mt-2 text-[11px] leading-5 text-slate-400">
+              <div className="mt-2 text-xs leading-5 text-slate-400">
                 {t('Only metals with enough stored history appear here; non-exchange metals join as local snapshots accumulate.')}
               </div>
             </div>
