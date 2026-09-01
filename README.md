@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./docs/assets/hero-banner.webp" alt="COMET — Catalyst Overall Manufacturing Estimation Tool" width="100%" />
+  <img src="./docs/assets/hero-banner.webp" alt="COMET: Catalyst Overall Manufacturing Estimation Tool" width="100%" />
 </p>
 
 <p align="center">
