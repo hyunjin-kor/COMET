@@ -1,6 +1,6 @@
 # Project Links
 
-Last verified: 2026-08-31
+Last verified: 2026-09-02
 
 This page tracks COMET's external connection points. Only verified links are listed as active.
 
@@ -13,6 +13,7 @@ This page tracks COMET's external connection points. Only verified links are lis
 | Releases index | https://github.com/hyunjin-kor/COMET/releases | Active |
 | Latest release | https://github.com/hyunjin-kor/COMET/releases/latest | Redirects to the newest tag; re-verify with `gh release list -L 1` before quoting a specific version |
 | Source repository clone URL | https://github.com/hyunjin-kor/COMET.git | Active |
+| Repository `homepage` metadata | https://github.com/hyunjin-kor/COMET/releases/latest | Active; corrected on 2026-09-02 from a stale `hyunjin-kor/CatPrice` URL left over from the rename |
 | Zenodo DOI (all versions) | https://doi.org/10.5281/zenodo.21451931 | Active; auto-archives each new GitHub release. v1.3.19 (`10.5281/zenodo.22110422`) is the first record archived from a fully renamed tree, so its title, links and `COMET-v1.3.19.zip` archive all read COMET. The nine earlier records for v1.3.10-v1.3.18 predate the rename: their metadata was corrected in place on 2026-08-26 with DOIs unchanged, but each still holds a `CatPrice-<version>.zip` because published files are immutable |
 
 ## Not Yet Connected
@@ -20,7 +21,7 @@ This page tracks COMET's external connection points. Only verified links are lis
 | Area | Current status | Required next step |
 | --- | --- | --- |
 | Blog | No verified blog URL is present in repository files or GitHub repository metadata. | Add the exact blog URL after publication. |
-| Public website / homepage | GitHub repository `homepage` metadata is currently empty. | Set the homepage in GitHub and mirror it in `README.md`, `package.json`, and `pyproject.toml`. |
+| Public product website | No standalone website exists; the repository `homepage` currently points at the latest release. | Publish the site, then set it as the GitHub homepage and mirror it in `README.md`, `package.json`, and `pyproject.toml`. |
 | Hosted documentation site | No `mkdocs.yml` or hosted docs URL is present. | Add `mkdocs.yml` and publish docs only after the target URL is known. |
 
 ## Release Metadata
