@@ -87,6 +87,34 @@ class TestComputeCatalystLca:
         assert result["gwp_kg_co2eq_per_kg_catalyst"] is None
         assert result["coverage_pct"] == 0.0
 
+    def test_parenthetical_qualifier_does_not_hide_a_factor(self):
+        # Benchmark rows name forms like "TiO2 (anatase)"; the qualifier must
+        # not turn a covered material into a data gap.
+        result = compute_catalyst_lca([
+            {"name": "TiO2 (anatase)", "wt_pct": 99.0, "role": "support"},
+            {"name": "Cu (from Cu2O)", "wt_pct": 1.0, "role": "active_metal"},
+        ])
+        assert result["coverage_pct"] == 100.0
+        keys = {c["name"]: c["matched_key"] for c in result["per_component"]}
+        assert keys == {"TiO2 (anatase)": "TiO2", "Cu (from Cu2O)": "Cu"}
+
+    def test_oxide_and_compound_aliases_map_to_dominant_element(self):
+        result = compute_catalyst_lca([
+            {"name": "ZnO", "wt_pct": 40.0}, {"name": "V2O5", "wt_pct": 20.0},
+            {"name": "In2O3", "wt_pct": 20.0}, {"name": "MoS2", "wt_pct": 20.0},
+        ])
+        assert result["coverage_pct"] == 100.0
+        keys = {c["name"]: c["matched_key"] for c in result["per_component"]}
+        assert keys == {"ZnO": "Zn", "V2O5": "V", "In2O3": "In", "MoS2": "Mo"}
+
+    def test_true_gaps_stay_gaps(self):
+        # Carbons, silica and zeolites are not in Nuss & Eckelman; no alias
+        # may quietly map them onto an element.
+        result = compute_catalyst_lca([
+            {"name": "Activated carbon", "wt_pct": 50.0}, {"name": "H-ZSM-5", "wt_pct": 50.0},
+        ])
+        assert result["coverage_pct"] == 0.0
+
 
 class TestLcaApi:
     def test_factors_endpoint_returns_dataset(self, client):

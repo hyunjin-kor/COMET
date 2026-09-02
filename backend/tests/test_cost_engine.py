@@ -1,14 +1,23 @@
 """Integration tests for cost engine with CatCost verification cases.
 
-CatCost benchmarks (Baddour et al. 2018, Table 6.2):
+The Step Method is reproduced line by line against CatCost User Guide
+Table 6.2 (mid-2017 basis, public). Inputs are the published per-case
+materials totals, the published step lists with multiplicities, and the
+published order sizes. Nothing is tuned to hit the target.
+
   - 2 wt% Pt/C,       2 ton,  Small:  CatCost=$27.37/lb, Market=$34.09/lb
   - 21 wt% Ni/Al2O3, 20 ton, Medium: CatCost=$20.59/lb, Market=$21.33/lb
   - USY-based FCC,  200 ton, Large:  CatCost=$2.41/lb,  Market=$2.73/lb
 
-Note: Exact reproduction requires CatCost's proprietary input data (precursor
-prices, exact step selections). We verify our Step Method implementation
-produces results within ±20% when given materials costs calibrated to the
-CatCost outputs.
+Two residuals are documented departures in the table itself, not engine error:
+  - Ni/Al2O3 margin: footnote f applies 33% of pre-margin cost, while the
+    Figure 6.3 correlation the guide publishes gives 24% at 20 ton. COMET
+    follows the correlation, so its price lands 6.7% under the table.
+  - FCC campaign: footnote b uses an effective 67 t/d (zeolite ramp-up)
+    instead of the 150 t/d nominal rate. With that rate passed explicitly
+    COMET lands within 1.2%.
+
+See scripts/reproduce_catcost_table62.py for the full comparison.
 """
 
 import pytest
@@ -20,78 +29,104 @@ from backend.core.uncertainty import run_monte_carlo
 
 
 class TestStepMethodVerification:
-    """Verify Step Method processing cost produces reasonable results.
-
-    We test the processing cost portion independently, using known
-    materials costs that match CatCost assumptions.
-    """
+    """Reproduce CatCost User Guide Table 6.2 with the published inputs."""
 
     def test_pt_carbon_small_scale_step_method(self):
-        """2 wt% Pt/C, 2 ton, Small scale.
-
-        CatCost: $27.37/lb. Materials cost calibrated to CatCost's bulk
-        precursor library pricing (~$14.5/lb including PGM precursor at
-        industrial bulk rates, not spot metal price).
-        """
+        """2 wt% Pt/C, 2 ton, Small. Every printed line of Table 6.2 matches."""
         result = calculate_step_method(
-            materials_cost_per_lb=14.5,
+            materials_cost_per_lb=10.70,
             steps=[
-                "mixer_slurry",
                 "incipient_wetness",
+                "reactor_multistep",
+                "scrubber_nox",
                 "filter_plate_frame",
-                "dryer_batch_vacuum_tray",
+                "reactor_simple",
+                "dryer_rotary_40_100C",
             ],
             order_size_tons=2.0,
             chemppi_escalation=1.0,
         )
         assert result["scale"] == "small"
-        assert 3.0 < result["processing_cost_per_lb"] < 6.0
-        assert result["estimated_price_per_lb"] == pytest.approx(27.37, rel=0.20)
+        assert result["step_cost_per_hr"] == 390.0
+        assert result["campaign_days"] == 2.5
+        assert result["campaign_cost"] == 23400.0
+        assert result["processing_cost_per_lb"] == pytest.approx(5.85, abs=0.005)
+        assert result["subtotal_per_lb"] == pytest.approx(16.55, abs=0.005)
+        assert result["ga_per_lb"] == pytest.approx(0.83, abs=0.01)
+        assert result["sard_per_lb"] == pytest.approx(0.87, abs=0.01)
+        assert result["margin_per_lb"] == pytest.approx(9.12, abs=0.01)
+        assert result["estimated_price_per_lb"] == pytest.approx(27.37, abs=0.01)
 
     def test_ni_alumina_medium_scale_step_method(self):
-        """21 wt% Ni/Al2O3, 20 ton, Medium scale.
+        """21 wt% Ni/Al2O3, 20 ton, Medium. Exact through pre-margin cost.
 
-        CatCost: $20.59/lb.
+        The table's margin (footnote f, 33% of pre-margin) departs from the
+        Figure 6.3 correlation (24% at 20 ton) that COMET implements, so the
+        final price is held to the resulting 6.7% residual rather than widened.
         """
-        # Ni precursor (Ni nitrate) at bulk industrial pricing ~$13.3/lb
-        # including precursor compound cost well above metal spot price
         result = calculate_step_method(
-            materials_cost_per_lb=13.3,
+            materials_cost_per_lb=11.88,
             steps=[
-                "mixer_slurry",
                 "incipient_wetness",
-                "dryer_rotary_100_300C",
+                "dryer_rotary_40_100C",
                 "kiln_continuous_indirect",
-                "mill",
                 "scrubber_nox",
+                "crystallizer",
+                "filter_rotary_vacuum",
+                "dryer_rotary_40_100C",
+                "kiln_continuous_indirect",
+                "kiln_continuous_indirect",
             ],
             order_size_tons=20.0,
             chemppi_escalation=1.0,
         )
         assert result["scale"] == "medium"
-        assert result["estimated_price_per_lb"] == pytest.approx(20.59, rel=0.20)
+        assert result["step_cost_per_hr"] == 1200.0
+        assert result["campaign_days"] == 3.0
+        assert result["campaign_cost"] == 86400.0
+        assert result["processing_cost_per_lb"] == pytest.approx(2.16, abs=0.005)
+        assert result["subtotal_per_lb"] == pytest.approx(14.04, abs=0.005)
+        assert result["pre_margin_per_lb"] == pytest.approx(15.48, abs=0.01)
+        assert result["estimated_price_per_lb"] == pytest.approx(20.59, rel=0.07)
 
     def test_fcc_zeolite_large_scale_step_method(self):
-        """USY-based FCC, 200 ton, Large scale.
+        """USY-based FCC, 200 ton, Large, at the footnote-b effective rate.
 
-        CatCost: $2.41/lb.
+        Hourly step cost matches exactly. Footnote b gives an effective
+        67 t/d for the zeolite campaign (4 days), which the override passes
+        through; at the nominal 150 t/d COMET would run 2.33 days and land
+        33% low, so the override is the published condition, not a fit.
         """
+        steps = (
+            ["reactor_simple", "crystallizer"]
+            + ["filter_rotary_vacuum"] * 2
+            + ["reactor_simple"] * 3
+            + ["kiln_continuous_indirect", "reactor_multistep", "filter_rotary_vacuum", "reactor_multistep"]
+            + ["reactor_simple"] * 2
+            + ["dryer_spray"] * 2
+            + ["reactor_simple"] * 4
+            + ["filter_rotary_vacuum"] * 2
+            + ["dryer_rotary_100_300C"]
+        )
         result = calculate_step_method(
-            materials_cost_per_lb=1.40,
-            steps=[
-                "mixer_slurry",
-                "reactor_simple",
-                "filter_rotary_vacuum",
-                "dryer_spray",
-                "kiln_continuous_direct",
-                "mill",
-                "scrubber_nox",
-            ],
+            materials_cost_per_lb=0.352,
+            steps=steps,
             order_size_tons=200.0,
             chemppi_escalation=1.0,
+            production_rate_ton_per_day=67.0,
         )
         assert result["scale"] == "large"
-        assert result["estimated_price_per_lb"] == pytest.approx(2.41, rel=0.20)
+        assert result["step_cost_per_hr"] == 6725.0
+        assert result["production_rate_ton_per_day"] == 67.0
+        assert result["campaign_days"] == pytest.approx(4.0, abs=0.02)
+        assert result["processing_cost_per_lb"] == pytest.approx(1.61, abs=0.005)
+        assert result["estimated_price_per_lb"] == pytest.approx(2.41, rel=0.02)
+
+    def test_fcc_nominal_rate_is_the_default(self):
+        """Without the override the engine keeps the nominal 150 t/d rate."""
+        result = calculate_step_method(0.352, ["reactor_simple"], 200.0)
+        assert result["production_rate_ton_per_day"] == 150
+        assert result["campaign_days"] == pytest.approx(200 / 150 + 1.0, abs=0.01)
 
     def test_relative_ordering(self):
         """Larger orders should have lower per-unit processing costs."""
