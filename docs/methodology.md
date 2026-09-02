@@ -4,7 +4,7 @@ COMET implements the catalyst cost estimation methodology from the CatCost frame
 
 ## Current Scope
 
-COMET currently exposes four research-facing layers in the shipped product:
+The shipped product has four research-facing layers:
 
 1. `materials and live price basis`
    Material rows can resolve against live feeds, indexed references, literature rows, or vendor rows.

@@ -31,7 +31,7 @@ contribution path is intentionally tight.
 - Bug fixes that come with a pytest case (or a frontend reproduction
   step) showing the bug.
 - Small surface improvements that fit the locked stack in `AGENTS.md`
-  (“Tech stack”) — please don't introduce a new framework, ORM, build tool, or
+  (“Tech stack”). Please don't introduce a new framework, ORM, build tool or
   charting library without filing an issue first.
 - Methodology contributions inside `backend/core/` only when the
   three CatCost validation cases (2 wt% Pt/C, 21 wt% Ni/Al₂O₃, USY-FCC)
@@ -50,7 +50,7 @@ contribution path is intentionally tight.
 
 ## Reporting a security issue
 
-Please follow [`SECURITY.md`](./SECURITY.md) — do not open a public
+Please follow [`SECURITY.md`](./SECURITY.md). Do not open a public
 issue for vulnerabilities.
 
 ## License

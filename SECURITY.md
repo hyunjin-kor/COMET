@@ -2,9 +2,9 @@
 
 ## Reporting a Vulnerability
 
-If you find a security issue in COMET — for example a vulnerability in
-the bundled FastAPI sidecar, a way to escape the Electron renderer, or a
-secret leak in a packaged build — please **do not open a public issue**.
+If you find a security issue in COMET (say, a vulnerability in the bundled
+FastAPI sidecar, a way to escape the Electron renderer, or a secret leak in
+a packaged build), please **do not open a public issue**.
 
 Instead, send a private report to the maintainer through GitHub's private
 vulnerability disclosure flow:
@@ -14,8 +14,8 @@ vulnerability disclosure flow:
 Please include:
 
 - A short description of the issue.
-- The version (or commit SHA) you tested against — see `package.json` /
-  `pyproject.toml` for the active version.
+- The version (or commit SHA) you tested against; `package.json` and
+  `pyproject.toml` carry the active version.
 - A reproduction path: minimum input, observed behaviour, expected
   behaviour.
 - Any relevant logs from `%APPDATA%\COMET\comet-launcher.log`
@@ -29,7 +29,7 @@ release notes name the CVE / advisory once published.
 
 Only the latest tagged release on GitHub is actively patched. Older
 desktop installers stay available for download but do not receive
-security updates — please update to the latest installer before
+security updates. Please update to the latest installer before
 reporting.
 
 | Version | Supported |

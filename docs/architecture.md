@@ -1,8 +1,8 @@
 # COMET Architecture Reference
 
-Reference detail split out of [`AGENTS.md`](../AGENTS.md): the directory layout,
-the core calculation modules, and the API surface. `AGENTS.md` keeps the operating
-rules an agent must follow; this file is the map it navigates by.
+The directory layout, the core calculation modules and the API surface, split out
+of [`AGENTS.md`](../AGENTS.md). `AGENTS.md` keeps the operating rules; this file
+is the reference behind them.
 
 ---
 

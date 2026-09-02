@@ -5,8 +5,7 @@
 > GitHub benchmarking and the original CatCost methodology.
 
 
-Reference detail lives beside this file, so this guide stays short enough to read
-in full before touching anything:
+Reference detail lives beside this file:
 
 - [`docs/architecture.md`](docs/architecture.md) — directory layout, core calculation modules, API surface
 - [`docs/project-history.md`](docs/project-history.md) — GitHub benchmarking notes and the original Codex phase plan

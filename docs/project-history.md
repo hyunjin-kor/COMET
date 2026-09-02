@@ -1,9 +1,8 @@
 # COMET Project History
 
 The GitHub benchmarking notes and the original Codex phase plan, split out of
-[`AGENTS.md`](../AGENTS.md). Both are historical: they record how the project was
-scoped, not what it must do now. `git log --oneline` is the ground truth for
-what actually shipped.
+[`AGENTS.md`](../AGENTS.md). Both are historical. They record how the project was
+scoped at the start; `git log --oneline` is the ground truth for what shipped.
 
 ---
 
