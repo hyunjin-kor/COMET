@@ -45,7 +45,7 @@ Truth signals for this repo:
 - Backend logic / engine: `python -m pytest backend/tests -q`
 - Frontend type/build: `cd frontend && npm run build`
 - Desktop packaging: `npm run build` then `npm run smoke:desktop`
-- Methodology changes: the three CatCost validation cases (2 wt% Pt/C, 21 wt% Ni/Al₂O₃, USY-FCC) within ±20% — see `AGENTS.md` §7.
+- Methodology changes: the three CatCost Table 6.2 cases reproduced from published inputs — Pt/C to the cent, Ni/Al₂O₃ within 7%, FCC within 2% at the footnote-b rate — see the “Validation strategy” section of `AGENTS.md` and `scripts/reproduce_catcost_table62.py`.
 
 If a UI/desktop change can't be verified by a command, say so explicitly — don't claim success from a clean type-check alone.
 
@@ -66,7 +66,7 @@ These are the *only* facts you may state without re-verification. Re-verify (`gh
   - Installer name pattern: `COMET.Setup.<version>.exe`
   - Portable archive: `COMET-win-unpacked.zip`
 - **Public blog / homepage**: not configured in GitHub repo metadata
-- **License**: source-available, all rights reserved (see `LICENSE`)
+- **License**: PolyForm Noncommercial License 1.0.0, SPDX `PolyForm-Noncommercial-1.0.0` (see `LICENSE`). Noncommercial use is granted; commercial use requires a separate license.
 
 The package version is *not* automatically a published GitHub release. Before quoting "the latest release", run `gh release list -L 1` and compare. If `package.json` is ahead of the latest release tag, that's a prepared bump — say "package version vA.B.C, latest release vX.Y.Z" rather than conflating the two.
 
@@ -79,7 +79,7 @@ The package version is *not* automatically a published GitHub release. Before qu
 - **Treat `CatCost_v1-1-1/` as proprietary.** Don't redistribute its raw data. Re-source materials from public references (ICIS public, Sigma-Aldrich, USGS).
 - **COMET is independent.** Cite CatCost methodology academically; never claim CatCost ownership or NREL endorsement.
 - **Co-update versioned references.** When a release ships, update `docs/project-links.md`, `README.md`, `package.json`, and `pyproject.toml` together — never one alone. Verify asset names from the GitHub Releases API.
-- **Stay inside the locked stack** in `AGENTS.md` §2. Don't introduce a new framework, ORM, or build tool without asking.
+- **Stay inside the locked stack** in `AGENTS.md` (“Tech stack”). Don't introduce a new framework, ORM, or build tool without asking.
 
 ---
 

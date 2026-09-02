@@ -1,0 +1,18 @@
+{
+  "title": "COMET: Catalyst Overall Manufacturing Estimation Tool",
+  "description": "COMET is a desktop application for early-stage techno-economic and life-cycle evaluation of heterogeneous catalyst manufacturing, combining route-decomposed cost estimation with real-time metal price feeds.",
+  "upload_type": "software",
+  "access_right": "open",
+  "license": "polyform-noncommercial-1.0.0",
+  "creators": [
+    {
+      "name": "Kang, Hyunjin"
+    }
+  ],
+  "keywords": [
+    "catalysis",
+    "cost-estimation",
+    "techno-economic-analysis",
+    "chemical-engineering"
+  ]
+}

@@ -10,7 +10,7 @@
   <a href="https://github.com/hyunjin-kor/COMET/releases/latest"><img src="https://img.shields.io/github/v/release/hyunjin-kor/COMET?label=download&color=2ea44f" alt="Latest release" /></a>
   <img src="https://img.shields.io/badge/platform-Windows-0078d4" alt="Windows" />
   <a href="https://doi.org/10.5281/zenodo.21451931"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.21451931.svg" alt="DOI" /></a>
-  <img src="https://img.shields.io/badge/license-source--available-lightgrey" alt="License: source-available" />
+  <img src="https://img.shields.io/badge/license-PolyForm--Noncommercial--1.0.0-lightgrey" alt="License: PolyForm Noncommercial 1.0.0" />
 </p>
 
 <p align="center">
@@ -29,10 +29,6 @@ It is aimed at catalysis researchers who want a quick, defensible answer to ques
 - Which part of the recipe drives the cost — the metal, the support, or the preparation route?
 - How does my composition compare against published catalysts for the same reaction?
 
-## The name
-
-A comet nucleus is an irregular, pitted, porous sphere — the same geometry as a catalyst pellet, and the same kind of rough surface where the interesting chemistry happens. That resemblance is where the name came from, and the rest of it fits too: COMET checks a candidate against established commercial catalysts, so a promising new one can be spotted early, arriving out of a field of known benchmarks.
-
 ## Download
 
 Get the installer from the [latest release](https://github.com/hyunjin-kor/COMET/releases/latest):
@@ -48,7 +44,7 @@ From v1.3.13 the app keeps itself current: it checks GitHub Releases on startup,
 
 - Estimates catalyst selling cost with the Step Method for preparation-route costing, following the CatCost methodology published by NREL
 - Tracks metal prices with three explicit states — `LIVE`, `INDEXED`, `MANUAL` — and shows the source, quote year, and freshness behind every number
-- Ships ten literature benchmark families (ammonia cracking, CO₂ hydrogenation, RWGS, dry reforming, water-gas shift, fuel-cell ORR, electrolyzer OER, and more) that you can load as editable starting points
+- Ships thirty literature benchmark families (ammonia cracking, CO₂ hydrogenation, RWGS, dry reforming, water-gas shift, fuel-cell ORR, electrolyzer OER, and more) that you can load as editable starting points
 - Handles both bulk supported catalysts and electrode-stack electrocatalysts
 - Runs Monte Carlo uncertainty analysis so you get a cost range, not just a point estimate
 - Adds an optional spent-catalyst recovery credit to thermocatalyst runs
@@ -63,41 +59,14 @@ The Prices page shows every tracked metal with its current quote basis and histo
 
 ## Screens
 
-### Cost estimate
+<img src="./docs/assets/screen-cost-estimate-composition.png" alt="Composition input — active metals, promoters, and support balance, each price showing its source" width="100%" />
 
-<img src="./docs/assets/screen-cost-estimate-composition.png" alt="Composition input" width="100%" />
+<img src="./docs/assets/screen-result.png" alt="Result screen — the full cost ledger with the price evidence behind every line" width="100%" />
 
-Set active metals, promoters, and support balance. Each price shows where it came from.
+<img src="./docs/assets/screen-live-metal-prices-overview.png" alt="Price overview — every tracked metal with its quote basis, source, and freshness" width="100%" />
 
-<img src="./docs/assets/screen-cost-estimate-preparation.png" alt="Preparation route" width="100%" />
-
-Build the preparation route from unit operations and pick the campaign scale.
-
-### Live metal prices
-
-<img src="./docs/assets/screen-live-metal-prices-overview.png" alt="Price overview" width="100%" />
-
-<img src="./docs/assets/screen-live-metal-prices-trend.png" alt="Price trend" width="100%" />
-
-### Literature benchmarks
-
-<img src="./docs/assets/screen-literature-benchmarks-routes.png" alt="Benchmark comparison" width="100%" />
-
-<img src="./docs/assets/screen-literature-benchmarks-detail.png" alt="Benchmark detail" width="100%" />
-
-### Result and uncertainty
-
-<img src="./docs/assets/screen-result.png" alt="Result screen" width="100%" />
-
-<img src="./docs/assets/screen-estimate-range.png" alt="Monte Carlo range" width="100%" />
-
-### Source library
-
-<img src="./docs/assets/screen-source-library.png" alt="Source library" width="100%" />
-
-Every price the calculator can use in one place — materials, step rates, and route templates — each with its quote basis, source, and freshness. Filter by category, catalyst domain, or application, and open the public source behind any row.
-
-Screenshots are regenerated from the running app with `scripts/capture_readme_screens.mjs`.
+Preparation routes, benchmark comparison, the Monte Carlo range, and the source
+library are in [docs/screens.md](docs/screens.md).
 
 ## Building from source
 
@@ -120,7 +89,7 @@ cd frontend && npm run build         # type-check + build
 npm run smoke:desktop                # packaged-app smoke test
 ```
 
-The engine is validated against the three published CatCost reference cases (2 wt% Pt/C, 21 wt% Ni/Al₂O₃, USY-based FCC) within their documented tolerance bands.
+The engine reproduces the three published CatCost reference cases (2 wt% Pt/C, 21 wt% Ni/Al₂O₃, USY-based FCC; User Guide Table 6.2) line by line from the published inputs — Pt/C to the cent, the other two within 7% with the residuals traced to documented footnotes. `scripts/reproduce_catcost_table62.py` prints the full comparison.
 
 ## Optional API keys
 
@@ -147,6 +116,15 @@ To cite COMET itself, use the Zenodo DOI [10.5281/zenodo.21451931](https://doi.o
 
 Where the project is headed is tracked in [docs/roadmap.md](docs/roadmap.md).
 
+## The name
+
+A comet nucleus is an irregular, pitted, porous sphere — the same geometry as a catalyst pellet, and the same kind of rough surface where the interesting chemistry happens. That resemblance is where the name came from, and the rest of it fits too: COMET checks a candidate against established commercial catalysts, so a promising new one can be spotted early, arriving out of a field of known benchmarks.
+
 ## License
 
-Source-available, all rights reserved. See [LICENSE](LICENSE).
+[PolyForm Noncommercial License 1.0.0](LICENSE) (`PolyForm-Noncommercial-1.0.0`).
+
+Free to use, modify and redistribute for any noncommercial purpose — research,
+education, personal study. Use by universities, public research organizations and
+government institutions is permitted regardless of funding source. Commercial use
+requires a separate license from the copyright holder.

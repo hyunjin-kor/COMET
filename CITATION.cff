@@ -7,6 +7,7 @@ authors:
     given-names: "Hyunjin"
 repository-code: "https://github.com/hyunjin-kor/COMET"
 doi: "10.5281/zenodo.21451931"
+license: "PolyForm-Noncommercial-1.0.0"
 license-url: "https://github.com/hyunjin-kor/COMET/blob/master/LICENSE"
 keywords:
   - catalysis
