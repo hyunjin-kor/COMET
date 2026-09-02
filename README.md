@@ -59,14 +59,10 @@ The Prices page shows every tracked metal with its current quote basis and histo
 
 ## Screens
 
-<img src="./docs/assets/screen-cost-estimate-composition.png" alt="Composition input — active metals, promoters, and support balance, each price showing its source" width="100%" />
-
 <img src="./docs/assets/screen-result.png" alt="Result screen — the full cost ledger with the price evidence behind every line" width="100%" />
 
-<img src="./docs/assets/screen-live-metal-prices-overview.png" alt="Price overview — every tracked metal with its quote basis, source, and freshness" width="100%" />
-
-Preparation routes, benchmark comparison, the Monte Carlo range, and the source
-library are in [docs/screens.md](docs/screens.md).
+Composition input, preparation routes, live metal prices, benchmark comparison,
+the Monte Carlo range, and the source library are in [docs/screens.md](docs/screens.md).
 
 ## Building from source
 
