@@ -1,0 +1,7338 @@
+{
+ "generated_at": "2026-09-02T07:17:16.777583+00:00",
+ "history_file": "docs\\paper\\price_history_2026-09-02.json",
+ "history_symbols": {
+  "Ru": {
+   "unit": "$/troy_oz",
+   "first": "2019-01-31",
+   "last": "2026-09-02",
+   "n": 93
+  },
+  "Ir": {
+   "unit": "$/troy_oz",
+   "first": "2019-01-31",
+   "last": "2026-09-02",
+   "n": 93
+  },
+  "Rh": {
+   "unit": "$/troy_oz",
+   "first": "2019-01-31",
+   "last": "2026-09-02",
+   "n": 93
+  },
+  "Pd": {
+   "unit": "$/troy_oz",
+   "first": "2019-01-31",
+   "last": "2026-09-02",
+   "n": 93
+  },
+  "Pt": {
+   "unit": "$/troy_oz",
+   "first": "2019-01-31",
+   "last": "2026-09-02",
+   "n": 93
+  },
+  "Au": {
+   "unit": "$/troy_oz",
+   "first": "2021-09-02",
+   "last": "2026-09-02",
+   "n": 1257
+  },
+  "Ag": {
+   "unit": "$/troy_oz",
+   "first": "2021-09-02",
+   "last": "2026-09-02",
+   "n": 1257
+  },
+  "Cu": {
+   "unit": "$/lb",
+   "first": "2021-09-02",
+   "last": "2026-09-02",
+   "n": 1258
+  },
+  "Al": {
+   "unit": "$/lb",
+   "first": "2021-09-02",
+   "last": "2026-09-02",
+   "n": 1256
+  },
+  "Ni": {
+   "unit": "$/lb",
+   "first": "2026-01-02",
+   "last": "2026-09-01",
+   "n": 168
+  },
+  "Zn": {
+   "unit": "$/lb",
+   "first": "2026-01-02",
+   "last": "2026-09-01",
+   "n": 168
+  },
+  "Sn": {
+   "unit": "$/lb",
+   "first": "2026-01-02",
+   "last": "2026-09-01",
+   "n": 168
+  }
+ },
+ "price_basis": {
+  "Au": {
+   "symbol": "Au",
+   "name": "Gold",
+   "price": 4369.4,
+   "unit": "$/troy_oz",
+   "source": "Yahoo Finance (live)",
+   "fetched_at": "2026-09-02T06:20:58.717270"
+  },
+  "Ir": {
+   "symbol": "Ir",
+   "name": "Iridium",
+   "price": 7850.0,
+   "unit": "$/troy_oz",
+   "source": "Johnson Matthey (live)",
+   "fetched_at": "2026-09-02T06:20:58.717270"
+  },
+  "Pd": {
+   "symbol": "Pd",
+   "name": "Palladium",
+   "price": 1316.5,
+   "unit": "$/troy_oz",
+   "source": "Yahoo Finance (live)",
+   "fetched_at": "2026-09-02T06:20:58.717270"
+  },
+  "Pt": {
+   "symbol": "Pt",
+   "name": "Platinum",
+   "price": 1746.3,
+   "unit": "$/troy_oz",
+   "source": "Yahoo Finance (live)",
+   "fetched_at": "2026-09-02T06:20:58.717270"
+  },
+  "Rh": {
+   "symbol": "Rh",
+   "name": "Rhodium",
+   "price": 9225.0,
+   "unit": "$/troy_oz",
+   "source": "Kitco (live)",
+   "fetched_at": "2026-09-02T06:20:58.717270"
+  },
+  "Ru": {
+   "symbol": "Ru",
+   "name": "Ruthenium",
+   "price": 1675.0,
+   "unit": "$/troy_oz",
+   "source": "Johnson Matthey (live)",
+   "fetched_at": "2026-09-02T06:20:58.717270"
+  },
+  "Ag": {
+   "symbol": "Ag",
+   "name": "Silver",
+   "price": 64.575,
+   "unit": "$/troy_oz",
+   "source": "Yahoo Finance (live)",
+   "fetched_at": "2026-09-02T06:20:58.717270"
+  },
+  "Al": {
+   "symbol": "Al",
+   "name": "Aluminum",
+   "price": 1.5558,
+   "unit": "$/lb",
+   "source": "Yahoo Finance (live)",
+   "fetched_at": "2026-09-02T06:20:58.717270"
+  },
+  "Co": {
+   "symbol": "Co",
+   "name": "Cobalt",
+   "price": 21.0,
+   "unit": "$/lb",
+   "source": "USGS MCS 2026 (2025 avg)",
+   "fetched_at": "2026-09-02T06:20:58.717270"
+  },
+  "Cu": {
+   "symbol": "Cu",
+   "name": "Copper",
+   "price": 6.5475,
+   "unit": "$/lb",
+   "source": "Yahoo Finance (live)",
+   "fetched_at": "2026-09-02T06:20:58.717270"
+  },
+  "Fe": {
+   "symbol": "Fe",
+   "name": "Iron",
+   "price": 0.0604,
+   "unit": "$/lb",
+   "source": "CatCost 2018 + ChemPPI escalation",
+   "fetched_at": "2026-09-02T06:20:58.717270"
+  },
+  "Mo": {
+   "symbol": "Mo",
+   "name": "Molybdenum",
+   "price": 34.71,
+   "unit": "$/lb",
+   "source": "USGS MCS 2026 (2025 avg)",
+   "fetched_at": "2026-09-02T06:20:58.717270"
+  },
+  "Ni": {
+   "symbol": "Ni",
+   "name": "Nickel",
+   "price": 7.4101,
+   "unit": "$/lb",
+   "source": "Markets Insider (live)",
+   "fetched_at": "2026-09-02T06:20:58.717270"
+  },
+  "W": {
+   "symbol": "W",
+   "name": "Tungsten",
+   "price": 21.74,
+   "unit": "$/lb",
+   "source": "USGS MCS 2026 (2025 avg)",
+   "fetched_at": "2026-09-02T06:20:58.717270"
+  },
+  "Zn": {
+   "symbol": "Zn",
+   "name": "Zinc",
+   "price": 1.8665,
+   "unit": "$/lb",
+   "source": "Westmetall (LME settlement)",
+   "fetched_at": "2026-09-02T06:20:58.717270"
+  },
+  "Sn": {
+   "symbol": "Sn",
+   "name": "Tin",
+   "price": 24.8229,
+   "unit": "$/lb",
+   "source": "Westmetall (LME settlement)",
+   "fetched_at": "2026-09-02T06:20:58.717270"
+  },
+  "V": {
+   "symbol": "V",
+   "name": "Vanadium",
+   "price": 8.96,
+   "unit": "$/lb",
+   "source": "USGS MCS 2026 (2025 avg)",
+   "fetched_at": "2026-09-02T06:20:58.717270"
+  },
+  "Re": {
+   "symbol": "Re",
+   "name": "Rhenium",
+   "price": 1179.4,
+   "unit": "$/lb",
+   "source": "USGS MCS 2026 (2025 avg)",
+   "fetched_at": "2026-09-02T06:20:58.717270"
+  }
+ },
+ "scan": 32,
+ "families": [
+  {
+   "family": "aem-electrolyzer-oer",
+   "title": "AEM electrolyzer OER reference family",
+   "domain": "electrocatalyst",
+   "economics_unit": [
+    "$/cm2"
+   ],
+   "cost_winner": "cr-doped-amorphous",
+   "composite_perf0_winner": "cr-doped-amorphous",
+   "candidates": [
+    {
+     "slug": "cr-doped-amorphous",
+     "cost": 1.4671,
+     "feeds": {}
+    },
+    {
+     "slug": "nife-seed-assisted",
+     "cost": 1.4819,
+     "feeds": {}
+    },
+    {
+     "slug": "nife-ldh-scalable",
+     "cost": 1.5064,
+     "feeds": {}
+    },
+    {
+     "slug": "nico2o4-spinel",
+     "cost": 1.5064,
+     "feeds": {
+      "Ni": 24.4,
+      "Co": 49.1
+     }
+    }
+   ],
+   "exposure": "metal_vs_none",
+   "contest_kinds": [
+    "metal_vs_none",
+    "no_feed"
+   ],
+   "contests": [
+    {
+     "a": "cr-doped-amorphous",
+     "b": "nico2o4-spinel",
+     "kind": "metal_vs_none",
+     "symbol": "Co",
+     "symbol_in": "nico2o4-spinel",
+     "wt_pct": 49.1,
+     "precious": false,
+     "cost": {
+      "symbol": "Co",
+      "unit": "$/lb",
+      "baseline_price": 21.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.021,
+       2100.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Co",
+      "unit": "$/lb",
+      "baseline_price": 21.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.021,
+       2100.0
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "cr-doped-amorphous",
+     "b": "nico2o4-spinel",
+     "kind": "metal_vs_none",
+     "symbol": "Ni",
+     "symbol_in": "nico2o4-spinel",
+     "wt_pct": 24.4,
+     "precious": false,
+     "cost": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 35
+     }
+    }
+   ]
+  },
+  {
+   "family": "ammonia-cracking",
+   "title": "Ammonia decomposition reference family",
+   "domain": "thermal",
+   "economics_unit": [
+    "$/lb"
+   ],
+   "cost_winner": "ni-alumina-baseline",
+   "composite_perf0_winner": "ni-alumina-baseline",
+   "candidates": [
+    {
+     "slug": "ni-mgo-ceo2-interface",
+     "cost": 5.5689,
+     "feeds": {
+      "Ni": 15.0
+     }
+    },
+    {
+     "slug": "ni-alumina-baseline",
+     "cost": 4.376,
+     "feeds": {
+      "Ni": 12.0
+     }
+    },
+    {
+     "slug": "co-mgo-la2o3",
+     "cost": 4.5041,
+     "feeds": {
+      "Co": 5.0
+     }
+    },
+    {
+     "slug": "ru-mgo-premium",
+     "cost": 1327.2637,
+     "feeds": {
+      "Ru": 3.0
+     }
+    }
+   ],
+   "exposure": "precious_vs_base",
+   "contest_kinds": [
+    "base_vs_base",
+    "precious_vs_base",
+    "same_metals"
+   ],
+   "contests": [
+    {
+     "a": "ni-alumina-baseline",
+     "b": "co-mgo-la2o3",
+     "kind": "base_vs_base",
+     "symbol": "Co",
+     "symbol_in": "co-mgo-la2o3",
+     "wt_pct": 5.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Co",
+      "unit": "$/lb",
+      "baseline_price": 21.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       19.298201
+      ],
+      "crossing_over_baseline": [
+       0.919
+      ],
+      "scan_range": [
+       0.021,
+       2100.0
+      ],
+      "evaluations": 31
+     },
+     "composite_perf0": {
+      "symbol": "Co",
+      "unit": "$/lb",
+      "baseline_price": 21.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.021,
+       2100.0
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "ni-alumina-baseline",
+     "b": "co-mgo-la2o3",
+     "kind": "base_vs_base",
+     "symbol": "Ni",
+     "symbol_in": "ni-alumina-baseline",
+     "wt_pct": 12.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       8.071113
+      ],
+      "crossing_over_baseline": [
+       1.0892
+      ],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 28,
+      "history": {
+       "n": 9,
+       "first": "2026-01-30",
+       "last": "2026-09-01",
+       "min": 7.3822,
+       "median": 7.7564,
+       "max": 8.7657,
+       "months_b_wins": 2,
+       "months_a_wins": 7,
+       "share_b_wins_pct": 22.2
+      }
+     },
+     "composite_perf0": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       615.430347
+      ],
+      "crossing_over_baseline": [
+       83.0529
+      ],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 36,
+      "history": {
+       "n": 9,
+       "first": "2026-01-30",
+       "last": "2026-09-01",
+       "min": 7.3822,
+       "median": 7.7564,
+       "max": 8.7657,
+       "months_b_wins": 0,
+       "months_a_wins": 9,
+       "share_b_wins_pct": 0.0
+      }
+     }
+    },
+    {
+     "a": "ni-alumina-baseline",
+     "b": "ru-mgo-premium",
+     "kind": "precious_vs_base",
+     "symbol": "Ni",
+     "symbol_in": "ni-alumina-baseline",
+     "wt_pct": 12.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "ni-alumina-baseline",
+     "b": "ru-mgo-premium",
+     "kind": "precious_vs_base",
+     "symbol": "Ru",
+     "symbol_in": "ru-mgo-premium",
+     "wt_pct": 3.0,
+     "precious": true,
+     "cost": {
+      "symbol": "Ru",
+      "unit": "$/troy_oz",
+      "baseline_price": 1675.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       1.704605
+      ],
+      "crossing_over_baseline": [
+       0.001
+      ],
+      "scan_range": [
+       1.675,
+       167500.0
+      ],
+      "evaluations": 32,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 250.0,
+       "median": 465.0,
+       "max": 1707.8947,
+       "months_b_wins": 0,
+       "months_a_wins": 93,
+       "share_b_wins_pct": 0.0
+      }
+     },
+     "composite_perf0": {
+      "symbol": "Ru",
+      "unit": "$/troy_oz",
+      "baseline_price": 1675.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       1.758414
+      ],
+      "crossing_over_baseline": [
+       0.001
+      ],
+      "scan_range": [
+       1.675,
+       167500.0
+      ],
+      "evaluations": 44,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 250.0,
+       "median": 465.0,
+       "max": 1707.8947,
+       "months_b_wins": 0,
+       "months_a_wins": 93,
+       "share_b_wins_pct": 0.0
+      }
+     }
+    }
+   ]
+  },
+  {
+   "family": "ammonia-synthesis",
+   "title": "Ammonia synthesis reference family",
+   "domain": "thermal",
+   "economics_unit": [
+    "$/lb"
+   ],
+   "cost_winner": "fused-iron-baseline",
+   "composite_perf0_winner": "fused-iron-baseline",
+   "candidates": [
+    {
+     "slug": "fused-iron-baseline",
+     "cost": 5.0716,
+     "feeds": {}
+    },
+    {
+     "slug": "cs-co3mo3n",
+     "cost": 55.9373,
+     "feeds": {
+      "Mo": 60.0,
+      "Co": 37.0
+     }
+    },
+    {
+     "slug": "ru-graphite-kaap",
+     "cost": 3104.513,
+     "feeds": {
+      "Ru": 8.0
+     }
+    },
+    {
+     "slug": "ru-cafh-lowtemp",
+     "cost": 5024.1642,
+     "feeds": {
+      "Ru": 12.0
+     }
+    }
+   ],
+   "exposure": "metal_vs_none",
+   "contest_kinds": [
+    "metal_vs_none"
+   ],
+   "contests": [
+    {
+     "a": "fused-iron-baseline",
+     "b": "cs-co3mo3n",
+     "kind": "metal_vs_none",
+     "symbol": "Co",
+     "symbol_in": "cs-co3mo3n",
+     "wt_pct": 37.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Co",
+      "unit": "$/lb",
+      "baseline_price": 21.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.021,
+       2100.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Co",
+      "unit": "$/lb",
+      "baseline_price": 21.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.021,
+       2100.0
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "fused-iron-baseline",
+     "b": "cs-co3mo3n",
+     "kind": "metal_vs_none",
+     "symbol": "Mo",
+     "symbol_in": "cs-co3mo3n",
+     "wt_pct": 60.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Mo",
+      "unit": "$/lb",
+      "baseline_price": 34.71,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.034710000000000005,
+       3471.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Mo",
+      "unit": "$/lb",
+      "baseline_price": 34.71,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.034710000000000005,
+       3471.0
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "fused-iron-baseline",
+     "b": "ru-graphite-kaap",
+     "kind": "metal_vs_none",
+     "symbol": "Ru",
+     "symbol_in": "ru-graphite-kaap",
+     "wt_pct": 8.0,
+     "precious": true,
+     "cost": {
+      "symbol": "Ru",
+      "unit": "$/troy_oz",
+      "baseline_price": 1675.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.675,
+       167500.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Ru",
+      "unit": "$/troy_oz",
+      "baseline_price": 1675.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.675,
+       167500.0
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "fused-iron-baseline",
+     "b": "ru-cafh-lowtemp",
+     "kind": "metal_vs_none",
+     "symbol": "Ru",
+     "symbol_in": "ru-cafh-lowtemp",
+     "wt_pct": 12.0,
+     "precious": true,
+     "cost": {
+      "symbol": "Ru",
+      "unit": "$/troy_oz",
+      "baseline_price": 1675.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.675,
+       167500.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Ru",
+      "unit": "$/troy_oz",
+      "baseline_price": 1675.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.675,
+       167500.0
+      ],
+      "evaluations": 35
+     }
+    }
+   ]
+  },
+  {
+   "family": "co2-electroreduction",
+   "title": "CO2 electroreduction (CO2RR) reference family",
+   "domain": "electrocatalyst",
+   "economics_unit": [
+    "$/cm2",
+    "$/lb"
+   ],
+   "cost_winner": "sn-formate-co2rr",
+   "composite_perf0_winner": "ag-co-mea",
+   "candidates": [
+    {
+     "slug": "ag-co-mea",
+     "cost": 1550.3537,
+     "feeds": {
+      "Ag": 100.0
+     }
+    },
+    {
+     "slug": "cu-multicarbon-co2rr",
+     "cost": 2.7057,
+     "feeds": {
+      "Cu": 100.0
+     }
+    },
+    {
+     "slug": "sn-formate-co2rr",
+     "cost": 1.5065,
+     "feeds": {
+      "Sn": 100.0
+     }
+    },
+    {
+     "slug": "au-co-co2rr",
+     "cost": 2.8409,
+     "feeds": {
+      "Au": 100.0
+     }
+    }
+   ],
+   "exposure": "precious_vs_base",
+   "contest_kinds": [
+    "base_vs_base",
+    "precious_vs_base"
+   ],
+   "contests": [
+    {
+     "a": "sn-formate-co2rr",
+     "b": "ag-co-mea",
+     "kind": "precious_vs_base",
+     "symbol": "Ag",
+     "symbol_in": "ag-co-mea",
+     "wt_pct": 100.0,
+     "precious": true,
+     "cost": {
+      "symbol": "Ag",
+      "unit": "$/troy_oz",
+      "baseline_price": 64.575,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       1.705285
+      ],
+      "crossing_over_baseline": [
+       0.0264
+      ],
+      "scan_range": [
+       0.06457500000000001,
+       6457.5
+      ],
+      "evaluations": 33,
+      "history": {
+       "n": 61,
+       "first": "2021-09-30",
+       "last": "2026-09-02",
+       "min": 17.762,
+       "median": 25.293,
+       "max": 92.682,
+       "months_b_wins": 0,
+       "months_a_wins": 61,
+       "share_b_wins_pct": 0.0
+      }
+     },
+     "composite_perf0": {
+      "symbol": "Ag",
+      "unit": "$/troy_oz",
+      "baseline_price": 64.575,
+      "b_wins_at_baseline": true,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       119.177274
+      ],
+      "crossing_over_baseline": [
+       1.8456
+      ],
+      "scan_range": [
+       0.06457500000000001,
+       6457.5
+      ],
+      "evaluations": 37,
+      "history": {
+       "n": 61,
+       "first": "2021-09-30",
+       "last": "2026-09-02",
+       "min": 17.762,
+       "median": 25.293,
+       "max": 92.682,
+       "months_b_wins": 61,
+       "months_a_wins": 0,
+       "share_b_wins_pct": 100.0
+      }
+     }
+    },
+    {
+     "a": "sn-formate-co2rr",
+     "b": "ag-co-mea",
+     "kind": "precious_vs_base",
+     "symbol": "Sn",
+     "symbol_in": "sn-formate-co2rr",
+     "wt_pct": 100.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Sn",
+      "unit": "$/lb",
+      "baseline_price": 24.8229,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       1023.35392
+      ],
+      "crossing_over_baseline": [
+       41.2262
+      ],
+      "scan_range": [
+       0.024822900000000002,
+       2482.29
+      ],
+      "evaluations": 33,
+      "history": {
+       "n": 9,
+       "first": "2026-01-30",
+       "last": "2026-09-01",
+       "min": 20.6884,
+       "median": 24.7934,
+       "max": 26.0476,
+       "months_b_wins": 0,
+       "months_a_wins": 9,
+       "share_b_wins_pct": 0.0
+      }
+     },
+     "composite_perf0": {
+      "symbol": "Sn",
+      "unit": "$/lb",
+      "baseline_price": 24.8229,
+      "b_wins_at_baseline": true,
+      "b_wins_when": "above",
+      "verdict": "b_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.024822900000000002,
+       2482.29
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "sn-formate-co2rr",
+     "b": "cu-multicarbon-co2rr",
+     "kind": "base_vs_base",
+     "symbol": "Cu",
+     "symbol_in": "cu-multicarbon-co2rr",
+     "wt_pct": 100.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "sn-formate-co2rr",
+     "b": "cu-multicarbon-co2rr",
+     "kind": "base_vs_base",
+     "symbol": "Sn",
+     "symbol_in": "sn-formate-co2rr",
+     "wt_pct": 100.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Sn",
+      "unit": "$/lb",
+      "baseline_price": 24.8229,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.024822900000000002,
+       2482.29
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Sn",
+      "unit": "$/lb",
+      "baseline_price": 24.8229,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       378.721761,
+       387.615294
+      ],
+      "crossing_over_baseline": [
+       15.257,
+       15.6152
+      ],
+      "scan_range": [
+       0.024822900000000002,
+       2482.29
+      ],
+      "evaluations": 39,
+      "history": {
+       "n": 9,
+       "first": "2026-01-30",
+       "last": "2026-09-01",
+       "min": 20.6884,
+       "median": 24.7934,
+       "max": 26.0476,
+       "months_b_wins": 0,
+       "months_a_wins": 9,
+       "share_b_wins_pct": 0.0
+      }
+     }
+    },
+    {
+     "a": "sn-formate-co2rr",
+     "b": "au-co-co2rr",
+     "kind": "precious_vs_base",
+     "symbol": "Au",
+     "symbol_in": "au-co-co2rr",
+     "wt_pct": 100.0,
+     "precious": true,
+     "cost": {
+      "symbol": "Au",
+      "unit": "$/troy_oz",
+      "baseline_price": 4369.4,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       4.3694,
+       436939.99999999994
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Au",
+      "unit": "$/troy_oz",
+      "baseline_price": 4369.4,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       4.3694,
+       436939.99999999994
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "sn-formate-co2rr",
+     "b": "au-co-co2rr",
+     "kind": "precious_vs_base",
+     "symbol": "Sn",
+     "symbol_in": "sn-formate-co2rr",
+     "wt_pct": 100.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Sn",
+      "unit": "$/lb",
+      "baseline_price": 24.8229,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.024822900000000002,
+       2482.29
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Sn",
+      "unit": "$/lb",
+      "baseline_price": 24.8229,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.024822900000000002,
+       2482.29
+      ],
+      "evaluations": 35
+     }
+    }
+   ]
+  },
+  {
+   "family": "co2-methanation",
+   "title": "CO2 methanation reference family",
+   "domain": "thermal",
+   "economics_unit": [
+    "$/lb"
+   ],
+   "cost_winner": "ni-ceo2-lowtemp",
+   "composite_perf0_winner": "ni-alumina-baseline",
+   "candidates": [
+    {
+     "slug": "ni-ceo2-lowtemp",
+     "cost": 4.6487,
+     "feeds": {
+      "Ni": 10.0
+     }
+    },
+    {
+     "slug": "ni-alumina-baseline",
+     "cost": 5.0615,
+     "feeds": {
+      "Ni": 20.0
+     }
+    },
+    {
+     "slug": "ru-layered-titanate",
+     "cost": 1843.7708,
+     "feeds": {
+      "Ru": 5.0
+     }
+    },
+    {
+     "slug": "ru-mnox-photothermal",
+     "cost": 1844.3703,
+     "feeds": {
+      "Ru": 5.0
+     }
+    }
+   ],
+   "exposure": "precious_vs_base",
+   "contest_kinds": [
+    "precious_vs_base",
+    "same_metals"
+   ],
+   "contests": [
+    {
+     "a": "ni-ceo2-lowtemp",
+     "b": "ru-layered-titanate",
+     "kind": "precious_vs_base",
+     "symbol": "Ni",
+     "symbol_in": "ni-ceo2-lowtemp",
+     "wt_pct": 10.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "ni-ceo2-lowtemp",
+     "b": "ru-layered-titanate",
+     "kind": "precious_vs_base",
+     "symbol": "Ru",
+     "symbol_in": "ru-layered-titanate",
+     "wt_pct": 5.0,
+     "precious": true,
+     "cost": {
+      "symbol": "Ru",
+      "unit": "$/troy_oz",
+      "baseline_price": 1675.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.675,
+       167500.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Ru",
+      "unit": "$/troy_oz",
+      "baseline_price": 1675.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.675,
+       167500.0
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "ni-ceo2-lowtemp",
+     "b": "ru-mnox-photothermal",
+     "kind": "precious_vs_base",
+     "symbol": "Ni",
+     "symbol_in": "ni-ceo2-lowtemp",
+     "wt_pct": 10.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "ni-ceo2-lowtemp",
+     "b": "ru-mnox-photothermal",
+     "kind": "precious_vs_base",
+     "symbol": "Ru",
+     "symbol_in": "ru-mnox-photothermal",
+     "wt_pct": 5.0,
+     "precious": true,
+     "cost": {
+      "symbol": "Ru",
+      "unit": "$/troy_oz",
+      "baseline_price": 1675.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.675,
+       167500.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Ru",
+      "unit": "$/troy_oz",
+      "baseline_price": 1675.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.675,
+       167500.0
+      ],
+      "evaluations": 35
+     }
+    }
+   ]
+  },
+  {
+   "family": "co2-methanol",
+   "title": "CO2-to-methanol reference family",
+   "domain": "thermal",
+   "economics_unit": [
+    "$/lb"
+   ],
+   "cost_winner": "cu-zrox-interface",
+   "composite_perf0_winner": "cza-baseline",
+   "candidates": [
+    {
+     "slug": "cza-baseline",
+     "cost": 8.4741,
+     "feeds": {
+      "Cu": 45.0
+     }
+    },
+    {
+     "slug": "cu-zrox-interface",
+     "cost": 5.9986,
+     "feeds": {
+      "Cu": 14.0
+     }
+    },
+    {
+     "slug": "in2o3-zro2-lowtemp",
+     "cost": 137.5771,
+     "feeds": {}
+    },
+    {
+     "slug": "pd-in2o3",
+     "cost": 439.4023,
+     "feeds": {
+      "Pd": 0.75
+     }
+    }
+   ],
+   "exposure": "precious_vs_base",
+   "contest_kinds": [
+    "metal_vs_none",
+    "precious_vs_base",
+    "same_metals"
+   ],
+   "contests": [
+    {
+     "a": "cu-zrox-interface",
+     "b": "in2o3-zro2-lowtemp",
+     "kind": "metal_vs_none",
+     "symbol": "Cu",
+     "symbol_in": "cu-zrox-interface",
+     "wt_pct": 14.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       630.636525
+      ],
+      "crossing_over_baseline": [
+       96.3171
+      ],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 33,
+      "history": {
+       "n": 61,
+       "first": "2021-09-30",
+       "last": "2026-09-02",
+       "min": 3.4135,
+       "median": 4.3135,
+       "max": 6.5935,
+       "months_b_wins": 0,
+       "months_a_wins": 61,
+       "share_b_wins_pct": 0.0
+      }
+     },
+     "composite_perf0": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "cu-zrox-interface",
+     "b": "pd-in2o3",
+     "kind": "precious_vs_base",
+     "symbol": "Cu",
+     "symbol_in": "cu-zrox-interface",
+     "wt_pct": 14.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "cu-zrox-interface",
+     "b": "pd-in2o3",
+     "kind": "precious_vs_base",
+     "symbol": "Pd",
+     "symbol_in": "pd-in2o3",
+     "wt_pct": 0.75,
+     "precious": true,
+     "cost": {
+      "symbol": "Pd",
+      "unit": "$/troy_oz",
+      "baseline_price": 1316.5,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.3165,
+       131650.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Pd",
+      "unit": "$/troy_oz",
+      "baseline_price": 1316.5,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.3165,
+       131650.0
+      ],
+      "evaluations": 35
+     }
+    }
+   ]
+  },
+  {
+   "family": "co2-to-formate",
+   "title": "CO2 hydrogenation to formate / formic acid reference family",
+   "domain": "thermal",
+   "economics_unit": [
+    "$/lb"
+   ],
+   "cost_winner": "ru-sa-ldh",
+   "composite_perf0_winner": "ru-sa-ldh",
+   "candidates": [
+    {
+     "slug": "pdag-ndcarbon-co2fa",
+     "cost": 1815.7237,
+     "feeds": {
+      "Pd": 5.0,
+      "Ag": 5.0
+     }
+    },
+    {
+     "slug": "ru-sa-ldh",
+     "cost": 275.1133,
+     "feeds": {
+      "Ru": 0.5
+     }
+    },
+    {
+     "slug": "ru-pincer-co2fa",
+     "cost": 17653.0251,
+     "feeds": {
+      "Ru": 30.0
+     }
+    },
+    {
+     "slug": "ir-pincer-co2fa",
+     "cost": 78416.3612,
+     "feeds": {
+      "Ir": 30.0
+     }
+    }
+   ],
+   "exposure": "precious_vs_precious",
+   "contest_kinds": [
+    "precious_vs_precious",
+    "same_metals"
+   ],
+   "contests": [
+    {
+     "a": "ru-sa-ldh",
+     "b": "pdag-ndcarbon-co2fa",
+     "kind": "precious_vs_precious",
+     "symbol": "Ag",
+     "symbol_in": "pdag-ndcarbon-co2fa",
+     "wt_pct": 5.0,
+     "precious": true,
+     "cost": {
+      "symbol": "Ag",
+      "unit": "$/troy_oz",
+      "baseline_price": 64.575,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.06457500000000001,
+       6457.5
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Ag",
+      "unit": "$/troy_oz",
+      "baseline_price": 64.575,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       0.064575,
+       0.093617,
+       0.13572,
+       0.196759,
+       0.28525,
+       0.413539,
+       0.599524,
+       0.869154,
+       1.260048,
+       1.826742,
+       2.648303,
+       3.839352,
+       5.566065,
+       8.069351,
+       11.698466,
+       16.959742,
+       24.587228,
+       35.645105,
+       51.676158,
+       74.917029,
+       108.610263
+      ],
+      "crossing_over_baseline": [
+       0.001,
+       0.0014,
+       0.0021,
+       0.003,
+       0.0044,
+       0.0064,
+       0.0093,
+       0.0135,
+       0.0195,
+       0.0283,
+       0.041,
+       0.0595,
+       0.0862,
+       0.125,
+       0.1812,
+       0.2626,
+       0.3808,
+       0.552,
+       0.8003,
+       1.1602,
+       1.6819
+      ],
+      "scan_range": [
+       0.06457500000000001,
+       6457.5
+      ],
+      "evaluations": 35,
+      "history": {
+       "n": 61,
+       "first": "2021-09-30",
+       "last": "2026-09-02",
+       "min": 17.762,
+       "median": 25.293,
+       "max": 92.682,
+       "months_b_wins": 0,
+       "months_a_wins": 61,
+       "share_b_wins_pct": 0.0
+      }
+     }
+    },
+    {
+     "a": "ru-sa-ldh",
+     "b": "pdag-ndcarbon-co2fa",
+     "kind": "precious_vs_precious",
+     "symbol": "Pd",
+     "symbol_in": "pdag-ndcarbon-co2fa",
+     "wt_pct": 5.0,
+     "precious": true,
+     "cost": {
+      "symbol": "Pd",
+      "unit": "$/troy_oz",
+      "baseline_price": 1316.5,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       133.532019
+      ],
+      "crossing_over_baseline": [
+       0.1014
+      ],
+      "scan_range": [
+       1.3165,
+       131650.0
+      ],
+      "evaluations": 33,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 935.9474,
+       "median": 1552.8636,
+       "max": 2901.65,
+       "months_b_wins": 0,
+       "months_a_wins": 93,
+       "share_b_wins_pct": 0.0
+      }
+     },
+     "composite_perf0": {
+      "symbol": "Pd",
+      "unit": "$/troy_oz",
+      "baseline_price": 1316.5,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       1268.503971
+      ],
+      "crossing_over_baseline": [
+       0.9635
+      ],
+      "scan_range": [
+       1.3165,
+       131650.0
+      ],
+      "evaluations": 36,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 935.9474,
+       "median": 1552.8636,
+       "max": 2901.65,
+       "months_b_wins": 26,
+       "months_a_wins": 67,
+       "share_b_wins_pct": 28.0
+      }
+     }
+    },
+    {
+     "a": "ru-sa-ldh",
+     "b": "pdag-ndcarbon-co2fa",
+     "kind": "precious_vs_precious",
+     "symbol": "Ru",
+     "symbol_in": "ru-sa-ldh",
+     "wt_pct": 0.5,
+     "precious": true,
+     "cost": {
+      "symbol": "Ru",
+      "unit": "$/troy_oz",
+      "baseline_price": 1675.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       11502.346824
+      ],
+      "crossing_over_baseline": [
+       6.8671
+      ],
+      "scan_range": [
+       1.675,
+       167500.0
+      ],
+      "evaluations": 33,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 250.0,
+       "median": 465.0,
+       "max": 1707.8947,
+       "months_b_wins": 0,
+       "months_a_wins": 93,
+       "share_b_wins_pct": 0.0
+      }
+     },
+     "composite_perf0": {
+      "symbol": "Ru",
+      "unit": "$/troy_oz",
+      "baseline_price": 1675.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       439.915891,
+       637.763959,
+       1279.615015,
+       1340.419132,
+       1943.26013
+      ],
+      "crossing_over_baseline": [
+       0.2626,
+       0.3808,
+       0.7639,
+       0.8003,
+       1.1602
+      ],
+      "scan_range": [
+       1.675,
+       167500.0
+      ],
+      "evaluations": 38,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 250.0,
+       "median": 465.0,
+       "max": 1707.8947,
+       "months_b_wins": 59,
+       "months_a_wins": 34,
+       "share_b_wins_pct": 63.4
+      }
+     }
+    },
+    {
+     "a": "ru-sa-ldh",
+     "b": "ir-pincer-co2fa",
+     "kind": "precious_vs_precious",
+     "symbol": "Ir",
+     "symbol_in": "ir-pincer-co2fa",
+     "wt_pct": 30.0,
+     "precious": true,
+     "cost": {
+      "symbol": "Ir",
+      "unit": "$/troy_oz",
+      "baseline_price": 7850.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       7.8500000000000005,
+       785000.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Ir",
+      "unit": "$/troy_oz",
+      "baseline_price": 7850.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       7.8500000000000005,
+       785000.0
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "ru-sa-ldh",
+     "b": "ir-pincer-co2fa",
+     "kind": "precious_vs_precious",
+     "symbol": "Ru",
+     "symbol_in": "ru-sa-ldh",
+     "wt_pct": 0.5,
+     "precious": true,
+     "cost": {
+      "symbol": "Ru",
+      "unit": "$/troy_oz",
+      "baseline_price": 1675.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.675,
+       167500.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Ru",
+      "unit": "$/troy_oz",
+      "baseline_price": 1675.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       112886.977106
+      ],
+      "crossing_over_baseline": [
+       67.3952
+      ],
+      "scan_range": [
+       1.675,
+       167500.0
+      ],
+      "evaluations": 39,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 250.0,
+       "median": 465.0,
+       "max": 1707.8947,
+       "months_b_wins": 0,
+       "months_a_wins": 93,
+       "share_b_wins_pct": 0.0
+      }
+     }
+    }
+   ]
+  },
+  {
+   "family": "co-prox",
+   "title": "Preferential CO oxidation (PROX) reference family",
+   "domain": "thermal",
+   "economics_unit": [
+    "$/lb"
+   ],
+   "cost_winner": "cuo-ceo2",
+   "composite_perf0_winner": "cuo-ceo2",
+   "candidates": [
+    {
+     "slug": "cuo-ceo2",
+     "cost": 12.1837,
+     "feeds": {
+      "Cu": 5.6
+     }
+    },
+    {
+     "slug": "pt-fe-alumina",
+     "cost": 254.2105,
+     "feeds": {
+      "Pt": 0.5
+     }
+    },
+    {
+     "slug": "au-tio2-nanogold",
+     "cost": 2545.401,
+     "feeds": {
+      "Au": 2.0
+     }
+    }
+   ],
+   "exposure": "precious_vs_base",
+   "contest_kinds": [
+    "precious_vs_base"
+   ],
+   "contests": [
+    {
+     "a": "cuo-ceo2",
+     "b": "pt-fe-alumina",
+     "kind": "precious_vs_base",
+     "symbol": "Cu",
+     "symbol_in": "cuo-ceo2",
+     "wt_pct": 5.6,
+     "precious": false,
+     "cost": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "cuo-ceo2",
+     "b": "pt-fe-alumina",
+     "kind": "precious_vs_base",
+     "symbol": "Pt",
+     "symbol_in": "pt-fe-alumina",
+     "wt_pct": 0.5,
+     "precious": true,
+     "cost": {
+      "symbol": "Pt",
+      "unit": "$/troy_oz",
+      "baseline_price": 1746.3,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.7463,
+       174630.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Pt",
+      "unit": "$/troy_oz",
+      "baseline_price": 1746.3,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       1215.796222
+      ],
+      "crossing_over_baseline": [
+       0.6962
+      ],
+      "scan_range": [
+       1.7463,
+       174630.0
+      ],
+      "evaluations": 38,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 762.4737,
+       "median": 973.8333,
+       "max": 2447.8095,
+       "months_b_wins": 76,
+       "months_a_wins": 17,
+       "share_b_wins_pct": 81.7
+      }
+     }
+    },
+    {
+     "a": "cuo-ceo2",
+     "b": "au-tio2-nanogold",
+     "kind": "precious_vs_base",
+     "symbol": "Au",
+     "symbol_in": "au-tio2-nanogold",
+     "wt_pct": 2.0,
+     "precious": true,
+     "cost": {
+      "symbol": "Au",
+      "unit": "$/troy_oz",
+      "baseline_price": 4369.4,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       4.3694,
+       436939.99999999994
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Au",
+      "unit": "$/troy_oz",
+      "baseline_price": 4369.4,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       4.3694,
+       436939.99999999994
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "cuo-ceo2",
+     "b": "au-tio2-nanogold",
+     "kind": "precious_vs_base",
+     "symbol": "Cu",
+     "symbol_in": "cuo-ceo2",
+     "wt_pct": 5.6,
+     "precious": false,
+     "cost": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 35
+     }
+    }
+   ]
+  },
+  {
+   "family": "dry-reforming",
+   "title": "Methane dry reforming reference family",
+   "domain": "thermal",
+   "economics_unit": [
+    "$/lb"
+   ],
+   "cost_winner": "ni-zeolite-stable",
+   "composite_perf0_winner": "ni-single-atom-ceria",
+   "candidates": [
+    {
+     "slug": "ni-single-atom-ceria",
+     "cost": 5.389,
+     "feeds": {
+      "Ni": 8.0
+     }
+    },
+    {
+     "slug": "ni-zeolite-stable",
+     "cost": 5.2601,
+     "feeds": {
+      "Ni": 12.0
+     }
+    },
+    {
+     "slug": "ni-co-almgo",
+     "cost": 5.5481,
+     "feeds": {
+      "Ni": 4.0,
+      "Co": 5.5
+     }
+    },
+    {
+     "slug": "ir-ceria-premium",
+     "cost": 1038.3856,
+     "feeds": {
+      "Ir": 0.6
+     }
+    }
+   ],
+   "exposure": "precious_vs_base",
+   "contest_kinds": [
+    "base_vs_base",
+    "precious_vs_base",
+    "same_metals"
+   ],
+   "contests": [
+    {
+     "a": "ni-zeolite-stable",
+     "b": "ni-co-almgo",
+     "kind": "base_vs_base",
+     "symbol": "Co",
+     "symbol_in": "ni-co-almgo",
+     "wt_pct": 5.5,
+     "precious": false,
+     "cost": {
+      "symbol": "Co",
+      "unit": "$/lb",
+      "baseline_price": 21.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       17.522901
+      ],
+      "crossing_over_baseline": [
+       0.8344
+      ],
+      "scan_range": [
+       0.021,
+       2100.0
+      ],
+      "evaluations": 30
+     },
+     "composite_perf0": {
+      "symbol": "Co",
+      "unit": "$/lb",
+      "baseline_price": 21.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.021,
+       2100.0
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "ni-zeolite-stable",
+     "b": "ir-ceria-premium",
+     "kind": "precious_vs_base",
+     "symbol": "Ir",
+     "symbol_in": "ir-ceria-premium",
+     "wt_pct": 0.6,
+     "precious": true,
+     "cost": {
+      "symbol": "Ir",
+      "unit": "$/troy_oz",
+      "baseline_price": 7850.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       9.315592
+      ],
+      "crossing_over_baseline": [
+       0.0012
+      ],
+      "scan_range": [
+       7.8500000000000005,
+       785000.0
+      ],
+      "evaluations": 32,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 1480.0,
+       "median": 4545.6522,
+       "max": 7850.0,
+       "months_b_wins": 0,
+       "months_a_wins": 93,
+       "share_b_wins_pct": 0.0
+      }
+     },
+     "composite_perf0": {
+      "symbol": "Ir",
+      "unit": "$/troy_oz",
+      "baseline_price": 7850.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       9.373291
+      ],
+      "crossing_over_baseline": [
+       0.0012
+      ],
+      "scan_range": [
+       7.8500000000000005,
+       785000.0
+      ],
+      "evaluations": 45,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 1480.0,
+       "median": 4545.6522,
+       "max": 7850.0,
+       "months_b_wins": 0,
+       "months_a_wins": 93,
+       "share_b_wins_pct": 0.0
+      }
+     }
+    },
+    {
+     "a": "ni-zeolite-stable",
+     "b": "ir-ceria-premium",
+     "kind": "precious_vs_base",
+     "symbol": "Ni",
+     "symbol_in": "ni-zeolite-stable",
+     "wt_pct": 12.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 35
+     }
+    }
+   ]
+  },
+  {
+   "family": "ethylene-epoxidation",
+   "title": "Ethylene epoxidation reference family",
+   "domain": "thermal",
+   "economics_unit": [
+    "$/lb"
+   ],
+   "cost_winner": "ag-alumina-baseline",
+   "composite_perf0_winner": "ag-alumina-baseline",
+   "candidates": [
+    {
+     "slug": "agcs-industrial",
+     "cost": 198.3388,
+     "feeds": {
+      "Ag": 15.0
+     }
+    },
+    {
+     "slug": "ag-alumina-baseline",
+     "cost": 198.0726,
+     "feeds": {
+      "Ag": 15.0
+     }
+    },
+    {
+     "slug": "cu-ag-bimetallic",
+     "cost": 204.8708,
+     "feeds": {
+      "Ag": 14.0,
+      "Cu": 0.7
+     }
+    },
+    {
+     "slug": "agcsre-modern",
+     "cost": 212.4518,
+     "feeds": {
+      "Ag": 15.0
+     }
+    }
+   ],
+   "exposure": "base_vs_base",
+   "contest_kinds": [
+    "base_vs_base",
+    "same_metals"
+   ],
+   "contests": [
+    {
+     "a": "ag-alumina-baseline",
+     "b": "cu-ag-bimetallic",
+     "kind": "base_vs_base",
+     "symbol": "Cu",
+     "symbol_in": "cu-ag-bimetallic",
+     "wt_pct": 0.7,
+     "precious": false,
+     "cost": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 35
+     }
+    }
+   ]
+  },
+  {
+   "family": "fischer-tropsch-synthesis",
+   "title": "Fischer-Tropsch synthesis (FTS) reference family",
+   "domain": "thermal",
+   "economics_unit": [
+    "$/lb"
+   ],
+   "cost_winner": "fe-silica-lower-olefin",
+   "composite_perf0_winner": "fe-silica-lower-olefin",
+   "candidates": [
+    {
+     "slug": "fe-silica-lower-olefin",
+     "cost": 5.1762,
+     "feeds": {}
+    },
+    {
+     "slug": "fe-cu-k-precipitated",
+     "cost": 6.6439,
+     "feeds": {
+      "Cu": 3.0
+     }
+    },
+    {
+     "slug": "co-alumina-fts",
+     "cost": 14.1005,
+     "feeds": {
+      "Co": 20.0
+     }
+    },
+    {
+     "slug": "co-cnt-structured",
+     "cost": 39.3413,
+     "feeds": {
+      "Co": 15.0
+     }
+    }
+   ],
+   "exposure": "metal_vs_none",
+   "contest_kinds": [
+    "metal_vs_none"
+   ],
+   "contests": [
+    {
+     "a": "fe-silica-lower-olefin",
+     "b": "fe-cu-k-precipitated",
+     "kind": "metal_vs_none",
+     "symbol": "Cu",
+     "symbol_in": "fe-cu-k-precipitated",
+     "wt_pct": 3.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "fe-silica-lower-olefin",
+     "b": "co-alumina-fts",
+     "kind": "metal_vs_none",
+     "symbol": "Co",
+     "symbol_in": "co-alumina-fts",
+     "wt_pct": 20.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Co",
+      "unit": "$/lb",
+      "baseline_price": 21.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.021,
+       2100.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Co",
+      "unit": "$/lb",
+      "baseline_price": 21.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.021,
+       2100.0
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "fe-silica-lower-olefin",
+     "b": "co-cnt-structured",
+     "kind": "metal_vs_none",
+     "symbol": "Co",
+     "symbol_in": "co-cnt-structured",
+     "wt_pct": 15.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Co",
+      "unit": "$/lb",
+      "baseline_price": 21.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.021,
+       2100.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Co",
+      "unit": "$/lb",
+      "baseline_price": 21.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.021,
+       2100.0
+      ],
+      "evaluations": 35
+     }
+    }
+   ]
+  },
+  {
+   "family": "formic-acid-dehydrogenation",
+   "title": "Formic-acid dehydrogenation reference family",
+   "domain": "thermal",
+   "economics_unit": [
+    "$/lb"
+   ],
+   "cost_winner": "co-nc-nonnoble",
+   "composite_perf0_winner": "co-nc-nonnoble",
+   "candidates": [
+    {
+     "slug": "co-nc-nonnoble",
+     "cost": 10.0269,
+     "feeds": {
+      "Co": 3.0
+     }
+    },
+    {
+     "slug": "ptmo-gasphase-premium",
+     "cost": 1220.015,
+     "feeds": {
+      "Pt": 3.0,
+      "Mo": 2.0
+     }
+    },
+    {
+     "slug": "pd-carbon-baseline",
+     "cost": 1570.939,
+     "feeds": {
+      "Pd": 5.0
+     }
+    },
+    {
+     "slug": "aupd-mil101",
+     "cost": 3358.1433,
+     "feeds": {
+      "Au": 2.0,
+      "Pd": 2.0
+     }
+    }
+   ],
+   "exposure": "precious_vs_base",
+   "contest_kinds": [
+    "precious_vs_base"
+   ],
+   "contests": [
+    {
+     "a": "co-nc-nonnoble",
+     "b": "ptmo-gasphase-premium",
+     "kind": "precious_vs_base",
+     "symbol": "Co",
+     "symbol_in": "co-nc-nonnoble",
+     "wt_pct": 3.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Co",
+      "unit": "$/lb",
+      "baseline_price": 21.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.021,
+       2100.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Co",
+      "unit": "$/lb",
+      "baseline_price": 21.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.021,
+       2100.0
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "co-nc-nonnoble",
+     "b": "ptmo-gasphase-premium",
+     "kind": "precious_vs_base",
+     "symbol": "Mo",
+     "symbol_in": "ptmo-gasphase-premium",
+     "wt_pct": 2.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Mo",
+      "unit": "$/lb",
+      "baseline_price": 34.71,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.034710000000000005,
+       3471.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Mo",
+      "unit": "$/lb",
+      "baseline_price": 34.71,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.034710000000000005,
+       3471.0
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "co-nc-nonnoble",
+     "b": "ptmo-gasphase-premium",
+     "kind": "precious_vs_base",
+     "symbol": "Pt",
+     "symbol_in": "ptmo-gasphase-premium",
+     "wt_pct": 3.0,
+     "precious": true,
+     "cost": {
+      "symbol": "Pt",
+      "unit": "$/troy_oz",
+      "baseline_price": 1746.3,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.7463,
+       174630.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Pt",
+      "unit": "$/troy_oz",
+      "baseline_price": 1746.3,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       688.46994
+      ],
+      "crossing_over_baseline": [
+       0.3942
+      ],
+      "scan_range": [
+       1.7463,
+       174630.0
+      ],
+      "evaluations": 40,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 762.4737,
+       "median": 973.8333,
+       "max": 2447.8095,
+       "months_b_wins": 0,
+       "months_a_wins": 93,
+       "share_b_wins_pct": 0.0
+      }
+     }
+    },
+    {
+     "a": "co-nc-nonnoble",
+     "b": "pd-carbon-baseline",
+     "kind": "precious_vs_base",
+     "symbol": "Co",
+     "symbol_in": "co-nc-nonnoble",
+     "wt_pct": 3.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Co",
+      "unit": "$/lb",
+      "baseline_price": 21.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.021,
+       2100.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Co",
+      "unit": "$/lb",
+      "baseline_price": 21.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.021,
+       2100.0
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "co-nc-nonnoble",
+     "b": "pd-carbon-baseline",
+     "kind": "precious_vs_base",
+     "symbol": "Pd",
+     "symbol_in": "pd-carbon-baseline",
+     "wt_pct": 5.0,
+     "precious": true,
+     "cost": {
+      "symbol": "Pd",
+      "unit": "$/troy_oz",
+      "baseline_price": 1316.5,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       2.46583
+      ],
+      "crossing_over_baseline": [
+       0.0019
+      ],
+      "scan_range": [
+       1.3165,
+       131650.0
+      ],
+      "evaluations": 31,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 935.9474,
+       "median": 1552.8636,
+       "max": 2901.65,
+       "months_b_wins": 0,
+       "months_a_wins": 93,
+       "share_b_wins_pct": 0.0
+      }
+     },
+     "composite_perf0": {
+      "symbol": "Pd",
+      "unit": "$/troy_oz",
+      "baseline_price": 1316.5,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       446.336906
+      ],
+      "crossing_over_baseline": [
+       0.339
+      ],
+      "scan_range": [
+       1.3165,
+       131650.0
+      ],
+      "evaluations": 39,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 935.9474,
+       "median": 1552.8636,
+       "max": 2901.65,
+       "months_b_wins": 0,
+       "months_a_wins": 93,
+       "share_b_wins_pct": 0.0
+      }
+     }
+    },
+    {
+     "a": "co-nc-nonnoble",
+     "b": "aupd-mil101",
+     "kind": "precious_vs_base",
+     "symbol": "Au",
+     "symbol_in": "aupd-mil101",
+     "wt_pct": 2.0,
+     "precious": true,
+     "cost": {
+      "symbol": "Au",
+      "unit": "$/troy_oz",
+      "baseline_price": 4369.4,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       4.3694,
+       436939.99999999994
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Au",
+      "unit": "$/troy_oz",
+      "baseline_price": 4369.4,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       4.3694,
+       436939.99999999994
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "co-nc-nonnoble",
+     "b": "aupd-mil101",
+     "kind": "precious_vs_base",
+     "symbol": "Co",
+     "symbol_in": "co-nc-nonnoble",
+     "wt_pct": 3.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Co",
+      "unit": "$/lb",
+      "baseline_price": 21.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.021,
+       2100.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Co",
+      "unit": "$/lb",
+      "baseline_price": 21.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.021,
+       2100.0
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "co-nc-nonnoble",
+     "b": "aupd-mil101",
+     "kind": "precious_vs_base",
+     "symbol": "Pd",
+     "symbol_in": "aupd-mil101",
+     "wt_pct": 2.0,
+     "precious": true,
+     "cost": {
+      "symbol": "Pd",
+      "unit": "$/troy_oz",
+      "baseline_price": 1316.5,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.3165,
+       131650.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Pd",
+      "unit": "$/troy_oz",
+      "baseline_price": 1316.5,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.3165,
+       131650.0
+      ],
+      "evaluations": 35
+     }
+    }
+   ]
+  },
+  {
+   "family": "fuel-cell-orr",
+   "title": "Fuel-cell ORR cathode reference family",
+   "domain": "electrocatalyst",
+   "economics_unit": [
+    "$/lb"
+   ],
+   "cost_winner": "fen-c-pgmfree-cathode",
+   "composite_perf0_winner": "fen-c-pgmfree-cathode",
+   "candidates": [
+    {
+     "slug": "fen-c-pgmfree-cathode",
+     "cost": 7.2989,
+     "feeds": {}
+    },
+    {
+     "slug": "ptco-intermetallic-cathode",
+     "cost": 7469.9342,
+     "feeds": {
+      "Pt": 20.0,
+      "Co": 10.0
+     }
+    },
+    {
+     "slug": "ptc-baseline-cathode",
+     "cost": 7325.9385,
+     "feeds": {
+      "Pt": 20.0
+     }
+    },
+    {
+     "slug": "ptni-octahedra",
+     "cost": 32952.3287,
+     "feeds": {
+      "Pt": 70.0,
+      "Ni": 10.0
+     }
+    }
+   ],
+   "exposure": "metal_vs_none",
+   "contest_kinds": [
+    "metal_vs_none"
+   ],
+   "contests": [
+    {
+     "a": "fen-c-pgmfree-cathode",
+     "b": "ptco-intermetallic-cathode",
+     "kind": "metal_vs_none",
+     "symbol": "Co",
+     "symbol_in": "ptco-intermetallic-cathode",
+     "wt_pct": 10.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Co",
+      "unit": "$/lb",
+      "baseline_price": 21.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.021,
+       2100.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Co",
+      "unit": "$/lb",
+      "baseline_price": 21.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.021,
+       2100.0
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "fen-c-pgmfree-cathode",
+     "b": "ptco-intermetallic-cathode",
+     "kind": "metal_vs_none",
+     "symbol": "Pt",
+     "symbol_in": "ptco-intermetallic-cathode",
+     "wt_pct": 20.0,
+     "precious": true,
+     "cost": {
+      "symbol": "Pt",
+      "unit": "$/troy_oz",
+      "baseline_price": 1746.3,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.7463,
+       174630.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Pt",
+      "unit": "$/troy_oz",
+      "baseline_price": 1746.3,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.7463,
+       174630.0
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "fen-c-pgmfree-cathode",
+     "b": "ptc-baseline-cathode",
+     "kind": "metal_vs_none",
+     "symbol": "Pt",
+     "symbol_in": "ptc-baseline-cathode",
+     "wt_pct": 20.0,
+     "precious": true,
+     "cost": {
+      "symbol": "Pt",
+      "unit": "$/troy_oz",
+      "baseline_price": 1746.3,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.7463,
+       174630.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Pt",
+      "unit": "$/troy_oz",
+      "baseline_price": 1746.3,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       6.116088
+      ],
+      "crossing_over_baseline": [
+       0.0035
+      ],
+      "scan_range": [
+       1.7463,
+       174630.0
+      ],
+      "evaluations": 38,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 762.4737,
+       "median": 973.8333,
+       "max": 2447.8095,
+       "months_b_wins": 0,
+       "months_a_wins": 93,
+       "share_b_wins_pct": 0.0
+      }
+     }
+    },
+    {
+     "a": "fen-c-pgmfree-cathode",
+     "b": "ptni-octahedra",
+     "kind": "metal_vs_none",
+     "symbol": "Ni",
+     "symbol_in": "ptni-octahedra",
+     "wt_pct": 10.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "fen-c-pgmfree-cathode",
+     "b": "ptni-octahedra",
+     "kind": "metal_vs_none",
+     "symbol": "Pt",
+     "symbol_in": "ptni-octahedra",
+     "wt_pct": 70.0,
+     "precious": true,
+     "cost": {
+      "symbol": "Pt",
+      "unit": "$/troy_oz",
+      "baseline_price": 1746.3,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.7463,
+       174630.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Pt",
+      "unit": "$/troy_oz",
+      "baseline_price": 1746.3,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.7463,
+       174630.0
+      ],
+      "evaluations": 35
+     }
+    }
+   ]
+  },
+  {
+   "family": "glycerol-electrooxidation",
+   "title": "Glycerol electrooxidation reference family",
+   "domain": "electrocatalyst",
+   "economics_unit": [
+    "$/cm2",
+    "$/lb"
+   ],
+   "cost_winner": "niooh-glycerol-anode",
+   "composite_perf0_winner": "niooh-glycerol-anode",
+   "candidates": [
+    {
+     "slug": "niooh-glycerol-anode",
+     "cost": 1.5064,
+     "feeds": {
+      "Ni": 100.0
+     }
+    },
+    {
+     "slug": "pt-c-glycerol-anode",
+     "cost": 1.5298,
+     "feeds": {
+      "Pt": 20.0
+     }
+    },
+    {
+     "slug": "pt-bi-dha",
+     "cost": 19877.5779,
+     "feeds": {
+      "Pt": 47.5
+     }
+    },
+    {
+     "slug": "au-c-glycerol-selectivity",
+     "cost": 1.6141,
+     "feeds": {
+      "Au": 20.0
+     }
+    }
+   ],
+   "exposure": "precious_vs_base",
+   "contest_kinds": [
+    "precious_vs_base"
+   ],
+   "contests": [
+    {
+     "a": "niooh-glycerol-anode",
+     "b": "pt-c-glycerol-anode",
+     "kind": "precious_vs_base",
+     "symbol": "Ni",
+     "symbol_in": "niooh-glycerol-anode",
+     "wt_pct": 100.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "niooh-glycerol-anode",
+     "b": "pt-c-glycerol-anode",
+     "kind": "precious_vs_base",
+     "symbol": "Pt",
+     "symbol_in": "pt-c-glycerol-anode",
+     "wt_pct": 20.0,
+     "precious": true,
+     "cost": {
+      "symbol": "Pt",
+      "unit": "$/troy_oz",
+      "baseline_price": 1746.3,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       1020.139071
+      ],
+      "crossing_over_baseline": [
+       0.5842
+      ],
+      "scan_range": [
+       1.7463,
+       174630.0
+      ],
+      "evaluations": 33,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 762.4737,
+       "median": 973.8333,
+       "max": 2447.8095,
+       "months_b_wins": 59,
+       "months_a_wins": 34,
+       "share_b_wins_pct": 63.4
+      }
+     },
+     "composite_perf0": {
+      "symbol": "Pt",
+      "unit": "$/troy_oz",
+      "baseline_price": 1746.3,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       355.292955
+      ],
+      "crossing_over_baseline": [
+       0.2035
+      ],
+      "scan_range": [
+       1.7463,
+       174630.0
+      ],
+      "evaluations": 39,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 762.4737,
+       "median": 973.8333,
+       "max": 2447.8095,
+       "months_b_wins": 0,
+       "months_a_wins": 93,
+       "share_b_wins_pct": 0.0
+      }
+     }
+    },
+    {
+     "a": "niooh-glycerol-anode",
+     "b": "pt-bi-dha",
+     "kind": "precious_vs_base",
+     "symbol": "Ni",
+     "symbol_in": "niooh-glycerol-anode",
+     "wt_pct": 100.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "niooh-glycerol-anode",
+     "b": "pt-bi-dha",
+     "kind": "precious_vs_base",
+     "symbol": "Pt",
+     "symbol_in": "pt-bi-dha",
+     "wt_pct": 47.5,
+     "precious": true,
+     "cost": {
+      "symbol": "Pt",
+      "unit": "$/troy_oz",
+      "baseline_price": 1746.3,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.7463,
+       174630.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Pt",
+      "unit": "$/troy_oz",
+      "baseline_price": 1746.3,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       90.329276
+      ],
+      "crossing_over_baseline": [
+       0.0517
+      ],
+      "scan_range": [
+       1.7463,
+       174630.0
+      ],
+      "evaluations": 38,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 762.4737,
+       "median": 973.8333,
+       "max": 2447.8095,
+       "months_b_wins": 0,
+       "months_a_wins": 93,
+       "share_b_wins_pct": 0.0
+      }
+     }
+    },
+    {
+     "a": "niooh-glycerol-anode",
+     "b": "au-c-glycerol-selectivity",
+     "kind": "precious_vs_base",
+     "symbol": "Au",
+     "symbol_in": "au-c-glycerol-selectivity",
+     "wt_pct": 20.0,
+     "precious": true,
+     "cost": {
+      "symbol": "Au",
+      "unit": "$/troy_oz",
+      "baseline_price": 4369.4,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       1020.157548
+      ],
+      "crossing_over_baseline": [
+       0.2335
+      ],
+      "scan_range": [
+       4.3694,
+       436939.99999999994
+      ],
+      "evaluations": 31,
+      "history": {
+       "n": 61,
+       "first": "2021-09-30",
+       "last": "2026-09-02",
+       "min": 1635.9,
+       "median": 2217.3999,
+       "max": 5230.5,
+       "months_b_wins": 0,
+       "months_a_wins": 61,
+       "share_b_wins_pct": 0.0
+      }
+     },
+     "composite_perf0": {
+      "symbol": "Au",
+      "unit": "$/troy_oz",
+      "baseline_price": 4369.4,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       205.972339
+      ],
+      "crossing_over_baseline": [
+       0.0471
+      ],
+      "scan_range": [
+       4.3694,
+       436939.99999999994
+      ],
+      "evaluations": 38,
+      "history": {
+       "n": 61,
+       "first": "2021-09-30",
+       "last": "2026-09-02",
+       "min": 1635.9,
+       "median": 2217.3999,
+       "max": 5230.5,
+       "months_b_wins": 0,
+       "months_a_wins": 61,
+       "share_b_wins_pct": 0.0
+      }
+     }
+    },
+    {
+     "a": "niooh-glycerol-anode",
+     "b": "au-c-glycerol-selectivity",
+     "kind": "precious_vs_base",
+     "symbol": "Ni",
+     "symbol_in": "niooh-glycerol-anode",
+     "wt_pct": 100.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 35
+     }
+    }
+   ]
+  },
+  {
+   "family": "hydrodeoxygenation",
+   "title": "Hydrodeoxygenation (HDO) of bio-oils reference family",
+   "domain": "thermal",
+   "economics_unit": [
+    "$/lb"
+   ],
+   "cost_winner": "comos-hdo",
+   "composite_perf0_winner": "comos-hdo",
+   "candidates": [
+    {
+     "slug": "comos-hdo",
+     "cost": 12.1726,
+     "feeds": {
+      "Mo": 12.0,
+      "Co": 4.0
+     }
+    },
+    {
+     "slug": "pt-silica-hdo",
+     "cost": 412.1681,
+     "feeds": {
+      "Pt": 1.0
+     }
+    },
+    {
+     "slug": "nimo-carbon-hdo",
+     "cost": 13.5115,
+     "feeds": {
+      "Mo": 10.0,
+      "Ni": 5.0
+     }
+    },
+    {
+     "slug": "ru-carbon-hdo",
+     "cost": 2010.8748,
+     "feeds": {
+      "Ru": 5.0
+     }
+    }
+   ],
+   "exposure": "precious_vs_base",
+   "contest_kinds": [
+    "base_vs_base",
+    "precious_vs_base"
+   ],
+   "contests": [
+    {
+     "a": "comos-hdo",
+     "b": "pt-silica-hdo",
+     "kind": "precious_vs_base",
+     "symbol": "Co",
+     "symbol_in": "comos-hdo",
+     "wt_pct": 4.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Co",
+      "unit": "$/lb",
+      "baseline_price": 21.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.021,
+       2100.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Co",
+      "unit": "$/lb",
+      "baseline_price": 21.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       1744.111049
+      ],
+      "crossing_over_baseline": [
+       83.0529
+      ],
+      "scan_range": [
+       0.021,
+       2100.0
+      ],
+      "evaluations": 36
+     }
+    },
+    {
+     "a": "comos-hdo",
+     "b": "pt-silica-hdo",
+     "kind": "precious_vs_base",
+     "symbol": "Mo",
+     "symbol_in": "comos-hdo",
+     "wt_pct": 12.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Mo",
+      "unit": "$/lb",
+      "baseline_price": 34.71,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       2248.203584
+      ],
+      "crossing_over_baseline": [
+       64.7711
+      ],
+      "scan_range": [
+       0.034710000000000005,
+       3471.0
+      ],
+      "evaluations": 33
+     },
+     "composite_perf0": {
+      "symbol": "Mo",
+      "unit": "$/lb",
+      "baseline_price": 34.71,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       683.611645
+      ],
+      "crossing_over_baseline": [
+       19.6949
+      ],
+      "scan_range": [
+       0.034710000000000005,
+       3471.0
+      ],
+      "evaluations": 38
+     }
+    },
+    {
+     "a": "comos-hdo",
+     "b": "pt-silica-hdo",
+     "kind": "precious_vs_base",
+     "symbol": "Pt",
+     "symbol_in": "pt-silica-hdo",
+     "wt_pct": 1.0,
+     "precious": true,
+     "cost": {
+      "symbol": "Pt",
+      "unit": "$/troy_oz",
+      "baseline_price": 1746.3,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       14.539496
+      ],
+      "crossing_over_baseline": [
+       0.0083
+      ],
+      "scan_range": [
+       1.7463,
+       174630.0
+      ],
+      "evaluations": 33,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 762.4737,
+       "median": 973.8333,
+       "max": 2447.8095,
+       "months_b_wins": 0,
+       "months_a_wins": 93,
+       "share_b_wins_pct": 0.0
+      }
+     },
+     "composite_perf0": {
+      "symbol": "Pt",
+      "unit": "$/troy_oz",
+      "baseline_price": 1746.3,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       1244.346798
+      ],
+      "crossing_over_baseline": [
+       0.7126
+      ],
+      "scan_range": [
+       1.7463,
+       174630.0
+      ],
+      "evaluations": 39,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 762.4737,
+       "median": 973.8333,
+       "max": 2447.8095,
+       "months_b_wins": 77,
+       "months_a_wins": 16,
+       "share_b_wins_pct": 82.8
+      }
+     }
+    },
+    {
+     "a": "comos-hdo",
+     "b": "nimo-carbon-hdo",
+     "kind": "base_vs_base",
+     "symbol": "Co",
+     "symbol_in": "comos-hdo",
+     "wt_pct": 4.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Co",
+      "unit": "$/lb",
+      "baseline_price": 21.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       43.227179
+      ],
+      "crossing_over_baseline": [
+       2.0584
+      ],
+      "scan_range": [
+       0.021,
+       2100.0
+      ],
+      "evaluations": 33
+     },
+     "composite_perf0": {
+      "symbol": "Co",
+      "unit": "$/lb",
+      "baseline_price": 21.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       721.95415
+      ],
+      "crossing_over_baseline": [
+       34.3788
+      ],
+      "scan_range": [
+       0.021,
+       2100.0
+      ],
+      "evaluations": 38
+     }
+    },
+    {
+     "a": "comos-hdo",
+     "b": "nimo-carbon-hdo",
+     "kind": "base_vs_base",
+     "symbol": "Ni",
+     "symbol_in": "nimo-carbon-hdo",
+     "wt_pct": 5.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       53.791192,
+       55.054372
+      ],
+      "crossing_over_baseline": [
+       7.2592,
+       7.4296
+      ],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 39,
+      "history": {
+       "n": 9,
+       "first": "2026-01-30",
+       "last": "2026-09-01",
+       "min": 7.3822,
+       "median": 7.7564,
+       "max": 8.7657,
+       "months_b_wins": 0,
+       "months_a_wins": 9,
+       "share_b_wins_pct": 0.0
+      }
+     }
+    },
+    {
+     "a": "comos-hdo",
+     "b": "ru-carbon-hdo",
+     "kind": "precious_vs_base",
+     "symbol": "Co",
+     "symbol_in": "comos-hdo",
+     "wt_pct": 4.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Co",
+      "unit": "$/lb",
+      "baseline_price": 21.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.021,
+       2100.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Co",
+      "unit": "$/lb",
+      "baseline_price": 21.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.021,
+       2100.0
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "comos-hdo",
+     "b": "ru-carbon-hdo",
+     "kind": "precious_vs_base",
+     "symbol": "Mo",
+     "symbol_in": "comos-hdo",
+     "wt_pct": 12.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Mo",
+      "unit": "$/lb",
+      "baseline_price": 34.71,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.034710000000000005,
+       3471.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Mo",
+      "unit": "$/lb",
+      "baseline_price": 34.71,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.034710000000000005,
+       3471.0
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "comos-hdo",
+     "b": "ru-carbon-hdo",
+     "kind": "precious_vs_base",
+     "symbol": "Ru",
+     "symbol_in": "ru-carbon-hdo",
+     "wt_pct": 5.0,
+     "precious": true,
+     "cost": {
+      "symbol": "Ru",
+      "unit": "$/troy_oz",
+      "baseline_price": 1675.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       6.440428
+      ],
+      "crossing_over_baseline": [
+       0.0038
+      ],
+      "scan_range": [
+       1.675,
+       167500.0
+      ],
+      "evaluations": 33,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 250.0,
+       "median": 465.0,
+       "max": 1707.8947,
+       "months_b_wins": 0,
+       "months_a_wins": 93,
+       "share_b_wins_pct": 0.0
+      }
+     },
+     "composite_perf0": {
+      "symbol": "Ru",
+      "unit": "$/troy_oz",
+      "baseline_price": 1675.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       52.60059
+      ],
+      "crossing_over_baseline": [
+       0.0314
+      ],
+      "scan_range": [
+       1.675,
+       167500.0
+      ],
+      "evaluations": 40,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 250.0,
+       "median": 465.0,
+       "max": 1707.8947,
+       "months_b_wins": 0,
+       "months_a_wins": 93,
+       "share_b_wins_pct": 0.0
+      }
+     }
+    }
+   ]
+  },
+  {
+   "family": "hydrogen-evolution-reaction",
+   "title": "HER (hydrogen evolution) reference family",
+   "domain": "electrocatalyst",
+   "economics_unit": [
+    "$/cm2",
+    "$/lb"
+   ],
+   "cost_winner": "nimo-alkaline-her-cathode",
+   "composite_perf0_winner": "nimo-alkaline-her-cathode",
+   "candidates": [
+    {
+     "slug": "nimo-alkaline-her-cathode",
+     "cost": 1.5064,
+     "feeds": {
+      "Ni": 70.0,
+      "Mo": 30.0
+     }
+    },
+    {
+     "slug": "mos2-acidic-her-cathode",
+     "cost": 2.7057,
+     "feeds": {}
+    },
+    {
+     "slug": "pt-carbon-her-cathode",
+     "cost": 2.7243,
+     "feeds": {
+      "Pt": 20.0
+     }
+    },
+    {
+     "slug": "ru-c2n-her",
+     "cost": 13049.759,
+     "feeds": {
+      "Ru": 30.0
+     }
+    }
+   ],
+   "exposure": "precious_vs_base",
+   "contest_kinds": [
+    "metal_vs_none",
+    "precious_vs_base"
+   ],
+   "contests": [
+    {
+     "a": "nimo-alkaline-her-cathode",
+     "b": "mos2-acidic-her-cathode",
+     "kind": "metal_vs_none",
+     "symbol": "Mo",
+     "symbol_in": "nimo-alkaline-her-cathode",
+     "wt_pct": 30.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Mo",
+      "unit": "$/lb",
+      "baseline_price": 34.71,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.034710000000000005,
+       3471.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Mo",
+      "unit": "$/lb",
+      "baseline_price": 34.71,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       410.237407
+      ],
+      "crossing_over_baseline": [
+       11.819
+      ],
+      "scan_range": [
+       0.034710000000000005,
+       3471.0
+      ],
+      "evaluations": 37
+     }
+    },
+    {
+     "a": "nimo-alkaline-her-cathode",
+     "b": "mos2-acidic-her-cathode",
+     "kind": "metal_vs_none",
+     "symbol": "Ni",
+     "symbol_in": "nimo-alkaline-her-cathode",
+     "wt_pct": 70.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "nimo-alkaline-her-cathode",
+     "b": "pt-carbon-her-cathode",
+     "kind": "precious_vs_base",
+     "symbol": "Mo",
+     "symbol_in": "nimo-alkaline-her-cathode",
+     "wt_pct": 30.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Mo",
+      "unit": "$/lb",
+      "baseline_price": 34.71,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.034710000000000005,
+       3471.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Mo",
+      "unit": "$/lb",
+      "baseline_price": 34.71,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.034710000000000005,
+       3471.0
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "nimo-alkaline-her-cathode",
+     "b": "pt-carbon-her-cathode",
+     "kind": "precious_vs_base",
+     "symbol": "Ni",
+     "symbol_in": "nimo-alkaline-her-cathode",
+     "wt_pct": 70.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "nimo-alkaline-her-cathode",
+     "b": "pt-carbon-her-cathode",
+     "kind": "precious_vs_base",
+     "symbol": "Pt",
+     "symbol_in": "pt-carbon-her-cathode",
+     "wt_pct": 20.0,
+     "precious": true,
+     "cost": {
+      "symbol": "Pt",
+      "unit": "$/troy_oz",
+      "baseline_price": 1746.3,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.7463,
+       174630.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Pt",
+      "unit": "$/troy_oz",
+      "baseline_price": 1746.3,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       474.891789
+      ],
+      "crossing_over_baseline": [
+       0.2719
+      ],
+      "scan_range": [
+       1.7463,
+       174630.0
+      ],
+      "evaluations": 40,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 762.4737,
+       "median": 973.8333,
+       "max": 2447.8095,
+       "months_b_wins": 0,
+       "months_a_wins": 93,
+       "share_b_wins_pct": 0.0
+      }
+     }
+    },
+    {
+     "a": "nimo-alkaline-her-cathode",
+     "b": "ru-c2n-her",
+     "kind": "precious_vs_base",
+     "symbol": "Mo",
+     "symbol_in": "nimo-alkaline-her-cathode",
+     "wt_pct": 30.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Mo",
+      "unit": "$/lb",
+      "baseline_price": 34.71,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.034710000000000005,
+       3471.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Mo",
+      "unit": "$/lb",
+      "baseline_price": 34.71,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.034710000000000005,
+       3471.0
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "nimo-alkaline-her-cathode",
+     "b": "ru-c2n-her",
+     "kind": "precious_vs_base",
+     "symbol": "Ni",
+     "symbol_in": "nimo-alkaline-her-cathode",
+     "wt_pct": 70.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "nimo-alkaline-her-cathode",
+     "b": "ru-c2n-her",
+     "kind": "precious_vs_base",
+     "symbol": "Ru",
+     "symbol_in": "ru-c2n-her",
+     "wt_pct": 30.0,
+     "precious": true,
+     "cost": {
+      "symbol": "Ru",
+      "unit": "$/troy_oz",
+      "baseline_price": 1675.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       3.14953
+      ],
+      "crossing_over_baseline": [
+       0.0019
+      ],
+      "scan_range": [
+       1.675,
+       167500.0
+      ],
+      "evaluations": 33,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 250.0,
+       "median": 465.0,
+       "max": 1707.8947,
+       "months_b_wins": 0,
+       "months_a_wins": 93,
+       "share_b_wins_pct": 0.0
+      }
+     },
+     "composite_perf0": {
+      "symbol": "Ru",
+      "unit": "$/troy_oz",
+      "baseline_price": 1675.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       139.436899
+      ],
+      "crossing_over_baseline": [
+       0.0832
+      ],
+      "scan_range": [
+       1.675,
+       167500.0
+      ],
+      "evaluations": 40,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 250.0,
+       "median": 465.0,
+       "max": 1707.8947,
+       "months_b_wins": 0,
+       "months_a_wins": 93,
+       "share_b_wins_pct": 0.0
+      }
+     }
+    }
+   ]
+  },
+  {
+   "family": "methane-pyrolysis",
+   "title": "Methane pyrolysis (turquoise hydrogen) reference family",
+   "domain": "thermal",
+   "economics_unit": [
+    "$/lb"
+   ],
+   "cost_winner": "activated-carbon-autocatalytic",
+   "composite_perf0_winner": "activated-carbon-autocatalytic",
+   "candidates": [
+    {
+     "slug": "activated-carbon-autocatalytic",
+     "cost": 2.4321,
+     "feeds": {}
+    },
+    {
+     "slug": "fe-alumina-pyrolysis",
+     "cost": 4.5474,
+     "feeds": {}
+    },
+    {
+     "slug": "ni-sio2-highload",
+     "cost": 11.1628,
+     "feeds": {
+      "Ni": 75.0
+     }
+    },
+    {
+     "slug": "molten-ni-bi",
+     "cost": 23.4005,
+     "feeds": {
+      "Ni": 27.0
+     }
+    }
+   ],
+   "exposure": "metal_vs_none",
+   "contest_kinds": [
+    "metal_vs_none",
+    "no_feed"
+   ],
+   "contests": [
+    {
+     "a": "activated-carbon-autocatalytic",
+     "b": "ni-sio2-highload",
+     "kind": "metal_vs_none",
+     "symbol": "Ni",
+     "symbol_in": "ni-sio2-highload",
+     "wt_pct": 75.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "activated-carbon-autocatalytic",
+     "b": "molten-ni-bi",
+     "kind": "metal_vs_none",
+     "symbol": "Ni",
+     "symbol_in": "molten-ni-bi",
+     "wt_pct": 27.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 35
+     }
+    }
+   ]
+  },
+  {
+   "family": "methanol-to-olefins",
+   "title": "Methanol-to-olefins (MTO / MTH) reference family",
+   "domain": "thermal",
+   "economics_unit": [
+    "$/lb"
+   ],
+   "cost_winner": "hzsm5-mth",
+   "composite_perf0_winner": "hzsm5-mth",
+   "candidates": [
+    {
+     "slug": "hzsm5-mth",
+     "cost": 5.813,
+     "feeds": {}
+    },
+    {
+     "slug": "zn-zsm5-aromatics",
+     "cost": 5.9797,
+     "feeds": {
+      "Zn": 3.0
+     }
+    },
+    {
+     "slug": "sapo-34-light-olefin",
+     "cost": 14.4663,
+     "feeds": {}
+    },
+    {
+     "slug": "nano-sapo-34",
+     "cost": 15.7756,
+     "feeds": {}
+    }
+   ],
+   "exposure": "metal_vs_none",
+   "contest_kinds": [
+    "metal_vs_none",
+    "no_feed"
+   ],
+   "contests": [
+    {
+     "a": "hzsm5-mth",
+     "b": "zn-zsm5-aromatics",
+     "kind": "metal_vs_none",
+     "symbol": "Zn",
+     "symbol_in": "zn-zsm5-aromatics",
+     "wt_pct": 3.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Zn",
+      "unit": "$/lb",
+      "baseline_price": 1.8665,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0018665,
+       186.65
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Zn",
+      "unit": "$/lb",
+      "baseline_price": 1.8665,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0018665,
+       186.65
+      ],
+      "evaluations": 35
+     }
+    }
+   ]
+  },
+  {
+   "family": "nh3-scr",
+   "title": "NH3-SCR DeNOx reference family",
+   "domain": "thermal",
+   "economics_unit": [
+    "$/lb"
+   ],
+   "cost_winner": "fe-zsm-5",
+   "composite_perf0_winner": "v2o5-wo3-tio2",
+   "candidates": [
+    {
+     "slug": "v2o5-wo3-tio2",
+     "cost": 6.0476,
+     "feeds": {}
+    },
+    {
+     "slug": "fe-zsm-5",
+     "cost": 5.1609,
+     "feeds": {}
+    },
+    {
+     "slug": "cu-ssz-13",
+     "cost": 19.7363,
+     "feeds": {
+      "Cu": 2.5
+     }
+    }
+   ],
+   "exposure": "metal_vs_none",
+   "contest_kinds": [
+    "metal_vs_none",
+    "no_feed"
+   ],
+   "contests": [
+    {
+     "a": "fe-zsm-5",
+     "b": "cu-ssz-13",
+     "kind": "metal_vs_none",
+     "symbol": "Cu",
+     "symbol_in": "cu-ssz-13",
+     "wt_pct": 2.5,
+     "precious": false,
+     "cost": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 35
+     }
+    }
+   ]
+  },
+  {
+   "family": "nitrogen-reduction-reaction",
+   "title": "Electrochemical N2 reduction (NRR) reference family",
+   "domain": "electrocatalyst",
+   "economics_unit": [
+    "$/cm2",
+    "$/lb"
+   ],
+   "cost_winner": "plasma-nrr",
+   "composite_perf0_winner": "plasma-nrr",
+   "candidates": [
+    {
+     "slug": "plasma-nrr",
+     "cost": 1.4818,
+     "feeds": {
+      "Ni": 100.0
+     }
+    },
+    {
+     "slug": "li-mediated-nrr",
+     "cost": 2.6984,
+     "feeds": {
+      "Cu": 100.0
+     }
+    },
+    {
+     "slug": "aqueous-nrr-cu",
+     "cost": 2.6984,
+     "feeds": {
+      "Cu": 100.0
+     }
+    },
+    {
+     "slug": "li-flow-shuttle",
+     "cost": 58.3695,
+     "feeds": {}
+    }
+   ],
+   "exposure": "base_vs_base",
+   "contest_kinds": [
+    "base_vs_base",
+    "metal_vs_none"
+   ],
+   "contests": [
+    {
+     "a": "plasma-nrr",
+     "b": "li-mediated-nrr",
+     "kind": "base_vs_base",
+     "symbol": "Cu",
+     "symbol_in": "li-mediated-nrr",
+     "wt_pct": 100.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       5.749418
+      ],
+      "crossing_over_baseline": [
+       0.8781
+      ],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 37,
+      "history": {
+       "n": 61,
+       "first": "2021-09-30",
+       "last": "2026-09-02",
+       "min": 3.4135,
+       "median": 4.3135,
+       "max": 6.5935,
+       "months_b_wins": 53,
+       "months_a_wins": 8,
+       "share_b_wins_pct": 86.9
+      }
+     }
+    },
+    {
+     "a": "plasma-nrr",
+     "b": "li-mediated-nrr",
+     "kind": "base_vs_base",
+     "symbol": "Ni",
+     "symbol_in": "plasma-nrr",
+     "wt_pct": 100.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       8.375283
+      ],
+      "crossing_over_baseline": [
+       1.1303
+      ],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 42,
+      "history": {
+       "n": 9,
+       "first": "2026-01-30",
+       "last": "2026-09-01",
+       "min": 7.3822,
+       "median": 7.7564,
+       "max": 8.7657,
+       "months_b_wins": 2,
+       "months_a_wins": 7,
+       "share_b_wins_pct": 22.2
+      }
+     }
+    },
+    {
+     "a": "plasma-nrr",
+     "b": "aqueous-nrr-cu",
+     "kind": "base_vs_base",
+     "symbol": "Cu",
+     "symbol_in": "aqueous-nrr-cu",
+     "wt_pct": 100.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       5.060348
+      ],
+      "crossing_over_baseline": [
+       0.7729
+      ],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 40,
+      "history": {
+       "n": 61,
+       "first": "2021-09-30",
+       "last": "2026-09-02",
+       "min": 3.4135,
+       "median": 4.3135,
+       "max": 6.5935,
+       "months_b_wins": 49,
+       "months_a_wins": 12,
+       "share_b_wins_pct": 80.3
+      }
+     }
+    },
+    {
+     "a": "plasma-nrr",
+     "b": "aqueous-nrr-cu",
+     "kind": "base_vs_base",
+     "symbol": "Ni",
+     "symbol_in": "plasma-nrr",
+     "wt_pct": 100.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       9.057778
+      ],
+      "crossing_over_baseline": [
+       1.2224
+      ],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 41,
+      "history": {
+       "n": 9,
+       "first": "2026-01-30",
+       "last": "2026-09-01",
+       "min": 7.3822,
+       "median": 7.7564,
+       "max": 8.7657,
+       "months_b_wins": 0,
+       "months_a_wins": 9,
+       "share_b_wins_pct": 0.0
+      }
+     }
+    },
+    {
+     "a": "plasma-nrr",
+     "b": "li-flow-shuttle",
+     "kind": "metal_vs_none",
+     "symbol": "Ni",
+     "symbol_in": "plasma-nrr",
+     "wt_pct": 100.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       22.227734
+      ],
+      "crossing_over_baseline": [
+       2.9997
+      ],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 33,
+      "history": {
+       "n": 9,
+       "first": "2026-01-30",
+       "last": "2026-09-01",
+       "min": 7.3822,
+       "median": 7.7564,
+       "max": 8.7657,
+       "months_b_wins": 0,
+       "months_a_wins": 9,
+       "share_b_wins_pct": 0.0
+      }
+     },
+     "composite_perf0": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       26.17557,
+       26.194563
+      ],
+      "crossing_over_baseline": [
+       3.5324,
+       3.535
+      ],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 44,
+      "history": {
+       "n": 9,
+       "first": "2026-01-30",
+       "last": "2026-09-01",
+       "min": 7.3822,
+       "median": 7.7564,
+       "max": 8.7657,
+       "months_b_wins": 0,
+       "months_a_wins": 9,
+       "share_b_wins_pct": 0.0
+      }
+     }
+    }
+   ]
+  },
+  {
+   "family": "olefin-metathesis",
+   "title": "Heterogeneous olefin metathesis reference family",
+   "domain": "thermal",
+   "economics_unit": [
+    "$/lb"
+   ],
+   "cost_winner": "wo3-silica-oct",
+   "composite_perf0_winner": "wo3-silica-oct",
+   "candidates": [
+    {
+     "slug": "wo3-silica-oct",
+     "cost": 6.4049,
+     "feeds": {
+      "W": 7.0
+     }
+    },
+    {
+     "slug": "mo-silica-alumina",
+     "cost": 11.6424,
+     "feeds": {
+      "Mo": 8.0
+     }
+    },
+    {
+     "slug": "w-h-alumina",
+     "cost": 9.4117,
+     "feeds": {
+      "W": 4.0
+     }
+    },
+    {
+     "slug": "re2o7-alumina-mild",
+     "cost": 114.3953,
+     "feeds": {}
+    }
+   ],
+   "exposure": "base_vs_base",
+   "contest_kinds": [
+    "base_vs_base",
+    "metal_vs_none",
+    "same_metals"
+   ],
+   "contests": [
+    {
+     "a": "wo3-silica-oct",
+     "b": "mo-silica-alumina",
+     "kind": "base_vs_base",
+     "symbol": "Mo",
+     "symbol_in": "mo-silica-alumina",
+     "wt_pct": 8.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Mo",
+      "unit": "$/lb",
+      "baseline_price": 34.71,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.034710000000000005,
+       3471.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Mo",
+      "unit": "$/lb",
+      "baseline_price": 34.71,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.034710000000000005,
+       3471.0
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "wo3-silica-oct",
+     "b": "mo-silica-alumina",
+     "kind": "base_vs_base",
+     "symbol": "W",
+     "symbol_in": "wo3-silica-oct",
+     "wt_pct": 7.0,
+     "precious": false,
+     "cost": {
+      "symbol": "W",
+      "unit": "$/lb",
+      "baseline_price": 21.74,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       73.742199
+      ],
+      "crossing_over_baseline": [
+       3.392
+      ],
+      "scan_range": [
+       0.02174,
+       2174.0
+      ],
+      "evaluations": 33
+     },
+     "composite_perf0": {
+      "symbol": "W",
+      "unit": "$/lb",
+      "baseline_price": 21.74,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       111.090489,
+       111.41328
+      ],
+      "crossing_over_baseline": [
+       5.11,
+       5.1248
+      ],
+      "scan_range": [
+       0.02174,
+       2174.0
+      ],
+      "evaluations": 42
+     }
+    },
+    {
+     "a": "wo3-silica-oct",
+     "b": "re2o7-alumina-mild",
+     "kind": "metal_vs_none",
+     "symbol": "W",
+     "symbol_in": "wo3-silica-oct",
+     "wt_pct": 7.0,
+     "precious": false,
+     "cost": {
+      "symbol": "W",
+      "unit": "$/lb",
+      "baseline_price": 21.74,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       1093.907831
+      ],
+      "crossing_over_baseline": [
+       50.3177
+      ],
+      "scan_range": [
+       0.02174,
+       2174.0
+      ],
+      "evaluations": 33
+     },
+     "composite_perf0": {
+      "symbol": "W",
+      "unit": "$/lb",
+      "baseline_price": 21.74,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       1018.001578
+      ],
+      "crossing_over_baseline": [
+       46.8262
+      ],
+      "scan_range": [
+       0.02174,
+       2174.0
+      ],
+      "evaluations": 43
+     }
+    }
+   ]
+  },
+  {
+   "family": "pem-electrolyzer-oer",
+   "title": "PEM electrolyzer OER reference family",
+   "domain": "electrocatalyst",
+   "economics_unit": [
+    "$/cm2"
+   ],
+   "cost_winner": "pem-low-ir-interface",
+   "composite_perf0_winner": "pem-low-ir-interface",
+   "candidates": [
+    {
+     "slug": "pem-low-ir-interface",
+     "cost": 2.614,
+     "feeds": {}
+    },
+    {
+     "slug": "pem-ru-rich-acidic",
+     "cost": 2.651,
+     "feeds": {}
+    },
+    {
+     "slug": "iro2-tio2-supported",
+     "cost": 3.3281,
+     "feeds": {
+      "Ir": 40.0
+     }
+    },
+    {
+     "slug": "pem-irox-baseline",
+     "cost": 3.3281,
+     "feeds": {}
+    }
+   ],
+   "exposure": "metal_vs_none",
+   "contest_kinds": [
+    "metal_vs_none",
+    "no_feed"
+   ],
+   "contests": [
+    {
+     "a": "pem-low-ir-interface",
+     "b": "iro2-tio2-supported",
+     "kind": "metal_vs_none",
+     "symbol": "Ir",
+     "symbol_in": "iro2-tio2-supported",
+     "wt_pct": 40.0,
+     "precious": true,
+     "cost": {
+      "symbol": "Ir",
+      "unit": "$/troy_oz",
+      "baseline_price": 7850.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       7.8500000000000005,
+       785000.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Ir",
+      "unit": "$/troy_oz",
+      "baseline_price": 7850.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       7.8500000000000005,
+       785000.0
+      ],
+      "evaluations": 35
+     }
+    }
+   ]
+  },
+  {
+   "family": "photocatalytic-co2-reduction",
+   "title": "Photocatalytic CO2 reduction reference family",
+   "domain": "thermal",
+   "economics_unit": [
+    "$/lb"
+   ],
+   "cost_winner": "tio2-photo-co2",
+   "composite_perf0_winner": "tio2-photo-co2",
+   "candidates": [
+    {
+     "slug": "tio2-photo-co2",
+     "cost": 10.1985,
+     "feeds": {}
+    },
+    {
+     "slug": "gcn-sns2-zscheme",
+     "cost": 25.8734,
+     "feeds": {}
+    },
+    {
+     "slug": "bivo4-visible",
+     "cost": 34.111,
+     "feeds": {}
+    },
+    {
+     "slug": "cu2o-mof-co2",
+     "cost": 65.0151,
+     "feeds": {
+      "Cu": 40.0
+     }
+    }
+   ],
+   "exposure": "metal_vs_none",
+   "contest_kinds": [
+    "metal_vs_none",
+    "no_feed"
+   ],
+   "contests": [
+    {
+     "a": "tio2-photo-co2",
+     "b": "cu2o-mof-co2",
+     "kind": "metal_vs_none",
+     "symbol": "Cu",
+     "symbol_in": "cu2o-mof-co2",
+     "wt_pct": 40.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 35
+     }
+    }
+   ]
+  },
+  {
+   "family": "photocatalytic-water-splitting",
+   "title": "Photocatalytic water splitting reference family",
+   "domain": "thermal",
+   "economics_unit": [
+    "$/lb"
+   ],
+   "cost_winner": "tio2-anatase-baseline",
+   "composite_perf0_winner": "tio2-anatase-baseline",
+   "candidates": [
+    {
+     "slug": "pt-tio2-cocatalyst",
+     "cost": 461.7299,
+     "feeds": {
+      "Pt": 1.0
+     }
+    },
+    {
+     "slug": "tio2-anatase-baseline",
+     "cost": 10.1985,
+     "feeds": {}
+    },
+    {
+     "slug": "gcn-metal-free",
+     "cost": 19.6889,
+     "feeds": {}
+    },
+    {
+     "slug": "srtio3-al-qe-benchmark",
+     "cost": 2908.3458,
+     "feeds": {
+      "Rh": 1.0,
+      "Co": 1.0
+     }
+    }
+   ],
+   "exposure": "metal_vs_none",
+   "contest_kinds": [
+    "metal_vs_none",
+    "no_feed"
+   ],
+   "contests": [
+    {
+     "a": "tio2-anatase-baseline",
+     "b": "pt-tio2-cocatalyst",
+     "kind": "metal_vs_none",
+     "symbol": "Pt",
+     "symbol_in": "pt-tio2-cocatalyst",
+     "wt_pct": 1.0,
+     "precious": true,
+     "cost": {
+      "symbol": "Pt",
+      "unit": "$/troy_oz",
+      "baseline_price": 1746.3,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.7463,
+       174630.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Pt",
+      "unit": "$/troy_oz",
+      "baseline_price": 1746.3,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       5.079589,
+       5.320958,
+       920.222923
+      ],
+      "crossing_over_baseline": [
+       0.0029,
+       0.003,
+       0.527
+      ],
+      "scan_range": [
+       1.7463,
+       174630.0
+      ],
+      "evaluations": 41,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 762.4737,
+       "median": 973.8333,
+       "max": 2447.8095,
+       "months_b_wins": 0,
+       "months_a_wins": 93,
+       "share_b_wins_pct": 0.0
+      }
+     }
+    },
+    {
+     "a": "tio2-anatase-baseline",
+     "b": "srtio3-al-qe-benchmark",
+     "kind": "metal_vs_none",
+     "symbol": "Co",
+     "symbol_in": "srtio3-al-qe-benchmark",
+     "wt_pct": 1.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Co",
+      "unit": "$/lb",
+      "baseline_price": 21.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.021,
+       2100.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Co",
+      "unit": "$/lb",
+      "baseline_price": 21.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.021,
+       2100.0
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "tio2-anatase-baseline",
+     "b": "srtio3-al-qe-benchmark",
+     "kind": "metal_vs_none",
+     "symbol": "Rh",
+     "symbol_in": "srtio3-al-qe-benchmark",
+     "wt_pct": 1.0,
+     "precious": true,
+     "cost": {
+      "symbol": "Rh",
+      "unit": "$/troy_oz",
+      "baseline_price": 9225.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       9.225,
+       922500.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Rh",
+      "unit": "$/troy_oz",
+      "baseline_price": 9225.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       9.225,
+       922500.0
+      ],
+      "evaluations": 35
+     }
+    }
+   ]
+  },
+  {
+   "family": "propane-dehydrogenation",
+   "title": "Propane dehydrogenation (PDH) reference family",
+   "domain": "thermal",
+   "economics_unit": [
+    "$/lb"
+   ],
+   "cost_winner": "crox-alumina-catofin",
+   "composite_perf0_winner": "crox-alumina-catofin",
+   "candidates": [
+    {
+     "slug": "crox-alumina-catofin",
+     "cost": 3.5879,
+     "feeds": {}
+    },
+    {
+     "slug": "bn-odhp",
+     "cost": 26.7674,
+     "feeds": {}
+    },
+    {
+     "slug": "ptsn-alumina-pdh",
+     "cost": 179.2703,
+     "feeds": {
+      "Pt": 0.5,
+      "Sn": 0.5
+     }
+    },
+    {
+     "slug": "ptzn-intermetallic-pdh",
+     "cost": 205.8133,
+     "feeds": {
+      "Pt": 0.5,
+      "Zn": 1.0
+     }
+    }
+   ],
+   "exposure": "metal_vs_none",
+   "contest_kinds": [
+    "metal_vs_none",
+    "no_feed"
+   ],
+   "contests": [
+    {
+     "a": "crox-alumina-catofin",
+     "b": "ptsn-alumina-pdh",
+     "kind": "metal_vs_none",
+     "symbol": "Pt",
+     "symbol_in": "ptsn-alumina-pdh",
+     "wt_pct": 0.5,
+     "precious": true,
+     "cost": {
+      "symbol": "Pt",
+      "unit": "$/troy_oz",
+      "baseline_price": 1746.3,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.7463,
+       174630.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Pt",
+      "unit": "$/troy_oz",
+      "baseline_price": 1746.3,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.7463,
+       174630.0
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "crox-alumina-catofin",
+     "b": "ptsn-alumina-pdh",
+     "kind": "metal_vs_none",
+     "symbol": "Sn",
+     "symbol_in": "ptsn-alumina-pdh",
+     "wt_pct": 0.5,
+     "precious": false,
+     "cost": {
+      "symbol": "Sn",
+      "unit": "$/lb",
+      "baseline_price": 24.8229,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.024822900000000002,
+       2482.29
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Sn",
+      "unit": "$/lb",
+      "baseline_price": 24.8229,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.024822900000000002,
+       2482.29
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "crox-alumina-catofin",
+     "b": "ptzn-intermetallic-pdh",
+     "kind": "metal_vs_none",
+     "symbol": "Pt",
+     "symbol_in": "ptzn-intermetallic-pdh",
+     "wt_pct": 0.5,
+     "precious": true,
+     "cost": {
+      "symbol": "Pt",
+      "unit": "$/troy_oz",
+      "baseline_price": 1746.3,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.7463,
+       174630.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Pt",
+      "unit": "$/troy_oz",
+      "baseline_price": 1746.3,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.7463,
+       174630.0
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "crox-alumina-catofin",
+     "b": "ptzn-intermetallic-pdh",
+     "kind": "metal_vs_none",
+     "symbol": "Zn",
+     "symbol_in": "ptzn-intermetallic-pdh",
+     "wt_pct": 1.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Zn",
+      "unit": "$/lb",
+      "baseline_price": 1.8665,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0018665,
+       186.65
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Zn",
+      "unit": "$/lb",
+      "baseline_price": 1.8665,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0018665,
+       186.65
+      ],
+      "evaluations": 35
+     }
+    }
+   ]
+  },
+  {
+   "family": "rwgs",
+   "title": "Reverse water-gas shift reference family",
+   "domain": "thermal",
+   "economics_unit": [
+    "$/lb"
+   ],
+   "cost_winner": "cu-ceria-baseline",
+   "composite_perf0_winner": "cu-ceria-baseline",
+   "candidates": [
+    {
+     "slug": "cu-ceria-baseline",
+     "cost": 5.7053,
+     "feeds": {
+      "Cu": 15.0
+     }
+    },
+    {
+     "slug": "cs-fe-cu-alumina",
+     "cost": 8.2104,
+     "feeds": {
+      "Cu": 3.0
+     }
+    },
+    {
+     "slug": "mo2n-hightemp",
+     "cost": 38.4556,
+     "feeds": {
+      "Mo": 65.0
+     }
+    },
+    {
+     "slug": "pt-tio2-premium",
+     "cost": 757.8614,
+     "feeds": {
+      "Pt": 2.0
+     }
+    }
+   ],
+   "exposure": "precious_vs_base",
+   "contest_kinds": [
+    "base_vs_base",
+    "precious_vs_base",
+    "same_metals"
+   ],
+   "contests": [
+    {
+     "a": "cu-ceria-baseline",
+     "b": "mo2n-hightemp",
+     "kind": "base_vs_base",
+     "symbol": "Cu",
+     "symbol_in": "cu-ceria-baseline",
+     "wt_pct": 15.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       154.214594
+      ],
+      "crossing_over_baseline": [
+       23.5532
+      ],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 33,
+      "history": {
+       "n": 61,
+       "first": "2021-09-30",
+       "last": "2026-09-02",
+       "min": 3.4135,
+       "median": 4.3135,
+       "max": 6.5935,
+       "months_b_wins": 0,
+       "months_a_wins": 61,
+       "share_b_wins_pct": 0.0
+      }
+     },
+     "composite_perf0": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "cu-ceria-baseline",
+     "b": "mo2n-hightemp",
+     "kind": "base_vs_base",
+     "symbol": "Mo",
+     "symbol_in": "mo2n-hightemp",
+     "wt_pct": 65.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Mo",
+      "unit": "$/lb",
+      "baseline_price": 34.71,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       1.848735
+      ],
+      "crossing_over_baseline": [
+       0.0533
+      ],
+      "scan_range": [
+       0.034710000000000005,
+       3471.0
+      ],
+      "evaluations": 33
+     },
+     "composite_perf0": {
+      "symbol": "Mo",
+      "unit": "$/lb",
+      "baseline_price": 34.71,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.034710000000000005,
+       3471.0
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "cu-ceria-baseline",
+     "b": "pt-tio2-premium",
+     "kind": "precious_vs_base",
+     "symbol": "Cu",
+     "symbol_in": "cu-ceria-baseline",
+     "wt_pct": 15.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "cu-ceria-baseline",
+     "b": "pt-tio2-premium",
+     "kind": "precious_vs_base",
+     "symbol": "Pt",
+     "symbol_in": "pt-tio2-premium",
+     "wt_pct": 2.0,
+     "precious": true,
+     "cost": {
+      "symbol": "Pt",
+      "unit": "$/troy_oz",
+      "baseline_price": 1746.3,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       2.088708
+      ],
+      "crossing_over_baseline": [
+       0.0012
+      ],
+      "scan_range": [
+       1.7463,
+       174630.0
+      ],
+      "evaluations": 32,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 762.4737,
+       "median": 973.8333,
+       "max": 2447.8095,
+       "months_b_wins": 0,
+       "months_a_wins": 93,
+       "share_b_wins_pct": 0.0
+      }
+     },
+     "composite_perf0": {
+      "symbol": "Pt",
+      "unit": "$/troy_oz",
+      "baseline_price": 1746.3,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.7463,
+       174630.0
+      ],
+      "evaluations": 35
+     }
+    }
+   ]
+  },
+  {
+   "family": "selective-acetylene-hydrogenation",
+   "title": "Selective acetylene hydrogenation reference family",
+   "domain": "thermal",
+   "economics_unit": [
+    "$/lb"
+   ],
+   "cost_winner": "nizn-intermetallic",
+   "composite_perf0_winner": "nizn-intermetallic",
+   "candidates": [
+    {
+     "slug": "nizn-intermetallic",
+     "cost": 5.6678,
+     "feeds": {
+      "Ni": 15.0,
+      "Zn": 5.0
+     }
+    },
+    {
+     "slug": "pdcu-saa",
+     "cost": 10.8046,
+     "feeds": {
+      "Pd": 0.01,
+      "Cu": 4.99
+     }
+    },
+    {
+     "slug": "pd-alumina-baseline",
+     "cost": 14.9028,
+     "feeds": {
+      "Pd": 0.04
+     }
+    },
+    {
+     "slug": "pdag-bimetallic",
+     "cost": 17.5673,
+     "feeds": {
+      "Pd": 0.04,
+      "Ag": 0.2
+     }
+    }
+   ],
+   "exposure": "precious_vs_base",
+   "contest_kinds": [
+    "precious_vs_base"
+   ],
+   "contests": [
+    {
+     "a": "nizn-intermetallic",
+     "b": "pdcu-saa",
+     "kind": "precious_vs_base",
+     "symbol": "Cu",
+     "symbol_in": "pdcu-saa",
+     "wt_pct": 4.99,
+     "precious": false,
+     "cost": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "nizn-intermetallic",
+     "b": "pdcu-saa",
+     "kind": "precious_vs_base",
+     "symbol": "Ni",
+     "symbol_in": "nizn-intermetallic",
+     "wt_pct": 15.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       30.150936
+      ],
+      "crossing_over_baseline": [
+       4.0689
+      ],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 33,
+      "history": {
+       "n": 9,
+       "first": "2026-01-30",
+       "last": "2026-09-01",
+       "min": 7.3822,
+       "median": 7.7564,
+       "max": 8.7657,
+       "months_b_wins": 0,
+       "months_a_wins": 9,
+       "share_b_wins_pct": 0.0
+      }
+     },
+     "composite_perf0": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       29.375438
+      ],
+      "crossing_over_baseline": [
+       3.9642
+      ],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 43,
+      "history": {
+       "n": 9,
+       "first": "2026-01-30",
+       "last": "2026-09-01",
+       "min": 7.3822,
+       "median": 7.7564,
+       "max": 8.7657,
+       "months_b_wins": 0,
+       "months_a_wins": 9,
+       "share_b_wins_pct": 0.0
+      }
+     }
+    },
+    {
+     "a": "nizn-intermetallic",
+     "b": "pdcu-saa",
+     "kind": "precious_vs_base",
+     "symbol": "Pd",
+     "symbol_in": "pdcu-saa",
+     "wt_pct": 0.01,
+     "precious": true,
+     "cost": {
+      "symbol": "Pd",
+      "unit": "$/troy_oz",
+      "baseline_price": 1316.5,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.3165,
+       131650.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Pd",
+      "unit": "$/troy_oz",
+      "baseline_price": 1316.5,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.3165,
+       131650.0
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "nizn-intermetallic",
+     "b": "pdcu-saa",
+     "kind": "precious_vs_base",
+     "symbol": "Zn",
+     "symbol_in": "nizn-intermetallic",
+     "wt_pct": 5.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Zn",
+      "unit": "$/lb",
+      "baseline_price": 1.8665,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       70.08961
+      ],
+      "crossing_over_baseline": [
+       37.5514
+      ],
+      "scan_range": [
+       0.0018665,
+       186.65
+      ],
+      "evaluations": 31,
+      "history": {
+       "n": 9,
+       "first": "2026-01-30",
+       "last": "2026-09-01",
+       "min": 1.4445,
+       "median": 1.6098,
+       "max": 1.8665,
+       "months_b_wins": 0,
+       "months_a_wins": 9,
+       "share_b_wins_pct": 0.0
+      }
+     },
+     "composite_perf0": {
+      "symbol": "Zn",
+      "unit": "$/lb",
+      "baseline_price": 1.8665,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       70.820838
+      ],
+      "crossing_over_baseline": [
+       37.9431
+      ],
+      "scan_range": [
+       0.0018665,
+       186.65
+      ],
+      "evaluations": 41,
+      "history": {
+       "n": 9,
+       "first": "2026-01-30",
+       "last": "2026-09-01",
+       "min": 1.4445,
+       "median": 1.6098,
+       "max": 1.8665,
+       "months_b_wins": 0,
+       "months_a_wins": 9,
+       "share_b_wins_pct": 0.0
+      }
+     }
+    },
+    {
+     "a": "nizn-intermetallic",
+     "b": "pd-alumina-baseline",
+     "kind": "precious_vs_base",
+     "symbol": "Ni",
+     "symbol_in": "nizn-intermetallic",
+     "wt_pct": 15.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       48.293718
+      ],
+      "crossing_over_baseline": [
+       6.5173
+      ],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 33,
+      "history": {
+       "n": 9,
+       "first": "2026-01-30",
+       "last": "2026-09-01",
+       "min": 7.3822,
+       "median": 7.7564,
+       "max": 8.7657,
+       "months_b_wins": 0,
+       "months_a_wins": 9,
+       "share_b_wins_pct": 0.0
+      }
+     },
+     "composite_perf0": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       45.163886
+      ],
+      "crossing_over_baseline": [
+       6.0949
+      ],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 44,
+      "history": {
+       "n": 9,
+       "first": "2026-01-30",
+       "last": "2026-09-01",
+       "min": 7.3822,
+       "median": 7.7564,
+       "max": 8.7657,
+       "months_b_wins": 0,
+       "months_a_wins": 9,
+       "share_b_wins_pct": 0.0
+      }
+     }
+    },
+    {
+     "a": "nizn-intermetallic",
+     "b": "pd-alumina-baseline",
+     "kind": "precious_vs_base",
+     "symbol": "Pd",
+     "symbol_in": "pd-alumina-baseline",
+     "wt_pct": 0.04,
+     "precious": true,
+     "cost": {
+      "symbol": "Pd",
+      "unit": "$/troy_oz",
+      "baseline_price": 1316.5,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       195.851346
+      ],
+      "crossing_over_baseline": [
+       0.1488
+      ],
+      "scan_range": [
+       1.3165,
+       131650.0
+      ],
+      "evaluations": 33,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 935.9474,
+       "median": 1552.8636,
+       "max": 2901.65,
+       "months_b_wins": 0,
+       "months_a_wins": 93,
+       "share_b_wins_pct": 0.0
+      }
+     },
+     "composite_perf0": {
+      "symbol": "Pd",
+      "unit": "$/troy_oz",
+      "baseline_price": 1316.5,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       225.052461
+      ],
+      "crossing_over_baseline": [
+       0.1709
+      ],
+      "scan_range": [
+       1.3165,
+       131650.0
+      ],
+      "evaluations": 40,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 935.9474,
+       "median": 1552.8636,
+       "max": 2901.65,
+       "months_b_wins": 0,
+       "months_a_wins": 93,
+       "share_b_wins_pct": 0.0
+      }
+     }
+    },
+    {
+     "a": "nizn-intermetallic",
+     "b": "pd-alumina-baseline",
+     "kind": "precious_vs_base",
+     "symbol": "Zn",
+     "symbol_in": "nizn-intermetallic",
+     "wt_pct": 5.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Zn",
+      "unit": "$/lb",
+      "baseline_price": 1.8665,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       124.516355
+      ],
+      "crossing_over_baseline": [
+       66.7111
+      ],
+      "scan_range": [
+       0.0018665,
+       186.65
+      ],
+      "evaluations": 33,
+      "history": {
+       "n": 9,
+       "first": "2026-01-30",
+       "last": "2026-09-01",
+       "min": 1.4445,
+       "median": 1.6098,
+       "max": 1.8665,
+       "months_b_wins": 0,
+       "months_a_wins": 9,
+       "share_b_wins_pct": 0.0
+      }
+     },
+     "composite_perf0": {
+      "symbol": "Zn",
+      "unit": "$/lb",
+      "baseline_price": 1.8665,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       118.529205
+      ],
+      "crossing_over_baseline": [
+       63.5035
+      ],
+      "scan_range": [
+       0.0018665,
+       186.65
+      ],
+      "evaluations": 43,
+      "history": {
+       "n": 9,
+       "first": "2026-01-30",
+       "last": "2026-09-01",
+       "min": 1.4445,
+       "median": 1.6098,
+       "max": 1.8665,
+       "months_b_wins": 0,
+       "months_a_wins": 9,
+       "share_b_wins_pct": 0.0
+      }
+     }
+    },
+    {
+     "a": "nizn-intermetallic",
+     "b": "pdag-bimetallic",
+     "kind": "precious_vs_base",
+     "symbol": "Ag",
+     "symbol_in": "pdag-bimetallic",
+     "wt_pct": 0.2,
+     "precious": true,
+     "cost": {
+      "symbol": "Ag",
+      "unit": "$/troy_oz",
+      "baseline_price": 64.575,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.06457500000000001,
+       6457.5
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Ag",
+      "unit": "$/troy_oz",
+      "baseline_price": 64.575,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.06457500000000001,
+       6457.5
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "nizn-intermetallic",
+     "b": "pdag-bimetallic",
+     "kind": "precious_vs_base",
+     "symbol": "Ni",
+     "symbol_in": "nizn-intermetallic",
+     "wt_pct": 15.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       60.092552
+      ],
+      "crossing_over_baseline": [
+       8.1095
+      ],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 33,
+      "history": {
+       "n": 9,
+       "first": "2026-01-30",
+       "last": "2026-09-01",
+       "min": 7.3822,
+       "median": 7.7564,
+       "max": 8.7657,
+       "months_b_wins": 0,
+       "months_a_wins": 9,
+       "share_b_wins_pct": 0.0
+      }
+     },
+     "composite_perf0": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       57.212099
+      ],
+      "crossing_over_baseline": [
+       7.7208
+      ],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 44,
+      "history": {
+       "n": 9,
+       "first": "2026-01-30",
+       "last": "2026-09-01",
+       "min": 7.3822,
+       "median": 7.7564,
+       "max": 8.7657,
+       "months_b_wins": 0,
+       "months_a_wins": 9,
+       "share_b_wins_pct": 0.0
+      }
+     }
+    },
+    {
+     "a": "nizn-intermetallic",
+     "b": "pdag-bimetallic",
+     "kind": "precious_vs_base",
+     "symbol": "Pd",
+     "symbol_in": "pdag-bimetallic",
+     "wt_pct": 0.04,
+     "precious": true,
+     "cost": {
+      "symbol": "Pd",
+      "unit": "$/troy_oz",
+      "baseline_price": 1316.5,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.3165,
+       131650.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Pd",
+      "unit": "$/troy_oz",
+      "baseline_price": 1316.5,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       1.3165,
+       131650.0
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "nizn-intermetallic",
+     "b": "pdag-bimetallic",
+     "kind": "precious_vs_base",
+     "symbol": "Zn",
+     "symbol_in": "nizn-intermetallic",
+     "wt_pct": 5.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Zn",
+      "unit": "$/lb",
+      "baseline_price": 1.8665,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       159.907553
+      ],
+      "crossing_over_baseline": [
+       85.6724
+      ],
+      "scan_range": [
+       0.0018665,
+       186.65
+      ],
+      "evaluations": 33,
+      "history": {
+       "n": 9,
+       "first": "2026-01-30",
+       "last": "2026-09-01",
+       "min": 1.4445,
+       "median": 1.6098,
+       "max": 1.8665,
+       "months_b_wins": 0,
+       "months_a_wins": 9,
+       "share_b_wins_pct": 0.0
+      }
+     },
+     "composite_perf0": {
+      "symbol": "Zn",
+      "unit": "$/lb",
+      "baseline_price": 1.8665,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       154.793526
+      ],
+      "crossing_over_baseline": [
+       82.9325
+      ],
+      "scan_range": [
+       0.0018665,
+       186.65
+      ],
+      "evaluations": 43,
+      "history": {
+       "n": 9,
+       "first": "2026-01-30",
+       "last": "2026-09-01",
+       "min": 1.4445,
+       "median": 1.6098,
+       "max": 1.8665,
+       "months_b_wins": 0,
+       "months_a_wins": 9,
+       "share_b_wins_pct": 0.0
+      }
+     }
+    }
+   ]
+  },
+  {
+   "family": "steam-methane-reforming",
+   "title": "Steam methane reforming (SMR) reference family",
+   "domain": "thermal",
+   "economics_unit": [
+    "$/lb"
+   ],
+   "cost_winner": "sn-ni-coking-resistant",
+   "composite_perf0_winner": "ni-calcium-aluminate",
+   "candidates": [
+    {
+     "slug": "ni-calcium-aluminate",
+     "cost": 5.3948,
+     "feeds": {
+      "Ni": 14.5
+     }
+    },
+    {
+     "slug": "sn-ni-coking-resistant",
+     "cost": 4.5675,
+     "feeds": {
+      "Ni": 15.0,
+      "Sn": 0.5
+     }
+    },
+    {
+     "slug": "rh-alumina-compact",
+     "cost": 2570.4459,
+     "feeds": {
+      "Rh": 1.0
+     }
+    }
+   ],
+   "exposure": "precious_vs_base",
+   "contest_kinds": [
+    "base_vs_base",
+    "precious_vs_base"
+   ],
+   "contests": [
+    {
+     "a": "sn-ni-coking-resistant",
+     "b": "ni-calcium-aluminate",
+     "kind": "base_vs_base",
+     "symbol": "Sn",
+     "symbol_in": "sn-ni-coking-resistant",
+     "wt_pct": 0.5,
+     "precious": false,
+     "cost": {
+      "symbol": "Sn",
+      "unit": "$/lb",
+      "baseline_price": 24.8229,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       134.694415
+      ],
+      "crossing_over_baseline": [
+       5.4262
+      ],
+      "scan_range": [
+       0.024822900000000002,
+       2482.29
+      ],
+      "evaluations": 32,
+      "history": {
+       "n": 9,
+       "first": "2026-01-30",
+       "last": "2026-09-01",
+       "min": 20.6884,
+       "median": 24.7934,
+       "max": 26.0476,
+       "months_b_wins": 0,
+       "months_a_wins": 9,
+       "share_b_wins_pct": 0.0
+      }
+     },
+     "composite_perf0": {
+      "symbol": "Sn",
+      "unit": "$/lb",
+      "baseline_price": 24.8229,
+      "b_wins_at_baseline": true,
+      "b_wins_when": "above",
+      "verdict": "b_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.024822900000000002,
+       2482.29
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "sn-ni-coking-resistant",
+     "b": "rh-alumina-compact",
+     "kind": "precious_vs_base",
+     "symbol": "Ni",
+     "symbol_in": "sn-ni-coking-resistant",
+     "wt_pct": 15.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Ni",
+      "unit": "$/lb",
+      "baseline_price": 7.4101,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0074101,
+       741.01
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "sn-ni-coking-resistant",
+     "b": "rh-alumina-compact",
+     "kind": "precious_vs_base",
+     "symbol": "Rh",
+     "symbol_in": "rh-alumina-compact",
+     "wt_pct": 1.0,
+     "precious": true,
+     "cost": {
+      "symbol": "Rh",
+      "unit": "$/troy_oz",
+      "baseline_price": 9225.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       9.225,
+       922500.0
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Rh",
+      "unit": "$/troy_oz",
+      "baseline_price": 9225.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       9.225,
+       922500.0
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "sn-ni-coking-resistant",
+     "b": "rh-alumina-compact",
+     "kind": "precious_vs_base",
+     "symbol": "Sn",
+     "symbol_in": "sn-ni-coking-resistant",
+     "wt_pct": 0.5,
+     "precious": false,
+     "cost": {
+      "symbol": "Sn",
+      "unit": "$/lb",
+      "baseline_price": 24.8229,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.024822900000000002,
+       2482.29
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Sn",
+      "unit": "$/lb",
+      "baseline_price": 24.8229,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.024822900000000002,
+       2482.29
+      ],
+      "evaluations": 35
+     }
+    }
+   ]
+  },
+  {
+   "family": "syngas-methanol",
+   "title": "Syngas-to-methanol reference family",
+   "domain": "thermal",
+   "economics_unit": [
+    "$/lb"
+   ],
+   "cost_winner": "cza-industrial",
+   "composite_perf0_winner": "cza-industrial",
+   "candidates": [
+    {
+     "slug": "cza-industrial",
+     "cost": 9.4126,
+     "feeds": {
+      "Cu": 48.0
+     }
+    },
+    {
+     "slug": "ga-promoted-cza",
+     "cost": 16.6706,
+     "feeds": {
+      "Cu": 47.0
+     }
+    },
+    {
+     "slug": "pd-zno-intermetallic",
+     "cost": 791.9188,
+     "feeds": {
+      "Pd": 2.5
+     }
+    }
+   ],
+   "exposure": "precious_vs_base",
+   "contest_kinds": [
+    "precious_vs_base",
+    "same_metals"
+   ],
+   "contests": [
+    {
+     "a": "cza-industrial",
+     "b": "pd-zno-intermetallic",
+     "kind": "precious_vs_base",
+     "symbol": "Cu",
+     "symbol_in": "cza-industrial",
+     "wt_pct": 48.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "cza-industrial",
+     "b": "pd-zno-intermetallic",
+     "kind": "precious_vs_base",
+     "symbol": "Pd",
+     "symbol_in": "pd-zno-intermetallic",
+     "wt_pct": 2.5,
+     "precious": true,
+     "cost": {
+      "symbol": "Pd",
+      "unit": "$/troy_oz",
+      "baseline_price": 1316.5,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       9.993806
+      ],
+      "crossing_over_baseline": [
+       0.0076
+      ],
+      "scan_range": [
+       1.3165,
+       131650.0
+      ],
+      "evaluations": 33,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 935.9474,
+       "median": 1552.8636,
+       "max": 2901.65,
+       "months_b_wins": 0,
+       "months_a_wins": 93,
+       "share_b_wins_pct": 0.0
+      }
+     },
+     "composite_perf0": {
+      "symbol": "Pd",
+      "unit": "$/troy_oz",
+      "baseline_price": 1316.5,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       8.729582
+      ],
+      "crossing_over_baseline": [
+       0.0066
+      ],
+      "scan_range": [
+       1.3165,
+       131650.0
+      ],
+      "evaluations": 40,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 935.9474,
+       "median": 1552.8636,
+       "max": 2901.65,
+       "months_b_wins": 0,
+       "months_a_wins": 93,
+       "share_b_wins_pct": 0.0
+      }
+     }
+    }
+   ]
+  },
+  {
+   "family": "water-gas-shift",
+   "title": "Water-gas shift reference family",
+   "domain": "thermal",
+   "economics_unit": [
+    "$/lb"
+   ],
+   "cost_winner": "fe-cr-hts",
+   "composite_perf0_winner": "cu-zno-baseline",
+   "candidates": [
+    {
+     "slug": "cu-zno-baseline",
+     "cost": 7.9884,
+     "feeds": {
+      "Cu": 40.0
+     }
+    },
+    {
+     "slug": "fe-cr-hts",
+     "cost": 6.8855,
+     "feeds": {
+      "Cu": 2.1
+     }
+    },
+    {
+     "slug": "co-ceria-interface",
+     "cost": 9.9936,
+     "feeds": {
+      "Co": 18.0
+     }
+    },
+    {
+     "slug": "pt-ceria-premium",
+     "cost": 945.2935,
+     "feeds": {
+      "Pt": 2.5
+     }
+    }
+   ],
+   "exposure": "precious_vs_base",
+   "contest_kinds": [
+    "base_vs_base",
+    "precious_vs_base",
+    "same_metals"
+   ],
+   "contests": [
+    {
+     "a": "fe-cr-hts",
+     "b": "co-ceria-interface",
+     "kind": "base_vs_base",
+     "symbol": "Co",
+     "symbol_in": "co-ceria-interface",
+     "wt_pct": 18.0,
+     "precious": false,
+     "cost": {
+      "symbol": "Co",
+      "unit": "$/lb",
+      "baseline_price": 21.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       9.533281
+      ],
+      "crossing_over_baseline": [
+       0.454
+      ],
+      "scan_range": [
+       0.021,
+       2100.0
+      ],
+      "evaluations": 32
+     },
+     "composite_perf0": {
+      "symbol": "Co",
+      "unit": "$/lb",
+      "baseline_price": 21.0,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       1.036974
+      ],
+      "crossing_over_baseline": [
+       0.0494
+      ],
+      "scan_range": [
+       0.021,
+       2100.0
+      ],
+      "evaluations": 36
+     }
+    },
+    {
+     "a": "fe-cr-hts",
+     "b": "co-ceria-interface",
+     "kind": "base_vs_base",
+     "symbol": "Cu",
+     "symbol_in": "fe-cr-hts",
+     "wt_pct": 2.1,
+     "precious": false,
+     "cost": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "above",
+      "verdict": "crosses",
+      "crossings": [
+       77.998207
+      ],
+      "crossing_over_baseline": [
+       11.9127
+      ],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 30,
+      "history": {
+       "n": 61,
+       "first": "2021-09-30",
+       "last": "2026-09-02",
+       "min": 3.4135,
+       "median": 4.3135,
+       "max": 6.5935,
+       "months_b_wins": 0,
+       "months_a_wins": 61,
+       "share_b_wins_pct": 0.0
+      }
+     },
+     "composite_perf0": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "fe-cr-hts",
+     "b": "pt-ceria-premium",
+     "kind": "precious_vs_base",
+     "symbol": "Cu",
+     "symbol_in": "fe-cr-hts",
+     "wt_pct": 2.1,
+     "precious": false,
+     "cost": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 19
+     },
+     "composite_perf0": {
+      "symbol": "Cu",
+      "unit": "$/lb",
+      "baseline_price": 6.5475,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "a_always_wins",
+      "crossings": [],
+      "crossing_over_baseline": [],
+      "scan_range": [
+       0.0065475,
+       654.75
+      ],
+      "evaluations": 35
+     }
+    },
+    {
+     "a": "fe-cr-hts",
+     "b": "pt-ceria-premium",
+     "kind": "precious_vs_base",
+     "symbol": "Pt",
+     "symbol_in": "pt-ceria-premium",
+     "wt_pct": 2.5,
+     "precious": true,
+     "cost": {
+      "symbol": "Pt",
+      "unit": "$/troy_oz",
+      "baseline_price": 1746.3,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       5.404304
+      ],
+      "crossing_over_baseline": [
+       0.0031
+      ],
+      "scan_range": [
+       1.7463,
+       174630.0
+      ],
+      "evaluations": 33,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 762.4737,
+       "median": 973.8333,
+       "max": 2447.8095,
+       "months_b_wins": 0,
+       "months_a_wins": 93,
+       "share_b_wins_pct": 0.0
+      }
+     },
+     "composite_perf0": {
+      "symbol": "Pt",
+      "unit": "$/troy_oz",
+      "baseline_price": 1746.3,
+      "b_wins_at_baseline": false,
+      "b_wins_when": "below",
+      "verdict": "crosses",
+      "crossings": [
+       5.696416
+      ],
+      "crossing_over_baseline": [
+       0.0033
+      ],
+      "scan_range": [
+       1.7463,
+       174630.0
+      ],
+      "evaluations": 43,
+      "history": {
+       "n": 93,
+       "first": "2019-01-31",
+       "last": "2026-09-02",
+       "min": 762.4737,
+       "median": 973.8333,
+       "max": 2447.8095,
+       "months_b_wins": 0,
+       "months_a_wins": 93,
+       "share_b_wins_pct": 0.0
+      }
+     }
+    }
+   ]
+  }
+ ],
+ "errors": []
+}
