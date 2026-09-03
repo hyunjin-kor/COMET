@@ -138,6 +138,21 @@ seeded first day, which alone reads as Au 2000 → 4404 and Pt 950 → 1891
 overnight. A further 25 rows were dropped as outliers — aluminium quoted per
 metric ton, and a rhodium parse failure pinned at 1001.0.
 
+### 2.5 Break-even metal price
+
+The replay asks whether a recommendation moved; this asks at what price it
+would. For each family the cost-only winner at the reference basis is paired
+with every rival that depends on a different market-fed metal. For each metal
+only one of the pair contains, that price is swept from 0.001× to 100× of the
+basis with all other prices held, and the crossing is located by a log-grid
+scan followed by bisection. Two crossings are reported per contest — on landed
+cost, where the gap is affine in the swept price and has at most one root, and
+on the performance-zero composite, where min–max normalised economics can
+cross more than once, so every sign change is kept. The frozen monthly record
+then gives the number of months on each side of the cost crossing. Families
+whose candidates share the same metals, or carry none, are classed as having
+no exposure rather than reported as stable. 30 families, 120 contests.
+
 ## 3. Results and discussion
 
 ### 3.1 The Step Method reproduces CatCost Table 6.2
@@ -216,6 +231,74 @@ whose prices decouple** — a platinum-group metal against a base metal, one PGM
 against another, or a metal loading against none. That is a statable rule for
 when a screening ranking needs its price basis quoted alongside it.
 
+### 3.5 At what metal price does the active-metal choice flip?
+
+> **Provisional — concept dry run.** The numbers in this section come from
+> the 2026-09-02 software state and exist to fix the framing and the table
+> layout. They are to be regenerated with `scripts/active_metal_breakeven.py`
+> after the software update is complete, and must not be quoted before then.
+
+The reactions where the choice of active metal is live are the familiar ones:
+Ru or Ni for ammonia cracking and CO₂ methanation, Pt or Cu for CO-PROX,
+reverse and forward water-gas shift, Rh or Ni for steam reforming, Ir or Ni for
+dry reforming, Pt/C or a nickel oxyhydroxide for an electro-oxidation anode.
+Fifteen of the 30 families are such precious-versus-base contests; eleven
+(the zeolite, oxide and carbon families) carry no market-fed metal at all;
+three are base-versus-base and one precious-versus-precious.
+
+**At literature loadings the precious metal never competes on cost.** Across
+the 28 sweeps that move a precious metal's price against a base-metal winner,
+a cost crossing exists in 13, at a median of **0.4% of today's price**; in the
+other 15 the precious-metal route cannot win even with the metal free, because
+its support, precursor conversion and processing already exceed the base-metal
+catalyst's whole cost. Ru/MgO (3 wt%) matches Ni/Al₂O₃ for ammonia cracking
+only at Ru ≈ $1.7/oz; Ir/CeO₂ (0.6 wt%) matches Ni-zeolite for dry reforming
+at Ir ≈ $9/oz; Pt/TiO₂ (2 wt%) matches Cu/CeO₂ for RWGS at Pt ≈ $2/oz. Only
+one of the 28 contests has a single month of the seven-year record on the
+precious side. A 1–5 wt% PGM formulation against a 10–20 wt% base-metal one
+is therefore a decision about activity and lifetime, not about metal price,
+and no observed market movement makes it otherwise.
+
+**Loading, not metal identity, sets the exposure.** The three sweeps that
+cross within 0.1×–10× of today are Pd/Al₂O₃ at **0.04 wt%** for acetylene
+hydrogenation (break-even $196/oz, 0.15× today) and the two 20 wt% Pt/C and
+Au/C anodes against NiOOH ($1,020/oz). The anode cases cross because the
+base-metal rival, 100 wt% NiOOH on a fixed-cost route, is itself expensive
+per pound.
+
+**The one cost ordering that has actually changed sides.** For the glycerol
+anode, Pt/C is cheaper whenever platinum is below $1,020/oz — which held in
+**63% of the 93 months** since 2019 and does not hold today. The replay in
+§3.4 did not flag this family because it ranks on the composite, whose
+break-even is $355/oz, a price platinum never reached: the cost ordering
+changed sides for most of seven years while the recommendation did not,
+carried by the evidence and route scores.
+
+**Plausible flips are base-metal contests, and composite ones.** Cost
+crossings inside ordinary market movement (0.5×–2× today) occur only where
+both candidates are base metals: the cheapest ammonia-cracking catalyst
+changes from Ni/Al₂O₃ to Co/MgO-La₂O₃ at **Ni +9% or Co −8%**, and the
+dry-reforming winner at Co −17%. On the performance-zero composite, by
+contrast, 8 of the 28 precious-metal sweeps cross within 0.1×–10× (CO-PROX
+Pt at 0.70×, HDO Pt at 0.71×, CO₂-to-formate Pd at 0.96×). This is why §3.4
+finds flips that the cost sweep does not: the price sensitivity of a screening
+recommendation comes from cost interacting with the non-cost scores, not from
+cost crossovers alone. Reporting cost only would call these families
+insensitive; reporting the composite only would hide that the cost ordering
+never moved.
+
+**The zeolite and oxide families are the control.** MTO, NH₃-SCR, the
+FCC-type routes, photocatalytic TiO₂ and CrOx dehydrogenation carry no
+market-fed metal or a trace of one, so the metal-free candidate wins on cost at
+every swept price. These are the largest-tonnage solid catalysts in use; that
+the volume end of the market is insulated from metal prices, while the
+exposure concentrates in PGM- and Ni/Co-based hydrogenation, reforming and
+electrochemical families, is itself a statable result.
+
+*[Figure 3: for each precious-vs-base contest, the cost break-even as a
+multiple of today's price on a log axis, with the five-year observed range of
+that metal overlaid; the three contests inside 0.1×–10× labelled.]*
+
 ## 4. Conclusion
 
 Route-resolved cost and cradle-to-gate impact on one boundary let the same
@@ -229,7 +312,11 @@ weighting moves the winner in 8 of 30 families; the metal price basis moves it
 in 4 of 30, whenever the candidates rest on different metals. Neither is a
 reason to distrust screening — 26 of 30 families are robust to five years of
 observed price movement — but both are reasons to publish the basis with the
-result.
+result. The break-even sweep locates where that sensitivity sits: at
+literature loadings a precious-metal catalyst is never a cost decision against
+a base-metal one, the cheapest catalyst can change within ±10% of a nickel or
+cobalt price, and the zeolite and oxide families that carry most of the
+industry's tonnage are insulated from metal markets altogether.
 
 ## 5. Limitations
 
@@ -250,6 +337,11 @@ To be stated in the manuscript, not buried:
    Cu/Ni crossing is bracketed, not observed.
 6. **MCDA scores are author-assigned.** Reported, and the reason the
    performance-zero ranking is primary.
+7. **Cobalt, molybdenum and tungsten have no long price series**, so the
+   nearest base-metal cost flips (Ni-vs-Co in ammonia cracking and dry
+   reforming) cannot yet be counted against history. The break-even sweep
+   moves one metal at a time with the others held, so it does not represent
+   co-movement; §3.4's date slices are its complement.
 
 ## 6. Data and code availability
 
