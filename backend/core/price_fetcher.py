@@ -106,7 +106,7 @@ def _utc_now_iso() -> str:
 # escalating the 2018 CatCost value across eight volatile years.
 _USGS_REF: dict[str, float] = {
     "Co": 21.0,    # U.S. spot cathode, $/lb (Platts via USGS)
-    "Mo": 34.71,   # molybdic oxide $51/kg, contained-Mo basis
+    "Mo": 23.13,   # molybdic oxide $51/kg; USGS quotes contained Mo (Platts basis), so no oxide correction
     "W": 21.74,    # Rotterdam WO3 concentrate $380/mtu at 7.93 kg W per mtu
     "Zn": 1.30,    # LME cash 130 c/lb; fallback under the live Westmetall feed
     "Sn": 15.00,   # LME cash 1,500 c/lb; fallback under the live Westmetall feed
@@ -609,10 +609,20 @@ WESTMETALL_FIELDS: dict[str, str] = {
     "Zn": "LME_Zn_cash",
     "Sn": "LME_Sn_cash",
 }
-# IMF Primary Commodity Price System indicator codes (monthly averages).
-IMF_PCPS_SERIES: dict[str, str] = {
-    "Co": "PCOBA",
-    "Mo": "PLMMODY",
+# IMF Primary Commodity Price System monthly averages: symbol -> (indicator,
+# app unit, factor from the published unit). Base metals publish per tonne
+# (PCOBA's codelist entry says "per pound" but the values are per tonne);
+# gold and silver publish per troy ounce.
+IMF_PCPS_SERIES: dict[str, tuple[str, str, float]] = {
+    "Al": ("PALUM", "$/lb", 1 / LB_PER_METRIC_TON),
+    "Cu": ("PCOPP", "$/lb", 1 / LB_PER_METRIC_TON),
+    "Ni": ("PNICK", "$/lb", 1 / LB_PER_METRIC_TON),
+    "Zn": ("PZINC", "$/lb", 1 / LB_PER_METRIC_TON),
+    "Sn": ("PTIN", "$/lb", 1 / LB_PER_METRIC_TON),
+    "Co": ("PCOBA", "$/lb", 1 / LB_PER_METRIC_TON),
+    "Mo": ("PLMMODY", "$/lb", 1 / LB_PER_METRIC_TON),
+    "Au": ("PGOLD", "$/troy_oz", 1.0),
+    "Ag": ("PSILVER", "$/troy_oz", 1.0),
 }
 
 
@@ -715,10 +725,11 @@ def _parse_westmetall_table(page: str) -> list[dict]:
 
 
 async def fetch_imf_pcps_history(symbol: str, start: date) -> list[dict]:
-    """Return monthly-average history from the IMF Primary Commodity Price System, in $/lb."""
-    indicator = IMF_PCPS_SERIES.get(symbol)
-    if not indicator:
+    """Return monthly-average history from the IMF Primary Commodity Price System, in the app unit."""
+    entry = IMF_PCPS_SERIES.get(symbol)
+    if not entry:
         return []
+    indicator, _unit, factor = entry
     try:
         async with httpx.AsyncClient(timeout=60, follow_redirects=True, headers=_HTTP_HEADERS) as client:
             resp = await client.get(
@@ -732,29 +743,30 @@ async def fetch_imf_pcps_history(symbol: str, start: date) -> list[dict]:
         logger.warning("IMF PCPS history(%s) failed: %s", symbol, e)
         return []
 
-    points = _parse_imf_pcps_series(page)
+    points = _parse_imf_pcps_series(page, factor)
     logger.info("IMF PCPS history(%s): %d points", symbol, len(points))
     return points
 
 
-def _parse_imf_pcps_series(page: str) -> list[dict]:
-    """Parse SDMX-ML monthly observations into ascending month-end $/lb points.
+def _parse_imf_pcps_series(page: str, factor: float) -> list[dict]:
+    """Parse SDMX-ML monthly observations into ascending month-end points.
 
-    PCPS quotes base metals per metric tonne. The PCOBA codelist entry says
-    "US dollars per pound", but the values are per tonne (cobalt reads ~55,000
-    in mid-2026 against a ~$25/lb market), so the tonne conversion applies.
+    ``factor`` converts the published unit to the app unit (see
+    IMF_PCPS_SERIES). Cobalt is the trap: its codelist entry says "US dollars
+    per pound", but the values are per tonne (~55,000 in mid-2026 against a
+    ~$25/lb market).
     """
     points: list[dict] = []
     for year, month, value in re.findall(
         r'<Obs [^>]*TIME_PERIOD="(\d{4})-M(\d{2})"[^>]*OBS_VALUE="([^"]+)"', page
     ):
         try:
-            per_tonne = float(value)
+            published = float(value)
         except ValueError:
             continue
         y, m = int(year), int(month)
         day = date(y, m, calendar.monthrange(y, m)[1])
-        points.append({"date": day.isoformat(), "price": round(per_tonne / LB_PER_METRIC_TON, 4)})
+        points.append({"date": day.isoformat(), "price": round(published * factor, 4)})
     points.sort(key=lambda p: p["date"])
     return points
 

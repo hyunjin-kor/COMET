@@ -15,6 +15,14 @@ The shipped product has four research-facing layers:
 4. `spent catalyst recovery proxy`
    Thermocatalyst workflows can optionally include end-of-life recovery value as a screening adjustment.
 
+## Price basis
+
+Two tiers, kept apart on purpose.
+
+The live tier is what the desktop app shows. Yahoo Finance futures for gold, silver, platinum, palladium, copper and aluminium, Johnson Matthey daily base prices for the platinum-group metals, Westmetall's LME settlements for nickel, zinc and tin, and USGS annual averages where nothing trades. Every price carries its source, quote time and evidence tier.
+
+The reference tier is what the paper analysis prices from. Monthly averages from the IMF Primary Commodity Price System (aluminium, copper, nickel, zinc, tin, cobalt, molybdenum, gold, silver) and Johnson Matthey base prices averaged by month (platinum, palladium, rhodium, ruthenium, iridium), cut at the latest month both publish. Tungsten, rhenium, vanadium and iron have no published series and keep their USGS or CatCost anchors. `scripts/fetch_price_history.py` freezes the series, `scripts/build_reference_basis.py` turns one month into a price map, and the analysis scripts take that map through `--price-basis`. Every number in the paper then re-costs from a committed file rather than from whatever the app fetched that day.
+
 ## Step Method (Chapter 6)
 
 The Step Method estimates catalyst selling price by summing:

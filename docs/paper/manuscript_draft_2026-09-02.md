@@ -130,6 +130,14 @@ that occurred together. A symbol not covering the whole window holds a
 constant value rather than being spliced in partway, which would enter the
 series as a step change.
 
+> *Design change 2026-09-03, to apply at regeneration:* price states become
+> institutional monthly averages (IMF Primary Commodity Prices for Al, Cu, Ni,
+> Zn, Sn, Co, Mo, Au, Ag; Johnson Matthey base prices averaged by month for
+> Pt, Pd, Rh, Ru, Ir), all from 2019-01, cut at the latest month every series
+> covers. The "last observation in the period" wording below and the Yahoo
+> Finance dependence go away; the reference basis for "today" is that latest
+> common month. Nickel, zinc and tin then vary over the whole window.
+
 Only live market feeds are replayed. Seeded reference values, CatCost
 escalation and USGS annual averages are point estimates, not observations;
 2,169 such rows were excluded. This matters to the result: including them
@@ -360,20 +368,24 @@ Every number in this manuscript regenerates from:
 
 ```bash
 python scripts/reproduce_catcost_table62.py --json docs/paper/table62_reproduction_<date>.json
-python scripts/run_all_families.py --out docs/paper/all_families_<date>.json
+python scripts/run_all_families.py --price-basis docs/paper/reference_basis_<date>.json \
+    --out docs/paper/all_families_<date>.json
 python scripts/fetch_price_history.py --out docs/paper/price_history_<date>.json
+python scripts/build_reference_basis.py --history docs/paper/price_history_<date>.json \
+    --out docs/paper/reference_basis_<date>.json
 python scripts/price_volatility_screen.py --history docs/paper/price_history_<date>.json \
-    --since 2021-09 --out docs/paper/price_volatility_5y_<date>.json
-python scripts/price_volatility_screen.py --out docs/paper/price_volatility_<date>.json
+    --since 2019-01 --price-basis docs/paper/reference_basis_<date>.json \
+    --out docs/paper/price_volatility_<date>.json
 python scripts/active_metal_breakeven.py --history docs/paper/price_history_<date>.json \
+    --price-basis docs/paper/reference_basis_<date>.json \
     --out docs/paper/active_metal_breakeven_<date>.json
 ```
 
 The frozen outputs of the run reported here are committed beside this file, so
 a reader can check a quoted number without re-running anything. Passing
-`--price-basis docs/paper/all_families_<date>.json` to the evaluation scripts
-re-costs from the committed price basis instead of the local price table, so
-the numbers regenerate on any machine.
+`--price-basis docs/paper/reference_basis_<date>.json` to the evaluation
+scripts re-costs from the committed reference basis instead of the local price
+table, so the numbers regenerate on any machine.
 
 > *Resolved 2026-09-02:* the Zenodo records for v1.3.10–v1.3.24 now carry
 > `polyform-noncommercial-1.0.0`. Copies taken while they were labelled CC BY 4.0

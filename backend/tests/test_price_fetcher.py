@@ -149,17 +149,23 @@ def test_parse_imf_pcps_series_converts_metric_ton_to_lb_at_month_end():
     </Series>
     """
 
-    points = _parse_imf_pcps_series(page)
+    points = _parse_imf_pcps_series(page, 1 / 2204.62)
 
     assert [point["date"] for point in points] == ["2026-06-30", "2026-07-31"]
     assert math.isclose(points[-1]["price"], 55872.86363636364 / 2204.62, rel_tol=1e-4)
+
+
+def test_parse_imf_pcps_series_keeps_troy_ounce_quotes_unconverted():
+    page = '<Obs TIME_PERIOD="2026-M07" OBS_VALUE="4075.0968" DERIVATION_TYPE="R"/>'
+
+    assert _parse_imf_pcps_series(page, 1.0) == [{"date": "2026-07-31", "price": 4075.0968}]
 
 
 def test_reference_prices_use_usgs_anchors_for_co_mo_w():
     ref = get_reference_prices()
 
     anchors = (
-        ("Co", 21.0), ("Mo", 34.71), ("W", 21.74),
+        ("Co", 21.0), ("Mo", 23.13), ("W", 21.74),
         ("Zn", 1.30), ("Sn", 15.0), ("V", 8.96), ("Re", 1179.4),
     )
     for sym, anchor in anchors:

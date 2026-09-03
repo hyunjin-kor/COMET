@@ -34,6 +34,15 @@ class TestSourceMatching:
         # Metals.Dev is rated slightly higher than MetalpriceAPI in the rule table.
         assert metals_dev["confidence_score"] > metalprice["confidence_score"]
 
+    def test_monthly_average_sources_share_the_reference_tier(self):
+        imf = describe_price_evidence(source="IMF PCPS (monthly average)", fetched_at="2026-07-31")
+        jm = describe_price_evidence(source="Johnson Matthey (monthly average)", fetched_at="2026-07-31")
+        assert imf["tier"] == jm["tier"] == "indexed_reference"
+        assert imf["confidence_score"] == jm["confidence_score"] == 88
+        assert imf["freshness_status"] == "reference"
+        # The daily Johnson Matthey board keeps its own rule.
+        assert describe_price_evidence(source="Johnson Matthey (live)")["tier"] == "supplier_board"
+
     def test_johnson_matthey_is_supplier_board_with_long_freshness_window(self):
         ev = describe_price_evidence(source="Johnson Matthey (live)")
         assert ev["tier"] == "supplier_board"
