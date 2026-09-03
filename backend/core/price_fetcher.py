@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import calendar
 import html as html_lib
 import json
 import logging
@@ -608,6 +609,10 @@ WESTMETALL_FIELDS: dict[str, str] = {
     "Zn": "LME_Zn_cash",
     "Sn": "LME_Sn_cash",
 }
+# IMF Primary Commodity Price System indicator codes (monthly averages).
+IMF_PCPS_SERIES: dict[str, str] = {
+    "Co": "PCOBA",
+}
 
 
 async def fetch_johnson_matthey_history(start: date, end: date) -> dict[str, list[dict]]:
@@ -703,6 +708,51 @@ def _parse_westmetall_table(page: str) -> list[dict]:
             per_tonne = float(cells[1].replace(",", ""))
         except ValueError:
             continue
+        points.append({"date": day.isoformat(), "price": round(per_tonne / LB_PER_METRIC_TON, 4)})
+    points.sort(key=lambda p: p["date"])
+    return points
+
+
+async def fetch_imf_pcps_history(symbol: str, start: date) -> list[dict]:
+    """Return monthly-average history from the IMF Primary Commodity Price System, in $/lb."""
+    indicator = IMF_PCPS_SERIES.get(symbol)
+    if not indicator:
+        return []
+    try:
+        async with httpx.AsyncClient(timeout=60, follow_redirects=True, headers=_HTTP_HEADERS) as client:
+            resp = await client.get(
+                f"https://api.imf.org/external/sdmx/2.1/data/IMF.RES,PCPS/G001.{indicator}.USD.M",
+                params={"startPeriod": start.strftime("%Y-%m")},
+                headers={"Accept": "application/xml"},
+            )
+            resp.raise_for_status()
+            page = resp.text
+    except httpx.HTTPError as e:
+        logger.warning("IMF PCPS history(%s) failed: %s", symbol, e)
+        return []
+
+    points = _parse_imf_pcps_series(page)
+    logger.info("IMF PCPS history(%s): %d points", symbol, len(points))
+    return points
+
+
+def _parse_imf_pcps_series(page: str) -> list[dict]:
+    """Parse SDMX-ML monthly observations into ascending month-end $/lb points.
+
+    PCPS quotes base metals per metric tonne. The PCOBA codelist entry says
+    "US dollars per pound", but the values are per tonne (cobalt reads ~55,000
+    in mid-2026 against a ~$25/lb market), so the tonne conversion applies.
+    """
+    points: list[dict] = []
+    for year, month, value in re.findall(
+        r'<Obs [^>]*TIME_PERIOD="(\d{4})-M(\d{2})"[^>]*OBS_VALUE="([^"]+)"', page
+    ):
+        try:
+            per_tonne = float(value)
+        except ValueError:
+            continue
+        y, m = int(year), int(month)
+        day = date(y, m, calendar.monthrange(y, m)[1])
         points.append({"date": day.isoformat(), "price": round(per_tonne / LB_PER_METRIC_TON, 4)})
     points.sort(key=lambda p: p["date"])
     return points

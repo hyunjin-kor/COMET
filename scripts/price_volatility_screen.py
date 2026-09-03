@@ -244,13 +244,19 @@ def main() -> None:
     parser.add_argument("--all-symbols", action="store_true",
                         help="vary every observed symbol instead of only those "
                              "present on all dates (reproduces the coverage artefact)")
+    parser.add_argument("--price-basis", type=Path,
+                        help="frozen price basis JSON (a previous run's output, or its price_basis map) instead of the local database")
     args = parser.parse_args()
 
     create_db_and_tables()
 
     with Session(engine) as session:
         ensure_material_library_seeded(session)
-        baseline = _latest_price_map(session)
+        if args.price_basis:
+            payload = json.loads(args.price_basis.read_text(encoding="utf-8"))
+            baseline = payload.get("price_basis", payload)
+        else:
+            baseline = _latest_price_map(session)
         if args.history:
             series, partial = load_frozen_series(args.history, args.since)
             dropped, excluded = [], {}
@@ -284,7 +290,7 @@ def main() -> None:
 
         for fam in families:
             key = fam["family"]
-            base = evaluate_benchmark_family(session=session, family=key, profile="balanced")
+            base = evaluate_benchmark_family(session=session, family=key, profile="balanced", prices=baseline)
             base_weights = dict(base["decision_profile"]["weights"])
             perf0 = performance_zero_weights(base_weights)
 
@@ -354,6 +360,8 @@ def main() -> None:
         "live_sources": list(LIVE_SOURCES),
         "excluded_non_market_rows": excluded,
         "price_source": str(args.history) if args.history else "application database",
+        "price_basis_source": str(args.price_basis) if args.price_basis else "application database",
+        "price_basis": baseline,
         "window_since": args.since,
         "held_at_baseline_incomplete_coverage": partial,
         "dropped_outliers": dropped,

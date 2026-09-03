@@ -40,7 +40,11 @@ from backend.core.decision_engine import (  # noqa: E402
     evaluate_benchmark_family,
     list_benchmark_families,
 )
-from backend.database import create_db_and_tables, engine, ensure_material_library_seeded  # noqa: E402
+from backend.database import (  # noqa: E402
+    create_db_and_tables,
+    engine,
+    ensure_material_library_seeded,
+)
 
 DIMS = ("economics", "evidence", "route", "performance")
 
@@ -79,7 +83,7 @@ def run_family(session: Session, family: str, baseline: dict, history: dict, sca
         classes.add(kind)
         if kind in {"no_feed", "same_metals"}:
             continue
-        for symbol in sorted((sa ^ sb)):
+        for symbol in sorted(sa ^ sb):
             holder = cost_winner if symbol in sa else b
             row: dict[str, Any] = {
                 "a": cost_winner, "b": b, "kind": kind, "symbol": symbol,
@@ -132,6 +136,7 @@ def main() -> None:
     ap.add_argument("--out", type=Path, required=True)
     ap.add_argument("--scan", type=int, default=32, help="log-grid points per sweep")
     ap.add_argument("--family", action="append", help="restrict to these families")
+    ap.add_argument("--price-basis", type=Path, help="frozen price basis JSON (a previous run's output, or its price_basis map) instead of the local database")
     args = ap.parse_args()
 
     history = json.loads(args.history.read_text(encoding="utf-8"))["series"]
@@ -141,7 +146,11 @@ def main() -> None:
 
     with Session(engine) as session:
         ensure_material_library_seeded(session)
-        baseline = _latest_price_map(session)
+        if args.price_basis:
+            payload = json.loads(args.price_basis.read_text(encoding="utf-8"))
+            baseline = payload.get("price_basis", payload)
+        else:
+            baseline = _latest_price_map(session)
         for fam in list_benchmark_families():
             key = fam["family"]
             if args.family and key not in args.family:
@@ -155,6 +164,7 @@ def main() -> None:
         "generated_at": datetime.now(UTC).isoformat(),
         "history_file": str(args.history),
         "history_symbols": {s: {"unit": v["unit"], "first": v["first"], "last": v["last"], "n": v["n"]} for s, v in history.items()},
+        "price_basis_source": str(args.price_basis) if args.price_basis else "application database",
         "price_basis": baseline,
         "scan": args.scan,
         "families": families_out,

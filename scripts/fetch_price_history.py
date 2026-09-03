@@ -12,6 +12,7 @@ paper over it:
   Johnson Matthey   Ru Rh Pt Pd Ir     monthly, 2019 onward
   Yahoo Finance     Pt Pd Au Ag Cu Al  daily, five years
   Westmetall (LME)  Ni Zn Sn           daily, current year only
+  IMF PCPS          Co                 monthly average, from --start (series begins 1992)
 
 Run:  python scripts/fetch_price_history.py --out docs/paper/price_history_<date>.json
 """
@@ -29,10 +30,12 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from backend.core.price_fetcher import (  # noqa: E402
+    IMF_PCPS_SERIES,
     JM_HISTORY_SYMBOLS,
     WESTMETALL_FIELDS,
     YAHOO_METALS,
     fetch_history,
+    fetch_imf_pcps_history,
     fetch_johnson_matthey_history,
     fetch_westmetall_history,
 )
@@ -40,6 +43,7 @@ from backend.core.price_fetcher import (  # noqa: E402
 YAHOO_UNITS = {symbol: unit for symbol, _ticker, _name, unit, _factor in YAHOO_METALS}
 JM_UNIT = "$/troy_oz"
 WESTMETALL_UNIT = "$/lb"
+IMF_UNIT = "$/lb"
 
 
 def _series(rows: list[dict], unit: str, source: str) -> dict[str, Any]:
@@ -105,13 +109,24 @@ async def collect(start: date, end: date, yahoo_period: str, pause_s: float) -> 
         else:
             failures[f"westmetall:{symbol}"] = "empty response"
 
+    for symbol in IMF_PCPS_SERIES:
+        try:
+            rows = await fetch_imf_pcps_history(symbol, start)
+        except Exception as exc:  # noqa: BLE001
+            failures[f"imf:{symbol}"] = f"{type(exc).__name__}: {exc}"
+            continue
+        if rows:
+            series[symbol] = _series(rows, IMF_UNIT, "IMF PCPS (monthly average)")
+        else:
+            failures[f"imf:{symbol}"] = "empty response"
+
     return {"series": series, "failures": failures}
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", type=Path, required=True)
-    parser.add_argument("--start", default="2019-01-01", help="Johnson Matthey history start")
+    parser.add_argument("--start", default="2019-01-01", help="Johnson Matthey and IMF history start")
     parser.add_argument("--yahoo-period", default="5y")
     parser.add_argument("--pause", type=float, default=3.0, help="seconds between Yahoo calls")
     args = parser.parse_args()
