@@ -5,7 +5,7 @@ React/Vite renderer for the COMET desktop application.
 ## Project Links
 
 - Repository: https://github.com/hyunjin-kor/COMET
-- Latest release: https://github.com/hyunjin-kor/COMET/releases/tag/v1.1.13
+- Latest release: https://github.com/hyunjin-kor/COMET/releases/latest
 - Root handoff file for Claude: `../CLAUDE.md`
 
 ## Commands

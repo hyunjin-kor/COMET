@@ -4,6 +4,7 @@ from datetime import UTC, datetime
 from backend.core.price_fetcher import (
     _extract_yahoo_history,
     _extract_yahoo_quote,
+    _parse_imf_pcps_series,
     _parse_johnson_matthey_current_prices,
     _parse_johnson_matthey_history,
     _parse_markets_insider_quote,
@@ -137,6 +138,21 @@ def test_parse_westmetall_table_converts_metric_ton_to_lb():
 
     assert [point["date"] for point in points] == ["2026-08-27", "2026-08-28"]
     assert math.isclose(points[-1]["price"], 16850.0 / 2204.62, rel_tol=1e-4)
+
+
+def test_parse_imf_pcps_series_converts_metric_ton_to_lb_at_month_end():
+    page = """
+    <Series COUNTRY="G001" INDICATOR="PCOBA" DATA_TRANSFORMATION="USD" FREQUENCY="M" SCALE="0">
+      <Obs TIME_PERIOD="2026-M07" OBS_VALUE="55872.86363636364" DERIVATION_TYPE="R"/>
+      <Obs TIME_PERIOD="2026-M02" OBS_VALUE="NaN-not-a-price" DERIVATION_TYPE="R"/>
+      <Obs TIME_PERIOD="2026-M06" OBS_VALUE="55854.52272727273" DERIVATION_TYPE="R"/>
+    </Series>
+    """
+
+    points = _parse_imf_pcps_series(page)
+
+    assert [point["date"] for point in points] == ["2026-06-30", "2026-07-31"]
+    assert math.isclose(points[-1]["price"], 55872.86363636364 / 2204.62, rel_tol=1e-4)
 
 
 def test_reference_prices_use_usgs_anchors_for_co_mo_w():

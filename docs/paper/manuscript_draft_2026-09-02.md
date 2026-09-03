@@ -342,6 +342,12 @@ To be stated in the manuscript, not buried:
    reforming) cannot yet be counted against history. The break-even sweep
    moves one metal at a time with the others held, so it does not represent
    co-movement; §3.4's date slices are its complement.
+   [2026-09-03: cobalt and molybdenum monthly history is now frozen from IMF
+   PCPS (2019 onward at the fetch default). The cobalt 2025 average, $15.8/lb,
+   sits below the USGS anchor the price basis uses, $21.0/lb, and the app's
+   molybdenum anchor ($34.71/lb) looks 1.5x high against both IMF and USGS
+   ($51.9/kg contained Mo, about $23/lb); align both before regenerating §3.5.
+   Tungsten remains without a series.]
 
 ## 6. Data and code availability
 
@@ -359,14 +365,19 @@ python scripts/fetch_price_history.py --out docs/paper/price_history_<date>.json
 python scripts/price_volatility_screen.py --history docs/paper/price_history_<date>.json \
     --since 2021-09 --out docs/paper/price_volatility_5y_<date>.json
 python scripts/price_volatility_screen.py --out docs/paper/price_volatility_<date>.json
+python scripts/active_metal_breakeven.py --history docs/paper/price_history_<date>.json \
+    --out docs/paper/active_metal_breakeven_<date>.json
 ```
 
 The frozen outputs of the run reported here are committed beside this file, so
-a reader can check a quoted number without re-running anything.
+a reader can check a quoted number without re-running anything. Passing
+`--price-basis docs/paper/all_families_<date>.json` to the evaluation scripts
+re-costs from the committed price basis instead of the local price table, so
+the numbers regenerate on any machine.
 
-> *Open item:* Zenodo records v1.3.10–v1.3.24 were published under CC BY 4.0
-> before the licence was settled. Their metadata needs correcting by hand, and
-> those grants cannot be withdrawn.
+> *Resolved 2026-09-02:* the Zenodo records for v1.3.10–v1.3.24 now carry
+> `polyform-noncommercial-1.0.0`. Copies taken while they were labelled CC BY 4.0
+> keep that grant; only the label changed.
 
 ---
 

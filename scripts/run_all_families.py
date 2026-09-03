@@ -92,6 +92,7 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", type=Path, required=True)
     ap.add_argument("--grid", type=float, default=0.1, help="weight-simplex grid step")
+    ap.add_argument("--price-basis", type=Path, help="frozen price basis JSON (a previous run's output, or its price_basis map) instead of the local database")
     args = ap.parse_args()
 
     create_db_and_tables()
@@ -101,7 +102,11 @@ def main() -> None:
 
     with Session(engine) as session:
         ensure_material_library_seeded(session)
-        price_basis = _latest_price_map(session)
+        if args.price_basis:
+            payload = json.loads(args.price_basis.read_text(encoding="utf-8"))
+            price_basis = payload.get("price_basis", payload)
+        else:
+            price_basis = _latest_price_map(session)
         catalogs = _load_catalogs()
 
         for fam in list_benchmark_families():
@@ -110,14 +115,14 @@ def main() -> None:
             profiles = list(catalog["decision_profiles"])
             by_profile: dict[str, dict] = {}
             for profile in profiles:
-                by_profile[profile] = evaluate_benchmark_family(session=session, family=key, profile=profile)
+                by_profile[profile] = evaluate_benchmark_family(session=session, family=key, profile=profile, prices=price_basis)
 
             balanced = by_profile.get("balanced") or by_profile[profiles[0]]
             base_w = dict(balanced["decision_profile"]["weights"])
             perf0 = {k: (0.0 if k == "performance" else base_w[k]) for k in DIMS}
             s = sum(perf0.values())
             perf0 = {k: v / s for k, v in perf0.items()}
-            perf0_res = evaluate_benchmark_family(session=session, family=key, profile=balanced["decision_profile"]["id"], weights=perf0)
+            perf0_res = evaluate_benchmark_family(session=session, family=key, profile=balanced["decision_profile"]["id"], weights=perf0, prices=price_basis)
 
             cands = balanced["candidates"]
             balanced_winner = cands[0]["slug"] if cands else None
@@ -160,6 +165,7 @@ def main() -> None:
 
     out = {
         "generated_at": datetime.now(UTC).isoformat(),
+        "price_basis_source": str(args.price_basis) if args.price_basis else "application database",
         "price_basis": price_basis,
         "simplex_grid_step": args.grid,
         "summary": summary,
