@@ -49,6 +49,7 @@ so SmartScreen will warn you the first time. Pick "More info → Run anyway".
 
 - Costs the preparation route with the Step Method, following the CatCost methodology published by NREL
 - Tags every price `LIVE`, `INDEXED` or `MANUAL`, and shows the source, quote year and freshness behind it
+- Switches between a practical basis (live quotes) and an academic basis (IMF and Johnson Matthey monthly averages), so a screening result can be quoted against a citable month
 - Ships thirty literature benchmark families you can load and edit: ammonia cracking, CO₂ hydrogenation, RWGS, dry reforming, water-gas shift, fuel-cell ORR, electrolyzer OER and more
 - Covers bulk supported catalysts as well as electrode-stack electrocatalysts
 - Runs Monte Carlo, so you get a range rather than one number

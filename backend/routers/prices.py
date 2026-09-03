@@ -32,6 +32,7 @@ TRACKED_SYMBOLS = [
 ]
 
 _PERIOD_DAYS = {"1mo": 31, "3mo": 92, "6mo": 183, "1y": 366, "2y": 731, "5y": 1827}
+_BASIS_PATTERN = "^(live|reference)$"
 
 # Trend payloads are cached per period so reopening the page (or switching
 # the change basis back and forth) does not re-hit the Yahoo chart API.
@@ -44,6 +45,8 @@ def _normalize(symbol: str) -> str:
 
 
 def _is_live_source(source: str | None) -> bool:
+    if "monthly average" in (source or ""):
+        return False
     return any(
         label in (source or "")
         for label in (
@@ -91,6 +94,7 @@ def _serialize_price_row(
     unit: str,
     source: str,
     fetched_at: str | None,
+    basis: str = "live",
 ) -> dict:
     source_type = _source_type_from_source(source)
     evidence = describe_price_evidence(source=source, fetched_at=fetched_at)
@@ -103,14 +107,37 @@ def _serialize_price_row(
         "source_type": source_type,
         "is_live": source_type == "live",
         "fetched_at": fetched_at,
+        "basis": basis,
+        "basis_month": fetched_at[:7] if basis == "reference" and fetched_at else None,
         "evidence": evidence,
     }
 
 
+def _reference_rows(session: Session, symbol: str, cutoff: date | None = None) -> list[MetalPrice]:
+    """Stored monthly-average rows for ``symbol``, oldest first."""
+    stmt = (
+        select(MetalPrice)
+        .where(MetalPrice.symbol == symbol, MetalPrice.basis == "reference")
+        .order_by(MetalPrice.fetched_at.desc())
+        .limit(500)
+    )
+    rows = list(reversed(session.exec(stmt).all()))
+    if cutoff is not None:
+        rows = [row for row in rows if row.fetched_at.date() >= cutoff]
+    return rows
+
+
 @router.get("")
-def get_all_prices(session: Session = Depends(get_session)):
-    """Get latest price for every metal (DB cache first, then reference)."""
-    stmt = select(MetalPrice).order_by(MetalPrice.fetched_at.desc())
+def get_all_prices(
+    basis: str = Query(default="live", pattern=_BASIS_PATTERN),
+    session: Session = Depends(get_session),
+):
+    """Latest price for every metal in one basis (stored rows first, anchors for the rest)."""
+    stmt = (
+        select(MetalPrice)
+        .where(MetalPrice.basis == basis)
+        .order_by(MetalPrice.fetched_at.desc())
+    )
     db_prices = session.exec(stmt).all()
 
     seen: set[str] = set()
@@ -125,9 +152,10 @@ def get_all_prices(session: Session = Depends(get_session)):
                 unit=p.unit,
                 source=p.source,
                 fetched_at=p.fetched_at.isoformat(),
+                basis=basis,
             ))
 
-    # Fill missing symbols from reference
+    # Fill missing symbols from the USGS / CatCost anchors
     for sym, info in get_reference_prices().items():
         if sym not in seen:
             result.append(_serialize_price_row(
@@ -137,6 +165,7 @@ def get_all_prices(session: Session = Depends(get_session)):
                 unit=info["unit"],
                 source=info["source"],
                 fetched_at=info["fetched_at"],
+                basis=basis,
             ))
 
     # Sort: live prices first, then alphabetical
@@ -214,17 +243,45 @@ async def _symbol_trend(
     }
 
 
+def _reference_trend(symbol: str, period: str, session: Session) -> dict:
+    """Trend built from stored monthly averages; no network call."""
+    cutoff = date.today() - timedelta(days=_PERIOD_DAYS.get(period, 366))
+    rows = _reference_rows(session, symbol, cutoff)
+    points = [{"date": row.fetched_at.strftime("%Y-%m-%d"), "price": row.price} for row in rows]
+    prices = [point["price"] for point in points]
+    first = prices[0] if prices else None
+    last = prices[-1] if prices else None
+    change_pct = ((last - first) / first * 100) if first and last is not None and first != 0 else None
+    return {
+        "symbol": symbol,
+        "source": rows[-1].source if rows else "reference",
+        "count": len(points),
+        "first": first,
+        "last": last,
+        "high": max(prices) if prices else None,
+        "low": min(prices) if prices else None,
+        "change_pct": change_pct,
+        "points": _downsample(points),
+    }
+
+
 @router.get("/trends")
 async def get_price_trends(
     period: str = Query(default="3mo", pattern="^(1mo|3mo|6mo|1y|2y|5y)$"),
+    basis: str = Query(default="live", pattern=_BASIS_PATTERN),
     session: Session = Depends(get_session),
 ):
     """Compact per-symbol trend series and change stats for every tracked metal.
 
-    Yahoo-backed symbols come from the chart API; the rest fall back to the
-    per-refresh snapshots accumulated in the local DB (deduplicated by day),
-    so change figures are only reported for series with real depth.
+    On the live basis, Yahoo-backed symbols come from the chart API and the
+    rest fall back to the per-refresh snapshots accumulated in the local DB
+    (deduplicated by day). On the reference basis every series is the stored
+    monthly averages, so no network call is made.
     """
+
+    if basis == "reference":
+        trends = [_reference_trend(symbol, period, session) for symbol in TRACKED_SYMBOLS]
+        return {"period": period, "basis": basis, "trends": {trend["symbol"]: trend for trend in trends}}
 
     cached = _trends_cache.get(period)
     if cached and time.monotonic() - cached[0] < _TRENDS_TTL_SECONDS:
@@ -237,7 +294,7 @@ async def get_price_trends(
     trends = await asyncio.gather(
         *[_symbol_trend(symbol, period, session, jm_history) for symbol in TRACKED_SYMBOLS]
     )
-    payload = {"period": period, "trends": {trend["symbol"]: trend for trend in trends}}
+    payload = {"period": period, "basis": basis, "trends": {trend["symbol"]: trend for trend in trends}}
     _trends_cache[period] = (time.monotonic(), payload)
     return payload
 
@@ -301,12 +358,16 @@ def get_price_usage():
 
 
 @router.get("/{symbol}")
-def get_price(symbol: str, session: Session = Depends(get_session)):
-    """Get latest price for a specific metal."""
+def get_price(
+    symbol: str,
+    basis: str = Query(default="live", pattern=_BASIS_PATTERN),
+    session: Session = Depends(get_session),
+):
+    """Get latest price for a specific metal in one basis."""
     symbol = _normalize(symbol)
     stmt = (
         select(MetalPrice)
-        .where(MetalPrice.symbol == symbol)
+        .where(MetalPrice.symbol == symbol, MetalPrice.basis == basis)
         .order_by(MetalPrice.fetched_at.desc())
         .limit(1)
     )
@@ -319,6 +380,7 @@ def get_price(symbol: str, session: Session = Depends(get_session)):
             unit=p.unit,
             source=p.source,
             fetched_at=p.fetched_at.isoformat(),
+            basis=basis,
         )
     refs = get_reference_prices()
     if symbol not in refs:
@@ -331,6 +393,7 @@ def get_price(symbol: str, session: Session = Depends(get_session)):
         unit=info["unit"],
         source=info["source"],
         fetched_at=info["fetched_at"],
+        basis=basis,
     )
 
 
@@ -340,12 +403,39 @@ async def get_price_history(
     period: str = Query(default="1y", pattern="^(1mo|3mo|6mo|1y|2y|5y)$"),
     from_date: date | None = Query(default=None, alias="from"),
     to_date: date | None = Query(default=None, alias="to"),
+    basis: str = Query(default="live", pattern=_BASIS_PATTERN),
     session: Session = Depends(get_session),
 ):
-    """Return OHLC price history from Yahoo Finance (live) or DB records."""
+    """Return price history: live feeds or DB records, or stored monthly averages on the reference basis."""
     symbol = _normalize(symbol)
     if from_date is not None and to_date is not None and from_date > to_date:
         raise HTTPException(status_code=422, detail="'from' must be on or before 'to'")
+
+    if basis == "reference":
+        rows = _reference_rows(session, symbol, date.today() - timedelta(days=_PERIOD_DAYS.get(period, 366)))
+        history = _filter_history_range(
+            [
+                {
+                    "date": row.fetched_at.strftime("%Y-%m-%d"),
+                    "price": row.price,
+                    "open": row.price,
+                    "high": row.price,
+                    "low": row.price,
+                }
+                for row in rows
+            ],
+            from_date,
+            to_date,
+        )
+        if not history:
+            raise HTTPException(status_code=404, detail=f"No reference history for '{symbol}'")
+        return {
+            "symbol": symbol,
+            "period": period,
+            "source": rows[-1].source,
+            "count": len(history),
+            "history": history,
+        }
 
     # Try yfinance live history first (covers Pt, Pd, Au, Ag, Cu, Al)
     live_history = await fetch_history(symbol, period)

@@ -171,12 +171,12 @@ _LIVE_ELIGIBLE_LIBRARY_KEYS: set[str] = {
 }
 
 
-def _latest_live_price(session: Session, symbol: str) -> MetalPrice | None:
-    """Return the most recent stored live quote for ``symbol``, if any."""
+def _latest_live_price(session: Session, symbol: str, basis: str = "live") -> MetalPrice | None:
+    """Return the most recent stored quote for ``symbol`` within one price basis, if any."""
 
     stmt = (
         select(MetalPrice)
-        .where(MetalPrice.symbol == symbol)
+        .where(MetalPrice.symbol == symbol, MetalPrice.basis == basis)
         .order_by(MetalPrice.fetched_at.desc())
         .limit(1)
     )
@@ -184,7 +184,7 @@ def _latest_live_price(session: Session, symbol: str) -> MetalPrice | None:
 
 
 def _live_override_for_material(
-    session: Session, material: Material
+    session: Session, material: Material, basis: str = "live"
 ) -> dict | None:
     """If ``material`` is a USGS commodity proxy and a live quote exists, return it.
 
@@ -200,7 +200,7 @@ def _live_override_for_material(
     if not symbol:
         return None
 
-    quote = _latest_live_price(session, symbol)
+    quote = _latest_live_price(session, symbol, basis)
     if quote is None or quote.price is None or quote.price <= 0:
         return None
 
@@ -210,6 +210,7 @@ def _live_override_for_material(
         "source": quote.source,
         "fetched_at": quote.fetched_at.isoformat() if quote.fetched_at else None,
         "symbol": symbol,
+        "basis": basis,
     }
 
 
@@ -275,6 +276,7 @@ def resolve_component_input(
     component: dict,
     *,
     target_year: int = DEFAULT_ESCALATION_TARGET_YEAR,
+    basis: str = "live",
 ) -> tuple[dict, dict | None]:
     """Resolve a component row against the library when a material key is provided.
 
@@ -306,13 +308,13 @@ def resolve_component_input(
 
     snapshot = material_snapshot(material, used_for=f"component:{component.get('role', 'component')}")
 
-    live = _live_override_for_material(session, material)
+    live = _live_override_for_material(session, material, basis)
     if live is not None:
         live_per_lb = round(mass_price_to_per_lb(live["price"], live["price_unit"]), 6)
         resolved["price_per_lb"] = live_per_lb
         snapshot["price"] = live["price"]
         snapshot["price_unit"] = live["price_unit"]
-        snapshot["price_scope"] = "live_market"
+        snapshot["price_scope"] = "live_market" if basis == "live" else "reference_monthly"
         snapshot["quote_source"] = live["source"]
         snapshot["normalized_price_per_lb"] = live_per_lb
         snapshot["raw_price_per_lb"] = live_per_lb
@@ -330,6 +332,7 @@ def resolve_component_input(
             "fallback_price_unit": material.price_unit,
             "fallback_source": material.source,
             "fallback_quote_year": material.quote_year,
+            "basis": basis,
         }
     else:
         raw_per_lb = round(material_price_per_lb(material), 6)
@@ -344,7 +347,8 @@ def resolve_component_input(
             # Eligible for live but no quote stored; surface that for clarity.
             snapshot["live_override"] = {
                 "applied": False,
-                "reason": "no_live_quote_stored",
+                "reason": "no_live_quote_stored" if basis == "live" else "no_reference_quote_stored",
+                "basis": basis,
             }
 
     return resolved, snapshot

@@ -31,63 +31,20 @@ from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from backend.core.price_fetcher import (  # noqa: E402
-    IMF_PCPS_SERIES,
-    JM_HISTORY_SYMBOLS,
-    fetch_imf_pcps_history,
-    fetch_johnson_matthey_history,
-)
-from backend.core.reference_basis import (  # noqa: E402
-    latest_common_month,
-    monthly_average,
-    truncate_series,
-)
-
-JM_UNIT = "$/troy_oz"
+from backend.core.price_fetcher import fetch_reference_series  # noqa: E402
 
 
-def _series(points: list[dict], unit: str, source: str) -> dict[str, Any]:
-    points = sorted(points, key=lambda p: p["date"])
+def _series(entry: dict[str, Any]) -> dict[str, Any]:
+    points = sorted(entry["points"], key=lambda p: p["date"])
     return {
-        "source": source,
-        "unit": unit,
+        "source": entry["source"],
+        "unit": entry["unit"],
         "cadence": "monthly_average",
         "points": points,
         "first": points[0]["date"] if points else None,
         "last": points[-1]["date"] if points else None,
         "n": len(points),
     }
-
-
-async def collect(start: date, end: date) -> dict[str, Any]:
-    """Fetch every feed, tolerating individual failures."""
-    series: dict[str, dict[str, Any]] = {}
-    failures: dict[str, str] = {}
-
-    try:
-        jm = await fetch_johnson_matthey_history(start, end)
-        for symbol in JM_HISTORY_SYMBOLS:
-            rows = (jm or {}).get(symbol) or []
-            if rows:
-                monthly = monthly_average(rows, exclude_month=end.strftime("%Y-%m"))
-                series[symbol] = _series(monthly, JM_UNIT, "Johnson Matthey (monthly average)")
-            else:
-                failures[symbol] = "johnson matthey returned no rows"
-    except Exception as exc:  # noqa: BLE001 - one dead feed must not lose the others
-        failures["_johnson_matthey"] = f"{type(exc).__name__}: {exc}"
-
-    for symbol, (_indicator, unit, _factor) in IMF_PCPS_SERIES.items():
-        try:
-            rows = await fetch_imf_pcps_history(symbol, start)
-        except Exception as exc:  # noqa: BLE001
-            failures[f"imf:{symbol}"] = f"{type(exc).__name__}: {exc}"
-            continue
-        if rows:
-            series[symbol] = _series(rows, unit, "IMF PCPS (monthly average)")
-        else:
-            failures[f"imf:{symbol}"] = "empty response"
-
-    return {"series": series, "failures": failures}
 
 
 def main() -> None:
@@ -98,19 +55,19 @@ def main() -> None:
 
     start = date.fromisoformat(args.start)
     end = date.today()
-    result = asyncio.run(collect(start, end))
-    if not result["series"]:
-        raise SystemExit(f"no series fetched: {result['failures']}")
+    raw, failures = asyncio.run(fetch_reference_series(start, end))
+    if not raw:
+        raise SystemExit(f"no series fetched: {failures}")
 
-    last_month = latest_common_month(result["series"])
-    series = truncate_series(result["series"], last_month)
+    series = {symbol: _series(entry) for symbol, entry in raw.items()}
+    last_month = max(entry["last"][:7] for entry in series.values())
 
     payload = {
         "generated_at": datetime.now(UTC).isoformat(),
         "requested": {"start": args.start, "end": end.isoformat()},
         "cadence": "monthly_average",
         "last_month": last_month,
-        "failures": result["failures"],
+        "failures": failures,
         "series": series,
     }
     args.out.parent.mkdir(parents=True, exist_ok=True)
@@ -121,9 +78,9 @@ def main() -> None:
         print(f"{symbol:<8}{entry['source']:<36}{entry['n']:>6}  "
               f"{entry['first'] or '-':<12}{entry['last'] or '-':<12}")
     print(f"all series cut at {last_month}")
-    if result["failures"]:
+    if failures:
         print("failures:")
-        for key, message in sorted(result["failures"].items()):
+        for key, message in sorted(failures.items()):
             print(f"  {key}: {message}")
     print(f"wrote {args.out}")
 

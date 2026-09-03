@@ -1831,3 +1831,106 @@ class TestDecision:
         assert all(candidate["route"]["calculator_template_id"] == "alkaline_electrolyzer_gde" for candidate in data["candidates"])
         assert all(candidate["summary"]["economics_basis_unit"] == "$/cm2" for candidate in data["candidates"])
         assert all(candidate["electrode_defaults"]["membrane_material_key"] for candidate in data["candidates"])
+
+
+class TestPriceBasis:
+    """The academic (reference) basis lives beside the live basis in one table."""
+
+    def _seed(self, session):
+        session.add_all([
+            MetalPrice(
+                symbol="Co", name="Cobalt", price=24.0, unit="$/lb",
+                source="IMF PCPS (monthly average)", basis="reference",
+                fetched_at=datetime(2026, 6, 30, tzinfo=UTC),
+            ),
+            MetalPrice(
+                symbol="Co", name="Cobalt", price=25.3435, unit="$/lb",
+                source="IMF PCPS (monthly average)", basis="reference",
+                fetched_at=datetime(2026, 7, 31, tzinfo=UTC),
+            ),
+            MetalPrice(
+                symbol="Co", name="Cobalt", price=26.0, unit="$/lb",
+                source="Markets Insider (live)",
+                fetched_at=datetime(2026, 9, 1, tzinfo=UTC),
+            ),
+        ])
+        session.commit()
+
+    def test_reference_rows_stay_out_of_the_live_basis(self, client, session):
+        self._seed(session)
+
+        live = client.get("/api/prices/Co").json()
+        assert live["basis"] == "live"
+        assert live["source"] == "Markets Insider (live)"
+        assert live["basis_month"] is None
+
+        ref = client.get("/api/prices/Co?basis=reference").json()
+        assert ref["basis"] == "reference"
+        assert ref["price"] == 25.3435
+        assert ref["basis_month"] == "2026-07"
+        assert ref["source_type"] == "indexed"
+        assert ref["evidence"]["confidence_score"] == 88
+
+        rows = client.get("/api/prices?basis=reference").json()
+        by_symbol = {row["symbol"]: row for row in rows}
+        assert by_symbol["Co"]["price"] == 25.3435
+        assert by_symbol["W"]["source"].startswith("USGS")  # anchor fills a metal with no series
+        assert client.get("/api/prices?basis=weekly").status_code == 422
+
+    def test_reference_history_and_trends_come_from_the_table(self, client, session, monkeypatch):
+        from backend.routers import prices as prices_router
+
+        async def no_network(*args, **kwargs):
+            raise AssertionError("the reference basis must not touch a live feed")
+
+        monkeypatch.setattr(prices_router, "fetch_history", no_network)
+        monkeypatch.setattr(prices_router, "fetch_johnson_matthey_history", no_network)
+        monkeypatch.setattr(prices_router, "fetch_westmetall_history", no_network)
+        self._seed(session)
+
+        hist = client.get("/api/prices/Co/history?basis=reference&period=5y").json()
+        assert hist["source"] == "IMF PCPS (monthly average)"
+        assert [row["date"] for row in hist["history"]] == ["2026-06-30", "2026-07-31"]
+        assert client.get("/api/prices/W/history?basis=reference").status_code == 404
+
+        trends = client.get("/api/prices/trends?basis=reference&period=5y").json()
+        assert trends["basis"] == "reference"
+        assert trends["trends"]["Co"]["count"] == 2
+        assert trends["trends"]["Co"]["last"] == 25.3435
+        assert trends["trends"]["W"]["count"] == 0
+
+    def test_benchmark_family_accepts_a_price_basis(self, client):
+        ref = client.get("/api/decision/benchmarks/ammonia-cracking?basis=reference")
+        assert ref.status_code == 200
+        assert ref.json()["price_basis"] == "reference"
+        assert client.get("/api/decision/benchmarks/ammonia-cracking").json()["price_basis"] == "live"
+        assert client.get("/api/decision/benchmarks/ammonia-cracking?basis=daily").status_code == 422
+
+    def test_calculate_prices_library_metals_from_the_chosen_basis(self, client, session):
+        session.add(MetalPrice(
+            symbol="Pt", name="Platinum", price=1641.0909, unit="$/troy_oz",
+            source="Johnson Matthey (monthly average)", basis="reference",
+            fetched_at=datetime(2026, 7, 31, tzinfo=UTC),
+        ))
+        session.commit()
+        payload = {
+            "components": [
+                {"role": "active_metal", "material_key": "lit:usgs-platinum-bullion-2025", "wt_pct": 5.0},
+                {"role": "support", "material_key": "lit:usgs-alumina-2025", "wt_pct": 95.0},
+            ],
+            "price_basis": "reference",
+        }
+
+        body = client.post("/api/calculate", json=payload).json()
+        pt = next(m for m in body["resolved_materials"] if m["material_key"] == "lit:usgs-platinum-bullion-2025")
+        assert pt["live_override"]["applied"] is True
+        assert pt["live_override"]["basis"] == "reference"
+        assert pt["price_scope"] == "reference_monthly"
+        assert pt["price"] == 1641.0909
+        assert body["input_summary"]["price_basis"] == "reference"
+
+        live = client.post("/api/calculate", json={**payload, "price_basis": "live"}).json()
+        pt_live = next(m for m in live["resolved_materials"] if m["material_key"] == "lit:usgs-platinum-bullion-2025")
+        assert pt_live["live_override"]["applied"] is False
+        assert pt_live["live_override"]["reason"] == "no_live_quote_stored"
+        assert live["input_summary"]["price_basis"] == "live"

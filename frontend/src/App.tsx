@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 import { BrowserRouter, HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import AppFrame from './components/layout/AppFrame';
+import { BasisProvider } from './lib/basis';
 import { LangProvider } from './lib/i18n';
 import { UnitProvider } from './lib/units';
 
@@ -21,6 +22,7 @@ export default function App() {
   return (
     <LangProvider>
     <UnitProvider>
+    <BasisProvider>
       <Router>
         <Routes>
           <Route element={<AppFrame />}>
@@ -38,6 +40,7 @@ export default function App() {
           </Route>
         </Routes>
       </Router>
+    </BasisProvider>
     </UnitProvider>
     </LangProvider>
   );

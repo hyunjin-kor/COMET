@@ -15,6 +15,7 @@ import {
 } from '../lib/api';
 import { LB_PER_KG, TROY_OZ_PER_KG, TROY_OZ_PER_LB, type Unit } from '../lib/unit-conversion';
 import { useLang } from '../lib/i18n';
+import { useBasis } from '../lib/use-basis';
 import { useUnit } from '../lib/use-unit';
 
 const MetalTrendChart = lazy(() => import('../components/charts/MetalTrendChart'));
@@ -113,6 +114,7 @@ function fmtPrice(price: number | null, rawUnit: string, displayUnit: Unit) {
 
 function sourceDescription(row: MetalPrice) {
   if (row.source_type === 'live') return row.source;
+  if (row.basis_month) return `${row.source}, ${row.basis_month}`;
   if (row.source_type === 'indexed') return 'Indexed reference aligned with CatCost-style library pricing';
   return 'Manual price input';
 }
@@ -258,6 +260,7 @@ function DarkChartFallback({ label }: { label: string }) {
 export default function Prices() {
   const { unit } = useUnit();
   const { lang, t } = useLang();
+  const { basis } = useBasis();
   const {
     activeSection,
     activeSectionId,
@@ -286,7 +289,7 @@ export default function Prices() {
   const load = useCallback((options?: { silent?: boolean }) => {
     if (!options?.silent) setLoading(true);
     setError(null);
-    fetchPrices()
+    fetchPrices(basis)
       .then((rows) => {
         setPrices(rows);
         setSelected((current) => current ?? rows[0]?.symbol ?? null);
@@ -297,7 +300,7 @@ export default function Prices() {
       .finally(() => {
         if (!options?.silent) setLoading(false);
       });
-  }, []);
+  }, [basis]);
 
   useEffect(() => {
     load();
@@ -338,7 +341,7 @@ export default function Prices() {
 
     let cancelled = false;
     setHistLoading(true);
-    fetchPriceHistory(selected, { period })
+    fetchPriceHistory(selected, { period, basis })
       .then((payload) => {
         if (cancelled) return;
         setHistory(payload.history ?? []);
@@ -356,11 +359,11 @@ export default function Prices() {
     return () => {
       cancelled = true;
     };
-  }, [selected, period]);
+  }, [selected, period, basis]);
 
   useEffect(() => {
     let cancelled = false;
-    fetchPriceTrends(trendPeriod)
+    fetchPriceTrends(trendPeriod, basis)
       .then((payload) => {
         if (!cancelled) setTrends(payload.trends);
       })
@@ -370,7 +373,7 @@ export default function Prices() {
     return () => {
       cancelled = true;
     };
-  }, [trendPeriod]);
+  }, [trendPeriod, basis]);
 
   useEffect(() => {
     let cancelled = false;
@@ -430,6 +433,11 @@ export default function Prices() {
   const liveQuoteCount = prices.filter((row) => row.source_type === 'live').length;
   const indexedQuoteCount = prices.filter((row) => row.source_type === 'indexed').length;
   const manualQuoteCount = prices.filter((row) => row.source_type === 'manual').length;
+  const monthlyQuoteCount = prices.filter((row) => row.basis_month).length;
+  const basisMonth = prices.reduce<string | null>(
+    (latest, row) => (row.basis_month && (!latest || row.basis_month > latest) ? row.basis_month : latest),
+    null,
+  );
   const reviewFlagCount = prices.filter(
     // Backend freshness vocabulary is current / stale / reference — "current"
     // is the healthy state; everything else deserves a look.
@@ -584,12 +592,18 @@ export default function Prices() {
               <div className="cp-subtle-label">{t('Quote Status')}</div>
               <div className="text-right">
                 <div className="text-sm font-semibold text-[#191f28]">
-                  {refreshing ? t('Refreshing live quotes') : latestFetchedAt ? t('Live quotes loaded') : t('Stored pricing basis')}
+                  {basis === 'reference'
+                    ? t('Academic basis loaded')
+                    : refreshing ? t('Refreshing live quotes') : latestFetchedAt ? t('Live quotes loaded') : t('Stored pricing basis')}
                 </div>
                 <div className="mt-1 text-xs leading-5 text-slate-600">
-                  {latestFetchedAt
-                    ? (lang === 'ko' ? `금속 ${liveQuoteCount}종 실시간 갱신 ${formatSyncStamp(latestFetchedAt)}` : `${liveQuoteCount} metals updated live ${formatSyncStamp(latestFetchedAt)}`)
-                    : t('Indexed and manual prices are available even before a live refresh.')}
+                  {basis === 'reference'
+                    ? (lang === 'ko'
+                      ? `IMF PCPS·Johnson Matthey 월평균, 금속 ${monthlyQuoteCount}종${basisMonth ? `, 최근 월 ${basisMonth}` : ''}`
+                      : `IMF PCPS and Johnson Matthey monthly averages, ${monthlyQuoteCount} metals${basisMonth ? `, latest month ${basisMonth}` : ''}`)
+                    : latestFetchedAt
+                      ? (lang === 'ko' ? `금속 ${liveQuoteCount}종 실시간 갱신 ${formatSyncStamp(latestFetchedAt)}` : `${liveQuoteCount} metals updated live ${formatSyncStamp(latestFetchedAt)}`)
+                      : t('Indexed and manual prices are available even before a live refresh.')}
                 </div>
               </div>
               <button onClick={handleRefresh} disabled={refreshing} className="cp-button-secondary px-4 py-2.5 text-sm">
@@ -607,7 +621,9 @@ export default function Prices() {
 
           <div className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
             <StatusTile label={t('Tracked metals')} value={String(prices.length)} detail={t('Metals with a stored price basis.')} />
-            <StatusTile label={t('Live coverage')} value={`${liveQuoteCount}/${prices.length}`} detail={t('Metals backed by current live sources.')} />
+            {basis === 'reference'
+              ? <StatusTile label={t('Monthly-average coverage')} value={`${monthlyQuoteCount}/${prices.length}`} detail={t('Metals with a stored monthly average.')} />
+              : <StatusTile label={t('Live coverage')} value={`${liveQuoteCount}/${prices.length}`} detail={t('Metals backed by current live sources.')} />}
             <StatusTile label={t('Indexed & manual quotes')} value={String(indexedQuoteCount + manualQuoteCount)} detail={lang === 'ko' ? `지수 ${indexedQuoteCount}건, 수동 ${manualQuoteCount}건 시세를 계속 사용할 수 있습니다.` : `${indexedQuoteCount} indexed and ${manualQuoteCount} manual quotes remain usable.`} />
             <StatusTile label={t('Needs review')} value={String(reviewFlagCount)} detail={t('Stale quotes or low-confidence sources worth checking.')} />
           </div>

@@ -10,6 +10,7 @@ from backend.core.material_pricing import mass_price_to_per_lb
 from backend.core.price_escalation import latest_index_year
 
 PriceUnit = Literal["$/lb", "$/kg", "$/troy_oz"]
+PriceBasis = Literal["live", "reference"]
 ApplicationFamily = Literal[
     "general",
     "fuel_cell",
@@ -121,6 +122,13 @@ class CostCalculationRequest(BaseModel):
     reactor_type: str = Field(default="fixed")
     catalyst_bulk_density: float = Field(default=50.0, gt=0)
     electrode_input: ElectrodeCostInput | None = None
+    price_basis: PriceBasis = Field(
+        default="live",
+        description=(
+            "Which stored price tier library-backed metals resolve against: "
+            "'live' daily quotes or 'reference' monthly averages."
+        ),
+    )
 
     @model_validator(mode="after")
     def validate_payload(self) -> CostCalculationRequest:

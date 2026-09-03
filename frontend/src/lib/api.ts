@@ -111,6 +111,9 @@ async function requestText(path: string, options?: RequestInit): Promise<string>
 
 // Calculator
 export type CatalystDomain = 'thermal' | 'electrocatalyst' | 'general' | 'both';
+// 'live': daily quotes the app shows day to day. 'reference': institutional
+// monthly averages (IMF PCPS, Johnson Matthey) used as the academic basis.
+export type PriceBasis = 'live' | 'reference';
 export type ApplicationFamily = 'general' | 'fuel_cell' | 'direct_methanol_fuel_cell' | 'electrolyzer';
 
 export interface ComponentInput {
@@ -155,6 +158,7 @@ export interface CostInput {
   reactor_type?: string;
   catalyst_bulk_density?: number;
   electrode_input?: ElectrodeCostInput;
+  price_basis?: PriceBasis;
 }
 
 export interface ComponentBreakdown {
@@ -410,6 +414,8 @@ export interface MetalPrice {
   source_type: 'live' | 'indexed' | 'manual';
   is_live: boolean;
   fetched_at: string | null;
+  basis: PriceBasis;
+  basis_month: string | null;
   evidence: {
     tier: string;
     confidence_score: number;
@@ -423,8 +429,9 @@ export interface MetalPrice {
   };
 }
 
-export const fetchPrices = () => request<MetalPrice[]>('/prices');
-export const fetchPrice = (symbol: string) => request<MetalPrice>(`/prices/${symbol}`);
+export const fetchPrices = (basis: PriceBasis = 'live') => request<MetalPrice[]>(`/prices?basis=${basis}`);
+export const fetchPrice = (symbol: string, basis: PriceBasis = 'live') =>
+  request<MetalPrice>(`/prices/${symbol}?basis=${basis}`);
 
 export interface PriceHistoryPoint {
   date: string;
@@ -446,6 +453,7 @@ export interface PriceHistoryQuery {
   period?: '1mo' | '3mo' | '6mo' | '1y' | '2y' | '5y';
   from?: string;
   to?: string;
+  basis?: PriceBasis;
 }
 
 export const fetchPriceHistory = (symbol: string, query: PriceHistoryQuery = {}) => {
@@ -453,6 +461,7 @@ export const fetchPriceHistory = (symbol: string, query: PriceHistoryQuery = {})
   params.set('period', query.period ?? '1y');
   if (query.from) params.set('from', query.from);
   if (query.to) params.set('to', query.to);
+  if (query.basis) params.set('basis', query.basis);
   return request<PriceHistoryResponse>(`/prices/${symbol}/history?${params.toString()}`);
 };
 
@@ -470,11 +479,14 @@ export interface PriceTrend {
 
 export interface PriceTrendsResponse {
   period: string;
+  basis?: PriceBasis;
   trends: Record<string, PriceTrend>;
 }
 
-export const fetchPriceTrends = (period: NonNullable<PriceHistoryQuery['period']> = '3mo') =>
-  request<PriceTrendsResponse>(`/prices/trends?period=${period}`);
+export const fetchPriceTrends = (
+  period: NonNullable<PriceHistoryQuery['period']> = '3mo',
+  basis: PriceBasis = 'live',
+) => request<PriceTrendsResponse>(`/prices/trends?period=${period}&basis=${basis}`);
 
 export interface PriceUsageEntry {
   family: string;
@@ -1046,6 +1058,7 @@ export interface DecisionBenchmark {
       performance: number;
     };
   };
+  price_basis: PriceBasis | 'supplied';
   price_basis_updated_at: string | null;
   winner: DecisionCandidate | null;
   candidates: DecisionCandidate[];
@@ -1057,8 +1070,9 @@ export const fetchBenchmarkFamilies = () => request<{ families: BenchmarkFamilyS
 export const fetchDecisionBenchmark = (
   family: string,
   profile: 'balanced' | 'cost-first' | 'evidence-first' = 'balanced',
+  basis: PriceBasis = 'live',
 ) =>
-  request<DecisionBenchmark>(`/decision/benchmarks/${family}?profile=${profile}`);
+  request<DecisionBenchmark>(`/decision/benchmarks/${family}?profile=${profile}&basis=${basis}`);
 
 // CapEx & OpEx Factors workspace
 export interface EquipmentScalingItem {

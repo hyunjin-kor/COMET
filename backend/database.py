@@ -35,6 +35,9 @@ _SQLITE_COLUMN_PATCHES: dict[str, dict[str, str]] = {
         "application_family": "VARCHAR NOT NULL DEFAULT 'general'",
         "calculation_model": "VARCHAR NOT NULL DEFAULT 'catcost_step'",
     },
+    "metal_prices": {
+        "basis": "VARCHAR NOT NULL DEFAULT 'live'",
+    },
 }
 
 
