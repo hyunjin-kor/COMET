@@ -7,6 +7,20 @@ from typing import Any
 
 _SOURCE_RULES: list[dict[str, Any]] = [
     {
+        # Checked first so "Johnson Matthey (monthly average)" lands here, not on the daily board.
+        "match": "monthly average",
+        "tier": "indexed_reference",
+        "confidence_score": 88,
+        "transparency": "public_index",
+        "acquisition_mode": "api",
+        "freshness_target_hours": None,
+        "label": "Monthly average reference",
+        "note": (
+            "Institutional monthly average (IMF Primary Commodity Prices, or Johnson Matthey "
+            "base prices averaged by month) used as the paper's reference price basis."
+        ),
+    },
+    {
         "match": "Yahoo Finance",
         "tier": "exchange_screen",
         "confidence_score": 86,
