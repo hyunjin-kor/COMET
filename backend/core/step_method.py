@@ -38,17 +38,24 @@ def determine_scale(order_size_tons: float) -> str:
     return "large"
 
 
-def calculate_campaign_length(order_size_tons: float, scale: str) -> float:
+def calculate_campaign_length(
+    order_size_tons: float,
+    scale: str,
+    production_rate_ton_per_day: float | None = None,
+) -> float:
     """Calculate campaign length including synthesis and cleaning time.
 
     Args:
         order_size_tons: Order size in short tons.
         scale: Production scale ("small", "medium", "large").
+        production_rate_ton_per_day: Effective rate overriding the nominal
+            scale rate. CatCost Table 6.2 footnote b uses this for zeolite
+            campaigns, where ramp-up/down cuts the 150 t/d nominal to 67 t/d.
 
     Returns:
         Total campaign length in days.
     """
-    production_rate = PRODUCTION_RATES[scale]
+    production_rate = production_rate_ton_per_day or PRODUCTION_RATES[scale]
     synthesis_days = order_size_tons / production_rate
     cleaning_days = CLEANING_TIME[scale]
     return synthesis_days + cleaning_days
@@ -75,6 +82,7 @@ def calculate_step_method(
     ga_overhead_pct: float = DEFAULT_GA_OVERHEAD_PCT,
     sard_pct: float = DEFAULT_SARD_PCT,
     chemppi_escalation: float = 1.0,
+    production_rate_ton_per_day: float | None = None,
 ) -> dict[str, float | str]:
     """Calculate catalyst selling price using the Step Method.
 
@@ -85,6 +93,8 @@ def calculate_step_method(
         ga_overhead_pct: General & Administrative overhead fraction.
         sard_pct: Sales, Admin, R&D fraction.
         chemppi_escalation: ChemPPI escalation factor from mid-2017 basis.
+        production_rate_ton_per_day: Optional effective production rate; see
+            ``calculate_campaign_length``.
 
     Returns:
         Dict with full cost breakdown.
@@ -93,7 +103,7 @@ def calculate_step_method(
         ValueError: If a step is unavailable at the determined scale.
     """
     scale = determine_scale(order_size_tons)
-    campaign_days = calculate_campaign_length(order_size_tons, scale)
+    campaign_days = calculate_campaign_length(order_size_tons, scale, production_rate_ton_per_day)
 
     # Sum hourly costs for all steps
     hourly_total = 0.0
@@ -133,6 +143,7 @@ def calculate_step_method(
     return {
         "scale": scale,
         "order_size_tons": order_size_tons,
+        "production_rate_ton_per_day": production_rate_ton_per_day or PRODUCTION_RATES[scale],
         "campaign_days": round(campaign_days, 2),
         "step_cost_per_hr": round(hourly_total, 2),
         "chemppi_escalation": chemppi_escalation,

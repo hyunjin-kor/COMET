@@ -69,12 +69,45 @@ jobs:
         uses: actions/github-script@v9
         with:
           script: |
-            const { data } = await github.rest.repos.generateReleaseNotes({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              tag_name: context.ref.replace('refs/tags/', ''),
-            });
-            return data.body;
+            // Only user-facing commit types reach the release page; docs, chore,
+            // style, test, ci and build land in the Full Changelog link instead.
+            const SECTIONS = [
+              { title: "New features", types: ["feat"] },
+              { title: "Fixes", types: ["fix"] },
+              { title: "Changes", types: ["perf", "refactor"] },
+            ];
+            const semver = (name) => name.replace(/^v/, "").split(".").map(Number);
+            const { owner, repo } = context.repo;
+            const tag = context.ref.replace("refs/tags/", "");
+
+            const tags = (await github.paginate(github.rest.repos.listTags, { owner, repo, per_page: 100 }))
+              .map((t) => t.name)
+              .filter((name) => /^v\d+\.\d+\.\d+$/.test(name))
+              .sort((a, b) => {
+                const [x, y] = [semver(a), semver(b)];
+                return y[0] - x[0] || y[1] - x[1] || y[2] - x[2];
+              });
+            const previous = tags[tags.indexOf(tag) + 1];
+            if (!previous) return `Initial release ${tag}.`;
+
+            const { data } = await github.rest.repos.compareCommits({ owner, repo, base: previous, head: tag });
+            const entries = SECTIONS.map(() => []);
+            for (const commit of data.commits) {
+              const subject = commit.commit.message.split("\n")[0];
+              const parsed = subject.match(/^(\w+)(?:\([^)]*\))?!?:\s*(.+?)(?:\s+\(#(\d+)\))?$/);
+              if (!parsed) continue;
+              const [, type, text, pr] = parsed;
+              const index = SECTIONS.findIndex((section) => section.types.includes(type));
+              if (index === -1) continue;
+              entries[index].push(`- ${text[0].toUpperCase()}${text.slice(1)}${pr ? ` (#${pr})` : ""}`);
+            }
+
+            const body = SECTIONS
+              .map((section, i) => (entries[i].length ? `### ${section.title}\n\n${entries[i].join("\n")}` : null))
+              .filter(Boolean)
+              .join("\n\n");
+            const changelog = `**Full Changelog**: https://github.com/${owner}/${repo}/compare/${previous}...${tag}`;
+            return `${body || "Maintenance release — no user-facing changes."}\n\n${changelog}\n`;
           result-encoding: string
 
       - name: Create GitHub Release

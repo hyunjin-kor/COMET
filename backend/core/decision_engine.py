@@ -257,8 +257,16 @@ def evaluate_benchmark_family(
     session: Session,
     family: str = "ammonia-cracking",
     profile: str = "balanced",
+    weights: dict[str, float] | None = None,
+    prices: dict[str, dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
-    """Evaluate one optional reference family with the current price basis."""
+    """Evaluate one optional reference family with the current price basis.
+
+    ``weights`` overrides the profile's economics/evidence/route/performance
+    weights so callers can sweep the weight simplex for rank sensitivity.
+    ``prices`` replaces the latest-price map so callers can re-cost the same
+    candidates at a historical price state.
+    """
 
     catalog = _load_catalogs().get(family)
     if catalog is None:
@@ -267,11 +275,12 @@ def evaluate_benchmark_family(
     profile_config = catalog["decision_profiles"].get(profile)
     if profile_config is None:
         raise KeyError(f"Unknown decision profile: {profile}")
+    score_weights = weights or profile_config["weights"]
 
     route_map = {item["id"]: item for item in catalog["route_templates"]}
     quote_map = {item["id"]: item for item in catalog["catalog_quotes"]}
     citation_map = {item["id"]: item for item in catalog["citations"]}
-    latest_prices = _latest_price_map(session)
+    latest_prices = prices if prices is not None else _latest_price_map(session)
     family_domain = catalog.get("catalyst_domain", "thermal")
     family_application = catalog.get("application_family", "general")
 
@@ -408,7 +417,7 @@ def evaluate_benchmark_family(
         candidates.append(candidate_result)
 
     _economic_scores(candidates)
-    _apply_total_scores(candidates, profile_config["weights"])
+    _apply_total_scores(candidates, score_weights)
     candidates.sort(
         key=lambda item: (
             float(item["scores"]["total"]),
@@ -428,8 +437,16 @@ def evaluate_benchmark_family(
             "id": profile,
             "label": profile_config["label"],
             "description": profile_config["description"],
-            "weights": profile_config["weights"],
+            "weights": score_weights,
         },
+        "score_basis_note": (
+            "economics is computed from the current price basis and evidence is the "
+            "cost-weighted price-evidence confidence; route and performance combine "
+            "author-assigned 0-100 screening scores (route_confidence, "
+            "manufacturing_readiness, screening_exactness, performance_index) that are "
+            "not measured quantities. Set the performance weight to 0 to rank on priced "
+            "quantities only."
+        ),
         "price_basis_updated_at": latest_update,
         "winner": candidates[0] if candidates else None,
         "candidates": candidates,

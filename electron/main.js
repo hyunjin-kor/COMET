@@ -619,7 +619,7 @@ function showAbout() {
       'Real-time metal price based catalyst manufacturing cost estimator.',
       'Based on CatCost methodology (Baddour et al. 2018, Van Allsburg et al. 2022).',
       '',
-      'Copyright 2026 hyunjin.kang | All rights reserved',
+      'Copyright 2026 hyunjin.kang | PolyForm Noncommercial License 1.0.0',
     ].join('\n'),
     buttons: ['OK'],
   });

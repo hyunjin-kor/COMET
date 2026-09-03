@@ -240,7 +240,7 @@ def estimate_catalyst_cost(
 
     estimated = step_result["estimated_price_per_lb"]
 
-    lca_result = compute_catalyst_lca(components)
+    lca_result = compute_catalyst_lca(components, steps=steps)
 
     return {
         "input_summary": {

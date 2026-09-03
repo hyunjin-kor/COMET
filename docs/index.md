@@ -1,30 +1,38 @@
 # COMET Documentation
 
-COMET is a desktop catalyst cost application. The Electron shell, local FastAPI backend, calculation engine, and bundled datasets are all maintained in this repository.
+COMET is a Windows desktop app that estimates catalyst manufacturing cost. The
+Electron shell, the local FastAPI backend, the calculation engine, and the
+bundled datasets all live in this repository.
 
-## Project Links
+Start at the [README](../README.md) for what the app does and how to install it.
 
-- GitHub repository: [hyunjin-kor/COMET](https://github.com/hyunjin-kor/COMET)
-- Latest release: [GitHub Releases](https://github.com/hyunjin-kor/COMET/releases/latest)
-- Link map and Claude handoff notes: [`project-links.md`](project-links.md)
+## For users
 
-## Focus
+| Page | What it covers |
+| --- | --- |
+| [Getting started](getting-started.md) | Install, first estimate, where results are saved |
+| [Screens](screens.md) | Every screen in the app, in the order a session visits them |
+| [Methodology](methodology.md) | How the cost numbers are derived and what they can be trusted for |
+| [Desktop troubleshooting](desktop-troubleshooting.md) | SmartScreen, sidecar startup, update failures |
+| [Release notes](release-notes.md) | Where the changelog lives |
 
-- desktop packaging and installation
-- catalyst composition costing
-- thermocatalyst versus electrocatalyst workflow separation
-- local-only calculation workflow
-- live and indexed metal pricing
-- source-linked evidence review
-- optional spent catalyst recovery screening
-- uncertainty and comparison analysis
-- test and smoke-harness validation
+## For contributors
 
-## Local Development
+| Page | What it covers |
+| --- | --- |
+| [`AGENTS.md`](../AGENTS.md) | Operating rules, locked stack, validation strategy, coding conventions |
+| [Architecture](architecture.md) | Directory layout, core calculation modules, API surface |
+| [API reference](api-reference.md) | HTTP endpoints served by the local backend |
+| [Roadmap](roadmap.md) | What is planned and what has been superseded |
+| [Project links](project-links.md) | Verified external URLs and release metadata |
+| [Project history](project-history.md) | Benchmarking notes and the original phase plan (historical) |
+
+## Local development
 
 ```bash
 npm install
 npm run dev
 ```
 
-This starts the Electron shell, the local FastAPI sidecar, and the Vite renderer used during desktop development.
+This starts the Electron shell, the local FastAPI sidecar, and the Vite renderer.
+Full command list and test commands are in [`CLAUDE.md`](../CLAUDE.md).

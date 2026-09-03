@@ -1,15 +1,18 @@
 """Cradle-to-gate Life Cycle Assessment (LCA) for catalyst formulations.
 
 Computes Global Warming Potential (kg CO2-eq) and Cumulative Energy Demand (MJ)
-per kg of finished catalyst, as a wt%-weighted sum of per-element impact factors.
+per kg of finished catalyst as two separately reported terms:
 
-All seed values come from a single, peer-reviewed open-access source:
-    Nuss P, Eckelman MJ (2014). PLOS ONE 9(7): e101298.
-    doi:10.1371/journal.pone.0101298  (CC BY 4.0)
+  materials  wt%-weighted sum of per-element cradle-to-gate factors from
+             Nuss P, Eckelman MJ (2014). PLOS ONE 9(7): e101298.
+             doi:10.1371/journal.pone.0101298  (CC BY 4.0)
+  process    fuel and electricity of the Step Method route (see
+             backend/core/process_energy.py), only when ``steps`` is given.
 
-The engine never invents factors. Components without a verified factor in
-backend/data/lca_factors.json contribute their wt% to a `data_gap_pct`
-field that the response surfaces to the user.
+Without ``steps`` the result is the materials term alone and
+``system_boundary`` says so. The engine never invents factors: components
+without a verified factor contribute their wt% to ``data_gap_pct``, and route
+steps without an energy model are listed in ``process.unmodeled_steps``.
 """
 
 from __future__ import annotations
@@ -18,6 +21,7 @@ import json
 from functools import lru_cache
 from typing import Any
 
+from backend.core.process_energy import compute_process_energy
 from backend.paths import data_dir
 
 _DATA_DIR = data_dir()
@@ -40,31 +44,43 @@ def _resolve_element_key(component: dict, aliases: dict[str, str]) -> str | None
     Resolution order:
       1. Direct hit on `name` (e.g. "Pt", "TiO2", "ZrO2")
       2. Form-alias hit (e.g. "Al2O3" -> "Al")
-      3. Symbol of the chemical formula stripped of digits (e.g. "Pt2O" -> "Pt")
-      4. None — caller treats this as a data gap
+      3. Same two lookups on the name with any parenthetical qualifier
+         removed ("TiO2 (anatase)" -> "TiO2", "Cu (from Cu2O)" -> "Cu")
+      4. Symbol of the chemical formula stripped of digits (e.g. "Pt2O" -> "Pt")
+      5. None — caller treats this as a data gap
     """
     name = (component.get("name") or "").strip()
     if not name:
         return None
 
     factors = _load_lca_dataset()["factors"]
-    if name in factors:
-        return name
-    if name in aliases:
-        target = aliases[name]
-        if target in factors:
-            return target
+
+    def lookup(candidate: str) -> str | None:
+        if candidate in factors:
+            return candidate
+        target = aliases.get(candidate)
+        return target if target in factors else None
+
+    hit = lookup(name)
+    if hit:
+        return hit
+
+    base = name.split("(", 1)[0].strip()
+    if base and base != name:
+        hit = lookup(base)
+        if hit:
+            return hit
 
     # Last-resort: drop trailing digits and try again ("Pt3" -> "Pt").
-    stripped = "".join(ch for ch in name if not ch.isdigit())
-    if stripped in factors:
-        return stripped
-    if stripped in aliases and aliases[stripped] in factors:
-        return aliases[stripped]
-    return None
+    stripped = "".join(ch for ch in base if not ch.isdigit())
+    return lookup(stripped)
 
 
-def compute_catalyst_lca(components: list[dict]) -> dict[str, Any]:
+def compute_catalyst_lca(
+    components: list[dict],
+    steps: list[str] | None = None,
+    calcination_temp_c: float | None = None,
+) -> dict[str, Any]:
     """Compute cradle-to-gate impact per kg of finished catalyst.
 
     Parameters
@@ -74,12 +90,20 @@ def compute_catalyst_lca(components: list[dict]) -> dict[str, Any]:
           - "name" (str): element symbol or material name
           - "wt_pct" (float): weight percent in the finished catalyst (0-100)
         Extra keys are ignored.
+    steps:
+        Step Method route keys. When given, the process-energy term is added
+        and reported under ``process``; when None the result is materials only.
+    calcination_temp_c:
+        Overrides the default kiln temperature for the process term.
 
     Returns
     -------
     dict with:
-        gwp_kg_co2eq_per_kg_catalyst (float | None)
+        gwp_kg_co2eq_per_kg_catalyst (float | None) — materials + process
         ced_mj_per_kg_catalyst (float | None)
+        materials (dict) — the materials term on its own
+        process (dict | None) — the route term, itemized per step
+        system_boundary (str)
         per_component (list[dict]) — per-component contribution + matched factor
         data_gap_pct (float) — total wt% with no verified factor
         coverage_pct (float) — total wt% with verified factors
@@ -172,9 +196,35 @@ def compute_catalyst_lca(components: list[dict]) -> dict[str, Any]:
         )
 
     has_any_match = any(c["factor_status"] not in {"explicitly_unsupported", "no_factor_in_dataset"} for c in per_component)
+    materials_gwp = round(gwp_total, 4) if has_any_match else None
+    materials_ced = round(ced_total, 4) if has_any_match else None
+
+    process = None
+    total_gwp, total_ced = materials_gwp, materials_ced
+    boundary = "cradle-to-gate, materials only (route energy not included: no steps given)"
+    if steps:
+        process = compute_process_energy(steps, calcination_temp_c)
+        if process["unmodeled_steps"]:
+            warnings.append(
+                f"Process energy not modeled for {len(process['unmodeled_steps'])} of "
+                f"{process['total_step_count']} route steps: {', '.join(process['unmodeled_steps'])}."
+            )
+        total_gwp = round((materials_gwp or 0.0) + process["gwp_kg_co2eq_per_kg_catalyst"], 4)
+        total_ced = round((materials_ced or 0.0) + process["ced_mj_per_kg_catalyst"], 4)
+        boundary = (
+            "cradle-to-gate, materials + route energy "
+            f"({process['modeled_step_count']}/{process['total_step_count']} steps modeled)"
+        )
+
     return {
-        "gwp_kg_co2eq_per_kg_catalyst": round(gwp_total, 4) if has_any_match else None,
-        "ced_mj_per_kg_catalyst": round(ced_total, 4) if has_any_match else None,
+        "gwp_kg_co2eq_per_kg_catalyst": total_gwp,
+        "ced_mj_per_kg_catalyst": total_ced,
+        "materials": {
+            "gwp_kg_co2eq_per_kg_catalyst": materials_gwp,
+            "ced_mj_per_kg_catalyst": materials_ced,
+        },
+        "process": process,
+        "system_boundary": boundary,
         "per_component": per_component,
         "data_gap_pct": data_gap_pct,
         "coverage_pct": coverage_pct,

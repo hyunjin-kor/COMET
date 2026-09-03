@@ -515,9 +515,17 @@
     "CeO2": "Ce",
     "Nd2O3": "Nd",
     "Pr6O11": "Pr",
-    "Sm2O3": "Sm"
+    "Sm2O3": "Sm",
+    "ZnO": "Zn",
+    "V2O5": "V",
+    "In2O3": "In",
+    "MoS2": "Mo",
+    "NiOOH": "Ni",
+    "NiFe-LDH": "Ni",
+    "Seed-assisted NiFe": "Ni",
+    "Cr-doped amorphous NiFe": "Ni"
   },
-  "form_alias_note": "form_aliases map common oxide / supported forms back to their dominant element factor. This is a deliberate first-order approximation: the elemental factor is applied per kg of material (so 1 kg of Al2O3 is treated as 1 kg of Al at the cradle-to-gate stage). For high-precision LCA on oxides, prefer the explicit oxide entries above (TiO2, ZrO2). Items not listed in factors or aliases are treated as 'no_data' and the LCA result flags a data gap.",
+  "form_alias_note": "form_aliases map common oxide / supported forms back to their dominant element factor. This is a deliberate first-order approximation: the elemental factor is applied per kg of material (so 1 kg of Al2O3 is treated as 1 kg of Al at the cradle-to-gate stage). For high-precision LCA on oxides, prefer the explicit oxide entries above (TiO2, ZrO2). Mixed-metal forms (NiFe-LDH, NiOOH, MoS2) map to their dominant element by mass under the same approximation. A parenthetical qualifier in a name ('TiO2 (anatase)') is ignored for lookup. Items not listed in factors or aliases are treated as 'no_data' and the LCA result flags a data gap.",
   "unsupported_supports": [
     "SiO2",
     "Silica",

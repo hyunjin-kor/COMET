@@ -4,7 +4,7 @@ COMET implements the catalyst cost estimation methodology from the CatCost frame
 
 ## Current Scope
 
-COMET currently exposes four research-facing layers in the shipped product:
+The shipped product has four research-facing layers:
 
 1. `materials and live price basis`
    Material rows can resolve against live feeds, indexed references, literature rows, or vendor rows.
@@ -41,6 +41,20 @@ margin% = 39.192 * Q^(-0.23360)
 
 where Q is order size in tons.
 
+### Campaign length
+
+Campaign days = order size ÷ production rate + cleaning time (0.5 d Small, 1 d Medium/Large). The nominal rates are 1 / 10 / 150 t/d. `calculate_step_method` accepts `production_rate_ton_per_day` to override the nominal rate for routes whose effective throughput is lower — CatCost Table 6.2 footnote b applies 67 t/d to the zeolite FCC campaign for ramp-up and ramp-down.
+
+### Reproduction of CatCost Table 6.2
+
+`scripts/reproduce_catcost_table62.py` feeds the published Table 6.2 inputs (mid-2017 basis) through the Step Method and prints each intermediate next to the table's value. Hourly step cost, campaign length, processing cost, subtotal, G&A and SARD match to the cent on all three cases; Pt/C reproduces the published $27.37/lb exactly. Two residuals remain and both trace to the table rather than the implementation:
+
+| Case | COMET | Table 6.2 | Residual | Cause |
+|------|------:|----------:|---------:|-------|
+| 2 wt% Pt/C, 2 t | $27.37 | $27.37 | 0.00% | — |
+| 21 wt% Ni/Al₂O₃, 20 t | $19.22 | $20.59 | −6.65% | Footnote f applies 33% of pre-margin; the Figure 6.3 correlation gives 24% at 20 t |
+| USY-FCC, 200 t, 67 t/d | $2.44 | $2.41 | +1.16% | Footnote b effective rate; nominal 150 t/d would land 33% low |
+
 ## CapEx/OpEx Factors Method (Chapter 7)
 
 For detailed capital and operating cost estimation using factored approaches.
@@ -69,6 +83,24 @@ Net reclaimed value accounts for:
 - Recovery processing costs (thermal oxidation, incoming inspection, refining charges)
 
 In the COMET UI this is exposed as an optional `recovery scenario` for thermocatalyst cases. It is intended for early screening only.
+
+## Life Cycle Assessment
+
+The LCA block reports GWP (kg CO₂-eq) and CED (MJ) per kg of finished catalyst as two terms with separate provenance, and states its `system_boundary` in every result.
+
+**Materials term** — wt%-weighted sum of per-element cradle-to-gate factors from Nuss & Eckelman (2014, PLOS ONE, CC BY). Oxide supports map to their dominant element; supports without a verified factor (silica, carbons, zeolites) are reported as `data_gap_pct`, never estimated.
+
+**Process term** — added when the Step Method route is known. Each step is converted to fuel or electricity per kg of catalyst and then to impact with public factors (`backend/data/process_energy_factors.json`):
+
+- Calcination: sensible heat of the dry solid from ambient to the kiln temperature (default 500 °C, cp 0.95 kJ/kg·K), divided by a 0.40 kiln thermal efficiency, as natural gas.
+- Drying: latent plus sensible heat of the water load (0.7 kg/kg for impregnated supports, 1.7 kg/kg for spray-dried slurries), divided by a 0.55 dryer efficiency, as natural gas.
+- Mechanical steps (mixing, milling, filtration, extrusion): order-of-magnitude specific energies from Perry's, as grid electricity.
+- Emission factors: EPA GHG Emission Factors Hub (Jan 2025) — natural gas 53.06 kg CO₂/mmBtu, US-average grid 771.5 lb CO₂/MWh (eGRID2023), AR5 GWP100.
+- Electrocatalyst coating-line steps are area-based and listed as `unmodeled_steps` rather than estimated.
+
+Not in the boundary: precursor decomposition enthalpy, NOx and flare process emissions, solvent and water supply, wastewater, and equipment embodied impacts. Each occurrence of a step in a route is counted in full.
+
+For a 21 wt% Ni/Al₂O₃ impregnation route the process term is 0.24 kg CO₂-eq/kg against 7.84 for materials (3%). Across the 54 benchmark candidates with at least 50% materials coverage the route share is 2.4% (median), 5.5% (p90) and 15.2% (max), consistent with the CatCost paper's observation that raw materials dominate catalyst manufacturing GHG (`docs/paper/results_2026-09-02.md`). The two terms are kept separate in the output so that finding can be checked per candidate rather than assumed. Lab-scale catalyst LCIs in the literature (muffle furnaces, kWh per gram) were not used as inputs because they overstate industrial energy intensity by orders of magnitude.
 
 ## Research Extensions Already Implemented
 

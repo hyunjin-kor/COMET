@@ -4,7 +4,7 @@
   "description": "COMET: Catalyst Overall Manufacturing Estimation Tool — Windows desktop app for catalyst cost estimation and source-linked benchmark workflows",
   "main": "electron/main.js",
   "author": "hyunjin.kang",
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "PolyForm-Noncommercial-1.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/hyunjin-kor/COMET.git"

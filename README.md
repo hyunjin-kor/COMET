@@ -10,7 +10,7 @@
   <a href="https://github.com/hyunjin-kor/COMET/releases/latest"><img src="https://img.shields.io/github/v/release/hyunjin-kor/COMET?label=download&color=2ea44f" alt="Latest release" /></a>
   <img src="https://img.shields.io/badge/platform-Windows-0078d4" alt="Windows" />
   <a href="https://doi.org/10.5281/zenodo.21451931"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.21451931.svg" alt="DOI" /></a>
-  <img src="https://img.shields.io/badge/license-source--available-lightgrey" alt="License: source-available" />
+  <img src="https://img.shields.io/badge/license-PolyForm--Noncommercial--1.0.0-lightgrey" alt="License: PolyForm Noncommercial 1.0.0" />
 </p>
 
 <p align="center">
@@ -21,83 +21,58 @@
   <a href="docs/roadmap.md">Roadmap</a>
 </p>
 
-**COMET: Catalyst Overall Manufacturing Estimation Tool** is a Windows desktop app for early-stage catalyst cost screening. You describe a catalyst — composition, support, preparation route — and it returns a manufacturing cost estimate built on current metal prices, published costing methodology, and a curated materials library. Everything runs locally: the app bundles its own calculation backend and database, so there is no server to set up and no account to create.
+**COMET** estimates what a catalyst costs to make. Describe the composition, the
+support and the preparation route, and it prices that recipe against current metal
+quotes using the published CatCost method. It runs entirely on your machine. No
+server, no account.
 
-It is aimed at catalysis researchers who want a quick, defensible answer to questions like:
+Built for catalysis researchers with questions like:
 
-- How much does a metal price swing change my catalyst cost?
-- Which part of the recipe drives the cost — the metal, the support, or the preparation route?
-- How does my composition compare against published catalysts for the same reaction?
-
-## The name
-
-A comet nucleus is an irregular, pitted, porous sphere — the same geometry as a catalyst pellet, and the same kind of rough surface where the interesting chemistry happens. That resemblance is where the name came from, and the rest of it fits too: COMET checks a candidate against established commercial catalysts, so a promising new one can be spotted early, arriving out of a field of known benchmarks.
+- If platinum moves 20%, what does that do to my cost?
+- Is the metal driving this number, or the preparation route?
+- How does my composition compare to published catalysts for the same reaction?
 
 ## Download
 
 Get the installer from the [latest release](https://github.com/hyunjin-kor/COMET/releases/latest):
 
-- `COMET.Setup.<version>.exe` — recommended for most users
-- `COMET-win-unpacked.zip` — portable version, runs without installation
+- `COMET.Setup.<version>.exe` for most people
+- `COMET-win-unpacked.zip` if you want a portable copy
 
-The app works offline out of the box, falling back to indexed and manual prices. Live price feeds only need an API key if you want them (see below).
+It works offline. Without API keys it falls back to indexed and manual prices.
 
-From v1.3.13 the app keeps itself current: it checks GitHub Releases on startup, downloads updates in the background, and offers a restart prompt. The binary is unsigned, so Windows SmartScreen may warn on first install — choose "More info → Run anyway".
+Since v1.3.13 the app updates itself: it checks GitHub Releases at startup,
+downloads in the background, and prompts you to restart. The binary is unsigned,
+so SmartScreen will warn you the first time. Pick "More info → Run anyway".
 
 ## What it does
 
-- Estimates catalyst selling cost with the Step Method for preparation-route costing, following the CatCost methodology published by NREL
-- Tracks metal prices with three explicit states — `LIVE`, `INDEXED`, `MANUAL` — and shows the source, quote year, and freshness behind every number
-- Ships ten literature benchmark families (ammonia cracking, CO₂ hydrogenation, RWGS, dry reforming, water-gas shift, fuel-cell ORR, electrolyzer OER, and more) that you can load as editable starting points
-- Handles both bulk supported catalysts and electrode-stack electrocatalysts
-- Runs Monte Carlo uncertainty analysis so you get a cost range, not just a point estimate
-- Adds an optional spent-catalyst recovery credit to thermocatalyst runs
-- Escalates historical prices to the current year with ChemPPI and CEPCI indices
-- Exports the result — cost ledger, price evidence, Monte Carlo range — to Excel-friendly CSV
+- Costs the preparation route with the Step Method, following the CatCost methodology published by NREL
+- Tags every price `LIVE`, `INDEXED` or `MANUAL`, and shows the source, quote year and freshness behind it
+- Ships thirty literature benchmark families you can load and edit: ammonia cracking, CO₂ hydrogenation, RWGS, dry reforming, water-gas shift, fuel-cell ORR, electrolyzer OER and more
+- Covers bulk supported catalysts as well as electrode-stack electrocatalysts
+- Runs Monte Carlo, so you get a range rather than one number
+- Credits spent-catalyst recovery on thermocatalyst runs, if you want it
+- Escalates older prices to this year with ChemPPI and CEPCI
+- Exports the cost ledger, price evidence and Monte Carlo range to CSV
 
 ## How a session goes
 
-Pick thermocatalyst or electrocatalyst, define the composition, choose a preparation route, and run the estimate. The result opens on its own screen with a full cost ledger and the evidence behind each price used. From there you can tweak the recipe and rerun — the draft stays in place, so scenario work is fast.
+Pick thermocatalyst or electrocatalyst, define the composition, choose a
+preparation route, run it. The result opens on its own screen with the full cost
+ledger and the evidence behind each price. Tweak the recipe and rerun; the draft
+stays put.
 
-The Prices page shows every tracked metal with its current quote basis and history. The Benchmarks page compares published routes for a reaction family and lets you load one into the calculator as a starting point.
+The Prices page tracks every metal with its quote basis and history. The
+Benchmarks page lines up published routes for a reaction family, and loads any of
+them into the calculator.
 
 ## Screens
 
-### Cost estimate
+<img src="./docs/assets/screen-result.png" alt="Result screen: the full cost ledger with the price evidence behind every line" width="100%" />
 
-<img src="./docs/assets/screen-cost-estimate-composition.png" alt="Composition input" width="100%" />
-
-Set active metals, promoters, and support balance. Each price shows where it came from.
-
-<img src="./docs/assets/screen-cost-estimate-preparation.png" alt="Preparation route" width="100%" />
-
-Build the preparation route from unit operations and pick the campaign scale.
-
-### Live metal prices
-
-<img src="./docs/assets/screen-live-metal-prices-overview.png" alt="Price overview" width="100%" />
-
-<img src="./docs/assets/screen-live-metal-prices-trend.png" alt="Price trend" width="100%" />
-
-### Literature benchmarks
-
-<img src="./docs/assets/screen-literature-benchmarks-routes.png" alt="Benchmark comparison" width="100%" />
-
-<img src="./docs/assets/screen-literature-benchmarks-detail.png" alt="Benchmark detail" width="100%" />
-
-### Result and uncertainty
-
-<img src="./docs/assets/screen-result.png" alt="Result screen" width="100%" />
-
-<img src="./docs/assets/screen-estimate-range.png" alt="Monte Carlo range" width="100%" />
-
-### Source library
-
-<img src="./docs/assets/screen-source-library.png" alt="Source library" width="100%" />
-
-Every price the calculator can use in one place — materials, step rates, and route templates — each with its quote basis, source, and freshness. Filter by category, catalyst domain, or application, and open the public source behind any row.
-
-Screenshots are regenerated from the running app with `scripts/capture_readme_screens.mjs`.
+Composition input, preparation routes, live metal prices, benchmark comparison,
+the Monte Carlo range and the source library are in [docs/screens.md](docs/screens.md).
 
 ## Building from source
 
@@ -110,7 +85,9 @@ npm run web      # browser mode: build the frontend, then serve the whole app at
 npm run build    # packaged installer under dist-electron\
 ```
 
-The build produces `dist-electron\COMET Setup <version>.exe` and an unpacked app at `dist-electron\win-unpacked\COMET.exe`. Running instances are stopped automatically before a rebuild, or manually with `npm run desktop:stop`.
+The build produces `dist-electron\COMET Setup <version>.exe` and an unpacked app
+at `dist-electron\win-unpacked\COMET.exe`. Running instances are stopped
+automatically before a rebuild, or manually with `npm run desktop:stop`.
 
 ## Tests
 
@@ -120,7 +97,11 @@ cd frontend && npm run build         # type-check + build
 npm run smoke:desktop                # packaged-app smoke test
 ```
 
-The engine is validated against the three published CatCost reference cases (2 wt% Pt/C, 21 wt% Ni/Al₂O₃, USY-based FCC) within their documented tolerance bands.
+The engine reproduces the three published CatCost reference cases (2 wt% Pt/C,
+21 wt% Ni/Al₂O₃, USY-based FCC; User Guide Table 6.2) line by line from the
+published inputs. Pt/C matches to the cent. The other two land within 7%, and
+both residuals trace to footnotes in the table itself.
+`scripts/reproduce_catcost_table62.py` prints the full comparison.
 
 ## Optional API keys
 
@@ -134,19 +115,29 @@ BLS_API_KEY=your_key             # bls.gov, free with registration
 
 ## Method basis
 
-COMET is an independent implementation. It cites the CatCost methodology academically but does not redistribute CatCost source data, and it is not affiliated with or endorsed by NREL.
+COMET is an independent implementation. It cites the CatCost methodology
+academically but does not redistribute CatCost source data, and it is not
+affiliated with or endorsed by NREL.
 
 - Baddour, F. G., et al. (2018). *Journal of the American Chemical Society*.
 - Van Allsburg, K. M., et al. (2022). Early-stage evaluation of catalyst manufacturing cost and environmental impact using CatCost. *Nature Catalysis*.
 
 Benchmark- and route-specific references are attached to the datasets inside the app.
 
-To cite COMET itself, use the Zenodo DOI [10.5281/zenodo.21451931](https://doi.org/10.5281/zenodo.21451931) or GitHub's "Cite this repository" button.
+To cite COMET itself, use the Zenodo DOI
+[10.5281/zenodo.21451931](https://doi.org/10.5281/zenodo.21451931) or GitHub's
+"Cite this repository" button.
 
-## Roadmap
+## The name
 
-Where the project is headed is tracked in [docs/roadmap.md](docs/roadmap.md).
+A comet nucleus is a pitted, porous sphere, which is roughly what a catalyst
+pellet looks like. The acronym came afterwards.
 
 ## License
 
-Source-available, all rights reserved. See [LICENSE](LICENSE).
+[PolyForm Noncommercial License 1.0.0](LICENSE) (`PolyForm-Noncommercial-1.0.0`).
+
+Free to use, modify and redistribute for any noncommercial purpose: research,
+education, personal study. Use by universities, public research organizations and
+government institutions is permitted regardless of funding source. Commercial use
+requires a separate license from the copyright holder.

@@ -7,7 +7,7 @@ name = "comet"
 version = "1.3.24"
 description = "COMET: Catalyst Overall Manufacturing Estimation Tool — real-time metal price based catalyst manufacturing cost estimation"
 readme = "README.md"
-license = "LicenseRef-Proprietary"
+license = "PolyForm-Noncommercial-1.0.0"
 license-files = ["LICENSE"]
 requires-python = ">=3.11"
 dependencies = [

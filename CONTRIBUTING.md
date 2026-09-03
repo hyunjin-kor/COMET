@@ -31,11 +31,12 @@ contribution path is intentionally tight.
 - Bug fixes that come with a pytest case (or a frontend reproduction
   step) showing the bug.
 - Small surface improvements that fit the locked stack in `AGENTS.md`
-  §2 — please don't introduce a new framework, ORM, build tool, or
+  (“Tech stack”). Please don't introduce a new framework, ORM, build tool or
   charting library without filing an issue first.
 - Methodology contributions inside `backend/core/` only when the
   three CatCost validation cases (2 wt% Pt/C, 21 wt% Ni/Al₂O₃, USY-FCC)
-  still land within the tolerances declared in `AGENTS.md` §7.
+  still land within the tolerances declared in `AGENTS.md`
+  (“Validation strategy”).
 - Documentation fixes (typos, broken links, stale screenshots).
 
 ## What we will not accept
@@ -49,11 +50,11 @@ contribution path is intentionally tight.
 
 ## Reporting a security issue
 
-Please follow [`SECURITY.md`](./SECURITY.md) — do not open a public
+Please follow [`SECURITY.md`](./SECURITY.md). Do not open a public
 issue for vulnerabilities.
 
 ## License
 
-COMET is source-available, all rights reserved (`LICENSE`). By
-opening a PR you confirm that you authored the change and grant the
-maintainer permission to incorporate it under that license.
+COMET is licensed under the PolyForm Noncommercial License 1.0.0
+(`LICENSE`). By opening a PR you confirm that you authored the change and
+grant the maintainer permission to incorporate it under that license.
