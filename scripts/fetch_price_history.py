@@ -12,7 +12,7 @@ paper over it:
   Johnson Matthey   Ru Rh Pt Pd Ir     monthly, 2019 onward
   Yahoo Finance     Pt Pd Au Ag Cu Al  daily, five years
   Westmetall (LME)  Ni Zn Sn           daily, current year only
-  IMF PCPS          Co                 monthly average, from --start (series begins 1992)
+  IMF PCPS          Co Mo              monthly average, from --start (series begins 1992)
 
 Run:  python scripts/fetch_price_history.py --out docs/paper/price_history_<date>.json
 """

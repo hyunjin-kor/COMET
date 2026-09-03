@@ -612,6 +612,7 @@ WESTMETALL_FIELDS: dict[str, str] = {
 # IMF Primary Commodity Price System indicator codes (monthly averages).
 IMF_PCPS_SERIES: dict[str, str] = {
     "Co": "PCOBA",
+    "Mo": "PLMMODY",
 }
 
 

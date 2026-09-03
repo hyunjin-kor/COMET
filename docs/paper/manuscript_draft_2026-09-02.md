@@ -342,10 +342,12 @@ To be stated in the manuscript, not buried:
    reforming) cannot yet be counted against history. The break-even sweep
    moves one metal at a time with the others held, so it does not represent
    co-movement; §3.4's date slices are its complement.
-   [2026-09-03: cobalt monthly history is now frozen from IMF PCPS (2019
-   onward at the fetch default). Its 2025 average, $15.8/lb, sits below the
-   USGS anchor the price basis uses for cobalt, $21.0/lb, so align the basis
-   before regenerating §3.5. Molybdenum and tungsten remain without a series.]
+   [2026-09-03: cobalt and molybdenum monthly history is now frozen from IMF
+   PCPS (2019 onward at the fetch default). The cobalt 2025 average, $15.8/lb,
+   sits below the USGS anchor the price basis uses, $21.0/lb, and the app's
+   molybdenum anchor ($34.71/lb) looks 1.5x high against both IMF and USGS
+   ($51.9/kg contained Mo, about $23/lb); align both before regenerating §3.5.
+   Tungsten remains without a series.]
 
 ## 6. Data and code availability
 
