@@ -1,5 +1,6 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import { useLang } from '../../lib/i18n';
+import { useBasis } from '../../lib/use-basis';
 import { useUnit } from '../../lib/use-unit';
 import BrandMark from './BrandMark';
 import { isNavigationPathActive, navigationItems } from './navigation';
@@ -28,6 +29,8 @@ type SidebarProps = {
 export default function Sidebar({ collapsed, onToggleCollapsed }: SidebarProps) {
   const { unit, toggle } = useUnit();
   const { lang, toggle: toggleLang, t } = useLang();
+  const { basis, toggle: toggleBasis } = useBasis();
+  const basisTitle = 'Price basis: live quotes for practical work, monthly averages for academic work (click to switch)';
   const location = useLocation();
   const hasTitlebar = typeof window !== 'undefined' && window.cometDesktop?.platform === 'win32';
 
@@ -115,6 +118,16 @@ export default function Sidebar({ collapsed, onToggleCollapsed }: SidebarProps) 
               >
                 {lang === 'en' ? 'EN' : '한'}
               </button>
+              <button
+                type="button"
+                onClick={toggleBasis}
+                className="no-drag flex h-8 w-10 items-center justify-center rounded-full bg-[#eef1f2] text-xs font-semibold text-[#0f766e] transition hover:bg-[#e6f5f2]"
+                title={basisTitle}
+                aria-label={`Toggle price basis, currently ${basis === 'live' ? 'live quotes' : 'monthly averages'}`}
+                aria-pressed={basis === 'reference'}
+              >
+                {basis === 'live' ? 'Live' : 'Avg'}
+              </button>
             </div>
           ) : (
             <div className="space-y-3 border-t border-[#f2f4f6] px-1.5 pb-1 pt-4">
@@ -173,6 +186,35 @@ export default function Sidebar({ collapsed, onToggleCollapsed }: SidebarProps) 
                     }`}
                   >
                     한국어
+                  </span>
+                </button>
+              </div>
+              <div className="flex items-center justify-between gap-3">
+                <div className="text-xs font-medium text-[#68727f]">{t('Price basis')}</div>
+
+                <button
+                  type="button"
+                  onClick={toggleBasis}
+                  className="no-drag flex items-center rounded-full bg-[#eef1f2] p-0.5"
+                  title={basisTitle}
+                  aria-label={`Toggle price basis, currently ${basis === 'live' ? 'live quotes' : 'monthly averages'}`}
+                  aria-pressed={basis === 'reference'}
+                >
+                  <span
+                    aria-hidden="true"
+                    className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
+                      basis === 'live' ? 'bg-[#0f766e] text-white' : 'text-[#5f6b7a]'
+                    }`}
+                  >
+                    {t('Live')}
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
+                      basis === 'reference' ? 'bg-[#0f766e] text-white' : 'text-[#5f6b7a]'
+                    }`}
+                  >
+                    {t('Monthly avg')}
                   </span>
                 </button>
               </div>

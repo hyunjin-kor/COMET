@@ -14,6 +14,7 @@ import httpx
 
 from backend.config import settings
 from backend.core.constants import LB_PER_METRIC_TON
+from backend.core.reference_basis import latest_common_month, monthly_average, truncate_series
 from backend.paths import data_dir
 
 logger = logging.getLogger(__name__)
@@ -92,6 +93,10 @@ _CATCOST_REF: dict[str, float] = {
     "Ni": 6.08,
     "W": 24.04,
 }
+
+
+def metal_name(symbol: str) -> str:
+    return _NAMES.get(symbol, symbol)
 
 
 def _utc_now_iso() -> str:
@@ -769,6 +774,48 @@ def _parse_imf_pcps_series(page: str, factor: float) -> list[dict]:
         points.append({"date": day.isoformat(), "price": round(published * factor, 4)})
     points.sort(key=lambda p: p["date"])
     return points
+
+
+async def fetch_reference_series(start: date, end: date) -> tuple[dict[str, dict], dict[str, str]]:
+    """Monthly-average series for the reference basis, cut at the latest month all of them cover.
+
+    Johnson Matthey daily base prices are averaged by month (the running month
+    is dropped); IMF PCPS publishes monthly averages as such. Returns
+    ``(series, failures)`` so one dead feed never loses the others.
+    """
+    series: dict[str, dict] = {}
+    failures: dict[str, str] = {}
+
+    try:
+        jm = await fetch_johnson_matthey_history(start, end)
+        for symbol in JM_HISTORY_SYMBOLS:
+            rows = (jm or {}).get(symbol) or []
+            if rows:
+                points = monthly_average(rows, exclude_month=end.strftime("%Y-%m"))
+                series[symbol] = {
+                    "source": "Johnson Matthey (monthly average)",
+                    "unit": "$/troy_oz",
+                    "points": points,
+                }
+            else:
+                failures[f"jm:{symbol}"] = "johnson matthey returned no rows"
+    except Exception as exc:  # noqa: BLE001
+        failures["_johnson_matthey"] = f"{type(exc).__name__}: {exc}"
+
+    for symbol, (_indicator, unit, _factor) in IMF_PCPS_SERIES.items():
+        try:
+            rows = await fetch_imf_pcps_history(symbol, start)
+        except Exception as exc:  # noqa: BLE001
+            failures[f"imf:{symbol}"] = f"{type(exc).__name__}: {exc}"
+            continue
+        if rows:
+            series[symbol] = {"source": "IMF PCPS (monthly average)", "unit": unit, "points": rows}
+        else:
+            failures[f"imf:{symbol}"] = "empty response"
+
+    if not series:
+        return {}, failures
+    return truncate_series(series, latest_common_month(series)), failures
 
 
 async def fetch_westmetall() -> dict[str, dict]:

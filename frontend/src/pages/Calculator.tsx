@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FitPriceText } from '../components/shared/FitPriceText';
 import { WorkspaceSectionFooter, WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
@@ -35,6 +35,7 @@ import {
 import { formatPrice } from '../lib/format-price';
 import { useLang } from '../lib/i18n';
 import { LB_PER_KG, TROY_OZ_PER_LB } from '../lib/unit-conversion';
+import { useBasis } from '../lib/use-basis';
 import { useUnit } from '../lib/use-unit';
 
 
@@ -504,6 +505,9 @@ export default function Calculator() {
   const navigate = useNavigate();
   const { toDisplay, toInternal, fmtLabel } = useUnit();
   const { lang, t } = useLang();
+  const { basis } = useBasis();
+  // The basis the loaded price rows currently reflect; the switch effect re-prices on change.
+  const appliedBasisRef = useRef(basis);
   const sectionState = useWorkspaceSections(ESTIMATE_SECTIONS, 'estimate');
   const storedDraft = loadCalculatorDraft();
   const [rows, setRows] = useState<CalculatorRow[]>(() => storedDraft?.rows?.length ? storedDraft.rows : defaultRows());
@@ -580,7 +584,7 @@ export default function Calculator() {
       setPricesLoading(true);
       setPricesError(false);
       try {
-        const prices = await fetchPrices();
+        const prices = await fetchPrices(appliedBasisRef.current);
         if (cancelled) return;
         setLivePriceRows(prices);
         setLiveMap(toFeedMap(prices));
@@ -796,30 +800,52 @@ export default function Calculator() {
     return map;
   }
 
+  function applyPriceRows(prices: MetalPrice[]) {
+    const map = toFeedMap(prices);
+    const nextLiveOptions = prices.map(buildLiveMetalOption);
+    setLivePriceRows(prices);
+    setLiveMap(map);
+    setRows((previous) => ensureThermalRows(
+      previous.map((row) => {
+        if (row.role === 'support' || row.source_type === 'manual') return row;
+        const liveKey = row.symbol ? `live:${row.symbol}` : `live:${row.name}`;
+        const liveOption = nextLiveOptions.find((option) => option.selection_key === liveKey);
+        return liveOption ? applyOptionToRow(row, liveOption) : row;
+      }),
+      [...nextLiveOptions, ...activeMetalLibraryOptions],
+      supportSelectionOptions,
+    ));
+    setPricesUpdatedAt(new Date());
+  }
+
   async function syncPrices() {
     setRefreshing(true);
     try {
       await refreshPriceFeed();
-      const prices = await fetchPrices();
-      const map = toFeedMap(prices);
-      const nextLiveOptions = prices.map(buildLiveMetalOption);
-      setLivePriceRows(prices);
-      setLiveMap(map);
-      setRows((previous) => ensureThermalRows(
-        previous.map((row) => {
-          if (row.role === 'support' || row.source_type === 'manual') return row;
-          const liveKey = row.symbol ? `live:${row.symbol}` : `live:${row.name}`;
-          const liveOption = nextLiveOptions.find((option) => option.selection_key === liveKey);
-          return liveOption ? applyOptionToRow(row, liveOption) : row;
-        }),
-        [...nextLiveOptions, ...activeMetalLibraryOptions],
-        supportSelectionOptions,
-      ));
-      setPricesUpdatedAt(new Date());
+      applyPriceRows(await fetchPrices(basis));
     } finally {
       setRefreshing(false);
     }
   }
+
+  // Switching the price basis re-prices every tracked-metal row from the
+  // other tier. The first load is handled by the mount effect above, so this
+  // only fires on an actual change.
+  useEffect(() => {
+    if (appliedBasisRef.current === basis) return;
+    appliedBasisRef.current = basis;
+    let cancelled = false;
+    (async () => {
+      const prices = await fetchPrices(basis);
+      if (!cancelled) applyPriceRows(prices);
+    })().catch(() => {
+      // The Price basis tile keeps showing the previous state on a failed switch.
+    });
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- applyPriceRows closes over render-derived option lists; run only when the basis changes
+  }, [basis]);
 
   const activeBenchmark = selectedBenchmark?.catalyst_domain === catalystDomain ? selectedBenchmark : null;
   const activeElectroTemplate =
@@ -1100,6 +1126,7 @@ export default function Calculator() {
           template_id: electrocatalystConfig.templateId || undefined,
           order_size_tons: orderSize,
           steps,
+          price_basis: basis,
           components: [{
             role: 'active_catalyst',
             material_key: electrocatalystConfig.catalystMaterialKey,
@@ -1147,6 +1174,7 @@ export default function Calculator() {
           include_spent_value: includeSpentValue,
           reactor_type: reactorType,
           catalyst_bulk_density: catalystBulkDensity,
+          price_basis: basis,
         };
       }
 
@@ -1526,6 +1554,13 @@ export default function Calculator() {
                             })}`
                         : t('Indexed and manual rows stay usable before the next live refresh.')
                 }
+              />
+              <CompactValueRow
+                label={t('Basis')}
+                value={basis === 'reference' ? t('Academic (monthly averages)') : t('Practical (live quotes)')}
+                detail={basis === 'reference'
+                  ? t('IMF PCPS and Johnson Matthey monthly averages; the latest published month prices the estimate.')
+                  : t('Switch the basis from the sidebar.')}
               />
               <CompactValueRow label={t('Manual overrides')} value={String(manualOverrideCount)} detail={t('Materials priced by hand instead of a tracked source.')} />
             </div>

@@ -410,6 +410,13 @@ export default function CalculatorResult() {
                 value={routeSummary?.manufacturing_mode ? modeDisplay(routeSummary.manufacturing_mode) : t('Manual selection')}
                 detail={t(applicationDisplay(routeSummary?.application_family ?? snapshotState.benchmarkCandidate?.application_family ?? catalystDomain))}
               />
+              <RailRow
+                label={t('Price basis')}
+                value={result.input_summary.price_basis === 'reference' ? t('Academic (monthly averages)') : t('Practical (live quotes)')}
+                detail={result.input_summary.price_basis === 'reference'
+                  ? t('IMF PCPS and Johnson Matthey monthly averages; the latest published month prices the estimate.')
+                  : t('Live quotes at the time of the estimate.')}
+              />
             </div>
           </div>
         </div>

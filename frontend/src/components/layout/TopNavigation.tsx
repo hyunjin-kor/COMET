@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useLang } from '../../lib/i18n';
+import { useBasis } from '../../lib/use-basis';
 import { useUnit } from '../../lib/use-unit';
 import BrandMark from './BrandMark';
 import { isNavigationPathActive, navigationItems } from './navigation';
@@ -37,6 +38,7 @@ function CloseIcon() {
 export default function TopNavigation() {
   const { unit, toggle } = useUnit();
   const { lang, toggle: toggleLang, t } = useLang();
+  const { basis, toggle: toggleBasis } = useBasis();
   const location = useLocation();
   const isWindowsDesktop = typeof window !== 'undefined' && window.cometDesktop?.platform === 'win32';
   const [isMaximized, setIsMaximized] = useState(false);
@@ -178,6 +180,31 @@ export default function TopNavigation() {
                 }`}
               >
                 한국어
+              </span>
+            </button>
+            <button
+              type="button"
+              onClick={toggleBasis}
+              className="flex items-center gap-1 rounded-full border border-[#e5e8eb] bg-[#f2f4f6] p-1"
+              title="Price basis: live quotes for practical work, monthly averages for academic work"
+              aria-label={`Toggle price basis, currently ${basis === 'live' ? 'live quotes' : 'monthly averages'}`}
+              aria-pressed={basis === 'reference'}
+            >
+              <span
+                aria-hidden="true"
+                className={`rounded-full px-3 py-1.5 text-xs font-bold transition ${
+                  basis === 'live' ? 'bg-white text-[#191f28] shadow-[0_1px_3px_rgba(15,23,42,0.06)]' : 'text-[#5f6b7a]'
+                }`}
+              >
+                {t('Live')}
+              </span>
+              <span
+                aria-hidden="true"
+                className={`rounded-full px-3 py-1.5 text-xs font-bold transition ${
+                  basis === 'reference' ? 'bg-white text-[#191f28] shadow-[0_1px_3px_rgba(15,23,42,0.06)]' : 'text-[#5f6b7a]'
+                }`}
+              >
+                {t('Monthly avg')}
               </span>
             </button>
           </div>

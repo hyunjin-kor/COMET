@@ -63,8 +63,13 @@ def _normalize_price_per_lb(price: float, unit: str) -> float:
     raise ValueError(f"Unsupported price unit: {unit}")
 
 
-def _latest_price_map(session: Session) -> dict[str, dict[str, Any]]:
-    stmt = select(MetalPrice).order_by(MetalPrice.fetched_at.desc())
+def _latest_price_map(session: Session, basis: str = "live") -> dict[str, dict[str, Any]]:
+    """Latest stored quote per symbol within one price basis, anchors filling the rest."""
+    stmt = (
+        select(MetalPrice)
+        .where(MetalPrice.basis == basis)
+        .order_by(MetalPrice.fetched_at.desc())
+    )
     latest_rows = session.exec(stmt).all()
 
     seen: set[str] = set()
@@ -259,13 +264,15 @@ def evaluate_benchmark_family(
     profile: str = "balanced",
     weights: dict[str, float] | None = None,
     prices: dict[str, dict[str, Any]] | None = None,
+    basis: str = "live",
 ) -> dict[str, Any]:
     """Evaluate one optional reference family with the current price basis.
 
     ``weights`` overrides the profile's economics/evidence/route/performance
     weights so callers can sweep the weight simplex for rank sensitivity.
     ``prices`` replaces the latest-price map so callers can re-cost the same
-    candidates at a historical price state.
+    candidates at a historical price state; otherwise ``basis`` picks the
+    stored tier ("live" daily quotes or "reference" monthly averages).
     """
 
     catalog = _load_catalogs().get(family)
@@ -280,7 +287,7 @@ def evaluate_benchmark_family(
     route_map = {item["id"]: item for item in catalog["route_templates"]}
     quote_map = {item["id"]: item for item in catalog["catalog_quotes"]}
     citation_map = {item["id"]: item for item in catalog["citations"]}
-    latest_prices = prices if prices is not None else _latest_price_map(session)
+    latest_prices = prices if prices is not None else _latest_price_map(session, basis)
     family_domain = catalog.get("catalyst_domain", "thermal")
     family_application = catalog.get("application_family", "general")
 
@@ -447,6 +454,7 @@ def evaluate_benchmark_family(
             "not measured quantities. Set the performance weight to 0 to rank on priced "
             "quantities only."
         ),
+        "price_basis": basis if prices is None else "supplied",
         "price_basis_updated_at": latest_update,
         "winner": candidates[0] if candidates else None,
         "candidates": candidates,

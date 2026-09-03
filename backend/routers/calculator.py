@@ -91,6 +91,7 @@ def _prepare_calculation_context(req: CostCalculationRequest, session: Session) 
             session,
             component,
             target_year=req.target_year,
+            basis=req.price_basis,
         )
         resolved_components.append(resolved_component)
         if snapshot is not None:
@@ -168,6 +169,7 @@ def _prepare_calculation(req: CostCalculationRequest, session: Session) -> tuple
 
     context = _prepare_calculation_context(req, session)
     result = _estimate_from_context(req, context)
+    result["input_summary"]["price_basis"] = req.price_basis
     return result, context["resolved_components"], context["application_family"]
 
 

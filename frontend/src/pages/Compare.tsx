@@ -16,6 +16,7 @@ import {
 } from '../lib/calculator-session';
 import { formatPrice } from '../lib/format-price';
 import { useLang } from '../lib/i18n';
+import { useBasis } from '../lib/use-basis';
 import { useUnit } from '../lib/use-unit';
 
 type DecisionProfile = 'balanced' | 'cost-first' | 'evidence-first';
@@ -109,6 +110,7 @@ export default function Compare() {
   const navigate = useNavigate();
   const { toDisplay, fmtLabel } = useUnit();
   const { lang, t } = useLang();
+  const { basis } = useBasis();
   const sectionState = useWorkspaceSections(REFERENCE_SECTIONS, 'reference');
   const { family: familyParam } = useParams();
   const [profile, setProfile] = useState<DecisionProfile>('balanced');
@@ -154,7 +156,7 @@ export default function Compare() {
     if (!family) return;
 
     let cancelled = false;
-    fetchDecisionBenchmark(family, profile)
+    fetchDecisionBenchmark(family, profile, basis)
       .then((payload) => {
         if (cancelled) return;
         setBenchmark(payload);
@@ -171,7 +173,7 @@ export default function Compare() {
     return () => {
       cancelled = true;
     };
-  }, [family, profile]);
+  }, [family, profile, basis]);
 
   const candidates = useMemo(() => benchmark?.candidates ?? [], [benchmark?.candidates]);
   const activeFamily = useMemo(() => families.find((item) => item.family === family) ?? null, [families, family]);
@@ -260,6 +262,9 @@ export default function Compare() {
               <div className="mt-3 flex flex-wrap gap-2">
                 {activeFamily ? <span className="cp-chip-dark">{activeFamily.title}</span> : null}
                 {benchmark.reaction ? <span className="cp-chip-dark">{benchmark.reaction}</span> : null}
+                <span className="cp-chip-dark">
+                  {benchmark.price_basis === 'reference' ? t('Academic basis: monthly averages') : t('Practical basis: live quotes')}
+                </span>
                 <span className="cp-chip-dark">{t(catalystDomainLabel(benchmark.catalyst_domain))}</span>
                 <span className="cp-chip-dark">{t(applicationFamilyLabel(benchmark.application_family))}</span>
                 <span className="cp-chip-dark">{t(benchmark.decision_profile.label)}</span>

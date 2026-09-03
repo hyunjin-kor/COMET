@@ -2,7 +2,7 @@
 
 import pytest
 
-from backend.core.decision_engine import evaluate_benchmark_family
+from backend.core.decision_engine import _latest_price_map, evaluate_benchmark_family
 from backend.core.price_fetcher import get_reference_prices
 from backend.core.reference_basis import (
     build_price_basis,
@@ -10,6 +10,7 @@ from backend.core.reference_basis import (
     monthly_average,
     truncate_series,
 )
+from backend.services.price_scheduler import save_reference_series
 
 
 def test_monthly_average_dates_at_month_end_and_skips_the_running_month():
@@ -93,3 +94,20 @@ def test_reference_basis_is_accepted_by_the_decision_engine(session):
     result = evaluate_benchmark_family(session=session, family="ammonia-cracking", prices=basis)
     assert result["winner"] is not None
     assert all(c["evidence_summary"]["live_component_count"] == 0 for c in result["candidates"])
+
+
+def test_save_reference_series_dedupes_by_month_and_feeds_the_reference_basis(session):
+    series = {
+        "Co": {
+            "unit": "$/lb",
+            "source": "IMF PCPS (monthly average)",
+            "points": [{"date": "2026-06-30", "price": 24.0}, {"date": "2026-07-31", "price": 25.3435}],
+        }
+    }
+    assert save_reference_series(session, series) == {"Co": 2}
+    assert save_reference_series(session, series) == {}
+
+    reference = _latest_price_map(session, "reference")
+    assert reference["Co"]["price"] == 25.3435
+    assert reference["Co"]["source"] == "IMF PCPS (monthly average)"
+    assert _latest_price_map(session, "live")["Co"]["source"].startswith("USGS")

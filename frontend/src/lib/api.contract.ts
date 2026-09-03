@@ -31,6 +31,7 @@ import {
   type MaterialItem,
   type MaterialUpdateInput,
   type MetalPrice,
+  type PriceBasis,
   type PriceHistoryQuery,
   type PriceHistoryResponse,
   type SavedEstimateDetail,
@@ -78,15 +79,16 @@ export const apiCrudContracts = {
   fetchDecisionBenchmark: (
     family: string,
     profile?: 'balanced' | 'cost-first' | 'evidence-first',
+    basis?: PriceBasis,
   ) => Promise<DecisionBenchmark>;
   fetchEquipmentDetail: (equipmentId: string | number) => Promise<EquipmentItem>;
   fetchMaterial: (materialId: number) => Promise<MaterialItem>;
   fetchMaterialApplicationFamilies: () => Promise<string[]>;
   fetchMaterialCategories: () => Promise<string[]>;
   fetchMaterialDomains: () => Promise<string[]>;
-  fetchPrice: (symbol: string) => Promise<MetalPrice>;
+  fetchPrice: (symbol: string, basis?: PriceBasis) => Promise<MetalPrice>;
   fetchPriceHistory: (symbol: string, query?: PriceHistoryQuery) => Promise<PriceHistoryResponse>;
-  fetchPrices: () => Promise<MetalPrice[]>;
+  fetchPrices: (basis?: PriceBasis) => Promise<MetalPrice[]>;
   fetchSavedEstimate: (estimateId: number) => Promise<SavedEstimateDetail>;
   fetchSavedEstimates: (query?: SavedEstimateQuery) => Promise<SavedEstimateSummary[]>;
   fetchTemplateDetail: (templateId: string) => Promise<ProcessTemplate>;
