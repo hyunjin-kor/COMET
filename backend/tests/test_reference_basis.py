@@ -111,3 +111,34 @@ def test_save_reference_series_dedupes_by_month_and_feeds_the_reference_basis(se
     assert reference["Co"]["price"] == 25.3435
     assert reference["Co"]["source"] == "IMF PCPS (monthly average)"
     assert _latest_price_map(session, "live")["Co"]["source"].startswith("USGS")
+
+
+def test_support_series_catalog_maps_library_keys_to_hs_codes():
+    from backend.core.price_fetcher import load_support_series
+
+    catalog = load_support_series()
+    ids = [entry["id"] for entry in catalog["series"]]
+    assert len(ids) == len(set(ids))
+    for entry in catalog["series"]:
+        assert entry["id"] == f"HS{entry['hs']}"
+        assert len(entry["hs"]) == 6
+    by_key = {key: entry["id"] for entry in catalog["series"] for key in entry["library_keys"]}
+    assert by_key["lit:usgs-alumina-2025"] == "HS281820"
+    assert by_key["lit:comtrade-activated-carbon-2024"] == "HS380210"
+
+
+def test_collect_support_prices_is_a_no_op_without_a_key(monkeypatch):
+    import asyncio
+
+    from backend.services import price_scheduler
+
+    monkeypatch.setattr(price_scheduler.settings, "comtrade_api_key", "")
+    assert asyncio.run(price_scheduler.collect_support_prices()) == {}
+
+
+def test_months_between_spans_year_boundaries():
+    from datetime import date
+
+    from backend.services.price_scheduler import _months_between
+
+    assert _months_between(date(2025, 11, 1), date(2026, 2, 15)) == ["202511", "202512", "202601", "202602"]

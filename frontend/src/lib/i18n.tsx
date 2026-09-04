@@ -31,6 +31,10 @@ const KO: Record<string, string> = {
   'Basis': '기준',
   'Switch the basis from the sidebar.': '기준은 사이드바에서 전환합니다.',
   'Live quotes at the time of the estimate.': '계산 시점의 실시간 시세입니다.',
+  'Support materials': '지지체 재료',
+  'UN Comtrade monthly import unit values, all grades combined.': 'UN Comtrade 월간 수입 단가이며, 모든 등급이 합산된 값입니다.',
+  'No Comtrade key configured, so supports keep their library anchors.': 'Comtrade 키가 없어 지지체는 라이브러리 앵커 값을 유지합니다.',
+  'No data': '데이터 없음',
   'IMF PCPS and Johnson Matthey monthly averages; the latest published month prices the estimate.':
     'IMF PCPS와 Johnson Matthey 월평균이며, 가장 최근 발표 월이 계산 기준입니다.',
   'Collapse sidebar': '사이드바 접기',

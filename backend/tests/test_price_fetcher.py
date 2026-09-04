@@ -174,3 +174,19 @@ def test_reference_prices_use_usgs_anchors_for_co_mo_w():
     assert ref["Fe"]["source"] == "CatCost 2018 + ChemPPI escalation"
     assert ref["Zn"]["unit"] == "$/lb"
     assert ref["Re"]["name"] == "Rhenium"
+
+
+def test_parse_comtrade_rows_divides_value_by_net_weight_at_month_end():
+    from backend.core.price_fetcher import _parse_comtrade_rows
+
+    rows = [
+        {"period": "202603", "netWgt": 100000.0, "primaryValue": 62500.0, "cmdCode": "281820"},
+        {"period": "202602", "netWgt": 0, "primaryValue": 1.0},
+        {"period": "202601", "netWgt": 5000.0, "primaryValue": None},
+        {"period": "202512", "netWgt": 2000.0, "primaryValue": 1300.0},
+    ]
+
+    assert _parse_comtrade_rows(rows) == [
+        {"date": "2025-12-31", "price": 0.65},
+        {"date": "2026-03-31", "price": 0.625},
+    ]

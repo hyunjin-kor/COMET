@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import logging
+from functools import lru_cache
 
 from sqlmodel import Session, select
 
 from backend.core.constants import LB_PER_KG, TROY_OZ_PER_LB
 from backend.core.price_escalation import get_escalation_factor, latest_index_year
+from backend.core.price_fetcher import load_support_series
 from backend.models.material import Material
 from backend.models.metal_price import MetalPrice
 
@@ -183,20 +185,38 @@ def _latest_live_price(session: Session, symbol: str, basis: str = "live") -> Me
     return session.exec(stmt).first()
 
 
+@lru_cache(maxsize=1)
+def _support_series_by_library_key() -> dict[str, str]:
+    """library_key -> support series id, from backend/data/support_series.json."""
+    return {
+        key: entry["id"]
+        for entry in load_support_series()["series"]
+        for key in entry.get("library_keys", [])
+    }
+
+
 def _live_override_for_material(
     session: Session, material: Material, basis: str = "live"
 ) -> dict | None:
-    """If ``material`` is a USGS commodity proxy and a live quote exists, return it.
+    """If ``material`` is a commodity proxy and a stored quote exists in ``basis``, return it.
+
+    Metal proxies resolve by element symbol on either basis. Support proxies
+    resolve only on the reference basis, against their monthly import unit
+    value series; there is no live quote for a support.
 
     Returns a dict with ``price``, ``price_unit``, ``source``, ``fetched_at``
     suitable for swapping into the resolved component. Returns ``None`` when
-    the row is not eligible for live upgrade or no live quote is stored.
+    the row is not eligible or no quote is stored.
     """
 
     library_key = material.library_key or ""
-    if library_key not in _LIVE_ELIGIBLE_LIBRARY_KEYS:
+    support_series = _support_series_by_library_key().get(library_key)
+    if support_series and basis == "reference":
+        symbol = support_series
+    elif library_key in _LIVE_ELIGIBLE_LIBRARY_KEYS:
+        symbol = (material.symbol or "").strip()
+    else:
         return None
-    symbol = (material.symbol or "").strip()
     if not symbol:
         return None
 
@@ -343,8 +363,11 @@ def resolve_component_input(
         snapshot["escalation_target_year"] = target_year
         snapshot["escalation_basis_year"] = material.quote_year
         snapshot["normalized_price_per_lb"] = resolved["price_per_lb"]
-        if (material.library_key or "") in _LIVE_ELIGIBLE_LIBRARY_KEYS:
-            # Eligible for live but no quote stored; surface that for clarity.
+        eligible = (material.library_key or "") in _LIVE_ELIGIBLE_LIBRARY_KEYS or (
+            basis == "reference" and (material.library_key or "") in _support_series_by_library_key()
+        )
+        if eligible:
+            # Eligible for an override but no quote stored; surface that for clarity.
             snapshot["live_override"] = {
                 "applied": False,
                 "reason": "no_live_quote_stored" if basis == "live" else "no_reference_quote_stored",

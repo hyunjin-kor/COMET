@@ -9,6 +9,7 @@ import json
 import logging
 import re
 from datetime import UTC, date, datetime
+from functools import lru_cache
 
 import httpx
 
@@ -97,6 +98,73 @@ _CATCOST_REF: dict[str, float] = {
 
 def metal_name(symbol: str) -> str:
     return _NAMES.get(symbol, symbol)
+
+
+@lru_cache(maxsize=1)
+def load_support_series() -> dict:
+    """Support-material unit-value series definitions (backend/data/support_series.json)."""
+    with open(_DATA_DIR / "support_series.json", encoding="utf-8") as handle:
+        return json.load(handle)
+
+
+COMTRADE_API = "https://comtradeapi.un.org/data/v1/get/C/M/HS"
+
+
+async def fetch_comtrade_unit_values(
+    hs_code: str,
+    periods: list[str],
+    api_key: str,
+    reporter_code: str = "842",
+) -> list[dict]:
+    """Monthly import unit values ($/kg) for one HS code from UN Comtrade Plus.
+
+    ``periods`` are YYYYMM strings, at most twelve per call (the API limit).
+    """
+    if not periods:
+        return []
+    try:
+        async with httpx.AsyncClient(timeout=60, follow_redirects=True, headers=_HTTP_HEADERS) as client:
+            resp = await client.get(
+                COMTRADE_API,
+                params={
+                    "reporterCode": reporter_code,
+                    "partnerCode": "0",
+                    "partner2Code": "0",
+                    "cmdCode": hs_code,
+                    "flowCode": "M",
+                    "period": ",".join(periods[:12]),
+                    "customsCode": "C00",
+                    "motCode": "0",
+                },
+                headers={"Ocp-Apim-Subscription-Key": api_key},
+            )
+            resp.raise_for_status()
+            rows = resp.json().get("data", [])
+    except (httpx.HTTPError, json.JSONDecodeError, ValueError) as e:
+        logger.warning("Comtrade %s failed: %s", hs_code, e)
+        return []
+    points = _parse_comtrade_rows(rows)
+    logger.info("Comtrade %s: %d months", hs_code, len(points))
+    return points
+
+
+def _parse_comtrade_rows(rows: list[dict]) -> list[dict]:
+    """Customs value over net weight per month, dated at month end; rows without weight are skipped."""
+    points: list[dict] = []
+    for row in rows:
+        try:
+            period = str(row["period"])
+            net_kg = float(row.get("netWgt") or 0)
+            value = float(row.get("primaryValue") or 0)
+        except (KeyError, TypeError, ValueError):
+            continue
+        if net_kg <= 0 or value <= 0 or len(period) != 6:
+            continue
+        year, month = int(period[:4]), int(period[4:])
+        day = date(year, month, calendar.monthrange(year, month)[1])
+        points.append({"date": day.isoformat(), "price": round(value / net_kg, 4)})
+    points.sort(key=lambda p: p["date"])
+    return points
 
 
 def _utc_now_iso() -> str:

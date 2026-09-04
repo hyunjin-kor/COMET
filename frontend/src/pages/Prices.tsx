@@ -8,9 +8,11 @@ import {
   fetchPrices,
   fetchPriceTrends,
   fetchPriceUsage,
+  fetchSupportPrices,
   refreshPrices,
   type MetalPrice,
   type PriceTrend,
+  type SupportPriceSeries,
   type PriceUsageEntry,
 } from '../lib/api';
 import { LB_PER_KG, TROY_OZ_PER_KG, TROY_OZ_PER_LB, type Unit } from '../lib/unit-conversion';
@@ -283,6 +285,7 @@ export default function Prices() {
   const [trendPeriod, setTrendPeriod] = useState<TrendPeriod>('3mo');
   const [trends, setTrends] = useState<Record<string, PriceTrend> | null>(null);
   const [usage, setUsage] = useState<Record<string, PriceUsageEntry[]> | null>(null);
+  const [supportSeries, setSupportSeries] = useState<SupportPriceSeries[] | null>(null);
   const [compareSymbols, setCompareSymbols] = useState<string[]>([]);
   const navigate = useNavigate();
 
@@ -374,6 +377,21 @@ export default function Prices() {
       cancelled = true;
     };
   }, [trendPeriod, basis]);
+
+  useEffect(() => {
+    if (basis !== 'reference') return;
+    let cancelled = false;
+    fetchSupportPrices(basis)
+      .then((payload) => {
+        if (!cancelled) setSupportSeries(payload.series);
+      })
+      .catch(() => {
+        if (!cancelled) setSupportSeries(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [basis]);
 
   useEffect(() => {
     let cancelled = false;
@@ -627,6 +645,32 @@ export default function Prices() {
             <StatusTile label={t('Indexed & manual quotes')} value={String(indexedQuoteCount + manualQuoteCount)} detail={lang === 'ko' ? `지수 ${indexedQuoteCount}건, 수동 ${manualQuoteCount}건 시세를 계속 사용할 수 있습니다.` : `${indexedQuoteCount} indexed and ${manualQuoteCount} manual quotes remain usable.`} />
             <StatusTile label={t('Needs review')} value={String(reviewFlagCount)} detail={t('Stale quotes or low-confidence sources worth checking.')} />
           </div>
+
+          {basis === 'reference' && supportSeries ? (
+            <div className="mb-5 rounded-[22px] border border-slate-200 bg-white/76 px-4 py-3">
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <div className="cp-subtle-label">{t('Support materials')}</div>
+                <div className="text-xs text-slate-600">
+                  {supportSeries.some((row) => row.price != null)
+                    ? t('UN Comtrade monthly import unit values, all grades combined.')
+                    : t('No Comtrade key configured, so supports keep their library anchors.')}
+                </div>
+              </div>
+              <div className="mt-2 grid gap-1.5 sm:grid-cols-2 xl:grid-cols-3">
+                {supportSeries.map((row) => (
+                  <div key={row.id} className="flex items-baseline justify-between gap-3 rounded-[14px] border border-slate-100 bg-white px-3 py-2 text-sm">
+                    <div className="min-w-0">
+                      <div className="truncate font-semibold text-[#191f28]" title={row.name}>{row.material}</div>
+                      <div className="truncate text-xs text-slate-500" title={row.note}>HS {row.hs}{row.basis_month ? `, ${row.basis_month}` : ''}</div>
+                    </div>
+                    <div className="whitespace-nowrap font-mono text-sm text-[#191f28]">
+                      {row.price != null ? `$${row.price.toFixed(2)}/kg` : t('No data')}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : null}
 
           <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-[22px] border border-slate-200 bg-white/76 px-4 py-3">
             <div className="flex flex-wrap items-center gap-3">

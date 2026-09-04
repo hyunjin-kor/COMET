@@ -21,6 +21,19 @@ _SOURCE_RULES: list[dict[str, Any]] = [
         ),
     },
     {
+        "match": "UN Comtrade",
+        "tier": "indexed_reference",
+        "confidence_score": 72,
+        "transparency": "public_index",
+        "acquisition_mode": "api",
+        "freshness_target_hours": None,
+        "label": "Trade unit value",
+        "note": (
+            "Customs value divided by net weight for one HS code (UN Comtrade); all grades "
+            "and partners combined, so it is a bulk market level rather than a catalyst-grade quote."
+        ),
+    },
+    {
         "match": "Yahoo Finance",
         "tier": "exchange_screen",
         "confidence_score": 86,

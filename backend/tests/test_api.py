@@ -1934,3 +1934,61 @@ class TestPriceBasis:
         assert pt_live["live_override"]["applied"] is False
         assert pt_live["live_override"]["reason"] == "no_live_quote_stored"
         assert live["input_summary"]["price_basis"] == "live"
+
+
+class TestSupportPrices:
+    def _seed_alumina(self, session):
+        session.add_all([
+            MetalPrice(
+                symbol="HS281820", name="Calcined alumina", price=0.61, unit="$/kg",
+                source="UN Comtrade (monthly unit value)", basis="reference",
+                fetched_at=datetime(2026, 5, 31, tzinfo=UTC),
+            ),
+            MetalPrice(
+                symbol="HS281820", name="Calcined alumina", price=0.64, unit="$/kg",
+                source="UN Comtrade (monthly unit value)", basis="reference",
+                fetched_at=datetime(2026, 6, 30, tzinfo=UTC),
+            ),
+        ])
+        session.commit()
+
+    def test_supports_endpoint_lists_series_with_latest_month(self, client, session):
+        self._seed_alumina(session)
+        payload = client.get("/api/prices/supports").json()
+        assert payload["basis"] == "reference"
+        by_id = {row["id"]: row for row in payload["series"]}
+        assert by_id["HS281820"]["price"] == 0.64
+        assert by_id["HS281820"]["basis_month"] == "2026-06"
+        assert by_id["HS281820"]["months"] == 2
+        assert "lit:usgs-alumina-2025" in by_id["HS281820"]["library_keys"]
+        assert by_id["HS282300"]["price"] is None
+        live = client.get("/api/prices/supports?basis=live").json()
+        assert all(row["price"] is None for row in live["series"])
+
+    def test_support_rows_stay_off_the_metals_list(self, client, session):
+        self._seed_alumina(session)
+        symbols = {row["symbol"] for row in client.get("/api/prices?basis=reference").json()}
+        assert "HS281820" not in symbols
+
+    def test_calculate_prices_a_support_proxy_from_its_series_on_the_reference_basis(self, client, session):
+        self._seed_alumina(session)
+        payload = {
+            "components": [
+                {"role": "active_metal", "name": "Ni", "wt_pct": 15.0, "price_per_lb": 7.5},
+                {"role": "support", "material_key": "lit:usgs-alumina-2025", "wt_pct": 85.0},
+            ],
+            "price_basis": "reference",
+        }
+
+        body = client.post("/api/calculate", json=payload).json()
+        alumina = next(m for m in body["resolved_materials"] if m["material_key"] == "lit:usgs-alumina-2025")
+        assert alumina["live_override"]["applied"] is True
+        assert alumina["live_override"]["live_source"] == "UN Comtrade (monthly unit value)"
+        assert alumina["price"] == 0.64
+        assert alumina["price_unit"] == "$/kg"
+        assert alumina["price_scope"] == "reference_monthly"
+
+        live = client.post("/api/calculate", json={**payload, "price_basis": "live"}).json()
+        alumina_live = next(m for m in live["resolved_materials"] if m["material_key"] == "lit:usgs-alumina-2025")
+        assert "live_override" not in alumina_live
+        assert alumina_live["price"] == 0.59

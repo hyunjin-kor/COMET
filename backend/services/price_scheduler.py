@@ -8,10 +8,13 @@ from datetime import UTC, date, datetime, timedelta
 
 from sqlmodel import Session, select
 
+from backend.config import settings
 from backend.core.price_fetcher import (
     fetch_all_prices,
+    fetch_comtrade_unit_values,
     fetch_reference_series,
     fetch_yfinance,
+    load_support_series,
     metal_name,
 )
 from backend.database import engine
@@ -54,7 +57,68 @@ async def collect_prices(source: str | None = None) -> dict[str, dict]:
             await collect_reference_prices()
         except Exception as exc:  # a dead reference feed must not fail the live refresh
             logger.warning("Reference price collection failed: %s", exc)
+        try:
+            await collect_support_prices()
+        except Exception as exc:
+            logger.warning("Support price collection failed: %s", exc)
     return results
+
+
+def _months_between(start: date, end: date) -> list[str]:
+    """YYYYMM for every month from ``start`` up to and including ``end``'s month."""
+    months: list[str] = []
+    year, month = start.year, start.month
+    while (year, month) <= (end.year, end.month):
+        months.append(f"{year:04d}{month:02d}")
+        year, month = (year + 1, 1) if month == 12 else (year, month + 1)
+    return months
+
+
+async def collect_support_prices() -> dict[str, int]:
+    """Store monthly support unit values from UN Comtrade for months not yet in the table.
+
+    Needs COMTRADE_API_KEY; without it the academic basis keeps the library
+    anchors for supports. Only missing months are requested, twelve per call.
+    """
+    api_key = settings.comtrade_api_key
+    if not api_key:
+        return {}
+    catalog = load_support_series()
+    today = date.today()
+    last_complete = (today.replace(day=1) - timedelta(days=1))
+    wanted = _months_between(REFERENCE_START, last_complete)
+
+    inserted: dict[str, int] = {}
+    with Session(engine) as session:
+        for entry in catalog["series"]:
+            stored = {
+                row.fetched_at.strftime("%Y%m")
+                for row in session.exec(
+                    select(MetalPrice).where(MetalPrice.symbol == entry["id"], MetalPrice.basis == "reference")
+                ).all()
+            }
+            missing = [m for m in wanted if m not in stored]
+            points: list[dict] = []
+            for i in range(0, len(missing), 12):
+                points.extend(
+                    await fetch_comtrade_unit_values(
+                        entry["hs"], missing[i : i + 12], api_key, catalog["reporter_code"]
+                    )
+                )
+            if not points:
+                continue
+            series = {
+                entry["id"]: {
+                    "name": entry["name"],
+                    "unit": catalog["unit"],
+                    "source": "UN Comtrade (monthly unit value)",
+                    "points": points,
+                }
+            }
+            inserted.update(save_reference_series(session, series))
+    if inserted:
+        logger.info("Support series: stored %s", inserted)
+    return inserted
 
 
 def _reference_due() -> bool:
@@ -98,7 +162,7 @@ def save_reference_series(session: Session, series: dict[str, dict]) -> dict[str
             session.add(
                 MetalPrice(
                     symbol=symbol,
-                    name=metal_name(symbol),
+                    name=entry.get("name") or metal_name(symbol),
                     price=float(point["price"]),
                     unit=entry["unit"],
                     source=entry["source"],
