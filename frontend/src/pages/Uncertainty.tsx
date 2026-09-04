@@ -313,7 +313,7 @@ export default function Uncertainty() {
                 </div>
                 <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
                   <div className="cp-subtle-label">{t('Preparation basis')}</div>
-                  <div className="mt-2 text-base font-semibold text-[#191f28]">{lang === 'ko' ? `단위 공정 ${draft.steps.length}개` : `${draft.steps.length} unit operation${draft.steps.length === 1 ? '' : 's'}`}</div>
+                  <div className="mt-2 text-base font-semibold text-[#191f28]">{lang === 'ko' ? `제조 단계 ${draft.steps.length}개` : `${draft.steps.length} unit operation${draft.steps.length === 1 ? '' : 's'}`}</div>
                   <div className="mt-1 text-xs leading-6 text-slate-600">{draft.steps.map((key) => t(stepDisplayLabel(key))).join(', ') || t('No preparation steps selected')}</div>
                 </div>
                 <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
@@ -326,7 +326,7 @@ export default function Uncertainty() {
               </div>
 
               <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                <FieldBlock label={t('Simulation count')} hint="100 to 10000">
+                <FieldBlock label={t('Simulation count')} hint={lang === 'ko' ? '100~10000' : '100 to 10000'}>
                   <input
                     type="number"
                     step="100"

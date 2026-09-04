@@ -489,7 +489,7 @@ export default function Library() {
                           <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
                             <div className="min-w-0">
                               <div className="truncate font-semibold text-[#191f28]">{material.name}</div>
-                              <div className="truncate text-xs text-slate-600">{material.symbol || material.formula || 'No symbol'}</div>
+                              <div className="truncate text-xs text-slate-600">{material.symbol || material.formula || (lang === 'ko' ? '기호 없음' : 'No symbol')}</div>
                               {material.notes ? <div className="mt-1 text-xs leading-5 text-slate-600">{material.notes}</div> : null}
                             </div>
                             <div className="text-left lg:text-right">

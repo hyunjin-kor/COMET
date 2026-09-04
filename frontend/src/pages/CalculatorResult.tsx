@@ -325,7 +325,7 @@ export default function CalculatorResult() {
             <div className="mt-2 text-xs leading-6 text-slate-300">
               {electrodeModel ? (
                 lang === 'ko' ? (
-                  <>유효 면적 cm²당 전극 스택 원가입니다 (모델 면적 {electrodeModel.active_area_cm2.toFixed(1)} cm²). 질량 기준으로는 벤더 포장가 기준 {formatPrice(toDisplay(result.summary.estimated_price_per_lb))}{fmtLabel}입니다.</>
+                  <>유효 면적 cm²당 전극 조립체 원가입니다 (모델 면적 {electrodeModel.active_area_cm2.toFixed(1)} cm²). 질량 기준으로는 공급사 포장 단가 기준 {formatPrice(toDisplay(result.summary.estimated_price_per_lb))}{fmtLabel}입니다.</>
                 ) : (
                   <>
                     Electrode-stack cost per cm² of active area ({electrodeModel.active_area_cm2.toFixed(1)} cm² modeled).
@@ -335,7 +335,7 @@ export default function CalculatorResult() {
                 )
               ) : (
                 lang === 'ko' ? (
-                  <>판매 마진 반영 전 순원가 {formatPrice(toDisplay(result.summary.net_cost_per_lb))}{fmtLabel}. 다른 단위로는 {formatPrice(altPrice)}{altLabel}.</>
+                  <>폐촉매 회수 가치를 뺀 순원가 {formatPrice(toDisplay(result.summary.net_cost_per_lb))}{fmtLabel}. 다른 단위로는 {formatPrice(altPrice)}{altLabel}.</>
                 ) : (
                   <>
                     Net cost {formatPrice(toDisplay(result.summary.net_cost_per_lb))}
@@ -347,7 +347,7 @@ export default function CalculatorResult() {
             </div>
             <div className="mt-3 flex flex-wrap gap-2">
               <span className="cp-chip-dark">{t(domainDisplay(catalystDomain))}</span>
-              <span className="cp-chip-dark">{lang === 'ko' ? `${t(result.step_method.scale)} 규모` : `${result.step_method.scale} scale`}</span>
+              <span className="cp-chip-dark">{lang === 'ko' ? t(result.step_method.scale) : `${result.step_method.scale} scale`}</span>
               <span className="cp-chip-dark">{generatedAt}</span>
             </div>
           </div>
@@ -367,12 +367,12 @@ export default function CalculatorResult() {
               <RailRow
                 label={t('Public links')}
                 value={`${publicSourceCount}/${resolvedMaterials.length || 0}`}
-                detail={lang === 'ko' ? `초안 내 실시간 ${snapshotState.liveFeedCount}건 / 지수 ${snapshotState.indexedFeedCount}건` : `${snapshotState.liveFeedCount} live / ${snapshotState.indexedFeedCount} indexed rows in the draft`}
+                detail={lang === 'ko' ? `실시간 ${snapshotState.liveFeedCount}건 / 지수 보정 ${snapshotState.indexedFeedCount}건` : `${snapshotState.liveFeedCount} live / ${snapshotState.indexedFeedCount} indexed rows in the draft`}
               />
               <RailRow
                 label={t('Latest quote year')}
                 value={latestQuoteYear ? String(latestQuoteYear) : 'N/A'}
-                detail={lang === 'ko' ? `아카이브 전용 재료 ${historicalOnlyCount}건` : `${historicalOnlyCount} archive-only material rows`}
+                detail={lang === 'ko' ? `보관 자료 재료 ${historicalOnlyCount}건` : `${historicalOnlyCount} archive-only material rows`}
               />
               <RailRow
                 label={t('Route references')}
@@ -398,7 +398,7 @@ export default function CalculatorResult() {
               <RailRow
                 label={t('Production scale')}
                 value={lang === 'ko' ? `${snapshotState.orderSize}톤` : `${snapshotState.orderSize} tons`}
-                detail={lang === 'ko' ? `${t(result.step_method.scale)} 규모 / ${Number(result.step_method.campaign_days).toFixed(1)}일` : `${result.step_method.scale} scale / ${Number(result.step_method.campaign_days).toFixed(1)} days`}
+                detail={lang === 'ko' ? `${t(result.step_method.scale)} / ${Number(result.step_method.campaign_days).toFixed(1)}일` : `${result.step_method.scale} scale / ${Number(result.step_method.campaign_days).toFixed(1)} days`}
               />
               <RailRow
                 label={t('Steps')}
@@ -447,7 +447,7 @@ export default function CalculatorResult() {
               <div className="mt-3 text-sm text-slate-300">
                 {electrodeModel ? (
                   lang === 'ko' ? (
-                    <>유효 면적 cm²당 전극 스택 원가입니다. 질량 기준으로는 벤더 포장가 기준 {formatPrice(toDisplay(result.summary.estimated_price_per_lb))}{fmtLabel}입니다.</>
+                    <>유효 면적 cm²당 전극 조립체 원가입니다. 질량 기준으로는 공급사 포장 단가 기준 {formatPrice(toDisplay(result.summary.estimated_price_per_lb))}{fmtLabel}입니다.</>
                   ) : (
                     <>
                       Electrode-stack cost per cm² of active area. Per-mass view{' '}
@@ -457,7 +457,7 @@ export default function CalculatorResult() {
                   )
                 ) : (
                   lang === 'ko' ? (
-                    <>판매 마진 반영 전 순원가 {formatPrice(toDisplay(result.summary.net_cost_per_lb))}{fmtLabel}.</>
+                    <>폐촉매 회수 가치를 뺀 순원가 {formatPrice(toDisplay(result.summary.net_cost_per_lb))}{fmtLabel}.</>
                   ) : (
                     <>
                       Net cost {formatPrice(toDisplay(result.summary.net_cost_per_lb))}
@@ -468,7 +468,7 @@ export default function CalculatorResult() {
               </div>
               <div className="mt-4 flex flex-wrap gap-2">
                 <span className="cp-chip-dark">{t(domainDisplay(catalystDomain))}</span>
-                <span className="cp-chip-dark">{lang === 'ko' ? `${t(result.step_method.scale)} 규모` : `${result.step_method.scale} scale`}</span>
+                <span className="cp-chip-dark">{lang === 'ko' ? t(result.step_method.scale) : `${result.step_method.scale} scale`}</span>
                 <span className="cp-chip-dark">{generatedAt}</span>
                 {snapshotState.benchmarkCandidate ? <span className="cp-chip-dark">{t('Reference-loaded')}</span> : null}
               </div>
@@ -478,7 +478,7 @@ export default function CalculatorResult() {
           <div className="grid gap-3 sm:grid-cols-2">
             <MetricTile label={t('Production time')} value={`${Number(result.step_method.campaign_days).toFixed(1)} d`} detail={lang === 'ko' ? `${snapshotState.orderSize}톤 1회 생산` : `${snapshotState.orderSize} tons per run`} />
             <MetricTile label={t('Margin')} value={`${Number(result.step_method.margin_pct).toFixed(1)}%`} detail={t('Selling margin basis')} />
-            <MetricTile label={t('Price sources')} value={String(snapshotState.liveFeedCount + snapshotState.indexedFeedCount)} detail={lang === 'ko' ? `실시간 ${snapshotState.liveFeedCount}건 / 지수 ${snapshotState.indexedFeedCount}건` : `${snapshotState.liveFeedCount} live / ${snapshotState.indexedFeedCount} indexed`} />
+            <MetricTile label={t('Price sources')} value={String(snapshotState.liveFeedCount + snapshotState.indexedFeedCount)} detail={lang === 'ko' ? `실시간 ${snapshotState.liveFeedCount}건 / 지수 보정 ${snapshotState.indexedFeedCount}건` : `${snapshotState.liveFeedCount} live / ${snapshotState.indexedFeedCount} indexed`} />
             <MetricTile label={t('Public links')} value={`${publicSourceCount}/${resolvedMaterials.length || 0}`} detail={t('Resolved rows with a public URL.')} />
           </div>
         </div>
@@ -587,7 +587,7 @@ export default function CalculatorResult() {
 
         <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
           <MetricTile label={t('Active metals')} value={String(snapshotState.activeMetalCount)} detail={t('Named active inputs')} />
-          <MetricTile label={t('Active-phase loading')} value={`${snapshotState.nonSupportWt.toFixed(1)} wt%`} detail={lang === 'ko' ? `담체 ${snapshotState.supportWtPct.toFixed(1)} wt%로 마감` : `Support closes at ${snapshotState.supportWtPct.toFixed(1)} wt%`} />
+          <MetricTile label={t('Active-phase loading')} value={`${snapshotState.nonSupportWt.toFixed(1)} wt%`} detail={lang === 'ko' ? `담체 ${snapshotState.supportWtPct.toFixed(1)} wt%` : `Support closes at ${snapshotState.supportWtPct.toFixed(1)} wt%`} />
           <MetricTile label={t('Support')} value={snapshotState.selectedSupportName ?? t('Pending')} detail={t('Current support basis')} />
           <MetricTile label={t('Preparation steps')} value={String(snapshotState.stepLabels.length)} detail={t('Selected preparation steps')} />
         </div>
@@ -750,7 +750,7 @@ export default function CalculatorResult() {
             </div>
           </div>
           <span className={`cp-chip shrink-0 ${dataGap > 0 ? 'border-amber-200 bg-amber-50 text-amber-700' : 'border-emerald-200 bg-emerald-50 text-emerald-700'}`}>
-            {lang === 'ko' ? `커버리지 ${coverage}%` : `${coverage}% covered`}
+            {lang === 'ko' ? `반영률 ${coverage}%` : `${coverage}% covered`}
           </span>
         </div>
 
