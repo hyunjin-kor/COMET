@@ -248,7 +248,7 @@ function compactThermalOptionLabel(option: ThermalSelectionOption, lang: 'en' | 
   // Research-pack vendor quotes can sit orders of magnitude above bulk
   // indexes (e.g. lab ZSM-5 at ~$474/kg vs the ~$4/kg trade statistic), so
   // flag them right in the selector instead of only in the price field.
-  if (option.price_scope === 'vendor_lab') return `${option.display_name} ${lang === 'ko' ? '(실험실가)' : '(lab price)'}`;
+  if (option.price_scope === 'vendor_lab') return `${option.display_name} ${lang === 'ko' ? '(실험실 소포장)' : '(lab price)'}`;
   return option.display_name;
 }
 
@@ -985,7 +985,7 @@ export default function Calculator() {
   );
   const thermalValidationMessage = thermalRows.length > maxThermalComponents
     ? (lang === 'ko'
-      ? `열촉매 조성은 조촉매화 담체를 포함해 최대 ${maxThermalComponents}개 성분까지 가능합니다.`
+      ? `열촉매 조성은 복합 담체를 포함해 최대 ${maxThermalComponents}개 성분까지 가능합니다.`
       : `Thermal formulations are capped at ${maxThermalComponents} total components including promoted supports.`)
     : incompleteThermalRows.length > 0
       ? (lang === 'ko'
@@ -1567,7 +1567,7 @@ export default function Calculator() {
                       ? t('Indexed and manual prices still apply. Refresh to retry the live sources.')
                       : pricesUpdatedAt
                         ? lang === 'ko'
-                          ? `실시간 ${liveFeedCount}건 / 지수 ${indexedFeedCount}건 시세 갱신 ${pricesUpdatedAt.toLocaleTimeString('ko-KR', { hour: 'numeric', minute: '2-digit' })}`
+                          ? `실시간 ${liveFeedCount}건 / 지수 보정 ${indexedFeedCount}건, 시세 갱신 ${pricesUpdatedAt.toLocaleTimeString('ko-KR', { hour: 'numeric', minute: '2-digit' })}`
                           : `${liveFeedCount} live / ${indexedFeedCount} indexed prices updated ${pricesUpdatedAt.toLocaleTimeString('en-US', {
                               hour: 'numeric',
                               minute: '2-digit',
@@ -1602,7 +1602,7 @@ export default function Calculator() {
             <div className="cp-subtle-label">{t('Preparation basis')}</div>
             <div className="mt-2 text-base font-semibold text-[#191f28]">{preparationSummary}</div>
             <div className="mt-2 space-y-1">
-              <CompactValueRow label={t('Production scale')} value={lang === 'ko' ? `${orderSize}톤` : `${orderSize} tons`} detail={lang === 'ko' ? `${t(scale.label)} 규모 / ${scale.rate}` : `${scale.label} scale / ${scale.rate}`} />
+              <CompactValueRow label={t('Production scale')} value={lang === 'ko' ? `${orderSize}톤` : `${orderSize} tons`} detail={lang === 'ko' ? `${t(scale.label)} / ${scale.rate}` : `${scale.label} scale / ${scale.rate}`} />
               <CompactValueRow
                 label={t('Steps')}
                 value={String(steps.length)}
@@ -1797,7 +1797,7 @@ export default function Calculator() {
             {t('Total components:')} <span className="font-semibold text-[#191f28]">{thermalRows.length}</span> / {maxThermalComponents}.
             {supportIsSplit
               ? (lang === 'ko' ? ` 현재 조성 합계: ${totalThermalWt.toFixed(1)} wt%.` : ` Current formulation total: ${totalThermalWt.toFixed(1)} wt%.`)
-              : (lang === 'ko' ? ` 담체가 ${supportWtPct.toFixed(1)} wt%로 자동 마감됩니다.` : ` Support closes automatically at ${supportWtPct.toFixed(1)} wt%.`)}
+              : (lang === 'ko' ? ` 담체가 ${supportWtPct.toFixed(1)} wt%로 자동으로 채워집니다.` : ` Support closes automatically at ${supportWtPct.toFixed(1)} wt%.`)}
           </div>
         </div>
         </div>
@@ -1870,7 +1870,7 @@ export default function Calculator() {
             <div className="flex items-center justify-between gap-3">
               <div className="cp-subtle-label">{t('Start from a standard method')}</div>
               <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                {thermalTemplates.length} {t('methods')}
+                {lang === 'ko' ? `제조법 ${thermalTemplates.length}개` : `${thermalTemplates.length} ${t('methods')}`}
               </div>
             </div>
             <div className="mt-2 text-xs leading-6 text-slate-600">
@@ -2040,7 +2040,7 @@ export default function Calculator() {
   const validationMessage = catalystDomain === 'electrocatalyst'
     ? isValid
       ? (lang === 'ko'
-        ? `전극 스택이 준비되었습니다: ${selectedCatalystMaterial?.name ?? 'catalyst'}, ${selectedIonomerMaterial?.name ?? 'ionomer'}, ${selectedMembraneMaterial?.name ?? 'membrane'}, ${selectedSubstrateMaterial?.name ?? 'GDL'} 모두 라이브러리에서 선택되었습니다.`
+        ? `전극 조립체가 준비되었습니다: ${selectedCatalystMaterial?.name ?? 'catalyst'}, ${selectedIonomerMaterial?.name ?? 'ionomer'}, ${selectedMembraneMaterial?.name ?? 'membrane'}, ${selectedSubstrateMaterial?.name ?? 'GDL'} 모두 라이브러리에서 선택되었습니다.`
         : `Electrocatalyst stack is ready: ${selectedCatalystMaterial?.name ?? 'catalyst'}, ${selectedIonomerMaterial?.name ?? 'ionomer'}, ${selectedMembraneMaterial?.name ?? 'membrane'}, and ${selectedSubstrateMaterial?.name ?? 'GDL'} are all sourced from the library.`)
       : electrocatalystValidationMessage
     : isValid
@@ -2071,7 +2071,7 @@ export default function Calculator() {
             {loadedSavedName ? (
               <div className="mt-4 rounded-[24px] border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
                 {lang === 'ko'
-                  ? <>저장된 계산 <span className="font-semibold">{loadedSavedName}</span>을(를) 초안으로 불러왔습니다. 라이브러리 링크가 없는 행은 저장된 가격을 수동 입력값으로 복원했습니다.</>
+                  ? <>저장된 계산 <span className="font-semibold">{loadedSavedName}</span>을(를) 현재 입력으로 불러왔습니다. 라이브러리 링크가 없는 행은 저장된 가격을 수동 입력값으로 복원했습니다.</>
                   : <>Loaded saved estimate <span className="font-semibold">{loadedSavedName}</span> into the draft. Rows without a
                 library link were restored with their saved prices as manual inputs.</>}
               </div>
@@ -2081,7 +2081,7 @@ export default function Calculator() {
                 <div className="flex items-center justify-between gap-3">
                   <div className="cp-subtle-label">{t('Saved estimates')}</div>
                   <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                    {savedEstimates.length} {t('saved')}
+                    {lang === 'ko' ? `${savedEstimates.length}개 저장됨` : `${savedEstimates.length} ${t('saved')}`}
                   </div>
                 </div>
                 <div className="mt-2 text-xs leading-6 text-slate-600">

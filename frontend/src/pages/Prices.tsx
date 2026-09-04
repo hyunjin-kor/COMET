@@ -642,7 +642,7 @@ export default function Prices() {
             {basis === 'reference'
               ? <StatusTile label={t('Monthly-average coverage')} value={`${monthlyQuoteCount}/${prices.length}`} detail={t('Metals with a stored monthly average.')} />
               : <StatusTile label={t('Live coverage')} value={`${liveQuoteCount}/${prices.length}`} detail={t('Metals backed by current live sources.')} />}
-            <StatusTile label={t('Indexed & manual quotes')} value={String(indexedQuoteCount + manualQuoteCount)} detail={lang === 'ko' ? `지수 ${indexedQuoteCount}건, 수동 ${manualQuoteCount}건 시세를 계속 사용할 수 있습니다.` : `${indexedQuoteCount} indexed and ${manualQuoteCount} manual quotes remain usable.`} />
+            <StatusTile label={t('Indexed & manual quotes')} value={String(indexedQuoteCount + manualQuoteCount)} detail={lang === 'ko' ? `지수 보정 ${indexedQuoteCount}건, 수동 ${manualQuoteCount}건 시세를 계속 쓸 수 있습니다.` : `${indexedQuoteCount} indexed and ${manualQuoteCount} manual quotes remain usable.`} />
             <StatusTile label={t('Needs review')} value={String(reviewFlagCount)} detail={t('Stale quotes or low-confidence sources worth checking.')} />
           </div>
 
@@ -938,7 +938,7 @@ export default function Prices() {
                     <div className={`mt-2 font-mono text-xl font-semibold ${pctChange == null ? 'text-white' : pctChange >= 0 ? 'text-emerald-300' : 'text-rose-300'}`}>
                       {pctChange != null ? fmtChangePct(pctChange) : 'N/A'}
                     </div>
-                    <div className="mt-1 text-xs leading-5 text-slate-400">{lang === 'ko' ? `${PERIOD_LABELS[period]} 구간 수익률` : `Over the ${PERIOD_LABELS[period]} window`}</div>
+                    <div className="mt-1 text-xs leading-5 text-slate-400">{lang === 'ko' ? `${PERIOD_LABELS[period]} 구간 변동률` : `Over the ${PERIOD_LABELS[period]} window`}</div>
                   </div>
                   <div className="rounded-[22px] border border-white/10 bg-white/6 p-3">
                     <div className="cp-subtle-label !text-slate-400">{t('Annualized volatility')}</div>
