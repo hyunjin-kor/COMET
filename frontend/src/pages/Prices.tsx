@@ -74,7 +74,7 @@ function readableInk(background: string): string {
 
 const FEED_SECTIONS: WorkspaceSection[] = [
   { id: 'quotes', label: 'Prices', summary: 'Choose the metal price to inspect.' },
-  { id: 'history', label: 'History', summary: 'Read source quality, freshness, and trend.' },
+  { id: 'history', label: 'History', summary: 'Read source quality, quote age, and trend.' },
 ];
 
 function convertTrackedPrice(price: number, rawUnit: string, displayUnit: Unit) {
@@ -117,7 +117,7 @@ function fmtPrice(price: number | null, rawUnit: string, displayUnit: Unit) {
 function sourceDescription(row: MetalPrice) {
   if (row.source_type === 'live') return row.source;
   if (row.basis_month) return `${row.source}, ${row.basis_month}`;
-  if (row.source_type === 'indexed') return 'Indexed reference aligned with CatCost-style library pricing';
+  if (row.source_type === 'indexed') return 'Published reference price, brought to this year with a price index';
   return 'Manual price input';
 }
 
@@ -653,7 +653,7 @@ export default function Prices() {
                 <div className="text-xs text-slate-600">
                   {supportSeries.some((row) => row.price != null)
                     ? t('UN Comtrade monthly import unit values, all grades combined.')
-                    : t('No Comtrade key configured, so supports keep their library anchors.')}
+                    : t('No Comtrade key configured, so supports keep their library prices.')}
                 </div>
               </div>
               <div className="mt-2 grid gap-1.5 sm:grid-cols-2 xl:grid-cols-3">
@@ -801,7 +801,7 @@ export default function Prices() {
       return (
         <div className="cp-inspector-rail">
           <section className="cp-rail-panel">
-            <div className="cp-subtle-label">{t('Evidence Surface')}</div>
+            <div className="cp-subtle-label">{t('Source Evidence')}</div>
             <div className="mt-2 text-lg font-semibold text-[#191f28]">{t('Choose a metal to inspect its history.')}</div>
           </section>
         </div>
@@ -828,7 +828,7 @@ export default function Prices() {
         <section className="cp-rail-panel">
           <div className="cp-subtle-label">{t('Source Audit')}</div>
           <div className="mt-3 space-y-1">
-            <InspectorRow label={t('Evidence tier')} value={t(selectedRow.evidence.label)} detail={selectedRow.evidence.note} />
+            <InspectorRow label={t('Source reliability')} value={t(selectedRow.evidence.label)} detail={selectedRow.evidence.note} />
             <InspectorRow label={t('Transparency')} value={selectedRow.evidence.transparency} detail={selectedRow.evidence.acquisition_mode} />
             <InspectorRow label={t('Quote age')} value={selectedRow.evidence.freshness_status} detail={selectedRow.evidence.age_hours != null ? (lang === 'ko' ? `${selectedRow.evidence.age_hours.toFixed(1)}시간 경과` : `${selectedRow.evidence.age_hours.toFixed(1)} h old`) : t('Age not stored')} />
           </div>
@@ -968,7 +968,7 @@ export default function Prices() {
                 {selectedRow ? (
                   <div className="mt-4 grid gap-3 sm:grid-cols-3">
                     <div className="rounded-[22px] border border-white/10 bg-white/6 p-3">
-                      <div className="cp-subtle-label !text-slate-400">{t('Evidence tier')}</div>
+                      <div className="cp-subtle-label !text-slate-400">{t('Source reliability')}</div>
                       <div className="mt-2 text-sm font-semibold text-white">{t(selectedRow.evidence.label)}</div>
                       <div className="mt-1 text-xs leading-5 text-slate-400">{selectedRow.evidence.note}</div>
                     </div>

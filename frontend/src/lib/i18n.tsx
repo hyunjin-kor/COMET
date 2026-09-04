@@ -16,7 +16,7 @@ const KO: Record<string, string> = {
   'Estimate Range': '추정 범위',
   'Capital & OpEx': '설비·운영비',
   'Source Library': '자료 라이브러리',
-  'Catalyst cost workspace': '촉매 원가 워크스페이스',
+  'Catalyst cost estimator': '촉매 원가 계산기',
   'Evidence-first catalyst costing': '근거 우선 촉매 원가 산정',
   'Display unit': '표시 단위',
   'Language': '언어',
@@ -33,14 +33,14 @@ const KO: Record<string, string> = {
   'Live quotes at the time of the estimate.': '계산 시점의 실시간 시세입니다.',
   'Support materials': '지지체 재료',
   'UN Comtrade monthly import unit values, all grades combined.': 'UN Comtrade 월간 수입 단가이며, 모든 등급이 합산된 값입니다.',
-  'No Comtrade key configured, so supports keep their library anchors.': 'Comtrade 키가 없어 지지체는 라이브러리 앵커 값을 유지합니다.',
+  'No Comtrade key configured, so supports keep their library prices.': 'Comtrade 키가 없어 지지체는 라이브러리 가격을 유지합니다.',
   'No data': '데이터 없음',
-  'Each card shows the processing cost of the route alone at the current campaign size, before materials.':
-    '각 카드에는 재료비를 제외한, 현재 캠페인 규모에서의 공정 가공비가 표시됩니다.',
+  'Each card shows the processing cost of the route alone at the current production scale, before materials.':
+    '각 카드에는 재료비를 제외한, 현재 생산 규모에서의 공정 가공비가 표시됩니다.',
   'Scale-fitted': '규모 맞춤',
   'Not costed': '미산정',
   'Partly costed': '일부 미산정',
-  'operations': '개 조작',
+  'steps': '단계',
   'Supported Metal': '담지 금속',
   'Supported PGM': '담지 귀금속',
   'Bulk Oxide': '벌크 산화물',
@@ -71,13 +71,12 @@ const KO: Record<string, string> = {
   'Preparation Method': '제조법',
   'Result': '결과',
   'Choose thermocatalyst or electrocatalyst.': '열촉매 또는 전기촉매를 선택하세요.',
-  'Set the formulation or the electrode stack.': '조성 또는 전극 스택을 설정하세요.',
-  'Set campaign scale and preparation steps.': '생산 규모와 제조 단계를 설정하세요.',
+  'Set the formulation or the electrode assembly.': '조성 또는 전극 조립체를 설정하세요.',
+  'Set production scale and preparation steps.': '생산 규모와 제조 단계를 설정하세요.',
   'Run the estimate and open the result screen.': '계산을 실행하고 결과 화면을 여세요.',
   'Choose the catalyst class, define the formulation, set the preparation basis, then run the estimate.':
     '촉매 유형을 고르고, 조성을 정의하고, 제조 기준을 설정한 뒤 계산을 실행하세요.',
-  'Choose the catalyst class, build the electrode stack, set the preparation basis, then run the estimate.':
-    '촉매 유형을 고르고, 전극 스택을 구성하고, 제조 기준을 설정한 뒤 계산을 실행하세요.',
+  'Choose the catalyst class, build the electrode assembly, set the preparation basis, then run the estimate.': '촉매 유형을 고르고, 전극 조립체를 구성하고, 제조 기준을 설정한 뒤 계산을 실행하세요.',
   'Catalyst type': '촉매 유형',
   'Choose the catalyst class before you build the formulation.': '조성을 구성하기 전에 촉매 유형을 먼저 선택하세요.',
   'Thermocatalyst': '열촉매',
@@ -88,8 +87,7 @@ const KO: Record<string, string> = {
     '벌크 조성, 담체 비율, 플랜트식 제조 공정을 하나의 계산으로 다룹니다.',
   'Best for supported metal catalysts, mixed oxides, zeolites, and reforming or cracking routes.':
     '담지 금속 촉매, 혼합 산화물, 제올라이트, 개질·크래킹 공정에 적합합니다.',
-  'Split the electrode stack into catalyst powder, ionomer, membrane, and substrate.':
-    '전극 스택을 촉매 분말, 아이오노머, 멤브레인, 기재로 나눠 계산합니다.',
+  'Split the electrode assembly into catalyst powder, ionomer, membrane, and substrate.': '전극 조립체를 촉매 분말, 아이오노머, 멤브레인, 기재로 나눠 계산합니다.',
   'Best for PEMFC, PEMWE, DMFC, and other electrode fabrication routes.':
     'PEMFC, PEMWE, DMFC 등 전극 제조 공정에 적합합니다.',
   'Switching the catalyst class does not advance to the next step.': '촉매 유형을 바꿔도 다음 단계로 자동 이동하지 않습니다.',
@@ -105,13 +103,15 @@ const KO: Record<string, string> = {
   'Choose the preparation basis.': '제조 기준을 선택하세요.',
   'Preparation method': '제조법',
   'Route building': '루트 구성',
-  'Select every unit operation that applies': '해당하는 단위 공정을 모두 선택하세요',
+  'Select every preparation step that applies': '해당하는 제조 단계를 모두 선택하세요',
   'You are assembling the full preparation route, not choosing a single option.': '단일 선택이 아니라 전체 제조 루트를 구성하는 화면입니다.',
   'Operation groups': '공정 그룹',
-  'One group can hold several unit operations': '한 그룹에 여러 단위 공정이 들어갈 수 있습니다',
+  'One group can hold several preparation steps': '한 그룹에 여러 제조 단계가 들어갈 수 있습니다',
   'Current route': '현재 루트',
-  'Campaign size': '캠페인 규모',
-  'tons per campaign': '톤/캠페인',
+  'Production scale': '생산 규모',
+  'tons': '톤',
+  'Production time': '생산 기간',
+  'Order size in tons; sets the Small, Medium or Large equipment basis.': '톤 단위 생산량이며, 소·중·대규모 장비 기준을 정합니다.',
   'Start from a standard method': '표준 제조법에서 시작',
   'methods': '개 제조법',
   'Loads the full unit-operation sequence for a named preparation method — co-precipitation, sol-gel, impregnation, zeolite synthesis and more. Operations stay editable afterward.':
@@ -129,16 +129,16 @@ const KO: Record<string, string> = {
   'selected': '선택',
   'Run estimate': '계산 실행',
   'Running estimate': '계산 중',
-  'The result screen opens separately and keeps this draft intact.': '결과 화면은 따로 열리며 이 초안은 그대로 유지됩니다.',
+  'The result screen opens separately and keeps these inputs intact.': '결과 화면은 따로 열리며 입력은 그대로 유지됩니다.',
   'Calculation failed.': '계산에 실패했습니다.',
   'Saved estimates': '저장된 계산',
   'saved': '개 저장됨',
-  'Named cases saved from the result screen. Load restores the composition, unit operations, and campaign size into this draft.':
-    '결과 화면에서 이름을 붙여 저장한 케이스입니다. 불러오기는 조성·단위 공정·캠페인 규모를 이 초안으로 복원합니다.',
+  'Named cases saved from the result screen. Load restores the composition, unit operations, and production scale into this draft.':
+    '결과 화면에서 이름을 붙여 저장한 케이스입니다. 불러오기는 조성·단위 공정·생산 규모를 이 초안으로 복원합니다.',
   'Load': '불러오기',
   'Delete': '삭제',
   'Working…': '처리 중…',
-  'Restore this case into the draft': '이 케이스를 초안으로 복원',
+  'Restore this case into Cost Estimate': '이 케이스를 원가 계산으로 복원',
   'Recovery scenario': '회수 시나리오',
   'Recovery off': '회수 미적용',
   'Refresh': '새로고침',
@@ -146,7 +146,6 @@ const KO: Record<string, string> = {
   'Price basis': '가격 기준',
   'Status': '상태',
   'Current case': '현재 케이스',
-  'Campaign': '캠페인',
   'Steps': '단위 공정',
   'Latest result': '최근 결과',
   'Open': '열기',
@@ -177,16 +176,16 @@ const KO: Record<string, string> = {
   'Candidates': '후보',
   'Detail': '상세',
   'Choose family and ranking logic.': '반응군과 순위 기준을 선택하세요.',
-  'Scan the current route stack.': '현재 후보들을 살펴보세요.',
+  'Scan the current candidates.': '현재 후보들을 살펴보세요.',
   'Read the selected route deeply.': '선택한 루트를 자세히 읽어보세요.',
-  'Screen published routes before you edit the cost case.': '원가 케이스를 편집하기 전에 발표된 공정 루트를 스크리닝하세요.',
+  'Screen published routes before you edit the cost estimate.': '원가 계산을 편집하기 전에 발표된 공정 루트를 스크리닝하세요.',
   'Reaction family': '반응군',
   'Ranking profile': '순위 기준',
   'Balanced': '균형',
   'Cost-first': '비용 우선',
   'Evidence-first': '근거 우선',
   'Top route': '1위 루트',
-  'Landed catalyst': '실효 촉매 단가',
+  'Delivered catalyst': '납품 기준 촉매 단가',
   'Electrode layer': '전극층',
   'Literature bank': '반응군 문헌',
   'Published routes': '발표된 루트',
@@ -196,13 +195,12 @@ const KO: Record<string, string> = {
   'Load into cost estimate': '원가 계산으로 불러오기',
   'Key evidence': '핵심 근거',
   'Family literature bank': '반응군 문헌 목록',
-  'Screening basis': '스크리닝 기준',
+  'Composition basis': '조성 기준',
   'Reference notes': '참고 노트',
   'Preprocess': '전처리',
   'Synthesis': '합성',
   'Postprocess': '후처리',
   'Route extras': '루트 부대비용',
-  'Raw material stack': '원재료 구성',
   'Step-method operations': '스텝법(Step Method) 가공비',
   'Score': '점수',
 
@@ -231,7 +229,7 @@ const KO: Record<string, string> = {
   'Prices': '시세',
   'History': '이력',
   'Choose the metal price to inspect.': '확인할 금속 시세를 선택하세요.',
-  'Read source quality, freshness, and trend.': '출처 품질, 최신성, 추세를 확인하세요.',
+  'Read source quality, quote age, and trend.': '출처 품질, 시세 경과 시간, 추세를 확인하세요.',
   'Scan the tracked metals, then inspect the evidence, quote age, and source quality for the selected metal.':
     '추적 중인 금속을 훑어보고, 선택한 금속의 근거·시세 경과·출처 품질을 확인하세요.',
   'Quote Status': '시세 상태',
@@ -245,10 +243,9 @@ const KO: Record<string, string> = {
 
   // Uncertainty
   'Current Case': '현재 케이스',
-  'Use the same draft that feeds Cost Estimate.': '원가 계산과 같은 초안을 사용합니다.',
+  'Use the same inputs as Cost Estimate.': '원가 계산과 같은 입력을 사용합니다.',
   'Run Monte Carlo around the same catalyst case.': '같은 촉매 케이스로 몬테카를로를 실행하세요.',
-  'Monte Carlo range around the current Cost Estimate draft. Edit the catalyst case there, then run the range here.':
-    '현재 원가 계산 초안을 중심으로 한 몬테카를로 범위입니다. 케이스는 원가 계산에서 편집하고, 범위는 여기서 실행하세요.',
+  'Monte Carlo range around the current Cost Estimate inputs. Edit the catalyst there, then run the range here.': '현재 원가 계산 입력을 중심으로 한 몬테카를로 범위입니다. 촉매는 그곳에서 편집하고, 범위는 여기서 실행하세요.',
   'Baseline': '기준값',
   'Mean': '평균',
   'Median': '중앙값',
@@ -269,7 +266,7 @@ const KO: Record<string, string> = {
   'Next: Composition →': '다음: 조성 →',
 
   // Calculator - composition section
-  'Build the electrode stack.': '전극 스택을 구성하세요.',
+  'Build the electrode assembly.': '전극 조립체를 구성하세요.',
   'Choose the stored material records first, then tune the geometric inputs used for area-based costing.':
     '저장된 재료 레코드를 먼저 고른 뒤, 면적 기준 원가 계산에 쓰이는 기하 입력값을 조정하세요.',
   'Keep active metals and promoters explicit. A single support row auto-balances the formulation, and multiple support rows enable promoted-support formulations up to four total components.':
@@ -283,14 +280,14 @@ const KO: Record<string, string> = {
   'At least one active metal is required.': '활성 금속이 최소 한 개 필요합니다.',
 
   // Calculator - electrode stack panel
-  'Electrode stack': '전극 스택',
-  'Set the stack first, then price the preparation method.': '스택을 먼저 구성한 뒤 제조법 원가를 계산하세요.',
+  'Electrode assembly': '전극 조립체',
+  'Set the electrode assembly first, then price the preparation method.': '전극 조립체를 먼저 구성한 뒤 제조법 원가를 계산하세요.',
   'Catalyst powder, ionomer, membrane, and substrate each keep their own source record.':
     '촉매 분말, 아이오노머, 멤브레인, 기재는 각자 출처 레코드를 유지합니다.',
   'Defaults prefer higher-confidence literature or sourced vendor rows when they exist.':
     '기본값은 신뢰도가 높은 문헌 또는 출처가 있는 벤더 행을 우선합니다.',
   'Application family': '응용 분야',
-  'Material stack': '재료 스택',
+  'Material list': '재료 목록',
   'Catalyst powder': '촉매 분말',
   'Ionomer': '아이오노머',
   'Membrane': '멤브레인',
@@ -306,14 +303,14 @@ const KO: Record<string, string> = {
   // Calculator - preparation method section
   'Templates add pretreatment, coating, drying, lamination, and break-in steps. Adjust them if the lab route differs.':
     '템플릿은 전처리, 코팅, 건조, 라미네이션, 브레이크인 단계를 추가합니다. 실험실 공정과 다르면 수정하세요.',
-  'Pick the industrial steps that best approximate the synthesis route, then let campaign size set the scale basis.':
-    '합성 경로에 가장 가까운 산업 단위 공정을 고르면, 캠페인 규모가 스케일 기준을 결정합니다.',
+  'Pick the industrial steps that best approximate the synthesis route, then let the production scale set the equipment basis.':
+    '합성 경로에 가장 가까운 산업 단위 공정을 고르면, 생산 규모가 장비 기준을 결정합니다.',
   'Saved thermal and electrochemical routes often include several operations from the same group.':
     '저장된 열·전기화학 루트는 같은 그룹의 공정을 여러 개 포함하는 경우가 많습니다.',
   'Add or remove operations until the route matches the actual lab or pilot procedure.':
     '실제 실험실 또는 파일럿 절차와 일치할 때까지 공정을 추가하거나 제거하세요.',
   'Recovery on': '회수 적용',
-  'Optional spent catalyst value proxy': '폐촉매 가치 프록시 (선택)',
+  'Optional spent-catalyst recovery credit': '폐촉매 회수 가치 (선택)',
   'Use this when the catalyst contains recoverable metal and end-of-life value matters to the screening decision.':
     '촉매에 회수 가능한 금속이 포함되어 있고, 수명 종료 시 가치가 스크리닝 판단에 중요할 때 사용하세요.',
   'Current engine includes support loss, reactor-type loss, refining loss, and recovery cost. Full deactivation and regeneration-cycle modeling is not yet included.':
@@ -334,14 +331,14 @@ const KO: Record<string, string> = {
 
   // Result page - sections and labels
   'Headline price, scope, and active warnings.': '핵심 가격, 범위, 활성 경고를 봅니다.',
-  'Route, cost structure, and campaign basis.': '공정 루트, 비용 구조, 캠페인 기준을 봅니다.',
+  'Route, cost structure, and production scale.': '공정 루트, 비용 구조, 생산 규모를 봅니다.',
   'Cradle-to-gate impact per kg of catalyst.': '촉매 kg당 크래들-투-게이트 영향을 봅니다.',
   'Resolved source rows, normalization, and links.': '확정된 출처 행, 정규화, 링크를 봅니다.',
   'Model Scope': '모델 범위',
-  'Direct workspace route': '워크스페이스 직접 구성 루트',
+  'Custom route': '직접 구성한 루트',
   'Separate route logic from raw inputs.': '공정 로직과 원료 입력을 분리해서 봅니다.',
-  'This surface is for campaign scale, selected preparation steps, route metadata, and the main cost split.':
-    '이 화면은 캠페인 규모, 선택된 제조 단계, 루트 정보, 주요 비용 분할을 보여줍니다.',
+  'This surface is for production scale, selected preparation steps, route metadata, and the main cost split.':
+    '이 화면은 생산 규모, 선택된 제조 단계, 루트 정보, 주요 비용 분할을 보여줍니다.',
   'Cost Structure': '비용 구조',
   'Materials versus processing': '원재료 대 가공비',
   'Cost breakdown': '원가 구성',
@@ -358,15 +355,13 @@ const KO: Record<string, string> = {
     '각 레코드는 원 견적, 포장 기준, 정규화 기준, 공개 링크 상태를 보여줍니다.',
 
   // Library sections
-  'Source rows with quote and trust metadata.': '견적·신뢰도 메타데이터가 붙은 출처 행입니다.',
-  'Hourly step rates by campaign scale.': '생산 규모별 단위 공정 시간당 요율입니다.',
+  'Source rows with their quote year and reliability.': '견적 연도와 신뢰도가 붙은 출처 행입니다.',
+  'Hourly step rates by production scale.': '생산 규모별 단위 공정 시간당 요율입니다.',
   'Route templates and processing stages.': '공정 루트 템플릿과 처리 단계입니다.',
 
   // Uncertainty
   'Run the current case to reveal the price spread.': '현재 케이스를 실행해 가격 분포를 확인하세요.',
-  'This result uses the same catalyst draft and preparation route from Cost Estimate.':
-    '이 결과는 원가 계산과 동일한 촉매 초안과 제조 루트를 사용합니다.',
-
+  'This result uses the same catalyst inputs and preparation route from Cost Estimate.': '이 결과는 원가 계산과 동일한 촉매 입력과 제조 루트를 사용합니다.',
   // Compare
   'Public benchmark links in the active reaction family': '현재 반응군의 공개 벤치마크 링크 수',
 
@@ -441,7 +436,7 @@ const KO: Record<string, string> = {
   // Calculator - additional
   'Manual overrides': '수동 가격 입력',
   'Materials priced by hand instead of a tracked source.': '추적 출처 대신 직접 입력한 가격의 재료 수입니다.',
-  'Optional spent catalyst value proxy for recovery-sensitive screening.': '회수 민감 스크리닝용 폐촉매 가치 프록시 (선택).',
+  'Optional spent-catalyst recovery credit for recovery-sensitive screening.': '회수 민감 스크리닝용 폐촉매 회수 가치 (선택).',
   'No result for this catalyst class yet. Run the estimate once to populate this summary.':
     '이 촉매 유형의 결과가 아직 없습니다. 계산을 한 번 실행하면 요약이 채워집니다.',
   'Preparation steps': '제조 단계',
@@ -453,11 +448,11 @@ const KO: Record<string, string> = {
     '계속하기 전에 촉매 분말, 아이오노머, 멤브레인, 기재/GDL, 제조 템플릿을 선택하세요.',
   'Select a preparation template': '제조 템플릿을 선택하세요',
   'Manual step selection': '수동 공정 선택',
-  'Recovery proxy on': '회수 프록시 적용',
-  'Recovery proxy off': '회수 프록시 미적용',
+  'Recovery credit on': '회수 가치 적용',
+  'Recovery credit off': '회수 가치 미적용',
   'Indexed and manual rows stay usable before the next live refresh.': '다음 실시간 갱신 전에도 지수·수동 시세를 사용할 수 있습니다.',
   'Waiting for the local backend to publish live quotes.': '로컬 백엔드가 실시간 시세를 게시할 때까지 기다리는 중입니다.',
-  'Choose at least one unit operation': '단위 공정을 최소 한 개 선택하세요',
+  'Choose at least one preparation step': '제조 단계를 최소 한 개 선택하세요',
   'Total components:': '전체 성분:',
   'Select active metal or precursor': '활성 금속 또는 전구체 선택',
   'Select promoter material': '조촉매 재료 선택',
@@ -469,7 +464,6 @@ const KO: Record<string, string> = {
   'Manual': '수동',
   'Current case basis': '현재 케이스 기준',
   'Ready to run': '실행 준비 완료',
-  'Campaign basis': '캠페인 기준',
   'Select a library record to lock pricing.': '라이브러리 레코드를 선택하면 가격이 고정됩니다.',
   'Choose a catalyst powder': '촉매 분말을 선택하세요',
   'Choose an ionomer': '아이오노머를 선택하세요',
@@ -489,13 +483,13 @@ const KO: Record<string, string> = {
   'Margin': '마진',
   'General and administrative overhead': '일반관리비',
   'Selling, administrative, and R&D uplift': '판매·관리·연구개발 가산',
-  'Overhead (G&A)': '간접비 (G&A)',
+  'Overhead (general and administrative)': '간접비 (일반관리비)',
   'Sales, admin & R&D (S&ARD)': '판매·관리·연구개발비 (S&ARD)',
   'Reference-loaded': '참조 루트 적용됨',
   'Selling margin basis': '판매 마진 기준',
   'Price sources': '가격 출처',
   'Resolved rows with a public URL.': '공개 URL이 있는 확정 행 수입니다.',
-  'Electrode Stack': '전극 스택',
+  'Electrode Assembly': '전극 조립체',
   'Area-based electrocatalyst layer model': '면적 기준 전극층 모델',
   'Catalyst powder, ionomer, membrane, and substrate are costed on an active-area basis and displayed alongside the powder estimate.':
     '촉매 분말, 아이오노머, 멤브레인, 기재를 유효 면적 기준으로 원가 계산해 분말 기준 결과와 함께 보여줍니다.',
@@ -507,8 +501,7 @@ const KO: Record<string, string> = {
   'Cost per area': '면적당 원가',
   'Manufacturing line cost': '제조 라인 비용',
   'Spent catalyst value was included in the net-cost basis.': '폐촉매 가치가 순원가 기준에 포함되었습니다.',
-  'This is an end-of-life recovery proxy. It is useful for early screening, but it does not yet model deactivation kinetics or regeneration frequency.':
-    '수명 종료 시점 회수 프록시입니다. 초기 스크리닝에는 유용하지만 비활성화 속도나 재생 주기는 아직 모델링하지 않습니다.',
+  'This is a simplified end-of-life recovery credit. It is useful for early screening, but it does not yet model deactivation kinetics or regeneration frequency.': '수명 종료 시점 회수 가치입니다. 초기 스크리닝에는 유용하지만 비활성화 속도나 재생 주기는 아직 모델링하지 않습니다.',
   'Gross metal value': '총 금속 가치',
   'Recovery cost': '회수 비용',
   'Reclaimed value': '회수 후 가치',
@@ -520,7 +513,7 @@ const KO: Record<string, string> = {
   'Selected preparation steps': '선택된 제조 단계',
   'Included': '포함됨',
   'Overhead + margin': '간접비 + 마진',
-  'Template-driven route metadata is attached to this estimate.': '템플릿 기반 루트 정보가 이 계산에 첨부되어 있습니다.',
+  'The route template details are attached to this estimate.': '루트 템플릿 정보가 이 계산에 첨부되어 있습니다.',
   'No saved result yet': '저장된 결과가 아직 없습니다',
   'Run an estimate from the cost estimate workspace first. The result then stays available for focused review.':
     '먼저 원가 계산 화면에서 계산을 실행하세요. 결과는 이 화면에서 계속 확인할 수 있습니다.',
@@ -547,10 +540,9 @@ const KO: Record<string, string> = {
   'Loaded into catalyst': '촉매 내 담지 비율',
   'Unit price': '단가',
   'Share': '비중',
-  'Of material cost stack': '재료비 중 비중',
+  'Of material cost': '재료비 중 비중',
   'Total material cost': '총 재료비',
-  'CatCost-style step basis with backend escalation and selling adjustments applied in the calculation engine.':
-    'CatCost 방식 스텝법 기준이며, 물가 보정과 판매 조정은 계산 엔진에서 적용됩니다.',
+  'CatCost Step Method rates, brought to this year with the chemical price index, plus overhead and selling margin.': 'CatCost Step Method 단가를 화학 물가지수로 올해 기준으로 환산하고 간접비와 판매 마진을 더한 값입니다.',
   'Source Records': '출처 기록',
   'Public literature source': '공개 문헌 출처',
   'Direct vendor source': '벤더 직접 출처',
@@ -576,11 +568,11 @@ const KO: Record<string, string> = {
   'How this route is framed in the benchmark set.': '이 루트가 벤치마크에서 다뤄지는 기준입니다.',
   'Current weighting logic for ranking.': '현재 순위 가중치 기준입니다.',
   'QA + activation + route overhead': '품질관리·활성화·루트 간접비',
-  'Literature architecture proxy': '문헌 구조 프록시',
-  'Engineering proxy': '공학적 프록시',
-  'Market plus vendor anchor': '시장가 + 벤더가 기준',
-  'Vendor stack anchor': '벤더 스택 기준',
-  'Literature low-loading plus vendor stack': '문헌 저담지 + 벤더 스택',
+  'Representative literature composition': '문헌 대표 조성',
+  'Engineering estimate': '공학적 추정',
+  'Market price plus vendor quote': '시장가 + 벤더 견적',
+  'Vendor quotes': '벤더 견적',
+  'Literature low loading plus vendor quotes': '문헌 저담지 + 벤더 견적',
   'Ru-based cost pressure relief': 'Ru 기반 원가 부담 완화',
 
   // Prices - metals and groups
@@ -602,7 +594,7 @@ const KO: Record<string, string> = {
   'Tungsten': '텅스텐',
   'Iron': '철',
   'Exchange-linked quote': '거래소 연동 시세',
-  'Screen-scraped quote': '화면 수집 시세',
+  'Quote read from a public price page': '공개 시세 페이지에서 읽은 시세',
   'Supplier board': '공급사 고시가',
   'Indexed reference': '지수 참조',
   'Government bulk reference': '정부 통계 벌크 기준가',
@@ -623,11 +615,11 @@ const KO: Record<string, string> = {
   'Direction': '방향',
   'Stored metal price series': '저장된 금속 가격 시계열',
   'Source Audit': '출처 감사',
-  'Evidence tier': '근거 등급',
+  'Source reliability': '출처 신뢰도',
   'Transparency': '투명성',
   'Current': '현재',
   'Maximum observed value': '관측된 최고값',
-  'Evidence Surface': '근거 요약',
+  'Source Evidence': '출처 근거',
   'Choose a metal to inspect its history.': '이력을 확인할 금속을 선택하세요.',
   'Age not stored': '경과 시간 미기재',
   'Change basis': '등락 기준',
@@ -646,26 +638,25 @@ const KO: Record<string, string> = {
     '모든 시계열이 구간 시작 시점에 100에서 출발하므로, 절대 가격이 크게 다른 금속끼리도 비교할 수 있습니다.',
   'Only metals with enough stored history appear here; non-exchange metals join as local snapshots accumulate.':
     '저장된 이력이 충분한 금속만 표시됩니다. 거래소 시세가 없는 금속은 로컬 스냅숏이 쌓이면 추가됩니다.',
-  'Indexed reference aligned with CatCost-style library pricing': 'CatCost 방식 라이브러리 가격과 정렬된 지수 참조',
+  'Published reference price, brought to this year with a price index': '물가지수로 올해 기준으로 환산한 공개 참조 가격',
   'Manual price input': '수동 가격 입력값',
 
   // Uncertainty - additional
-  'No valid Cost Estimate draft is ready.': '유효한 원가 계산 초안이 없습니다.',
+  'No complete Cost Estimate inputs are ready.': '완성된 원가 계산 입력이 없습니다.',
   'Build the catalyst case first, then come back here to quantify the price range around that same case.':
     '먼저 촉매 케이스를 구성한 뒤, 여기서 같은 케이스의 가격 범위를 정량화하세요.',
   'Open Cost Estimate': '원가 계산 열기',
-  'Electrocatalyst stack': '전기촉매 스택',
+  'Electrocatalyst assembly': '전기촉매 전극 조립체',
   'Thermocatalyst formulation': '열촉매 조성',
-  'No unit operations selected': '선택된 단위 공정 없음',
-  'Campaign scale': '캠페인 규모',
+  'No preparation steps selected': '선택된 제조 단계 없음',
   'Simulation count': '시뮬레이션 횟수',
   'Catalyst powder band': '촉매 분말 변동 폭',
   'Active metal band': '활성 금속 변동 폭',
   'Promoter band': '조촉매 변동 폭',
   'Support band': '담체 변동 폭',
   'Ionomer / membrane / GDL band': '아이오노머/멤브레인/GDL 변동 폭',
-  'Campaign size band': '캠페인 규모 변동 폭',
-  'Current Cost Estimate draft': '현재 원가 계산 초안',
+  'Production scale band': '생산 규모 변동 폭',
+  'Current Cost Estimate inputs': '현재 원가 계산 입력',
   'No separate metal-only form is used here anymore.': '별도의 금속 전용 입력 양식은 더 이상 사용하지 않습니다.',
   'What moves': '변동 요소',
   'Catalyst + adjunct prices': '촉매 + 부자재 가격',
@@ -707,10 +698,8 @@ const KO: Record<string, string> = {
   'Vendor pack price': '벤더 포장 단가',
   'Historical archive': '과거 아카이브',
   'This row can be picked in the calculator.': '이 행은 계산기에서 선택할 수 있습니다.',
-  'Area-priced electrocatalyst row. Used in the electrode stack model, not the thermal mass-based calculator.':
-    '면적 단가 전기촉매 행입니다. 질량 기준 열촉매 계산이 아니라 전극 스택 모델에서 사용됩니다.',
-  'Volume-priced ionomer / dispersion row without density. Used directly in the electrode stack model.':
-    '밀도 정보가 없는 부피 단가 아이오노머/분산액 행입니다. 전극 스택 모델에서 직접 사용됩니다.',
+  'Area-priced electrocatalyst row. Used in the electrode assembly model, not the thermal mass-based calculator.': '면적 단가 전기촉매 행입니다. 질량 기준 열촉매 계산이 아니라 전극 조립체 모델에서 사용됩니다.',
+  'Volume-priced ionomer / dispersion row without density. Used directly in the electrode assembly model.': '밀도 정보가 없는 부피 단가 아이오노머/분산액 행입니다. 전극 조립체 모델에서 직접 사용됩니다.',
   'Reference row only. Price unit is not yet mapped to the calculator.': '참고용 행입니다. 가격 단위가 아직 계산기에 매핑되지 않았습니다.',
   'Source Detail': '출처 상세',
   'Choose a material row': '재료 행을 선택하세요',
@@ -797,7 +786,7 @@ const KO: Record<string, string> = {
   'Administration': '관리비',
   'Distribution & marketing': '유통·마케팅',
   'R&D': '연구개발',
-  'G&A subtotal': '일반관리비 소계',
+  'Overhead subtotal': '간접비 소계',
 };
 
 type LangContextValue = {

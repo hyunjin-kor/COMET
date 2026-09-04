@@ -478,7 +478,7 @@ export default function CapEx() {
                     <RailRow label={t('Administration')} value={formatUSD(result.opex.administration)} />
                     <RailRow label={t('Distribution & marketing')} value={formatUSD(result.opex.distribution_marketing)} />
                     <RailRow label={t('R&D')} value={formatUSD(result.opex.rnd)} />
-                    <RailRow label={t('G&A subtotal')} value={formatUSD(result.opex.general_expenses_total)} />
+                    <RailRow label={t('Overhead subtotal')} value={formatUSD(result.opex.general_expenses_total)} />
                   </div>
                 </div>
               </div>

@@ -22,7 +22,7 @@ const applicationDisplay = (family: string) =>
           : family;
 
 const RANGE_SECTIONS: WorkspaceSection[] = [
-  { id: 'case', label: 'Current Case', summary: 'Use the same draft that feeds Cost Estimate.' },
+  { id: 'case', label: 'Current Case', summary: 'Use the same inputs as Cost Estimate.' },
   { id: 'range', label: 'Estimate Range', summary: 'Run Monte Carlo around the same catalyst case.' },
 ];
 
@@ -287,13 +287,13 @@ export default function Uncertainty() {
           <div className="border-b border-slate-900/8 pb-5">
             <h2 className="cp-heading-xl">{t('Estimate Range')}</h2>
             <p className="cp-body-copy mt-1.5 max-w-2xl">
-              {t('Monte Carlo range around the current Cost Estimate draft. Edit the catalyst case there, then run the range here.')}
+              {t('Monte Carlo range around the current Cost Estimate inputs. Edit the catalyst there, then run the range here.')}
             </p>
           </div>
 
           {!draft || !canRun ? (
             <div className="mt-5 rounded-[24px] border border-amber-200 bg-amber-50/80 px-5 py-5 text-sm text-amber-900">
-              <div className="font-semibold">{t('No valid Cost Estimate draft is ready.')}</div>
+              <div className="font-semibold">{t('No complete Cost Estimate inputs are ready.')}</div>
               <div className="mt-2 leading-6">
                 {t('Build the catalyst case first, then come back here to quantify the price range around that same case.')}
               </div>
@@ -308,16 +308,16 @@ export default function Uncertainty() {
                   <div className="cp-subtle-label">{t('Current case')}</div>
                   <div className="mt-2 text-base font-semibold text-[#191f28]">{caseSummary}</div>
                   <div className="mt-1 text-xs leading-6 text-slate-600">
-                    {draft.catalystDomain === 'electrocatalyst' ? t('Electrocatalyst stack') : t('Thermocatalyst formulation')}
+                    {draft.catalystDomain === 'electrocatalyst' ? t('Electrocatalyst assembly') : t('Thermocatalyst formulation')}
                   </div>
                 </div>
                 <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
                   <div className="cp-subtle-label">{t('Preparation basis')}</div>
                   <div className="mt-2 text-base font-semibold text-[#191f28]">{lang === 'ko' ? `단위 공정 ${draft.steps.length}개` : `${draft.steps.length} unit operation${draft.steps.length === 1 ? '' : 's'}`}</div>
-                  <div className="mt-1 text-xs leading-6 text-slate-600">{draft.steps.map((key) => t(stepDisplayLabel(key))).join(', ') || t('No unit operations selected')}</div>
+                  <div className="mt-1 text-xs leading-6 text-slate-600">{draft.steps.map((key) => t(stepDisplayLabel(key))).join(', ') || t('No preparation steps selected')}</div>
                 </div>
                 <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
-                  <div className="cp-subtle-label">{t('Campaign scale')}</div>
+                  <div className="cp-subtle-label">{t('Production scale')}</div>
                   <div className="mt-2 text-base font-semibold text-[#191f28]">{lang === 'ko' ? `${draft.orderSize}톤` : `${draft.orderSize} tons`}</div>
                   <div className="mt-1 text-xs leading-6 text-slate-600">
                     {t(applicationDisplay(draft.applicationFamily ?? 'general'))} / {t(domainDisplay(draft.catalystDomain))}
@@ -389,7 +389,7 @@ export default function Uncertainty() {
                   </FieldBlock>
                 )}
 
-                <FieldBlock label={t('Campaign size band')} hint="+/- %">
+                <FieldBlock label={t('Production scale band')} hint="+/- %">
                   <input
                     type="number"
                     step="1"
@@ -405,7 +405,7 @@ export default function Uncertainty() {
               <div className="mt-5 grid gap-3 sm:grid-cols-3">
                 <div className="cp-metric-tile">
                   <div className="cp-subtle-label">{t('Baseline source')}</div>
-                  <div className="mt-2 text-lg font-semibold text-[#191f28]">{t('Current Cost Estimate draft')}</div>
+                  <div className="mt-2 text-lg font-semibold text-[#191f28]">{t('Current Cost Estimate inputs')}</div>
                   <div className="mt-1 text-xs leading-5 text-slate-600">{t('No separate metal-only form is used here anymore.')}</div>
                 </div>
                 <div className="cp-metric-tile">
@@ -453,7 +453,7 @@ export default function Uncertainty() {
                 <span className="section-kicker">{t('Estimate Range')}</span>
                 <h2 className="cp-heading-xl mt-4">{t('Run the current case to reveal the price spread.')}</h2>
                 <p className="cp-body-copy mt-3 max-w-xl">
-                  {t('This result uses the same catalyst draft and preparation route from Cost Estimate.')}
+                  {t('This result uses the same catalyst inputs and preparation route from Cost Estimate.')}
                 </p>
               </div>
 

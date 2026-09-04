@@ -31,7 +31,7 @@ const CHART_COLORS = [
 ];
 const RESULT_SECTIONS: WorkspaceSection[] = [
   { id: 'summary', label: 'Result', summary: 'Headline price, scope, and active warnings.' },
-  { id: 'manufacturing', label: 'Preparation Method', summary: 'Route, cost structure, and campaign basis.' },
+  { id: 'manufacturing', label: 'Preparation Method', summary: 'Route, cost structure, and production scale.' },
   { id: 'environmental', label: 'Environmental', summary: 'Cradle-to-gate impact per kg of catalyst.' },
   { id: 'sources', label: 'Evidence', summary: 'Resolved source rows, normalization, and links.' },
 ];
@@ -254,7 +254,7 @@ export default function CalculatorResult() {
     },
     typeof result.step_method.ga_per_lb === 'number'
       ? {
-          label: 'Overhead (G&A)',
+          label: 'Overhead (general and administrative)',
           value: `${formatPrice(toDisplay(Number(result.step_method.ga_per_lb)))}${fmtLabel}`,
           detail: t('General and administrative overhead'),
         }
@@ -347,7 +347,7 @@ export default function CalculatorResult() {
             </div>
             <div className="mt-3 flex flex-wrap gap-2">
               <span className="cp-chip-dark">{t(domainDisplay(catalystDomain))}</span>
-              <span className="cp-chip-dark">{lang === 'ko' ? `${t(result.step_method.scale)} 캠페인` : `${result.step_method.scale} campaign`}</span>
+              <span className="cp-chip-dark">{lang === 'ko' ? `${t(result.step_method.scale)} 규모` : `${result.step_method.scale} scale`}</span>
               <span className="cp-chip-dark">{generatedAt}</span>
             </div>
           </div>
@@ -392,11 +392,11 @@ export default function CalculatorResult() {
           <div className="rounded-[22px] border border-slate-900/8 bg-white/62 p-4">
             <div className="cp-subtle-label">{t('Preparation basis')}</div>
             <div className="mt-2 text-base font-semibold text-[#191f28]">
-              {routeSummary?.name ?? snapshotState.benchmarkCandidate?.route.name ?? t('Direct workspace route')}
+              {routeSummary?.name ?? snapshotState.benchmarkCandidate?.route.name ?? t('Custom route')}
             </div>
             <div className="mt-3 space-y-1">
               <RailRow
-                label={t('Campaign')}
+                label={t('Production scale')}
                 value={lang === 'ko' ? `${snapshotState.orderSize}톤` : `${snapshotState.orderSize} tons`}
                 detail={lang === 'ko' ? `${t(result.step_method.scale)} 규모 / ${Number(result.step_method.campaign_days).toFixed(1)}일` : `${result.step_method.scale} scale / ${Number(result.step_method.campaign_days).toFixed(1)} days`}
               />
@@ -468,7 +468,7 @@ export default function CalculatorResult() {
               </div>
               <div className="mt-4 flex flex-wrap gap-2">
                 <span className="cp-chip-dark">{t(domainDisplay(catalystDomain))}</span>
-                <span className="cp-chip-dark">{lang === 'ko' ? `${t(result.step_method.scale)} 캠페인` : `${result.step_method.scale} campaign`}</span>
+                <span className="cp-chip-dark">{lang === 'ko' ? `${t(result.step_method.scale)} 규모` : `${result.step_method.scale} scale`}</span>
                 <span className="cp-chip-dark">{generatedAt}</span>
                 {snapshotState.benchmarkCandidate ? <span className="cp-chip-dark">{t('Reference-loaded')}</span> : null}
               </div>
@@ -476,7 +476,7 @@ export default function CalculatorResult() {
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
-            <MetricTile label={t('Campaign')} value={`${Number(result.step_method.campaign_days).toFixed(1)} d`} detail={lang === 'ko' ? `캠페인당 ${snapshotState.orderSize}톤` : `${snapshotState.orderSize} tons per campaign`} />
+            <MetricTile label={t('Production time')} value={`${Number(result.step_method.campaign_days).toFixed(1)} d`} detail={lang === 'ko' ? `${snapshotState.orderSize}톤 1회 생산` : `${snapshotState.orderSize} tons per run`} />
             <MetricTile label={t('Margin')} value={`${Number(result.step_method.margin_pct).toFixed(1)}%`} detail={t('Selling margin basis')} />
             <MetricTile label={t('Price sources')} value={String(snapshotState.liveFeedCount + snapshotState.indexedFeedCount)} detail={lang === 'ko' ? `실시간 ${snapshotState.liveFeedCount}건 / 지수 ${snapshotState.indexedFeedCount}건` : `${snapshotState.liveFeedCount} live / ${snapshotState.indexedFeedCount} indexed`} />
             <MetricTile label={t('Public links')} value={`${publicSourceCount}/${resolvedMaterials.length || 0}`} detail={t('Resolved rows with a public URL.')} />
@@ -500,7 +500,7 @@ export default function CalculatorResult() {
           <div className="mt-4 rounded-[24px] border border-slate-900/8 bg-white/58 p-4">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div>
-                <div className="cp-subtle-label">{t('Electrode Stack')}</div>
+                <div className="cp-subtle-label">{t('Electrode Assembly')}</div>
                 <div className="cp-heading-sm mt-2">{t('Area-based electrocatalyst layer model')}</div>
                 <div className="mt-1 text-xs leading-6 text-slate-600">
                   {t('Catalyst powder, ionomer, membrane, and substrate are costed on an active-area basis and displayed alongside the powder estimate.')}
@@ -537,7 +537,7 @@ export default function CalculatorResult() {
                 <div className="cp-subtle-label !text-emerald-700">{t('Recovery scenario')}</div>
                 <div className="cp-heading-sm mt-2">{t('Spent catalyst value was included in the net-cost basis.')}</div>
                 <div className="mt-1 text-xs leading-6 text-emerald-900">
-                  {t('This is an end-of-life recovery proxy. It is useful for early screening, but it does not yet model deactivation kinetics or regeneration frequency.')}
+                  {t('This is a simplified end-of-life recovery credit. It is useful for early screening, but it does not yet model deactivation kinetics or regeneration frequency.')}
                 </div>
               </div>
               <span className="cp-chip">{spentCatalyst.metal_symbol}</span>
@@ -579,7 +579,7 @@ export default function CalculatorResult() {
             <div className="cp-subtle-label">{t('Preparation Method')}</div>
             <div className="cp-heading-lg mt-2">{t('Separate route logic from raw inputs.')}</div>
             <div className="mt-1 text-xs leading-6 text-slate-600">
-              {t('This surface is for campaign scale, selected preparation steps, route metadata, and the main cost split.')}
+              {t('This surface is for production scale, selected preparation steps, route metadata, and the main cost split.')}
             </div>
           </div>
           <span className="cp-chip">{lang === 'ko' ? `재료 ${result.materials.components.length}종` : `${result.materials.components.length} material${result.materials.components.length === 1 ? '' : 's'}`}</span>
@@ -666,7 +666,7 @@ export default function CalculatorResult() {
             <div className="cp-subtle-label !text-sky-700">{t('Preparation method')}</div>
             <div className="mt-2 cp-heading-sm">{routeSummary.name}</div>
             <div className="mt-2 text-sm leading-6 text-sky-900">
-              {routeSummary.route_note || t('Template-driven route metadata is attached to this estimate.')}
+              {routeSummary.route_note || t('The route template details are attached to this estimate.')}
             </div>
             <div className="mt-3 flex flex-wrap gap-2">
               <span className="cp-chip">{modeDisplay(routeSummary.manufacturing_mode)}</span>
@@ -907,7 +907,7 @@ export default function CalculatorResult() {
               <div className="mt-4 grid gap-2.5 sm:grid-cols-3 xl:grid-cols-1 2xl:grid-cols-3">
                 <MetricTile label="wt%" value={(component.wt_frac * 100).toFixed(1)} detail={t('Loaded into catalyst')} />
                 <MetricTile label={t('Unit price')} value={formatPrice(toDisplay(component.price_per_lb))} detail={`Per${fmtLabel}`} />
-                <MetricTile label={t('Share')} value={`${Number(component.cost_pct).toFixed(1)}%`} detail={t('Of material cost stack')} />
+                <MetricTile label={t('Share')} value={`${Number(component.cost_pct).toFixed(1)}%`} detail={t('Of material cost')} />
               </div>
             </div>
           ))}
@@ -922,7 +922,7 @@ export default function CalculatorResult() {
             </span>
           </div>
           <div className="mt-2 text-xs leading-6 text-slate-600">
-            {t('CatCost-style step basis with backend escalation and selling adjustments applied in the calculation engine.')}
+            {t('CatCost Step Method rates, brought to this year with the chemical price index, plus overhead and selling margin.')}
           </div>
         </div>
 

@@ -97,8 +97,8 @@ const ELECTRO_APPLICATION_OPTIONS: Array<{ value: ApplicationFamily; label: stri
 ];
 const ESTIMATE_SECTIONS: WorkspaceSection[] = [
   { id: 'type', label: 'Catalyst Type', summary: 'Choose thermocatalyst or electrocatalyst.' },
-  { id: 'composition', label: 'Composition', summary: 'Set the formulation or the electrode stack.' },
-  { id: 'manufacturing', label: 'Preparation Method', summary: 'Set campaign scale and preparation steps.' },
+  { id: 'composition', label: 'Composition', summary: 'Set the formulation or the electrode assembly.' },
+  { id: 'manufacturing', label: 'Preparation Method', summary: 'Set production scale and preparation steps.' },
   { id: 'result', label: 'Result', summary: 'Run the estimate and open the result screen.' },
 ];
 
@@ -577,7 +577,7 @@ export default function Calculator() {
     }));
   }, [currentScale]);
 
-  // Processing cost of every method at the current campaign size, so the
+  // Processing cost of every method at the current production scale, so the
   // method cards can show what the route itself costs before materials.
   useEffect(() => {
     if (catalystDomain !== 'thermal') return;
@@ -1293,8 +1293,8 @@ export default function Calculator() {
         <div className="surface-ghost p-4">
           <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_320px] xl:items-start">
             <div>
-              <div className="cp-subtle-label">{t('Electrode stack')}</div>
-              <div className="cp-heading-lg mt-2">{t('Set the stack first, then price the preparation method.')}</div>
+              <div className="cp-subtle-label">{t('Electrode assembly')}</div>
+              <div className="cp-heading-lg mt-2">{t('Set the electrode assembly first, then price the preparation method.')}</div>
               <p className="mt-2 text-sm leading-7 text-slate-600">
                 {t('Catalyst powder, ionomer, membrane, and substrate each keep their own source record.')}
               </p>
@@ -1328,7 +1328,7 @@ export default function Calculator() {
 
         <div className="grid gap-4 xl:grid-cols-2">
           <div className="surface-ghost p-4">
-            <div className="cp-subtle-label">{t('Material stack')}</div>
+            <div className="cp-subtle-label">{t('Material list')}</div>
             <div className="mt-3 grid gap-3">
               <label className="block">
                 <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">{t('Catalyst powder')}</div>
@@ -1531,8 +1531,8 @@ export default function Calculator() {
         : activeBenchmark?.route.name ?? t('Manual step selection');
     const recoverySummary = catalystDomain === 'thermal'
       ? includeSpentValue
-        ? `${t('Recovery proxy on')} / ${reactorType === 'fixed' ? t('Fixed bed') : t('Slurry')} / ${catalystBulkDensity.toFixed(1)} lb/ft³`
-        : t('Recovery proxy off')
+        ? `${t('Recovery credit on')} / ${reactorType === 'fixed' ? t('Fixed bed') : t('Slurry')} / ${catalystBulkDensity.toFixed(1)} lb/ft³`
+        : t('Recovery credit off')
       : applicationFamilyLabel(applicationFamily);
 
     return (
@@ -1602,18 +1602,18 @@ export default function Calculator() {
             <div className="cp-subtle-label">{t('Preparation basis')}</div>
             <div className="mt-2 text-base font-semibold text-[#191f28]">{preparationSummary}</div>
             <div className="mt-2 space-y-1">
-              <CompactValueRow label={t('Campaign')} value={lang === 'ko' ? `${orderSize}톤` : `${orderSize} tons`} detail={lang === 'ko' ? `${t(scale.label)} 규모 / ${scale.rate}` : `${scale.label} scale / ${scale.rate}`} />
+              <CompactValueRow label={t('Production scale')} value={lang === 'ko' ? `${orderSize}톤` : `${orderSize} tons`} detail={lang === 'ko' ? `${t(scale.label)} 규모 / ${scale.rate}` : `${scale.label} scale / ${scale.rate}`} />
               <CompactValueRow
                 label={t('Steps')}
                 value={String(steps.length)}
-                detail={steps.length > 0 ? `${t(formatStepLabel(steps[0]!))}${steps.length > 1 ? ` +${steps.length - 1}` : ''}` : t('Choose at least one unit operation')}
+                detail={steps.length > 0 ? `${t(formatStepLabel(steps[0]!))}${steps.length > 1 ? ` +${steps.length - 1}` : ''}` : t('Choose at least one preparation step')}
               />
               <CompactValueRow
                 label={catalystDomain === 'thermal' ? t('Recovery') : t('Application')}
                 value={recoverySummary}
                 detail={
                   catalystDomain === 'thermal'
-                    ? t('Optional spent catalyst value proxy for recovery-sensitive screening.')
+                    ? t('Optional spent-catalyst recovery credit for recovery-sensitive screening.')
                     : t('Application family currently selected.')
                 }
               />
@@ -1672,7 +1672,7 @@ export default function Calculator() {
             {
               value: 'electrocatalyst' as const,
               title: 'Electrocatalyst',
-              note: 'Split the electrode stack into catalyst powder, ionomer, membrane, and substrate.',
+              note: 'Split the electrode assembly into catalyst powder, ionomer, membrane, and substrate.',
               detail: 'Best for PEMFC, PEMWE, DMFC, and other electrode fabrication routes.',
             },
           ]).map((option) => {
@@ -1726,7 +1726,7 @@ export default function Calculator() {
         <section className="surface-card p-5">
           <div>
             <div className="cp-subtle-label">{t('Composition')}</div>
-            <h2 className="cp-heading-lg mt-2">{t('Build the electrode stack.')}</h2>
+            <h2 className="cp-heading-lg mt-2">{t('Build the electrode assembly.')}</h2>
             <p className="mt-2 text-sm leading-7 text-slate-600">
               {t('Choose the stored material records first, then tune the geometric inputs used for area-based costing.')}
             </p>
@@ -1822,7 +1822,7 @@ export default function Calculator() {
           <p className="mt-2 text-sm leading-7 text-slate-600">
             {catalystDomain === 'electrocatalyst'
               ? t('Templates add pretreatment, coating, drying, lamination, and break-in steps. Adjust them if the lab route differs.')
-              : t('Pick the industrial steps that best approximate the synthesis route, then let campaign size set the scale basis.')}
+              : t('Pick the industrial steps that best approximate the synthesis route, then let the production scale set the equipment basis.')}
           </p>
         </div>
 
@@ -1830,14 +1830,14 @@ export default function Calculator() {
         <div className="grid gap-3 lg:grid-cols-3">
           <div className="rounded-[20px] border border-slate-200 bg-white/82 px-4 py-3">
             <div className="cp-subtle-label">{t('Route building')}</div>
-            <div className="mt-2 text-sm font-semibold text-[#191f28]">{t('Select every unit operation that applies')}</div>
+            <div className="mt-2 text-sm font-semibold text-[#191f28]">{t('Select every preparation step that applies')}</div>
             <div className="mt-1 text-xs leading-6 text-slate-600">
               {t('You are assembling the full preparation route, not choosing a single option.')}
             </div>
           </div>
           <div className="rounded-[20px] border border-slate-200 bg-white/82 px-4 py-3">
             <div className="cp-subtle-label">{t('Operation groups')}</div>
-            <div className="mt-2 text-sm font-semibold text-[#191f28]">{t('One group can hold several unit operations')}</div>
+            <div className="mt-2 text-sm font-semibold text-[#191f28]">{t('One group can hold several preparation steps')}</div>
             <div className="mt-1 text-xs leading-6 text-slate-600">
               {t('Saved thermal and electrochemical routes often include several operations from the same group.')}
             </div>
@@ -1846,8 +1846,8 @@ export default function Calculator() {
             <div className="cp-subtle-label !text-[#0f766e]">{t('Current route')}</div>
             <div className="mt-2 text-sm font-semibold text-[#191f28]">
               {lang === 'ko'
-                ? `${selectedCategoryCount}개 그룹에서 단위 공정 ${steps.length}개 선택됨`
-                : `${steps.length} unit operation${steps.length === 1 ? '' : 's'} across ${selectedCategoryCount} group${selectedCategoryCount === 1 ? '' : 's'}`}
+                ? `${selectedCategoryCount}개 그룹에서 제조 단계 ${steps.length}개 선택됨`
+                : `${steps.length} preparation step${steps.length === 1 ? '' : 's'} across ${selectedCategoryCount} group${selectedCategoryCount === 1 ? '' : 's'}`}
             </div>
             <div className="mt-1 text-xs leading-6 text-slate-600">
               {t('Add or remove operations until the route matches the actual lab or pilot procedure.')}
@@ -1876,7 +1876,7 @@ export default function Calculator() {
             <div className="mt-2 text-xs leading-6 text-slate-600">
               {t('Loads the full unit-operation sequence for a named preparation method — co-precipitation, sol-gel, impregnation, zeolite synthesis and more. Operations stay editable afterward.')}
               {' '}
-              {t('Each card shows the processing cost of the route alone at the current campaign size, before materials.')}
+              {t('Each card shows the processing cost of the route alone at the current production scale, before materials.')}
             </div>
             {[...new Set(thermalTemplates.map((template) => template.category || 'Other'))].map((category) => (
               <div key={category} className="mt-3">
@@ -1915,7 +1915,7 @@ export default function Calculator() {
                           {template.example_catalysts.slice(0, 3).join(', ')}
                         </div>
                         <div className="mt-1.5 flex flex-wrap gap-1.5 text-[11px] text-slate-500">
-                          <span>{routeSteps.length} {t('operations')}</span>
+                          <span>{routeSteps.length} {t('steps')}</span>
                           {substitutions.length ? <span className="rounded-full border border-slate-200 px-1.5">{t('Scale-fitted')}</span> : null}
                           {uncosted.length ? <span className="rounded-full border border-amber-200 bg-amber-50 px-1.5 text-amber-700">{t('Partly costed')}</span> : null}
                         </div>
@@ -1929,7 +1929,7 @@ export default function Calculator() {
         ) : null}
         <div className="surface-ghost p-3.5">
           <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-            <div><div className="cp-subtle-label">{t('Campaign size')}</div><div className="mt-3 flex flex-wrap items-center gap-3"><input type="number" min="1" step="1" value={orderSize} onChange={(event) => setOrderSize(Math.max(1, Number(event.target.value) || 1))} className="input-base w-32 text-center font-mono" /><span className="text-sm text-slate-600">{t('tons per campaign')}</span><span className={`rounded-full border px-3 py-1 text-xs font-semibold ${scale.classes}`}>{t(scale.label)} / {scale.rate}</span></div></div>
+            <div><div className="cp-subtle-label">{t('Production scale')}</div><div className="mt-3 flex flex-wrap items-center gap-3"><input type="number" min="1" step="1" value={orderSize} onChange={(event) => setOrderSize(Math.max(1, Number(event.target.value) || 1))} className="input-base w-32 text-center font-mono" title={t('Order size in tons; sets the Small, Medium or Large equipment basis.')} /><span className="text-sm text-slate-600">{t('tons')}</span><span className={`rounded-full border px-3 py-1 text-xs font-semibold ${scale.classes}`}>{t(scale.label)} / {scale.rate}</span></div></div>
             <div className="cp-toolbar">{QUICK_ORDER_SIZES.map((size) => <button key={size} onClick={() => setOrderSize(size)} className={`rounded-[16px] px-3 py-2 text-xs font-semibold transition ${orderSize === size ? 'bg-slate-950 text-white' : 'text-slate-600 hover:bg-white hover:text-slate-900'}`}>{lang === 'ko' ? `${size}톤` : `${size} tons`}</button>)}</div>
           </div>
         </div>
@@ -1975,7 +1975,7 @@ export default function Calculator() {
             <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
               <div className="max-w-2xl">
                 <div className="cp-subtle-label">{t('Recovery scenario')}</div>
-                <div className="cp-heading-sm mt-2">{t('Optional spent catalyst value proxy')}</div>
+                <div className="cp-heading-sm mt-2">{t('Optional spent-catalyst recovery credit')}</div>
                 <p className="mt-2 text-sm leading-7 text-slate-600">
                   {t('Use this when the catalyst contains recoverable metal and end-of-life value matters to the screening decision.')}
                 </p>
@@ -2060,12 +2060,12 @@ export default function Calculator() {
             <div className={`rounded-[24px] border px-4 py-4 text-sm ${isValid ? 'border-emerald-200 bg-emerald-50 text-emerald-800' : 'border-amber-200 bg-amber-50 text-amber-800'}`}>{validationMessage}</div>
             <div className="mt-4 grid gap-3 sm:grid-cols-3">
               <MetricTile label={t('Catalyst type')} value={t(catalystDomainLabel(catalystDomain))} detail={t('Current case basis')} />
-              <MetricTile label={t('Preparation steps')} value={String(steps.length)} detail={steps.length > 0 ? t('Ready to run') : t('Choose at least one unit operation')} />
-              <MetricTile label={t('Campaign basis')} value={lang === 'ko' ? `${orderSize}톤` : `${orderSize} tons`} detail={`${t(scale.label)} / ${scale.rate}`} />
+              <MetricTile label={t('Preparation steps')} value={String(steps.length)} detail={steps.length > 0 ? t('Ready to run') : t('Choose at least one preparation step')} />
+              <MetricTile label={t('Production scale')} value={lang === 'ko' ? `${orderSize}톤` : `${orderSize} tons`} detail={`${t(scale.label)} / ${scale.rate}`} />
             </div>
             <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
               <button onClick={handleCalculate} disabled={loading || !isValid || steps.length === 0} className="cp-button-primary min-w-[250px]">{loading ? <><span className="mr-2 inline-flex h-4 w-4 animate-spin rounded-full border-2 border-slate-950 border-t-transparent" />{t('Running estimate')}</> : t('Run estimate')}</button>
-              <div className="text-xs leading-6 text-slate-600">{t('The result screen opens separately and keeps this draft intact.')}</div>
+              <div className="text-xs leading-6 text-slate-600">{t('The result screen opens separately and keeps these inputs intact.')}</div>
             </div>
             {error ? <div className="mt-4 rounded-[24px] border border-red-200 bg-red-50 px-4 py-4 text-sm text-red-700"><span className="font-semibold">{t('Calculation failed.')}</span> {error}</div> : null}
             {loadedSavedName ? (
@@ -2085,7 +2085,7 @@ export default function Calculator() {
                   </div>
                 </div>
                 <div className="mt-2 text-xs leading-6 text-slate-600">
-                  {t('Named cases saved from the result screen. Load restores the composition, unit operations, and campaign size into this draft.')}
+                  {t('Named cases saved from the result screen. Load restores the composition, unit operations, and production scale into this draft.')}
                 </div>
                 <div className="mt-3 space-y-2">
                   {savedEstimates.map((saved) => {
@@ -2140,7 +2140,7 @@ export default function Calculator() {
           <h2 className="cp-heading-xl">{t('Cost Estimate')}</h2>
           <p className="mt-1 text-sm text-[#68727f]">
             {catalystDomain === 'electrocatalyst'
-              ? t('Choose the catalyst class, build the electrode stack, set the preparation basis, then run the estimate.')
+              ? t('Choose the catalyst class, build the electrode assembly, set the preparation basis, then run the estimate.')
               : t('Choose the catalyst class, define the formulation, set the preparation basis, then run the estimate.')}
           </p>
         </div>
