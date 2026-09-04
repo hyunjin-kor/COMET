@@ -60,8 +60,8 @@ const DOMAIN_OPTIONS: Array<{ value: '' | CatalystDomain; label: string }> = [
   { value: 'both', label: 'Both' },
 ];
 const LIBRARY_SECTIONS: WorkspaceSection[] = [
-  { id: 'materials', label: 'Materials', summary: 'Source rows with quote and trust metadata.' },
-  { id: 'steps', label: 'Steps', summary: 'Hourly step rates by campaign scale.' },
+  { id: 'materials', label: 'Materials', summary: 'Source rows with their quote year and reliability.' },
+  { id: 'steps', label: 'Steps', summary: 'Hourly step rates by production scale.' },
   { id: 'templates', label: 'Templates', summary: 'Route templates and processing stages.' },
 ];
 
@@ -154,10 +154,10 @@ function usabilityTone(material: MaterialItem) {
 function usabilityHint(material: MaterialItem) {
   if (material.is_calculator_usable) return 'This row can be picked in the calculator.';
   if (material.price_unit && (material.price_unit.includes('cm2') || material.price_unit.includes('m2'))) {
-    return 'Area-priced electrocatalyst row. Used in the electrode stack model, not the thermal mass-based calculator.';
+    return 'Area-priced electrocatalyst row. Used in the electrode assembly model, not the thermal mass-based calculator.';
   }
   if (material.price_unit && material.price_unit.includes('mL')) {
-    return 'Volume-priced ionomer / dispersion row without density. Used directly in the electrode stack model.';
+    return 'Volume-priced ionomer / dispersion row without density. Used directly in the electrode assembly model.';
   }
   return 'Reference row only. Price unit is not yet mapped to the calculator.';
 }

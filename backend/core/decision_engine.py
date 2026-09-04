@@ -356,7 +356,7 @@ def evaluate_benchmark_family(
         electrode_model = estimate.get("electrode_model")
         economics_basis_value = landed_cost_per_lb
         economics_basis_unit = "$/lb"
-        economics_basis_label = "Landed catalyst"
+        economics_basis_label = "Delivered catalyst"
         if electrode_model is not None:
             economics_basis_value = float(electrode_model["cost_per_cm2_usd"])
             economics_basis_unit = "$/cm2"

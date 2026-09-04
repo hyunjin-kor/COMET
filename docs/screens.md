@@ -11,7 +11,7 @@ Set active metals, promoters, and support balance. Each price shows where it cam
 
 <img src="assets/screen-cost-estimate-preparation.png" alt="Preparation route" width="100%" />
 
-Build the preparation route from unit operations and pick the campaign scale.
+Build the preparation route from unit operations and pick the production scale.
 
 ## Live metal prices
 

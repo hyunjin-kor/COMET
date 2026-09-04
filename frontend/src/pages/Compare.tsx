@@ -29,7 +29,7 @@ const PROFILE_OPTIONS = [
 
 const REFERENCE_SECTIONS: WorkspaceSection[] = [
   { id: 'overview', label: 'Overview', summary: 'Choose family and ranking logic.' },
-  { id: 'routes', label: 'Candidates', summary: 'Scan the current route stack.' },
+  { id: 'routes', label: 'Candidates', summary: 'Scan the current candidates.' },
   { id: 'detail', label: 'Detail', summary: 'Read the selected route deeply.' },
 ];
 
@@ -57,11 +57,11 @@ function applicationFamilyLabel(value: string) {
 
 function screeningBasisLabel(value: string) {
   const labels: Record<string, string> = {
-    literature_architecture_proxy: 'Literature architecture proxy',
-    engineering_proxy: 'Engineering proxy',
-    market_plus_vendor_anchor: 'Market plus vendor anchor',
-    vendor_stack_anchor: 'Vendor stack anchor',
-    literature_low_loading_plus_vendor_stack: 'Literature low-loading plus vendor stack',
+    literature_architecture_proxy: 'Representative literature composition',
+    engineering_proxy: 'Engineering estimate',
+    market_plus_vendor_anchor: 'Market price plus vendor quote',
+    vendor_stack_anchor: 'Vendor quotes',
+    literature_low_loading_plus_vendor_stack: 'Literature low loading plus vendor quotes',
     ru_based_cost_pressure_relief: 'Ru-based cost pressure relief',
   };
   return labels[value] ?? value.replace(/_/g, ' ').replace(/\s+/g, ' ').trim();
@@ -258,7 +258,7 @@ export default function Compare() {
           <div className="grid gap-4">
             <div className="surface-ink overflow-hidden p-5 sm:p-6">
               <h1 className="font-display text-[clamp(1.4rem,2vw,1.8rem)] leading-[1.2] text-white">{t('Literature Benchmarks')}</h1>
-              <p className="mt-2 text-sm text-white/60">{t('Screen published routes before you edit the cost case.')}</p>
+              <p className="mt-2 text-sm text-white/60">{t('Screen published routes before you edit the cost estimate.')}</p>
               <div className="mt-3 flex flex-wrap gap-2">
                 {activeFamily ? <span className="cp-chip-dark">{activeFamily.title}</span> : null}
                 {benchmark.reaction ? <span className="cp-chip-dark">{benchmark.reaction}</span> : null}
@@ -339,14 +339,14 @@ export default function Compare() {
           </div>
           <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
             <MetricTile label={t(activeCandidate.summary.economics_basis_label)} value={benchmarkCostValue(activeCandidate)} detail={benchmarkCostDetail(activeCandidate)} />
-            <MetricTile label={t('Materials')} value={formatPrice(toDisplay(activeCandidate.summary.materials_cost_per_lb))} detail={t('Raw material stack')} />
+            <MetricTile label={t('Materials')} value={formatPrice(toDisplay(activeCandidate.summary.materials_cost_per_lb))} detail={t('Raw materials')} />
             <MetricTile label={t('Processing')} value={formatPrice(toDisplay(activeCandidate.summary.processing_cost_per_lb))} detail={t('Step-method operations')} />
             <MetricTile label={t('Route extras')} value={formatPrice(toDisplay(activeCandidate.summary.route_extra_cost_per_lb))} detail={t('QA + activation + route overhead')} />
           </div>
           <div className="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
             <MetricTile label={t('Key evidence')} value={String(activeCandidate.literature_basis.length)} detail={t('Direct links supporting the selected route.')} />
             <MetricTile label={t('Literature bank')} value={String(benchmark.citations.length)} detail={t('Higher-level references visible across the reaction family.')} />
-            <MetricTile label={t('Screening basis')} value={t(screeningBasisLabel(activeCandidate.screening_basis))} detail={t('How this route is framed in the benchmark set.')} />
+            <MetricTile label={t('Composition basis')} value={t(screeningBasisLabel(activeCandidate.screening_basis))} detail={t('How this route is framed in the benchmark set.')} />
             <MetricTile label={t('Ranking profile')} value={t(benchmark.decision_profile.label)} detail={t('Current weighting logic for ranking.')} />
           </div>
           <div className="mt-4 grid gap-4 xl:grid-cols-[minmax(0,1.02fr)_minmax(320px,0.98fr)]">

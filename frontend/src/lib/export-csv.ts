@@ -58,8 +58,8 @@ export function buildResultCsv(snapshot: CalculatorResultSnapshot): string {
       ['Composition', composition],
       ['Catalyst domain', String(result.input_summary.catalyst_domain ?? 'thermal')],
       ['Generated at', snapshot.generatedAt],
-      ['Campaign size (tons)', snapshot.orderSize],
-      ['Campaign scale', step.scale],
+      ['Order size (tons)', snapshot.orderSize],
+      ['Production scale', step.scale],
       ['Campaign days', Number(step.campaign_days)],
     ),
   );
@@ -83,7 +83,7 @@ export function buildResultCsv(snapshot: CalculatorResultSnapshot): string {
     ['Materials', result.materials.total_materials_cost_per_lb],
     ['Processing', Number(step.processing_cost_per_lb)],
   ];
-  if (typeof step.ga_per_lb === 'number') ledger.push(['Overhead (G&A)', step.ga_per_lb]);
+  if (typeof step.ga_per_lb === 'number') ledger.push(['Overhead (general and administrative)', step.ga_per_lb]);
   if (typeof step.sard_per_lb === 'number') ledger.push(['Sales, admin & R&D (S&ARD)', step.sard_per_lb]);
   if (typeof step.margin_per_lb === 'number') {
     ledger.push([`Margin (${Number(step.margin_pct).toFixed(1)}%)`, step.margin_per_lb]);
@@ -161,7 +161,7 @@ export function buildResultCsv(snapshot: CalculatorResultSnapshot): string {
   if (electrode) {
     sections.push(
       rows(
-        ['Electrode stack'],
+        ['Electrode assembly'],
         ['Metric', 'Value', 'Unit'],
         ['Active area', electrode.active_area_cm2, 'cm2'],
         ['Catalyst loading', electrode.catalyst_loading_mg_cm2, 'mg/cm2'],
