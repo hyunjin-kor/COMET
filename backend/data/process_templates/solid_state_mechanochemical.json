@@ -1,0 +1,67 @@
+{
+ "id": "solid_state_mechanochemical",
+ "name": "Solid-State / Mechanochemical Synthesis - Bulk Oxide or Nitride",
+ "description": "Dry precursors are blended and milled, then reacted in a kiln without a solvent. Covers ceramic mixed oxides and perovskites, hexagonal boron nitride and the thermal polymerization of urea or melamine to g-C3N4.",
+ "category": "Bulk Oxide",
+ "catalyst_domain": "thermal",
+ "example_catalysts": [
+  "g-C3N4",
+  "h-BN",
+  "LaCoO3",
+  "Mixed oxides"
+ ],
+ "steps": [
+  "mixer_dry_blender",
+  "mill",
+  "kiln_continuous_indirect",
+  "mill"
+ ],
+ "step_quantities": [
+  {
+   "step": "mixer_dry_blender",
+   "template_step_name": "Mixer, dry blender",
+   "quantity": 1.0,
+   "note": "Dry blending of precursors"
+  },
+  {
+   "step": "mill",
+   "template_step_name": "Mill",
+   "quantity": 1.0,
+   "note": "Milling to reaction fineness"
+  },
+  {
+   "step": "kiln_continuous_indirect",
+   "template_step_name": "Kiln, continuous indirect (300–1290 °C)",
+   "quantity": 1.0,
+   "note": "Solid-state reaction or polymerization"
+  },
+  {
+   "step": "mill",
+   "template_step_name": "Mill",
+   "quantity": 1.0,
+   "note": "Final size reduction"
+  }
+ ],
+ "typical_parameters": {
+  "calcination_temp_C": {
+   "min": 450,
+   "max": 1200,
+   "default": 600
+  },
+  "order_size_tons": {
+   "min": 1,
+   "max": 200,
+   "default": 20
+  }
+ },
+ "confidence": "literature",
+ "reference_urls": [
+  "https://doi.org/10.1016/S0920-5861(02)00375-9",
+  "https://doi.org/10.1038/nmat2317",
+  "https://doi.org/10.1126/science.aaf7885"
+ ],
+ "quote_year": 2026,
+ "source": "Campanati, Fornasari and Vaccari, Fundamentals in the preparation of heterogeneous catalysts, Catal. Today 77, 299 (2003); Wang et al., Nature Mater. 7, 76 (2008), g-C3N4; Grant et al., Science 354, 1570 (2016), boron nitride",
+ "route_note": "No filtration, no drying and no nitrate off-gas. Milling time, not kiln time, is usually the cost driver.",
+ "uncosted_operations": []
+}

@@ -65,6 +65,12 @@ Campaign days = order size ÷ production rate + cleaning time (0.5 d Small, 1 d 
 | 21 wt% Ni/Al₂O₃, 20 t | $19.22 | $20.59 | −6.65% | Footnote f applies 33% of pre-margin; the Figure 6.3 correlation gives 24% at 20 t |
 | USY-FCC, 200 t, 67 t/d | $2.44 | $2.41 | +1.16% | Footnote b effective rate; nominal 150 t/d would land 33% low |
 
+### Preparation methods
+
+The calculator's Preparation Method step offers named methods on top of the unit operations: impregnation (incipient wetness and excess solution), co-precipitation, deposition-precipitation, sol-gel, hydrothermal synthesis, ion exchange, oxide-melt fusion, solid-state and mechanochemical synthesis, colloidal nanoparticle deposition, solution combustion, zeolite and FCC routes, shaping into extrudates and pellets, washcoating on monoliths, sulfidation and gas-phase reduction. Each is a `process_templates/*.json` file that maps the method to Step Library operations with a cited description (Perego and Villa 1997, Campanati et al. 2003, Munnik et al. 2015 and method-specific sources). The method cards show the processing cost of the route alone at the current campaign size, from `GET /api/templates/costs`.
+
+Two rules keep those costs honest. Steps are fitted to the campaign's scale before pricing: Table 6.1 lists batch equipment at Small only and continuous equipment at Medium and Large only, so a batch kiln stands in for the continuous kiln at 2 tons and the reverse at 20 and 200 tons (`SCALE_EQUIVALENTS` in `backend/core/step_method.py`). And an operation the Step Library has no rate for (a pressure autoclave, a fusion furnace, a washcoat coating line, a hydrogen reduction furnace, gas-phase sulfiding) is either costed at the nearest listed rate and named as such, or left out and listed under `uncosted_operations`; the card shows a "partly costed" flag either way. No hourly rate is invented for them.
+
 ## CapEx/OpEx Factors Method (Chapter 7)
 
 For detailed capital and operating cost estimation using factored approaches.

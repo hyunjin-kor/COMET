@@ -103,3 +103,37 @@ class TestStepMethod:
         )
         # Processing cost per lb should generally be lower for larger orders
         assert medium["processing_cost_per_lb"] < small["processing_cost_per_lb"]
+
+
+class TestScaleFitting:
+    def test_small_scale_swaps_continuous_equipment_for_batch(self):
+        from backend.core.step_method import fit_steps_to_scale
+
+        fitted, substitutions, dropped = fit_steps_to_scale(
+            ["mixer_slurry", "filter_rotary_vacuum", "kiln_continuous_indirect", "dryer_spray"], "small"
+        )
+        assert fitted == ["mixer_slurry", "filter_plate_frame", "kiln_batch", "dryer_rotary_100_300C"]
+        assert [(s["from"], s["to"]) for s in substitutions] == [
+            ("filter_rotary_vacuum", "filter_plate_frame"),
+            ("kiln_continuous_indirect", "kiln_batch"),
+            ("dryer_spray", "dryer_rotary_100_300C"),
+        ]
+        assert dropped == []
+
+    def test_large_scale_swaps_batch_equipment_for_continuous(self):
+        from backend.core.step_method import fit_steps_to_scale
+
+        fitted, substitutions, dropped = fit_steps_to_scale(
+            ["kiln_batch", "filter_plate_frame", "dryer_batch_vacuum_tray", "ball_forming"], "large"
+        )
+        assert fitted == ["kiln_continuous_indirect", "filter_rotary_vacuum", "dryer_rotary_40_100C", "extruder_with_feeder"]
+        assert len(substitutions) == 4
+        assert dropped == []
+
+    def test_steps_already_available_pass_through_and_unknown_steps_are_dropped(self):
+        from backend.core.step_method import fit_steps_to_scale
+
+        fitted, substitutions, dropped = fit_steps_to_scale(["mill", "no_such_step"], "medium")
+        assert fitted == ["mill"]
+        assert substitutions == []
+        assert dropped == ["no_such_step"]

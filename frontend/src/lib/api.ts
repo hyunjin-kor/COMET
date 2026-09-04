@@ -691,7 +691,39 @@ export interface ProcessTemplate {
   route_note?: string;
   source?: string;
   reference_urls?: string[];
+  uncosted_operations?: string[];
 }
+
+export interface TemplateCost {
+  id: string;
+  name: string;
+  category: string;
+  catalyst_domain: CatalystDomain;
+  steps: string[];
+  steps_fitted: string[];
+  substitutions: Array<{ from: string; to: string }>;
+  dropped_steps: string[];
+  uncosted_operations: string[];
+  processing_cost_per_lb: number | null;
+  processing_cost_per_kg: number | null;
+  step_cost_per_hr: number | null;
+  campaign_days: number | null;
+}
+
+export interface TemplateCostsResponse {
+  order_size_tons: number;
+  scale: 'small' | 'medium' | 'large';
+  basis_year: number;
+  target_year: number;
+  chemppi_escalation: number;
+  templates: TemplateCost[];
+}
+
+export const fetchTemplateCosts = (orderSizeTons: number, catalystDomain?: CatalystDomain) => {
+  const params = new URLSearchParams({ order_size_tons: String(orderSizeTons) });
+  if (catalystDomain) params.set('catalyst_domain', catalystDomain);
+  return request<TemplateCostsResponse>(`/templates/costs?${params.toString()}`);
+};
 
 export const fetchTemplates = (catalystDomain?: CatalystDomain) =>
   request<ProcessTemplate[]>(`/templates${catalystDomain ? `?catalyst_domain=${catalystDomain}` : ''}`);

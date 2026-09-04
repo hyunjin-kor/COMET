@@ -1,0 +1,72 @@
+{
+ "id": "combustion_synthesis_mixed_oxide",
+ "name": "Solution Combustion Synthesis - Mixed Oxide",
+ "description": "Metal nitrates and a fuel such as urea or glycine are dissolved together, concentrated to a gel and ignited. The self-sustaining reaction leaves a foamed, high-surface-area mixed oxide in minutes.",
+ "category": "Mixed Oxide",
+ "catalyst_domain": "thermal",
+ "example_catalysts": [
+  "CuO-CeO2",
+  "LaMnO3",
+  "Co3O4-CeO2"
+ ],
+ "steps": [
+  "mixer_slurry",
+  "dryer_rotary_100_300C",
+  "kiln_continuous_indirect",
+  "mill",
+  "scrubber_nox"
+ ],
+ "step_quantities": [
+  {
+   "step": "mixer_slurry",
+   "template_step_name": "Mixer, slurry",
+   "quantity": 1.0,
+   "note": "Nitrate and fuel solution make-up"
+  },
+  {
+   "step": "dryer_rotary_100_300C",
+   "template_step_name": "Dryer, rotary (100–300 °C)",
+   "quantity": 1.0,
+   "note": "Concentration to a gel"
+  },
+  {
+   "step": "kiln_continuous_indirect",
+   "template_step_name": "Kiln, continuous indirect (300–1290 °C)",
+   "quantity": 1.0,
+   "note": "Ignition and combustion"
+  },
+  {
+   "step": "mill",
+   "template_step_name": "Mill",
+   "quantity": 1.0,
+   "note": "Size reduction of the foamed product"
+  },
+  {
+   "step": "scrubber_nox",
+   "template_step_name": "Scrubber, NOx",
+   "quantity": 1.0,
+   "note": "Combustion off-gas"
+  }
+ ],
+ "typical_parameters": {
+  "calcination_temp_C": {
+   "min": 300,
+   "max": 600,
+   "default": 400
+  },
+  "order_size_tons": {
+   "min": 1,
+   "max": 100,
+   "default": 10
+  }
+ },
+ "confidence": "literature",
+ "reference_urls": [
+  "https://doi.org/10.1016/s0926-860x(02)00558-6",
+  "https://doi.org/10.1016/S0920-5861(02)00375-9"
+ ],
+ "quote_year": 2026,
+ "source": "Avgouropoulos and Ioannides, urea-nitrate combustion synthesis of CuO-CeO2, Appl. Catal. A 244, 155 (2003); Campanati, Fornasari and Vaccari, Fundamentals in the preparation of heterogeneous catalysts, Catal. Today 77, 299 (2003)",
+ "route_note": "Short kiln residence, but the NOx and fuel off-gas needs scrubbing and the product is a fine powder that usually needs shaping.",
+ "uncosted_operations": []
+}

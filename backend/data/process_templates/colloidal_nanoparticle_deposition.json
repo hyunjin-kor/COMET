@@ -1,0 +1,85 @@
+{
+ "id": "colloidal_nanoparticle_deposition",
+ "name": "Colloidal / Polyol Nanoparticle Synthesis with Deposition",
+ "description": "Metal nanoparticles are formed first in solution, by polyol or borohydride reduction with a capping agent, then deposited on the support and freed of the capping agent by washing and a mild thermal treatment. Gives narrow size distributions that impregnation cannot.",
+ "category": "Supported PGM",
+ "catalyst_domain": "thermal",
+ "example_catalysts": [
+  "Pt/C",
+  "PtCo/C",
+  "PdAg/N-C",
+  "Au/C"
+ ],
+ "steps": [
+  "mixer_slurry",
+  "reactor_multistep",
+  "filter_rotary_vacuum",
+  "dryer_rotary_40_100C",
+  "kiln_continuous_indirect",
+  "mill"
+ ],
+ "step_quantities": [
+  {
+   "step": "mixer_slurry",
+   "template_step_name": "Mixer, slurry",
+   "quantity": 1.0,
+   "note": "Precursor, reductant and capping agent make-up"
+  },
+  {
+   "step": "reactor_multistep",
+   "template_step_name": "Reactor, multistep",
+   "quantity": 1.0,
+   "note": "Colloid formation and deposition onto the support"
+  },
+  {
+   "step": "filter_rotary_vacuum",
+   "template_step_name": "Filter, rotary vacuum",
+   "quantity": 1.0,
+   "note": "Filtration and washing"
+  },
+  {
+   "step": "dryer_rotary_40_100C",
+   "template_step_name": "Dryer, rotary (40–100 °C)",
+   "quantity": 1.0,
+   "note": "Low-temperature drying"
+  },
+  {
+   "step": "kiln_continuous_indirect",
+   "template_step_name": "Kiln, continuous indirect (300–1290 °C)",
+   "quantity": 1.0,
+   "note": "Capping-agent removal"
+  },
+  {
+   "step": "mill",
+   "template_step_name": "Mill",
+   "quantity": 1.0,
+   "note": "Size reduction"
+  }
+ ],
+ "typical_parameters": {
+  "metal_loading_wt_pct": {
+   "min": 1,
+   "max": 40,
+   "default": 20
+  },
+  "calcination_temp_C": {
+   "min": 200,
+   "max": 400,
+   "default": 300
+  },
+  "order_size_tons": {
+   "min": 1,
+   "max": 200,
+   "default": 20
+  }
+ },
+ "confidence": "literature",
+ "reference_urls": [
+  "https://doi.org/10.1021/cr500486u",
+  "https://doi.org/10.1016/j.apcatb.2020.119628"
+ ],
+ "quote_year": 2026,
+ "source": "Munnik, de Jongh and de Jong, Recent developments in the synthesis of supported catalysts, Chem. Rev. 115, 6687 (2015); Yang and Kuwahara, PdAg alloy nanoparticles in N-doped carbon, Appl. Catal. B 283, 119628 (2021)",
+ "route_note": "Solvent and capping-agent consumption per kilogram of catalyst is far above impregnation; those enter as materials, not steps.",
+ "uncosted_operations": []
+}

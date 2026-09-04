@@ -70,6 +70,9 @@ Monte Carlo simulation (100-10000 iterations).
 
 ## Prices
 
+### GET /api/templates/costs
+`?order_size_tons=20` (and optionally `catalyst_domain`). Processing cost of every process template at that campaign size, materials excluded, with the steps fitted to the campaign's scale (`steps_fitted`, `substitutions`), any steps that could not be priced (`dropped_steps`), and the operations the Step Library has no rate for (`uncosted_operations`).
+
 ### GET /api/prices
 All metals with latest prices. `?basis=live` (default) returns the daily quotes; `?basis=reference` returns the latest stored monthly averages (IMF PCPS, Johnson Matthey), with `basis_month` on each row. The same parameter applies to `/api/prices/{symbol}`, `/api/prices/{symbol}/history`, `/api/prices/trends` and `/api/decision/benchmarks/{family}`; `POST /api/calculate` takes it as `price_basis` in the body. `GET /api/prices/supports?basis=reference` lists the support-material unit-value series (HS code, material, library keys, latest month and value).
 

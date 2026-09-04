@@ -1,0 +1,93 @@
+{
+ "id": "sulfidation_hydrotreating",
+ "name": "Impregnation with Sulfidation - Hydrotreating Catalysts",
+ "description": "Co or Ni with Mo or W is impregnated onto alumina extrudates, dried and calcined to the oxide, then converted to the active sulfide in a H2S/H2 or spiked-feed stream. The route for every hydrodesulfurization and hydrodeoxygenation catalyst.",
+ "category": "Activation",
+ "catalyst_domain": "thermal",
+ "example_catalysts": [
+  "CoMoS/Al2O3",
+  "NiMoS/Al2O3",
+  "NiW/Al2O3"
+ ],
+ "steps": [
+  "mixer_slurry",
+  "incipient_wetness",
+  "dryer_rotary_100_300C",
+  "kiln_continuous_indirect",
+  "extruder_with_feeder",
+  "reactor_simple",
+  "mill"
+ ],
+ "step_quantities": [
+  {
+   "step": "mixer_slurry",
+   "template_step_name": "Mixer, slurry",
+   "quantity": 1.0,
+   "note": "Impregnation solution make-up"
+  },
+  {
+   "step": "incipient_wetness",
+   "template_step_name": "Incipient wetness (impregnation)",
+   "quantity": 1.0,
+   "note": "Impregnation of the extrudates"
+  },
+  {
+   "step": "dryer_rotary_100_300C",
+   "template_step_name": "Dryer, rotary (100–300 °C)",
+   "quantity": 1.0,
+   "note": "Drying"
+  },
+  {
+   "step": "kiln_continuous_indirect",
+   "template_step_name": "Kiln, continuous indirect (300–1290 °C)",
+   "quantity": 1.0,
+   "note": "Calcination to the oxide precursor"
+  },
+  {
+   "step": "extruder_with_feeder",
+   "template_step_name": "Extruder, with feeder",
+   "quantity": 1.0,
+   "note": "Shaping when starting from powder"
+  },
+  {
+   "step": "reactor_simple",
+   "template_step_name": "Reactor, simple (mixing)",
+   "quantity": 1.0,
+   "note": "Sulfiding; costed at the simple-reactor rate"
+  },
+  {
+   "step": "mill",
+   "template_step_name": "Mill",
+   "quantity": 1.0,
+   "note": "Size reduction of the powder feed"
+  }
+ ],
+ "typical_parameters": {
+  "metal_loading_wt_pct": {
+   "min": 8,
+   "max": 20,
+   "default": 15
+  },
+  "calcination_temp_C": {
+   "min": 400,
+   "max": 550,
+   "default": 500
+  },
+  "order_size_tons": {
+   "min": 5,
+   "max": 200,
+   "default": 50
+  }
+ },
+ "confidence": "literature",
+ "reference_urls": [
+  "https://doi.org/10.1016/S0926-860X(97)00035-5",
+  "https://doi.org/10.1021/acscatal.8b03402"
+ ],
+ "quote_year": 2026,
+ "source": "Eijsbouts, On the flexibility of the active phase in hydrotreating catalysts, Appl. Catal. A 158, 53 (1997); Song et al., CoMoS nanosulfide for HDO, ACS Catal. 8, 11577 (2018)",
+ "route_note": "Sulfiding is often done in the refinery reactor rather than at the manufacturer; drop the reactor stage to cost the oxide precursor alone.",
+ "uncosted_operations": [
+  "Gas-phase sulfiding (H2S/H2 or DMDS): costed at the simple-reactor rate"
+ ]
+}

@@ -12,6 +12,7 @@ import {
   fetchThermalCompositionOptions,
   fetchMaterials,
   fetchPrices,
+  fetchTemplateCosts,
   fetchTemplates,
   refreshPrices as refreshPriceFeed,
   type ComponentInput,
@@ -20,6 +21,7 @@ import {
   type MaterialItem,
   type MetalPrice,
   type ProcessTemplate,
+  type TemplateCost,
   type ThermalCompositionOption,
   type ThermalCompositionOptions,
 } from '../lib/api';
@@ -529,6 +531,7 @@ export default function Calculator() {
   const [electroMaterials, setElectroMaterials] = useState<MaterialItem[]>([]);
   const [electroTemplates, setElectroTemplates] = useState<ProcessTemplate[]>([]);
   const [thermalTemplates, setThermalTemplates] = useState<ProcessTemplate[]>([]);
+  const [templateCosts, setTemplateCosts] = useState<Record<string, TemplateCost>>({});
   const [savedEstimates, setSavedEstimates] = useState<SavedEstimateSummary[]>([]);
   const [savedBusyId, setSavedBusyId] = useState<number | null>(null);
   const [loadedSavedName, setLoadedSavedName] = useState<string | null>(null);
@@ -573,6 +576,24 @@ export default function Calculator() {
       return step ? (step.scales as readonly Scale[]).includes(currentScale) : false;
     }));
   }, [currentScale]);
+
+  // Processing cost of every method at the current campaign size, so the
+  // method cards can show what the route itself costs before materials.
+  useEffect(() => {
+    if (catalystDomain !== 'thermal') return;
+    let cancelled = false;
+    fetchTemplateCosts(orderSize, 'thermal')
+      .then((payload) => {
+        if (cancelled) return;
+        setTemplateCosts(Object.fromEntries(payload.templates.map((item) => [item.id, item])));
+      })
+      .catch(() => {
+        if (!cancelled) setTemplateCosts({});
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [orderSize, catalystDomain]);
 
   // Fetch live prices ONCE on mount. Each fetchPrices() returns a fresh array
   // reference, and the dedupe/derived options below depend on it — putting
@@ -1854,27 +1875,56 @@ export default function Calculator() {
             </div>
             <div className="mt-2 text-xs leading-6 text-slate-600">
               {t('Loads the full unit-operation sequence for a named preparation method — co-precipitation, sol-gel, impregnation, zeolite synthesis and more. Operations stay editable afterward.')}
+              {' '}
+              {t('Each card shows the processing cost of the route alone at the current campaign size, before materials.')}
             </div>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {thermalTemplates.map((template) => {
-                const active = template.steps.length === steps.length
-                  && template.steps.every((key) => steps.includes(key));
-                return (
-                  <button
-                    key={template.id}
-                    onClick={() => setSteps([...template.steps])}
-                    title={`${template.description ? `${template.description} — ` : ''}${template.steps.map(formatStepLabel).join(' → ')}`}
-                    className={`rounded-[16px] border px-3 py-2 text-left text-sm transition ${
-                      active
-                        ? 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e]'
-                        : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
-                    }`}
-                  >
-                    {template.name}
-                  </button>
-                );
-              })}
-            </div>
+            {[...new Set(thermalTemplates.map((template) => template.category || 'Other'))].map((category) => (
+              <div key={category} className="mt-3">
+                <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">{t(category)}</div>
+                <div className="mt-1.5 grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+                  {thermalTemplates.filter((template) => (template.category || 'Other') === category).map((template) => {
+                    const cost = templateCosts[template.id];
+                    const routeSteps = cost?.steps_fitted?.length ? cost.steps_fitted : template.steps;
+                    const active = routeSteps.length === steps.length && routeSteps.every((key) => steps.includes(key));
+                    const uncosted = cost?.uncosted_operations ?? template.uncosted_operations ?? [];
+                    const substitutions = cost?.substitutions ?? [];
+                    const costLabel = cost?.processing_cost_per_lb != null
+                      ? `${formatPrice(toDisplay(cost.processing_cost_per_lb))}${fmtLabel}`
+                      : null;
+                    return (
+                      <button
+                        key={template.id}
+                        onClick={() => setSteps([...routeSteps])}
+                        title={[
+                          template.description,
+                          routeSteps.map(formatStepLabel).join(' → '),
+                          substitutions.length ? `${t('Scale-fitted')}: ${substitutions.map((s) => `${formatStepLabel(s.from)} → ${formatStepLabel(s.to)}`).join(', ')}` : '',
+                          uncosted.length ? `${t('Not costed')}: ${uncosted.join('; ')}` : '',
+                        ].filter(Boolean).join('\n')}
+                        className={`rounded-[16px] border px-3 py-2.5 text-left transition ${
+                          active
+                            ? 'border-[#0d9488] bg-[#e6f5f2]'
+                            : 'border-slate-200 bg-white hover:border-slate-300'
+                        }`}
+                      >
+                        <div className="flex items-start justify-between gap-2">
+                          <div className={`text-sm font-semibold ${active ? 'text-[#0f766e]' : 'text-[#191f28]'}`}>{template.name}</div>
+                          {costLabel ? <div className="whitespace-nowrap font-mono text-sm text-[#191f28]">{costLabel}</div> : null}
+                        </div>
+                        <div className="mt-1 truncate text-xs text-slate-500">
+                          {template.example_catalysts.slice(0, 3).join(', ')}
+                        </div>
+                        <div className="mt-1.5 flex flex-wrap gap-1.5 text-[11px] text-slate-500">
+                          <span>{routeSteps.length} {t('operations')}</span>
+                          {substitutions.length ? <span className="rounded-full border border-slate-200 px-1.5">{t('Scale-fitted')}</span> : null}
+                          {uncosted.length ? <span className="rounded-full border border-amber-200 bg-amber-50 px-1.5 text-amber-700">{t('Partly costed')}</span> : null}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
           </div>
         ) : null}
         <div className="surface-ghost p-3.5">

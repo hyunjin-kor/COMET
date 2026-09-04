@@ -1992,3 +1992,53 @@ class TestSupportPrices:
         alumina_live = next(m for m in live["resolved_materials"] if m["material_key"] == "lit:usgs-alumina-2025")
         assert "live_override" not in alumina_live
         assert alumina_live["price"] == 0.59
+class TestTemplateCosts:
+    def test_every_method_is_costed_at_each_campaign_size(self, client):
+        ids = {item["id"] for item in client.get("/api/templates?catalyst_domain=thermal").json() if item["steps"]}
+        assert len(ids) >= 20
+        for tons, scale in ((2, "small"), (20, "medium"), (200, "large")):
+            payload = client.get(f"/api/templates/costs?order_size_tons={tons}&catalyst_domain=thermal").json()
+            assert payload["scale"] == scale
+            by_id = {item["id"]: item for item in payload["templates"]}
+            assert set(by_id) == ids
+            for item in by_id.values():
+                assert item["dropped_steps"] == [], (item["id"], scale)
+                assert item["processing_cost_per_lb"] > 0, (item["id"], scale)
+                assert item["processing_cost_per_kg"] > item["processing_cost_per_lb"]
+
+    def test_small_campaign_fits_the_kiln_to_batch_equipment(self, client):
+        payload = client.get("/api/templates/costs?order_size_tons=2").json()
+        wet = next(item for item in payload["templates"] if item["id"] == "wet_impregnation_metal_oxide")
+        assert "kiln_batch" in wet["steps_fitted"]
+        assert {"from": "kiln_continuous_indirect", "to": "kiln_batch"} in wet["substitutions"]
+        washcoat = next(item for item in payload["templates"] if item["id"] == "washcoat_monolith")
+        assert washcoat["uncosted_operations"]
+
+    def test_cost_rejects_a_zero_campaign(self, client):
+        assert client.get("/api/templates/costs?order_size_tons=0").status_code == 422
+
+
+class TestPreparationMethodCatalog:
+    def test_new_methods_cite_sources_and_map_to_step_library_keys(self, client):
+        from backend.core.constants import STEP_COSTS
+
+        templates = client.get("/api/templates?catalyst_domain=thermal").json()
+        by_id = {item["id"]: item for item in templates}
+        for method in (
+            "deposition_precipitation_metal_oxide",
+            "hydrothermal_oxide_nanostructure",
+            "ion_exchange_zeolite_metal",
+            "fusion_promoted_magnetite",
+            "solid_state_mechanochemical",
+            "colloidal_nanoparticle_deposition",
+            "combustion_synthesis_mixed_oxide",
+            "shaping_extrusion_pelletizing",
+            "washcoat_monolith",
+            "sulfidation_hydrotreating",
+            "reduction_activation_addon",
+        ):
+            item = by_id[method]
+            assert item["reference_urls"], method
+            assert all(url.startswith("https://doi.org/") for url in item["reference_urls"]), method
+            assert all(step in STEP_COSTS for step in item["steps"]), method
+            assert isinstance(item["uncosted_operations"], list)

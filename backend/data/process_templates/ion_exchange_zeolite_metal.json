@@ -1,0 +1,85 @@
+{
+ "id": "ion_exchange_zeolite_metal",
+ "name": "Ion Exchange - Metal into Zeolite",
+ "description": "A zeolite or other ion exchanger is stirred in a solution of the metal salt, usually in two or three cycles, then filtered, washed, dried and calcined. The route behind commercial Cu-CHA and Fe-ZSM-5 SCR catalysts and metal-loaded Y and L zeolites.",
+ "category": "Zeolite",
+ "catalyst_domain": "thermal",
+ "example_catalysts": [
+  "Cu-SSZ-13",
+  "Fe-ZSM-5",
+  "Pt/KL",
+  "Ni-USY"
+ ],
+ "steps": [
+  "mixer_slurry",
+  "reactor_simple",
+  "reactor_simple",
+  "filter_rotary_vacuum",
+  "dryer_rotary_100_300C",
+  "kiln_continuous_indirect"
+ ],
+ "step_quantities": [
+  {
+   "step": "mixer_slurry",
+   "template_step_name": "Mixer, slurry",
+   "quantity": 1.0,
+   "note": "Zeolite suspension in the exchange solution"
+  },
+  {
+   "step": "reactor_simple",
+   "template_step_name": "Reactor, simple (mixing)",
+   "quantity": 1.0,
+   "note": "Exchange cycle 1"
+  },
+  {
+   "step": "reactor_simple",
+   "template_step_name": "Reactor, simple (mixing)",
+   "quantity": 1.0,
+   "note": "Exchange cycle 2"
+  },
+  {
+   "step": "filter_rotary_vacuum",
+   "template_step_name": "Filter, rotary vacuum",
+   "quantity": 1.0,
+   "note": "Filtration and washing after each cycle"
+  },
+  {
+   "step": "dryer_rotary_100_300C",
+   "template_step_name": "Dryer, rotary (100–300 °C)",
+   "quantity": 1.0,
+   "note": "Drying"
+  },
+  {
+   "step": "kiln_continuous_indirect",
+   "template_step_name": "Kiln, continuous indirect (300–1290 °C)",
+   "quantity": 1.0,
+   "note": "Calcination"
+  }
+ ],
+ "typical_parameters": {
+  "metal_loading_wt_pct": {
+   "min": 0.5,
+   "max": 8,
+   "default": 2.5
+  },
+  "calcination_temp_C": {
+   "min": 300,
+   "max": 800,
+   "default": 500
+  },
+  "order_size_tons": {
+   "min": 1,
+   "max": 200,
+   "default": 20
+  }
+ },
+ "confidence": "literature",
+ "reference_urls": [
+  "https://doi.org/10.1016/S0920-5861(96)00055-7",
+  "https://doi.org/10.1007/s11244-013-0145-8"
+ ],
+ "quote_year": 2026,
+ "source": "Perego and Villa, Catalyst preparation methods, Catal. Today 34, 281 (1997); Beale et al., Cu-chabazite as the deployed diesel DeNOx catalyst, Top. Catal. 56, 1441 (2013)",
+ "route_note": "Two exchange cycles are the default; add a reactor stage per extra cycle. Exchange consumes a stoichiometric excess of salt that leaves with the wash water.",
+ "uncosted_operations": []
+}

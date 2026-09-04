@@ -20,6 +20,46 @@ from backend.core.constants import (
     STEP_COSTS,
 )
 
+# Same unit operation, the scale-appropriate equipment. Table 6.1 lists batch
+# equipment at Small only and continuous equipment at Medium and Large only,
+# so a route written for one scale needs these swaps to be costed at another.
+SCALE_EQUIVALENTS: dict[str, dict[str, str]] = {
+    "kiln_batch": {"medium": "kiln_continuous_indirect", "large": "kiln_continuous_indirect"},
+    "kiln_continuous_indirect": {"small": "kiln_batch"},
+    "kiln_continuous_direct": {"small": "kiln_batch"},
+    "filter_rotary_vacuum": {"small": "filter_plate_frame"},
+    "filter_plate_frame": {"medium": "filter_rotary_vacuum", "large": "filter_rotary_vacuum"},
+    "dryer_batch_vacuum_tray": {"medium": "dryer_rotary_40_100C", "large": "dryer_rotary_40_100C"},
+    "dryer_spray": {"small": "dryer_rotary_100_300C"},
+    "ball_forming": {"large": "extruder_with_feeder"},
+}
+
+
+def fit_steps_to_scale(steps: list[str], scale: str) -> tuple[list[str], list[dict], list[str]]:
+    """Swap steps Table 6.1 does not offer at ``scale`` for their scale equivalent.
+
+    Returns ``(fitted, substitutions, dropped)``. A step with no rate and no
+    equivalent at the scale is dropped and reported, never costed at zero.
+    """
+    fitted: list[str] = []
+    substitutions: list[dict] = []
+    dropped: list[str] = []
+    for step in steps:
+        costs = STEP_COSTS.get(step)
+        if costs is None:
+            dropped.append(step)
+            continue
+        if costs.get(scale) is not None:
+            fitted.append(step)
+            continue
+        alternative = SCALE_EQUIVALENTS.get(step, {}).get(scale)
+        if alternative and STEP_COSTS[alternative].get(scale) is not None:
+            fitted.append(alternative)
+            substitutions.append({"from": step, "to": alternative})
+        else:
+            dropped.append(step)
+    return fitted, substitutions, dropped
+
 
 def determine_scale(order_size_tons: float) -> str:
     """Determine production scale from order size.
