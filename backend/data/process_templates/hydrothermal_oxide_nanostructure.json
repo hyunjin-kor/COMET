@@ -1,0 +1,87 @@
+{
+ "id": "hydrothermal_oxide_nanostructure",
+ "name": "Hydrothermal / Solvothermal Synthesis - Bulk Oxide",
+ "description": "Precursor solution or gel is crystallized in a sealed vessel above the boiling point of the solvent, then filtered, washed, dried and calcined. The industrial route for zeolites and for nanostructured titania, ceria and zirconia.",
+ "category": "Bulk Oxide",
+ "catalyst_domain": "thermal",
+ "example_catalysts": [
+  "TiO2 nanotubes",
+  "CeO2 nanorods",
+  "ZrO2",
+  "Na2Ti3O7"
+ ],
+ "steps": [
+  "mixer_slurry",
+  "crystallizer",
+  "filter_rotary_vacuum",
+  "dryer_rotary_100_300C",
+  "kiln_continuous_indirect",
+  "mill"
+ ],
+ "step_quantities": [
+  {
+   "step": "mixer_slurry",
+   "template_step_name": "Mixer, slurry",
+   "quantity": 1.0,
+   "note": "Precursor solution or gel make-up"
+  },
+  {
+   "step": "crystallizer",
+   "template_step_name": "Crystallizer",
+   "quantity": 1.0,
+   "note": "Hydrothermal crystallization; the autoclave is costed at the crystallizer rate"
+  },
+  {
+   "step": "filter_rotary_vacuum",
+   "template_step_name": "Filter, rotary vacuum",
+   "quantity": 1.0,
+   "note": "Filtration and washing"
+  },
+  {
+   "step": "dryer_rotary_100_300C",
+   "template_step_name": "Dryer, rotary (100–300 °C)",
+   "quantity": 1.0,
+   "note": "Drying"
+  },
+  {
+   "step": "kiln_continuous_indirect",
+   "template_step_name": "Kiln, continuous indirect (300–1290 °C)",
+   "quantity": 1.0,
+   "note": "Calcination"
+  },
+  {
+   "step": "mill",
+   "template_step_name": "Mill",
+   "quantity": 1.0,
+   "note": "Size reduction"
+  }
+ ],
+ "typical_parameters": {
+  "metal_loading_wt_pct": {
+   "min": 0.5,
+   "max": 30,
+   "default": 5
+  },
+  "calcination_temp_C": {
+   "min": 300,
+   "max": 700,
+   "default": 450
+  },
+  "order_size_tons": {
+   "min": 1,
+   "max": 200,
+   "default": 20
+  }
+ },
+ "confidence": "literature",
+ "reference_urls": [
+  "https://doi.org/10.1016/S0920-5861(02)00375-9",
+  "https://doi.org/10.1016/S0920-5861(96)00055-7"
+ ],
+ "quote_year": 2026,
+ "source": "Campanati, Fornasari and Vaccari, Fundamentals in the preparation of heterogeneous catalysts, Catal. Today 77, 299 (2003); Perego and Villa, Catalyst preparation methods, Catal. Today 34, 281 (1997)",
+ "route_note": "The same crystallizer proxy the zeolite routes use. Pressure-vessel time is what sets the cost, so a long crystallization is a multiple of this step.",
+ "uncosted_operations": [
+  "Pressure autoclave (120-250 C, autogenous pressure): costed at the crystallizer rate; there is no pressure-vessel rate in the Step Library"
+ ]
+}

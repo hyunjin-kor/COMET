@@ -1,0 +1,93 @@
+{
+ "id": "deposition_precipitation_metal_oxide",
+ "name": "Deposition-Precipitation - Metal on Oxide Support",
+ "description": "The support is suspended in a metal-salt solution and the metal hydroxide or carbonate is precipitated onto it under controlled pH, by urea hydrolysis or slow base addition. Gives small, evenly spread particles at higher loadings than impregnation reaches. Filtered, washed, dried and calcined.",
+ "category": "Supported Metal",
+ "catalyst_domain": "thermal",
+ "example_catalysts": [
+  "Au/TiO2",
+  "Ni/SiO2",
+  "Cu/ZnO",
+  "Ni/Al2O3"
+ ],
+ "steps": [
+  "mixer_slurry",
+  "reactor_multistep",
+  "filter_rotary_vacuum",
+  "dryer_rotary_100_300C",
+  "kiln_continuous_indirect",
+  "mill",
+  "scrubber_nox"
+ ],
+ "step_quantities": [
+  {
+   "step": "mixer_slurry",
+   "template_step_name": "Mixer, slurry",
+   "quantity": 1.0,
+   "note": "Support suspension in the metal-salt solution"
+  },
+  {
+   "step": "reactor_multistep",
+   "template_step_name": "Reactor, multistep",
+   "quantity": 1.0,
+   "note": "Controlled-pH precipitation or urea hydrolysis, then aging"
+  },
+  {
+   "step": "filter_rotary_vacuum",
+   "template_step_name": "Filter, rotary vacuum",
+   "quantity": 1.0,
+   "note": "Filtration and washing"
+  },
+  {
+   "step": "dryer_rotary_100_300C",
+   "template_step_name": "Dryer, rotary (100–300 °C)",
+   "quantity": 1.0,
+   "note": "Drying of the washed cake"
+  },
+  {
+   "step": "kiln_continuous_indirect",
+   "template_step_name": "Kiln, continuous indirect (300–1290 °C)",
+   "quantity": 1.0,
+   "note": "Calcination"
+  },
+  {
+   "step": "mill",
+   "template_step_name": "Mill",
+   "quantity": 1.0,
+   "note": "Size reduction"
+  },
+  {
+   "step": "scrubber_nox",
+   "template_step_name": "Scrubber, NOx",
+   "quantity": 1.0,
+   "note": "Nitrate decomposition off-gas"
+  }
+ ],
+ "typical_parameters": {
+  "metal_loading_wt_pct": {
+   "min": 1,
+   "max": 40,
+   "default": 10
+  },
+  "calcination_temp_C": {
+   "min": 300,
+   "max": 800,
+   "default": 500
+  },
+  "order_size_tons": {
+   "min": 1,
+   "max": 200,
+   "default": 20
+  }
+ },
+ "confidence": "literature",
+ "reference_urls": [
+  "https://doi.org/10.1002/9783527610044.hetcat0021",
+  "https://doi.org/10.1016/S0920-5861(96)00208-8",
+  "https://doi.org/10.1021/cr500486u"
+ ],
+ "quote_year": 2026,
+ "source": "Geus and van Dillen, Preparation of supported catalysts by deposition-precipitation, Handbook of Heterogeneous Catalysis (2008); Haruta, Catal. Today 36, 153 (1997); Munnik, de Jongh and de Jong, Recent developments in the synthesis of supported catalysts, Chem. Rev. 115, 6687 (2015)",
+ "route_note": "Costs one more reaction stage than incipient wetness and the filtration that impregnation avoids. Precursor lost to the mother liquor is small when precipitation is driven to completion.",
+ "uncosted_operations": []
+}

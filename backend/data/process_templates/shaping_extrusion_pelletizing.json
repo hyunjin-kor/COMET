@@ -1,0 +1,71 @@
+{
+ "id": "shaping_extrusion_pelletizing",
+ "name": "Shaping - Extrudates, Pellets and Spheres",
+ "description": "Turns a calcined powder into fixed-bed bodies: a paste with binder and peptizing acid is extruded or tableted, dried and calcined again. Add this route after a powder route when the estimate is for a shaped commercial product.",
+ "category": "Shaping",
+ "catalyst_domain": "thermal",
+ "example_catalysts": [
+  "Ni/Al2O3 reforming rings",
+  "CoMo/Al2O3 trilobes",
+  "Cu/ZnO/Al2O3 tablets"
+ ],
+ "steps": [
+  "mixer_slurry",
+  "extruder_with_feeder",
+  "dryer_rotary_100_300C",
+  "kiln_continuous_indirect"
+ ],
+ "step_quantities": [
+  {
+   "step": "mixer_slurry",
+   "template_step_name": "Mixer, slurry",
+   "quantity": 1.0,
+   "note": "Paste make-up with binder and peptizing acid"
+  },
+  {
+   "step": "extruder_with_feeder",
+   "template_step_name": "Extruder, with feeder",
+   "quantity": 1.0,
+   "note": "Extrusion or tableting"
+  },
+  {
+   "step": "dryer_rotary_100_300C",
+   "template_step_name": "Dryer, rotary (100–300 °C)",
+   "quantity": 1.0,
+   "note": "Drying of green bodies"
+  },
+  {
+   "step": "kiln_continuous_indirect",
+   "template_step_name": "Kiln, continuous indirect (300–1290 °C)",
+   "quantity": 1.0,
+   "note": "Calcination to set the binder"
+  }
+ ],
+ "typical_parameters": {
+  "binder_wt_pct": {
+   "min": 5,
+   "max": 30,
+   "default": 15
+  },
+  "calcination_temp_C": {
+   "min": 400,
+   "max": 700,
+   "default": 550
+  },
+  "order_size_tons": {
+   "min": 1,
+   "max": 200,
+   "default": 20
+  }
+ },
+ "confidence": "literature",
+ "reference_urls": [
+  "https://doi.org/10.1016/S0920-5861(96)00055-7",
+  "https://doi.org/10.1016/S0920-5861(02)00375-9",
+  "https://doi.org/10.3390/en13112792"
+ ],
+ "quote_year": 2026,
+ "source": "Perego and Villa, Catalyst preparation methods, Catal. Today 34, 281 (1997); Campanati, Fornasari and Vaccari, Fundamentals in the preparation of heterogeneous catalysts, Catal. Today 77, 299 (2003); commercial Ni/calcium-aluminate reforming rings, Energies 13, 2792 (2020)",
+ "route_note": "Costed as a second pass through mixing, forming, drying and calcination. Spheres by oil-drop or pan granulation use the ball-forming rate instead of the extruder.",
+ "uncosted_operations": []
+}

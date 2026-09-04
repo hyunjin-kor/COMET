@@ -491,6 +491,7 @@ def list_templates(catalyst_domain: str | None = Query(default=None)):
             "route_note": data.get("route_note", ""),
             "source": data.get("source", ""),
             "reference_urls": data.get("reference_urls", []),
+            "uncosted_operations": data.get("uncosted_operations", []),
         })
     return results
 

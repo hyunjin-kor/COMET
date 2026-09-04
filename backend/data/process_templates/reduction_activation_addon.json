@@ -1,0 +1,52 @@
+{
+ "id": "reduction_activation_addon",
+ "name": "Activation - Gas-Phase Reduction (H2)",
+ "description": "Reduces the calcined oxide to the metal in flowing hydrogen, then passivates it for shipment. Add this route after a powder or shaped route when the product is sold pre-reduced.",
+ "category": "Activation",
+ "catalyst_domain": "thermal",
+ "example_catalysts": [
+  "Pre-reduced Ni/Al2O3",
+  "Cu/ZnO/Al2O3",
+  "Fe Fischer-Tropsch"
+ ],
+ "steps": [
+  "kiln_continuous_indirect",
+  "flare"
+ ],
+ "step_quantities": [
+  {
+   "step": "kiln_continuous_indirect",
+   "template_step_name": "Kiln, continuous indirect (300–1290 °C)",
+   "quantity": 1.0,
+   "note": "Reduction; the hydrogen furnace is costed at the indirect kiln rate"
+  },
+  {
+   "step": "flare",
+   "template_step_name": "Flare",
+   "quantity": 1.0,
+   "note": "Hydrogen off-gas"
+  }
+ ],
+ "typical_parameters": {
+  "reduction_temp_C": {
+   "min": 250,
+   "max": 600,
+   "default": 450
+  },
+  "order_size_tons": {
+   "min": 1,
+   "max": 200,
+   "default": 20
+  }
+ },
+ "confidence": "literature",
+ "reference_urls": [
+  "https://doi.org/10.1021/cr500486u"
+ ],
+ "quote_year": 2026,
+ "source": "Munnik, de Jongh and de Jong, Recent developments in the synthesis of supported catalysts, Chem. Rev. 115, 6687 (2015)",
+ "route_note": "Costed as one kiln pass plus flaring. Hydrogen consumption enters as a material.",
+ "uncosted_operations": [
+  "Hydrogen reduction furnace: costed at the indirect kiln rate"
+ ]
+}

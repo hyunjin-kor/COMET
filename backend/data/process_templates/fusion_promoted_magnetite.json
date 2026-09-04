@@ -1,0 +1,68 @@
+{
+ "id": "fusion_promoted_magnetite",
+ "name": "Oxide-Melt Fusion - Promoted Magnetite",
+ "description": "Magnetite ore and promoter oxides are melted together, cast, crushed and sieved to irregular grains, then reduced in the converter. The century-old route for ammonia synthesis iron and its wustite successor.",
+ "category": "Bulk Oxide",
+ "catalyst_domain": "thermal",
+ "example_catalysts": [
+  "Fe3O4-K2O-Al2O3-CaO",
+  "Fe1-xO wustite"
+ ],
+ "steps": [
+  "mixer_dry_blender",
+  "kiln_continuous_direct",
+  "mill",
+  "reactor_simple"
+ ],
+ "step_quantities": [
+  {
+   "step": "mixer_dry_blender",
+   "template_step_name": "Mixer, dry blender",
+   "quantity": 1.0,
+   "note": "Dry blending of ore and promoter oxides"
+  },
+  {
+   "step": "kiln_continuous_direct",
+   "template_step_name": "Kiln, continuous direct (300–1290 °C)",
+   "quantity": 1.0,
+   "note": "Melt fusion; the electric furnace is costed at the direct-fired kiln rate"
+  },
+  {
+   "step": "mill",
+   "template_step_name": "Mill",
+   "quantity": 1.0,
+   "note": "Crushing and sieving of the cast melt"
+  },
+  {
+   "step": "reactor_simple",
+   "template_step_name": "Reactor, simple (mixing)",
+   "quantity": 1.0,
+   "note": "Pre-reduction or passivation"
+  }
+ ],
+ "typical_parameters": {
+  "promoter_wt_pct": {
+   "min": 1,
+   "max": 6,
+   "default": 4
+  },
+  "order_size_tons": {
+   "min": 5,
+   "max": 200,
+   "default": 50
+  }
+ },
+ "confidence": "literature",
+ "reference_urls": [
+  "https://doi.org/10.1002/anie.201305812",
+  "https://doi.org/10.1002/14356007.o02_o11",
+  "https://doi.org/10.1142/8199"
+ ],
+ "quote_year": 2026,
+ "source": "Kandemir et al., Angew. Chem. Int. Ed. 52, 12723 (2013); Appl, Ammonia, Ullmann's Encyclopedia of Industrial Chemistry (2011); Liu, Ammonia Synthesis Catalysts, World Scientific (2013)",
+ "route_note": "No wet chemistry and no precursor salts, which is why fused iron is the cheapest catalyst per tonne in the library. The melt furnace is the one operation the Step Library approximates loosely.",
+ "uncosted_operations": [
+  "Electric fusion furnace (~1600 C melt): costed at the direct-fired kiln rate",
+  "Sieving to 1.5-3 mm grains: costed at the mill rate"
+ ]
+}

@@ -1,0 +1,73 @@
+{
+ "id": "washcoat_monolith",
+ "name": "Washcoating - Catalyst on Monolith / Honeycomb",
+ "description": "A milled slurry of the catalyst powder and binder is coated onto a ceramic or metal honeycomb, blown clear, dried and calcined. The route for automotive three-way, diesel oxidation and SCR converters.",
+ "category": "Structured",
+ "catalyst_domain": "thermal",
+ "example_catalysts": [
+  "Pt-Pd/Al2O3 on cordierite",
+  "Cu-SSZ-13 SCR washcoat",
+  "V2O5-WO3/TiO2 honeycomb"
+ ],
+ "steps": [
+  "mixer_slurry",
+  "mill",
+  "dryer_rotary_100_300C",
+  "kiln_continuous_indirect"
+ ],
+ "step_quantities": [
+  {
+   "step": "mixer_slurry",
+   "template_step_name": "Mixer, slurry",
+   "quantity": 1.0,
+   "note": "Washcoat slurry make-up"
+  },
+  {
+   "step": "mill",
+   "template_step_name": "Mill",
+   "quantity": 1.0,
+   "note": "Slurry milling to coating fineness"
+  },
+  {
+   "step": "dryer_rotary_100_300C",
+   "template_step_name": "Dryer, rotary (100–300 °C)",
+   "quantity": 1.0,
+   "note": "Drying of the coated substrate"
+  },
+  {
+   "step": "kiln_continuous_indirect",
+   "template_step_name": "Kiln, continuous indirect (300–1290 °C)",
+   "quantity": 1.0,
+   "note": "Calcination of the washcoat"
+  }
+ ],
+ "typical_parameters": {
+  "washcoat_loading_g_per_L": {
+   "min": 50,
+   "max": 250,
+   "default": 120
+  },
+  "calcination_temp_C": {
+   "min": 400,
+   "max": 600,
+   "default": 500
+  },
+  "order_size_tons": {
+   "min": 1,
+   "max": 100,
+   "default": 10
+  }
+ },
+ "confidence": "literature",
+ "reference_urls": [
+  "https://doi.org/10.1081/CR-120001807",
+  "https://doi.org/10.1007/s11244-013-0145-8"
+ ],
+ "quote_year": 2026,
+ "source": "Nijhuis, Beers, Vergunst et al., Preparation of monolithic catalysts, Catal. Rev. 43, 345 (2001); Beale et al., Top. Catal. 56, 1441 (2013)",
+ "route_note": "The coating pass itself has no Step Library rate, so this route costs the slurry, milling, drying and calcination and says so. The honeycomb substrate is a material input.",
+ "uncosted_operations": [
+  "Dip-coating or vacuum-assisted coating line: no Step Library rate, the coating pass is not costed",
+  "Honeycomb substrate (cordierite or metal foil) enters as a material, not a step"
+ ]
+}
