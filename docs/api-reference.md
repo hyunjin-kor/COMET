@@ -71,7 +71,7 @@ Monte Carlo simulation (100-10000 iterations).
 ## Prices
 
 ### GET /api/prices
-All metals with latest prices. `?basis=live` (default) returns the daily quotes; `?basis=reference` returns the latest stored monthly averages (IMF PCPS, Johnson Matthey), with `basis_month` on each row. The same parameter applies to `/api/prices/{symbol}`, `/api/prices/{symbol}/history`, `/api/prices/trends` and `/api/decision/benchmarks/{family}`; `POST /api/calculate` takes it as `price_basis` in the body.
+All metals with latest prices. `?basis=live` (default) returns the daily quotes; `?basis=reference` returns the latest stored monthly averages (IMF PCPS, Johnson Matthey), with `basis_month` on each row. The same parameter applies to `/api/prices/{symbol}`, `/api/prices/{symbol}/history`, `/api/prices/trends` and `/api/decision/benchmarks/{family}`; `POST /api/calculate` takes it as `price_basis` in the body. `GET /api/prices/supports?basis=reference` lists the support-material unit-value series (HS code, material, library keys, latest month and value).
 
 ### GET /api/prices/{symbol}
 Single metal price (e.g., `/api/prices/Pt`).

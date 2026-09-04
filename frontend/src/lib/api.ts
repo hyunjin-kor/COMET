@@ -488,6 +488,29 @@ export const fetchPriceTrends = (
   basis: PriceBasis = 'live',
 ) => request<PriceTrendsResponse>(`/prices/trends?period=${period}&basis=${basis}`);
 
+export interface SupportPriceSeries {
+  id: string;
+  hs: string;
+  name: string;
+  material: string;
+  library_keys: string[];
+  note: string;
+  unit: string;
+  price: number | null;
+  basis_month: string | null;
+  source: string | null;
+  months: number;
+}
+
+export interface SupportPricesResponse {
+  basis: PriceBasis;
+  source: string;
+  series: SupportPriceSeries[];
+}
+
+export const fetchSupportPrices = (basis: PriceBasis = 'reference') =>
+  request<SupportPricesResponse>(`/prices/supports?basis=${basis}`);
+
 export interface PriceUsageEntry {
   family: string;
   title: string;

@@ -112,6 +112,7 @@ COMET runs without any keys. Add them only if you want live price feeds:
 METALS_DEV_API_KEY=your_key      # metals.dev, free tier available
 METALPRICE_API_KEY=your_key      # metalpriceapi.com, free tier available
 BLS_API_KEY=your_key             # bls.gov, free with registration
+COMTRADE_API_KEY=your_key        # comtradeplus.un.org, free tier; monthly support-material unit values on the academic basis
 ```
 
 ## Method basis

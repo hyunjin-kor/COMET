@@ -20,6 +20,7 @@ from backend.core.price_fetcher import (
     fetch_johnson_matthey_history,
     fetch_westmetall_history,
     get_reference_prices,
+    load_support_series,
 )
 from backend.database import get_session
 from backend.models.metal_price import MetalPrice
@@ -135,7 +136,7 @@ def get_all_prices(
     """Latest price for every metal in one basis (stored rows first, anchors for the rest)."""
     stmt = (
         select(MetalPrice)
-        .where(MetalPrice.basis == basis)
+        .where(MetalPrice.basis == basis, MetalPrice.symbol.in_(TRACKED_SYMBOLS))
         .order_by(MetalPrice.fetched_at.desc())
     )
     db_prices = session.exec(stmt).all()
@@ -347,6 +348,39 @@ def _usage_map() -> dict[str, list[dict]]:
         for symbol in matched:
             usage[symbol].append(entry)
     return usage
+
+
+@router.get("/supports")
+def get_support_prices(
+    basis: str = Query(default="reference", pattern=_BASIS_PATTERN),
+    session: Session = Depends(get_session),
+):
+    """Support-material unit-value series with their latest stored month.
+
+    Only the reference basis carries these; on the live basis every series
+    reports no value, since supports have no daily quote.
+    """
+    catalog = load_support_series()
+    out = []
+    for entry in catalog["series"]:
+        latest = None
+        if basis == "reference":
+            rows = _reference_rows(session, entry["id"])
+            latest = rows[-1] if rows else None
+        out.append({
+            "id": entry["id"],
+            "hs": entry["hs"],
+            "name": entry["name"],
+            "material": entry["material"],
+            "library_keys": entry.get("library_keys", []),
+            "note": entry.get("note", ""),
+            "unit": catalog["unit"],
+            "price": latest.price if latest else None,
+            "basis_month": latest.fetched_at.strftime("%Y-%m") if latest else None,
+            "source": latest.source if latest else None,
+            "months": len(_reference_rows(session, entry["id"])) if basis == "reference" else 0,
+        })
+    return {"basis": basis, "source": catalog["source"], "series": out}
 
 
 @router.get("/usage")

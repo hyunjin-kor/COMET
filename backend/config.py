@@ -16,6 +16,8 @@ class Settings(BaseSettings):
     metals_dev_api_key: str = ""
     metalprice_api_key: str = ""
     bls_api_key: str = ""
+    # UN Comtrade Plus subscription key; enables monthly support-material unit values.
+    comtrade_api_key: str = ""
 
     # Scheduler
     price_update_hour: int = 6  # UTC hour to fetch daily prices

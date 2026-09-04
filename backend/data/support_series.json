@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "description": "Monthly import unit values for support and precursor materials on the academic (reference) price basis. Each series is one HS 6-digit code reported by the United States (reporter 842) for imports from the world (partner 0), customs value divided by net weight. All grades and partners are combined, so a series is a bulk market level, not a catalyst-grade quote.",
+  "source": "UN Comtrade Plus, https://comtradeplus.un.org (API key required; free tier)",
+  "reporter_code": "842",
+  "flow_code": "M",
+  "unit": "$/kg",
+  "series": [
+    {
+      "id": "HS281820",
+      "hs": "281820",
+      "name": "Calcined alumina (non-corundum), U.S. import unit value",
+      "material": "Al2O3",
+      "library_keys": ["lit:comtrade-calcined-alumina-2024", "lit:usgs-alumina-2025"],
+      "note": "Dominated by smelter-grade flows; catalyst-carrier gamma alumina trades above this level."
+    },
+    {
+      "id": "HS281810",
+      "hs": "281810",
+      "name": "Artificial corundum (alpha-alumina), U.S. import unit value",
+      "material": "alpha-Al2O3",
+      "library_keys": [],
+      "note": "Abrasive and refractory grades dominate the volume."
+    },
+    {
+      "id": "HS282300",
+      "hs": "282300",
+      "name": "Titanium oxides, U.S. import unit value",
+      "material": "TiO2",
+      "library_keys": ["lit:usgs-tio2-pigment-2025"],
+      "note": "Pigment grade dominates; anatase catalyst grades trade above this level."
+    },
+    {
+      "id": "HS281122",
+      "hs": "281122",
+      "name": "Silicon dioxide, U.S. import unit value",
+      "material": "SiO2",
+      "library_keys": [],
+      "note": "Precipitated, fumed and gel silicas combined."
+    },
+    {
+      "id": "HS380210",
+      "hs": "380210",
+      "name": "Activated carbon, U.S. import unit value",
+      "material": "Activated carbon",
+      "library_keys": ["lit:comtrade-activated-carbon-2024"],
+      "note": "All grades combined; catalyst-support grades trade above this level."
+    },
+    {
+      "id": "HS280300",
+      "hs": "280300",
+      "name": "Carbon black, U.S. import unit value",
+      "material": "Carbon black",
+      "library_keys": ["lit:comtrade-carbon-black-2024"],
+      "note": "Rubber grades dominate; conductive grades trade above this level."
+    },
+    {
+      "id": "HS284210",
+      "hs": "284210",
+      "name": "Synthetic zeolites and aluminosilicates, U.S. import unit value",
+      "material": "Zeolite",
+      "library_keys": ["lit:comtrade-synthetic-zeolite-2024"],
+      "note": "HS 2842.10 is broader than zeolites (detergent builders, molecular sieves)."
+    },
+    {
+      "id": "HS251990",
+      "hs": "251990",
+      "name": "Magnesia (fused or dead-burned), U.S. import unit value",
+      "material": "MgO",
+      "library_keys": ["lit:comtrade-magnesia-2024"],
+      "note": "Refractory grades dominate the volume."
+    },
+    {
+      "id": "HS284610",
+      "hs": "284610",
+      "name": "Cerium compounds, U.S. import unit value",
+      "material": "CeO2",
+      "library_keys": [],
+      "note": "Oxide, carbonate and chloride combined; kept beside the USGS cerium-oxide anchor rather than replacing it."
+    },
+    {
+      "id": "HS282010",
+      "hs": "282010",
+      "name": "Manganese dioxide, U.S. import unit value",
+      "material": "MnO2",
+      "library_keys": ["lit:comtrade-mno2-2024"],
+      "note": "Battery and chemical grades combined."
+    },
+    {
+      "id": "HS281990",
+      "hs": "281990",
+      "name": "Chromium oxides and hydroxides (excluding trioxide), U.S. import unit value",
+      "material": "Cr2O3",
+      "library_keys": ["lit:comtrade-chromium-oxide-2024"],
+      "note": "Pigment and refractory grades combined."
+    }
+  ]
+}
