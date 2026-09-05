@@ -214,9 +214,13 @@ export default function CalculatorResult() {
 
   const snapshotState = snapshot;
   const { result } = snapshot;
+  const benchmarkCandidate =
+    snapshot.benchmarkCandidate && snapshot.benchmarkCandidate.catalyst_domain === result.input_summary.catalyst_domain
+      ? snapshot.benchmarkCandidate
+      : null;
   const altPrice = unit === 'kg' ? result.summary.estimated_price_per_lb : result.summary.estimated_price_per_kg;
   const altLabel = unit === 'kg' ? '/lb' : '/kg';
-  const generatedAt = new Date(snapshot.generatedAt).toLocaleString('en-US', {
+  const generatedAt = new Date(snapshot.generatedAt).toLocaleString(lang === 'ko' ? 'ko-KR' : 'en-US', {
     month: 'short',
     day: 'numeric',
     hour: 'numeric',
@@ -392,7 +396,7 @@ export default function CalculatorResult() {
           <div className="rounded-[22px] border border-slate-900/8 bg-white/62 p-4">
             <div className="cp-subtle-label">{t('Preparation basis')}</div>
             <div className="mt-2 text-base font-semibold text-[#191f28]">
-              {routeSummary?.name ?? snapshotState.benchmarkCandidate?.route.name ?? t('Custom route')}
+              {routeSummary?.name ?? benchmarkCandidate?.route.name ?? t('Custom route')}
             </div>
             <div className="mt-3 space-y-1">
               <RailRow
@@ -408,7 +412,7 @@ export default function CalculatorResult() {
               <RailRow
                 label={t('Mode')}
                 value={routeSummary?.manufacturing_mode ? modeDisplay(routeSummary.manufacturing_mode) : t('Manual selection')}
-                detail={t(applicationDisplay(routeSummary?.application_family ?? snapshotState.benchmarkCandidate?.application_family ?? catalystDomain))}
+                detail={t(applicationDisplay(routeSummary?.application_family ?? benchmarkCandidate?.application_family ?? catalystDomain))}
               />
               <RailRow
                 label={t('Price basis')}
@@ -470,7 +474,7 @@ export default function CalculatorResult() {
                 <span className="cp-chip-dark">{t(domainDisplay(catalystDomain))}</span>
                 <span className="cp-chip-dark">{lang === 'ko' ? t(result.step_method.scale) : `${result.step_method.scale} scale`}</span>
                 <span className="cp-chip-dark">{generatedAt}</span>
-                {snapshotState.benchmarkCandidate ? <span className="cp-chip-dark">{t('Reference-loaded')}</span> : null}
+                {benchmarkCandidate ? <span className="cp-chip-dark">{t('Reference-loaded')}</span> : null}
               </div>
             </div>
           </div>
@@ -547,21 +551,21 @@ export default function CalculatorResult() {
               <MetricTile
                 label={t('Gross metal value')}
                 value={formatPrice(toDisplay(spentCatalyst.V_metal_per_lb))}
-                detail={`Per${catLabel}`}
+                detail={lang === 'ko' ? `촉매 ${unit}당` : `Per${catLabel}`}
               />
               <MetricTile
                 label={t('Recovery cost')}
                 value={formatPrice(toDisplay(spentCatalyst.C_recovery_per_lb))}
-                detail={`Per${catLabel}`}
+                detail={lang === 'ko' ? `촉매 ${unit}당` : `Per${catLabel}`}
               />
               <MetricTile
                 label={t('Reclaimed value')}
                 value={formatPrice(toDisplay(spentCatalyst.V_reclaimed_per_lb))}
-                detail={`Per${catLabel}`}
+                detail={lang === 'ko' ? `촉매 ${unit}당` : `Per${catLabel}`}
               />
               <MetricTile
                 label={t('Loss basis')}
-                value={`${(spentCatalyst.loss_use_pct * 100).toFixed(1)}% / ${(spentCatalyst.loss_refining_pct * 100).toFixed(1)}%`}
+                value={`${spentCatalyst.loss_use_pct.toFixed(1)}% / ${spentCatalyst.loss_refining_pct.toFixed(1)}%`}
                 detail={t('Use loss / refining loss')}
               />
             </div>
@@ -586,9 +590,19 @@ export default function CalculatorResult() {
         </div>
 
         <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
-          <MetricTile label={t('Active metals')} value={String(snapshotState.activeMetalCount)} detail={t('Named active inputs')} />
-          <MetricTile label={t('Active-phase loading')} value={`${snapshotState.nonSupportWt.toFixed(1)} wt%`} detail={lang === 'ko' ? `담체 ${snapshotState.supportWtPct.toFixed(1)} wt%` : `Support closes at ${snapshotState.supportWtPct.toFixed(1)} wt%`} />
-          <MetricTile label={t('Support')} value={snapshotState.selectedSupportName ?? t('Pending')} detail={t('Current support basis')} />
+          {electrodeModel ? (
+            <>
+              <MetricTile label={t('Catalyst powder')} value={resolvedMaterials.find((material) => material.used_for === 'electrode:catalyst_powder')?.name ?? composition} detail={t('Selected catalyst powder')} />
+              <MetricTile label={t('Catalyst loading')} value={`${Number(electrodeModel.catalyst_loading_mg_cm2).toFixed(2)} mg/cm²`} detail={t('Dry catalyst loading')} />
+              <MetricTile label={t('Active area')} value={`${Number(electrodeModel.active_area_cm2).toFixed(1)} cm²`} detail={t('Per modeled layer')} />
+            </>
+          ) : (
+            <>
+              <MetricTile label={t('Active metals')} value={String(snapshotState.activeMetalCount)} detail={t('Named active inputs')} />
+              <MetricTile label={t('Active-phase loading')} value={`${snapshotState.nonSupportWt.toFixed(1)} wt%`} detail={lang === 'ko' ? `담체 ${snapshotState.supportWtPct.toFixed(1)} wt%` : `Support closes at ${snapshotState.supportWtPct.toFixed(1)} wt%`} />
+              <MetricTile label={t('Support')} value={snapshotState.selectedSupportName ?? t('Pending')} detail={t('Current support basis')} />
+            </>
+          )}
           <MetricTile label={t('Preparation steps')} value={String(snapshotState.stepLabels.length)} detail={t('Selected preparation steps')} />
         </div>
 
@@ -645,18 +659,18 @@ export default function CalculatorResult() {
           </div>
         </div>
 
-        {snapshotState.benchmarkCandidate ? (
+        {benchmarkCandidate ? (
           <div className="mt-4 rounded-[24px] border border-emerald-200 bg-emerald-50/80 p-4">
             <div className="cp-subtle-label !text-emerald-700">{t('Reference baseline')}</div>
-            <div className="mt-2 cp-heading-sm">{snapshotState.benchmarkCandidate.title}</div>
-            <div className="mt-2 text-sm leading-6 text-emerald-900">{snapshotState.benchmarkCandidate.screening_summary}</div>
+            <div className="mt-2 cp-heading-sm">{benchmarkCandidate.title}</div>
+            <div className="mt-2 text-sm leading-6 text-emerald-900">{benchmarkCandidate.screening_summary}</div>
             <div className="mt-3 flex flex-wrap gap-2">
-              <span className="cp-chip">{snapshotState.benchmarkCandidate.archetype}</span>
-              <span className="cp-chip">{snapshotState.benchmarkCandidate.route.name}</span>
+              <span className="cp-chip">{benchmarkCandidate.archetype}</span>
+              <span className="cp-chip">{benchmarkCandidate.route.name}</span>
               <span className="cp-chip">
-                {t(snapshotState.benchmarkCandidate.catalyst_domain === 'electrocatalyst' ? 'Electrocatalyst' : 'Thermocatalyst')}
+                {t(benchmarkCandidate.catalyst_domain === 'electrocatalyst' ? 'Electrocatalyst' : 'Thermocatalyst')}
               </span>
-              <span className="cp-chip">{t('Evidence')} {snapshotState.benchmarkCandidate.scores.evidence.toFixed(1)}</span>
+              <span className="cp-chip">{t('Evidence')} {benchmarkCandidate.scores.evidence.toFixed(1)}</span>
             </div>
           </div>
         ) : null}

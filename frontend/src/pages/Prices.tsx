@@ -89,12 +89,12 @@ function displayTrackedUnit(rawUnit: string, displayUnit: Unit) {
   return rawUnit;
 }
 
-function formatSyncStamp(value: string | null) {
+function formatSyncStamp(value: string | null, locale = 'en-US') {
   if (!value) return 'Awaiting live refresh';
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return 'Awaiting live refresh';
 
-  return date.toLocaleString('en-US', {
+  return date.toLocaleString(locale, {
     month: 'short',
     day: 'numeric',
     hour: 'numeric',
@@ -620,7 +620,7 @@ export default function Prices() {
                       ? `IMF PCPS·Johnson Matthey 월평균, 금속 ${monthlyQuoteCount}종${basisMonth ? `, 최근 월 ${basisMonth}` : ''}`
                       : `IMF PCPS and Johnson Matthey monthly averages, ${monthlyQuoteCount} metals${basisMonth ? `, latest month ${basisMonth}` : ''}`)
                     : latestFetchedAt
-                      ? (lang === 'ko' ? `금속 ${liveQuoteCount}종 실시간 갱신 ${formatSyncStamp(latestFetchedAt)}` : `${liveQuoteCount} metals updated live ${formatSyncStamp(latestFetchedAt)}`)
+                      ? (lang === 'ko' ? `금속 ${liveQuoteCount}종 실시간 갱신 ${formatSyncStamp(latestFetchedAt, 'ko-KR')}` : `${liveQuoteCount} metals updated live ${formatSyncStamp(latestFetchedAt)}`)
                       : t('Indexed and manual prices are available even before a live refresh.')}
                 </div>
               </div>
@@ -845,7 +845,7 @@ export default function Prices() {
           <div className="flex flex-col gap-4 border-b border-white/10 pb-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <div className="cp-subtle-label !text-slate-400">{t('Selected Metal')}</div>
-              <h2 className="font-display mt-2 text-[clamp(1.75rem,2.4vw,2.35rem)] leading-[1.0] text-white">{selectedRow?.name ?? 'Choose a metal'}</h2>
+              <h2 className="font-display mt-2 text-[clamp(1.75rem,2.4vw,2.35rem)] leading-[1.0] text-white">{selectedRow ? t(selectedRow.name) : t('Choose a metal')}</h2>
               <div className="mt-2 flex flex-wrap items-center gap-2">
                 {selectedRow ? <SourceBadge sourceType={selectedRow.source_type} /> : null}
                 {pctChange != null ? (

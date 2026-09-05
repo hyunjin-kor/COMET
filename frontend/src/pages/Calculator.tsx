@@ -444,11 +444,13 @@ function electrocatalystTemplateRank(
         ? 1
         : 2;
 
-  if (applicationFamily !== 'electrolyzer') {
+  const isPemElectrolyzer = templateId === 'pem_electrolyzer_ccm';
+  const isDmfc = templateId === 'dmfc_gde_route';
+  const isPemRoute = templateId === 'pem_fuel_cell_ccm' || isDmfc;
+
+  if (applicationFamily !== 'electrolyzer' && !isPemRoute) {
     return exactFamilyRank;
   }
-
-  const isPemElectrolyzer = templateId === 'pem_electrolyzer_ccm';
   const isPfsa = text.includes('pfsa') || text.includes('aquivion');
   const isAem = text.includes('aem') || text.includes('piperion') || text.includes('sustainion') || text.includes('pdt');
   const isTitanium = text.includes('titanium') || text.includes('ptl') || text.includes('frit');
@@ -456,12 +458,13 @@ function electrocatalystTemplateRank(
   const isCarbon = text.includes('carbon');
 
   if (category === 'Ionomer' || category === 'Membrane') {
-    if (isPemElectrolyzer) return isPfsa ? 0 : isAem ? 1 : 2;
+    if (isPemElectrolyzer || isPemRoute) return isPfsa ? 0 : isAem ? 1 : 2;
     return isAem ? 0 : isPfsa ? 1 : 2;
   }
 
   if (category === 'Gas Diffusion Layer') {
     if (isPemElectrolyzer) return isTitanium ? 0 : isCarbon ? 1 : isNickel ? 2 : 3;
+    if (isPemRoute) return isCarbon ? 0 : isTitanium ? 1 : isNickel ? 2 : 3;
     return isNickel ? 0 : isCarbon ? 1 : isTitanium ? 2 : 3;
   }
 
@@ -471,6 +474,11 @@ function electrocatalystTemplateRank(
       if (symbol === 'ru') return 1;
       if (symbol === 'ptir') return 2;
       return 3;
+    }
+    if (isPemRoute) {
+      if (symbol === 'ptru') return isDmfc ? 0 : 1;
+      if (symbol === 'pt') return isDmfc ? 1 : 0;
+      return 2;
     }
     if (symbol === 'ni') return 0;
     if (symbol === 'ag') return 1;
@@ -687,7 +695,9 @@ export default function Calculator() {
         ]);
         setElectroMaterials(materials);
         setElectroTemplates(
-          templates.filter((template) => !template.application_family || template.application_family === applicationFamily || template.application_family === 'general'),
+          applicationFamily === 'general'
+            ? templates
+            : templates.filter((template) => !template.application_family || template.application_family === applicationFamily || template.application_family === 'general'),
         );
       } catch {
         setElectroMaterials([]);
@@ -794,7 +804,7 @@ export default function Calculator() {
       nextPatch.substrateMaterialKey = substratePreferred;
     }
     if (electroTemplates.length > 0 && !electroTemplates.some((template) => template.id === electrocatalystConfig.templateId)) {
-      nextPatch.templateId = electroTemplates[0]?.id ?? electrocatalystConfig.templateId;
+      nextPatch.templateId = (electroTemplates.find((template) => template.id.startsWith('pem_')) ?? electroTemplates[0])?.id ?? electrocatalystConfig.templateId;
     }
 
     if (Object.keys(nextPatch).length > 0) {
@@ -869,6 +879,24 @@ export default function Calculator() {
   }, [basis]);
 
   const activeBenchmark = selectedBenchmark?.catalyst_domain === catalystDomain ? selectedBenchmark : null;
+  const routeStepsFor = (template: ProcessTemplate) => {
+    const fitted = templateCosts[template.id]?.steps_fitted;
+    return fitted?.length ? fitted : template.steps;
+  };
+  const sameSteps = (left: string[], right: string[]) => left.length === right.length && left.every((key) => right.includes(key));
+  const matchedThermalTemplate =
+    catalystDomain === 'thermal' ? thermalTemplates.find((template) => sameSteps(routeStepsFor(template), steps)) ?? null : null;
+  const benchmarkTemplate = activeBenchmark?.route.calculator_template_id
+    ? thermalTemplates.find((template) => template.id === activeBenchmark.route.calculator_template_id) ?? null
+    : null;
+  const thermalTemplateId = matchedThermalTemplate && matchedThermalTemplate.id !== benchmarkTemplate?.id ? matchedThermalTemplate.id : undefined;
+  const thermalRouteLabel = thermalTemplateId
+    ? matchedThermalTemplate?.name ?? t('Manual step selection')
+    : activeBenchmark
+      ? benchmarkTemplate && !sameSteps(routeStepsFor(benchmarkTemplate), steps)
+        ? `${activeBenchmark.route.name} (${t('edited')})`
+        : activeBenchmark.route.name
+      : t('Manual step selection');
   const activeElectroTemplate =
     catalystDomain === 'electrocatalyst'
       ? electroTemplates.find((template) => template.id === electrocatalystConfig.templateId) ?? null
@@ -1189,6 +1217,7 @@ export default function Calculator() {
         input = {
           components,
           steps,
+          template_id: thermalTemplateId,
           catalyst_domain: catalystDomain,
           application_family: applicationFamily,
           order_size_tons: orderSize,
@@ -1315,9 +1344,9 @@ export default function Calculator() {
                         : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
                     }`}
                   >
-                    <div className="font-semibold">{option.label}</div>
+                    <div className="font-semibold">{t(option.label)}</div>
                     <div className={`mt-1 text-xs leading-5 ${applicationFamily === option.value ? 'text-slate-300' : 'text-slate-600'}`}>
-                      {option.detail}
+                      {t(option.detail)}
                     </div>
                   </button>
                 ))}
@@ -1333,7 +1362,7 @@ export default function Calculator() {
               <label className="block">
                 <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">{t('Catalyst powder')}</div>
                 <select value={electrocatalystConfig.catalystMaterialKey} onChange={(event) => updateElectroConfig({ catalystMaterialKey: event.target.value })} className="input-base mt-2">
-                  <option value="">Select catalyst powder</option>
+                  <option value="">{t('Select catalyst powder')}</option>
                   {catalystPowders.map((material) => (
                     <option key={String(material.id)} value={String(material.id)}>
                       {calculatorMaterialLabel(material)}
@@ -1345,7 +1374,7 @@ export default function Calculator() {
               <label className="block">
                 <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">{t('Ionomer')}</div>
                 <select value={electrocatalystConfig.ionomerMaterialKey} onChange={(event) => updateElectroConfig({ ionomerMaterialKey: event.target.value })} className="input-base mt-2">
-                  <option value="">Select ionomer</option>
+                  <option value="">{t('Select ionomer')}</option>
                   {ionomerOptions.map((material) => (
                     <option key={String(material.id)} value={String(material.id)}>
                       {calculatorMaterialLabel(material)}
@@ -1357,7 +1386,7 @@ export default function Calculator() {
               <label className="block">
                 <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">{t('Membrane')}</div>
                 <select value={electrocatalystConfig.membraneMaterialKey} onChange={(event) => updateElectroConfig({ membraneMaterialKey: event.target.value })} className="input-base mt-2">
-                  <option value="">Select membrane</option>
+                  <option value="">{t('Select membrane')}</option>
                   {membraneOptions.map((material) => (
                     <option key={String(material.id)} value={String(material.id)}>
                       {calculatorMaterialLabel(material)}
@@ -1369,7 +1398,7 @@ export default function Calculator() {
               <label className="block">
                 <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">{t('Substrate / GDL')}</div>
                 <select value={electrocatalystConfig.substrateMaterialKey} onChange={(event) => updateElectroConfig({ substrateMaterialKey: event.target.value })} className="input-base mt-2">
-                  <option value="">Select substrate / GDL</option>
+                  <option value="">{t('Select substrate / GDL')}</option>
                   {substrateOptions.map((material) => (
                     <option key={String(material.id)} value={String(material.id)}>
                       {calculatorMaterialLabel(material)}
@@ -1392,7 +1421,7 @@ export default function Calculator() {
               </label>
 
               <label className="block">
-                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">Catalyst loading</div>
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">{t('Catalyst loading')}</div>
                 <div className="mt-2 flex items-center gap-2">
                   <input type="number" min="0.01" step="0.01" value={electrocatalystConfig.catalystLoadingMgCm2} onChange={(event) => updateElectroConfig({ catalystLoadingMgCm2: Number(event.target.value) })} className="input-base text-right font-mono" />
                   <span className="text-xs text-slate-600">mg/cm²</span>
@@ -1400,25 +1429,25 @@ export default function Calculator() {
               </label>
 
               <label className="block sm:col-span-2">
-                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">Ionomer / catalyst ratio</div>
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">{t('Ionomer / catalyst ratio')}</div>
                 <div className="mt-2 flex items-center gap-2">
                   <input type="number" min="0" step="0.05" value={electrocatalystConfig.ionomerToCatalystRatio} onChange={(event) => updateElectroConfig({ ionomerToCatalystRatio: Number(event.target.value) })} className="input-base max-w-[180px] text-right font-mono" />
-                  <span className="text-xs text-slate-600">dry ionomer mass / catalyst powder mass</span>
+                  <span className="text-xs text-slate-600">{t('dry ionomer mass / catalyst powder mass')}</span>
                 </div>
               </label>
 
               <label className="block sm:col-span-2">
-                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">Manufacturing scenario</div>
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">{t('Manufacturing scenario')}</div>
                 <select value={electrocatalystConfig.manufacturingScenario} onChange={(event) => updateElectroConfig({ manufacturingScenario: event.target.value as ElectrocatalystDraft['manufacturingScenario'] })} className="input-base mt-2">
-                  <option value="">Materials only (no line cost)</option>
-                  <option value="rnd_batch">R&amp;D batch line — $0.123/cm² (Hog 2026)</option>
-                  <option value="pilot_roll_to_roll">Pilot roll-to-roll — $0.006/cm² (Hog 2026)</option>
+                  <option value="">{t('Materials only (no line cost)')}</option>
+                  <option value="rnd_batch">{t('R&D batch line — $0.123/cm² (Hog 2026)')}</option>
+                  <option value="pilot_roll_to_roll">{t('Pilot roll-to-roll — $0.006/cm² (Hog 2026)')}</option>
                 </select>
-                <div className="mt-1 text-xs text-slate-600">Adds equipment, labor, and facility cost per cm² of active area. EUR→USD at 1.1306 (2025 avg).</div>
+                <div className="mt-1 text-xs text-slate-600">{t('Adds equipment, labor, and facility cost per cm² of active area. EUR→USD at 1.1306 (2025 avg).')}</div>
               </label>
 
               <label className="block sm:col-span-2">
-                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">Preparation template</div>
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">{t('Preparation template')}</div>
                 <select value={electrocatalystConfig.templateId} onChange={(event) => updateElectroConfig({ templateId: event.target.value })} className="input-base mt-2">
                   {electroTemplates.map((template) => (
                     <option key={template.id} value={template.id}>
@@ -1444,7 +1473,7 @@ export default function Calculator() {
             <div className="mt-2 cp-heading-sm">{activeElectroTemplate.name}</div>
             <div className="mt-2 text-sm leading-6 text-emerald-900">{activeElectroTemplate.description}</div>
             <div className="mt-3 flex flex-wrap gap-2">
-              <span className="cp-chip">{applicationFamilyLabel(applicationFamily)}</span>
+              <span className="cp-chip">{t(applicationFamilyLabel(applicationFamily))}</span>
               {activeElectroTemplate.manufacturing_mode ? <span className="cp-chip">{activeElectroTemplate.manufacturing_mode}</span> : null}
               <span className="cp-chip">{activeElectroTemplate.steps.length} steps</span>
             </div>
@@ -1515,7 +1544,7 @@ export default function Calculator() {
 
   function renderWorkspaceSummary() {
     const latestGenerated = latestSnapshotForCurrentCase
-      ? new Date(latestSnapshotForCurrentCase.generatedAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })
+      ? new Date(latestSnapshotForCurrentCase.generatedAt).toLocaleTimeString(lang === 'ko' ? 'ko-KR' : 'en-US', { hour: 'numeric', minute: '2-digit', hour12: true })
       : null;
     const manualOverrideCount = catalystDomain === 'electrocatalyst'
       ? 0
@@ -1528,12 +1557,12 @@ export default function Calculator() {
     const preparationSummary =
       catalystDomain === 'electrocatalyst'
         ? activeElectroTemplate?.name ?? t('Select a preparation template')
-        : activeBenchmark?.route.name ?? t('Manual step selection');
+        : thermalRouteLabel;
     const recoverySummary = catalystDomain === 'thermal'
       ? includeSpentValue
         ? `${t('Recovery credit on')} / ${reactorType === 'fixed' ? t('Fixed bed') : t('Slurry')} / ${catalystBulkDensity.toFixed(1)} lb/ft³`
         : t('Recovery credit off')
-      : applicationFamilyLabel(applicationFamily);
+      : t(applicationFamilyLabel(applicationFamily));
 
     return (
       <section className="surface-card p-4">
@@ -1593,7 +1622,7 @@ export default function Calculator() {
             <div className="mt-2 text-sm leading-6 text-slate-600">{recipeSummary}</div>
             <div className="mt-3 flex flex-wrap gap-2">
               <span className="cp-chip">{t(catalystDomainLabel(catalystDomain))}</span>
-              {catalystDomain === 'electrocatalyst' ? <span className="cp-chip">{applicationFamilyLabel(applicationFamily)}</span> : null}
+              {catalystDomain === 'electrocatalyst' ? <span className="cp-chip">{t(applicationFamilyLabel(applicationFamily))}</span> : null}
               {activeBenchmark ? <span className="cp-chip">{activeBenchmark.title}</span> : null}
             </div>
           </div>
@@ -1641,7 +1670,9 @@ export default function Calculator() {
             </div>
             <div className="mt-2 text-xs leading-6 text-slate-300">
               {latestSnapshotForCurrentCase
-                ? `Generated ${latestGenerated}. ${latestSnapshotForCurrentCase.selectedSupportName ?? 'Support'} remained the active basis.`
+                ? lang === 'ko'
+                  ? `${latestGenerated} 계산. 담체 ${latestSnapshotForCurrentCase.selectedSupportName ?? '미지정'} 기준.`
+                  : `Generated ${latestGenerated}. ${latestSnapshotForCurrentCase.selectedSupportName ?? 'Support'} remained the active basis.`
                 : t('No result for this catalyst class yet. Run the estimate once to populate this summary.')}
             </div>
           </div>
@@ -1861,7 +1892,7 @@ export default function Calculator() {
             <div className="mt-2 leading-6">{activeBenchmark.screening_summary}</div>
             <div className="mt-3 flex flex-wrap gap-2">
               <span className="cp-chip">{catalystDomainLabel(activeBenchmark.catalyst_domain)}</span>
-              <span className="cp-chip">{applicationFamilyLabel(activeBenchmark.application_family)}</span>
+              <span className="cp-chip">{t(applicationFamilyLabel(activeBenchmark.application_family))}</span>
             </div>
           </div>
         ) : null}

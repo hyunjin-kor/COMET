@@ -515,13 +515,13 @@ export default function Uncertainty() {
 
               <div className="mt-5 grid gap-3 sm:grid-cols-7">
                 {[
-                  ['Min', result.min],
+                  [t('Min'), result.min],
                   ['P5', result.p5],
                   ['P25', result.p25],
-                  ['Median', result.median],
+                  [t('Median'), result.median],
                   ['P75', result.p75],
                   ['P95', result.p95],
-                  ['Max', result.max],
+                  [t('Max'), result.max],
                 ].map(([label, value]) => (
                   <div key={String(label)} className="rounded-[22px] border border-slate-900/8 bg-white/62 px-3 py-4 text-center">
                     <div className="cp-subtle-label">{label}</div>

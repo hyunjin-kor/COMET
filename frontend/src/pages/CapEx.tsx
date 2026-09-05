@@ -339,11 +339,11 @@ export default function CapEx() {
               <div className="mt-2 text-sm text-slate-300">{t('CatCost Ch.7 factored estimate')}</div>
               <div className="mt-4 text-3xl font-display">{formatUSD(result.summary.total_capital_investment_usd)}</div>
               <div className="mt-2 text-xs leading-6 text-slate-300">
-                FCI {formatUSD(result.summary.fixed_capital_investment_usd)} + working capital{' '}
+                FCI {formatUSD(result.summary.fixed_capital_investment_usd)} + {t('working capital')}{' '}
                 {formatUSD(result.capex.working_capital)}.
               </div>
               <div className="mt-3 flex flex-wrap gap-2">
-                <span className="cp-chip-dark">PE basis</span>
+                <span className="cp-chip-dark">{t('PE basis')}</span>
                 <span className="cp-chip-dark">{formatUSD(result.summary.purchased_equipment_cost_usd)}</span>
                 <span className="cp-chip-dark">FCI/PE {result.summary.fci_to_purchased_equipment_ratio.toFixed(2)}x</span>
               </div>
@@ -356,12 +356,12 @@ export default function CapEx() {
             <MetricTile
               label={t('Fixed Capital Investment')}
               value={formatUSD(result.capex.fixed_capital_investment)}
-              detail={`Direct ${formatUSD(result.capex.direct_capital)} + indirect ${formatUSD(result.capex.indirect_capital)}`}
+              detail={`${t('Direct')} ${formatUSD(result.capex.direct_capital)} + ${t('indirect')} ${formatUSD(result.capex.indirect_capital)}`}
             />
             <MetricTile
               label={t('Working capital')}
               value={formatUSD(result.capex.working_capital)}
-              detail={`${(result.capex.working_capital / Math.max(result.capex.purchased_equipment, 1) * 100).toFixed(0)}% of PE — typical 70-89%`}
+              detail={`${(result.capex.working_capital / Math.max(result.capex.purchased_equipment, 1) * 100).toFixed(0)}% ${t('of PE, typical 70-89%')}`}
             />
           </div>
 
