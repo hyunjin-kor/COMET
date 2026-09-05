@@ -247,7 +247,7 @@ export default function Compare() {
   }
 
   const winner = benchmark.winner;
-  const updatedAt = benchmark.price_basis_updated_at ? new Date(benchmark.price_basis_updated_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true }) : 'Reference basis';
+  const updatedAt = benchmark.price_basis_updated_at ? new Date(benchmark.price_basis_updated_at).toLocaleString(lang === 'ko' ? 'ko-KR' : 'en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true }) : 'Reference basis';
 
   return (
     <div className="flex flex-col gap-4">
@@ -355,7 +355,7 @@ export default function Compare() {
                 <div className="cp-subtle-label">{t('Preparation method')}</div>
                 <div className="mt-2 cp-heading-sm">{activeCandidate.route.name}</div>
                 <div className="mt-2 text-sm leading-7 text-slate-600">{activeCandidate.route.route_note}</div>
-                <div className="mt-3 flex flex-wrap gap-2"><span className="cp-chip">{activeCandidate.route.manufacturing_mode}</span><span className="cp-chip">{activeCandidate.summary.temperature_window_c[0]}-{activeCandidate.summary.temperature_window_c[1]} °C</span><span className="cp-chip">{lang === 'ko' ? `${t(activeCandidate.summary.scale)} 규모` : `${activeCandidate.summary.scale} scale`}</span></div>
+                <div className="mt-3 flex flex-wrap gap-2"><span className="cp-chip">{activeCandidate.route.manufacturing_mode}</span><span className="cp-chip">{activeCandidate.summary.temperature_window_c[0]}-{activeCandidate.summary.temperature_window_c[1]} °C</span><span className="cp-chip">{lang === 'ko' ? t(activeCandidate.summary.scale) : `${activeCandidate.summary.scale} scale`}</span></div>
                 <div className="mt-4 grid gap-3 md:grid-cols-3">{([['Preprocess', activeCandidate.route.preprocess], ['Synthesis', activeCandidate.route.synthesis], ['Postprocess', activeCandidate.route.postprocess]] as Array<[string, string[]]>).map(([label, items]) => <div key={label} className="rounded-[22px] border border-slate-900/8 bg-white/64 p-3"><div className="cp-subtle-label">{t(label)}</div><div className="mt-3 space-y-2">{items.map((item) => <div key={item} className="text-sm leading-6 text-slate-700">{item}</div>)}</div></div>)}</div>
               </div>
               <div className="surface-ghost p-4">
