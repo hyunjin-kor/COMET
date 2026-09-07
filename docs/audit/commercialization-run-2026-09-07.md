@@ -25,8 +25,8 @@ No source changed for this initial log. Reused evidence is explicitly distinguis
 | C05 | Complete | 26a283e | 30 crossed price/evidence families,21 manufacturing scenarios,9 electrode scenarios; byte-identical replay;802 full tests passed |
 | C06 | Evidence extension complete; real observations unresolved | f95ac74 | 2 additional Crossref-verified papers, actual HTTP/PDF checks and private collection worksheet; matched observations remain0 |
 | C07 | Protocol complete; participants unresolved | b84e343 | 6 defined tasks, recording/analysis criteria, empty CSV, actual participants0 |
-| C08 | Foundation complete | This task commit | 27 account/auth/storage tests;829 full tests460.46s; frontend lint/build/i18n and Table6.2 passed; startup remains rights-gated |
-| C09 | Pending | — | Subscription active/expired/revoked lifecycle and access tests |
+| C08 | Foundation complete | de54164 | 27 account/auth/storage tests;829 full tests460.46s; frontend lint/build/i18n and Table6.2 passed; startup remains rights-gated |
+| C09 | Complete | This task commit | Subscription periods/seats/audit/operator commands;843 full tests475.34s; no actual billing or accounts |
 | C10 | Pending | — | Account UI, limits, backup/restore and operating procedures |
 | C11 | Pending | — | Claims/results/version aligned in publication package |
 | C12 | Pending | — | Public portfolio and evidence-based contribution documentation |
@@ -39,7 +39,7 @@ No existing LICENSE change, paid source, new framework/ORM/build tool, destructi
 
 ## Next action
 
-Complete C05 final checks, retain the C06 independent-evidence extension and C07 researcher protocol, then implement the hosted identity/subscription work. No release can be described as commercially cleared before the actual data-origin permissions are resolved.
+Finish C09 subscription verification, then connect C10 account UI/limits/backup recovery before publication and portfolio alignment. No release can be described as commercially cleared before the actual data-origin permissions are resolved.
 
 ## C03 implementation and verification
 
@@ -140,3 +140,19 @@ Verification:27 targeted tests pass, including same-company material isolation, 
 Critic: two aggregate frontend harness attempts failed from nested PowerShell quoting and local script execution policy. Their logs are retained and are not pass evidence; direct `npm.cmd` calls then executed each check successfully without changing policy. UI is unchanged in this foundation commit; actual hosted account screens and browser validation follow in C10. Subscription status/seat controls, operating limits, backups and operator commands remain C09/C10. This is not an internet deployment or a production security certification; host ACL/TLS/proxy configuration and real rights remain external requirements.
 
 Final C08 verification: **829 passed in460.46s**, wrapper463.727s: [full output](commercial-c08-pytest-2026-09-07.log). Code was held unchanged during the full run. Source/document whitespace checks pass; raw focused logs preserve their command-output trailing blank lines. This increase in total test runtime includes the added password-hashing/isolation tests and is not a measured application latency regression or improvement.
+
+Follow-up: [CI34129271727](https://github.com/hyunjin-kor/COMET/actions/runs/34129271727) at de54164 completed success for all three jobs.
+
+## C09 subscription periods, seats and operator actions
+
+Added company pending/active/revoked records with explicit periods and derived expiry. New organizations and legacy C08 organizations default to pending; additive columns preserve existing records without inventing contracts. Active access begins at the stated start and ends before the stated end. Ordinary expiry/revocation permits saved reads and exports, while new computations and data changes require active access. Security account disable remains a separate action that revokes all sessions.
+
+Seat availability is enforced with an immediate SQLite transaction on creation and reactivation. Decreasing seats below enabled accounts is rejected; no arbitrary user is disabled. Renewal takes effect for existing authenticated sessions. Browser-provided contract/company fields are rejected. No billing event is inferred and no real contract, customer identity or password was provisioned.
+
+The [operator CLI](../../scripts/manage_hosted.py) requires a named actor for management actions and hidden, confirmed interactive input for account passwords/resets. No password command-line option or unattended echo fallback exists. Users can change their password after ordinary expiry by providing the current one; change/reset invalidates all existing sessions. Audit records contain identifiers, actions and contract before/after fields without password/token/research payloads. [Operations](../commercial/hosted-operations.ko.md) documents these exact boundaries.
+
+Verification: the expanded focused suite passed40 tests in51.39s (wrapper54.766s), including a concurrent last-seat race, inactive saved access, renewal, actor/date/seat validation, legacy schema preservation and password session invalidation. One further client-self-grant rejection test was added before the full suite. Ruff and operator `--help` pass. Initial collection failed before the new model existed; an intermediate Ruff fixture-import warning was corrected, not suppressed. Focused command logs preserve these stages. Frontend and calculation code remain unchanged from C08; its passing lint/build/i18n and Table6.2 evidence is reused.
+
+Critic: manual entitlement records are neither executed contracts nor verified payment receipts. The audit DB is not an externally immutable ledger, and password provisioning still needs an actual approved private delivery/identity procedure. UI, compute quotas and tested recovery remain C10. Real data rights still block hosted startup. No rights approval or commercial launch is claimed.
+
+Final C09 verification: **843 passed in475.34s**, wrapper478.892s: [output](commercial-c09-pytest-2026-09-07.log). Code and tests were held unchanged during the full run. Ruff passed on all changed Python files. Source/document whitespace is checked separately from retained raw earlier log formatting.

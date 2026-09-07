@@ -9,6 +9,10 @@ class HostedOrganization(SQLModel, table=True):
     __tablename__ = "hosted_organizations"
     id: str = Field(default_factory=lambda: uuid4().hex, primary_key=True)
     name: str
+    status: str = "pending"
+    starts_at: float | None = None
+    ends_at: float | None = None
+    seat_limit: int = 1
 
 
 class HostedAccount(SQLModel, table=True):
@@ -32,3 +36,13 @@ class HostedLoginThrottle(SQLModel, table=True):
     key: str = Field(primary_key=True)
     window: int
     attempts: int = 0
+
+
+class HostedAuditEvent(SQLModel, table=True):
+    __tablename__ = "hosted_audit_events"
+    id: str = Field(default_factory=lambda: uuid4().hex, primary_key=True)
+    at: float = Field(index=True)
+    actor: str
+    action: str = Field(index=True)
+    target_id: str
+    details_json: str = "{}"

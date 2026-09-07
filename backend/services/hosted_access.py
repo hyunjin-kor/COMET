@@ -13,7 +13,7 @@ from threading import BoundedSemaphore
 from urllib.parse import urlsplit
 
 from fastapi import HTTPException, Request
-from sqlalchemy import delete, text
+from sqlalchemy import delete, inspect, text
 from sqlmodel import Session, SQLModel, create_engine, select
 
 from backend.config import settings
@@ -21,6 +21,7 @@ from backend.core.data_rights import check_data_rights
 from backend.models import Equipment, Estimate, Material, MetalPrice
 from backend.models.hosted import (
     HostedAccount,
+    HostedAuditEvent,
     HostedLoginSession,
     HostedLoginThrottle,
     HostedOrganization,
@@ -30,7 +31,7 @@ from backend.paths import data_dir
 COOKIE_NAME = "__Host-comet_session"
 SESSION_SECONDS = 12 * 60 * 60
 _PASSWORD_SLOTS = BoundedSemaphore(2)
-_CONTROL_TABLES = [model.__table__ for model in (HostedAccount, HostedOrganization, HostedLoginSession, HostedLoginThrottle)]
+_CONTROL_TABLES = [model.__table__ for model in (HostedAccount, HostedOrganization, HostedLoginSession, HostedLoginThrottle, HostedAuditEvent)]
 _DATA_TABLES = [model.__table__ for model in (Equipment, Estimate, Material, MetalPrice)]
 _SAFE_METHODS = {"GET", "HEAD", "OPTIONS"}
 _PUBLIC_API = {("GET", "/api/health"), ("GET", "/api/auth/session"), ("POST", "/api/auth/login")}
@@ -77,6 +78,13 @@ def initialize_hosted_store() -> None:
     engine = _sqlite_engine(root / "control.db")
     try:
         SQLModel.metadata.create_all(engine, tables=_CONTROL_TABLES)
+        existing = {column["name"] for column in inspect(engine).get_columns("hosted_organizations")}
+        additions = {"status": "VARCHAR NOT NULL DEFAULT 'pending'", "starts_at": "FLOAT",
+                     "ends_at": "FLOAT", "seat_limit": "INTEGER NOT NULL DEFAULT 1"}
+        with engine.begin() as connection:
+            for name, ddl in additions.items():
+                if name not in existing:
+                    connection.exec_driver_sql(f"ALTER TABLE hosted_organizations ADD COLUMN {name} {ddl}")
     finally:
         engine.dispose()
 
@@ -131,19 +139,23 @@ def verify_password(password: str, encoded: str | None) -> bool:
         return False
 
 
-def create_organization(name: str) -> HostedOrganization:
+def create_organization(name: str, *, actor: str = "operator") -> HostedOrganization:
+    from backend.services.hosted_subscription import audit_event
+
     if not name.strip() or len(name) > 200:
         raise ValueError("Organization name must have 1–200 characters")
     with control_session() as session:
         organization = HostedOrganization(name=name.strip())
         session.add(organization)
+        audit_event(session, actor, "organization_created", organization.id)
         session.commit()
         session.refresh(organization)
         return organization
 
 
-def create_account(organization_id: str, username: str, password: str) -> HostedAccount:
+def create_account(organization_id: str, username: str, password: str, *, actor: str = "operator") -> HostedAccount:
     from backend.database import sync_material_library
+    from backend.services.hosted_subscription import audit_event, require_available_seat
 
     username = normalize_username(username)
     password_hash = hash_password(password)
@@ -151,6 +163,7 @@ def create_account(organization_id: str, username: str, password: str) -> Hosted
         session.exec(text("BEGIN IMMEDIATE"))
         if session.get(HostedOrganization, organization_id) is None:
             raise ValueError("Organization not found")
+        require_available_seat(session, organization_id)
         if session.exec(select(HostedAccount).where(HostedAccount.username == username)).first():
             raise ValueError("Account already exists")
         account = HostedAccount(organization_id=organization_id, username=username, password_hash=password_hash)
@@ -162,20 +175,27 @@ def create_account(organization_id: str, username: str, password: str) -> Hosted
         finally:
             engine.dispose()
         session.add(account)
+        audit_event(session, actor, "account_created", account.id, {"organization_id": organization_id})
         session.commit()
         session.refresh(account)
         return account
 
 
-def set_account_enabled(account_id: str, enabled: bool) -> None:
+def set_account_enabled(account_id: str, enabled: bool, *, actor: str = "operator") -> None:
+    from backend.services.hosted_subscription import audit_event, require_available_seat
+
     with control_session() as session:
+        session.exec(text("BEGIN IMMEDIATE"))
         account = session.get(HostedAccount, account_id)
         if account is None:
             raise ValueError("Account not found")
+        if enabled and not account.enabled:
+            require_available_seat(session, account.organization_id)
         account.enabled = enabled
         session.add(account)
         if not enabled:
             session.exec(delete(HostedLoginSession).where(HostedLoginSession.account_id == account_id))
+        audit_event(session, actor, "account_enabled" if enabled else "account_disabled", account.id)
         session.commit()
 
 
@@ -200,6 +220,8 @@ def _limit_login(username: str, client_host: str) -> None:
 
 
 def sign_in(username: str, password: str, client_host: str, previous_token: str | None):
+    from backend.services.hosted_subscription import audit_event
+
     username = normalize_username(username)
     _limit_login(username, client_host)
     if not _PASSWORD_SLOTS.acquire(blocking=False):
@@ -224,6 +246,7 @@ def sign_in(username: str, password: str, client_host: str, previous_token: str 
             token = secrets.token_urlsafe(32)
             session.add(HostedLoginSession(token_hash=hashlib.sha256(token.encode()).hexdigest(),
                                           account_id=account.id, expires_at=now + SESSION_SECONDS))
+            audit_event(session, account.id, "signed_in", account.id)
             session.commit()
             session.refresh(account)
             return account, token
@@ -261,6 +284,9 @@ def authorize_hosted_request(request: Request) -> None:
     if account is None:
         raise HTTPException(401, "Sign in required")
     request.state.hosted_account = account
+    from backend.services.hosted_subscription import enforce_subscription
+
+    enforce_subscription(request, account)
 
 
 @contextmanager
@@ -281,9 +307,49 @@ def private_session(request: Request):
 
 
 def sign_out(request: Request) -> None:
+    from backend.services.hosted_subscription import audit_event
+
     token = request.cookies.get(cookie_name(), "")
     with control_session() as session:
         record = session.get(HostedLoginSession, hashlib.sha256(token.encode()).hexdigest())
         if record:
+            audit_event(session, record.account_id, "signed_out", record.account_id)
             session.delete(record)
             session.commit()
+
+
+def reset_account_password(account_id: str, password: str, *, actor: str) -> None:
+    from backend.services.hosted_subscription import audit_event
+
+    encoded = hash_password(password)
+    with control_session() as session:
+        session.exec(text("BEGIN IMMEDIATE"))
+        account = session.get(HostedAccount, account_id)
+        if not account:
+            raise ValueError("Account not found")
+        account.password_hash = encoded
+        session.add(account)
+        session.exec(delete(HostedLoginSession).where(HostedLoginSession.account_id == account_id))
+        audit_event(session, actor, "password_reset", account_id)
+        session.commit()
+
+
+def change_password(account_id: str, current_password: str, new_password: str, client_host: str) -> None:
+    from backend.services.hosted_subscription import audit_event
+
+    _limit_login(account_id, client_host)
+    if not _PASSWORD_SLOTS.acquire(blocking=False):
+        raise HTTPException(429, "Login service is busy; try again later")
+    try:
+        with control_session() as session:
+            session.exec(text("BEGIN IMMEDIATE"))
+            account = session.get(HostedAccount, account_id)
+            if not account or not account.enabled or not verify_password(current_password, account.password_hash):
+                raise HTTPException(401, "Invalid account or password")
+            account.password_hash = hash_password(new_password)
+            session.add(account)
+            session.exec(delete(HostedLoginSession).where(HostedLoginSession.account_id == account_id))
+            audit_event(session, account_id, "password_changed", account_id)
+            session.commit()
+    finally:
+        _PASSWORD_SLOTS.release()

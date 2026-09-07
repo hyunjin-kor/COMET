@@ -23,6 +23,10 @@ def hosted_client(monkeypatch, tmp_path):
     app.dependency_overrides.clear()
     with TestClient(app, base_url="https://testserver") as client:
         organization = hosted.create_organization("Synthetic organization")
+        from backend.services.hosted_subscription import set_subscription
+
+        set_subscription(organization.id, status="active", starts_at=0, ends_at=4_000_000_000,
+                         seat_limit=2, actor="synthetic-test-operator", reason="contract_recorded")
         first = hosted.create_account(organization.id, "fixture.first", PASSWORD)
         second = hosted.create_account(organization.id, "fixture.second", PASSWORD)
         yield client, first, second
@@ -154,6 +158,10 @@ def test_other_company_cannot_read_export_compare_or_change_saved_estimates(host
                                                   "size_units": "kg", "function_type": "power"}).json()["id"]
     client.post("/api/auth/logout")
     organization = hosted.create_organization("Synthetic other company")
+    from backend.services.hosted_subscription import set_subscription
+
+    set_subscription(organization.id, status="active", starts_at=0, ends_at=4_000_000_000,
+                     seat_limit=1, actor="synthetic-test-operator", reason="contract_recorded")
     hosted.create_account(organization.id, "fixture.other", PASSWORD)
     assert login(client, "fixture.other").status_code == 200
     assert client.get("/api/estimates").json() == []
