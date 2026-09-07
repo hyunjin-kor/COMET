@@ -10,6 +10,15 @@ const http = require('http');
 const fs = require('fs');
 const { autoUpdater } = require('electron-updater');
 
+// Isolated profiles keep packaged verification away from saved user estimates.
+if (process.env.COMET_PROFILE_DIR) {
+  if (!path.isAbsolute(process.env.COMET_PROFILE_DIR)) {
+    throw new Error('COMET_PROFILE_DIR must be an absolute path');
+  }
+  fs.mkdirSync(process.env.COMET_PROFILE_DIR, { recursive: true });
+  app.setPath('userData', process.env.COMET_PROFILE_DIR);
+}
+
 // Prevent black-window rendering issues on some Windows GPU/driver setups.
 app.disableHardwareAcceleration();
 

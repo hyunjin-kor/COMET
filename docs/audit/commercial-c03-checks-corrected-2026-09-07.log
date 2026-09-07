@@ -1,0 +1,159 @@
+All checks passed!
+
+> frontend@1.4.0 lint
+> eslint .
+
+
+> frontend@1.4.0 build
+> tsc -b && vite build
+
+vite v8.1.5 building client environment for production...
+[2K
+transforming...✓ 628 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                      0.75 kB │ gzip:   0.40 kB
+dist/assets/PretendardVariable-CJuje-Rk.woff2    2,057.68 kB
+dist/assets/index-thXbEmtg.css                      66.38 kB │ gzip:  12.01 kB
+dist/assets/format-price-xyQn9blZ.js                 0.35 kB │ gzip:   0.18 kB │ map:     1.67 kB
+dist/assets/calculator-session-OVC9PJVi.js           0.59 kB │ gzip:   0.28 kB │ map:     5.12 kB
+dist/assets/rolldown-runtime-QTnfLwEv.js             0.69 kB │ gzip:   0.42 kB
+dist/assets/recipe-inputs-CyfhZpma.js                0.69 kB │ gzip:   0.28 kB │ map:     2.25 kB
+dist/assets/ResultBreakdownPieChart-B1wyL9Kp.js      0.83 kB │ gzip:   0.54 kB │ map:     2.34 kB
+dist/assets/EstimateRangeBarChart-B3a6KbOP.js        1.01 kB │ gzip:   0.59 kB │ map:     2.66 kB
+dist/assets/Skeleton-a7cBJvy9.js                     1.42 kB │ gzip:   0.59 kB │ map:     4.45 kB
+dist/assets/FitPriceText-D6vJwrZ6.js                 1.56 kB │ gzip:   0.78 kB │ map:     4.81 kB
+dist/assets/MetalCompareChart-DfPTDyAL.js            1.71 kB │ gzip:   0.90 kB │ map:     5.27 kB
+dist/assets/MetalTrendChart-CQ9ryDm-.js              1.78 kB │ gzip:   0.89 kB │ map:     5.06 kB
+dist/assets/WorkspaceSections-ByTxfkkn.js            3.33 kB │ gzip:   1.49 kB │ map:     9.67 kB
+dist/assets/api-BnRGIZ3q.js                          4.01 kB │ gzip:   1.81 kB │ map:    44.52 kB
+dist/assets/export-csv-Ddpoa43F.js                   7.32 kB │ gzip:   2.78 kB │ map:    18.90 kB
+dist/assets/CostEvidencePanel-5DOYFSbE.js           15.38 kB │ gzip:   3.92 kB │ map:    35.33 kB
+dist/assets/CapEx-MVXd1TfV.js                       18.44 kB │ gzip:   4.34 kB │ map:    44.35 kB
+dist/assets/Compare-wdKOZvFU.js                     18.65 kB │ gzip:   4.91 kB │ map:    42.20 kB
+dist/assets/Uncertainty-D6cUH1oH.js                 19.54 kB │ gzip:   5.54 kB │ map:    45.31 kB
+dist/assets/Library-CaWcOcJM.js                     24.95 kB │ gzip:   5.98 kB │ map:    64.72 kB
+dist/assets/Prices-9OY3r5EX.js                      33.12 kB │ gzip:   8.62 kB │ map:    80.42 kB
+dist/assets/CalculatorResult-CCponJ8F.js            55.38 kB │ gzip:  12.70 kB │ map:   116.26 kB
+dist/assets/Calculator-B1z7Ed2-.js                  91.98 kB │ gzip:  23.42 kB │ map:   238.60 kB
+dist/assets/index-dS_sr2nL.js                      142.02 kB │ gzip:  48.11 kB │ map:   591.85 kB
+dist/assets/react-CC1klYW5.js                      189.64 kB │ gzip:  59.65 kB │ map:   841.37 kB
+dist/assets/recharts-KlhfxoSq.js                   390.73 kB │ gzip: 111.46 kB │ map: 1,913.19 kB
+
+✓ built in 738ms
+
+> frontend@1.4.0 check:i18n
+> node ../scripts/check_i18n.mjs
+
+{
+  "static_translation_calls": 984,
+  "korean_keys": 1010,
+  "missing_key_occurrences": 0,
+  "raw_jsx_label_occurrences": 31,
+  "untranslated_ui_label_occurrences": 0,
+  "missing": [],
+  "untranslatedLabels": [],
+  "scope": "Literal and conditional t(string) keys, literal JSX text, UI attributes and direct JSX template-literal fragments. Technical symbols/units, the product name and already-Korean text are explicitly excluded from untranslated UI counts. Conditional language branches, source data and variable translation keys require manual/browser review."
+}
+✔ optional recipes reject incomplete values, zero yield and double interpretation of percentages (0.6407ms)
+✔ CSV preserves calculation scope, production assumptions and purchased-input evidence (1.6915ms)
+✔ repeated operations remain distinct while order-only changes match (0.0986ms)
+✔ unchecking and rechecking a repeated operation restores its count and original sequence (0.4976ms)
+✔ interleaved step toggles preserve other edits and restore repeated operations after draft reload (0.1314ms)
+✔ scale fitting keeps deliberate omissions and additions including an in-flight manual edit (0.1579ms)
+✔ editing a chosen method never silently adopts another method with matching steps (0.0944ms)
+✔ returning to a smaller scale does not reinsert a deliberately removed substituted kiln (0.0858ms)
+✔ selected card identity survives identical routes and scale fitting (0.1072ms)
+✔ selected method waits for current-scale steps, while manual routes stay usable (0.1038ms)
+✔ fuel_cell × pem_fuel_cell_ccm defaults (5.2951ms)
+✔ direct_methanol_fuel_cell × dmfc_gde_route defaults (0.1268ms)
+✔ electrolyzer × pem_electrolyzer_ccm defaults (0.0551ms)
+✔ electrolyzer × alkaline_electrolyzer_gde defaults (0.0452ms)
+✔ AEM fuel-cell route retains existing application-family preference (0.1067ms)
+✔ equal chemistry ranks prefer source scope, then quoted price, then name (0.102ms)
+✔ electrode displayed ledger uses area costs without thermal cost fields (0.176ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 14.6865
+✔ range preserves precursor consumption, purchase evidence, throughput, consumables and template identity (1.0765ms)
+✔ range rejects incomplete recipes, zero retention, missing production evidence and incomplete wash inputs (0.1294ms)
+✔ old thermal drafts retain nominal throughput, balanced support and legacy recovery defaults (0.0855ms)
+✔ split support retains each fraction and each optional recipe instead of auto-balancing one row (0.1158ms)
+✔ electrode range preserves its manufacturing scenario and material stack without thermal additions (0.0969ms)
+✔ the real range handler passes the currently selected reference price basis with the full draft input (4.2084ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9.1583
+✔ stoichiometry, repeated groups and hydrate coefficients have distinct positions (2.0884ms)
+✔ fractional and variable stoichiometry are not mistaken for powers or model numbers (0.1335ms)
+✔ ionic charge, zero-valent metals and explicitly identified isotope mass are superscripts (0.2002ms)
+✔ area, volume, inverse units and numerical powers use superscripts (0.1849ms)
+✔ URLs, DOI, identifiers, product grades and source ambiguities remain intact (0.1423ms)
+✔ formatting is idempotent and search accepts displayed subscripts and powers (0.4797ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6.9599
+
+## 2 wt% Pt/C  (order 2 ton)
+materials: published total 10.7  |  sum of rows 10.7013
+                                 COMET   Table 6.2    dev %
+step_cost_per_hr              390.0000    390.0000    +0.00
+campaign_days                   2.5000      2.5000    +0.00
+campaign_cost               23400.0000  23400.0000    +0.00
+processing_cost_per_lb          5.8500      5.8500    +0.00
+subtotal_per_lb                16.5500     16.5500    +0.00
+ga_per_lb                       0.8275      0.8300    -0.30
+sard_per_lb                     0.8689      0.8700    -0.13
+margin_per_lb                   9.1231      9.1200    +0.03
+estimated_price_per_lb         27.3695     27.3700    -0.00
+margin basis: COMET 33.33% of selling price = 50.0% of pre-margin  |  table footnote 50.0% of pre-margin
+vs market $34.09: COMET -19.7%  |  CatCost published -19.7%
+
+## 21 wt% Ni/Al2O3  (order 20 ton)
+materials: published total 11.88  |  sum of rows 11.8918
+                                 COMET   Table 6.2    dev %
+step_cost_per_hr             1200.0000   1200.0000    +0.00
+campaign_days                   3.0000      3.0000    +0.00
+campaign_cost               86400.0000  86400.0000    +0.00
+processing_cost_per_lb          2.1600      2.1600    +0.00
+subtotal_per_lb                14.0400     14.0400    +0.00
+ga_per_lb                       0.7020      0.7000    +0.29
+sard_per_lb                     0.7371      0.7400    -0.39
+margin_per_lb                   3.7415      5.1100   -26.78
+estimated_price_per_lb         19.2206     20.5900    -6.65
+margin basis: COMET 19.47% of selling price = 24.17% of pre-margin  |  table footnote 33.0% of pre-margin
+vs market $21.33: COMET -9.9%  |  CatCost published -3.5%
+
+## USY-based FCC (with RE)  (order 200 ton)
+materials: published total 0.352  |  sum of rows 0.3524
+                                 COMET   Table 6.2    dev %
+step_cost_per_hr             6725.0000   6725.0000    +0.00
+campaign_days                   2.3300      4.0000   -41.75
+campaign_cost              376600.0000 645600.0000   -41.67
+processing_cost_per_lb          0.9415      1.6100   -41.52
+subtotal_per_lb                 1.2935      1.9700   -34.34
+ga_per_lb                       0.0647      0.1000   -35.30
+sard_per_lb                     0.0679      0.1000   -32.10
+margin_per_lb                   0.1829      0.2400   -23.79
+estimated_price_per_lb          1.6090      2.4100   -33.24
+margin basis: COMET 11.37% of selling price = 12.83% of pre-margin  |  table footnote 11.0% of pre-margin
+vs market $2.73: COMET -41.1%  |  CatCost published -11.7%
+with footnote-b rate 67 t/d: campaign 3.985 d, processing 1.6080, price 2.4380 (+1.16% vs published)
+
+[plugin @tailwindcss/vite:generate:build] [33m[SOURCEMAP_BROKEN] [0mSourcemap is likely to be incorrect: a plugin (@tailwindcss/vite:generate:build) was used to transform files, but didn't generate a sourcemap for the transformation. Consult the plugin documentation for help: https://rolldown.rs/guide/troubleshooting#warning-sourcemap-is-likely-to-be-incorrect
+

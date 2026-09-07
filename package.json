@@ -17,7 +17,7 @@
   "scripts": {
     "dev": "concurrently --kill-others-on-fail \"npm run dev:backend\" \"npm run dev:frontend\" \"npm run electron:wait\"",
     "dev:backend": "uvicorn backend.main:app --host 127.0.0.1 --port 8765 --reload",
-    "dev:frontend": "cross-env VITE_BACKEND_PORT=8765 cd frontend && npm run dev",
+    "dev:frontend": "cross-env VITE_BACKEND_PORT=8765 npm --prefix frontend run dev",
     "electron:wait": "wait-on http://127.0.0.1:8765/api/health http://localhost:5173 && npm run electron:dev",
     "electron:dev": "cross-env NODE_ENV=development electron .",
     "desktop:stop": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/stop_comet_processes.ps1 -Quiet",

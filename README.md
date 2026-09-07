@@ -81,16 +81,27 @@ the Monte Carlo range and the source library are in [docs/screens.md](docs/scree
 
 ## Building from source
 
-Requires Python 3.11+, Node.js 18+, and Windows for desktop packaging.
+Requires Python 3.11+, Node.js 22.12+ (24 LTS recommended), and Windows for desktop packaging.
+From the repository root in PowerShell, install both JavaScript dependency sets
+and the Python environment before starting:
 
-```bash
-npm install
-npm run dev      # development: Electron shell + FastAPI sidecar + Vite renderer
-npm run web      # browser mode: build the frontend, then serve the whole app at http://localhost:8765
-npm run build    # packaged installer under dist-electron\
+```powershell
+py -3.11 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -e ".[dev]"
+$env:Path = (Resolve-Path .venv\Scripts).Path + ';' + $env:Path
+$env:COMET_PYTHON = (Resolve-Path .venv\Scripts\python.exe).Path
+npm.cmd ci
+npm.cmd --prefix frontend ci
+npm.cmd run dev      # development: Electron shell + FastAPI sidecar + Vite renderer
+npm.cmd run web      # browser mode: build the frontend, then serve the whole app at http://localhost:8765
+npm.cmd run build    # packaged installer under dist-electron\
 ```
 
-The build produces `dist-electron\COMET Setup <version>.exe` and an unpacked app
+Run one of the final three commands at a time. `COMET_PYTHON` keeps the desktop
+backend and packager on the environment where dependencies were installed.
+The explicit `.cmd` commands avoid depending on PowerShell script execution policy.
+
+The build produces `dist-electron\COMET.Setup.<version>.exe` and an unpacked app
 at `dist-electron\win-unpacked\COMET.exe`. Running instances are stopped
 automatically before a rebuild, or manually with `npm run desktop:stop`.
 
@@ -99,9 +110,9 @@ automatically before a rebuild, or manually with `npm run desktop:stop`.
 The prepared source version is **1.4.0**; the latest verified public release is **v1.3.24** (verified 2026-09-07). Tagging and publishing 1.4.0 remain human release steps. See the [release preparation checklist](docs/release-checklist.md) and [Korean getting-started guide](docs/getting-started.ko.md).
 
 ```bash
-python -m pytest backend/tests -q    # engine + API, includes CatCost validation cases
-cd frontend && npm run build         # type-check + build
-npm run smoke:desktop                # packaged-app smoke test
+python -m pytest backend/tests -q     # engine + API, includes CatCost validation cases
+npm --prefix frontend run build      # type-check + build, from the repository root
+npm run smoke:desktop                 # packaged-app smoke test in a fresh temporary profile
 ```
 
 The engine reproduces the three published CatCost reference cases (2 wt% Pt/C,
