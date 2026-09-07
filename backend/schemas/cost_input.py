@@ -24,7 +24,7 @@ ApplicationFamily = Literal[
 class ComponentInput(BaseModel):
     """One component of the catalyst formulation."""
 
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra="ignore", allow_inf_nan=False)
 
     role: Literal["active_metal", "active_catalyst", "promoter", "support"] = "active_metal"
     material_key: str | None = Field(
@@ -58,7 +58,7 @@ class ComponentInput(BaseModel):
 class ElectrodeCostInput(BaseModel):
     """Optional area-based coating model for electrocatalyst workflows."""
 
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra="ignore", allow_inf_nan=False)
 
     application_family: ApplicationFamily = "general"
     catalyst_material_key: str | None = None
@@ -97,7 +97,7 @@ class CostCalculationRequest(BaseModel):
     so you do not need to pre-normalize (though it is good practice).
     """
 
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra="ignore", allow_inf_nan=False)
 
     components: list[ComponentInput] | None = Field(
         default=None,
@@ -210,7 +210,7 @@ class CostCalculationRequest(BaseModel):
 class QuickCalculationRequest(BaseModel):
     """Simplified single-metal input for POST /api/calculate/quick."""
 
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra="ignore", allow_inf_nan=False)
 
     metal_symbol: str = Field(..., min_length=1, max_length=64)
     metal_price: float = Field(..., gt=0)

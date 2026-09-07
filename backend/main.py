@@ -8,7 +8,7 @@ from pathlib import Path
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from fastapi import Depends, FastAPI, HTTPException, Request
-from fastapi.exception_handlers import request_validation_exception_handler
+from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
@@ -164,7 +164,10 @@ async def safe_auth_validation_error(request: Request, exc: RequestValidationErr
     # Pydantic input-error details can echo an invalid password. Never expose it.
     if request.url.path.startswith("/api/auth/"):
         return JSONResponse({"detail": "Invalid account request"}, status_code=422)
-    return await request_validation_exception_handler(request, exc)
+    # Invalid JSON numbers (NaN/Infinity) cannot themselves be serialized in
+    # a JSON error response. Keep locations/messages without echoing inputs.
+    errors = [{key: value for key, value in error.items() if key != "input"} for error in exc.errors()]
+    return JSONResponse({"detail": jsonable_encoder(errors)}, status_code=422)
 
 
 @app.get("/api/health")

@@ -190,7 +190,7 @@ def write_results(path: Path, summary: dict, manifest: dict) -> None:
     replay += f' --live-basis "{(directory / ("live_basis_" + manifest["run_date"] + ".json")).as_posix()}"'
     if "support_history" in manifest:
         replay += f' --support-history "{(directory / manifest["support_history"]["file"]).as_posix()}"'
-    replay += f' --out-dir "{directory.as_posix()}"'
+    replay += f' --out-dir "_local/paper-replay-{manifest["run_date"]}"'
     lines = [f"# Paper results — {manifest['run_date']}", "", f"Price basis: **{manifest['price_basis']}**, completed month **{manifest['basis_month']}**. Seed: **{manifest['seed']}**.", "", f"Input status: {manifest['history']['status']}. {manifest['history']['note']}", "", "All numerical summaries below are generated from `paper_summary_" + manifest["run_date"] + ".json`; full commands, environment, snapshot hashes and timings are in the reproduction manifest.", "", "## CatCost Table 6.2", "", "| Case | Published $/lb | COMET $/lb | Residual % |", "|---|---:|---:|---:|"]
     for c in summary["table62"]:
         lines.append(f"| {c['name']} | {c['published_usd_per_lb']:.2f} | {c['comet_usd_per_lb']:.4f} | {c['residual_pct']:+.2f} |")
@@ -208,7 +208,7 @@ def main() -> None:
     parser.add_argument("--price-basis", choices=("reference",), default="reference")
     parser.add_argument("--month", help="YYYY-MM; default latest common completed month")
     parser.add_argument("--seed", type=int, default=20260906)
-    parser.add_argument("--out-dir", type=Path, default=ROOT / "docs/paper")
+    parser.add_argument("--out-dir", type=Path, help="new or empty output directory; existing evidence is never overwritten")
     parser.add_argument("--date", default=date.today().isoformat(), help="output filename date")
     parser.add_argument("--history", type=Path, help="use an existing frozen input without network collection")
     parser.add_argument("--support-history", type=Path, help="validated free Comtrade snapshot; included in latest_common_month")
@@ -217,7 +217,9 @@ def main() -> None:
     date.fromisoformat(args.date)
     if not 0 <= args.seed <= 4294967295:
         parser.error("seed must be in [0, 4294967295]")
-    args.out_dir = args.out_dir.resolve()
+    args.out_dir = (args.out_dir or ROOT / "_local" / f"paper-{args.date}").resolve()
+    if args.out_dir.exists() and (not args.out_dir.is_dir() or any(args.out_dir.iterdir())):
+        parser.error("Output directory must be new or empty; choose a different --out-dir to preserve existing evidence")
     args.out_dir.mkdir(parents=True, exist_ok=True)
     paths = {name: args.out_dir / f"{name}_{args.date}.json" for name in ("price_history", "monthly_history", "reference_basis", "live_basis", "all_families", "all_families_live", "price_volatility", "active_metal_breakeven", "table62_reproduction", "manufacturing_costs", "paper_summary", "reproduction_manifest")}
     env = {**os.environ, "PYTHONHASHSEED": str(args.seed), "PYTHONIOENCODING": "utf-8"}
@@ -263,6 +265,7 @@ def main() -> None:
                 normalized["support_input_sha256"] = manifest["support_history"]["sha256"]
             write_json(paths["monthly_history"], normalized)
             if args.live_basis:
+                manifest["live_input"] = {"source": str(args.live_basis.resolve()), "sha256": sha256(args.live_basis)}
                 live = classify_live_snapshot(read_json(args.live_basis))
                 write_json(paths["live_basis"], live)
             else:
@@ -273,7 +276,7 @@ def main() -> None:
             shutil.copytree(ROOT / "backend/data", snapshot_data)
             env["COMET_DATA_DIR"] = str(snapshot_data)
             manifest["inputs"] = [{"file": "backend/data/" + path.relative_to(snapshot_data).as_posix(), "sha256": sha256(path)} for path in sorted(snapshot_data.rglob("*.json"))]
-            manifest["code_inputs"] = [{"file": str(path.relative_to(ROOT)), "sha256": sha256(path)} for path in sorted([*(ROOT / "backend/core").glob("*.py"), *(ROOT / "scripts").glob("*.py")])]
+            manifest["code_inputs"] = [{"file": path.relative_to(ROOT).as_posix(), "sha256": sha256(path)} for path in sorted([*(p for p in (ROOT / "backend").rglob("*.py") if "tests" not in p.relative_to(ROOT / "backend").parts), *(ROOT / "scripts").glob("*.py")])]
             manifest["project_version"] = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))["project"]["version"]
             manifest["analysis_database"] = "new temporary SQLite database seeded from committed library data"
             basis = paths["reference_basis"]
@@ -325,8 +328,10 @@ def main() -> None:
             write_json(paths["paper_summary"], summary)
             write_results(args.out_dir / f"results_{args.date}.md", summary, manifest)
             manifest["code_changed_during_run"] = [entry["file"] for entry in manifest["code_inputs"] if sha256(ROOT / entry["file"]) != entry["sha256"]]
+            if manifest["code_changed_during_run"]:
+                raise RuntimeError("Source code changed during reproduction; rerun from unchanged code in a new output directory")
             generated_paths = [*paths.values(), args.out_dir / f"results_{args.date}.md", args.out_dir / f"figure_manifest_{args.date}.json", args.out_dir / f"breakeven_sweep_points_{args.date}.json", *(args.out_dir / "figures").glob(f"*_{args.date}.*")]
-            manifest["outputs"] = [{"file": str(path.relative_to(args.out_dir)), "sha256": sha256(path)} for path in sorted(generated_paths) if path.is_file() and path != paths["reproduction_manifest"]]
+            manifest["outputs"] = [{"file": path.relative_to(args.out_dir).as_posix(), "sha256": sha256(path)} for path in sorted(generated_paths) if path.is_file() and path != paths["reproduction_manifest"]]
             manifest["status"] = "complete"
     except Exception as exc:
         manifest["status"] = "failed"

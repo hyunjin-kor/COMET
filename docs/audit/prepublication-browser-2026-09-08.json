@@ -1,0 +1,97 @@
+{
+  "at": "2026-09-07T16:31:57.953682+00:00",
+  "server": "127.0.0.1:8765; isolated temporary SQLite; external collector disabled",
+  "browser": "CUA in-app browser; owned tab closed",
+  "electrode": {
+    "Composition": "Pt/C",
+    "Catalyst domain": "electrocatalyst",
+    "Application family": "fuel_cell",
+    "Simulations": "1000",
+    "Successful runs": "1000",
+    "Failed runs": "0",
+    "Metric": "electrode_assembly_cost",
+    "Seed": "",
+    "Unit": "$/cm²",
+    "Statistic": "Value ($/cm²)",
+    "Baseline": "0.15727",
+    "Mean": "0.158557",
+    "Std dev": "0.029127",
+    "Min": "0.106232",
+    "P5": "0.112179",
+    "P25": "0.134055",
+    "Median": "0.159257",
+    "P75": "0.183526",
+    "P95": "0.203078",
+    "Max": "0.208304"
+  },
+  "thermal_fixed_recovery": {
+    "Composition": "20.0% Ni/Al₂O₃",
+    "Catalyst domain": "thermal",
+    "Application family": "general",
+    "Simulations": "100",
+    "Successful runs": "100",
+    "Failed runs": "0",
+    "Metric": "selling_price_less_recovery",
+    "Seed": "",
+    "Unit": "$/lb",
+    "Statistic": "Value ($/lb)",
+    "Baseline": "6.112",
+    "Mean": "6.112",
+    "Std dev": "0",
+    "Min": "6.112",
+    "P5": "6.112",
+    "P25": "6.112",
+    "Median": "6.112",
+    "P75": "6.112",
+    "P95": "6.112",
+    "Max": "6.112"
+  },
+  "csv_hashes": {
+    "comet-range-pt-c.csv": "a33dd8c6f6336b22248d3619845546ffcad6eb5653ce9c96966b1f585a4997d2",
+    "comet-range-20-0-ni-al2o3.csv": "3d9c830d7d564d4cce97270dcef50c2fa97a642bdf2beb69f75e0ccc15f33be0",
+    "comet-result-pt-c-2026-09-07.csv": "a41e36d796cba043b602db340741be3f0f72792480f649337ed43c2dc4c1869f",
+    "comet-result-20-0-ni-al2o3-2026-09-07.csv": "02419100f4bc65025bc1c8ab3754aff99a48120a70bf2dd91ea649be30bf79fa"
+  },
+  "area_summary_mass_fields_omitted": true,
+  "screenshots": {
+    "prepublication-electrode-latest-card-2026-09-08.png": "6db5b26a9e36bfe26c8d240a647b97b89a52535a6a58c8f47906369ceef15b08",
+    "prepublication-electrode-range-2026-09-08.png": "27e1ea17c3e21e22590ffb79a4f2dce2f86abb85e05b0b79fbf0ad1199524525",
+    "prepublication-electrode-range-final-2026-09-08.png": "7d6341417e13d78db293f6a045801be78c6015095c814d95aa292d6241b33163",
+    "prepublication-electrode-range-fixed-2026-09-08.png": "4c3066260271f78eff0868094001d9c49b048b28cc6143b6c0fd2299e8adb7ea",
+    "prepublication-electrode-result-2026-09-08.png": "dc162c29e9fdeb5194f357bcab7275ac913e829be2a8abf362dc2d4b57c9a087",
+    "prepublication-thermal-range-2026-09-08.png": "952a9c6ed2c093cc604a8499bab814ba063f593be17f47ea9b52d1fd3b177bf7",
+    "prepublication-thermal-result-2026-09-08.png": "45207d2377f5a882aff6a85abb900f00c8e7a468e1e265b78e9c2fc2d7f0fd7d"
+  },
+  "console_errors": 0,
+  "warnings": [
+    {
+      "level": "warn",
+      "message": "The width(-1) and height(-1) of chart should be greater than 0,\n       please check the style of container, or the props width(100%) and height(100%),\n       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the\n       height and width.",
+      "timestamp": "2026-09-07T16:13:56.807Z",
+      "url": "http://127.0.0.1:8765/assets/recharts-KlhfxoSq.js"
+    },
+    {
+      "level": "warn",
+      "message": "The width(-1) and height(-1) of chart should be greater than 0,\n       please check the style of container, or the props width(100%) and height(100%),\n       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the\n       height and width.",
+      "timestamp": "2026-09-07T16:17:54.714Z",
+      "url": "http://127.0.0.1:8765/assets/recharts-KlhfxoSq.js"
+    },
+    {
+      "level": "warn",
+      "message": "The width(-1) and height(-1) of chart should be greater than 0,\n       please check the style of container, or the props width(100%) and height(100%),\n       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the\n       height and width.",
+      "timestamp": "2026-09-07T16:23:17.279Z",
+      "url": "http://127.0.0.1:8765/assets/recharts-KlhfxoSq.js"
+    },
+    {
+      "level": "warn",
+      "message": "The width(-1) and height(-1) of chart should be greater than 0,\n       please check the style of container, or the props width(100%) and height(100%),\n       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the\n       height and width.",
+      "timestamp": "2026-09-07T16:29:37.621Z",
+      "url": "http://127.0.0.1:8765/assets/recharts-KlhfxoSq.js"
+    }
+  ],
+  "limitations": [
+    "Four transient Recharts initial-size warnings; charts rendered and were visually inspected.",
+    "Earlier screenshots are retained as intermediate evidence; electrode-range-final and thermal-range show final range layout.",
+    "CSV text protection was byte-tested; Excel import/save/reopen behavior was not exercised."
+  ]
+}

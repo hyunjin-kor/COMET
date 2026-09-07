@@ -229,6 +229,9 @@ def sign_in(username: str, password: str, client_host: str, previous_token: str 
         raise HTTPException(429, "Login service is busy; try again later", headers={"Retry-After": "5"})
     try:
         with control_session() as session:
+            # Password reset/disable and session creation must be ordered;
+            # otherwise a login checked before reset can survive revocation.
+            session.exec(text("BEGIN IMMEDIATE"))
             account = session.exec(select(HostedAccount).where(HostedAccount.username == username)).first()
             valid = verify_password(password, account.password_hash if account else None)
             if not valid or not account or not account.enabled:

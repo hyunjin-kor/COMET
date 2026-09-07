@@ -74,6 +74,7 @@ test('old thermal drafts retain nominal throughput, balanced support and legacy 
   assert.equal(input.components[0].price_per_lb, 7);
   assert.equal(input.components[1].wt_pct, 80);
   assert.equal(buildRangeInputFromDraft({ ...draft(), productionRate: '' }).production_rate_ton_per_day, undefined);
+  assert.equal(buildRangeInputFromDraft({ ...draft(), applicationFamily: 'fuel_cell' }).application_family, 'general');
 });
 
 test('split support retains each fraction and each optional recipe instead of auto-balancing one row', () => {
@@ -112,4 +113,47 @@ test('the real range handler passes the currently selected reference price basis
   assert.equal(calls.length, 1);
   assert.deepEqual(calls[0][0], { ...calculationInput, price_basis: 'reference' });
   assert.equal(calls[0][1], 1000);
+});
+
+test('electrode area prices never receive the kg/lb conversion used by thermal ranges', () => {
+  const display = loadFunction('rangeDisplayValue');
+  const kg = (value) => value * 2.20462;
+  assert.equal(display(0.30011, '$/cm2', kg), 0.30011);
+  assert.equal(display(10, '$/lb', kg), 22.0462);
+});
+
+const asModule = (text) => ts.transpileModule(text, {
+  compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 },
+}).outputText;
+const scientificUrl = `data:text/javascript;base64,${Buffer.from(asModule(readFileSync(new URL('../frontend/src/lib/scientific-text.ts', import.meta.url), 'utf8'))).toString('base64')}`;
+const csvModule = asModule(readFileSync(new URL('../frontend/src/lib/export-csv.ts', import.meta.url), 'utf8'))
+  .replace(/(['"])\.\/scientific-text\1/, JSON.stringify(scientificUrl));
+const { buildRangeCsv } = await import(`data:text/javascript;base64,${Buffer.from(csvModule).toString('base64')}`);
+const rangeResult = {
+  composition: 'Pt/C', catalyst_domain: 'electrocatalyst', application_family: 'fuel_cell',
+  baseline: 0.30011, baseline_price_per_lb: 999, metric: 'electrode_assembly_cost', unit: '$/cm2',
+  mean: 0.30011, median: 0.30011, std: 0, min: 0.30011, max: 0.30011,
+  p5: 0.30011, p25: 0.30011, p75: 0.30011, p95: 0.30011,
+  n_simulations: 100, n_successful: 100, n_failed: 0, failure_reasons: {}, seed: 20260906,
+  uncertainties_applied: { electrode_adjunct_price: [1, 1] },
+};
+
+test('range CSV keeps area baseline, metric, seed and failed-run disclosure', () => {
+  const text = buildRangeCsv(rangeResult);
+  assert.ok(text.includes('Baseline,0.30011'));
+  assert.ok(text.includes('Unit,$/cm²'));
+  assert.ok(text.includes('Metric,electrode_assembly_cost'));
+  assert.ok(text.includes('Seed,20260906'));
+  assert.ok(!text.includes('999'));
+  const partial = buildRangeCsv({ ...rangeResult, n_successful: 58, n_failed: 42, failure_reasons: { 'Uncosted fixture': 42 } });
+  assert.ok(partial.includes('Statistics exclude failed runs'));
+  assert.ok(partial.includes('Uncosted fixture,42'));
+});
+
+test('CSV treats formula-like user labels as quoted text without changing numeric values', () => {
+  for (const label of ['=1+1', '+1+1', '-1+1', '@SUM(1)', '  =1+1', '\t=1+1', '＝1+1', '=1,"new cell"']) {
+    const text = buildRangeCsv({ ...rangeResult, composition: label, mean: -1 });
+    assert.ok(text.includes(`Composition,"\t${label.replace(/"/g, '""')}"`));
+    assert.ok(text.includes('Mean,-1'));
+  }
 });

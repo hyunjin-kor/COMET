@@ -59,6 +59,8 @@ Full catalyst cost estimation using the current multi-component request shape.
 - `electrode_model`: returned for electrocatalyst area-based runs
 - `resolved_materials`: source rows, quote basis, and normalization metadata
 
+Numeric requests reject NaN and Infinity with422. A `template_id` must belong to the selected catalyst domain. When `steps` is omitted (or empty), the selected template supplies its scale-fitted steps; explicit steps remain user edits. Saved calculation input records the steps actually used. The bulk margin correlation also rejects orders that imply a margin of100% or more. These errors do not write a saved estimate or custom material.
+
 ### POST /api/calculate/quick
 Simplified calculation with minimal inputs.
 
@@ -71,6 +73,19 @@ same body accepted by `/api/calculate`, plus `n_simulations` and optionally `see
 `seed` is a nonnegative integer; the same input and seed reproduce the same
 summary. Omit it (or pass `null`) for fresh random draws. Both the full calculator
 input and legacy flat uncertainty request accept this field.
+
+For `calculation_input`, the response identifies the sampled outcome:
+
+| Field | Thermal | Electrode assembly |
+|---|---|---|
+| `metric` | `selling_price`, or `selling_price_less_recovery` for a full request with recovery enabled | `electrode_assembly_cost` |
+| `unit` | `$/lb` | `$/cm2` |
+| `baseline` | Current point estimate for that metric | Current area-based assembly cost |
+| `baseline_price_per_lb`, `baseline_price_per_kg` | Compatibility fields retained | Omitted; mass conversion is inapplicable |
+
+The legacy flat response retains its bulk statistics without `baseline` or `metric` fields. `mean`, `median`, quantiles and standard deviation use `unit`. `seed` echoes the requested seed or null. `n_successful`, `n_failed` and `failure_reasons` disclose rejected samples; reported statistics are conditional on successful samples. A thermal scale crossing fits the existing operations to the new scale; a dropped required operation is a failed sample.
+
+`uncertainties` maps supported factor names to positive ordered `[low, high]` pairs. Full inputs accept `active_component_price`, `promoter_price`, `support_price`, `electrode_adjunct_price`, `order_size_tons`; legacy inputs accept `metal_price`, `support_price_per_lb`, `order_size_tons`, `metal_loading_wt_pct`. Unknown keys return422. An empty object fixes all factors at1, while an omitted/null map uses defaults. For an area result, only active-component and adjunct price factors are applied and reported in `uncertainties_applied`; area, loading, bulk order size and the declared manufacturing scenario do not vary.
 
 The offline `scripts/run_all_families.py` analysis accepts `--price-basis <json>`
 for a frozen price map and `--basis-type reference` for the academic tier. Frozen

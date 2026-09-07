@@ -1647,7 +1647,7 @@ export default function Calculator() {
             <div className="cp-subtle-label">{t('Preparation basis')}</div>
             <div className="mt-2 text-base font-semibold text-[#191f28]"><ScientificText text={preparationSummary} /></div>
             <div className="mt-2 space-y-1">
-              <CompactValueRow label={t('Production scale')} value={lang === 'ko' ? `${orderSize}톤` : `${orderSize} tons`} detail={lang === 'ko' ? `${t(scale.label)} / ${scale.rate}` : `${scale.label} scale / ${scale.rate}`} />
+              {catalystDomain === 'thermal' ? <CompactValueRow label={t('Production scale')} value={lang === 'ko' ? `${orderSize}톤` : `${orderSize} tons`} detail={lang === 'ko' ? `${t(scale.label)} / ${scale.rate}` : `${scale.label} scale / ${scale.rate}`} /> : <CompactValueRow label={t('Active area')} value={`${electrocatalystConfig.activeAreaCm2} cm²`} detail={`${electrocatalystConfig.catalystLoadingMgCm2} mg/cm²`} />}
               <CompactValueRow
                 label={t('Steps')}
                 value={String(steps.length)}
@@ -1676,13 +1676,13 @@ export default function Calculator() {
               {latestSnapshotForCurrentCase ? (
                 <FitPriceText
                   size="md"
-                  text={formatPrice(toDisplay(latestSnapshotForCurrentCase.result.summary.estimated_price_per_lb))}
+                  text={formatPrice(latestSnapshotForCurrentCase.result.electrode_model?.cost_per_cm2_usd ?? toDisplay(latestSnapshotForCurrentCase.result.summary.estimated_price_per_lb))}
                   className="min-w-0 text-white"
                 />
               ) : (
                 <div className="font-display text-[1.6rem] leading-none text-white">{t('Pending')}</div>
               )}
-              <div className="pb-1 text-sm text-slate-300"><ScientificText text={latestSnapshotForCurrentCase ? fmtLabel : ''} /></div>
+              <div className="pb-1 text-sm text-slate-300"><ScientificText text={latestSnapshotForCurrentCase ? latestSnapshotForCurrentCase.result.electrode_model ? '/cm²' : fmtLabel : ''} /></div>
             </div>
             <div className="mt-2 text-xs leading-6 text-slate-300">
               <ScientificText text={latestSnapshotForCurrentCase
@@ -2044,7 +2044,7 @@ export default function Calculator() {
             <div className="mt-4 grid gap-3 sm:grid-cols-3">
               <MetricTile label={t('Catalyst type')} value={t(catalystDomainLabel(catalystDomain))} detail={t('Current case basis')} />
               <MetricTile label={t('Preparation steps')} value={String(steps.length)} detail={!isRouteReady ? t('Pending') : steps.length > 0 ? t('Ready to run') : t('Choose at least one preparation step')} />
-              <MetricTile label={t('Production scale')} value={lang === 'ko' ? `${orderSize}톤` : `${orderSize} tons`} detail={`${t(scale.label)} / ${scale.rate}`} />
+              {catalystDomain === 'thermal' ? <MetricTile label={t('Production scale')} value={lang === 'ko' ? `${orderSize}톤` : `${orderSize} tons`} detail={`${t(scale.label)} / ${scale.rate}`} /> : <MetricTile label={t('Active area')} value={`${electrocatalystConfig.activeAreaCm2} cm²`} detail={`${electrocatalystConfig.catalystLoadingMgCm2} mg/cm²`} />}
             </div>
             <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
               <button onClick={handleCalculate} disabled={loading || !canCalculate} className="cp-button-primary min-w-[250px]">{loading ? <><span className="mr-2 inline-flex h-4 w-4 animate-spin rounded-full border-2 border-slate-950 border-t-transparent" />{t('Running estimate')}</> : t('Run estimate')}</button>
@@ -2079,8 +2079,7 @@ export default function Calculator() {
                           <div className="truncate text-sm font-semibold text-[#191f28]"><ScientificText text={saved.name} /></div>
                           <div className="mt-0.5 text-xs text-slate-600">
                             <ScientificText text={saved.metal_symbol ? `${saved.metal_loading_wt_pct}% ${saved.metal_symbol}` : saved.catalyst_domain} />
-                            <ScientificText text={saved.support_name ? ` / ${saved.support_name}` : ''} /> · {saved.order_size_tons} {t("tons ·")}{' '}
-                            {formatPrice(toDisplay(saved.estimated_price_per_lb))}{fmtLabel} · <ScientificText text={saved.created_at.slice(0, 10)} />
+                            <ScientificText text={saved.support_name ? ` / ${saved.support_name}` : ''} /> · {saved.catalyst_domain === 'thermal' ? <>{saved.order_size_tons} {t("tons ·")}{' '}{formatPrice(toDisplay(saved.estimated_price_per_lb))}{fmtLabel} · </> : null}<ScientificText text={saved.created_at.slice(0, 10)} />
                           </div>
                         </div>
                         <div className="flex items-center gap-2">

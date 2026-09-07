@@ -41,9 +41,9 @@ function StatTile({ label, value, detail }: { label: string; value: string; deta
 
 function StatTileDark({ label, value, detail }: { label: string; value: string; detail: string }) {
   return (
-    <div className="cp-metric-tile-dark">
+    <div className="cp-metric-tile-dark min-w-0">
       <div className="cp-subtle-label !text-slate-400"><ScientificText text={label} /></div>
-      <div className="mt-2 text-2xl font-display text-white"><ScientificText text={value} /></div>
+      <div className="mt-2 break-normal text-2xl font-display text-white"><ScientificText text={value} /></div>
       <div className="mt-1 text-xs leading-5 text-slate-400"><ScientificText text={detail} /></div>
     </div>
   );
@@ -82,6 +82,10 @@ function ChartFallback() {
 function bandBounds(percent: number): [number, number] {
   const bounded = Math.max(0, percent) / 100;
   return [Math.max(0.01, 1 - bounded), 1 + bounded];
+}
+
+function rangeDisplayValue(value: number, unit: string | undefined, toMassDisplay: (value: number) => number) {
+  return unit === '$/cm2' ? value : toMassDisplay(value);
 }
 
 function thermalRowSummary(rows: CalculatorRow[], role: 'active_metal' | 'promoter' | 'support') {
@@ -210,7 +214,7 @@ function buildRangeInputFromDraft(draft: CalculatorDraft): CostInput | null {
     production_rate_ton_per_day: draft.productionRate === '' ? undefined : draft.productionRate,
     production_rate_note: draft.productionRateNote,
     consumables: draft.consumables as ConsumableInput[] | undefined,
-    application_family: draft.applicationFamily ?? 'general',
+    application_family: 'general',
     order_size_tons: draft.orderSize,
     steps: draft.steps,
     include_spent_value: draft.includeSpentValue ?? false,
@@ -246,6 +250,8 @@ export default function Uncertainty() {
   const [supportBandPct, setSupportBandPct] = useState(20);
   const [adjunctBandPct, setAdjunctBandPct] = useState(15);
   const [orderBandPct, setOrderBandPct] = useState(20);
+  const toRangeDisplay = (value: number) => rangeDisplayValue(value, result?.unit, toDisplay);
+  const rangeLabel = result?.unit === '$/cm2' ? '/cm²' : fmtLabel;
 
   const calculationInput = draft ? buildRangeInputFromDraft(draft) : null;
   const canRun = calculationInput !== null && draft !== null && draft.steps.length > 0;
@@ -259,12 +265,12 @@ export default function Uncertainty() {
   const fmtBound = (v: number) => formatPrice(v).slice(1);
   const histData = result
     ? [
-        { range: `${fmtBound(toDisplay(result.min))}-${fmtBound(toDisplay(result.p5))}`, value: 5, fill: '#4e5968' },
-        { range: `${fmtBound(toDisplay(result.p5))}-${fmtBound(toDisplay(result.p25))}`, value: 20, fill: '#0d9488' },
-        { range: `${fmtBound(toDisplay(result.p25))}-${fmtBound(toDisplay(result.median))}`, value: 25, fill: '#0d9488' },
-        { range: `${fmtBound(toDisplay(result.median))}-${fmtBound(toDisplay(result.p75))}`, value: 25, fill: '#0d9488' },
-        { range: `${fmtBound(toDisplay(result.p75))}-${fmtBound(toDisplay(result.p95))}`, value: 20, fill: '#0d9488' },
-        { range: `${fmtBound(toDisplay(result.p95))}-${fmtBound(toDisplay(result.max))}`, value: 5, fill: '#4e5968' },
+        { range: `${fmtBound(toRangeDisplay(result.min))}-${fmtBound(toRangeDisplay(result.p5))}`, value: 5, fill: '#4e5968' },
+        { range: `${fmtBound(toRangeDisplay(result.p5))}-${fmtBound(toRangeDisplay(result.p25))}`, value: 20, fill: '#0d9488' },
+        { range: `${fmtBound(toRangeDisplay(result.p25))}-${fmtBound(toRangeDisplay(result.median))}`, value: 25, fill: '#0d9488' },
+        { range: `${fmtBound(toRangeDisplay(result.median))}-${fmtBound(toRangeDisplay(result.p75))}`, value: 25, fill: '#0d9488' },
+        { range: `${fmtBound(toRangeDisplay(result.p75))}-${fmtBound(toRangeDisplay(result.p95))}`, value: 20, fill: '#0d9488' },
+        { range: `${fmtBound(toRangeDisplay(result.p95))}-${fmtBound(toRangeDisplay(result.max))}`, value: 5, fill: '#4e5968' },
       ]
     : [];
 
@@ -334,10 +340,10 @@ export default function Uncertainty() {
                   <div className="mt-1 text-xs leading-6 text-slate-600">{draft.steps.map((key) => t(stepDisplayLabel(key))).join(', ') || t('No preparation steps selected')}</div>
                 </div>
                 <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
-                  <div className="cp-subtle-label">{t('Production scale')}</div>
-                  <div className="mt-2 text-base font-semibold text-[#191f28]"><ScientificText text={lang === 'ko' ? `${draft.orderSize}톤` : `${draft.orderSize} tons`} /></div>
+                  <div className="cp-subtle-label">{draft.catalystDomain === 'electrocatalyst' ? t('Active area') : t('Production scale')}</div>
+                  <div className="mt-2 text-base font-semibold text-[#191f28]"><ScientificText text={draft.catalystDomain === 'electrocatalyst' ? `${draft.electrocatalystConfig?.activeAreaCm2} cm²` : lang === 'ko' ? `${draft.orderSize}톤` : `${draft.orderSize} tons`} /></div>
                   <div className="mt-1 text-xs leading-6 text-slate-600">
-                    {t(applicationDisplay(draft.applicationFamily ?? 'general'))} / {t(domainDisplay(draft.catalystDomain))}
+                    {t(applicationDisplay(calculationInput?.application_family ?? 'general'))} / {t(domainDisplay(draft.catalystDomain))}
                   </div>
                 </div>
               </div>
@@ -406,7 +412,7 @@ export default function Uncertainty() {
                   </FieldBlock>
                 )}
 
-                <FieldBlock label={t('Production scale band')} hint="+/- %">
+                {draft.catalystDomain === 'thermal' ? <FieldBlock label={t('Production scale band')} hint="+/- %">
                   <input
                     type="number"
                     step="1"
@@ -416,7 +422,7 @@ export default function Uncertainty() {
                     onChange={(event) => setOrderBandPct(Number(event.target.value))}
                     className="input-base font-mono"
                   />
-                </FieldBlock>
+                </FieldBlock> : null}
               </div>
 
               <div className="mt-5 grid gap-3 sm:grid-cols-3">
@@ -430,7 +436,7 @@ export default function Uncertainty() {
                   <div className="mt-2 text-lg font-semibold text-[#191f28]">
                     {draft.catalystDomain === 'electrocatalyst' ? t('Catalyst + adjunct prices') : t('Active, promoter, and support prices')}
                   </div>
-                  <div className="mt-1 text-xs leading-5 text-slate-600">{t('The same case is re-run under sampled price and scale perturbations.')}</div>
+                  <div className="mt-1 text-xs leading-5 text-slate-600">{draft.catalystDomain === 'electrocatalyst' ? t('Area, loading and manufacturing assumptions stay fixed while powder and adjunct prices vary.') : t('The same case is re-run under sampled price and scale perturbations.')}</div>
                 </div>
                 <div className="cp-metric-tile">
                   <div className="cp-subtle-label">{t('Interpretation')}</div>
@@ -482,15 +488,20 @@ export default function Uncertainty() {
             </div>
           ) : (
             <>
+              <p className="mb-3 text-sm text-slate-600">{result.metric === 'electrode_assembly_cost' ? t('Comparison metric: electrode assembly cost per area.') : result.metric === 'selling_price_less_recovery' ? t('Full selling price after recovery credit') : t('Full selling price including margin, before recovery credit')}</p>
+              {result.n_failed > 0 ? <div className="mb-4 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+                <p>{t('Some simulations could not be costed. Statistics describe successful runs only.')} ({result.n_failed}/{result.n_simulations})</p>
+                {Object.entries(result.failure_reasons).map(([reason, count]) => <p key={reason} className="mt-2"><ScientificText text={reason} /> ({count})</p>)}
+              </div> : null}
               <div className="surface-ink overflow-hidden p-5">
                 {result.fixed_recipe_assumptions ? <p className="mb-4 text-sm leading-6 text-amber-200"><strong>{t('Fixed recipe assumptions')}: </strong><ScientificText text={result.fixed_recipe_assumptions} /></p> : null}
                 <div className="grid gap-3 sm:grid-cols-4">
-                  <StatTileDark label={t('Baseline')} value={`${formatPrice(toDisplay(result.baseline_price_per_lb))}${fmtLabel}`} detail={t('Current estimate')} />
-                  <StatTileDark label={t('Mean')} value={`${formatPrice(toDisplay(result.mean))}${fmtLabel}`} detail={t('Average outcome')} />
-                  <StatTileDark label={t('Median')} value={`${formatPrice(toDisplay(result.median))}${fmtLabel}`} detail={t('50th percentile')} />
+                  <StatTileDark label={t('Baseline')} value={`${formatPrice(toRangeDisplay(result.baseline))}${rangeLabel}`} detail={t('Current estimate')} />
+                  <StatTileDark label={t('Mean')} value={`${formatPrice(toRangeDisplay(result.mean))}${rangeLabel}`} detail={t('Average outcome')} />
+                  <StatTileDark label={t('Median')} value={`${formatPrice(toRangeDisplay(result.median))}${rangeLabel}`} detail={t('50th percentile')} />
                   <StatTileDark
                     label="P5-P95"
-                    value={`${formatPrice(toDisplay(result.p5))}-${formatPrice(toDisplay(result.p95))}`}
+                    value={`${formatPrice(toRangeDisplay(result.p5))} – ${formatPrice(toRangeDisplay(result.p95))}`}
                     detail={lang === 'ko' ? `성공한 실행 ${result.n_successful.toLocaleString('en-US')}회` : `${result.n_successful.toLocaleString('en-US')} successful runs`}
                   />
                 </div>
@@ -507,14 +518,14 @@ export default function Uncertainty() {
                 <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
                   <div className="cp-subtle-label">{t('Range width')}</div>
                   <div className="mt-2 text-base font-semibold text-[#191f28]">
-                    {formatPrice(toDisplay(result.p95 - result.p5))}{fmtLabel}
+                    {formatPrice(toRangeDisplay(result.p95 - result.p5))}{rangeLabel}
                   </div>
                   <div className="mt-1 text-xs leading-6 text-slate-600">{t('P95 minus P5')}</div>
                 </div>
                 <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
                   <div className="cp-subtle-label">{t('Std dev')}</div>
                   <div className="mt-2 text-base font-semibold text-[#191f28]">
-                    {formatPrice(toDisplay(result.std))}{fmtLabel}
+                    {formatPrice(toRangeDisplay(result.std))}{rangeLabel}
                   </div>
                   <div className="mt-1 text-xs leading-6 text-slate-600">{t('Distribution spread')}</div>
                 </div>
@@ -543,7 +554,7 @@ export default function Uncertainty() {
                 ].map(([label, value]) => (
                   <div key={String(label)} className="rounded-[22px] border border-slate-900/8 bg-white/62 px-3 py-4 text-center">
                     <div className="cp-subtle-label">{label}</div>
-                    <div className="mt-2 font-mono text-sm text-[#191f28]">{formatPrice(toDisplay(Number(value)))}</div>
+                    <div className="mt-2 font-mono text-sm text-[#191f28]">{formatPrice(toRangeDisplay(Number(value)))}</div>
                   </div>
                 ))}
               </div>

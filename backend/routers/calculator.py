@@ -8,6 +8,7 @@ from sqlmodel import Session
 
 from backend.core.cost_engine import estimate_catalyst_cost, estimate_catalyst_cost_simple
 from backend.core.material_pricing import resolve_component_input, resolve_electrode_materials
+from backend.core.step_method import determine_scale, fit_steps_to_scale
 from backend.database import get_session
 from backend.models.estimate import Estimate
 from backend.paths import data_dir
@@ -80,6 +81,8 @@ def _prepare_calculation_context(req: CostCalculationRequest, session: Session) 
     """Resolve template and library-backed materials into a reusable calculation context."""
 
     template = _load_template(req.template_id)
+    if template and template.get("catalyst_domain", "thermal") != req.catalyst_domain:
+        raise ValueError("Template and calculation catalyst domains must match")
     route_summary = _template_summary(template)
 
     application_family = req.application_family
@@ -118,8 +121,8 @@ def _prepare_calculation_context(req: CostCalculationRequest, session: Session) 
                 electrode_payload["catalyst_price_per_lb"] = float(primary["price_per_lb"])
 
     steps = req.steps
-    if template and (not steps):
-        steps = template.get("steps", steps)
+    if template and ("steps" not in req.model_fields_set or not steps):
+        steps, _, _ = fit_steps_to_scale(template.get("steps", []), determine_scale(req.order_size_tons))
 
     return {
         "resolved_components": resolved_components,
@@ -204,7 +207,9 @@ def calculate_cost_quick(req: QuickCalculationRequest):
         if req.template_id:
             template = _load_template(req.template_id)
             if template is not None:
-                steps = template.get("steps", steps)
+                if template.get("catalyst_domain", "thermal") != req.catalyst_domain:
+                    raise ValueError("Template and calculation catalyst domains must match")
+                steps, _, _ = fit_steps_to_scale(template.get("steps", steps), determine_scale(req.order_size_tons))
 
         result = estimate_catalyst_cost_simple(
             metal_symbol=req.metal_symbol,
@@ -258,7 +263,7 @@ def save_estimate(
         support_name=str(primary_support["name"]) if supports else "",
         order_size_tons=req.order_size_tons,
         estimated_price_per_lb=result["summary"]["estimated_price_per_lb"],
-        input_json=json.dumps(req.model_dump(mode="json")),
+        input_json=json.dumps({**req.model_dump(mode="json"), "steps": result["costing_scope"]["actual_steps"]}),
         result_json=json.dumps(result),
     )
     session.add(estimate)

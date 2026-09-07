@@ -7,6 +7,9 @@ type CsvCell = string | number | null | undefined;
 function csvEscape(cell: CsvCell): string {
   if (cell == null) return '';
   const text = typeof cell === 'string' ? formatScientificText(cell) : String(cell);
+  if (typeof cell === 'string' && /^(?:\s*[=+@\-＝＋－＠]|[\t\r\n])/.test(text)) {
+    return `"\t${text.replace(/"/g, '""')}"`;
+  }
   if (/[",\n\r]/.test(text)) return `"${text.replace(/"/g, '""')}"`;
   return text;
 }
@@ -51,6 +54,7 @@ export function buildResultCsv(snapshot: CalculatorResultSnapshot): string {
   const composition =
     typeof result.input_summary.composition === 'string' ? result.input_summary.composition : 'Catalyst estimate';
   const step = result.step_method;
+  const electrode = result.electrode_model;
   const sections: string[] = [];
 
   sections.push(
@@ -59,38 +63,42 @@ export function buildResultCsv(snapshot: CalculatorResultSnapshot): string {
       ['Composition', composition],
       ['Catalyst domain', String(result.input_summary.catalyst_domain ?? 'thermal')],
       ['Generated at', snapshot.generatedAt],
-      ['Order size (tons)', snapshot.orderSize],
-      ['Production scale', step.scale],
-      ['Campaign days', Number(step.campaign_days)],
+      ...(!electrode ? [
+        ['Order size (tons)', snapshot.orderSize],
+        ['Production scale', step.scale],
+        ['Campaign days', Number(step.campaign_days)],
+      ] : []),
     ),
   );
 
-  sections.push(
-    rows(
-      ['Summary'],
-      ['Metric', 'Value', 'Unit'],
-      ['Estimated selling price', result.summary.estimated_price_per_lb, '$/lb'],
-      ['Estimated selling price', result.summary.estimated_price_per_kg, '$/kg'],
-      ['Selling price less recovery value (margin included)', result.summary.net_cost_per_lb, '$/lb'],
-      ['Selling price less recovery value (margin included)', result.summary.net_cost_per_kg, '$/kg'],
-      ['Materials share', result.summary.materials_pct, '% of selling price'],
-      ['Processing share', result.summary.processing_pct, '% of selling price'],
-    ),
-  );
+  if (!electrode) {
+    sections.push(
+      rows(
+        ['Summary'],
+        ['Metric', 'Value', 'Unit'],
+        ['Estimated selling price', result.summary.estimated_price_per_lb, '$/lb'],
+        ['Estimated selling price', result.summary.estimated_price_per_kg, '$/kg'],
+        ['Selling price less recovery value (margin included)', result.summary.net_cost_per_lb, '$/lb'],
+        ['Selling price less recovery value (margin included)', result.summary.net_cost_per_kg, '$/kg'],
+        ['Materials share', result.summary.materials_pct, '% of selling price'],
+        ['Processing share', result.summary.processing_pct, '% of selling price'],
+      ),
+    );
 
-  const ledger: CsvCell[][] = [
-    ['Cost build-up'],
-    ['Item', 'Cost ($/lb)'],
-    ['Materials', result.materials.total_materials_cost_per_lb],
-    ['Processing', Number(step.processing_cost_per_lb)],
-  ];
-  if (typeof step.ga_per_lb === 'number') ledger.push(['Overhead (general and administrative)', step.ga_per_lb]);
-  if (typeof step.sard_per_lb === 'number') ledger.push(['Sales, admin & R&D (S&ARD)', step.sard_per_lb]);
-  if (typeof step.margin_per_lb === 'number') {
-    ledger.push([`Margin (${Number(step.margin_pct).toFixed(1)}%)`, step.margin_per_lb]);
+    const ledger: CsvCell[][] = [
+      ['Cost build-up'],
+      ['Item', 'Cost ($/lb)'],
+      ['Materials', result.materials.total_materials_cost_per_lb],
+      ['Processing', Number(step.processing_cost_per_lb)],
+    ];
+    if (typeof step.ga_per_lb === 'number') ledger.push(['Overhead (general and administrative)', step.ga_per_lb]);
+    if (typeof step.sard_per_lb === 'number') ledger.push(['Sales, admin & R&D (S&ARD)', step.sard_per_lb]);
+    if (typeof step.margin_per_lb === 'number') {
+      ledger.push([`Margin (${Number(step.margin_pct).toFixed(1)}%)`, step.margin_per_lb]);
+    }
+    ledger.push(['Estimated selling price', step.estimated_price_per_lb]);
+    sections.push(rows(...ledger));
   }
-  ledger.push(['Estimated selling price', step.estimated_price_per_lb]);
-  sections.push(rows(...ledger));
 
   sections.push(
     rows(
@@ -199,7 +207,6 @@ export function buildResultCsv(snapshot: CalculatorResultSnapshot): string {
     ));
   }
 
-  const electrode = result.electrode_model;
   if (electrode) {
     sections.push(
       rows(
@@ -216,7 +223,7 @@ export function buildResultCsv(snapshot: CalculatorResultSnapshot): string {
   }
 
   const spent = result.spent_catalyst;
-  if (spent) {
+  if (spent && !electrode) {
     sections.push(
       rows(
         ['Spent catalyst recovery'],
@@ -264,6 +271,9 @@ export function buildRangeCsv(result: EstimateRangeResult): string {
       ['Application family', result.application_family],
       ['Simulations', result.n_simulations],
       ['Successful runs', result.n_successful],
+      ['Failed runs', result.n_failed],
+      ['Metric', result.metric],
+      ['Seed', result.seed],
       ['Unit', result.unit],
     ),
   );
@@ -271,7 +281,7 @@ export function buildRangeCsv(result: EstimateRangeResult): string {
     rows(
       ['Distribution'],
       ['Statistic', `Value (${result.unit})`],
-      ['Baseline', result.baseline_price_per_lb],
+      ['Baseline', result.baseline],
       ['Mean', result.mean],
       ['Std dev', result.std],
       ['Min', result.min],
@@ -284,6 +294,11 @@ export function buildRangeCsv(result: EstimateRangeResult): string {
     ),
   );
   const applied = Object.entries(result.uncertainties_applied);
+  if (result.n_failed) sections.push(rows(
+    ['Statistics exclude failed runs; the range is conditional on successful simulations.'],
+    ['Failure reason', 'Count'],
+    ...Object.entries(result.failure_reasons),
+  ));
   if (result.fixed_recipe_assumptions) sections.push(rows(['Fixed recipe assumptions', result.fixed_recipe_assumptions]));
   if (applied.length) {
     sections.push(

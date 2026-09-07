@@ -36,3 +36,10 @@ def test_controlled_seed_mismatch_is_rejected(monkeypatch):
     monkeypatch.setattr(paper, 'load', load)
     with pytest.raises(ValueError, match='seeds differ'):
         paper.PaperRun(paper.PAPER / 'submission-2026-09-07')
+
+
+def test_submission_reproduction_command_preserves_the_frozen_output_directory():
+    run = paper.PaperRun(paper.PAPER / 'submission-2026-09-07')
+    command = run.reproduction_command()
+    assert '--out-dir _local/submission-replay-2026-09-07' in command
+    assert '--history docs/paper/submission-2026-09-07/' in command

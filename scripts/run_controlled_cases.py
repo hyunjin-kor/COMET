@@ -213,6 +213,9 @@ def main():
     parser.add_argument("--out-dir", type=Path, required=True)
     parser.add_argument("--seed", type=int, default=20260906)
     args = parser.parse_args()
+    args.out_dir = args.out_dir.resolve()
+    if args.out_dir.exists() and (not args.out_dir.is_dir() or any(args.out_dir.iterdir())):
+        parser.error("Output directory must be new or empty; choose a different --out-dir to preserve existing evidence")
     if data_dir().resolve() != (ROOT / "backend/data").resolve():
         raise ValueError("Controlled cases require the repository data directory whose hashes are recorded")
     basis = [json.loads(path.read_text(encoding="utf-8"))["price_basis"] for path in (args.reference_basis, args.live_basis)]

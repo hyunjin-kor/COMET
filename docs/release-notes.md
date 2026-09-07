@@ -1,10 +1,16 @@
 # Release Notes
 
-## 1.4.0 — prepared, not published (updated 2026-09-07)
+## 1.4.0 — prepared, not published (updated 2026-09-08)
 
 The package versions are 1.4.0. The latest verified public release remains v1.3.24. No tag, GitHub release, Zenodo deposit or deployment was created in this run.
 
 New distribution is held until the [bundled data rights review](commercial/rights-register-2026-09-07.md) is complete. The original workbook is excluded, but existing extracted records still need permission review.
+
+- Electrode range, latest-result cards and CSV exports now use assembly cost per area consistently. Adjunct-price changes affect the range, and kg/lb switching preserves area values. Bulk campaign/margin/recovery values are omitted from electrode result exports.
+- Thermal uncertainty follows the selected recovery option and fits operations across scale boundaries. Failed samples and their reasons are disclosed. Invalid numeric values and unsupported margin extrapolation return useful validation errors.
+- Direct API calls that omit template steps now calculate and save the selected method's actual scale-fitted steps. Cross-domain template selection is rejected.
+- Paper and controlled-case reproduction require a fresh output directory, preserve existing evidence and fail if source code changes during execution. CSV text cells that could be formulas are exported as quoted text with a leading tab.
+- Password reset and login now serialize account checks and session creation, preventing a racing login with an old password from retaining a new session. See the [prepublication audit](audit/prepublication-run-2026-09-08.md).
 
 - Choose live quotes or a common published month throughout the calculator, prices and literature comparison. The monthly reference uses IMF and Johnson Matthey averages; optional UN Comtrade support values retain explicit bulk-proxy provenance ([#104](https://github.com/hyunjin-kor/COMET/pull/104), [#105](https://github.com/hyunjin-kor/COMET/pull/105), [#106](https://github.com/hyunjin-kor/COMET/pull/106)).
 - Compare 28 named thermal preparation methods with processing costs at the chosen production scale. Card identity and repeated operations now survive scale fitting ([#107](https://github.com/hyunjin-kor/COMET/pull/107)).

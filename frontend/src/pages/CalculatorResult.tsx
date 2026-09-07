@@ -410,14 +410,7 @@ export default function CalculatorResult() {
             </div>
             <div className="mt-2 text-xs leading-6 text-slate-300">
               {electrodeModel ? (
-                lang === 'ko' ? (
-                  <>유효 면적 cm²당 전극 조립체 원가입니다 (모델 면적 {electrodeModel.active_area_cm2.toFixed(1)} cm²). 질량 기준으로는 공급사 포장 단가 기준 {formatPrice(toDisplay(result.summary.estimated_price_per_lb))}{fmtLabel}입니다.</>
-                ) : (
-                  <>
-                    {t("Electrode-stack cost per cm² of active area (")}{electrodeModel.active_area_cm2.toFixed(1)} {t("cm² modeled). Per-mass view")} {formatPrice(toDisplay(result.summary.estimated_price_per_lb))}
-                    {fmtLabel} {t("on vendor-pack material prices.")}
-                  </>
-                )
+                t('Electrode assembly cost per cm² of active area.')
               ) : (
                 lang === 'ko' ? (
                   <>폐촉매 회수 가치를 뺀 순원가 {formatPrice(toDisplay(result.summary.net_cost_per_lb))}{fmtLabel}. 다른 단위로는 {formatPrice(altPrice)}<ScientificText text={altLabel} />.</>
@@ -539,15 +532,7 @@ export default function CalculatorResult() {
               </div>
               <div className="mt-3 text-sm text-slate-300">
                 {electrodeModel ? (
-                  lang === 'ko' ? (
-                    <>유효 면적 cm²당 전극 조립체 원가입니다. 질량 기준으로는 공급사 포장 단가 기준 {formatPrice(toDisplay(result.summary.estimated_price_per_lb))}{fmtLabel}입니다.</>
-                  ) : (
-                    <>
-                      {t("Electrode-stack cost per cm² of active area. Per-mass view")}{' '}
-                      {formatPrice(toDisplay(result.summary.estimated_price_per_lb))}
-                      {fmtLabel} {t("on vendor-pack material prices.")}
-                    </>
-                  )
+                  t('Electrode assembly cost per cm² of active area.')
                 ) : (
                   lang === 'ko' ? (
                     <>폐촉매 회수 가치를 뺀 순원가 {formatPrice(toDisplay(result.summary.net_cost_per_lb))}{fmtLabel}.</>
@@ -601,7 +586,7 @@ export default function CalculatorResult() {
                 <div className="cp-subtle-label">{t('Electrode Assembly')}</div>
                 <div className="cp-heading-sm mt-2">{t('Area-based electrocatalyst layer model')}</div>
                 <div className="mt-1 text-xs leading-6 text-slate-600">
-                  {t('Catalyst powder, ionomer, membrane, and substrate are costed on an active-area basis and displayed alongside the powder estimate.')}
+                  {t('Catalyst powder, ionomer, membrane, and substrate are costed on an active-area basis.')}
                 </div>
               </div>
               <span className="cp-chip">{t(applicationDisplay(electrodeModel.application_family))}</span>

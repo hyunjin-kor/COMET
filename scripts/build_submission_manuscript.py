@@ -154,7 +154,7 @@ class PaperRun:
         return (
             "python scripts/reproduce_paper.py --price-basis reference "
             f"--month {self.summary['basis_month']} --seed {self.manifest['seed']} "
-            f"--date {DATE} --out-dir {prefix} "
+            f"--date {DATE} --out-dir _local/submission-replay-{DATE} "
             f"--history {prefix}/{self.manifest['history']['file']} "
             f"--support-history {prefix}/{self.manifest['support_history']['file']} "
             f"--live-basis {prefix}/live_basis_{DATE}.json"

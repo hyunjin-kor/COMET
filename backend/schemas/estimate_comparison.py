@@ -6,7 +6,7 @@ from backend.schemas.cost_input import PriceBasis
 
 
 class EstimateComparisonRequest(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
 
     estimate_ids: list[int] = Field(min_length=2, max_length=4)
     reference_estimate_id: int = Field(gt=0)

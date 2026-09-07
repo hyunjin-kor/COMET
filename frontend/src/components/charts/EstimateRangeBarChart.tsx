@@ -30,8 +30,8 @@ export default function EstimateRangeBarChart({ data }: { data: HistogramBar[] }
           labelStyle={{ color: '#4e5968', fontSize: 11, marginBottom: 4 }}
         />
         <Bar dataKey="value" radius={[6, 6, 0, 0]}>
-          {data.map((entry) => (
-            <Cell key={entry.range} fill={entry.fill} />
+          {data.map((entry, index) => (
+            <Cell key={index} fill={entry.fill} />
           ))}
         </Bar>
       </BarChart>

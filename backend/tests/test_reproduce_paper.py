@@ -74,3 +74,56 @@ def test_breakeven_propagates_reference_basis(monkeypatch):
     result = module.breakeven_for_pair(None, "family", "a", "b", "Cu", {"Cu": {"price": 4, "unit": "$/lb", "source": "test"}}, basis="reference", scan=3)
     assert "error" not in result
     assert seen and set(seen) == {"reference"}
+
+
+@pytest.mark.parametrize('script', ['reproduce_paper', 'run_controlled_cases'])
+def test_replay_refuses_nonempty_output_before_touching_frozen_evidence(tmp_path, monkeypatch, script):
+    from importlib import import_module
+
+    module = import_module('scripts.' + script)
+    frozen = tmp_path / 'frozen'
+    frozen.mkdir()
+    evidence = frozen / 'reproduction_manifest_2026-09-07.json'
+    evidence.write_bytes(b'original evidence\r\n')
+    missing = str(tmp_path / 'missing.json')
+    args = ([script, '--history', missing, '--date', '2026-09-07'] if script == 'reproduce_paper'
+            else [script, '--reference-basis', missing, '--live-basis', missing])
+    monkeypatch.setattr(sys, 'argv', [*args, '--out-dir', str(frozen)])
+    with pytest.raises(SystemExit) as exc:
+        module.main()
+    assert exc.value.code == 2
+    assert list(frozen.iterdir()) == [evidence]
+    assert evidence.read_bytes() == b'original evidence\r\n'
+
+
+def test_changed_source_marks_pipeline_failed_instead_of_complete(tmp_path, monkeypatch):
+    import shutil
+
+    from scripts import reproduce_paper as paper
+
+    frozen = paper.ROOT / 'docs/paper/submission-2026-09-07'
+    output = tmp_path / 'replay'
+    changed = False
+    original_hash = paper.sha256
+
+    def command(args, env, records, **kwargs):
+        nonlocal changed
+        shutil.copytree(frozen, output, dirs_exist_ok=True)
+        changed = args[1] == 'scripts/generate_paper_figures.py'
+        record = {'command': args, 'returncode': 0, 'elapsed_seconds': 0}
+        records.append(record)
+        return record
+
+    monkeypatch.setattr(paper, 'run_command', command)
+    monkeypatch.setattr(paper, 'sha256', lambda path: 'changed' if changed and path == paper.ROOT / 'backend/database.py' else original_hash(path))
+    monkeypatch.setattr(sys, 'argv', ['reproduce_paper', '--date', '2026-09-07', '--month', '2026-05',
+                                    '--history', str(frozen / 'price_history_2026-09-07.json'),
+                                    '--support-history', str(frozen / 'support_history_2026-09-07.json'),
+                                    '--live-basis', str(frozen / 'live_basis_2026-09-07.json'),
+                                    '--out-dir', str(output)])
+    with pytest.raises(RuntimeError, match='Source code changed'):
+        paper.main()
+    manifest = paper.read_json(output / 'reproduction_manifest_2026-09-07.json')
+    assert manifest['status'] == 'failed'
+    assert manifest['code_changed_during_run'] == ['backend/database.py']
+    assert manifest['live_input']['sha256'] == original_hash(frozen / 'live_basis_2026-09-07.json')

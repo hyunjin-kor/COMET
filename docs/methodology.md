@@ -56,7 +56,7 @@ From the repository root, with the project's Python packages and Matplotlib avai
 python scripts/reproduce_paper.py --price-basis reference --month 2026-07 --seed 20260906
 ```
 
-Omit `--month` to choose the latest common completed publication month. The command collects institutional history, freezes the reference basis, evaluates the library, replays price states, sweeps break-even prices and draws six figures. It records input SHA-256 hashes, exact commands, the Python/package environment and source failures in `docs/paper/reproduction_manifest_2026-09-06.json`. The deterministic analyses enumerate states; the seed controls the execution environment and is retained for reproducibility. The uncertainty API separately accepts an optional `seed`; omitting it requests independent samples.
+Omit `--month` to choose the latest common completed publication month. The command collects institutional history, freezes the reference basis, evaluates the library, replays price states, sweeps break-even prices and draws six figures. It records input SHA-256 hashes, exact commands, the Python/package environment and source failures in `reproduction_manifest_<date>.json` inside the selected output directory. The deterministic analyses enumerate states; the seed controls the execution environment and is retained for reproducibility. The uncertainty API separately accepts an optional `seed`; omitting it requests independent samples. Both reproduction runners require a new or empty output directory and stop before writing if evidence already exists. Paper output defaults to `_local/paper-<date>`. The manifest hashes the raw supplied live snapshot as well as metal/support history, backend and script sources; a source change during execution marks the run failed.
 
 To repeat the unified May submission evidence without collecting new quotes or overwriting the committed run:
 
@@ -312,3 +312,11 @@ Eligible observations report signed percentage error and absolute percentage
 error. The displayed MAPE averages only eligible observations for that saved
 estimate and is `null` when none qualify. It is a local comparison of
 user-confirmed evidence, not independent empirical validation of COMET.
+
+## Monte Carlo outcome and input boundaries
+
+The structured uncertainty API repeats the current calculator case. For a thermal case it reports selling price in $/lb, or selling price less recovery credit when that option is selected. For an electrode assembly it reports the assembly cost in $/cm², including catalyst powder and selected adjuncts. Changing kg/lb display units does not convert area costs. Area, loading and any declared electrode manufacturing scenario stay fixed; only powder and adjunct prices vary. Bulk order-size bounds do not apply to this area model. The legacy flat API remains a bulk selling-price model.
+
+When a sampled thermal order crosses a Small/Medium/Large boundary, the declared operations use the same documented scale substitutions as the point estimate. A sample that would lose a required operation is counted as failed instead of silently calculating a cheaper route. Responses and exports retain the number and reasons for failed runs; percentiles describe successful runs only. These are uniform scenario intervals, not validated confidence intervals. An explicit empty uncertainty map fixes all factors at one, whereas an omitted map uses the documented defaults.
+
+All numeric request values must be finite. The published selling-margin correlation is unchanged; an order for which it predicts a margin of 100% or more is rejected because a positive finite selling price cannot be calculated from that expression. COMET does not invent a small-batch extrapolation or clamp the margin. Omitted template steps resolve to that template at the requested scale, and saved inputs preserve the operations actually calculated. See the [prepublication audit](audit/prepublication-run-2026-09-08.md) for regression cases and unchanged Table 6.2/paper results.

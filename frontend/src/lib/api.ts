@@ -1038,9 +1038,14 @@ export interface EstimateRangeResult {
   p95: number;
   n_simulations: number;
   n_successful: number;
-  unit: string;
-  baseline_price_per_lb: number;
-  baseline_price_per_kg: number;
+  n_failed: number;
+  failure_reasons: Record<string, number>;
+  seed: number | null;
+  unit: '$/lb' | '$/cm2';
+  metric: 'selling_price' | 'selling_price_less_recovery' | 'electrode_assembly_cost';
+  baseline: number;
+  baseline_price_per_lb?: number;
+  baseline_price_per_kg?: number;
   composition: string;
   catalyst_domain: Extract<CatalystDomain, 'thermal' | 'electrocatalyst'>;
   application_family: ApplicationFamily;

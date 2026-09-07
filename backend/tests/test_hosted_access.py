@@ -39,6 +39,38 @@ def login(client, username="fixture.first", password=PASSWORD):
     return response
 
 
+def test_password_reset_revokes_a_sign_in_already_checking_the_old_password(hosted_client, monkeypatch):
+    from concurrent.futures import ThreadPoolExecutor
+    from threading import Event
+
+    _, first, _ = hosted_client
+    checking, reset_started, reset_done = Event(), Event(), Event()
+    original = hosted.verify_password
+
+    def delayed_verification(password, encoded):
+        checking.set()
+        assert reset_started.wait(5)
+        # A serialized reset waits for login's transaction. An unsafe reset
+        # completes here and the old login must not publish a session after it.
+        reset_done.wait(1)
+        return original(password, encoded)
+
+    def reset():
+        assert checking.wait(5)
+        reset_started.set()
+        hosted.reset_account_password(first.id, 'new-synthetic-fixture-password', actor='synthetic-test')
+        reset_done.set()
+
+    monkeypatch.setattr(hosted, 'verify_password', delayed_verification)
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        signing_in = pool.submit(hosted.sign_in, first.username, PASSWORD, 'testclient', None)
+        resetting = pool.submit(reset)
+        signing_in.result(timeout=10)
+        resetting.result(timeout=10)
+    with hosted.control_session() as session:
+        assert not session.exec(select(HostedLoginSession).where(HostedLoginSession.account_id == first.id)).all()
+
+
 def test_hosted_defaults_off_and_local_session_has_no_login_requirement(client):
     assert client.get("/api/auth/session").json() == {"mode": "desktop", "authenticated": False, "account": None}
     assert client.get("/api/estimates").status_code == 200

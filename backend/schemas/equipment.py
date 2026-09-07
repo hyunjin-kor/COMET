@@ -6,7 +6,7 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 class EquipmentBase(BaseModel):
     """Shared request/response fields for equipment entries."""
 
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
 
     category: str = Field(min_length=1)
     name: str = Field(min_length=1)
@@ -44,7 +44,7 @@ class EquipmentCreate(EquipmentBase):
 class EquipmentUpdate(BaseModel):
     """Partial payload used to update a custom equipment row."""
 
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
 
     category: str | None = Field(default=None, min_length=1)
     name: str | None = Field(default=None, min_length=1)

@@ -170,3 +170,20 @@ test('electrode displayed ledger uses area costs without thermal cost fields', (
   assert.deepEqual(electrodeCostRows({ electrode_model: result.electrode_model }), rows);
   assert.equal(electrodeCostRows({ electrode_model: null }), null);
 });
+
+test('electrode CSV exports the assembly ledger without a thermal campaign or selling margin', () => {
+  const result = {
+    input_summary: { catalyst_domain: 'electrocatalyst', composition: 'Synthetic powder' },
+    summary: { estimated_price_per_lb: 987654, net_cost_per_lb: 876543 },
+    step_method: { scale: 'medium', campaign_days: 765432, processing_cost_per_lb: 654321, margin_pct: 20 },
+    materials: { components: [], total_materials_cost_per_lb: 543210 },
+    electrode_model: { active_area_cm2: 25, catalyst_loading_mg_cm2: 0.5, total_cost_usd: 5,
+      cost_per_cm2_usd: 0.2, cost_per_m2_usd: 2000, breakdown: [{ label: 'Catalyst powder', cost_usd: 2 }, { label: 'Membrane', cost_usd: 3 }] },
+    spent_catalyst: { V_reclaimed_per_lb: 432109 },
+  };
+  const csv = buildResultCsv({ result, generatedAt: '2026-09-08', orderSize: 20, stepLabels: [] });
+  assert.ok(csv.includes('Cost per cm²,0.2,$/cm²'));
+  for (const text of ['987654', '876543', '765432', '654321', '543210', '432109', 'Campaign days', 'Estimated selling price', 'Spent catalyst recovery']) {
+    assert.ok(!csv.includes(text), `Unexpected thermal value/label: ${text}`);
+  }
+});

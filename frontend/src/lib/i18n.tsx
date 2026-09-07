@@ -664,6 +664,9 @@ const KO: Record<string, string> = {
   'Substrate / GDL': '기재 / GDL',
   'Electrode geometry': '전극 조건',
   'Active area': '유효 면적',
+  'Electrode assembly cost per cm² of active area.': '유효 면적 cm²당 전극 조립체 원가입니다.',
+  'Area, loading and manufacturing assumptions stay fixed while powder and adjunct prices vary.': '유효 면적·도포량·제조 조건은 고정하고 촉매 분말과 부재료 단가를 변동시킵니다.',
+  'Some simulations could not be costed. Statistics describe successful runs only.': '일부 표본은 원가를 계산하지 못했습니다. 아래 통계는 계산에 성공한 표본만을 대상으로 합니다.',
   'Selected preparation template': '선택된 제조 템플릿',
   'Pre-treatment': '전처리',
   'Synthesis / coating': '합성 / 코팅',
@@ -847,8 +850,8 @@ const KO: Record<string, string> = {
   'Resolved rows with a public URL.': '공개 URL이 있는 적용 항목 수입니다.',
   'Electrode Assembly': '전극 조립체',
   'Area-based electrocatalyst layer model': '면적 기준 전극층 모델',
-  'Catalyst powder, ionomer, membrane, and substrate are costed on an active-area basis and displayed alongside the powder estimate.':
-    '촉매 분말, 아이오노머, 멤브레인, 기재를 유효 면적 기준으로 원가 계산해 분말 기준 결과와 함께 보여줍니다.',
+  'Catalyst powder, ionomer, membrane, and substrate are costed on an active-area basis.':
+    '촉매 분말, 아이오노머, 멤브레인, 기재를 유효 면적 기준으로 원가 계산합니다.',
   'Per modeled layer': '모델링된 층 기준',
   'Catalyst loading': '촉매 담지량',
   'Dry catalyst loading': '건조 촉매 담지량',
