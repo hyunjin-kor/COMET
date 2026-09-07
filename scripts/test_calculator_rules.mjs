@@ -13,7 +13,7 @@ async function loadHelper(name) {
   return import(`data:text/javascript;base64,${Buffer.from(outputText).toString('base64')}`);
 }
 
-const { sameSteps, matchThermalTemplate, isThermalTemplateReady } = await loadHelper('preparation-selection');
+const { sameSteps, matchThermalTemplate, isThermalTemplateReady, togglePreparationStep, fitPreparationSelection } = await loadHelper('preparation-selection');
 const { compareElectroPreference } = await loadHelper('electrode-defaults');
 const { electrodeCostRows } = await loadHelper('electrode-result');
 const { blankRecipe, validRecipe, validConsumables } = await loadHelper('recipe-inputs');
@@ -50,6 +50,50 @@ test('CSV preserves calculation scope, production assumptions and purchased-inpu
 test('repeated operations remain distinct while order-only changes match', () => {
   assert.equal(sameSteps(['mix', 'mix', 'dry'], ['mix', 'dry', 'dry']), false);
   assert.equal(sameSteps(['mix', 'mix', 'dry'], ['dry', 'mix', 'mix']), true);
+});
+
+test('unchecking and rechecking a repeated operation restores its count and original sequence', () => {
+  const basis = ['mix', 'react', 'filter', 'react', 'dry', 'react'];
+  const before = { steps: [...basis], basis: [...basis] };
+  const off = togglePreparationStep(before, 'react');
+  assert.deepEqual(off.steps, ['mix', 'filter', 'dry']);
+  assert.deepEqual(togglePreparationStep(off, 'react'), before);
+  assert.deepEqual(before.steps, basis);
+});
+
+test('interleaved step toggles preserve other edits and restore repeated operations after draft reload', () => {
+  const initial = { steps: ['mix', 'react', 'dry', 'react'], basis: ['mix', 'react', 'dry', 'react'] };
+  let state = togglePreparationStep(initial, 'react');
+  state = togglePreparationStep(state, 'dry');
+  state = togglePreparationStep(state, 'mill');
+  state = togglePreparationStep(JSON.parse(JSON.stringify(state)), 'react');
+  assert.deepEqual(state.steps, ['mix', 'react', 'react', 'mill']);
+  state = togglePreparationStep(state, 'dry');
+  assert.deepEqual(state.steps, ['mix', 'react', 'dry', 'react', 'mill']);
+});
+
+test('scale fitting keeps deliberate omissions and additions including an in-flight manual edit', () => {
+  const cost = { steps_fitted: ['mix', 'kiln_continuous', 'filter', 'filter'], substitutions: [{from:'kiln_batch',to:'kiln_continuous'}] };
+  const selection = { basis: ['mix', 'kiln_batch', 'filter', 'filter'], steps: ['mix', 'filter', 'filter', 'mill'] };
+  const fitted = fitPreparationSelection(selection, cost, ['mix','kiln_continuous','filter','mill']);
+  assert.deepEqual(fitted.steps, ['mix','filter','filter','mill']);
+  assert.deepEqual(togglePreparationStep(fitted, 'kiln_continuous').steps, ['mix','kiln_continuous','filter','filter','mill']);
+  assert.equal(isThermalTemplateReady('selected', {selected:cost}, fitted.steps, 20, 20, true), true);
+  assert.equal(isThermalTemplateReady('selected', {selected:cost}, fitted.steps, 200, 20, true), false);
+});
+
+test('editing a chosen method never silently adopts another method with matching steps', () => {
+  const templates = [{id:'chosen',steps:['mix','dry']},{id:'other',steps:['mix']}];
+  assert.equal(matchThermalTemplate(templates, {}, ['mix'], 'chosen'), null);
+  assert.equal(matchThermalTemplate(templates, {}, ['mix'], null), null);
+  assert.equal(matchThermalTemplate(templates, {}, ['mix','dry'], 'chosen').id, 'chosen');
+});
+
+test('returning to a smaller scale does not reinsert a deliberately removed substituted kiln', () => {
+  const selection = {steps:['mix'],basis:['mix','kiln_continuous'],substitutions:[{from:'kiln_batch',to:'kiln_continuous'}]};
+  const small = fitPreparationSelection(selection, {steps_fitted:['mix','kiln_batch'],substitutions:[]}, ['mix','kiln_batch']);
+  assert.deepEqual(small.steps, ['mix']);
+  assert.deepEqual(togglePreparationStep(small, 'kiln_batch').steps, ['mix','kiln_batch']);
 });
 
 test('selected card identity survives identical routes and scale fitting', () => {

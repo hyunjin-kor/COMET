@@ -9,6 +9,28 @@ const LANG_KEY = 'comet_lang';
 // so partial coverage degrades gracefully. Data content (citations, evidence
 // notes, candidate summaries) deliberately stays in its source language.
 const KO: Record<string, string> = {
+  'Monthly average': '월평균',
+  'Live prices': '실시간 시세',
+  'optional': '선택 사항',
+  "Standard manufacturing methods": "표준 제조법",
+  "Choose a method, then adjust its operations below.": "제조법을 선택한 뒤 아래에서 제조 단계를 조정하세요.",
+  "Search manufacturing methods": "제조법 검색",
+  "Search method or catalyst": "제조법 또는 촉매 검색",
+  "Method category": "제조법 분류",
+  "No matching methods. Try another search.": "해당하는 제조법이 없습니다. 검색어를 바꿔 보세요.",
+  "Selected method details": "선택한 제조법 상세",
+  "Method with edited operations": "제조 단계 수정됨",
+  "Selected method": "선택한 제조법",
+  "Restore method steps": "표준 단계 복원",
+  "Standard processing cost": "표준 가공비",
+  "Uses the standard method and default production rate; excludes materials.": "표준 제조 단계와 기본 생산 속도 기준이며, 재료비는 제외합니다.",
+  "Standard method operations": "표준 제조 단계",
+  "Choose a starting method": "제조법을 선택하세요",
+  "Review the method here, or build your own route using the operation checkboxes below.": "여기서 제조법을 검토하거나, 아래 제조 단계를 직접 선택해 경로를 구성할 수 있습니다.",
+  "Manufacturing setup": "제조 조건 설정",
+  "Set the production scale, choose a method and check its operations.": "생산 규모와 제조법을 정하고 필요한 단계를 확인하세요.",
+  "Manufacturing operations": "제조 단계",
+  "Check each operation used. Repeated operations retain the method count when reselected.": "필요한 단계를 선택하세요. 반복 단계는 다시 선택해도 원래 횟수를 유지합니다.",
   'Fixed recipe assumptions': '고정한 투입량 가정',
 
   "Purchased precursor unit price": "구매 전구체 단가",

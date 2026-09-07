@@ -23,6 +23,8 @@ export interface CalculatorRow {
 export interface CalculatorDraft {
   rows: CalculatorRow[];
   steps: string[];
+  preparationStepBasis?: string[];
+  preparationStepSubstitutions?: Array<{ from: string; to: string }>;
   thermalTemplateId?: string | null;
   catalystDomain: 'thermal' | 'electrocatalyst';
   applicationFamily?: ApplicationFamily;

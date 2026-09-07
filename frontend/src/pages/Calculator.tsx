@@ -4,6 +4,7 @@ import CostEvidencePanel, { PurchaseEvidenceFields } from '../components/CostEvi
 import { SavedEstimateComparison } from '../components/SavedEstimateComparison';
 import { validConsumables, validRecipe, type ConsumableDraft } from '../lib/recipe-inputs';
 import { useNavigate } from 'react-router-dom';
+import { ManufacturingMethods } from '../components/ManufacturingMethods';
 import { FitPriceText } from '../components/shared/FitPriceText';
 import { WorkspaceSectionFooter, WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
 import {
@@ -42,7 +43,7 @@ import {
 } from '../lib/calculator-session';
 import { formatPrice } from '../lib/format-price';
 import { compareElectroPreference } from '../lib/electrode-defaults';
-import { isThermalTemplateReady, matchThermalTemplate, sameSteps } from '../lib/preparation-selection';
+import { fitPreparationSelection, isThermalTemplateReady, matchThermalTemplate, sameSteps, togglePreparationStep, type PreparationSelection } from '../lib/preparation-selection';
 import { useLang } from '../lib/i18n';
 import { LB_PER_KG, TROY_OZ_PER_LB } from '../lib/unit-conversion';
 import { useBasis } from '../lib/use-basis';
@@ -457,7 +458,12 @@ export default function Calculator() {
   const sectionState = useWorkspaceSections(ESTIMATE_SECTIONS, 'estimate');
   const storedDraft = loadCalculatorDraft();
   const [rows, setRows] = useState<CalculatorRow[]>(() => storedDraft?.rows?.length ? storedDraft.rows : defaultRows());
-  const [steps, setSteps] = useState<string[]>(() => storedDraft?.steps?.length ? storedDraft.steps : DEFAULT_STEPS);
+  const [preparation, setPreparation] = useState<PreparationSelection>(() => ({
+    steps: storedDraft?.steps ?? DEFAULT_STEPS,
+    basis: storedDraft?.preparationStepBasis ?? storedDraft?.steps ?? DEFAULT_STEPS,
+    substitutions: storedDraft?.preparationStepSubstitutions ?? [],
+  }));
+  const steps = preparation.steps;
   const [selectedThermalTemplateId, setSelectedThermalTemplateId] = useState<string | null>(() => storedDraft?.thermalTemplateId ?? null);
   const [catalystDomain, setCatalystDomain] = useState<'thermal' | 'electrocatalyst'>(() => storedDraft?.catalystDomain ?? 'thermal');
   const [applicationFamily, setApplicationFamily] = useState<ApplicationFamily>(() => storedDraft?.applicationFamily ?? 'fuel_cell');
@@ -497,6 +503,8 @@ export default function Calculator() {
     saveCalculatorDraft({
       rows,
       steps,
+      preparationStepBasis: preparation.basis,
+      preparationStepSubstitutions: preparation.substitutions,
       thermalTemplateId: selectedThermalTemplateId,
       catalystDomain,
       applicationFamily,
@@ -527,13 +535,18 @@ export default function Calculator() {
     selectedBenchmark,
     selectedThermalTemplateId,
     steps,
+    preparation.basis,
+    preparation.substitutions,
   ]);
 
   useEffect(() => {
     if (catalystDomain === 'thermal' && selectedThermalTemplateId) return;
-    setSteps((previous) => previous.filter((key) => {
+    const available = (key: string) => {
       const step = ALL_STEPS.find((item) => item.key === key);
       return step ? (step.scales as readonly Scale[]).includes(currentScale) : false;
+    };
+    setPreparation((previous) => ({
+      ...previous, steps: previous.steps.filter(available), basis: previous.basis.filter(available),
     }));
   }, [currentScale, catalystDomain, selectedThermalTemplateId]);
 
@@ -549,7 +562,10 @@ export default function Calculator() {
         setTemplateCosts(Object.fromEntries(payload.templates.map((item) => [item.id, item])));
         setTemplateCostsOrderSize(payload.order_size_tons);
         const selected = payload.templates.find((item) => item.id === selectedThermalTemplateId);
-        if (selected?.steps_fitted.length) setSteps([...selected.steps_fitted]);
+        if (selected?.steps_fitted.length) {
+          const available = ALL_STEPS.filter((step) => (step.scales as readonly Scale[]).includes(getScale(orderSize))).map((step) => step.key);
+          setPreparation((previous) => fitPreparationSelection(previous, selected, available));
+        }
       })
       .catch(() => {
         if (!cancelled) {
@@ -690,7 +706,7 @@ export default function Calculator() {
       return;
     }
 
-    setSteps(activeTemplate.steps);
+    setPreparation({ steps: [...activeTemplate.steps], basis: [...activeTemplate.steps] });
   }, [catalystDomain, electroTemplates, electrocatalystConfig.templateId]);
 
   useEffect(() => {
@@ -834,11 +850,15 @@ export default function Calculator() {
   };
   const matchedThermalTemplate =
     catalystDomain === 'thermal' ? matchThermalTemplate(thermalTemplates, templateCosts, steps, selectedThermalTemplateId) : null;
+  const selectedThermalTemplate = thermalTemplates.find((template) => template.id === selectedThermalTemplateId) ?? null;
+  const thermalStepsEdited = !sameSteps(steps, preparation.basis);
   const benchmarkTemplate = activeBenchmark?.route.calculator_template_id
     ? thermalTemplates.find((template) => template.id === activeBenchmark.route.calculator_template_id) ?? null
     : null;
-  const thermalTemplateId = matchedThermalTemplate && (selectedThermalTemplateId || matchedThermalTemplate.id !== benchmarkTemplate?.id) ? matchedThermalTemplate.id : undefined;
-  const thermalRouteLabel = thermalTemplateId
+  const thermalTemplateId = selectedThermalTemplateId ?? (matchedThermalTemplate && matchedThermalTemplate.id !== benchmarkTemplate?.id ? matchedThermalTemplate.id : undefined);
+  const thermalRouteLabel = selectedThermalTemplate
+    ? `${selectedThermalTemplate.name}${thermalStepsEdited ? ` (${t('edited')})` : ''}`
+    : thermalTemplateId
     ? matchedThermalTemplate?.name ?? t('Manual step selection')
     : activeBenchmark
       ? benchmarkTemplate && !sameSteps(routeStepsFor(benchmarkTemplate), steps)
@@ -883,8 +903,9 @@ export default function Calculator() {
               const step = ALL_STEPS.find((item) => item.key === key);
               return step ? (step.scales as readonly Scale[]).includes(currentScale) : false;
             });
-      setSteps(selectedThermalTemplateId && templateCosts[selectedThermalTemplateId]?.steps_fitted.length
-        ? [...templateCosts[selectedThermalTemplateId].steps_fitted] : thermalBenchmarkSteps);
+      const nextSteps = selectedThermalTemplateId && templateCosts[selectedThermalTemplateId]?.steps_fitted.length
+        ? [...templateCosts[selectedThermalTemplateId].steps_fitted] : thermalBenchmarkSteps;
+      setPreparation({ steps: nextSteps, basis: [...nextSteps], substitutions: templateCosts[selectedThermalTemplateId ?? ""]?.substitutions });
       return;
     }
 
@@ -923,8 +944,7 @@ export default function Calculator() {
     return previous.filter((row) => row.id !== id);
   });
   const toggleStep = (stepKey: string) => {
-    setSelectedThermalTemplateId(null);
-    setSteps((previous) => previous.includes(stepKey) ? previous.filter((item) => item !== stepKey) : [...previous, stepKey]);
+    setPreparation((previous) => togglePreparationStep(previous, stepKey));
   };
   const thermalRows = rows.filter((row) => row.role === 'active_metal' || row.role === 'promoter' || row.role === 'support');
   const supportRows = thermalRows.filter((row) => row.role === 'support');
@@ -990,6 +1010,7 @@ export default function Calculator() {
   const isValid = catalystDomain === 'electrocatalyst' ? isElectroValid : isThermalValid;
   const isRouteReady = catalystDomain !== 'thermal' || isThermalTemplateReady(
     selectedThermalTemplateId, templateCosts, steps, orderSize, templateCostsOrderSize,
+    thermalStepsEdited,
   );
   const canCalculate = isValid && isManufacturingSectionValid && isRouteReady;
   const latestSnapshotForCurrentCase = latestSnapshot
@@ -1093,7 +1114,10 @@ export default function Calculator() {
       setCatalystDomain('thermal');
       setRows(nextRows);
       setSelectedThermalTemplateId(input.template_id ?? null);
-      setSteps(input.steps ?? []);
+      const savedCost = input.template_id
+        ? (await fetchTemplateCosts(input.order_size_tons ?? 20, 'thermal')).templates.find((item) => item.id === input.template_id)
+        : undefined;
+      setPreparation({ steps: input.steps ?? [], basis: savedCost?.steps_fitted ?? input.steps ?? [], substitutions: savedCost?.substitutions });
       setOrderSize(input.order_size_tons ?? 20);
       setLoadedSavedName(summary.name);
     } catch {
@@ -1540,6 +1564,18 @@ export default function Calculator() {
         : t('Recovery credit off')
       : t(applicationFamilyLabel(applicationFamily));
 
+    if (sectionState.activeSection.id === 'manufacturing') {
+      return (
+        <section className="surface-card px-4 py-3">
+          <dl className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_minmax(0,.65fr)_minmax(0,1.4fr)]">
+            <div className="min-w-0"><dt className="text-[11px] text-slate-400">{t('Composition')}</dt><dd className="mt-1 truncate text-xs font-medium text-slate-700" title={recipeSummary}>{recipeSummary}</dd></div>
+            <div className="min-w-0"><dt className="text-[11px] text-slate-400">{t('Price basis')}</dt><dd className="mt-1 truncate text-xs font-medium text-slate-700">{basis === 'reference' ? t('Monthly average') : t('Live prices')}</dd></div>
+            <div className="min-w-0"><dt className="text-[11px] text-slate-400">{t('Preparation basis')}</dt><dd className="mt-1 truncate text-xs font-medium text-slate-700" title={preparationSummary}>{preparationSummary}</dd></div>
+          </dl>
+        </section>
+      );
+    }
+
     return (
       <section className="surface-card p-4">
         <div className="grid gap-3 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)]">
@@ -1821,50 +1857,15 @@ export default function Calculator() {
       ? [...ALL_STEPS]
       : ALL_STEPS.filter((step) => !ELECTRO_ONLY_STEPS.has(step.key));
     const visibleCategories = [...new Set(visibleSteps.map((step) => step.category))];
-    const selectedCategoryCount = visibleCategories.filter(
-      (category) => selectedStepKeysForCategory(category, steps).length > 0,
-    ).length;
+
 
     return (
       <section className="surface-card p-5">
-        <div>
-          <div className="cp-subtle-label">{t('Preparation method')}</div>
-          <h2 className="cp-heading-lg mt-2">{t('Choose the preparation basis.')}</h2>
-          <p className="mt-2 text-sm leading-7 text-slate-600">
-            {catalystDomain === 'electrocatalyst'
-              ? t('Templates add pretreatment, coating, drying, lamination, and break-in steps. Adjust them if the lab route differs.')
-              : t('Pick the industrial steps that best approximate the synthesis route, then let the production scale set the equipment basis.')}
-          </p>
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div><div className="cp-subtle-label">{t('Preparation method')}</div><h2 className="mt-2 text-xl font-semibold text-slate-900">{t('Manufacturing setup')}</h2></div>
+          <p className="text-xs text-slate-500">{t('Set the production scale, choose a method and check its operations.')}</p>
         </div>
-
-        <div className="mt-5 space-y-4">
-        <div className="grid gap-3 lg:grid-cols-3">
-          <div className="rounded-[20px] border border-slate-200 bg-white/82 px-4 py-3">
-            <div className="cp-subtle-label">{t('Route building')}</div>
-            <div className="mt-2 text-sm font-semibold text-[#191f28]">{t('Select every preparation step that applies')}</div>
-            <div className="mt-1 text-xs leading-6 text-slate-600">
-              {t('You are assembling the full preparation route, not choosing a single option.')}
-            </div>
-          </div>
-          <div className="rounded-[20px] border border-slate-200 bg-white/82 px-4 py-3">
-            <div className="cp-subtle-label">{t('Operation groups')}</div>
-            <div className="mt-2 text-sm font-semibold text-[#191f28]">{t('One group can hold several preparation steps')}</div>
-            <div className="mt-1 text-xs leading-6 text-slate-600">
-              {t('Saved thermal and electrochemical routes often include several operations from the same group.')}
-            </div>
-          </div>
-          <div className="rounded-[20px] border border-[#0d9488] bg-[#e6f5f2] px-4 py-3">
-            <div className="cp-subtle-label !text-[#0f766e]">{t('Current route')}</div>
-            <div className="mt-2 text-sm font-semibold text-[#191f28]">
-              {lang === 'ko'
-                ? `${selectedCategoryCount}개 그룹에서 제조 단계 ${steps.length}개 선택됨`
-                : `${steps.length} preparation step${steps.length === 1 ? '' : 's'} across ${selectedCategoryCount} group${selectedCategoryCount === 1 ? '' : 's'}`}
-            </div>
-            <div className="mt-1 text-xs leading-6 text-slate-600">
-              {t('Add or remove operations until the route matches the actual lab or pilot procedure.')}
-            </div>
-          </div>
-        </div>
+        <div className="mt-5 space-y-5">
         {activeBenchmark ? (
           <div className="rounded-[24px] border border-emerald-200 bg-emerald-50/80 px-4 py-4 text-sm text-emerald-900">
             <div className="cp-subtle-label !text-emerald-700">{t('Loaded reference baseline')}</div>
@@ -1876,123 +1877,73 @@ export default function Calculator() {
             </div>
           </div>
         ) : null}
-        {catalystDomain === 'thermal' && thermalTemplates.length > 0 ? (
-          <div className="surface-ghost p-3.5">
-            <div className="flex items-center justify-between gap-3">
-              <div className="cp-subtle-label">{t('Start from a standard method')}</div>
-              <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                {lang === 'ko' ? `제조법 ${thermalTemplates.length}개` : `${thermalTemplates.length} ${t('methods')}`}
-              </div>
-            </div>
-            <div className="mt-2 text-xs leading-6 text-slate-600">
-              {t('Loads the full unit-operation sequence for a named preparation method — co-precipitation, sol-gel, impregnation, zeolite synthesis and more. Operations stay editable afterward.')}
-              {' '}
-              {t('Each card shows the processing cost of the route alone at the current production scale, before materials.')}
-            </div>
-            {[...new Set(thermalTemplates.map((template) => template.category || 'Other'))].map((category) => (
-              <div key={category} className="mt-3">
-                <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">{t(category)}</div>
-                <div className="mt-1.5 grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
-                  {thermalTemplates.filter((template) => (template.category || 'Other') === category).map((template) => {
-                    const cost = templateCosts[template.id];
-                    const routeSteps = cost?.steps_fitted?.length ? cost.steps_fitted : template.steps;
-                    const active = matchedThermalTemplate?.id === template.id;
-                    const uncosted = cost?.uncosted_operations ?? template.uncosted_operations ?? [];
-                    const substitutions = cost?.substitutions ?? [];
-                    const costLabel = cost?.processing_cost_per_lb != null
-                      ? `${formatPrice(toDisplay(cost.processing_cost_per_lb))}${fmtLabel}`
-                      : null;
-                    return (
-                      <button
-                        key={template.id}
-                        onClick={() => {
-                          setSelectedThermalTemplateId(template.id);
-                          setSteps([...routeSteps]);
-                        }}
-                        title={[
-                          template.description,
-                          routeSteps.map(formatStepLabel).join(' → '),
-                          substitutions.length ? `${t('Scale-fitted')}: ${substitutions.map((s) => `${formatStepLabel(s.from)} → ${formatStepLabel(s.to)}`).join(', ')}` : '',
-                          uncosted.length ? `${t('Not costed')}: ${uncosted.join('; ')}` : '',
-                        ].filter(Boolean).join('\n')}
-                        className={`rounded-[16px] border px-3 py-2.5 text-left transition ${
-                          active
-                            ? 'border-[#0d9488] bg-[#e6f5f2]'
-                            : 'border-slate-200 bg-white hover:border-slate-300'
-                        }`}
-                      >
-                        <div className="flex items-start justify-between gap-2">
-                          <div className={`text-sm font-semibold ${active ? 'text-[#0f766e]' : 'text-[#191f28]'}`}>{template.name}</div>
-                          {costLabel ? <div className="whitespace-nowrap font-mono text-sm text-[#191f28]">{costLabel}</div> : null}
-                        </div>
-                        <div className="mt-1 truncate text-xs text-slate-500">
-                          {template.example_catalysts.slice(0, 3).join(', ')}
-                        </div>
-                        <div className="mt-1.5 flex flex-wrap gap-1.5 text-[11px] text-slate-500">
-                          <span>{routeSteps.length} {t('steps')}</span>
-                          {substitutions.length ? <span className="rounded-full border border-slate-200 px-1.5">{t('Scale-fitted')}</span> : null}
-                          {uncosted.length ? <span className="rounded-full border border-amber-200 bg-amber-50 px-1.5 text-amber-700">{t('Partly costed')}</span> : null}
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : null}
         <div className="surface-ghost p-3.5">
           <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
             <div><div className="cp-subtle-label">{t('Production scale')}</div><div className="mt-3 flex flex-wrap items-center gap-3"><input type="number" min="1" step="1" value={orderSize} onChange={(event) => setOrderSize(Math.max(1, Number(event.target.value) || 1))} className="input-base w-32 text-center font-mono" title={t('Order size in tons; sets the Small, Medium or Large equipment basis.')} /><span className="text-sm text-slate-600">{t('tons')}</span><span className={`rounded-full border px-3 py-1 text-xs font-semibold ${scale.classes}`}>{t(scale.label)} / {scale.rate}</span></div></div>
             <div className="cp-toolbar">{QUICK_ORDER_SIZES.map((size) => <button key={size} onClick={() => setOrderSize(size)} className={`rounded-[16px] px-3 py-2 text-xs font-semibold transition ${orderSize === size ? 'bg-slate-950 text-white' : 'text-slate-600 hover:bg-white hover:text-slate-900'}`}>{lang === 'ko' ? `${size}톤` : `${size} tons`}</button>)}</div>
           </div>
         </div>
-        <div className="grid gap-3 lg:grid-cols-2 xl:grid-cols-3">
-          {catalystDomain === 'thermal' ? <div className="surface-ghost p-4 lg:col-span-2 xl:col-span-3">
-            <h3 className="font-semibold">{t('Effective production rate')}</h3>
+          {catalystDomain === 'thermal' ? <details className="rounded-xl border border-slate-200 bg-white p-4" open={productionRate !== "" || undefined}>
+            <summary className="cursor-pointer text-sm font-medium text-slate-700">{t('Effective production rate')} <span className="ml-2 font-normal text-slate-400">{t('optional')}</span></summary>
             <p className="mt-2 text-xs leading-6 text-slate-600">{t('Optional short ton/day input. Leave blank to use the scale default. Production duration includes the existing cleaning allowance; method-card prices use the default rate.')}</p>
             <div className="mt-3 grid gap-3 sm:grid-cols-2">
               <label className="text-xs">{t('Effective rate (short ton/day)')}<input className="input-base mt-1 w-full" type="number" min="0" step="any" value={productionRate} onChange={(e) => setProductionRate(e.target.value === '' ? '' : Number(e.target.value))} /></label>
               <label className="text-xs">{t('Production-rate source or assumption')}<input className="input-base mt-1 w-full" value={productionRateNote} onChange={(e) => setProductionRateNote(e.target.value)} /></label>
             </div>
             {isRateValid ? <p className="mt-2 text-sm">{t('Production duration including cleaning')}: {(orderSize / (productionRate || (currentScale === 'small' ? 1 : currentScale === 'medium' ? 10 : 150)) + (currentScale === 'small' ? 0.5 : 1)).toFixed(2)} {t('days')}</p> : <p className="mt-2 text-sm text-amber-800">{t('Enter a positive production rate and its source or assumption.')}</p>}
-          </div> : null}
+          </details> : null}
+        {catalystDomain === 'thermal' && thermalTemplates.length > 0 ? (
+          <ManufacturingMethods templates={thermalTemplates} costs={templateCosts}
+            selectedId={selectedThermalTemplateId ?? matchedThermalTemplate?.id ?? null}
+            edited={thermalStepsEdited} loading={templateCostsOrderSize !== orderSize || templateCostsError}
+            formatStep={formatStepLabel} formatCost={(value) => `${formatPrice(toDisplay(value))}${fmtLabel}`}
+            onSelect={(template) => {
+              if (selectedThermalTemplateId === template.id) return;
+              const cost = templateCosts[template.id];
+              const nextSteps = cost?.steps_fitted?.length ? cost.steps_fitted : template.steps;
+              setSelectedThermalTemplateId(template.id);
+              setPreparation({ steps: [...nextSteps], basis: [...nextSteps], substitutions: cost?.substitutions });
+            }}
+            onReset={() => setPreparation((previous) => ({ ...previous, steps: [...previous.basis] }))}
+          />
+        ) : null}
+        <section aria-label={t('Manufacturing operations')}>
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <h3 className="text-sm font-semibold text-slate-900">{t('Manufacturing operations')}</h3>
+            <span className="text-xs tabular-nums text-slate-500">{steps.length} {t('steps')}</span>
+          </div>
+          <p className="mb-4 text-xs leading-6 text-slate-500">{t('Check each operation used. Repeated operations retain the method count when reselected.')}</p>
+          <div className="grid items-start gap-4 md:grid-cols-2 xl:grid-cols-3">
           {visibleCategories.map((category) => {
             const selectedInCategory = selectedStepKeysForCategory(category, steps);
             return (
-              <div key={category} className="surface-ghost p-3.5">
-                <div className="flex items-center justify-between gap-3">
-                  <div className="cp-subtle-label">{t(category)}</div>
-                  <div className={`rounded-full border px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${
-                    selectedInCategory.length > 0
-                      ? 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e]'
-                      : 'border-slate-200 bg-white text-slate-400'
-                  }`}>
-                    {lang === 'ko' ? `${selectedInCategory.length}개 선택` : `${selectedInCategory.length} selected`}
-                  </div>
+              <div key={category} className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+                <div className="flex h-11 items-center justify-between gap-3 border-b border-slate-100 px-3">
+                  <div className="text-xs font-semibold text-slate-700">{t(category)}</div>
+                  <span className="w-7 text-right font-mono text-xs text-slate-400">{selectedInCategory.length}</span>
                 </div>
-                <div className="mt-2 text-xs leading-6 text-slate-600">{t('Select every operation your route uses in this group.')}</div>
-                <div className="mt-3 flex flex-wrap gap-2">
+                <div className="p-1.5">
                   {visibleSteps.filter((step) => step.category === category).map((step) => {
                     const available = (step.scales as readonly Scale[]).includes(currentScale);
                     const checked = steps.includes(step.key);
-                    const availabilityLabel = step.scales.length === 3 ? null : step.scales.map((item) => item.charAt(0).toUpperCase()).join('/');
-                    return <button key={step.key} onClick={() => available && toggleStep(step.key)} disabled={!available} title={available ? t(step.label) : `${t('Unavailable at this production scale')}: ${t(scale.label)}`} className={`rounded-[16px] border px-3 py-2 text-left text-sm transition ${!available ? 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400' : checked ? 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e]' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}><div className="flex items-center justify-between gap-3"><div className="font-medium">{t(step.label)}</div>{checked ? <span className="rounded-full border border-[#0d9488] bg-white px-2 py-0.5 text-xs font-semibold uppercase tracking-[0.18em] text-[#0f766e]">{t("On")}</span> : null}</div>{availabilityLabel ? <div className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-400">{availabilityLabel}</div> : null}</button>;
+                    const count = steps.filter((key) => key === step.key).length;
+                    return (
+                      <button key={step.key} type="button" role="checkbox" aria-checked={checked} aria-label={t(step.label)}
+                        data-step-key={step.key} onClick={() => available && toggleStep(step.key)} disabled={!available}
+                        title={available ? t(step.label) : `${t('Unavailable at this production scale')}: ${t(scale.label)}`}
+                        className={`flex h-14 w-full items-center gap-2 rounded-lg px-2 text-left transition-colors focus-visible:outline-2 focus-visible:outline-teal-600 ${!available ? 'cursor-not-allowed text-slate-300' : checked ? 'bg-teal-50/80 text-teal-800' : 'text-slate-600 hover:bg-slate-50'}`}>
+                        <span aria-hidden="true" className={`flex h-4 w-4 shrink-0 items-center justify-center rounded border text-[11px] ${checked ? 'border-teal-600 bg-teal-600 text-white' : 'border-slate-300 text-transparent'}`}>✓</span>
+                        <span className="min-w-0 flex-1"><span className="line-clamp-2 text-[12px] font-medium leading-4">{t(step.label)}</span></span>
+                        <span className="w-7 shrink-0 text-right font-mono text-[11px] text-slate-400" aria-hidden="true">{count > 1 ? `×${count}` : ''}</span>
+                      </button>
+                    );
                   })}
                 </div>
-                {selectedInCategory.length > 0 ? (
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {selectedInCategory.map((stepKey) => (
-                      <span key={stepKey} className="rounded-full border border-slate-200 bg-white px-2.5 py-1 text-xs text-slate-600">
-                        {t(formatStepLabel(stepKey))}
-                      </span>
-                    ))}
-                  </div>
-                ) : null}
               </div>
             );
           })}
-        </div>
+          </div>
+        </section>
         {catalystDomain === 'thermal' ? (
           <div className="rounded-[24px] border border-slate-900/8 bg-white/72 p-4">
             <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
