@@ -28,8 +28,8 @@ No source changed for this initial log. Reused evidence is explicitly distinguis
 | C08 | Foundation complete | de54164 | 27 account/auth/storage tests;829 full tests460.46s; frontend lint/build/i18n and Table6.2 passed; startup remains rights-gated |
 | C09 | Complete | d92c681 | Subscription periods/seats/audit/operator commands;843 full tests475.34s; no actual billing or accounts |
 | C10 | Complete | 2c08f1f | Actual browser thermal/electrode/account/expiry QA;853 full tests511.11s; frontend lint/build/i18n, storage test, limits and new-directory recovery |
-| C11 | Preparation complete | this commit | Controlled scientific claims,94 manuscript/1217 SI JSON-key references,13 focused tests;856 full tests504.21s |
-| C12 | Pending | — | Public portfolio and evidence-based contribution documentation |
+| C11 | Preparation complete | 9a566d6 | Controlled scientific claims,94 manuscript/1217 SI JSON-key references,13 focused tests;856 full tests504.21s |
+| C12 | Complete | this commit | Concise public entry points, evidence-linked portfolio, accurate prepared/released and commercial status; local links checked |
 | C13 | Pending | — | Integrated truth signals, real UI, package and final CI |
 | C14 | External facts required | — | Rights/company/author approvals, independent observations/participants, JCR category, billing/hosting/launch choices |
 
@@ -194,3 +194,11 @@ Validation: generator `--check` passes94 manuscript and1217 SI JSON-key referenc
 Critic: the controlled figure strengthens interpretation within the model but does not create empirical industrial validation. Independent matched observations, actual researcher participation, rights, authors and journal eligibility remain C14. The new preparation documents are unsubmitted drafts, not accepted or company-approved representations. No source articles, paid data or new price values were added.
 
 Final C11 verification: **856 passed in504.21s**, wrapper507.762s: [output](commercial-c11-pytest-2026-09-07.log). Python code and tests were held unchanged during this full run. Frontend code is unchanged from the passing C10 checks and CI above. The manuscript generator check resolves every recorded numerical key; it does not establish independent experimental accuracy or author approval.
+
+## C12 public project and contribution evidence
+
+README now distinguishes the login-free local desktop from prepared hosted mode, places prepared1.4.0 versus publishedv1.3.24 beside downloads, and links the detailed research/service records. The [portfolio](../project-portfolio.ko.md) connects user problems to implementation, commits, analysis and test evidence. It retains prior-art credit and AI assistance without inventing sole ownership, author approval, adoption, sales or publication. Existing CITATION/codemeta names and prepared-version status were inspected and preserved.
+
+Updated project links and prepared release notes with current hosted, recovery, rights-review and controlled-study behavior. A fresh `gh repo view` confirms the existing public repository and release homepage; `gh release list -L 1` returnsv1.3.24, published2026-08-31T18:24:09Z, not draft/prerelease. No remote repository metadata changed. Historical Zenodo details were reduced to the verified concept DOI record with its actual evidence date, without assuming future archival success.
+
+Validation reuses unchanged C11 code's856 tests and C10 frontend/Windows CI. Relative documentation links and whitespace are checked before commit. Critic: a portfolio is an evidence index, not an independent determination of individual contribution or ownership. The user's stated project direction is recorded; formal authorship, institutional/company rights and actual outcomes remain C14.

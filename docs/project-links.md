@@ -1,6 +1,6 @@
 # Project Links
 
-Last verified: 2026-09-06
+Repository/release metadata checked: 2026-09-07. Other checks retain their stated evidence dates.
 
 This page tracks COMET's external connection points. Only verified links are listed as active.
 
@@ -14,7 +14,7 @@ This page tracks COMET's external connection points. Only verified links are lis
 | Latest release | https://github.com/hyunjin-kor/COMET/releases/latest | Redirects to the newest tag; re-verify with `gh release list -L 1` before quoting a specific version |
 | Source repository clone URL | https://github.com/hyunjin-kor/COMET.git | Active |
 | Repository `homepage` metadata | https://github.com/hyunjin-kor/COMET/releases/latest | Active; corrected on 2026-09-02 from a stale `hyunjin-kor/CatPrice` URL left over from the rename |
-| Zenodo DOI (all versions) | https://doi.org/10.5281/zenodo.21451931 | Active; auto-archives each new GitHub release. v1.3.19 (`10.5281/zenodo.22110422`) is the first record archived from a fully renamed tree, so its title, links and `COMET-v1.3.19.zip` archive all read COMET. The nine earlier records for v1.3.10-v1.3.18 predate the rename: their metadata was corrected in place on 2026-08-26 with DOIs unchanged, but each still holds a `CatPrice-<version>.zip` because published files are immutable |
+| Zenodo DOI (all versions) | https://doi.org/10.5281/zenodo.21451931 | Existing concept DOI, resolver/DataCite checked on 2026-09-06 as recorded below. No new deposit or future archive success is asserted. |
 
 ## Not Yet Connected
 
@@ -26,7 +26,7 @@ This page tracks COMET's external connection points. Only verified links are lis
 
 ## Release Metadata
 
-Single source of truth: `package.json`, `pyproject.toml`, `frontend/package.json` must agree.
+Version declarations in `package.json`, `pyproject.toml`, `frontend/package.json` and `backend/main.py` must agree; `test_version_sync.py` checks them.
 
 - Current prepared package version: `1.4.0`
 - Python package version: `1.4.0`
@@ -44,4 +44,14 @@ Use `CLAUDE.md` at the repository root as the first file for Claude or Claude Co
 
 ## Submission evidence
 
-The current [manuscript](paper/manuscript_2026-09-07.md), [SI](paper/si_2026-09-07.md), and [results](paper/submission-2026-09-07/results_2026-09-07.md) share the frozen May 2026 reference basis. [Source and format checks](paper/submission-format-2026-09-07.md) verify the ACS guidance and existing concept DOI; they do not create a new deposit or establish the planned v1.4.0 release. The [latest task audit](audit/validation-submission-2026-09-07.md) distinguishes completed software/data work from the unresolved empirical manufacturing-cost validation.
+The current [manuscript](paper/manuscript_2026-09-07.md), [SI](paper/si_2026-09-07.md), and [results](paper/submission-2026-09-07/results_2026-09-07.md) share the frozen May 2026 reference basis, with a separate [controlled experiment](paper/controlled-2026-09-07/README.md). [Source and format checks](paper/submission-format-2026-09-07.md) record the retrieved ACS guidance and existing DOI evidence; they do not establish Q1 eligibility, acceptance or the planned v1.4.0 release.
+
+## Project and company preparation
+
+- [Project portfolio and contribution evidence](project-portfolio.ko.md)
+- [Current three-objective audit](audit/commercialization-run-2026-09-07.md)
+- [Company licensing and subscription plan](commercial/strategy.ko.md)
+- [Data rights register and distribution hold](commercial/rights-register-2026-09-07.md)
+- [Hosted operation, account management and recovery](commercial/hosted-operations.ko.md)
+
+No verified public subscription endpoint or executed company contract exists in these records. GitHub repository metadata remains the existing local-desktop description and release homepage; it was read, not remotely changed in this preparation.

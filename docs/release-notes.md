@@ -1,8 +1,10 @@
 # Release Notes
 
-## 1.4.0 — prepared, not published (2026-09-06)
+## 1.4.0 — prepared, not published (updated 2026-09-07)
 
 The package versions are 1.4.0. The latest verified public release remains v1.3.24. No tag, GitHub release, Zenodo deposit or deployment was created in this run.
+
+New distribution is held until the [bundled data rights review](commercial/rights-register-2026-09-07.md) is complete. The original workbook is excluded, but existing extracted records still need permission review.
 
 - Choose live quotes or a common published month throughout the calculator, prices and literature comparison. The monthly reference uses IMF and Johnson Matthey averages; optional UN Comtrade support values retain explicit bulk-proxy provenance ([#104](https://github.com/hyunjin-kor/COMET/pull/104), [#105](https://github.com/hyunjin-kor/COMET/pull/105), [#106](https://github.com/hyunjin-kor/COMET/pull/106)).
 - Compare 28 named thermal preparation methods with processing costs at the chosen production scale. Card identity and repeated operations now survive scale fitting ([#107](https://github.com/hyunjin-kor/COMET/pull/107)).
@@ -25,8 +27,15 @@ The package versions are 1.4.0. The latest verified public release remains v1.3.
 - Compare 2–4 saved estimates under a shared price snapshot and reference operating conditions, alongside historical and price-only results. Composition and manufacturing differences remain visible.
 - Store supplier, quote date, quantity, grade and source evidence with manual inputs. Local actual-cost records retain exclusion reasons and only report errors for documented matching thermal full-cost conditions; they are not independent validation data.
 - Headline prices fit narrow cards on one line. Net-price wording now states that selling margin is included before recovery credit, and the cost pie uses a consistent selling-price denominator with consumable slices.
+- Optional hosted mode adds private account workspaces, organization subscription periods and seat limits. Users can view and download saved results after ordinary expiry. Cross-tab sign-out and account changes clear private drafts. Default desktop use remains login-free.
+- Operators can manage recorded entitlements, reset accounts, inspect audit events, and back up/recover to a new private directory. Request budgets protect calculation capacity. These controls have synthetic tests and browser checks; no payment integration or public service was launched.
+- Commercial startup and new release publication check exact-file data approvals. Company-license and subscription documents are review drafts; code availability does not grant third-party data rights.
+- Controlled studies separate numerical prices from source-confidence scoring, examine manufacturing-scale boundaries and sweep electrode loading. The manuscript/SI trace numerical statements to frozen JSON; actual independent cost observations and researcher participants remain absent.
+- Windows setup installs both frontend and desktop dependencies. CI now builds and smoke-tests a fresh Windows package using a separate profile to preserve the user's saved data.
 
 The [practical costing audit](audit/practical-costing-2026-09-07.md) records these changes, synthetic test boundaries, default-result regression and performance observations.
+
+The [research, portfolio and subscription audit](audit/commercialization-run-2026-09-07.md) records the current preparation, validation and unresolved rights, journal and field-evidence requirements.
 
 Validation and remaining checks are recorded in the [run audit](audit/autonomous-run-2026-09-06.md) and [release checklist](release-checklist.md). The published Table 6.2 acceptance cases remain Pt/C to the cent, Ni within 7%, and FCC within 2% using its footnote-b rate. Pricing-input changes and display corrections are documented individually; no new rate was invented for uncosted operations.
 

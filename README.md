@@ -23,8 +23,8 @@
 
 **COMET** estimates what a catalyst costs to make. Describe the composition, the
 support and the preparation route, and it prices that recipe against current metal
-quotes using the published CatCost method. It runs entirely on your machine. No
-server, no account.
+quotes using the published CatCost method. The default desktop app runs locally
+without an account. Its optional hosted service is in preparation.
 
 Built for catalysis researchers with questions like:
 
@@ -40,6 +40,9 @@ Get the installer from the [latest release](https://github.com/hyunjin-kor/COMET
 - `COMET-win-unpacked.zip` if you want a portable copy
 
 It works offline. Without API keys it falls back to indexed and manual prices.
+
+This branch prepares **1.4.0**; the latest verified public release is **v1.3.24**
+(2026-09-07). New distribution awaits the [data rights review](docs/commercial/rights-register-2026-09-07.md).
 
 Since v1.3.13 the app updates itself: it checks GitHub Releases at startup,
 downloads in the background, and prompts you to restart. The binary is unsigned,
@@ -107,7 +110,7 @@ automatically before a rebuild, or manually with `npm run desktop:stop`.
 
 ## Tests
 
-The prepared source version is **1.4.0**; the latest verified public release is **v1.3.24** (verified 2026-09-07). Tagging and publishing 1.4.0 remain human release steps. See the [release preparation checklist](docs/release-checklist.md) and [Korean getting-started guide](docs/getting-started.ko.md).
+See the [release checklist](docs/release-checklist.md) and [Korean getting-started guide](docs/getting-started.ko.md).
 
 ```bash
 python -m pytest backend/tests -q     # engine + API, includes CatCost validation cases
@@ -129,11 +132,23 @@ The [unified manuscript](docs/paper/manuscript_2026-09-07.md), [supporting infor
 python scripts/reproduce_paper.py --price-basis reference --month 2026-05 --seed 20260906 --date 2026-09-07 --history docs/paper/submission-2026-09-07/price_history_2026-09-07.json --live-basis docs/paper/submission-2026-09-07/live_basis_2026-09-07.json --support-history docs/paper/submission-2026-09-07/support_history_2026-09-07.json --out-dir _local/submission-replay-2026-09-07
 ```
 
-Matplotlib is needed for figures. Input hashes, exact commands and Python/package versions are recorded in the reproduction manifest. `python scripts/build_submission_manuscript.py --directory docs/paper/submission-2026-09-07 --check` checks the committed manuscript/SI and their numerical source keys. The original July metal-only results and earlier June support runs remain available as historical snapshots.
+Matplotlib is needed for figures. Input hashes, exact commands and Python/package versions are recorded in the reproduction manifest. `python scripts/build_submission_manuscript.py --directory docs/paper/submission-2026-09-07 --check` checks the committed manuscript/SI and their numerical source keys. The [controlled scenarios](docs/paper/controlled-2026-09-07/README.md) separate numerical price changes from source-confidence scoring and examine production scale and electrode loading. Earlier results remain available as historical snapshots.
 
 The shipped support history contains ten series and 28 observations over April–June. Alpha alumina lacks a valid June observation, so the combined paper basis is May; the app can still show each series' latest accepted quote. These all-grade import values are bulk proxies, not catalyst-grade supplier quotations. To collect a small new snapshot without credentials, run `python scripts/fetch_support_history.py --start 2026-04 --end 2026-07 --out support_history.json`; it records missing data and stops at provider rate limits. Omitting `--month` in the paper pipeline selects the common month of its supplied inputs.
 
 See the [validation and submission audit](docs/audit/validation-submission-2026-09-07.md) and [methodology](docs/methodology.md#reproducing-the-paper). The external cost evidence screen found no fully matched manufacturing-cost observation; method reproduction is not an empirical procurement-accuracy claim. Project data acquisition must remain free: no purchases, paid subscriptions or billable API calls.
+
+## Project and service preparation
+
+The [project portfolio](docs/project-portfolio.ko.md) connects design decisions to
+code, experiments and test evidence. The [publication checklist](docs/paper/author-readiness-2026-09-07.ko.md)
+records what authors must verify before submission.
+
+An opt-in hosted mode implements account-private calculations, subscription periods
+and seats, saved-result export after ordinary expiry, and tested backup/recovery.
+It has no public service endpoint or live billing. See the [service plan](docs/commercial/strategy.ko.md)
+and [operations guide](docs/commercial/hosted-operations.ko.md). Startup requires an
+actual commercial data-rights review; passing software tests does not grant those rights.
 
 ## Optional API keys
 
@@ -173,10 +188,9 @@ pellet looks like. The acronym came afterwards.
 
 [PolyForm Noncommercial License 1.0.0](LICENSE) (`PolyForm-Noncommercial-1.0.0`).
 
-Free to use, modify and redistribute for any noncommercial purpose: research,
-education, personal study. Use by universities, public research organizations and
-government institutions is permitted regardless of funding source. Commercial use
-requires a separate license from the copyright holder.
+The code is available for noncommercial use under the license's terms. Commercial
+use requires a separate grant from the actual copyright holder. This is a
+source-available project; the license is not OSI approved.
 
 Third-party data and dependencies retain their own terms. The code license does
 not grant their redistribution rights. Company subscription preparation is tracked
