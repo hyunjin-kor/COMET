@@ -69,7 +69,7 @@ class PaperRun:
         if self.summary["basis_month"] != self.manifest["basis_month"]:
             raise ValueError("Summary and manifest price months differ")
         for output in self.manifest["outputs"]:
-            if digest(self.directory / output["file"]) != output["sha256"]:
+            if digest(self.directory / output["file"].replace("\\", "/")) != output["sha256"]:
                 raise ValueError(f"Frozen output changed: {output['file']}")
         for kind in ("history", "support_history"):
             entry = self.manifest[kind]

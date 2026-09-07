@@ -2,6 +2,8 @@
 
 Started 2026-09-07 on `autonomous/2026-09-06`, baseline `c513e1ccaf37b7a61f6d3d31a0491627e654bc5c`, existing [PR112](https://github.com/hyunjin-kor/COMET/pull/112). This is an ongoing preparation log, not a claim of journal acceptance, legal authorization, production readiness or sales.
 
+Closing verification continued into2026-09-08 KST. Artifact names retain the run's start date; command records contain their actual UTC timestamps.
+
 ## User objectives and decisions
 
 1. One research paper targeting Q1 and a Journal Impact Factor from 8 to the mid-teens. Verify the metric year and JCR category; CiteScore/SJR quartiles are not substitutes. Prior ACS SC&E targeting may change under this newer instruction.
@@ -29,8 +31,8 @@ No source changed for this initial log. Reused evidence is explicitly distinguis
 | C09 | Complete | d92c681 | Subscription periods/seats/audit/operator commands;843 full tests475.34s; no actual billing or accounts |
 | C10 | Complete | 2c08f1f | Actual browser thermal/electrode/account/expiry QA;853 full tests511.11s; frontend lint/build/i18n, storage test, limits and new-directory recovery |
 | C11 | Preparation complete | 9a566d6 | Controlled scientific claims,94 manuscript/1217 SI JSON-key references,13 focused tests;856 full tests504.21s |
-| C12 | Complete | this commit | Concise public entry points, evidence-linked portfolio, accurate prepared/released and commercial status; local links checked |
-| C13 | Pending | — | Integrated truth signals, real UI, package and final CI |
+| C12 | Complete | d972f18 | Concise public entry points, evidence-linked portfolio, accurate prepared/released and commercial status;54 local links checked |
+| C13 | Local validation complete; final-head CI recorded in PR | final audit commit | 856 full tests/511.02s after portable path fix; Windows build172.791s/smoke17.651s; final replay26.009s |
 | C14 | External facts required | — | Rights/company/author approvals, independent observations/participants, JCR category, billing/hosting/launch choices |
 
 ## Boundaries
@@ -39,7 +41,7 @@ No existing LICENSE change, paid source, new framework/ORM/build tool, destructi
 
 ## Next action
 
-Finish C12 public portfolio documentation, then C13 final package, replay and CI verification. No release can be described as commercially cleared before the actual data-origin permissions are resolved.
+Local preparation is verified. Final documentation-head CI is checked after push and recorded in PR112; C14 external facts remain open. No release is commercially cleared by these tests.
 
 ## C03 implementation and verification
 
@@ -202,3 +204,142 @@ README now distinguishes the login-free local desktop from prepared hosted mode,
 Updated project links and prepared release notes with current hosted, recovery, rights-review and controlled-study behavior. A fresh `gh repo view` confirms the existing public repository and release homepage; `gh release list -L 1` returnsv1.3.24, published2026-08-31T18:24:09Z, not draft/prerelease. No remote repository metadata changed. Historical Zenodo details were reduced to the verified concept DOI record with its actual evidence date, without assuming future archival success.
 
 Validation reuses unchanged C11 code's856 tests and C10 frontend/Windows CI. Relative documentation links and whitespace are checked before commit. Critic: a portfolio is an evidence index, not an independent determination of individual contribution or ownership. The user's stated project direction is recorded; formal authorship, institutional/company rights and actual outcomes remain C14.
+
+## C13 final integrated verification
+
+The offline primary pipeline ran to a new `_local/commercial-final-paper-replay` directory, preserving the original frozen input/output files. Initial execution completed30.004s. Seven scientific JSON files and all12 main PNG/SVG files are byte-identical to the frozen run. Three further analysis files have equal numerical content after excluding only named run-time metadata: generated_at, history_file, price_source and price_basis_source as applicable. Paths were inspected and input history bytes match. All27 output hashes, current code/data hashes and unchanged frozen outputs verify. The [comparison](commercial-c13-replay-verified-2026-09-07.json) records actual differences; no blanket byte-identity claim is made for manifests.
+
+Controlled replay completed2.677s with identical numerical JSON and PNG/SVG. Its provenance reflects added service/rights modules since C05; the frozen scientific hash remains495b0fe9c5a60476bb29143082d745575976339aab5db4a3aca9c4c9fbd902ee. The manuscript check again verifies94 main/1217 SI references. Fresh Ruff, frontend lint, i18n and all30 Node rules pass; static missing/untranslated label counts are0. Table6.2 remains unchanged. Current public/commercial rights checks returnexit1 as expected for unapproved records, not as a passed publication gate.
+
+Two verification-harness issues are preserved. First, packaging was explicitly pointed at the general Python3.14 test runtime instead of the existing Python3.11 packaging runtime. The existing build script automatically installed PyInstaller6.22.2/hooks2026.7/altgraph0.17.5 into the user Python3.14 environment, then failed on its pre-existing obsolete pathlib backport. No package was removed and no application source/dependency declaration changed. The corrected package run uses the previously successful Python3.11.9/PyInstaller6.19.0 environment. The build forwards `--publish never` to electron-builder; no release or signing configuration is bypassed. Second, an initial comparison excluded only generated_at and correctly rejected relocated absolute input paths. The corrected comparison verifies the named path metadata and numerical payload separately; the failed log is retained.
+
+The first replay overlapped that packager installation, so its environment capture is not claimed to represent an unchanged installed-package set throughout execution. A final replay after the environment stabilized is required for the closing manifest. Calculation inputs/code stayed unchanged. Actual account UI evidence remains C10's six screenshots and saved JSON comparisons, with no frontend source changes since that successful browser run.
+
+That final replay subsequently passed30.522s: [stable comparison](commercial-c13-replay-stable-2026-09-07.json) and [actual environment/commands/input hashes](commercial-c13-reproduction-manifest-2026-09-07.json). The corrected unpublished package passed172.791s; isolated smoke passed17.651s, version1.4.0/one main window/prices and calculateHTTP200. User DB, launcher log and installed executable are byte-unchanged. Test and package jobs ran concurrently, so their timings are not controlled performance comparisons.
+
+[Bounded source review](commercial-c13-source-review-2026-09-07.json) found no LICENSE, existing data, dependency declaration/lock, or file-deletion changes since this goal's baseline. Root package.json changes only the development frontend command. No private-key/GitHub/OpenAI credential-pattern matches occurred in added tracked text; this is not a comprehensive secret/security audit. Private `_local`/`.autonomy` directories remain untracked. Installer/packaged component hashes are recorded. The first build's automatic local tooling installation is the environment change described above, not a repository dependency change.
+
+Closing journal recheck again returned403 for four direct publisher metrics pages. Indexed Engineering Au text displays9.0, while a different Elsevier endpoint displays9.2 versus the earlier issue-page9.6. [The record](commercial-c13-journal-recheck-2026-09-07.json) preserves this discrepancy without certifying a JCR year/category/Q1. The journal review now states both dated observations. No manuscript result or provisional format was altered by this unresolved bibliometric difference.
+
+Linux CI atd972f18 subsequently completed853passed/3failed in766.97s; Windows/frontend jobs passed. The three new manuscript tests exposed a pre-existing Windows separator in frozen manifest figure paths. The manuscript reader now converts that separator before joining the relative path, without changing the manifest or a numerical value. The three focused tests and manuscript check pass locally. The authorized unattended CI-fix scope was followed; no check was disabled or approval/hook bypassed.
+
+A direct Git-blob audit then detected that C11's `-text` attributes had not re-added four previously normalized files: controlled JSON/provenance/SVG and the extra literature access JSON. Their local original bytes still matched the recorded frozen hashes, while stored LF blobs differed. Re-added those exact existing bytes under the existing attributes. JSON content and SVG after line-ending normalization are unchanged; no number, source response or figure was recreated. [34 staged snapshot checks](commercial-c13-snapshot-index-2026-09-07.json) now match. Both the Linux failure and first blob-check failure remain in the logs. This fixes transport of the preserved snapshots instead of weakening their hash guards. A fresh full suite and26.009s paper replay follow this one-line reader correction; final-head CI remains required after push.
+
+## C14 external facts and launch sequence
+
+| Required fact | Current evidence | Responsible next step |
+|---|---|---|
+| Actual code rights and institutional obligations | Existing author metadata and user project direction; no reviewed employment/research/IP contracts | Developer, relevant institution and actual rights holders establish authority before a company grant |
+| Company commercial permission and customer contract | Unexecuted nonexclusive company-license and B2B subscription drafts | Company/rights holders confirm parties, scope, improvement ownership, support and agreed economics; no blanket copyright assignment assumed |
+| Bundled/static and dynamic data reuse |81 pending exact-file records,20 declared workbook-origin files; no commercial/public approval | Review permission evidence or independently replace with freely obtainable, commercially reusable sources; free viewing is insufficient |
+| Journal objective | Official candidate displays and Engineering Au Article guidance; metric year/JCR category/Q1 not established | Actual authors verify target eligibility and publication-cost coverage, then approve submission |
+| Industrial predictive accuracy |12 screened contextual sources; matched full manufacturing observations0; MAPE null | Obtain voluntarily supplied, condition-matched records with separate private/public/commercial consent |
+| Researcher usability | Protocol/blank worksheet; actual participants0 | Recruit real consenting researchers and report observed outcomes separately from automated QA |
+| Paid service operations | Tested synthetic sessions, entitlements, budgets and recovery; no production endpoint/payment | Company decides host/jurisdiction/TLS/OS access, retention/support, billing/privacy/tax obligations and performs a deployment review |
+| Release/deposit | Prepared1.4.0; actual publicv1.3.24 | Resolve distribution hold, review PR, then human tagging/release/updater/Zenodo checks; no automatic launch from this log |
+
+These are external prerequisites, not questions awaiting an unattended response. They remain unresolved without fabricating customers, data rights, contracts, author consent or publication. Acquisition remains free; no additional prices or generic LCA coefficients were invented. The original LICENSE is unchanged. No actual company billing, credentials, deployment, journal submission, release, tag, merge or third-party message occurred.
+
+Final local C13 verification: **856 passed in578.14s**, wrapper582.502s. Corrected build172.791s and isolated smoke17.651s passed; user DB/log/installed-executable hashes are unchanged. The final stable-environment paper run completed30.522s and its numerical/figure comparison passed. No application code changed after the tested source head.
+
+
+Final post-correction local verification: **856 passed in511.02s**, wrapper515.073s. This supersedes the earlier578.14s full run for the one-line manuscript portability fix. Source and working frozen bytes were held unchanged during this run; only Git staging restored previously normalized snapshot bytes. Final replay26.009s/27hashes and all figure/numerical comparisons passed. Desktop/UI code was unchanged from verified package and browser runs. Closing CI must pass on the pushed correction; no failed job is labelled successful.
+
+## 최종 보고 — 논문·포트폴리오·회사 구독 준비
+
+**준비 작업13개를 완료하고 외부 사실·실행1개(C14)를 보류했다.** 최종 문서 커밋의 CI 확인 결과는 PR112 본문에 기록한다. 이는 Q1 논문 게재나 판매 개시의 완료를 뜻하지 않는다. 기존 D03·V01의 자료/독립 실측 부분 완료 상태도 유지한다.
+
+| ID | 상태 | 커밋 | 근거 명령 출력 요약 |
+|---|---|---|---|
+| C01 | 준비 완료 | c7f51f1 | 목표·작업표·기준선 |
+| C02 | 준비 완료; 승인 미해결 | c2a17d1 | 81파일 권리 목록·12검사·792전체; 공개/상업 이용 검사는 현재 차단 |
+| C03 | 완료 | a5279bd | Windows CI·개발 실행 수정·별도 프로필; build227.964s/smoke17.604s |
+| C04 | 검토 완료; 자격 미확인 | 248c45e | 공식 저널 안내 확인; JIF연도/JCR분야/Q1 미확인 |
+| C05 | 완료 | 26a283e | 30반응군 통제 분석·21제조·9전극; 고정 결과 재현 |
+| C06 | 자료 조사 완료; 실측 없음 | f95ac74 | 추가2편 Crossref·무료원문 조사; 조건 일치 실측0 |
+| C07 | 계획 완료; 참여 미실시 | b84e343 | 6과제 연구자 평가 계획·빈 관측표; 실제 참여자0 |
+| C08 | 완료 | de54164 | 계정별 DB·인증·세션·경계 시험;829전체 |
+| C09 | 완료 | d92c681 | 기간·좌석·만료·감사·관리 명령;843전체 |
+| C10 | 완료 | 2c08f1f | 실제 브라우저6화면·계정 전환·만료 조회/다운로드·복구;853전체 |
+| C11 | 준비 완료 | 9a566d6 | 원고94/SI1217 수치키·27고정산출물·856전체 |
+| C12 | 완료 | d972f18 | 공개 설명·기여 근거·릴리스 상태;54상대링크 검사 |
+| C13 | 로컬 검증 완료; 최종 CI는 PR에 기록 | 최종 감사 커밋 | 856전체/511.02s; lint/build/Node30/Table6.2/설치스모크/재현 통과 |
+| C14 | 보류 — 외부 사실·실행 필요 | 해당 없음 | 실제 권리·회사·저자·저널 자격·실측·참여자·결제/배포 |
+
+원고·SI·커버레터·예상 질문·저자 확인표, 근거 중심 포트폴리오, 회사 이용허락/구독 조건 초안과 실제 계정·권한·복구 구현을 준비했다. 공개 코드는 PolyForm Noncommercial1.0.0을 유지한다. 회사는 실제 권리자의 별도 상업 이용 허락을 확보하는 구조이며, 비독점 제안을 기본으로 하고 저작권 전부 양도를 가정하지 않는다. 코드·데이터·회사의 고객 계약을 각각 검토해야 한다.
+
+### 계산 영향과 재현
+
+이번 C01–C13에서는 기존 원가 계산식·가격 데이터·LCA 계수·미산정 공정 단가를 바꾸지 않았다. 통제 분석은 기존 모델에 새로운 조건 조합을 적용한 것이며 관측 데이터를 추가한 것이 아니다. Table6.2는 **Pt/C27.3695, Ni/Al₂O₃19.2206(−6.65%), FCC각주 b2.4380(+1.16%) USD/lb**로 유지됐다. Pt/C는 센트 단위 일치, Ni와 FCC는 합격 범위다. Ni 판매 마진 규칙과 FCC의 실효 생산 속도 차이를 공개하며 명목 FCC값1.6090을 각주 b 검증값으로 바꾸어 쓰지 않는다.
+
+May2026/seed20260906 재현은27산출물 해시를 확인했다. 주요JSON7개와6그림의PNG/SVG가 기존 고정 결과와 동일하며,3분석 파일은 기록된 시각·절대경로만 다르다. 통제 분석의 수치 SHA-256은 `495b0fe9c5a60476bb29143082d745575976339aab5db4a3aca9c4c9fbd902ee`다. 가격 수치만 바꾸면1반응군, 출처 신뢰 점수만 바꾸면4반응군, 함께 바꾸면5반응군의 최상위 후보가 달라졌다. 전체 변화를 순수 가격 효과로 해석하지 않는다.
+
+[최종 명령·환경·검사](commercial-c13-checks-2026-09-07.json), [현재 재현 매니페스트](commercial-c13-portable-manifest-2026-09-07.json), [수치·그림 비교](commercial-c13-replay-portable-2026-09-07.json), [브라우저 증거](commercial-c10-browser-2026-09-07.json)에 근거가 있다. 브라우저는 합성 계정으로 열촉매·전극 계산, 자료 분리, 다른 탭 로그아웃, 만료 후 저장 결과 조회·다운로드와 새 계산 차단을 확인했다. 실제 고객·독립 참가자 시험은 아니다.
+
+### 성능 전후와 실행 시간
+
+아래 API 수치는 기존 T11의 동일 입력 비교를 재인용한 것으로, 이번 구독 기능의 속도 개선 측정이 아니다. 로컬 TestClient·임시 SQLite, 네트워크 제외 조건이며 논문 기준월과도 다르다.
+
+| 항목 | T11 개선 전 | T11 개선 후 | 근거/해석 |
+|---|---:|---:|---|
+| calculate20회 중앙값 |3.823ms|3.078ms|t11-performance-before.json / t11-performance-final.json |
+| MC1000회 |0.2584s|0.06275s|동일seed 결과 일치 |
+| MC10000회 |2.4119s|0.4188s|동일seed 결과 일치; 약5.76배 |
+| all families |1.3965s|1.1722s|당시 고정 입력30반응군 |
+
+| 이번 실행 | C03 | C13 | 해석 |
+|---|---:|---:|---|
+| Windows 패키지 빌드 |227.964s|172.791s|환경·부하/캐시 통제 비교가 아니므로 성능 개선 주장 없음 |
+| 별도 프로필 스모크 |17.604s|17.651s|1.4.0·주 창1개·prices/calculate200 |
+| 논문 전체 재현 |해당 없음|26.009s|경로 보완 후 최종 오프라인 재현; 가족 분석reference1.656s/live1.376s |
+
+사용자의 DB·실행 로그·설치 실행 파일 해시는 전후 동일하다. 기존 설치본은 교체하지 않았고 검증용 프로세스는 종료했다. 이번 빌드의 설치 파일은 로컬 준비물이며 공개 릴리스가 아니다. 기존 Tailwind sourcemap와 PyInstaller 선택 모듈 경고는 로그에 남겼다.
+
+Linux CI의 원고 검사3건 실패는 Windows 경로 구분자를 읽는 한 줄을 보완해 처리했다. 고정 JSON·SVG4파일은 이전 Git 줄바꿈 변환을 바로잡아 원래 해시 그대로 저장했다. 수치·그림 내용은 동일하며34스냅샷과5원고 메타데이터의 저장될 바이트를 확인했다. 기존 실패 로그도 보존한다.
+
+### 사람이 해야 할 일과 확인 못 한 사항
+
+- **판매 전 최우선:** 실제 코드 권리자·대학/연구비 계약·공동 기여자 권한과 회사 정보를 확인하고 별도 상업 이용허락을 체결한다. 기존81파일 중20파일이 워크북 유래를 명시한다. 무료 열람과 상업 재사용을 구분해 출처별 허락 또는 독립 대체 근거를 확보한다. 현재 공개·상업 이용 검사 모두exit1이며, 승인 없이 태그·출시하지 않는다.
+- 회사가 구독 가격·기간·지원·개선분 권리·자료 보존·개인정보·세금·결제·호스팅 조건을 정한다. 실제TLS/OS접근/운영 용량·장애 복구 목표·결제 연동은 확인하지 않았다. 구현된 접근 권한은 실제 계약이나 결제 증명이 아니다.
+- 논문 저자가 실제 저자·소속·연구비·이해상충·원고 책임을 확정한다. Engineering Au는 잠정 후보다. JIF의 정확한 연도·JCR분야/Q1과 출판비 조건을 확인하고 최종 저널을 정한다. 요청한 Q1/JIF목표를 달성했다고 쓰지 않는다.
+- 조건이 맞는 독립 제조 원가 실적과 동의한 실제 연구자 평가를 확보한다. 현재 실측0·참여자0·MAPE미산정이다. 추가2편은 Crossref를 확인했지만 출판사403과 SI의HTML차단은 남았다. 문헌 기반 모델을 산업 실적으로 바꾸어 부르지 않는다.
+- 배포 권리 문제가 해결되면 PR검토·머지 여부를 결정하고 사람이 태그v1.4.0을 푸시한다. 실제 설치/업데이트·릴리스 자산과 Zenodo버전 DOI/concept DOI10.5281/zenodo.21451931 연결을 확인한다. 이번 실행에서는 머지·태그·릴리스·배포·투고·외부 메시지·실결제를 하지 않았다.
+
+### 보수적으로 정한 가정
+
+- 초기 상품은 수동 계약 기록을 쓰는 조직 단위 B2B구독이며 가격·결제사를 만들어 내지 않는다. 계정별 자료를 같은 회사 안에서도 자동 공유하지 않는다.
+- 기본 데스크톱은 로그인 없이 사용한다. 서비스 모드에서만 인증·기간·좌석을 강제하며 만료 후 기존 자료의 조회·내보내기를 허용한다. 보안 계정 정지는 별도다.
+- 백업/복구는 서비스 중단을 운영자가 확인하고 새 폴더에 수행한다. 자동 무중단 일관성·불변 감사 원장·실제SLA·보안 인증을 주장하지 않는다.
+- 실제 권리 승인이 없는 데이터는 승인 처리하지 않는다. 라이선스 파일·원자료·누락 단가를 임의로 바꾸거나 지우지 않는다. 유료 자료 구매·과금 API·키 발급/저장은 하지 않는다.
+- 관측이 없는 정확도·참가자·저널 자격은 공백으로 남긴다. AI 지원을 숨기거나 단독 저자·소유권을 커밋 기록만으로 확정하지 않는다.
+
+### 이전 실행 기록
+
+아래 표는 당시 T01–T19 완료 기록이다. 현재 소스의 테스트 수·논문 기준월·데이터 권리 상태는 위 C01–C14와 현재 감사가 우선한다. 이전 실행에서의 공개 링크 응답이나 자료 상태를 이번에 재검증했다고 주장하지 않는다.
+
+<details>
+<summary>기존 T01–T19 작업 표 — 당시 결과 보존</summary>
+
+| ID | 상태 | 커밋 | 근거 명령 출력 요약 | 메모 |
+|---|---|---|---|---|
+| T01 | 완료 | 06b33e3, 84d416f | All four baseline signals passed; outputs above | 필수; Draft PR #112 |
+| T02 | 완료 | 87a4791 | Browser thermal/electrode HTTP 200; calculate median 4.15 ms, MC10000 2.812 s; 104 raw JSX/2 missing keys; 1,520 structural objects without direct source | 필수; 2026-09-06-baseline.md |
+| T03 | 완료 | 9d08443 | 23 targeted passed; full 605 passed; frontend lint/build passed; browser reference review 18 to 0 | Publication month and fixed anchors; live review age 7 days |
+| T04 | 완료 | a8e4597 | 7 focused passed; same seed both request shapes equal; two full family JSON outputs byte-identical; full605 passed | Default seed None replaces implicit42; deterministic score/cost/slug order |
+| T05 | 완료 | f8ab863 | 17 focused passed; full pipeline completed; fresh14-series input; hashes/environment captured; full605 passed | Final data regenerated under T16; README and methodology command documented |
+| T06 | 완료 | ccfedb6 | 80JSON,3046objects;317/317Crossref;467URLs:287ok,179unverified,1notfound; ruff passed | No source price corrected; Mo23.13 retained; exhaustive status evidence |
+| T07 | 완료 | 3001c1b | 28 thermal methods x3 scales API parity; native Node9 passed; full605 and frontendlintbuild pass | Explicit card ID; repeated operations retained; catalog 28+custom+5electrode documented |
+| T08 | 완료 | f0ed93e | Node defaults and poisoned-thermal ledger assertions pass; real PEM browser HTTP200 and area ledger verified | Application/template default table; area ledger matches headline; thermal campaign/margin hidden |
+| T09 | 완료 | afc1615 | 27 focused tests pass; actual public feeds retrieved; Pt/Pd JM and Cu/Al Westmetall verified; Yahoo300s | Source deltas and full selected snapshot recorded; optional paid feeds not invoked |
+| T10 | 완료 | 88bab31 | 38/83 support entries linked;20 focused pass;synthetic90 profile cases; frozen paper has noHS observations so values unchanged | 45 ambiguous entries explicitly unlinked; immutable fixed-price fallbacks |
+| T11 | 완료 | 74175cb | 18 focused tests; exact seeded MC JSON equality; final MC10k 0.4188 s vs paired 2.4119 s (5.76x); Table 6.2 unchanged | mtime/size cache and row-major batched RNG; final performance evidence supersedes intermediate run |
+| T12 | 완료 | 60c0588 | Methodology error-budget table cites exact price bounds, index inputs, 1/10/150 vs 67 t/day, recovery defaults, LCA gaps and uncosted routes | Prose landed with T05 (f8ab863); validated against regenerated summary and SI; no invented aggregate error bar |
+| T13 | 완료 | b93c62d | Clean coverage run 625 passed in 347.52 s; backend/core 94%, every module at least89%; 20 provider HTTP contract tests added | pytest-cov temporary environment only; check:i18n and CI wiring land with T14 translations to keep intermediate CI green |
+| T14 | 완료 | e209ff1 | check:i18n 781 calls/822 keys,0 missing/0 untranslated; frontend lint/build and Node9 pass; 3 real browser flows200; 11 README screenshots regenerated | Data text unchanged; Korean guide added; reference review0; capture failures and initial422 recorded honestly |
+| T15 | 완료 | 300fbf7 | All4 versions1.4.0; final desktop build156.36s and smoke200/one window; total172.41s; latest public release remains1.3.24 | Prepared metadata, notes and checklist only; isolated junction packaging issue recovered with unchanged-lockfile npm ci |
+| T16 | 완료 | ea787f0 | Full pipeline2026-07/seed20260906;14series91months; six PNG/SVGfigures; 26outputs+80data+34code hash checks pass; staged raw SHA preserved | Fresh history fetched; actual live12quote snapshot; latest-common July; live-classification edge tests11 included in final636 |
+| T17 | 완료 | e7effeb | Manuscript69+SI980 keys resolve;466 numeric checks;4Crossref citations;165-word abstract; estimated6624 word equivalents; six figures inspected | New3.4/3.5/3.6 and4SI tables; ACS guidelines verified; no invented authorship or version DOI |
+| T18 | 완료 | 5365889 | Reviewer checklist plus10 evidence-linked questions/answers; no fabricated performance/coverage/reuse claims | Expected objections cover method reproduction, proxies, sources, LCA, licensing and price reproducibility |
+| T19 | 완료 | 0844666 | Final636 passed; ruff, frontend/i18n/Node9, desktop1.4.0, Table6.2 and paper hashes pass; final report prepared | Single PR #112; no merge/tag/release/deployment |
+
+</details>
