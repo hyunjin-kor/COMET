@@ -18,6 +18,13 @@ The package versions are 1.4.0. The latest verified public release remains v1.3.
 
 - Additional primary-literature checks clarify grade, formulation and manufacturing assumptions for fifteen candidates across ammonia cracking, olefin metathesis, hydrodeoxygenation and NH3-SCR, without changing their numerical inputs.
 - A unified May 2026 manuscript, SI and six figures share frozen source hashes. A separate public-contract/catalog audit keeps unmatched purchase evidence out of manufacturing-accuracy metrics.
+- Results and CSV now preserve the actual costing scope, proxy rates, scale substitutions and declared omissions. Missing operations remain uncosted.
+- Thermal estimates accept an optional effective production rate with a source/assumption note. An explicit purchased-precursor recipe can account for component content, purity, retention yield and net solvent/wash consumption; default estimates are unchanged, and additional recipe inputs do not silently expand LCA coverage.
+- Compare 2–4 saved estimates under a shared price snapshot and reference operating conditions, alongside historical and price-only results. Composition and manufacturing differences remain visible.
+- Store supplier, quote date, quantity, grade and source evidence with manual inputs. Local actual-cost records retain exclusion reasons and only report errors for documented matching thermal full-cost conditions; they are not independent validation data.
+- Headline prices fit narrow cards on one line. Net-price wording now states that selling margin is included before recovery credit, and the cost pie uses a consistent selling-price denominator with consumable slices.
+
+The [practical costing audit](audit/practical-costing-2026-09-07.md) records these changes, synthetic test boundaries, default-result regression and performance observations.
 
 Validation and remaining checks are recorded in the [run audit](audit/autonomous-run-2026-09-06.md) and [release checklist](release-checklist.md). The published Table 6.2 acceptance cases remain Pt/C to the cent, Ni within 7%, and FCC within 2% using its footnote-b rate. Pricing-input changes and display corrections are documented individually; no new rate was invented for uncosted operations.
 

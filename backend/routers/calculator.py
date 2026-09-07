@@ -47,6 +47,7 @@ def _template_summary(template: dict | None) -> dict | None:
         "route_note": template.get("route_note", ""),
         "source": template.get("source", ""),
         "reference_urls": template.get("reference_urls", []),
+        "uncosted_operations": template.get("uncosted_operations", []),
     }
 
 
@@ -54,7 +55,7 @@ def _component_payload(req: CostCalculationRequest) -> list[dict]:
     """Build the component payload before DB-backed price resolution."""
 
     if req.components:
-        return [component.model_dump(exclude_none=True) for component in req.components]
+        return [component.model_dump(exclude_none=True, mode="json") for component in req.components]
 
     if (
         req.catalyst_domain == "electrocatalyst"
@@ -161,6 +162,9 @@ def _estimate_from_context(
         electrode_input=electrode_payload if electrode_payload is not None else context["electrode_payload"],
         route_summary=context["route_summary"],
         resolved_materials=context["resolved_materials"],
+        production_rate_ton_per_day=req.production_rate_ton_per_day,
+        production_rate_note=req.production_rate_note,
+        consumables=[c.model_dump() for c in req.consumables],
     )
 
 
@@ -251,7 +255,7 @@ def save_estimate(
         support_name=str(primary_support["name"]) if supports else "",
         order_size_tons=req.order_size_tons,
         estimated_price_per_lb=result["summary"]["estimated_price_per_lb"],
-        input_json=json.dumps(req.model_dump()),
+        input_json=json.dumps(req.model_dump(mode="json")),
         result_json=json.dumps(result),
     )
     session.add(estimate)

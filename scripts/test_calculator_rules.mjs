@@ -16,6 +16,36 @@ async function loadHelper(name) {
 const { sameSteps, matchThermalTemplate, isThermalTemplateReady } = await loadHelper('preparation-selection');
 const { compareElectroPreference } = await loadHelper('electrode-defaults');
 const { electrodeCostRows } = await loadHelper('electrode-result');
+const { blankRecipe, validRecipe, validConsumables } = await loadHelper('recipe-inputs');
+const { buildResultCsv } = await loadHelper('export-csv');
+
+test('optional recipes reject incomplete values, zero yield and double interpretation of percentages', () => {
+  assert.equal(validRecipe(undefined), true);
+  assert.equal(validRecipe(blankRecipe()), false);
+  const recipe = { precursor_name: 'Synthetic precursor', source_note: 'Arithmetic fixture', retained_component_fraction: 0.25, purity_fraction: 0.8, yield_fraction: 0.5, price_per_kg: 5 };
+  assert.equal(validRecipe(recipe), true);
+  assert.equal(validRecipe({ ...recipe, yield_fraction: 0 }), false);
+  assert.equal(validRecipe({ ...recipe, purity_fraction: 80 }), false);
+  assert.equal(validRecipe({ ...recipe, price_per_kg: '' }), false);
+  assert.equal(validConsumables([]), true);
+  assert.equal(validConsumables([{ name: 'Wash', source_note: 'Synthetic', kg_per_kg_catalyst: 3, price_per_kg: .5 }]), true);
+  assert.equal(validConsumables([{ name: 'Wash', source_note: '', kg_per_kg_catalyst: 3, price_per_kg: .5 }]), false);
+});
+
+test('CSV preserves calculation scope, production assumptions and purchased-input evidence', () => {
+  const result = {
+    input_summary: { composition: 'Synthetic fixture', production_rate_ton_per_day: 5, production_rate_note: 'Measured-rate fixture' },
+    summary: { estimated_price_per_lb: 20, estimated_price_per_kg: 44, net_cost_per_lb: 19, net_cost_per_kg: 42 },
+    step_method: { scale: 'medium', campaign_days: 5, margin_pct: 20, processing_cost_per_lb: 2 },
+    materials: { total_materials_cost_per_lb: 10, components: [{ name: 'Ni', role: 'active_metal', wt_pct: 20, price_per_lb: 8, precursor_markup: 1, cost_per_lb_cat: 5, cost_pct: 50,
+      recipe_consumption: { precursor_name: 'Synthetic precursor', retained_component_fraction: .25, purity_fraction: .8, yield_fraction: .5, price_per_kg: 5, purchased_kg_per_kg_catalyst: 2, cost_per_kg_catalyst: 10, source_note: 'Synthetic recipe' } }],
+      consumables: [{ name: 'Synthetic wash', kg_per_kg_catalyst: 3, price_per_kg: .5, cost_per_lb_cat: .68, source_note: 'Net purchase fixture' }] },
+    purchase_evidence: [{ name: 'Ni', price_per_lb: 8, evidence: { supplier: 'Supplier, synthetic', quote_date: '2026-05-07', grade: 'Test only' } }],
+    costing_scope: { status: 'partial', boundary: 'Selected operations only', actual_steps: ['mix'], costed_steps: [], substitutions: [], dropped_steps: ['centrifuge'], omitted_template_steps: [], added_steps: [], uncosted_operations: ['Pressure vessel uncosted'], route_modified: false },
+  };
+  const csv = buildResultCsv({ result, generatedAt: '2026-09-07', orderSize: 20, stepLabels: ['Mix'], steps: ['mix'] });
+  for (const text of ['Measured-rate fixture', 'Synthetic precursor', 'Synthetic wash', '"Supplier, synthetic"', 'Pressure vessel uncosted', 'centrifuge', '2026-05-07']) assert.ok(csv.includes(text), text);
+});
 
 test('repeated operations remain distinct while order-only changes match', () => {
   assert.equal(sameSteps(['mix', 'mix', 'dry'], ['mix', 'dry', 'dry']), false);

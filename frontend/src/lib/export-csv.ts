@@ -70,8 +70,8 @@ export function buildResultCsv(snapshot: CalculatorResultSnapshot): string {
       ['Metric', 'Value', 'Unit'],
       ['Estimated selling price', result.summary.estimated_price_per_lb, '$/lb'],
       ['Estimated selling price', result.summary.estimated_price_per_kg, '$/kg'],
-      ['Net cost', result.summary.net_cost_per_lb, '$/lb'],
-      ['Net cost', result.summary.net_cost_per_kg, '$/kg'],
+      ['Selling price less recovery value (margin included)', result.summary.net_cost_per_lb, '$/lb'],
+      ['Selling price less recovery value (margin included)', result.summary.net_cost_per_kg, '$/kg'],
       ['Materials share', result.summary.materials_pct, '% of selling price'],
       ['Processing share', result.summary.processing_pct, '% of selling price'],
     ),
@@ -108,6 +108,28 @@ export function buildResultCsv(snapshot: CalculatorResultSnapshot): string {
   );
 
   const resolved = result.resolved_materials ?? [];
+  if (result.input_summary.production_rate_ton_per_day != null) {
+    sections.push(rows(['Production-rate assumption'],
+      ['Effective rate (short ton/day)', Number(result.input_summary.production_rate_ton_per_day)],
+      ['Production duration including cleaning (days)', step.campaign_days],
+      ['Source or assumption', String(result.input_summary.production_rate_note ?? '')]));
+  }
+  const recipeRows = result.materials.components.filter((c) => c.recipe_consumption);
+  if (recipeRows.length) sections.push(rows(
+    ['Purchased-precursor mass balance'],
+    ['Finished component', 'Purchased precursor', 'Component fraction', 'Purity fraction', 'Retention yield', 'USD/kg precursor', 'kg purchased/kg catalyst', 'USD/kg catalyst', 'Source or assumption'],
+    ...recipeRows.map((c): CsvCell[] => { const r = c.recipe_consumption!; return [c.name, r.precursor_name, r.retained_component_fraction, r.purity_fraction, r.yield_fraction, r.price_per_kg, r.purchased_kg_per_kg_catalyst, r.cost_per_kg_catalyst, r.source_note]; }),
+  ));
+  if (result.materials.consumables?.length) sections.push(rows(
+    ['Net purchased consumables; additional LCA not included'],
+    ['Name', 'kg purchased/kg catalyst', 'USD/kg consumable', 'USD/lb catalyst', 'Source or assumption'],
+    ...result.materials.consumables.map((c): CsvCell[] => [c.name, c.kg_per_kg_catalyst, c.price_per_kg, c.cost_per_lb_cat, c.source_note]),
+  ));
+  if (result.purchase_evidence?.length) sections.push(rows(
+    ['Local purchase evidence; user supplied, not independently verified'],
+    ['Material', 'USD/lb material', 'Supplier', 'Quote date', 'Quantity', 'Quantity unit', 'Grade', 'Cost boundary', 'Reference', 'Notes'],
+    ...result.purchase_evidence.map((c): CsvCell[] => [c.name, c.price_per_lb, c.evidence.supplier, c.evidence.quote_date, c.evidence.quantity, c.evidence.quantity_unit, c.evidence.grade, c.evidence.cost_boundary, c.evidence.reference, c.evidence.notes]),
+  ));
   if (resolved.length) {
     sections.push(
       rows(
@@ -148,13 +170,32 @@ export function buildResultCsv(snapshot: CalculatorResultSnapshot): string {
       rows(
         ['Preparation route'],
         ['Template', route.name],
-        ['Steps', route.steps.join('; ')],
+        ['Declared template steps', route.steps.join('; ')],
         ['Source', route.source],
         ...route.reference_urls.map((url, index): CsvCell[] => [`Reference ${index + 1}`, url]),
       ),
     );
   } else if (snapshot.stepLabels.length) {
     sections.push(rows(['Preparation route'], ['Steps', snapshot.stepLabels.join('; ')]));
+  }
+
+  const scope = result.costing_scope;
+  if (scope) {
+    sections.push(rows(
+      ['Costing scope'],
+      ['Status', scope.status],
+      ['Boundary', scope.boundary],
+      ['Electrode-area boundary', scope.area_cost_boundary],
+      ['Template modified', scope.route_modified ? 'yes' : 'no'],
+      ['Actual selected steps', scope.actual_steps.join('; ')],
+      ['Unavailable at this scale', scope.dropped_steps.join('; ')],
+      ['Omitted template steps', scope.omitted_template_steps.join('; ')],
+      ['Added steps', scope.added_steps.join('; ')],
+      ...scope.uncosted_operations.map((operation): CsvCell[] => ['Uncosted operation', operation]),
+      ...scope.substitutions.map((entry): CsvCell[] => ['Scale substitution', entry.from, entry.to]),
+      ['Actual costed step', 'Status', 'Source', 'Basis', 'Reference URL'],
+      ...scope.costed_steps.map((entry): CsvCell[] => [entry.name, entry.status, entry.source, entry.basis, entry.reference_url]),
+    ));
   }
 
   const electrode = result.electrode_model;
@@ -242,6 +283,7 @@ export function buildRangeCsv(result: EstimateRangeResult): string {
     ),
   );
   const applied = Object.entries(result.uncertainties_applied);
+  if (result.fixed_recipe_assumptions) sections.push(rows(['Fixed recipe assumptions', result.fixed_recipe_assumptions]));
   if (applied.length) {
     sections.push(
       rows(

@@ -1,4 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
+import { ConsumablesFields, RecipeConsumptionFields } from '../components/RecipeConsumptionFields';
+import CostEvidencePanel, { PurchaseEvidenceFields } from '../components/CostEvidencePanel';
+import { SavedEstimateComparison } from '../components/SavedEstimateComparison';
+import { validConsumables, validRecipe, type ConsumableDraft } from '../lib/recipe-inputs';
 import { useNavigate } from 'react-router-dom';
 import { FitPriceText } from '../components/shared/FitPriceText';
 import { WorkspaceSectionFooter, WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
@@ -17,6 +21,8 @@ import {
   refreshPrices as refreshPriceFeed,
   type ComponentInput,
   type CostInput,
+  type PrecursorConsumption,
+  type ConsumableInput,
   type SavedEstimateSummary,
   type MaterialItem,
   type MetalPrice,
@@ -457,6 +463,9 @@ export default function Calculator() {
   const [applicationFamily, setApplicationFamily] = useState<ApplicationFamily>(() => storedDraft?.applicationFamily ?? 'fuel_cell');
   const [electrocatalystConfig, setElectrocatalystConfig] = useState<ElectrocatalystDraft>(() => ({ ...defaultElectrocatalystConfig(), ...storedDraft?.electrocatalystConfig }));
   const [orderSize, setOrderSize] = useState<number>(() => storedDraft?.orderSize ?? 20);
+  const [productionRate, setProductionRate] = useState<number | ''>(() => storedDraft?.productionRate ?? '');
+  const [productionRateNote, setProductionRateNote] = useState(() => storedDraft?.productionRateNote ?? '');
+  const [consumables, setConsumables] = useState<ConsumableDraft[]>(() => storedDraft?.consumables ?? []);
   const [includeSpentValue, setIncludeSpentValue] = useState<boolean>(() => storedDraft?.includeSpentValue ?? false);
   const [reactorType, setReactorType] = useState<'fixed' | 'slurry'>(() => storedDraft?.reactorType ?? 'fixed');
   const [catalystBulkDensity, setCatalystBulkDensity] = useState<number>(() => storedDraft?.catalystBulkDensity ?? 50);
@@ -476,6 +485,7 @@ export default function Calculator() {
   const [savedEstimates, setSavedEstimates] = useState<SavedEstimateSummary[]>([]);
   const [savedBusyId, setSavedBusyId] = useState<number | null>(null);
   const [loadedSavedName, setLoadedSavedName] = useState<string | null>(null);
+  const [evidenceEstimateId, setEvidenceEstimateId] = useState<number | null>(null);
   const [latestSnapshot, setLatestSnapshot] = useState<CalculatorResultSnapshot | null>(() => loadCalculatorResultSnapshot());
   const [pricesUpdatedAt, setPricesUpdatedAt] = useState<Date | null>(() => storedDraft?.pricesUpdatedAt ? new Date(storedDraft.pricesUpdatedAt) : null);
   const [pricesLoading, setPricesLoading] = useState(true);
@@ -491,6 +501,9 @@ export default function Calculator() {
       catalystDomain,
       applicationFamily,
       orderSize,
+      productionRate,
+      productionRateNote,
+      consumables,
       pricesUpdatedAt: pricesUpdatedAt ? pricesUpdatedAt.toISOString() : null,
       includeSpentValue,
       reactorType,
@@ -505,6 +518,9 @@ export default function Calculator() {
     electrocatalystConfig,
     includeSpentValue,
     orderSize,
+    productionRate,
+    productionRateNote,
+    consumables,
     pricesUpdatedAt,
     reactorType,
     rows,
@@ -887,7 +903,7 @@ export default function Calculator() {
     if (!option) return;
     setRows((previous) => previous.map((row) => {
       if (row.id !== rowId) return row;
-      return applyOptionToRow(row, option);
+      return applyOptionToRow({ ...row, recipe_consumption: undefined, purchase_evidence: undefined }, option);
     }));
   };
   const updateElectroConfig = (patch: Partial<ElectrocatalystDraft>) => setElectrocatalystConfig((previous) => ({ ...previous, ...patch }));
@@ -967,13 +983,15 @@ export default function Calculator() {
               ? t('Active metals and promoters must stay below 100 wt% so support remains positive.')
               : t('Enter a valid non-zero loading for the active portion of the formulation.');
   const electrocatalystValidationMessage = t('Select catalyst powder, ionomer, membrane, substrate / GDL, and a preparation template before continuing.');
-  const isCompositionSectionValid = catalystDomain === 'electrocatalyst' ? isElectroValid : isThermalValid;
-  const isManufacturingSectionValid = isCompositionSectionValid && steps.length > 0;
+  const isRecipeValid = thermalRows.every((row) => validRecipe(row.recipe_consumption)) && validConsumables(consumables);
+  const isRateValid = productionRate === '' || (Number.isFinite(productionRate) && productionRate > 0 && productionRateNote.trim().length > 0);
+  const isCompositionSectionValid = catalystDomain === 'electrocatalyst' ? isElectroValid : isThermalValid && isRecipeValid;
+  const isManufacturingSectionValid = isCompositionSectionValid && steps.length > 0 && (catalystDomain === 'electrocatalyst' || isRateValid);
   const isValid = catalystDomain === 'electrocatalyst' ? isElectroValid : isThermalValid;
   const isRouteReady = catalystDomain !== 'thermal' || isThermalTemplateReady(
     selectedThermalTemplateId, templateCosts, steps, orderSize, templateCostsOrderSize,
   );
-  const canCalculate = isValid && steps.length > 0 && isRouteReady;
+  const canCalculate = isValid && isManufacturingSectionValid && isRouteReady;
   const latestSnapshotForCurrentCase = latestSnapshot
     && latestSnapshot.result.input_summary.catalyst_domain === catalystDomain
     && (
@@ -1021,6 +1039,12 @@ export default function Calculator() {
     try {
       const detail = await fetchSavedEstimate(summary.id);
       const input = detail.input as unknown as CostInput;
+      setProductionRate(input.production_rate_ton_per_day ?? '');
+      setProductionRateNote(input.production_rate_note ?? '');
+      setConsumables(input.consumables ?? []);
+      setIncludeSpentValue(input.include_spent_value ?? false);
+      setReactorType(input.reactor_type === 'slurry' ? 'slurry' : 'fixed');
+      setCatalystBulkDensity(input.catalyst_bulk_density ?? 50);
 
       if (summary.catalyst_domain === 'electrocatalyst') {
         const electrode = input.electrode_input;
@@ -1049,7 +1073,7 @@ export default function Calculator() {
           const role = component.role as 'active_metal' | 'promoter' | 'support';
           const selectionKey = component.material_key ? `library:${component.material_key}` : '';
           const option = selectionKey ? findThermalOption(selectionKey) : undefined;
-          if (option) return createRowFromOption(role, option, component.wt_pct);
+          if (option) return { ...createRowFromOption(role, option, component.wt_pct), recipe_consumption: component.recipe_consumption, purchase_evidence: component.purchase_evidence };
           return {
             id: uid(),
             role,
@@ -1061,6 +1085,8 @@ export default function Calculator() {
             price_per_lb: component.price_per_lb ?? 0,
             source_type: 'manual' as const,
             source: 'Saved estimate',
+            recipe_consumption: component.recipe_consumption,
+            purchase_evidence: component.purchase_evidence,
           };
         });
       if (nextRows.length === 0) return;
@@ -1146,6 +1172,8 @@ export default function Calculator() {
             material_key: row.source_type === 'manual' ? undefined : row.material_key ?? undefined,
             wt_pct: row.wt_pct,
             price_per_lb: row.source_type === 'manual' || !row.material_key ? row.price_per_lb : undefined,
+            recipe_consumption: row.recipe_consumption as PrecursorConsumption | undefined,
+            purchase_evidence: row.purchase_evidence,
           })),
           ...completedSupportRows.map((row, index) => ({
             role: 'support' as const,
@@ -1153,6 +1181,8 @@ export default function Calculator() {
             material_key: row.source_type === 'manual' ? undefined : row.material_key ?? undefined,
             wt_pct: supportIsSplit ? row.wt_pct : index === 0 ? supportWtPct : 0,
             price_per_lb: row.source_type === 'manual' || !row.material_key ? row.price_per_lb : undefined,
+            recipe_consumption: row.recipe_consumption as PrecursorConsumption | undefined,
+            purchase_evidence: row.purchase_evidence,
           })).filter((row) => row.wt_pct > 0),
         ];
         input = {
@@ -1163,6 +1193,9 @@ export default function Calculator() {
           application_family: applicationFamily,
           order_size_tons: orderSize,
           include_spent_value: includeSpentValue,
+          production_rate_ton_per_day: productionRate === '' ? undefined : productionRate,
+          production_rate_note: productionRate === '' ? undefined : productionRateNote,
+          consumables: consumables as ConsumableInput[],
           reactor_type: reactorType,
           catalyst_bulk_density: catalystBulkDensity,
           price_basis: basis,
@@ -1475,6 +1508,8 @@ export default function Calculator() {
                   <button onClick={() => removeRow(row.id)} className="flex h-10 w-10 flex-none items-center justify-center rounded-[18px] border border-slate-300 bg-white/74 text-slate-400 transition hover:border-red-300 hover:bg-red-50 hover:text-red-700" aria-label={t("Remove row")}>x</button>
                 </div>
                 <div className="mt-3 text-xs text-slate-600">{row.name || 'Select a material record.'}</div>
+                <RecipeConsumptionFields value={row.recipe_consumption} onChange={(value) => updateRow(row.id, { recipe_consumption: value })} />
+                {row.source_type === 'manual' ? <PurchaseEvidenceFields value={row.purchase_evidence} onChange={(value) => updateRow(row.id, { purchase_evidence: value })} /> : null}
               </div>
             ))}
           </div>
@@ -1763,6 +1798,8 @@ export default function Calculator() {
                 {supportRows.length > 1 ? <button onClick={() => removeRow(row.id)} className="flex h-10 w-10 flex-none items-center justify-center rounded-[18px] border border-slate-300 bg-white/74 text-slate-400 transition hover:border-red-300 hover:bg-red-50 hover:text-red-700" aria-label={t("Remove support")}>x</button> : null}
               </div>
               <div className="mt-3 text-xs text-slate-600">{row.name || t('Select a support record.')}</div>
+              <RecipeConsumptionFields value={row.recipe_consumption} onChange={(value) => updateRow(row.id, { recipe_consumption: value })} />
+              {row.source_type === 'manual' ? <PurchaseEvidenceFields value={row.purchase_evidence} onChange={(value) => updateRow(row.id, { purchase_evidence: value })} /> : null}
             </div>
           ))}
           <div className="mt-3 rounded-[18px] border border-slate-200 bg-white/76 px-4 py-3 text-xs leading-6 text-slate-600">
@@ -1773,6 +1810,8 @@ export default function Calculator() {
           </div>
         </div>
         </div>
+        <ConsumablesFields value={consumables} onChange={setConsumables} />
+        {!isRecipeValid ? <p className="mt-3 text-sm text-amber-800">{t('Complete recipe and consumable inputs before continuing.')}</p> : null}
       </section>
     );
   }
@@ -1909,6 +1948,15 @@ export default function Calculator() {
           </div>
         </div>
         <div className="grid gap-3 lg:grid-cols-2 xl:grid-cols-3">
+          {catalystDomain === 'thermal' ? <div className="surface-ghost p-4 lg:col-span-2 xl:col-span-3">
+            <h3 className="font-semibold">{t('Effective production rate')}</h3>
+            <p className="mt-2 text-xs leading-6 text-slate-600">{t('Optional short ton/day input. Leave blank to use the scale default. Production duration includes the existing cleaning allowance; method-card prices use the default rate.')}</p>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              <label className="text-xs">{t('Effective rate (short ton/day)')}<input className="input-base mt-1 w-full" type="number" min="0" step="any" value={productionRate} onChange={(e) => setProductionRate(e.target.value === '' ? '' : Number(e.target.value))} /></label>
+              <label className="text-xs">{t('Production-rate source or assumption')}<input className="input-base mt-1 w-full" value={productionRateNote} onChange={(e) => setProductionRateNote(e.target.value)} /></label>
+            </div>
+            {isRateValid ? <p className="mt-2 text-sm">{t('Production duration including cleaning')}: {(orderSize / (productionRate || (currentScale === 'small' ? 1 : currentScale === 'medium' ? 10 : 150)) + (currentScale === 'small' ? 0.5 : 1)).toFixed(2)} {t('days')}</p> : <p className="mt-2 text-sm text-amber-800">{t('Enter a positive production rate and its source or assumption.')}</p>}
+          </div> : null}
           {visibleCategories.map((category) => {
             const selectedInCategory = selectedStepKeysForCategory(category, steps);
             return (
@@ -2081,6 +2129,7 @@ export default function Calculator() {
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
+                          <button className="cp-button-secondary px-3 py-1.5 text-xs" onClick={() => setEvidenceEstimateId(saved.id)}>{t('Actual-cost records')}</button>
                           <button
                             type="button"
                             onClick={() => void handleLoadSaved(saved)}
@@ -2107,6 +2156,8 @@ export default function Calculator() {
                     );
                   })}
                 </div>
+                <SavedEstimateComparison savedEstimates={savedEstimates} priceBasis={basis} />
+                {evidenceEstimateId !== null ? <CostEvidencePanel key={evidenceEstimateId} savedEstimateId={evidenceEstimateId} /> : null}
               </div>
             ) : null}
           </section>

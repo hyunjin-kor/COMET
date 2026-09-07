@@ -22,8 +22,10 @@ from backend.routers import (
     capex,
     catcost_import,
     compare,
+    cost_evidence,
     decision,
     equipment,
+    estimate_comparison,
     estimates,
     indices,
     lca,
@@ -125,6 +127,8 @@ app.include_router(decision.router)
 app.include_router(templates.router)
 app.include_router(equipment.router)
 app.include_router(estimates.router)
+app.include_router(estimate_comparison.router)
+app.include_router(cost_evidence.router)
 app.include_router(indices.router)
 app.include_router(lca.router)
 

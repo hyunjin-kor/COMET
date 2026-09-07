@@ -1,3 +1,5 @@
+import type { PurchaseEvidence } from './cost-evidence';
+
 // Port 8765 must match BACKEND_PORT in electron/main.js (single source of truth).
 const API_ROOT =
   typeof window !== 'undefined' && window.location.protocol === 'file:'
@@ -123,6 +125,24 @@ export interface ComponentInput {
   wt_pct: number;
   price_per_lb?: number;
   precursor_markup?: number;
+  recipe_consumption?: PrecursorConsumption;
+  purchase_evidence?: PurchaseEvidence;
+}
+
+export interface PrecursorConsumption {
+  precursor_name: string;
+  retained_component_fraction: number;
+  purity_fraction: number;
+  yield_fraction: number;
+  price_per_kg: number;
+  source_note: string;
+}
+
+export interface ConsumableInput {
+  name: string;
+  kg_per_kg_catalyst: number;
+  price_per_kg: number;
+  source_note: string;
 }
 
 export interface ElectrodeCostInput {
@@ -159,6 +179,9 @@ export interface CostInput {
   catalyst_bulk_density?: number;
   electrode_input?: ElectrodeCostInput;
   price_basis?: PriceBasis;
+  production_rate_ton_per_day?: number;
+  production_rate_note?: string;
+  consumables?: ConsumableInput[];
 }
 
 export interface ComponentBreakdown {
@@ -170,14 +193,18 @@ export interface ComponentBreakdown {
   precursor_markup: number;
   cost_per_lb_cat: number;
   cost_pct: number;
+  recipe_consumption?: PrecursorConsumption & { purchased_kg_per_kg_catalyst: number; cost_per_kg_catalyst: number };
 }
 
 export interface CostResult {
+  purchase_evidence?: Array<{ name: string; role: string; price_per_lb: number; evidence: PurchaseEvidence; verification: string }>;
   warnings?: string[];
   input_summary: Record<string, unknown>;
   materials: {
     components: ComponentBreakdown[];
     total_materials_cost_per_lb: number;
+    consumables?: Array<ConsumableInput & { cost_per_lb_cat: number; cost_pct: number }>;
+    costing_basis?: string;
   };
   step_method: {
     scale: string;
@@ -232,7 +259,23 @@ export interface CostResult {
     route_note: string;
     source: string;
     reference_urls: string[];
+    uncosted_operations?: string[];
   } | null;
+  costing_scope?: {
+    status: 'modeled_steps' | 'proxy' | 'partial';
+    boundary: string;
+    actual_steps: string[];
+    costed_steps: Array<{ step: string; name: string; status: 'costed' | 'proxy'; source: string; reference_url: string | null; basis: string }>;
+    declared_steps: string[];
+    substitutions: Array<{ from: string; to: string }>;
+    dropped_steps: string[];
+    omitted_template_steps: string[];
+    added_steps: string[];
+    uncosted_operations: string[];
+    route_modified: boolean;
+    template_name: string | null;
+    area_cost_boundary: string | null;
+  };
   spent_catalyst?: {
     metal_symbol: string;
     metal_loading_lb_per_lb: number;
@@ -960,6 +1003,7 @@ export const refreshPrices = (source?: 'yahoo') => {
 };
 
 export interface EstimateRangeResult {
+  fixed_recipe_assumptions?: string;
   mean: number;
   median: number;
   std: number;

@@ -1,5 +1,7 @@
 import { lazy, Suspense, useLayoutEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import CostEvidencePanel from '../components/CostEvidencePanel';
+import { PracticalCostingResult } from '../components/PracticalCostingResult';
 import { FitPriceText } from '../components/shared/FitPriceText';
 import {
   WorkspaceSectionFooter,
@@ -9,7 +11,7 @@ import {
 } from '../components/shared/WorkspaceSections';
 import { saveEstimate, type CostResult } from '../lib/api';
 import { LB_PER_KG, TROY_OZ_PER_LB } from '../lib/unit-conversion';
-import { loadCalculatorResultSnapshot } from '../lib/calculator-session';
+import { loadCalculatorResultSnapshot, saveCalculatorResultSnapshot } from '../lib/calculator-session';
 import { buildResultCsv, downloadCsv, resultCsvFilename } from '../lib/export-csv';
 import { formatPrice } from '../lib/format-price';
 import { electrodeCostRows } from '../lib/electrode-result';
@@ -164,7 +166,7 @@ export default function CalculatorResult() {
   const { unit, toDisplay, fmtLabel, catLabel } = useUnit();
   const { lang, t } = useLang();
   const sectionState = useWorkspaceSections(RESULT_SECTIONS, 'result');
-  const [snapshot] = useState(() => loadCalculatorResultSnapshot());
+  const [snapshot, setSnapshot] = useState(() => loadCalculatorResultSnapshot());
   const [saveName, setSaveName] = useState('');
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved' | 'failed'>('idle');
 
@@ -176,7 +178,10 @@ export default function CalculatorResult() {
         : 'Untitled estimate');
     setSaveState('saving');
     try {
-      await saveEstimate(snapshot.costInput, name);
+      const saved = await saveEstimate(snapshot.costInput, name);
+      const savedSnapshot = { ...snapshot, savedEstimateId: saved.id, result: saved.result };
+      setSnapshot(savedSnapshot);
+      saveCalculatorResultSnapshot(savedSnapshot);
       setSaveState('saved');
     } catch {
       setSaveState('failed');
@@ -234,9 +239,13 @@ export default function CalculatorResult() {
   const catalystDomain =
     result.input_summary.catalyst_domain === 'electrocatalyst' ? 'Electrocatalyst' : 'Thermocatalyst';
   const routeSummary = result.route_summary ?? null;
+  const costingScope = result.costing_scope ?? null;
   const electrodeModel = result.electrode_model ?? null;
   const spentCatalyst = electrodeModel ? null : result.spent_catalyst ?? null;
   const resolvedMaterials = result.resolved_materials ?? [];
+  const recipeReferenceKeys = new Set(snapshotState.costInput?.components
+    ?.filter((component) => component.recipe_consumption && component.material_key)
+    .map((component) => component.material_key) ?? []);
   const publicSourceCount = resolvedMaterials.filter((material) => Boolean(material.reference_url)).length;
   const historicalOnlyCount = resolvedMaterials.filter(
     (material) => material.price_scope === 'historical_bulk' && !material.reference_url,
@@ -306,6 +315,8 @@ export default function CalculatorResult() {
       value: 'Included',
     },
   ];
+  const sellingPriceShare = (costPerLb: number) => result.summary.estimated_price_per_lb > 0
+    ? costPerLb / result.summary.estimated_price_per_lb * 100 : 0;
   const pieData = electrodeRows ? electrodeRows.map((item) => ({ name: item.label, value: item.share })) : [
     ...result.materials.components.map((component) => ({
       name:
@@ -314,11 +325,70 @@ export default function CalculatorResult() {
           : component.role === 'promoter'
             ? `${component.name} promoter`
             : component.name,
-      value: component.cost_pct,
+      value: sellingPriceShare(component.cost_per_lb_cat),
     })),
-    { name: 'Processing', value: result.summary.processing_pct },
-    { name: 'Overhead + margin', value: Math.max(0, 100 - result.summary.materials_pct - result.summary.processing_pct) },
+    ...(result.materials.consumables ?? []).map((consumable) => ({
+      name: consumable.name,
+      value: sellingPriceShare(consumable.cost_per_lb_cat),
+    })),
+    { name: 'Processing', value: sellingPriceShare(Number(result.step_method.processing_cost_per_lb)) },
+    { name: 'Overhead + margin', value: sellingPriceShare(Math.max(0,
+      result.summary.estimated_price_per_lb - result.materials.total_materials_cost_per_lb
+      - Number(result.step_method.processing_cost_per_lb))) },
   ];
+
+  function renderCostingScope(detailed: boolean) {
+    if (!costingScope) return null;
+    const partial = costingScope.status === 'partial';
+    const proxyCount = costingScope.costed_steps.filter((step) => step.status === 'proxy').length;
+    const stepName = (key: string) => costingScope.costed_steps.find((step) => step.step === key)?.name ?? key.replace(/_/g, ' ');
+    return (
+      <div className={`mt-4 rounded-[20px] border p-4 ${partial ? 'border-amber-200 bg-amber-50/80 text-amber-950' : 'border-slate-200 bg-slate-50/80 text-slate-700'}`}>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="cp-subtle-label">{t('Costing scope')}</div>
+          <span className="cp-chip">{partial ? t('Partly costed') : costingScope.status === 'proxy' ? t('Includes proxy equipment') : t('Selected steps priced')}</span>
+        </div>
+        <p className="mt-2 text-sm leading-6">{costingScope.boundary}</p>
+        {costingScope.area_cost_boundary ? <p className="mt-2 text-sm leading-6">{costingScope.area_cost_boundary}</p> : null}
+        <div className="mt-2 flex flex-wrap gap-2 text-xs">
+          <span>{t('Costed steps')}: {costingScope.costed_steps.length}</span>
+          <span>{t('Proxy rates')}: {proxyCount}</span>
+          <span>{t('Scale substitutions')}: {costingScope.substitutions.length}</span>
+          <span>{t('Uncosted operations')}: {costingScope.uncosted_operations.length + costingScope.dropped_steps.length + costingScope.omitted_template_steps.length}</span>
+        </div>
+        {costingScope.route_modified ? <p className="mt-2 text-sm font-semibold">{t('Modified from the selected template')}. {t('The result uses the actual steps listed below; the template name is a reference.')}</p> : null}
+        {detailed ? (
+          <div className="mt-4 space-y-4">
+            {costingScope.uncosted_operations.length ? <div>
+              <div className="cp-subtle-label">{t('Uncosted operations')}</div>
+              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">{costingScope.uncosted_operations.map((operation, index) => <li key={index}>{operation}</li>)}</ul>
+            </div> : null}
+            {costingScope.substitutions.length ? <div>
+              <div className="cp-subtle-label">{t('Scale substitutions')}</div>
+              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">{costingScope.substitutions.map((entry, index) => <li key={index}>{stepName(entry.from)} → {stepName(entry.to)}</li>)}</ul>
+            </div> : null}
+            {costingScope.dropped_steps.length ? <p className="text-sm"><strong>{t('Unavailable at this scale')}:</strong> {costingScope.dropped_steps.map(stepName).join(', ')}</p> : null}
+            {costingScope.omitted_template_steps.length ? <p className="text-sm"><strong>{t('Omitted template steps')}:</strong> {costingScope.omitted_template_steps.map(stepName).join(', ')}</p> : null}
+            {costingScope.added_steps.length ? <p className="text-sm"><strong>{t('Added steps')}:</strong> {costingScope.added_steps.map(stepName).join(', ')}</p> : null}
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead><tr className="border-b border-slate-200">
+                  <th className="py-2 pr-3">{t('Actual costed steps')}</th>
+                  <th className="py-2 pr-3">{t('Status')}</th>
+                  <th className="py-2">{t('Source')}</th>
+                </tr></thead>
+                <tbody>{costingScope.costed_steps.map((entry, index) => <tr key={index} className="border-b border-slate-200/60 align-top">
+                  <td className="py-2 pr-3">{entry.name}</td>
+                  <td className="py-2 pr-3 whitespace-nowrap">{entry.status === 'proxy' ? t('Proxy rate') : t('Costed step')}</td>
+                  <td className="py-2">{entry.reference_url ? <a href={entry.reference_url} target="_blank" rel="noreferrer" className="underline">{entry.source}</a> : entry.source}<div className="mt-1 text-slate-500">{entry.basis}</div></td>
+                </tr>)}</tbody>
+              </table>
+            </div>
+          </div>
+        ) : null}
+      </div>
+    );
+  }
 
   function renderResultOverview() {
     return (
@@ -353,7 +423,7 @@ export default function CalculatorResult() {
                 ) : (
                   <>
                     {t("Net cost")} {formatPrice(toDisplay(result.summary.net_cost_per_lb))}
-                    {fmtLabel} {t("before selling margin treatment. Alternate view")} {formatPrice(altPrice)}
+                    {fmtLabel} {t('after recovery value, with selling margin included. Alternate view')} {formatPrice(altPrice)}
                     {altLabel}.
                   </>
                 )
@@ -408,6 +478,9 @@ export default function CalculatorResult() {
             <div className="mt-2 text-base font-semibold text-[#191f28]">
               {routeSummary?.name ?? benchmarkCandidate?.route.name ?? t('Custom route')}
             </div>
+            {costingScope?.route_modified ? (
+              <p className="mt-2 text-xs font-semibold text-amber-800">{t('Modified from the selected template')}</p>
+            ) : null}
             <div className="mt-3 space-y-1">
               {electrodeModel ? <RailRow
                 label={t('Active area')}
@@ -438,6 +511,7 @@ export default function CalculatorResult() {
             </div>
           </div>
         </div>
+        {renderCostingScope(false)}
       </section>
     );
   }
@@ -479,7 +553,7 @@ export default function CalculatorResult() {
                   ) : (
                     <>
                       {t("Net cost")} {formatPrice(toDisplay(result.summary.net_cost_per_lb))}
-                      {fmtLabel} {t("before selling margin treatment.")}
+                      {fmtLabel} {t('after recovery value, with selling margin included.')}
                     </>
                   )
                 )}
@@ -692,10 +766,14 @@ export default function CalculatorResult() {
           </div>
         ) : null}
 
+        {renderCostingScope(true)}
+        <PracticalCostingResult result={result} />
+
         {routeSummary ? (
           <div className="mt-4 rounded-[24px] border border-sky-200 bg-sky-50/75 p-4">
             <div className="cp-subtle-label !text-sky-700">{t('Preparation method')}</div>
             <div className="mt-2 cp-heading-sm">{routeSummary.name}</div>
+            {costingScope?.route_modified ? <p className="mt-2 text-sm font-semibold text-amber-800">{t('Modified from the selected template')}</p> : null}
             <div className="mt-2 text-sm leading-6 text-sky-900">
               {routeSummary.route_note || t('The route template details are attached to this estimate.')}
             </div>
@@ -937,9 +1015,12 @@ export default function CalculatorResult() {
 
               <div className="mt-4 grid gap-2.5 sm:grid-cols-3 xl:grid-cols-1 2xl:grid-cols-3">
                 <MetricTile label="wt%" value={(component.wt_frac * 100).toFixed(1)} detail={t('Loaded into catalyst')} />
-                <MetricTile label={t('Unit price')} value={formatPrice(toDisplay(component.price_per_lb))} detail={`${t('Per unit mass')} (${unit})`} />
+                <MetricTile label={component.recipe_consumption ? t('Purchased precursor unit price') : t('Unit price')} value={formatPrice(toDisplay(component.recipe_consumption ? component.recipe_consumption.price_per_kg / LB_PER_KG : component.price_per_lb))} detail={`${t('Per unit mass')} (${unit})`} />
                 <MetricTile label={t('Share')} value={`${Number(component.cost_pct).toFixed(1)}%`} detail={t('Of material cost')} />
               </div>
+              {component.recipe_consumption ? <p className="mt-3 text-xs leading-6 text-slate-600">
+                {t('Recipe purchase price replaces the component price in material cost. Reference component price:')} {formatPrice(toDisplay(component.price_per_lb))}{fmtLabel}.
+              </p> : null}
             </div>
           ))}
         </div>
@@ -983,7 +1064,7 @@ export default function CalculatorResult() {
                       </div>
                       {material.normalized_price_per_lb != null && material.price_unit !== `$${fmtLabel}` ? (
                         <div className="mt-0.5 font-mono text-xs text-slate-600">
-                          ≈ {formatPrice(toDisplay(material.normalized_price_per_lb))}{fmtLabel} {t('in calculator')}
+                          ≈ {formatPrice(toDisplay(material.normalized_price_per_lb))}{fmtLabel} {recipeReferenceKeys.has(material.material_key) ? t('reference price only') : t('in calculator')}
                         </div>
                       ) : null}
                       <div className="mt-1 text-xs text-slate-600">
@@ -1009,6 +1090,9 @@ export default function CalculatorResult() {
                       </div>
                     </div>
                   </div>
+                  {recipeReferenceKeys.has(material.material_key) ? <p className="mt-3 rounded-lg bg-amber-50 p-3 text-xs leading-6 text-amber-900">
+                    {t('This library quote is retained as a reference. The purchased-precursor recipe supplies the price used for this component cost.')}
+                  </p> : null}
                   <div className="mt-3 grid gap-2.5 sm:grid-cols-3">
                     <div className="rounded-[16px] border border-slate-200 bg-slate-50/80 px-3 py-2.5">
                       <div className="cp-subtle-label">{t('Pack Basis')}</div>
@@ -1027,7 +1111,7 @@ export default function CalculatorResult() {
                       </div>
                     </div>
                   </div>
-                  {material.escalation_factor != null && material.escalation_factor !== 1 && material.escalation_basis_year ? (
+                  {!recipeReferenceKeys.has(material.material_key) && material.escalation_factor != null && material.escalation_factor !== 1 && material.escalation_basis_year ? (
                     <div className="mt-3 rounded-[14px] border border-[#7950f2] bg-[#f3edff] px-3 py-2.5 text-xs leading-5 text-[#4d2eb5]">
                       <div className="font-bold uppercase tracking-[0.16em] text-[#4d2eb5]">
                         {t("Inflated to")} {material.escalation_target_year ?? new Date().getFullYear()} {t("basis")}
@@ -1045,7 +1129,7 @@ export default function CalculatorResult() {
                       </div>
                     </div>
                   ) : null}
-                  {material.live_override?.applied ? (
+                  {!recipeReferenceKeys.has(material.material_key) && material.live_override?.applied ? (
                     <div className="mt-3 rounded-[14px] border border-[#0d9488] bg-[#e6f5f2] px-3 py-2.5 text-xs leading-5 text-[#115e59]">
                       <div className="font-bold uppercase tracking-[0.16em] text-[#0f766e]">
                         {material.live_override.basis === 'reference' ? t('Monthly reference quote in use') : t('Live market quote in use')}
@@ -1074,7 +1158,7 @@ export default function CalculatorResult() {
                         ) : null}
                       </div>
                     </div>
-                  ) : material.live_override && material.live_override.applied === false ? (
+                  ) : !recipeReferenceKeys.has(material.material_key) && material.live_override && material.live_override.applied === false ? (
                     <div className="mt-3 rounded-[14px] border border-[#ffa800] bg-[#fff4dd] px-3 py-2.5 text-xs leading-5 text-[#7a5a00]">
                       <span className="font-bold uppercase tracking-[0.16em]">{t("No live quote")}</span>
                       <span className="ml-2">
@@ -1165,6 +1249,7 @@ export default function CalculatorResult() {
       {sectionState.activeSection.id === 'manufacturing' ? renderManufacturingSection() : null}
       {sectionState.activeSection.id === 'environmental' ? renderEnvironmentalSection() : null}
       {sectionState.activeSection.id === 'sources' ? renderSourcesSection() : null}
+      {sectionState.activeSection.id === 'sources' ? <CostEvidencePanel savedEstimateId={snapshotState.savedEstimateId ?? null} /> : null}
 
       <WorkspaceSectionFooter
         activeSection={sectionState.activeSection}

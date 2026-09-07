@@ -114,6 +114,9 @@ def run_cost_request_monte_carlo(
         electrode_input=context["electrode_payload"],
         route_summary=context["route_summary"],
         resolved_materials=context["resolved_materials"],
+        production_rate_ton_per_day=req.production_rate_ton_per_day,
+        production_rate_note=req.production_rate_note,
+        consumables=[c.model_dump() for c in req.consumables],
     )
 
     bounds = np.array([uncertainties.get(key, (1.0, 1.0)) for key in (
@@ -130,6 +133,12 @@ def run_cost_request_monte_carlo(
 
         for component in varied_components:
             base_price = float(component.get("price_per_lb", 0.0))
+            if component.get("recipe_consumption"):
+                recipe = dict(component["recipe_consumption"])
+                factor = (support_factor if component["role"] == "support" else
+                          promoter_factor if component["role"] == "promoter" else active_factor)
+                recipe["price_per_kg"] = float(recipe["price_per_kg"]) * factor
+                component["recipe_consumption"] = recipe
             if base_price <= 0:
                 continue
             if component["role"] in {"active_metal", "active_catalyst"}:
@@ -172,6 +181,9 @@ def run_cost_request_monte_carlo(
                 electrode_input=varied_electrode,
                 route_summary=context["route_summary"],
                 resolved_materials=context["resolved_materials"],
+                production_rate_ton_per_day=req.production_rate_ton_per_day,
+                production_rate_note=req.production_rate_note,
+                consumables=[c.model_dump() for c in req.consumables],
             )
             results.append(result["summary"]["estimated_price_per_lb"])
         except (ValueError, KeyError):
@@ -201,4 +213,7 @@ def run_cost_request_monte_carlo(
         "catalyst_domain": req.catalyst_domain,
         "application_family": context["application_family"],
         "uncertainties_applied": uncertainties,
+        **({"fixed_recipe_assumptions": "Precursor content, purity, retention yield, production rate and "
+            "consumable quantities/prices are fixed; precursor purchase prices follow their component role."}
+           if req.consumables or any(c.get("recipe_consumption") for c in context["resolved_components"]) else {}),
     }

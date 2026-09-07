@@ -1,0 +1,98 @@
+{
+  "checks": [
+    {
+      "check": "catcost",
+      "command": [
+        "python",
+        "scripts/reproduce_catcost_table62.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.081,
+      "at": "2026-09-07T03:34:16.318488+00:00",
+      "log": "docs/audit/practical-catcost-2026-09-07.log"
+    },
+    {
+      "check": "frontend-build",
+      "command": [
+        "npm.cmd",
+        "run",
+        "build",
+        "--prefix",
+        "frontend"
+      ],
+      "exit_code": 0,
+      "seconds": 4.406,
+      "at": "2026-09-07T03:47:09.165297+00:00",
+      "log": "docs/audit/practical-frontend-build-2026-09-07.log"
+    },
+    {
+      "check": "frontend-check",
+      "command": [
+        "npm.cmd",
+        "run",
+        "check:i18n",
+        "--prefix",
+        "frontend"
+      ],
+      "exit_code": 0,
+      "seconds": 0.75,
+      "at": "2026-09-07T03:47:00.096189+00:00",
+      "log": "docs/audit/practical-frontend-check-2026-09-07.log"
+    },
+    {
+      "check": "frontend-lint",
+      "command": [
+        "npm.cmd",
+        "run",
+        "lint",
+        "--prefix",
+        "frontend"
+      ],
+      "exit_code": 0,
+      "seconds": 4.465,
+      "at": "2026-09-07T03:47:04.650949+00:00",
+      "log": "docs/audit/practical-frontend-lint-2026-09-07.log"
+    },
+    {
+      "check": "node",
+      "command": [
+        "node",
+        "--test",
+        "scripts/test_calculator_rules.mjs"
+      ],
+      "exit_code": 0,
+      "seconds": 0.31,
+      "at": "2026-09-07T03:42:04.856527+00:00",
+      "log": "docs/audit/practical-node-2026-09-07.log"
+    },
+    {
+      "check": "pytest",
+      "command": [
+        "python",
+        "-m",
+        "pytest",
+        "backend/tests",
+        "-q"
+      ],
+      "exit_code": 0,
+      "seconds": 426.933,
+      "at": "2026-09-07T03:39:46.574226+00:00",
+      "log": "docs/audit/practical-pytest-2026-09-07.log"
+    },
+    {
+      "check": "ruff",
+      "command": [
+        "python",
+        "-m",
+        "ruff",
+        "check",
+        "backend",
+        "scripts"
+      ],
+      "exit_code": 0,
+      "seconds": 0.118,
+      "at": "2026-09-07T03:41:12.179225+00:00",
+      "log": "docs/audit/practical-ruff-2026-09-07.log"
+    }
+  ]
+}

@@ -196,3 +196,119 @@ The repository does **not** currently claim the following as complete:
 - regeneration-cycle and reuse loop economics
 
 Those are valid next-stage research features, but they remain roadmap items until the engine and tests support them directly.
+
+## Practical costing inputs and saved-case comparisons
+
+These optional inputs retain the existing calculation when omitted. They do not
+add literature prices, infer missing equipment rates, or establish empirical
+accuracy. The implementation is in `backend/schemas/recipe_input.py`,
+`backend/core/recipe_costing.py`, `backend/core/costing_scope.py`,
+`backend/routers/estimate_comparison.py` and `backend/core/cost_evidence.py`.
+
+### Manufacturing boundary and effective production rate
+
+Each result preserves `costing_scope`: the charged operations, their published or
+proxy status, scale substitutions, dropped and omitted steps, and declared
+uncosted operations. `modeled_steps` means that the selected Step Method operations
+have prices; it does not assert complete plant coverage. `proxy` identifies proxy
+rates or equipment substitutions, and `partial` identifies omissions. These fields
+travel with saved results and exports. For electrode assemblies, the powder-route
+Step Method cost is a separate mass-based calculation and is not added to the
+electrode-area total.
+
+Thermal requests can supply `production_rate_ton_per_day` with a required
+`production_rate_note`. The rate is finished-catalyst **short tons per day**. The
+campaign duration is order quantity divided by the effective rate, plus the
+existing scale-dependent cleaning allowance. Omitting the override uses the
+existing scale rate. This does not provide a new equipment-capacity model or
+change the existing hourly rates. Electrode requests reject this mass-based
+override.
+
+The displayed recovery-adjusted price is the selling price **including selling
+margin**, less the optional recovery value, floored at zero. It is not a
+manufacturing cost before margin.
+
+### Purchased precursor and auxiliary consumption
+
+For a thermal component, an optional `recipe_consumption` replaces its material
+cost contribution with a purchase-based mass balance. Let `w` be its normalized
+mass fraction in the finished catalyst, `f` the retained component fraction of
+the pure precursor, `p` precursor purity, `y` retained-component yield and `P`
+the purchased precursor price in USD/kg:
+
+```text
+purchased precursor kg / finished catalyst kg = w / (f × p × y)
+precursor cost USD / finished catalyst kg = w × P / (f × p × y)
+```
+
+All fractions must be supplied in `(0, 1]`, with a precursor name and source or
+assumption note. COMET does not derive a chemical formula, precursor content,
+purity or yield. `f` describes the pure compound; `p` describes the purchased
+material's purity, so the same impurity must not be counted in both. A recipe
+cannot also use a precursor markup other than one. Components without a recipe
+retain their existing weight-fraction, unit-price and markup calculation.
+
+The original component `price_per_lb` remains a retained-material reference price
+and, when applicable, the existing recovery-screening price. It is not added a
+second time to recipe material cost. Each `consumables` entry adds net purchased
+kg per kg of finished catalyst multiplied by its explicit USD/kg price. Solvent
+recycling, wash-water recovery and waste disposal are not inferred; the stated
+consumption and its note must explain any netting already performed.
+
+Recipe and auxiliary inputs change material cost only. The existing LCA still
+uses finished composition and its existing process-energy assumptions; it does
+not acquire precursor-specific, solvent, wastewater or yield-loss inventories.
+The result therefore flags the boundary difference rather than presenting the
+new recipe as a complete life-cycle inventory.
+
+### Comparing saved formulations under common conditions
+
+`POST /api/estimates/compare` compares two to four saved complete requests within
+one catalyst domain and resolved application family. The user chooses the price
+basis, common order quantity and a reference estimate. The reference supplies the
+target and base years, G&A/SARD, recovery assumptions and effective production
+rate. Electrode comparisons also share its area, loading, ionomer-to-catalyst
+ratio and manufacturing scenario. Full component lists, precursor yields and
+consumption amounts, and manufacturing routes remain individual.
+
+The response separates the saved historical result, a recalculation using shared
+prices at each original operating condition, and a recalculation using both shared
+prices and common conditions. The historical-to-repriced difference can include a
+model-version change; it is not automatically a pure market-price effect.
+Differences between formulations, yields and routes are not attributed solely to
+the manufacturing method. Thermal headline values are selling price less recovery
+per mass; electrode values are assembly cost per area.
+
+Library identities are matched by material key. Manual identities require the
+same normalized name and stated grade; unknown grades are not merged with known
+ones. For conflicting matched prices, the explicit reference wins; materials
+absent there use the lowest selected estimate ID. Precursor and auxiliary prices
+are matched separately by their names, which must distinguish grades. Manual
+ionomer concentration, density and pricing form are also kept distinct. Different
+library identities or grades with the same chemical name remain separate and
+produce a warning. Every harmonized price records its source estimate and the
+prices it replaced. Common-scale equipment substitutions and unavailable steps
+are disclosed. Original saved inputs, outputs and purchase evidence remain intact.
+
+### Local purchase and actual-cost evidence
+
+`purchase_evidence` records supplier, quote date, quantity and unit, grade, price
+boundary, reference and notes for a manually entered component price. These are
+local user-supplied records; COMET does not verify a supplier or convert a quotation
+into an independently observed cost.
+
+Actual observations attach to a saved estimate without replacing its calculation.
+The initial error assessment supports mass-based thermal catalysts only. It
+requires user-confirmed invoice, production-record or literature evidence; USD;
+a matching price month and observation date; matching normalized composition and
+known grades; production quantity and effective rate; template and repeated
+manufacturing steps; and documented cost inclusions and production conditions.
+The selected cost boundary distinguishes pre-margin manufacturing cost, selling
+price and selling price after recovery. Incomplete costing scopes, unobserved
+recipe/auxiliary consumption, missing fields, supplier quotes and electrode
+observations remain stored but do not contribute an error value.
+
+Eligible observations report signed percentage error and absolute percentage
+error. The displayed MAPE averages only eligible observations for that saved
+estimate and is `null` when none qualify. It is a local comparison of
+user-confirmed evidence, not independent empirical validation of COMET.

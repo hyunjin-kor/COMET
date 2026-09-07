@@ -2,7 +2,9 @@ import type { ReactNode } from 'react';
 import { lazy, Suspense, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { WorkspaceSectionFooter, WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
-import { runEstimateRange, type CostInput, type EstimateRangeResult } from '../lib/api';
+import { runEstimateRange, type CostInput, type EstimateRangeResult, type ConsumableInput, type PrecursorConsumption } from '../lib/api';
+import { validConsumables, validRecipe } from '../lib/recipe-inputs';
+import { useBasis } from '../lib/use-basis';
 import { loadCalculatorDraft, loadCalculatorResultSnapshot, type CalculatorDraft, type CalculatorRow } from '../lib/calculator-session';
 import { buildRangeCsv, downloadCsv, rangeCsvFilename } from '../lib/export-csv';
 import { formatPrice } from '../lib/format-price';
@@ -151,6 +153,7 @@ function buildRangeInputFromDraft(draft: CalculatorDraft): CostInput | null {
         active_area_cm2: electro.activeAreaCm2,
         catalyst_loading_mg_cm2: electro.catalystLoadingMgCm2,
         ionomer_to_catalyst_ratio: electro.ionomerToCatalystRatio,
+        manufacturing_scenario: electro.manufacturingScenario || undefined,
       },
     };
   }
@@ -159,6 +162,9 @@ function buildRangeInputFromDraft(draft: CalculatorDraft): CostInput | null {
     (row.role === 'active_metal' || row.role === 'promoter' || row.role === 'support')
   );
   const supportRows = thermalRows.filter((row) => row.role === 'support');
+  if (!thermalRows.every((row) => validRecipe(row.recipe_consumption)) || !validConsumables(draft.consumables ?? [])) return null;
+  if (draft.productionRate !== undefined && draft.productionRate !== ''
+    && (!(draft.productionRate > 0) || !Number.isFinite(draft.productionRate) || !draft.productionRateNote?.trim())) return null;
   const nonSupportRows = thermalRows.filter((row) => row.role !== 'support');
   const supportIsSplit = supportRows.length > 1;
   const completedNonSupportRows = nonSupportRows.filter((row) => row.name.trim().length > 0 && row.wt_pct > 0);
@@ -183,6 +189,8 @@ function buildRangeInputFromDraft(draft: CalculatorDraft): CostInput | null {
       material_key: row.source_type === 'manual' ? undefined : row.material_key ?? undefined,
       wt_pct: row.wt_pct,
       price_per_lb: row.source_type === 'manual' || !row.material_key ? row.price_per_lb : undefined,
+      recipe_consumption: row.recipe_consumption as PrecursorConsumption | undefined,
+      purchase_evidence: row.purchase_evidence,
     })),
     ...completedSupportRows.map((row, index) => ({
       role: 'support' as const,
@@ -190,11 +198,17 @@ function buildRangeInputFromDraft(draft: CalculatorDraft): CostInput | null {
       material_key: row.source_type === 'manual' ? undefined : row.material_key ?? undefined,
       wt_pct: supportIsSplit ? row.wt_pct : index === 0 ? supportWtPct : 0,
       price_per_lb: row.source_type === 'manual' || !row.material_key ? row.price_per_lb : undefined,
+      recipe_consumption: row.recipe_consumption as PrecursorConsumption | undefined,
+      purchase_evidence: row.purchase_evidence,
     })).filter((row) => row.wt_pct > 0),
   ];
 
   return {
     catalyst_domain: 'thermal',
+    template_id: draft.thermalTemplateId ?? undefined,
+    production_rate_ton_per_day: draft.productionRate === '' ? undefined : draft.productionRate,
+    production_rate_note: draft.productionRateNote,
+    consumables: draft.consumables as ConsumableInput[] | undefined,
     application_family: draft.applicationFamily ?? 'general',
     order_size_tons: draft.orderSize,
     steps: draft.steps,
@@ -209,6 +223,7 @@ export default function Uncertainty() {
   const navigate = useNavigate();
   const { toDisplay, fmtLabel } = useUnit();
   const { lang, t } = useLang();
+  const { basis } = useBasis();
   const draft = loadCalculatorDraft();
   const latestSnapshot = loadCalculatorResultSnapshot();
   const {
@@ -258,7 +273,7 @@ export default function Uncertainty() {
     setError('');
 
     try {
-      const nextResult = await runEstimateRange(calculationInput, nSim, {
+      const nextResult = await runEstimateRange({ ...calculationInput, price_basis: basis }, nSim, {
         active_component_price: bandBounds(activeBandPct),
         promoter_price: bandBounds(promoterBandPct),
         support_price: bandBounds(supportBandPct),
@@ -467,6 +482,7 @@ export default function Uncertainty() {
           ) : (
             <>
               <div className="surface-ink overflow-hidden p-5">
+                {result.fixed_recipe_assumptions ? <p className="mb-4 text-sm leading-6 text-amber-200"><strong>{t('Fixed recipe assumptions')}: </strong>{result.fixed_recipe_assumptions}</p> : null}
                 <div className="grid gap-3 sm:grid-cols-4">
                   <StatTileDark label={t('Baseline')} value={`${formatPrice(toDisplay(result.baseline_price_per_lb))}${fmtLabel}`} detail={t('Current estimate')} />
                   <StatTileDark label={t('Mean')} value={`${formatPrice(toDisplay(result.mean))}${fmtLabel}`} detail={t('Average outcome')} />

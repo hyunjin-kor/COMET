@@ -56,6 +56,10 @@ so SmartScreen will warn you the first time. Pick "More info → Run anyway".
 - Credits spent-catalyst recovery on thermocatalyst runs, if you want it
 - Escalates older prices to this year with ChemPPI and CEPCI
 - Exports the cost ledger, price evidence and Monte Carlo range to CSV
+- Shows which manufacturing operations are costed, proxies or omitted, including scale substitutions
+- Accepts documented effective production rates and optional precursor content, purity, retention yield and net solvent purchases
+- Compares 2–4 saved formulations under shared prices and production conditions, alongside their historical results
+- Keeps purchase provenance and actual-cost observations locally; reports errors only for matching, documented thermal full-cost observations
 
 ## How a session goes
 

@@ -123,3 +123,114 @@ Export saved estimate (`?format=json` or `?format=csv`).
 
 ### GET /api/health
 Server health check with scheduler status.
+
+## Optional practical costing fields
+
+`POST /api/calculate` and `POST /api/calculate/save` accept the following optional
+fields. Existing requests without these fields retain their default calculation.
+No field supplies a new equipment rate or a verified market observation.
+
+| Location / field | Meaning and validation |
+|---|---|
+| `production_rate_ton_per_day` | Positive effective finished-catalyst production rate, in short tons/day; thermal only. Omit or pass `null` for the scale default. |
+| `production_rate_note` | Required nonblank source or assumption note when the effective rate is supplied. |
+| `components[].recipe_consumption` | Optional thermal purchased-precursor calculation; requires all fields below and `precursor_markup: 1`. |
+| `recipe_consumption.precursor_name` | Purchased compound and grade, distinguished from the retained catalyst component. |
+| `recipe_consumption.retained_component_fraction` | Mass fraction of the desired retained component in the pure precursor; `(0, 1]`. |
+| `recipe_consumption.purity_fraction` | Purchased precursor purity; `(0, 1]`. |
+| `recipe_consumption.yield_fraction` | Fraction of that component retained in the finished catalyst; `(0, 1]`. |
+| `recipe_consumption.price_per_kg` | Nonnegative explicit purchased-precursor price in USD/kg. |
+| `recipe_consumption.source_note` | Required nonblank source or assumption note. |
+| `consumables[]` | Up to 30 thermal auxiliary inputs, each with `name`, positive `kg_per_kg_catalyst`, nonnegative `price_per_kg` in USD/kg, and nonblank `source_note`. These quantities are net purchases per kg of finished catalyst. |
+| `components[].purchase_evidence` | Optional local fields `supplier`, `quote_date` (`YYYY-MM-DD`), positive `quantity`, `quantity_unit`, `grade`, `cost_boundary`, `reference`, `notes`. No independent verification is implied. |
+
+Recipe cost uses normalized finished-component fraction divided by retained
+fraction, purity and yield, multiplied by purchased-precursor USD/kg. The original
+component `price_per_lb` stays a reference/recovery price and is not added again.
+See [the mass-balance boundary](methodology.md#purchased-precursor-and-auxiliary-consumption).
+Electrode requests reject thermal throughput, recipe and auxiliary inputs.
+
+Results add `costing_scope` with `status` (`modeled_steps`, `proxy`, `partial`),
+`boundary`, `costed_steps`, `actual_steps`, `declared_steps`, `substitutions`,
+`dropped_steps`, `omitted_template_steps`, `added_steps`, `uncosted_operations`,
+`route_modified`, `template_name`, and `area_cost_boundary`. Saved results and CSV
+exports retain these fields. A complete selected operation list does not establish
+complete plant coverage. Recipe cost does not replace the existing LCA inventory.
+
+## Saved complete-estimate comparison
+
+### POST /api/estimates/compare
+
+Compare two to four distinct saved estimates. The IDs below are illustrative;
+replace them with IDs returned by `/api/calculate/save` or `/api/estimates`.
+
+```json
+{
+  "estimate_ids": [12, 19],
+  "reference_estimate_id": 12,
+  "price_basis": "reference",
+  "order_size_tons": 20
+}
+```
+
+All four fields are required. The reference must be selected. Estimates must share
+the same catalyst domain and resolved application family. Electrode comparisons
+require electrode assembly inputs in every estimate. Invalid selections return
+422; an unknown saved ID returns 404. The endpoint does not overwrite saved data.
+
+The named reference supplies the target/base year, G&A/SARD, recovery assumptions,
+effective rate and note. For electrodes it also supplies area, catalyst loading,
+ionomer-to-catalyst ratio and manufacturing scenario. Each estimate retains its
+complete formulation, precursor yields/consumption, auxiliary amounts, template
+and manufacturing steps. Scale-specific equipment is fitted to the common order
+quantity, with substitutions and unavailable steps reported.
+
+The response contains:
+
+- `common_conditions`: every shared operating condition and the selected basis.
+- `unit`: `USD/lb` for thermal selling price less recovery, or `USD/cm2` for
+  electrode assembly cost. The frontend converts thermal mass units for display.
+- `price_snapshot`: harmonized values, their source estimate/evidence and
+  `overridden_estimate_ids`. Reference prices take priority; missing reference
+  materials use the lowest selected estimate ID. Library IDs and manual grades
+  remain distinct; unknown product equivalence is reported.
+- `estimates[]`: saved result, `repriced_original_conditions`, `common_conditions`,
+  `scale_adjustment`, and their three headline `values`.
+- `warnings`: scope and comparability limitations. A saved-to-repriced difference
+  may include a model-version change, and formulation/route differences are not
+  interpreted as pure manufacturing-method effects.
+
+## Local actual-cost evidence
+
+### GET /api/estimates/{estimate_id}/observations
+
+Returns `expected_reference`, preserved `observations`, `eligible_count`,
+`mape_pct`, and the explicit user-supplied verification status. `mape_pct` is
+`null` when no observation qualifies.
+
+### POST /api/estimates/{estimate_id}/observations
+
+Appends a local observation to the saved result JSON and returns the updated
+assessment with status 201. Existing calculation inputs and numeric results
+remain unchanged. Required fields are positive `observed_price`,
+`observation_date` and nonblank `source`. The optional fields are:
+
+| Field | Accepted values / meaning |
+|---|---|
+| `currency`, `price_unit` | Three-letter uppercase currency (default `USD`); `lb`, `kg` or `cm2` (default `kg`). No currency conversion is assumed. |
+| `price_period` | Observed input-price month `YYYY-MM`; must agree with the observation date and every saved component price month for eligibility. |
+| `order_size_tons`, `production_rate_ton_per_day` | Observed short-ton quantity and effective short tons/day; positive when supplied. |
+| `components[]` | Independently entered `name`, `wt_pct`, `grade`; observed fractions must total 100 wt% for eligibility. |
+| `template_id`, `steps[]` | Observed template ID and exact manufacturing step keys, including repeated operations. |
+| `cost_boundary` | `material_purchase` (default), `full_manufacturing_cost`, `full_selling_price`, `full_net_after_recovery`, or `other`. |
+| `cost_scope_note`, `production_conditions_note` | Source-documented inclusions/exclusions and operating conditions. |
+| `evidence_type` | `supplier_quote` (default), `invoice`, `production_record`, `public_literature`, or `other`. |
+| `verified_by_user`, `notes` | User confirmation (default `false`) and optional notes. Confirmation is not independent verification. |
+
+The assessment returns `eligible`, `exclusion_reasons`, the relevant
+`predicted_price`, `signed_error_pct`, `absolute_percentage_error` and
+`verification`. Error fields remain `null` for missing/mismatched conditions,
+unverified records, supplier quotes, partial costing scopes, recipe inputs whose
+actual consumption has not been matched, and electrode-area observations. The
+first implementation assesses full-cost errors for thermal mass-based cases only.
+Ineligible observations remain available as local evidence.

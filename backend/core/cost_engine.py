@@ -5,10 +5,11 @@ from __future__ import annotations
 import logging
 
 from backend.core.constants import LB_PER_KG, TROY_OZ_PER_LB
+from backend.core.costing_scope import summarize_costing_scope
 from backend.core.electrocatalyst import calculate_electrode_layer_cost
 from backend.core.lca import compute_catalyst_lca
-from backend.core.materials_calc import calculate_materials_cost_multi
 from backend.core.price_escalation import get_escalation_factor, latest_index_year
+from backend.core.recipe_costing import calculate_recipe_materials
 from backend.core.spent_catalyst import calculate_metal_recovery_value
 from backend.core.step_method import calculate_step_method
 
@@ -39,6 +40,9 @@ def estimate_catalyst_cost(
     electrode_input: dict | None = None,
     route_summary: dict | None = None,
     resolved_materials: list[dict] | None = None,
+    production_rate_ton_per_day: float | None = None,
+    production_rate_note: str = "",
+    consumables: list[dict] | None = None,
 ) -> dict:
     """Run a full catalyst cost estimation.
 
@@ -114,8 +118,24 @@ def estimate_catalyst_cost(
     if catalyst_domain != "electrocatalyst" and not supports and not self_supported:
         raise ValueError("At least one support component is required")
 
-    materials = calculate_materials_cost_multi(components)
+    if catalyst_domain == "electrocatalyst" and (
+        production_rate_ton_per_day is not None or consumables
+        or any(c.get("recipe_consumption") for c in components)
+    ):
+        raise ValueError("Production-rate and recipe consumption inputs apply to thermal manufacture only")
+    if production_rate_ton_per_day is not None:
+        from math import isfinite
+
+        if not isfinite(production_rate_ton_per_day) or production_rate_ton_per_day <= 0:
+            raise ValueError("Effective production rate must be finite and positive")
+    materials = calculate_recipe_materials(components, consumables)
     warnings: list[str] = []
+    if "costing_basis" in materials:
+        warnings.append(
+            "Recipe costs use user-supplied precursor content, purity, retention yield and net purchased "
+            "consumables. LCA remains based on finished composition and selected steps; precursor losses, "
+            "solvents, washing and waste treatment are not added to LCA."
+        )
 
     if catalyst_domain == "electrocatalyst" and electrode_input is None:
         warnings.append(
@@ -126,14 +146,21 @@ def estimate_catalyst_cost(
     unpriced_actives = [
         str(component["name"])
         for component in active_metals
-        if float(component.get("price_per_lb") or 0.0) <= 0
+        if float((component.get("recipe_consumption") or {}).get(
+            "price_per_kg", component.get("price_per_lb") or 0.0,
+        )) <= 0
     ]
     if unpriced_actives:
         warnings.append(
-            "Active-phase component(s) priced at $0.00/lb: "
+            ("Active-phase component(s) with zero charged purchase price: "
+             if any(c.get("recipe_consumption") for c in active_metals)
+             else "Active-phase component(s) priced at $0.00/lb: ")
             + ", ".join(unpriced_actives)
             + ". Their raw-material cost is missing from this estimate."
         )
+    zero_consumables = [c["name"] for c in consumables or [] if float(c["price_per_kg"]) == 0]
+    if zero_consumables:
+        warnings.append("Purchased consumables with zero entered price: " + ", ".join(zero_consumables))
 
     try:
         chemppi_factor = get_escalation_factor(basis_year, target_year, "chemppi")
@@ -150,6 +177,7 @@ def estimate_catalyst_cost(
         ga_overhead_pct=ga_overhead_pct,
         sard_pct=sard_pct,
         chemppi_escalation=chemppi_factor,
+        production_rate_ton_per_day=production_rate_ton_per_day,
     )
 
     spent_result = None
@@ -253,12 +281,23 @@ def estimate_catalyst_cost(
             "basis_year": basis_year,
             "target_year": target_year,
             "chemppi_escalation": round(chemppi_factor, 4),
+            **({"production_rate_ton_per_day": production_rate_ton_per_day,
+                "production_rate_note": production_rate_note}
+               if production_rate_ton_per_day is not None else {}),
         },
         "materials": materials,
         "step_method": step_result,
         "spent_catalyst": spent_result,
         "electrode_model": electrode_model,
         "route_summary": route_summary,
+        "costing_scope": summarize_costing_scope(
+            route_summary, steps, step_result["scale"], catalyst_domain, electrode_model,
+        ),
+        **({"purchase_evidence": [
+            {"name": c["name"], "role": c["role"], "price_per_lb": c["price_per_lb"],
+             "evidence": c["purchase_evidence"], "verification": "user_supplied_local"}
+            for c in components if c.get("purchase_evidence")
+        ]} if any(c.get("purchase_evidence") for c in components) else {}),
         "resolved_materials": resolved_materials or [],
         "warnings": warnings,
         "lca": lca_result,
