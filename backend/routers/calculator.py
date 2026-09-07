@@ -1,6 +1,7 @@
 """Calculator API endpoints."""
 
 import json
+import re
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
@@ -21,8 +22,10 @@ def _load_template(template_id: str | None) -> dict | None:
 
     if not template_id:
         return None
+    if not re.fullmatch(r"[A-Za-z0-9_-]+", template_id):
+        raise ValueError("Invalid template identifier")
     template_path = _DATA_DIR / "process_templates" / f"{template_id}.json"
-    if not template_path.exists():
+    if not template_path.resolve().is_relative_to((_DATA_DIR / "process_templates").resolve()) or not template_path.is_file():
         raise ValueError(f"Template '{template_id}' not found")
     with open(template_path, encoding="utf-8") as handle:
         return json.load(handle)

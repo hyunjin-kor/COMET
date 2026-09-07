@@ -7,10 +7,12 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import Depends, FastAPI, HTTPException, Request
+from fastapi.exception_handlers import request_validation_exception_handler
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from sqlmodel import Session
 
@@ -18,6 +20,7 @@ from backend.config import settings
 from backend.core.comtrade_snapshot import load_support_history
 from backend.database import create_db_and_tables, engine, sync_material_library
 from backend.routers import (
+    auth,
     calculator,
     capex,
     catcost_import,
@@ -34,6 +37,8 @@ from backend.routers import (
     templates,
     uncertainty,
 )
+from backend.services.hosted_access import authorize_hosted_request, initialize_hosted_store
+from backend.services.hosted_limits import HostedBodyLimit
 from backend.services.price_scheduler import collect_prices, save_reference_series
 
 logger = logging.getLogger(__name__)
@@ -66,6 +71,11 @@ def _is_local_request(host: str | None) -> bool:
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Create DB tables, fetch prices on startup, then schedule daily updates."""
+    if settings.hosted_mode:
+        initialize_hosted_store()
+        # Dynamic feed reuse has not been commercially cleared. No collection.
+        yield
+        return
     create_db_and_tables()
     with Session(engine) as session:
         sync_material_library(session, force=True)
@@ -101,22 +111,25 @@ app = FastAPI(
     description="Loopback API sidecar for the COMET desktop app",
     version=APP_VERSION,
     lifespan=lifespan,
+    dependencies=[Depends(authorize_hosted_request)],
     docs_url="/docs" if settings.debug else None,
     redoc_url="/redoc" if settings.debug else None,
     openapi_url="/openapi.json" if settings.debug else None,
 )
 
 app.add_middleware(TrustedHostMiddleware, allowed_hosts=settings.allowed_hosts_list)
+app.add_middleware(HostedBodyLimit)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.cors_origins_list,
+    allow_origins=[] if settings.hosted_mode else settings.cors_origins_list,
     allow_credentials=False,
     allow_methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["Content-Type"],
 )
 
 app.include_router(calculator.router)
+app.include_router(auth.router)
 app.include_router(capex.router)
 app.include_router(prices.router)
 app.include_router(materials.router)
@@ -141,7 +154,17 @@ async def apply_security_headers(request: Request, call_next):
     response.headers["X-Frame-Options"] = "DENY"
     response.headers["Referrer-Policy"] = "no-referrer"
     response.headers["Cache-Control"] = "no-store"
+    if settings.hosted_mode:
+        response.headers["Content-Security-Policy"] = "script-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'"
     return response
+
+
+@app.exception_handler(RequestValidationError)
+async def safe_auth_validation_error(request: Request, exc: RequestValidationError):
+    # Pydantic input-error details can echo an invalid password. Never expose it.
+    if request.url.path.startswith("/api/auth/"):
+        return JSONResponse({"detail": "Invalid account request"}, status_code=422)
+    return await request_validation_exception_handler(request, exc)
 
 
 @app.get("/api/health")
@@ -163,6 +186,8 @@ async def refresh_prices(request: Request, source: str | None = None):
     what the desktop client uses for short-interval polling. Omit the
     parameter for the full multi-source refresh.
     """
+    if settings.hosted_mode:
+        raise HTTPException(status_code=403, detail="Live feed reuse is not enabled for hosted service")
     client_host = request.client.host if request.client else None
     if not settings.debug and not _is_local_request(client_host):
         raise HTTPException(status_code=403, detail="Manual refresh is only available from local requests.")

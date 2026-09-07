@@ -24,8 +24,8 @@ No source changed for this initial log. Reused evidence is explicitly distinguis
 | C04 | Evidence review complete; target eligibility pending | 248c45e | Official indexed JIF displays and HTTP200 Engineering Au Article guidance; metric year/JCR category/Q1 unverified, no acceptance claim |
 | C05 | Complete | 26a283e | 30 crossed price/evidence families,21 manufacturing scenarios,9 electrode scenarios; byte-identical replay;802 full tests passed |
 | C06 | Evidence extension complete; real observations unresolved | f95ac74 | 2 additional Crossref-verified papers, actual HTTP/PDF checks and private collection worksheet; matched observations remain0 |
-| C07 | Protocol complete; participants unresolved | This task commit | 6 defined tasks, recording/analysis criteria, empty CSV, actual participants0 |
-| C08 | Pending | — | Opt-in hosted identity and private resource isolation |
+| C07 | Protocol complete; participants unresolved | b84e343 | 6 defined tasks, recording/analysis criteria, empty CSV, actual participants0 |
+| C08 | Foundation complete | This task commit | 27 account/auth/storage tests;829 full tests460.46s; frontend lint/build/i18n and Table6.2 passed; startup remains rights-gated |
 | C09 | Pending | — | Subscription active/expired/revoked lifecycle and access tests |
 | C10 | Pending | — | Account UI, limits, backup/restore and operating procedures |
 | C11 | Pending | — | Claims/results/version aligned in publication package |
@@ -120,3 +120,23 @@ Added a Korean protocol with six application tasks, proposed recruitment mix, co
 The GOV.UK moderated-usability guide was read and its direct URL returnedHTTP200/text/html on2026-09-07. COMET task definitions and release criteria are our proposed rubric, not a certified psychometric instrument. The CSV parses and contains0 observation rows. Automatic browser QA and developer rehearsal are explicitly excluded from participant results.
 
 Validation: inspected the protocol against current thermal/electrode/save/compare/evidence flows; preserved blank observations and reused26a283e's802 tests for unchanged software. Critic: real researcher usability evidence remains absent. The protocol prepares a study; it does not satisfy the empirical user-evaluation claim or establish customer demand. Actual participants and permissions remain C14.
+
+Follow-up: [CI34127421166](https://github.com/hyunjin-kor/COMET/actions/runs/34127421166) atb84e343 completed success for backend, frontend and fresh Windows package/smoke.
+
+## C08 hosted identity and private data foundation
+
+Added opt-in hosted authentication and a [documented account boundary](../commercial/hosted-architecture.ko.md). The conservative assumption is stricter than company-wide sharing: each account gets its own SQLite data file, even inside one company. Company membership is retained for the upcoming subscription entitlement. Public code/desktop behavior remains login-free by default; existing desktop tables receive no owner columns or automatic data transfer. Hosted control tables are excluded from desktop schema creation.
+
+An application-wide API dependency authenticates requests, and the existing session dependency selects storage using only the server-resolved account UUID. A missing private DB returns503 without creating it or falling back to desktop storage. Saved estimates, bulk comparison, observations, exports and custom material/equipment paths use that same private session. Auth responses expose only the account's own public fields.
+
+Passwords use stdlib scrypt N=2^17/r8/p1 with random salt; sessions use random256-bit identifiers with hashed server storage and a12-hour absolute lifetime. HTTPS cookies use __Host/Secure/HttpOnly/SameSite=Strict. Login rotates the existing browser session; logout and disabled accounts invalidate access. Origin plus a custom AJAX header protects mutations and login, backed by the inspected OWASP API pattern. Database login counters enforce account/client/global limits, with two password verifications per process at once. Request bodies are capped at2MiB before parsing, including chunked requests. Authentication validation errors do not echo invalid password inputs.
+
+Commercial hosted startup checks the existing data-rights manifest and deliberately fails on the current unapproved data. Network feed startup/refresh is disabled in hosted mode. Tests use disposable storage and explicit test-only review injection; no real reviewer entry, customer account, password or external credential was created. The configuration allows HTTP only through an explicit loopback-test option and restricts matching clients; production requires a configured HTTPS origin and host, debug off.
+
+Related finding fixed within the hosted-read boundary: calculator/material template IDs previously reached filesystem paths without a character/path-boundary check, including Windows backslash forms. Both entry points now reject them and resolved files must stay inside the template directory. Valid catalog IDs and numerical formulas are unchanged.
+
+Verification:27 targeted tests pass, including same-company material isolation, different-company estimate/equipment/list/detail/update/delete/export/observations/bulk comparison rejection, expiration/disable/logout/rotation, missing DB, desktop schema preservation, password hashes, CSRF, login throttling, chunked body size and template traversal. The first expected collection failure preceded the new module; the focused logs retain the runner's earlier `commercial-c05-hosted-*` prefix. Full suite is running on the final code. Ruff passes. Fresh frontend lint3.425s/build3.522s/i18n0.812s passed with0 missing keys/untranslated labels. [Table6.2](commercial-c08-table62-2026-09-07.log) retains Pt27.3695, Ni19.2206(−6.65%), FCC footnote-b2.4380(+1.16%) USD/lb.
+
+Critic: two aggregate frontend harness attempts failed from nested PowerShell quoting and local script execution policy. Their logs are retained and are not pass evidence; direct `npm.cmd` calls then executed each check successfully without changing policy. UI is unchanged in this foundation commit; actual hosted account screens and browser validation follow in C10. Subscription status/seat controls, operating limits, backups and operator commands remain C09/C10. This is not an internet deployment or a production security certification; host ACL/TLS/proxy configuration and real rights remain external requirements.
+
+Final C08 verification: **829 passed in460.46s**, wrapper463.727s: [full output](commercial-c08-pytest-2026-09-07.log). Code was held unchanged during the full run. Source/document whitespace checks pass; raw focused logs preserve their command-output trailing blank lines. This increase in total test runtime includes the added password-hashing/isolation tests and is not a measured application latency regression or improvement.
