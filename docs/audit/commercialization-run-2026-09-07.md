@@ -21,8 +21,8 @@ No source changed for this initial log. Reused evidence is explicitly distinguis
 | C01 | Complete | c7f51f1 | Goal and persisted C01–C14 backlog; clean tested baseline |
 | C02 | Preparation complete; rights approval unresolved | c2a17d1 | 81-file rights inventory,20 workbook-origin declarations,12 guard tests,792 full tests; actual public/commercial checks correctly reject unapproved data; contract drafts |
 | C03 | Complete; all CI jobs passed | a5279bd | Local780 tests; CI780/498.13s plus Windows/frontend; build227.964s, isolated smoke17.604s; user DB/log hashes unchanged |
-| C04 | Evidence review complete; target eligibility pending | This task commit | Official indexed JIF displays and HTTP200 Engineering Au Article guidance; metric year/JCR category/Q1 unverified, no acceptance claim |
-| C05 | Pending | — | Controlled, reproducible scientific case studies |
+| C04 | Evidence review complete; target eligibility pending | 248c45e | Official indexed JIF displays and HTTP200 Engineering Au Article guidance; metric year/JCR category/Q1 unverified, no acceptance claim |
+| C05 | Complete | This task commit | 30 crossed price/evidence families,21 manufacturing scenarios,9 electrode scenarios; byte-identical replay;802 full tests passed |
 | C06 | Pending | — | Free independent validation evidence; no inferred missing conditions |
 | C07 | Pending | — | External researcher evaluation protocol; real participation remains distinct |
 | C08 | Pending | — | Opt-in hosted identity and private resource isolation |
@@ -39,7 +39,7 @@ No existing LICENSE change, paid source, new framework/ORM/build tool, destructi
 
 ## Next action
 
-Continue C02 rights review and C04 journal evidence, then the controlled scientific and hosted-service work. No release can be described as commercially cleared before C02 resolves the actual data-origin findings.
+Complete C05 final checks, retain the C06 independent-evidence extension and C07 researcher protocol, then implement the hosted identity/subscription work. No release can be described as commercially cleared before the actual data-origin permissions are resolved.
 
 ## C03 implementation and verification
 
@@ -84,3 +84,21 @@ Critic: a reachable DOI or permissively licensed downloader does not clear its d
 Engineering Au Article guidance was retrieved HTTP200, updated2026-08-27. Its computational/process scope supports a provisional fit; the Article abstract is typically at most300 words, whereas2200 words is the Letter limit. No fixed Article text/figure cap was found in the inspected section. Existing six figures and frozen manuscript structure remain intact. APC coverage, indexing, authors and journal selection require actual confirmation. No paid access, author contact or submission took place.
 
 Verification for this documentation-only task reuses c2a17d1's792 passing backend tests and a5279bd's unchanged frontend/package evidence. Critic: citing a publisher-displayed number without its year and category is insufficient to say the Q1/JIF objective is met. Eligibility is explicitly deferred to C14; preparation and independent research analysis can continue.
+
+Follow-up: [CI34124287686](https://github.com/hyunjin-kor/COMET/actions/runs/34124287686) at248c45e completed success, including the Windows, frontend and backend jobs.
+
+## C05 controlled scientific scenarios
+
+Added [the deterministic analysis](../../scripts/run_controlled_cases.py) and [results, figure and interpretation](../paper/controlled-2026-09-07/README.md). An in-memory library reads the existing frozen reference/live bases; no network, price-library change or application DB is used. Provenance records input/code hashes and actual Python/package versions. Overrides to an unrecorded data directory are rejected. The seed is recorded, but conditions are enumerated without random sampling.
+
+All30 reaction families cross numeric price state and source-confidence annotations independently. Reference-price/live-evidence winners differ in4 families; live-price/reference-evidence differs in1; both change5. Thus the combined count cannot all be attributed to market movement. The score decomposition reproduces endpoint changes; source evidence and route/performance remain author-assigned rubrics. Same-basis corners reproduce native rankings, retaining the production tie rule.
+
+Three manufacturing routes are swept over7 quantities including the5/70 short-ton scale boundaries (21 cases), with fixed finished composition/material cost. The 4.99→5 short-ton incipient-wetness selling-price change13.0874→7.2813 USD/lb is a discrete model-class effect, not an observed factory discount. Nine electrode scenarios vary loading and a hypothetical powder-price multiplier. Catalog material-stack prices are area normalized; no industrial procurement, equal lifetime/activity or complete assembly claim is made.
+
+The two final executions took2.208/2.357s and produced identical JSON/PNG/SVG/provenance bytes: [comparison](commercial-c05-replay-comparison-2026-09-07.json). Numerical SHA-256:`495b0fe9c5a60476bb29143082d745575976339aab5db4a3aca9c4c9fbd902ee`. Thirteen README numeric references resolve to actual JSON keys. The figure was rendered and visually inspected. Earlier analysis logs retain superseded hashes from incremental development; the `analysis-verified`/`replay-verified` logs and current comparison are final evidence.
+
+Ten focused tests pass, including counterfactual attribution, incompatible candidates/compositions/units/routes, native electrode consistency, fixed-material scale sweep and rejected data override. Ruff passes. The first full run collected9 of those tests and passed801 in401.99s; a final full run was started after adding the provenance guard/test. Frontend/package behavior is unchanged from the passing CI above. Table6.2 was executed again and remains Pt27.3695, Ni19.2206(−6.65%), FCC footnote-b2.4380(+1.16%) USD/lb: [output](commercial-c05-table62-2026-09-07.log).
+
+Critic: controlled scenarios are not new empirical validation. Input states have different observation dates and support-price bases. Material LCA coverage is not a complete process inventory; price scaling of catalog electrode materials does not establish an optimal design. Rights approvals and matched independent observations remain unresolved.
+
+Final verification: **802 passed in397.81s**, wrapper401.044s: [output](commercial-c05-pytest-final-2026-09-07.log). No analysis or backend code changed during this final run. An initial shell attempt used a nonexistent worktree `.venv` path and did not start tests; the corrected run used the existing `python` runtime, also recorded in provenance. This shell invocation error was not an engine/test failure.
