@@ -234,3 +234,18 @@ unverified records, supplier quotes, partial costing scopes, recipe inputs whose
 actual consumption has not been matched, and electrode-area observations. The
 first implementation assesses full-cost errors for thermal mass-based cases only.
 Ineligible observations remain available as local evidence.
+
+## Optional hosted accounts
+
+The desktop default remains login-free. Opt-in hosted startup requires the commercial data-rights gate and private storage configuration described in [operations](commercial/hosted-operations.ko.md). No real service has been launched.
+
+| Endpoint | Behavior |
+|---|---|
+| `GET /api/auth/session` | Public bootstrap; `mode`, `authenticated`, and this account's public fields/subscription. Desktop returns `account: null`. |
+| `POST /api/auth/login` | `username` and `password`; sets an HttpOnly same-origin session cookie. No client-supplied company/contract fields. |
+| `POST /api/auth/logout` | Revokes the current server session and expires its cookie. |
+| `POST /api/auth/password` | Authenticated `current_password`, `new_password` (15–128 characters); revokes all account sessions and requires sign-in again. |
+
+Hosted protected APIs require `X-Comet-Account` equal to the account ID returned by session/login. This confirms the current displayed account; only the server cookie resolves the owner. A changed or missing confirmation returns409. All mutations, including login, require the configured exact `Origin` and `X-Comet-Request: 1`. Authentication expiry returns401. The shipped browser adds these headers only in hosted mode; no tokens are stored in browser storage.
+
+Ordinary pending/expired/revoked subscriptions retain saved reads and exports; new calculations and writes return403. Account security disable revokes all access separately. Limits return429 with `Retry-After`: account60/company240 work attempts per minute, uncertainty10 per account per minute, and two concurrent work requests per process. The existing10,000 simulation limit remains. Bodies over2MiB return413. These are initial single-worker guardrails, not a tested capacity or billing promise. No public operator API or client activation endpoint exists. Hosted external price refresh remains disabled.

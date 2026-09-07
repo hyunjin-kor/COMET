@@ -1,4 +1,5 @@
 import { ScientificText } from '../components/shared/ScientificText';
+import { useAuth } from '../lib/auth';
 import { formatScientificText } from '../lib/scientific-text';
 import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -262,6 +263,8 @@ function DarkChartFallback({ label }: { label: string }) {
 }
 
 export default function Prices() {
+  const { session: accountSession } = useAuth();
+  const isHosted = accountSession.mode === 'hosted';
   const { unit } = useUnit();
   const { lang, t } = useLang();
   const { basis } = useBasis();
@@ -317,6 +320,7 @@ export default function Prices() {
   //     Markets Insider so Rh, Ru, Ir, Ni, Co, Mo, W, Fe stay current
   //     without any paid API. The slower cadence keeps the scrapers polite.
   useEffect(() => {
+    if (isHosted) return;
     const yahooTick = async () => {
       try {
         await refreshPrices('yahoo');
@@ -339,7 +343,7 @@ export default function Prices() {
       window.clearInterval(yahooId);
       window.clearInterval(fullId);
     };
-  }, [load]);
+  }, [load, isHosted]);
 
   useEffect(() => {
     if (!selected) return;
@@ -410,6 +414,7 @@ export default function Prices() {
   }, []);
 
   const handleRefresh = async () => {
+    if (isHosted) { load(); return; }
     setRefreshing(true);
     setError(null);
 

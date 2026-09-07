@@ -33,7 +33,10 @@ def hosted_client(monkeypatch, tmp_path):
 
 
 def login(client, username="fixture.first", password=PASSWORD):
-    return client.post("/api/auth/login", json={"username": username, "password": password}, headers=HEADERS)
+    response = client.post("/api/auth/login", json={"username": username, "password": password}, headers=HEADERS)
+    if response.status_code == 200:
+        client.headers["X-Comet-Account"] = response.json()["account"]["id"]
+    return response
 
 
 def test_hosted_defaults_off_and_local_session_has_no_login_requirement(client):

@@ -1,4 +1,4 @@
-import { apiUrl, type CostResult, type PriceBasis } from './api';
+import { request, type CostResult, type PriceBasis } from './api';
 
 export interface EstimateComparisonInput {
   estimate_ids: number[];
@@ -38,19 +38,9 @@ export interface EstimateComparisonResult {
 }
 
 export async function compareSavedEstimates(input: EstimateComparisonInput): Promise<EstimateComparisonResult> {
-  const response = await fetch(apiUrl('/estimates/compare'), {
+  return request<EstimateComparisonResult>('/estimates/compare', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(input),
   });
-  const data = await response.json();
-  if (!response.ok) {
-    const detail = typeof data.detail === 'string'
-      ? data.detail
-      : Array.isArray(data.detail)
-        ? data.detail.map((item: { msg?: string }) => item.msg ?? '').join(' · ')
-        : response.statusText;
-    throw new Error(detail);
-  }
-  return data;
 }

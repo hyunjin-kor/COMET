@@ -1,4 +1,5 @@
 import { ScientificText } from '../components/shared/ScientificText';
+import { useAuth } from '../lib/auth';
 import { formatScientificText } from '../lib/scientific-text';
 import { useEffect, useRef, useState } from 'react';
 import { ConsumablesFields, RecipeConsumptionFields } from '../components/RecipeConsumptionFields';
@@ -451,6 +452,7 @@ function CompactValueRow({ label, value, detail }: { label: string; value: strin
 }
 
 export default function Calculator() {
+  const { session: accountSession } = useAuth();
   const navigate = useNavigate();
   const { toDisplay, toInternal, fmtLabel } = useUnit();
   const { lang, t } = useLang();
@@ -819,7 +821,7 @@ export default function Calculator() {
   async function syncPrices() {
     setRefreshing(true);
     try {
-      await refreshPriceFeed();
+      if (accountSession.mode !== 'hosted') await refreshPriceFeed();
       applyPriceRows(await fetchPrices(basis));
     } finally {
       setRefreshing(false);

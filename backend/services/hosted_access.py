@@ -25,13 +25,14 @@ from backend.models.hosted import (
     HostedLoginSession,
     HostedLoginThrottle,
     HostedOrganization,
+    HostedUsageCounter,
 )
 from backend.paths import data_dir
 
 COOKIE_NAME = "__Host-comet_session"
 SESSION_SECONDS = 12 * 60 * 60
 _PASSWORD_SLOTS = BoundedSemaphore(2)
-_CONTROL_TABLES = [model.__table__ for model in (HostedAccount, HostedOrganization, HostedLoginSession, HostedLoginThrottle, HostedAuditEvent)]
+_CONTROL_TABLES = [model.__table__ for model in (HostedAccount, HostedOrganization, HostedLoginSession, HostedLoginThrottle, HostedAuditEvent, HostedUsageCounter)]
 _DATA_TABLES = [model.__table__ for model in (Equipment, Estimate, Material, MetalPrice)]
 _SAFE_METHODS = {"GET", "HEAD", "OPTIONS"}
 _PUBLIC_API = {("GET", "/api/health"), ("GET", "/api/auth/session"), ("POST", "/api/auth/login")}
@@ -268,8 +269,9 @@ def account_for_request(request: Request) -> HostedAccount | None:
         return account
 
 
-def authorize_hosted_request(request: Request) -> None:
+def authorize_hosted_request(request: Request):
     if not settings.hosted_mode or not request.url.path.startswith("/api/"):
+        yield
         return
     if settings.hosted_allow_local_http and settings.hosted_origin.startswith("http:"):
         if not request.client or request.client.host not in {"127.0.0.1", "::1", "testclient"}:
@@ -279,14 +281,23 @@ def authorize_hosted_request(request: Request) -> None:
                 or request.headers.get("X-Comet-Request") != "1"):
             raise HTTPException(403, "Same-origin application request required")
     if (request.method, request.url.path) in _PUBLIC_API:
+        yield
         return
     account = account_for_request(request)
     if account is None:
         raise HTTPException(401, "Sign in required")
+    # A shared browser cookie can change in another tab. This header confirms
+    # the displayed account; it never selects the data owner or grants access.
+    if request.headers.get("X-Comet-Account") != account.id:
+        raise HTTPException(409, "Account changed; reload your workspace")
     request.state.hosted_account = account
     from backend.services.hosted_subscription import enforce_subscription
 
     enforce_subscription(request, account)
+    from backend.services.hosted_usage import work_slot
+
+    with work_slot(request, account):
+        yield
 
 
 @contextmanager

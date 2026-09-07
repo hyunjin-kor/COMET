@@ -1,5 +1,6 @@
 import type { PurchaseEvidence } from './cost-evidence';
 import { scientificSearchText } from './scientific-text';
+import { hostedRequestState, invalidateBrowserAccount } from './hosted-session';
 
 // Port 8765 must match BACKEND_PORT in electron/main.js (single source of truth).
 const API_ROOT =
@@ -16,6 +17,11 @@ function buildRequestInit(options?: RequestInit): RequestInit {
   const body = options?.body;
   if (!(body instanceof FormData) && !headers.has('Content-Type')) {
     headers.set('Content-Type', 'application/json');
+  }
+  const session = hostedRequestState();
+  if (session.mode === 'hosted') {
+    headers.set('X-Comet-Request', '1');
+    if (session.accountId) headers.set('X-Comet-Account', session.accountId);
   }
   return {
     ...options,
@@ -98,18 +104,34 @@ async function fetchWithBootRetry(input: RequestInfo, init?: RequestInit): Promi
   throw lastError;
 }
 
-async function request<T>(path: string, options?: RequestInit): Promise<T> {
-  const res = await ensureOk(await fetchWithBootRetry(apiUrl(path), buildRequestInit(options)));
+async function sessionResponse(path: string, options?: RequestInit) {
+  const before = hostedRequestState();
+  const res = await fetchWithBootRetry(apiUrl(path), buildRequestInit(options));
+  if (before.mode === 'hosted' && !['/auth/login', '/auth/session'].includes(path)) {
+    if (before.generation !== hostedRequestState().generation) throw new Error('Account changed; reload your workspace');
+    if (res.status === 401 || res.status === 409) invalidateBrowserAccount();
+  }
+  return ensureOk(res);
+}
+
+export async function request<T>(path: string, options?: RequestInit): Promise<T> {
+  const before = hostedRequestState();
+  const res = await sessionResponse(path, options);
   try {
-    return (await res.json()) as T;
+    const value = (await res.json()) as T;
+    if (before.mode === 'hosted' && before.generation !== hostedRequestState().generation) throw new Error('Account changed; reload your workspace');
+    return value;
   } catch {
     throw new Error(`Expected JSON from ${path} but got non-JSON response (status ${res.status}).`);
   }
 }
 
 async function requestText(path: string, options?: RequestInit): Promise<string> {
-  const res = await ensureOk(await fetchWithBootRetry(apiUrl(path), buildRequestInit(options)));
-  return res.text();
+  const before = hostedRequestState();
+  const res = await sessionResponse(path, options);
+  const value = await res.text();
+  if (before.mode === 'hosted' && before.generation !== hostedRequestState().generation) throw new Error('Account changed; reload your workspace');
+  return value;
 }
 
 // Calculator

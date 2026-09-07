@@ -1,4 +1,4 @@
-import { apiUrl } from './api';
+import { request } from './api';
 
 export interface PurchaseEvidence {
   supplier?: string;
@@ -67,18 +67,12 @@ export interface CostObservationSummary {
 }
 
 async function evidenceRequest(estimateId: number, observation?: ActualCostObservation, signal?: AbortSignal) {
-  const response = await fetch(apiUrl(`/estimates/${estimateId}/observations`), {
+  return request<CostObservationSummary>(`/estimates/${estimateId}/observations`, {
     method: observation ? 'POST' : 'GET',
     headers: { 'Content-Type': 'application/json' },
     body: observation ? JSON.stringify(observation) : undefined,
     signal,
   });
-  const body = await response.json();
-  if (!response.ok) {
-    const detail = body.detail;
-    throw new Error(typeof detail === 'string' ? detail : JSON.stringify(detail));
-  }
-  return body as CostObservationSummary;
 }
 
 export function fetchCostObservations(estimateId: number, signal?: AbortSignal) {

@@ -60,6 +60,7 @@ jobs:
           node ../scripts/test_calculator_rules.mjs
           node ../scripts/test_practical_range.mjs
           node ../scripts/test_scientific_text.mjs
+          node --test ../scripts/hosted-session.test.mjs
 
       - name: Lint
         run: npm run lint

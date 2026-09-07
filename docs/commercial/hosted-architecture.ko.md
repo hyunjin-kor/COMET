@@ -25,7 +25,7 @@ HTTPS 세션 쿠키는 `__Host-` 접두사, Secure, HttpOnly, SameSite=Strict와
 
 쓰기·로그인 요청에는 정확히 일치하는 설정 Origin과 `X-Comet-Request: 1` 헤더가 필요하다. 브라우저의 일반 폼 제출로 해당 헤더를 만들 수 없는 [OWASP의 AJAX/API 헤더 방식](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#employing-custom-request-headers-for-ajaxapi)을 적용하고 Origin을 추가 확인한다. hosted 모드에서 교차 출처 CORS를 열지 않는다. 로그인 오류는 계정 존재 여부를 구분하지 않으며, 잘못된 요청 본문에 포함된 비밀번호도 오류 응답에 되비추지 않는다.
 
-로그인 시도는 SQLite의 원자적 카운터로 분당 계정5회/클라이언트20회/서버60회까지 허용한다. 성공한 시도도 포함한다. 비밀번호 검증은 프로세스당 동시에2개로 제한한다. 전체 요청 본문은 Content-Length 유무와 관계없이 파싱 전에2MiB로 제한한다. 이 수치는 초기 보호 설정이며 실제 고객 부하 시험이나 가용성 보장이 아니다. API 계산 사용량 제한과 운영 용량 검증은 후속 작업이다.
+로그인 시도는 SQLite의 원자적 카운터로 분당 계정5회/클라이언트20회/서버60회까지 허용한다. 성공한 시도도 포함한다. 비밀번호 검증은 프로세스당 동시에2개로 제한한다. 전체 요청 본문은 Content-Length 유무와 관계없이 파싱 전에2MiB로 제한한다. 이 수치는 초기 보호 설정이며 실제 고객 부하 시험이나 가용성 보장이 아니다. 계산 한도와 백업 복구는 [운영 절차](hosted-operations.ko.md)에 정리했다.
 
 hosted 응답은 캐시 금지, 프레임 차단, nosniff, referrer 제한과 자체 스크립트 출처 제한 CSP를 적용한다. 제조법 식별자는 영문·숫자·밑줄·하이픈만 허용하고, 실제 경로가 카탈로그 안에 있는지 확인한다. 전체 저장소의 침투 시험을 마쳤다는 뜻은 아니다.
 
@@ -33,6 +33,6 @@ hosted 응답은 캐시 금지, 프레임 차단, nosniff, referrer 제한과 �
 
 `HOSTED_MODE`, `HOSTED_ORIGIN`, `HOSTED_STORAGE_DIR`, `HOSTED_RIGHTS_MANIFEST`가 준비된다. Origin은 하나의 HTTPS 출처여야 하며 `ALLOWED_HOSTS`에 일치하는 호스트를 명시한다. DEBUG는 꺼져 있어야 한다. `HOSTED_ALLOW_LOCAL_HTTP=true`는 localhost/loopback 시험에만 적용되며 별도의 로컬 쿠키 이름을 사용한다. 상업용 권리 확인 자체를 건너뛰는 실행 옵션은 없다. 자동화 테스트에서만 가짜 심사 결과와 임시 저장소를 명시적으로 주입한다.
 
-실제 서버의 TLS 종료, 프록시 신뢰 IP, 외부에서 백엔드 직접 접근 차단, 서비스 전용 OS 계정과 디렉터리 ACL, 디스크/백업 암호화, 복구 절차는 운영 단계에서 확인해야 한다. Windows에서는 Python의 디렉터리 mode 값만으로 ACL을 보장할 수 없다. 멀티 노드 공유 SQLite·인터넷 직접 노출·SSO/MFA·셀프 가입·자동 청구를 구현했다고 주장하지 않는다. 운영자 명령과 구독 만료·좌석·감사 기록은 [운영 절차](hosted-operations.ko.md)에 정리했다. 계정 화면과 복구 검증은 후속 작업이다.
+실제 서버의 TLS 종료, 프록시 신뢰 IP, 외부에서 백엔드 직접 접근 차단, 서비스 전용 OS 계정과 디렉터리 ACL·디스크/백업 암호화는 운영 단계에서 확인해야 한다. Windows에서는 Python의 디렉터리 mode 값만으로 ACL을 보장할 수 없다. 멀티 노드 공유 SQLite·인터넷 직접 노출·SSO/MFA·셀프 가입·자동 청구를 구현했다고 주장하지 않는다. 운영자 명령과 구독 만료·좌석·감사 기록·계정 화면과 복구 절차는 [운영 문서](hosted-operations.ko.md)에 정리했다. 임시 데이터 시험을 실제 고객 운영 실적으로 해석하지 않는다.
 
 hosted 모드는 외부 시세 수집 스케줄러를 시작하지 않고 수동 새로고침도 거절한다. 다운로드 라이브러리의 라이선스와 데이터의 상업용 재사용 허락은 별개다. 허락이 확인된 무료 데이터나 사용자가 적법하게 입력한 자료만 향후 운영 입력으로 삼는다. 현재의 배포 보류를 해제하거나 유료 데이터 계약을 체결하지 않았다.

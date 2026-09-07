@@ -46,3 +46,10 @@ class HostedAuditEvent(SQLModel, table=True):
     action: str = Field(index=True)
     target_id: str
     details_json: str = "{}"
+
+
+class HostedUsageCounter(SQLModel, table=True):
+    __tablename__ = "hosted_usage_counters"
+    key: str = Field(primary_key=True)
+    window: int
+    attempts: int = 0
