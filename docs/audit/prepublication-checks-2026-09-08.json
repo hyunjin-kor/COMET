@@ -472,5 +472,10 @@
     "path": "dist-electron/COMET.Setup.1.4.0.exe",
     "sha256": "2e330a7b582e0d9dd6987724308e9dd3266aabb683324849aa88fec7aec92a7a"
   },
-  "note": "Local package prepared without publishing or updating the installed app; remote CI pending in first source commit."
+  "note": "Local package prepared without publishing or updating the installed app; source CI34144072490 passed all three jobs. Final documentation-commit CI is linked in PR112.",
+  "source_ci": {
+    "commit": "1c0d1dc920181c512dc73c38430ef39eac470cc0",
+    "url": "https://github.com/hyunjin-kor/COMET/actions/runs/34144072490",
+    "conclusion": "success"
+  }
 }
