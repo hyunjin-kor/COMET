@@ -1,0 +1,93 @@
+{
+  "synthetic_data_only": true,
+  "errors": [],
+  "surfaces": [
+    {
+      "name": "composition-select",
+      "unformatted": [],
+      "sub": 2,
+      "sup": 0
+    },
+    {
+      "name": "manufacturing",
+      "unformatted": [],
+      "sub": 89,
+      "sup": 0
+    },
+    {
+      "name": "thermal-result",
+      "unformatted": [],
+      "sub": 4,
+      "sup": 0
+    },
+    {
+      "name": "uncertainty",
+      "unformatted": [],
+      "sub": 2,
+      "sup": 0
+    },
+    {
+      "name": "library-hydrate",
+      "unformatted": [],
+      "sub": 6,
+      "sup": 0
+    },
+    {
+      "name": "fractional-stoichiometry",
+      "unformatted": [],
+      "sub": 10,
+      "sup": 3
+    },
+    {
+      "name": "ionic-charge",
+      "unformatted": [],
+      "sub": 3,
+      "sup": 2
+    },
+    {
+      "name": "isotope",
+      "unformatted": [],
+      "sub": 4,
+      "sup": 3
+    },
+    {
+      "name": "capital-exponent",
+      "unformatted": [],
+      "sub": 0,
+      "sup": 1
+    },
+    {
+      "name": "prices",
+      "unformatted": [],
+      "sub": 3,
+      "sup": 0
+    },
+    {
+      "name": "korean-library",
+      "unformatted": [],
+      "sub": 12,
+      "sup": 1
+    }
+  ],
+  "screens": [
+    "docs/audit/screens/scientific-manufacturing-2026-09-07.png",
+    "docs/audit/screens/scientific-thermal-result-2026-09-07.png",
+    "docs/audit/screens/scientific-hydrate-library-2026-09-07.png",
+    "docs/audit/screens/scientific-fractional-composition-2026-09-07.png",
+    "docs/audit/screens/scientific-ionic-charge-2026-09-07.png",
+    "docs/audit/screens/scientific-isotope-2026-09-07.png",
+    "docs/audit/screens/scientific-capital-exponent-2026-09-07.png",
+    "docs/audit/screens/scientific-korean-library-2026-09-07.png"
+  ],
+  "csv": {
+    "subscript_formula": true,
+    "unit_format": true,
+    "raw_request_preserved": true
+  },
+  "position": {
+    "fontSize": "9px",
+    "bottom": "-2.25px",
+    "position": "relative"
+  },
+  "passed": true
+}
