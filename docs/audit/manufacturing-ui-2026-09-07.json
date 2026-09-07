@@ -1,0 +1,68 @@
+{
+  "synthetic_data_only": true,
+  "errors": [],
+  "screens": [
+    "docs/audit/screens/manufacturing-after-ko-2026-09-07.png",
+    "docs/audit/screens/manufacturing-mobile-ko-2026-09-07.png",
+    "docs/audit/screens/manufacturing-after-en-2026-09-07.png"
+  ],
+  "cases": [
+    {
+      "name": "reselection-save-reload-result",
+      "before_steps": 25,
+      "off_steps": 16,
+      "restored_steps": 25,
+      "template": "fcc_catalyst_usy_w_re",
+      "geometry": {
+        "beforeBox": {
+          "x": 1057.328125,
+          "y": 1158.296875,
+          "width": 334.65625,
+          "height": 56
+        },
+        "offBox": {
+          "x": 1057.328125,
+          "y": 497.296875,
+          "width": 334.65625,
+          "height": 56
+        },
+        "beforeDocumentY": 1158.296875,
+        "offDocumentY": 1158.296875
+      },
+      "processing_cost": 6.739
+    },
+    {
+      "name": "scale-change-delayed-response",
+      "passed": true
+    },
+    {
+      "name": "empty-draft-stays-empty",
+      "passed": true
+    },
+    {
+      "name": "search-partial-scope-korean",
+      "list": {
+        "x": 322,
+        "y": 661.296875,
+        "width": 537,
+        "height": 352
+      },
+      "detail": {
+        "x": 860,
+        "y": 598.296875,
+        "width": 538,
+        "height": 416
+      }
+    },
+    {
+      "name": "mobile",
+      "width": 390,
+      "scrollWidth": 390
+    },
+    {
+      "name": "electrode-separation-reselection",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

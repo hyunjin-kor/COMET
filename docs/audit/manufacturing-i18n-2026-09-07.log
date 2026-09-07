@@ -1,0 +1,15 @@
+
+> frontend@1.4.0 check:i18n
+> node ../scripts/check_i18n.mjs
+
+{
+  "static_translation_calls": 982,
+  "korean_keys": 1008,
+  "missing_key_occurrences": 0,
+  "raw_jsx_label_occurrences": 31,
+  "untranslated_ui_label_occurrences": 0,
+  "missing": [],
+  "untranslatedLabels": [],
+  "scope": "Literal and conditional t(string) keys, literal JSX text, UI attributes and direct JSX template-literal fragments. Technical symbols/units, the product name and already-Korean text are explicitly excluded from untranslated UI counts. Conditional language branches, source data and variable translation keys require manual/browser review."
+}
+
