@@ -19,8 +19,8 @@ No source changed for this initial log. Reused evidence is explicitly distinguis
 | ID | Status | Commit | Evidence / acceptance |
 |---|---|---|---|
 | C01 | Complete | c7f51f1 | Goal and persisted C01–C14 backlog; clean tested baseline |
-| C02 | Pending | — | Copyright/company/third-party/data rights matrix and unexecuted commercial terms |
-| C03 | Complete locally; fresh CI pending | This task commit | 780 tests; frontend/Ruff/i18n/29 Node cases; Windows build227.964s, isolated smoke17.604s; user DB/log hashes unchanged |
+| C02 | Preparation complete; rights approval unresolved | This task commit | 81-file rights inventory,20 workbook-origin declarations,12 guard tests,792 full tests; actual public/commercial checks correctly reject unapproved data; contract drafts |
+| C03 | Complete; all CI jobs passed | a5279bd | Local780 tests; CI780/498.13s plus Windows/frontend; build227.964s, isolated smoke17.604s; user DB/log hashes unchanged |
 | C04 | Pending | — | Official journal metrics/scope and dated quartile verification or explicit unknown |
 | C05 | Pending | — | Controlled, reproducible scientific case studies |
 | C06 | Pending | — | Free independent validation evidence; no inferred missing conditions |
@@ -60,3 +60,19 @@ README now installs both npm dependency sets and a Python virtual environment, u
 No calculation formula or data changed. Table6.2 retains Pt/C27.3695, Ni19.2206(−6.65%), FCC at footnote-b rate2.4380(+1.16%) USD/lb. These timing measurements do not establish a performance improvement.
 
 Critic: the first aggregate runner returned exit0 even though the child Windows PowerShell blocked npm.ps1. That run is **not frontend pass evidence**; its [failed harness output](commercial-c03-checks-2026-09-07.log) is retained. The corrected runner uses terminating errors and npm.cmd and actually executed all checks. Tailwind still emits the previously observed sourcemap warning; packaging has optional-hook warnings. Neither was suppressed. Fresh Windows GitHub CI remains to be verified after push.
+
+Follow-up: [CI34122880587](https://github.com/hyunjin-kor/COMET/actions/runs/34122880587) at a5279bd passed the new fresh Windows build/smoke job and frontend job. The Windows job installed from scratch and completed in about4min; its smoke phase passed in16s. Backend was still running at that observation, so no whole-run success is asserted here.
+
+Final C03 CI observation: the same run subsequently completed **success**, including780 backend tests in498.13s with two upstream dependency deprecation warnings. All three jobs passed.
+
+## C02 rights and distribution control
+
+The [rights register](../commercial/rights-register-2026-09-07.md) distinguishes the code license, actual copyright ownership, contributor permission, static data and dynamic feeds. Added a Korean commercialization strategy and unexecuted company-license/subscription drafts with unknown party, fee, SLA and ownership fields. No permissions or customer contracts have been created.
+
+The exact-file inventory covers81 bundled files recursively,20 with declared CatCost/workbook-sheet origins. Material/equipment counts606/241 are metadata counts, not a new data import. The previous README denial of CatCost source-data redistribution was corrected. All current data remain preserved and unapproved for the newly proposed distribution review.49 installed Python runtime packages and580 npm lock entries were inventoried from local metadata; this is not a full binary license audit.
+
+The new public-release gate rejects missing/modified/unreviewed data, absent review records and malformed manifests. Public distribution permission does not imply commercial permission. The gate is deliberately placed before tag release packaging/publication; it does not block local calculation/testing. Both checks on the real manifest returned exit1 as expected: [public](commercial-c02-public-gate-2026-09-07.log), [commercial](commercial-c02-commercial-gate-2026-09-07.log). They are **not** commercial-readiness passes. No tag-triggered workflow was executed.
+
+Verification:12 focused tests passed, including separate-use permissions, file mutation/new nested files, review metadata and malformed/duplicate manifests. Initial test collection correctly failed because the protection module did not exist; [before](commercial-c03-rights-before-2026-09-07.log) and [after](commercial-c03-rights-after-2026-09-07.log) retain the runner's earlier C03 filename prefix. Full suite **792 passed in467.83s**, wrapper471.319s: [output](commercial-c02-pytest-2026-09-07.log). Ruff passed. Frontend and calculations were unchanged from a5279bd, so its passing frontend/Table6.2/desktop evidence is reused rather than described as newly executed.
+
+Critic: a reachable DOI or permissively licensed downloader does not clear its data. IMF terms require attention to commercial permission; UN Comtrade's free research exceptions do not automatically apply to a for-profit analytics service; yfinance's Apache license does not license Yahoo data. Data acquisition remains free. Existing workbooks, source snapshots, schemas and LICENSE were not changed. The new checker only records and enforces explicit review decisions; it cannot establish legal rights itself. Company/college/contributor authority, dependency notices and data replacements/permissions remain C14 release blockers.

@@ -71,7 +71,13 @@ jobs:
           node scripts/test_scientific_text.mjs
           exit $LASTEXITCODE
 
-      - name: Build desktop app
+      - name: Verify data redistribution rights
+        # A reachable source URL does not establish redistribution permission.
+        # The current inventory deliberately fails until an authorized review.
+        # Local/PR packaging remains available for verification without publishing.
+        run: python scripts/check_data_rights.py --purpose public_distribution
+
+      - name: Build reviewed desktop app
         run: |
           $env:COMET_PYTHON = (Get-Command python).Source
           npm run build:frontend

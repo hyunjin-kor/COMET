@@ -148,9 +148,12 @@ COMTRADE_API_KEY=your_key        # optional scheduled collection; verified shipp
 
 ## Method basis
 
-COMET is an independent implementation. It cites the CatCost methodology
-academically but does not redistribute CatCost source data, and it is not
-affiliated with or endorsed by NREL.
+COMET implements and academically cites the CatCost methodology and is not
+affiliated with or endorsed by NREL. The source audit found legacy bundled files
+that declare CatCost workbook origins. Their reuse permissions are unresolved;
+the original workbook is excluded, but that alone does not clear extracted data.
+See the [data rights register](docs/commercial/rights-register-2026-09-07.md).
+New public releases are held by an exact-file rights check until review is complete.
 
 - Baddour, F. G., et al. (2018). Estimating Precommercial Heterogeneous Catalyst Price: A Simple Step-Based Method. *Organic Process Research & Development*. [Verified DOI](https://doi.org/10.1021/acs.oprd.8b00245).
 - Van Allsburg, K. M., et al. (2022). Early-stage evaluation of catalyst manufacturing cost and environmental impact using CatCost. *Nature Catalysis*.
@@ -174,3 +177,8 @@ Free to use, modify and redistribute for any noncommercial purpose: research,
 education, personal study. Use by universities, public research organizations and
 government institutions is permitted regardless of funding source. Commercial use
 requires a separate license from the copyright holder.
+
+Third-party data and dependencies retain their own terms. The code license does
+not grant their redistribution rights. Company subscription preparation is tracked
+in the [commercialization plan](docs/commercial/strategy.ko.md); no hosted sale or
+commercial data clearance is claimed.
