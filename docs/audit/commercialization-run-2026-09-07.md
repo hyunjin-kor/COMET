@@ -23,8 +23,8 @@ No source changed for this initial log. Reused evidence is explicitly distinguis
 | C03 | Complete; all CI jobs passed | a5279bd | Local780 tests; CI780/498.13s plus Windows/frontend; build227.964s, isolated smoke17.604s; user DB/log hashes unchanged |
 | C04 | Evidence review complete; target eligibility pending | 248c45e | Official indexed JIF displays and HTTP200 Engineering Au Article guidance; metric year/JCR category/Q1 unverified, no acceptance claim |
 | C05 | Complete | 26a283e | 30 crossed price/evidence families,21 manufacturing scenarios,9 electrode scenarios; byte-identical replay;802 full tests passed |
-| C06 | Evidence extension complete; real observations unresolved | This task commit | 2 additional Crossref-verified papers, actual HTTP/PDF checks and private collection worksheet; matched observations remain0 |
-| C07 | Pending | — | External researcher evaluation protocol; real participation remains distinct |
+| C06 | Evidence extension complete; real observations unresolved | f95ac74 | 2 additional Crossref-verified papers, actual HTTP/PDF checks and private collection worksheet; matched observations remain0 |
+| C07 | Protocol complete; participants unresolved | This task commit | 6 defined tasks, recording/analysis criteria, empty CSV, actual participants0 |
 | C08 | Pending | — | Opt-in hosted identity and private resource isolation |
 | C09 | Pending | — | Subscription active/expired/revoked lifecycle and access tests |
 | C10 | Pending | — | Account UI, limits, backup/restore and operating procedures |
@@ -112,3 +112,11 @@ Screened two additional primary papers and verified both DOIs/titles against act
 Crossref's article license metadata and third-party input rights are separated. Full articles remain local; no new model price/data or commercial permissions were added. The bounded inventory now screens12 cases across the prior ten and these two, while matched independent full-cost observations remain0 and empirical MAPE remains unestimated. Prepared a blank private record collection worksheet matching the application's existing observation schema. No records, contacts, purchases or participant data were invented.
 
 Validation: inspected the actual Crossref metadata, PDF text, URL final destinations/content types and file hashes in the access JSON. These documentation-only changes reuse26a283e's802 passing tests and unchanged frontend/package CI. Critic: laboratory economic modeling and published-method repetition are valuable context but insufficient evidence of industrial predictive accuracy. Acquiring a voluntarily shared, condition-matched production/procurement record remains C14.
+
+## C07 actual researcher evaluation protocol
+
+Added a Korean protocol with six application tasks, proposed recruitment mix, controlled version/price inputs, task ordering, assistance/time/error/comprehension recording and prespecified reporting distinctions. The initial target6 researchers is a proposed qualitative round, not a power calculation or completed sample. Consent, voluntary participation, institutional procedures and private storage must be established by the actual study team. No recruitment or message was sent.
+
+The GOV.UK moderated-usability guide was read and its direct URL returnedHTTP200/text/html on2026-09-07. COMET task definitions and release criteria are our proposed rubric, not a certified psychometric instrument. The CSV parses and contains0 observation rows. Automatic browser QA and developer rehearsal are explicitly excluded from participant results.
+
+Validation: inspected the protocol against current thermal/electrode/save/compare/evidence flows; preserved blank observations and reused26a283e's802 tests for unchanged software. Critic: real researcher usability evidence remains absent. The protocol prepares a study; it does not satisfy the empirical user-evaluation claim or establish customer demand. Actual participants and permissions remain C14.
