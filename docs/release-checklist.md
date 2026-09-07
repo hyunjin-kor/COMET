@@ -4,7 +4,7 @@ Prepared on 2026-09-06; evidence updated on 2026-09-07. This checklist does not 
 
 - [x] Set package.json, frontend/package.json, pyproject.toml and backend/main.py APP_VERSION to 1.4.0; synchronise lockfile package headers.
 - [x] Update release notes, CITATION.cff, codemeta.json and project links; retain PolyForm Noncommercial 1.0.0.
-- [x] Confirm latest full pytest (710 passed in 459.11 s), frontend lint/build and i18n checks, CatCost reproduction and desktop smoke (1.4.0) evidence in the run audit.
+- [x] Confirm latest full pytest (780 passed in 423.66 s), frontend lint/build and i18n checks, CatCost reproduction and desktop build/smoke (1.4.0, 210.624 s total) evidence in the run audit.
 - [ ] Human: review and merge the single run PR after CI passes; this execution does not merge it.
 - [ ] Human: create and push tag v1.4.0 from the approved release commit.
 - [ ] Human: confirm GitHub release assets and updater metadata (installer, portable archive, latest.yml, blockmap); test an upgrade from the prior public release.

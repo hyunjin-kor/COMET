@@ -89,15 +89,15 @@
   "result": {
     "n_simulations": 1000,
     "n_successful": 1000,
-    "mean": 11.9645,
-    "median": 11.881,
-    "std": 1.0863,
-    "min": 9.8457,
-    "max": 14.1533,
-    "p5": 10.312,
-    "p25": 11.0617,
-    "p75": 12.8964,
-    "p95": 13.6937,
+    "mean": 11.9757,
+    "median": 11.9616,
+    "std": 1.0926,
+    "min": 9.8525,
+    "max": 14.1973,
+    "p5": 10.2555,
+    "p25": 11.0259,
+    "p75": 12.9465,
+    "p95": 13.6575,
     "unit": "$/lb",
     "baseline_price_per_lb": 11.9234,
     "baseline_price_per_kg": 26.2866,
@@ -140,6 +140,7 @@
     "lca_coverage_pct": 100
   },
   "fixed_recipe_assumptions_visible": true,
+  "csv_fixed_assumptions_verified": true,
   "runtime_errors": [],
   "screenshot": "docs/audit/screens/practical-range-2026-09-07.png"
 }
