@@ -1,4 +1,5 @@
 import type { PurchaseEvidence } from './cost-evidence';
+import { scientificSearchText } from './scientific-text';
 
 // Port 8765 must match BACKEND_PORT in electron/main.js (single source of truth).
 const API_ROOT =
@@ -654,7 +655,7 @@ export const fetchMaterials = (
 ) => {
   const params = new URLSearchParams();
   if (category) params.set('category', category);
-  if (q) params.set('q', q);
+  if (q) params.set('q', scientificSearchText(q));
   if (catalystDomain) params.set('catalyst_domain', catalystDomain);
   if (applicationFamily) params.set('application_family', applicationFamily);
   if (limit) params.set('limit', String(limit));

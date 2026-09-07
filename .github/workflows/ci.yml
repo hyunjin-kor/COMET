@@ -59,6 +59,7 @@ jobs:
           npm run check:i18n
           node ../scripts/test_calculator_rules.mjs
           node ../scripts/test_practical_range.mjs
+          node ../scripts/test_scientific_text.mjs
 
       - name: Lint
         run: npm run lint

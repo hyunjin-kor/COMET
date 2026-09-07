@@ -1,5 +1,6 @@
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 import { useLang } from '../../lib/i18n';
+import { formatScientificText } from '../../lib/scientific-text';
 
 type PieSlice = {
   name: string;
@@ -17,7 +18,7 @@ export default function ResultBreakdownPieChart({
   return (
     <ResponsiveContainer width="100%" height="100%">
       <PieChart>
-        <Pie data={data} innerRadius={64} outerRadius={96} dataKey="value" paddingAngle={3} stroke="transparent">
+        <Pie data={data.map((row) => ({ ...row, name: formatScientificText(row.name) }))} innerRadius={64} outerRadius={96} dataKey="value" paddingAngle={3} stroke="transparent">
           {data.map((entry, index) => (
             <Cell key={entry.name} fill={colors[index % colors.length]} />
           ))}

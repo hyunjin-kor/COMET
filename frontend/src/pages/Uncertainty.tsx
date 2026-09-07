@@ -1,3 +1,4 @@
+import { ScientificText } from '../components/shared/ScientificText';
 import type { ReactNode } from 'react';
 import { lazy, Suspense, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -31,9 +32,9 @@ const RANGE_SECTIONS: WorkspaceSection[] = [
 function StatTile({ label, value, detail }: { label: string; value: string; detail: string }) {
   return (
     <div className="cp-metric-tile">
-      <div className="cp-subtle-label">{label}</div>
-      <div className="mt-2 text-2xl font-display text-slate-900">{value}</div>
-      <div className="mt-1 text-xs leading-5 text-slate-600">{detail}</div>
+      <div className="cp-subtle-label"><ScientificText text={label} /></div>
+      <div className="mt-2 text-2xl font-display text-slate-900"><ScientificText text={value} /></div>
+      <div className="mt-1 text-xs leading-5 text-slate-600"><ScientificText text={detail} /></div>
     </div>
   );
 }
@@ -41,9 +42,9 @@ function StatTile({ label, value, detail }: { label: string; value: string; deta
 function StatTileDark({ label, value, detail }: { label: string; value: string; detail: string }) {
   return (
     <div className="cp-metric-tile-dark">
-      <div className="cp-subtle-label !text-slate-400">{label}</div>
-      <div className="mt-2 text-2xl font-display text-white">{value}</div>
-      <div className="mt-1 text-xs leading-5 text-slate-400">{detail}</div>
+      <div className="cp-subtle-label !text-slate-400"><ScientificText text={label} /></div>
+      <div className="mt-2 text-2xl font-display text-white"><ScientificText text={value} /></div>
+      <div className="mt-1 text-xs leading-5 text-slate-400"><ScientificText text={detail} /></div>
     </div>
   );
 }
@@ -60,8 +61,8 @@ function FieldBlock({
   return (
     <label className="block">
       <div className="flex items-center justify-between gap-3">
-        <span className="cp-subtle-label">{label}</span>
-        {hint ? <span className="text-xs text-slate-400">{hint}</span> : null}
+        <span className="cp-subtle-label"><ScientificText text={label} /></span>
+        {hint ? <span className="text-xs text-slate-400"><ScientificText text={hint} /></span> : null}
       </div>
       <div className="mt-2">{children}</div>
     </label>
@@ -322,19 +323,19 @@ export default function Uncertainty() {
               <div className="mt-5 grid gap-3 lg:grid-cols-3">
                 <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
                   <div className="cp-subtle-label">{t('Current case')}</div>
-                  <div className="mt-2 text-base font-semibold text-[#191f28]">{caseSummary}</div>
+                  <div className="mt-2 text-base font-semibold text-[#191f28]"><ScientificText text={caseSummary} /></div>
                   <div className="mt-1 text-xs leading-6 text-slate-600">
                     {draft.catalystDomain === 'electrocatalyst' ? t('Electrocatalyst assembly') : t('Thermocatalyst formulation')}
                   </div>
                 </div>
                 <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
                   <div className="cp-subtle-label">{t('Preparation basis')}</div>
-                  <div className="mt-2 text-base font-semibold text-[#191f28]">{lang === 'ko' ? `제조 단계 ${draft.steps.length}개` : `${draft.steps.length} unit operation${draft.steps.length === 1 ? '' : 's'}`}</div>
+                  <div className="mt-2 text-base font-semibold text-[#191f28]"><ScientificText text={lang === 'ko' ? `제조 단계 ${draft.steps.length}개` : `${draft.steps.length} unit operation${draft.steps.length === 1 ? '' : 's'}`} /></div>
                   <div className="mt-1 text-xs leading-6 text-slate-600">{draft.steps.map((key) => t(stepDisplayLabel(key))).join(', ') || t('No preparation steps selected')}</div>
                 </div>
                 <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
                   <div className="cp-subtle-label">{t('Production scale')}</div>
-                  <div className="mt-2 text-base font-semibold text-[#191f28]">{lang === 'ko' ? `${draft.orderSize}톤` : `${draft.orderSize} tons`}</div>
+                  <div className="mt-2 text-base font-semibold text-[#191f28]"><ScientificText text={lang === 'ko' ? `${draft.orderSize}톤` : `${draft.orderSize} tons`} /></div>
                   <div className="mt-1 text-xs leading-6 text-slate-600">
                     {t(applicationDisplay(draft.applicationFamily ?? 'general'))} / {t(domainDisplay(draft.catalystDomain))}
                   </div>
@@ -482,7 +483,7 @@ export default function Uncertainty() {
           ) : (
             <>
               <div className="surface-ink overflow-hidden p-5">
-                {result.fixed_recipe_assumptions ? <p className="mb-4 text-sm leading-6 text-amber-200"><strong>{t('Fixed recipe assumptions')}: </strong>{result.fixed_recipe_assumptions}</p> : null}
+                {result.fixed_recipe_assumptions ? <p className="mb-4 text-sm leading-6 text-amber-200"><strong>{t('Fixed recipe assumptions')}: </strong><ScientificText text={result.fixed_recipe_assumptions} /></p> : null}
                 <div className="grid gap-3 sm:grid-cols-4">
                   <StatTileDark label={t('Baseline')} value={`${formatPrice(toDisplay(result.baseline_price_per_lb))}${fmtLabel}`} detail={t('Current estimate')} />
                   <StatTileDark label={t('Mean')} value={`${formatPrice(toDisplay(result.mean))}${fmtLabel}`} detail={t('Average outcome')} />
@@ -498,7 +499,7 @@ export default function Uncertainty() {
               <div className="mt-5 grid gap-3 lg:grid-cols-3">
                 <div className="rounded-[22px] border border-slate-200 bg-white/78 px-4 py-4">
                   <div className="cp-subtle-label">{t('Case')}</div>
-                  <div className="mt-2 text-base font-semibold text-[#191f28]">{result.composition}</div>
+                  <div className="mt-2 text-base font-semibold text-[#191f28]"><ScientificText text={result.composition} /></div>
                   <div className="mt-1 text-xs leading-6 text-slate-600">
                     {t(domainDisplay(result.catalyst_domain))} / {t(applicationDisplay(result.application_family))}
                   </div>

@@ -1,3 +1,5 @@
+import { ScientificText } from '../components/shared/ScientificText';
+import { formatScientificText } from '../lib/scientific-text';
 import { useEffect, useRef, useState } from 'react';
 import { ConsumablesFields, RecipeConsumptionFields } from '../components/RecipeConsumptionFields';
 import CostEvidencePanel, { PurchaseEvidenceFields } from '../components/CostEvidencePanel';
@@ -429,9 +431,9 @@ function calculatorMaterialLabel(material: MaterialItem) {
 function MetricTile({ label, value, detail, dark = false }: { label: string; value: string; detail: string; dark?: boolean }) {
   return (
     <div className={dark ? 'cp-metric-tile-dark' : 'cp-metric-tile'}>
-      <div className={`cp-subtle-label ${dark ? '!text-slate-400' : ''}`}>{label}</div>
-      <div className={`mt-2 text-2xl font-display ${dark ? 'text-white' : 'text-slate-900'}`}>{value}</div>
-      <div className={`mt-1 text-xs leading-5 ${dark ? 'text-slate-400' : 'text-slate-600'}`}>{detail}</div>
+      <div className={`cp-subtle-label ${dark ? '!text-slate-400' : ''}`}><ScientificText text={label} /></div>
+      <div className={`mt-2 text-2xl font-display ${dark ? 'text-white' : 'text-slate-900'}`}><ScientificText text={value} /></div>
+      <div className={`mt-1 text-xs leading-5 ${dark ? 'text-slate-400' : 'text-slate-600'}`}><ScientificText text={detail} /></div>
     </div>
   );
 }
@@ -440,10 +442,10 @@ function CompactValueRow({ label, value, detail }: { label: string; value: strin
   return (
     <div className="cp-data-row">
       <div>
-        <div className="cp-subtle-label">{label}</div>
-        {detail ? <div className="mt-1 text-xs leading-5 text-slate-600">{detail}</div> : null}
+        <div className="cp-subtle-label"><ScientificText text={label} /></div>
+        {detail ? <div className="mt-1 text-xs leading-5 text-slate-600"><ScientificText text={detail} /></div> : null}
       </div>
-      <div className="text-right text-sm font-semibold text-[#191f28]">{value}</div>
+      <div className="text-right text-sm font-semibold text-[#191f28]"><ScientificText text={value} /></div>
     </div>
   );
 }
@@ -1264,9 +1266,9 @@ export default function Calculator() {
     const dotClass = row.source_type === 'live' ? 'bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.32)]' : row.source_type === 'indexed' ? 'bg-amber-500' : 'bg-slate-500';
     const className = `inline-flex items-center gap-2 rounded-full border px-3 py-2 text-xs font-semibold transition ${sourceTone(row.source_type)}`;
     const content = <><span className={`h-2 w-2 rounded-full ${dotClass}`} /><span>{t(sourceTypeLabel(row.source_type))}</span></>;
-    if (!option || option.source_type === 'manual') return <span className={`${className} cursor-default`} title={row.source}>{content}</span>;
+    if (!option || option.source_type === 'manual') return <span className={`${className} cursor-default`} title={formatScientificText(row.source)}>{content}</span>;
     const title = row.source_type === 'manual' ? `Manual input. Switch to ${sourceTypeLabel(option.source_type)} pricing from ${option.source}.` : `${row.source}. Switch back to manual input.`;
-    return <button onClick={() => toggleRowSource(row.id)} title={title} className={className}>{content}</button>;
+    return <button onClick={() => toggleRowSource(row.id)} title={formatScientificText(title)} className={className}>{content}</button>;
   }
 
   function priceField(row: CalculatorRow) {
@@ -1284,19 +1286,19 @@ export default function Calculator() {
     return (
       <div className="rounded-[24px] border border-slate-900/8 bg-white/72 p-4">
         <div className="cp-subtle-label">{t(label)}</div>
-        <div className="mt-2 font-semibold text-[#191f28]">{material?.name ?? t(fallback)}</div>
-        <div className="mt-1 text-sm text-slate-600">{material ? materialQuoteLabel(material) : t('Select a library record to lock pricing.')}</div>
+        <div className="mt-2 font-semibold text-[#191f28]"><ScientificText text={material?.name ?? t(fallback)} /></div>
+        <div className="mt-1 text-sm text-slate-600"><ScientificText text={material ? materialQuoteLabel(material) : t('Select a library record to lock pricing.')} /></div>
         {material ? (
           <div className="mt-2 space-y-2">
             <div className="text-xs leading-6 text-slate-600">
-              {priceScopeLabel(material.price_scope)} / {pricingBasisDisplay(material.pricing_basis)}
-              {material.quote_year ? ` / ${material.quote_year}` : ''}
-              {material.quote_source ? ` / ${material.quote_source}` : ''}
+              <ScientificText text={priceScopeLabel(material.price_scope)} /> / <ScientificText text={pricingBasisDisplay(material.pricing_basis)} />
+              <ScientificText text={material.quote_year ? ` / ${material.quote_year}` : ''} />
+              <ScientificText text={material.quote_source ? ` / ${material.quote_source}` : ''} />
             </div>
             <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.16em] ${
               material.reference_url ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : 'border-amber-200 bg-amber-50 text-amber-700'
             }`}>
-              {materialSourceTrust(material)}
+              <ScientificText text={materialSourceTrust(material)} />
             </span>
             {material.reference_url ? (
               <a
@@ -1363,7 +1365,7 @@ export default function Calculator() {
                   <option value="">{t('Select catalyst powder')}</option>
                   {catalystPowders.map((material) => (
                     <option key={String(material.id)} value={String(material.id)}>
-                      {calculatorMaterialLabel(material)}
+                      {formatScientificText(calculatorMaterialLabel(material))}
                     </option>
                   ))}
                 </select>
@@ -1375,7 +1377,7 @@ export default function Calculator() {
                   <option value="">{t('Select ionomer')}</option>
                   {ionomerOptions.map((material) => (
                     <option key={String(material.id)} value={String(material.id)}>
-                      {calculatorMaterialLabel(material)}
+                      {formatScientificText(calculatorMaterialLabel(material))}
                     </option>
                   ))}
                 </select>
@@ -1387,7 +1389,7 @@ export default function Calculator() {
                   <option value="">{t('Select membrane')}</option>
                   {membraneOptions.map((material) => (
                     <option key={String(material.id)} value={String(material.id)}>
-                      {calculatorMaterialLabel(material)}
+                      {formatScientificText(calculatorMaterialLabel(material))}
                     </option>
                   ))}
                 </select>
@@ -1399,7 +1401,7 @@ export default function Calculator() {
                   <option value="">{t('Select substrate / GDL')}</option>
                   {substrateOptions.map((material) => (
                     <option key={String(material.id)} value={String(material.id)}>
-                      {calculatorMaterialLabel(material)}
+                      {formatScientificText(calculatorMaterialLabel(material))}
                     </option>
                   ))}
                 </select>
@@ -1449,7 +1451,7 @@ export default function Calculator() {
                 <select value={electrocatalystConfig.templateId} onChange={(event) => updateElectroConfig({ templateId: event.target.value })} className="input-base mt-2">
                   {electroTemplates.map((template) => (
                     <option key={template.id} value={template.id}>
-                      {template.name}
+                      {formatScientificText(template.name)}
                     </option>
                   ))}
                 </select>
@@ -1468,30 +1470,30 @@ export default function Calculator() {
         {activeElectroTemplate ? (
           <div className="rounded-[24px] border border-emerald-200 bg-emerald-50/80 p-4">
             <div className="cp-subtle-label !text-emerald-700">{t('Selected preparation template')}</div>
-            <div className="mt-2 cp-heading-sm">{activeElectroTemplate.name}</div>
-            <div className="mt-2 text-sm leading-6 text-emerald-900">{activeElectroTemplate.description}</div>
+            <div className="mt-2 cp-heading-sm"><ScientificText text={activeElectroTemplate.name} /></div>
+            <div className="mt-2 text-sm leading-6 text-emerald-900"><ScientificText text={activeElectroTemplate.description} /></div>
             <div className="mt-3 flex flex-wrap gap-2">
               <span className="cp-chip">{t(applicationFamilyLabel(applicationFamily))}</span>
-              {activeElectroTemplate.manufacturing_mode ? <span className="cp-chip">{activeElectroTemplate.manufacturing_mode}</span> : null}
+              {activeElectroTemplate.manufacturing_mode ? <span className="cp-chip"><ScientificText text={activeElectroTemplate.manufacturing_mode} /></span> : null}
               <span className="cp-chip">{activeElectroTemplate.steps.length} {t("steps")}</span>
             </div>
             <div className="mt-4 grid gap-3 lg:grid-cols-3">
               <div>
                 <div className="cp-subtle-label !text-emerald-700">{t('Pre-treatment')}</div>
                 <div className="mt-2 flex flex-wrap gap-2">
-                  {(activeElectroTemplate.preprocess ?? []).map((item) => <span key={item} className="cp-chip">{item}</span>)}
+                  {(activeElectroTemplate.preprocess ?? []).map((item) => <span key={item} className="cp-chip"><ScientificText text={item} /></span>)}
                 </div>
               </div>
               <div>
                 <div className="cp-subtle-label !text-emerald-700">{t('Synthesis / coating')}</div>
                 <div className="mt-2 flex flex-wrap gap-2">
-                  {(activeElectroTemplate.synthesis ?? []).map((item) => <span key={item} className="cp-chip">{item}</span>)}
+                  {(activeElectroTemplate.synthesis ?? []).map((item) => <span key={item} className="cp-chip"><ScientificText text={item} /></span>)}
                 </div>
               </div>
               <div>
                 <div className="cp-subtle-label !text-emerald-700">{t('Post-treatment')}</div>
                 <div className="mt-2 flex flex-wrap gap-2">
-                  {(activeElectroTemplate.postprocess ?? []).map((item) => <span key={item} className="cp-chip">{item}</span>)}
+                  {(activeElectroTemplate.postprocess ?? []).map((item) => <span key={item} className="cp-chip"><ScientificText text={item} /></span>)}
                 </div>
               </div>
             </div>
@@ -1523,15 +1525,15 @@ export default function Calculator() {
               <div key={row.id} className="surface-ghost p-4">
                 <div className="flex flex-wrap items-center gap-3">
                   <select value={row.selection_key ?? ''} onChange={(event) => selectThermalOption(row.id, event.target.value)} className="input-base min-w-[220px] flex-[1.6_1_320px] pr-10">
-                    <option value="">{role === 'active_metal' ? t('Select active metal or precursor') : t('Select promoter material')}</option>
-                    {selectionOptions.map((option) => <option key={option.selection_key} value={option.selection_key}>{compactThermalOptionLabel(option, lang)}</option>)}
+                    <option value="">{formatScientificText(role === 'active_metal' ? t('Select active metal or precursor') : t('Select promoter material'))}</option>
+                    {selectionOptions.map((option) => <option key={option.selection_key} value={option.selection_key}>{formatScientificText(compactThermalOptionLabel(option, lang))}</option>)}
                   </select>
                   <div className="flex flex-none items-center gap-2"><input type="number" step="0.1" min="0" max="100" value={row.wt_pct} onChange={(event) => updateRow(row.id, { wt_pct: Number(event.target.value) })} className="input-base w-28 text-right font-mono" /><span className="text-xs text-slate-600">wt%</span></div>
                   {sourceChip(row)}
                   {priceField(row)}
                   <button onClick={() => removeRow(row.id)} className="flex h-10 w-10 flex-none items-center justify-center rounded-[18px] border border-slate-300 bg-white/74 text-slate-400 transition hover:border-red-300 hover:bg-red-50 hover:text-red-700" aria-label={t("Remove row")}>x</button>
                 </div>
-                <div className="mt-3 text-xs text-slate-600">{row.name || 'Select a material record.'}</div>
+                <div className="mt-3 text-xs text-slate-600"><ScientificText text={row.name || 'Select a material record.'} /></div>
                 <RecipeConsumptionFields value={row.recipe_consumption} onChange={(value) => updateRow(row.id, { recipe_consumption: value })} />
                 {row.source_type === 'manual' ? <PurchaseEvidenceFields value={row.purchase_evidence} onChange={(value) => updateRow(row.id, { purchase_evidence: value })} /> : null}
               </div>
@@ -1568,9 +1570,9 @@ export default function Calculator() {
       return (
         <section className="surface-card px-4 py-3">
           <dl className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_minmax(0,.65fr)_minmax(0,1.4fr)]">
-            <div className="min-w-0"><dt className="text-[11px] text-slate-400">{t('Composition')}</dt><dd className="mt-1 truncate text-xs font-medium text-slate-700" title={recipeSummary}>{recipeSummary}</dd></div>
+            <div className="min-w-0"><dt className="text-[11px] text-slate-400">{t('Composition')}</dt><dd className="mt-1 truncate text-xs font-medium text-slate-700" title={formatScientificText(recipeSummary)}><ScientificText text={recipeSummary} /></dd></div>
             <div className="min-w-0"><dt className="text-[11px] text-slate-400">{t('Price basis')}</dt><dd className="mt-1 truncate text-xs font-medium text-slate-700">{basis === 'reference' ? t('Monthly average') : t('Live prices')}</dd></div>
-            <div className="min-w-0"><dt className="text-[11px] text-slate-400">{t('Preparation basis')}</dt><dd className="mt-1 truncate text-xs font-medium text-slate-700" title={preparationSummary}>{preparationSummary}</dd></div>
+            <div className="min-w-0"><dt className="text-[11px] text-slate-400">{t('Preparation basis')}</dt><dd className="mt-1 truncate text-xs font-medium text-slate-700" title={formatScientificText(preparationSummary)}><ScientificText text={preparationSummary} /></dd></div>
           </dl>
         </section>
       );
@@ -1631,17 +1633,17 @@ export default function Calculator() {
           <div className="rounded-[22px] border border-slate-900/8 bg-white/62 p-4">
             <div className="cp-subtle-label">{t('Current case')}</div>
             <div className="mt-2 text-base font-semibold text-[#191f28]">{t(catalystDomainLabel(catalystDomain))}</div>
-            <div className="mt-2 text-sm leading-6 text-slate-600">{recipeSummary}</div>
+            <div className="mt-2 text-sm leading-6 text-slate-600"><ScientificText text={recipeSummary} /></div>
             <div className="mt-3 flex flex-wrap gap-2">
               <span className="cp-chip">{t(catalystDomainLabel(catalystDomain))}</span>
               {catalystDomain === 'electrocatalyst' ? <span className="cp-chip">{t(applicationFamilyLabel(applicationFamily))}</span> : null}
-              {activeBenchmark ? <span className="cp-chip">{activeBenchmark.title}</span> : null}
+              {activeBenchmark ? <span className="cp-chip"><ScientificText text={activeBenchmark.title} /></span> : null}
             </div>
           </div>
 
           <div className="rounded-[22px] border border-slate-900/8 bg-white/62 p-4">
             <div className="cp-subtle-label">{t('Preparation basis')}</div>
-            <div className="mt-2 text-base font-semibold text-[#191f28]">{preparationSummary}</div>
+            <div className="mt-2 text-base font-semibold text-[#191f28]"><ScientificText text={preparationSummary} /></div>
             <div className="mt-2 space-y-1">
               <CompactValueRow label={t('Production scale')} value={lang === 'ko' ? `${orderSize}톤` : `${orderSize} tons`} detail={lang === 'ko' ? `${t(scale.label)} / ${scale.rate}` : `${scale.label} scale / ${scale.rate}`} />
               <CompactValueRow
@@ -1678,14 +1680,14 @@ export default function Calculator() {
               ) : (
                 <div className="font-display text-[1.6rem] leading-none text-white">{t('Pending')}</div>
               )}
-              <div className="pb-1 text-sm text-slate-300">{latestSnapshotForCurrentCase ? fmtLabel : ''}</div>
+              <div className="pb-1 text-sm text-slate-300"><ScientificText text={latestSnapshotForCurrentCase ? fmtLabel : ''} /></div>
             </div>
             <div className="mt-2 text-xs leading-6 text-slate-300">
-              {latestSnapshotForCurrentCase
+              <ScientificText text={latestSnapshotForCurrentCase
                 ? lang === 'ko'
                   ? `${latestGenerated} 계산. 담체 ${latestSnapshotForCurrentCase.selectedSupportName ?? '미지정'} 기준.`
                   : `Generated ${latestGenerated}. ${latestSnapshotForCurrentCase.selectedSupportName ?? 'Support'} remained the active basis.`
-                : t('No result for this catalyst class yet. Run the estimate once to populate this summary.')}
+                : t('No result for this catalyst class yet. Run the estimate once to populate this summary.')} />
             </div>
           </div>
         </div>
@@ -1776,7 +1778,7 @@ export default function Calculator() {
           </div>
           {!isElectroValid ? (
             <div className="mt-4 rounded-[20px] border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-800">
-              {electrocatalystValidationMessage}
+              <ScientificText text={electrocatalystValidationMessage} />
             </div>
           ) : null}
           <div className="mt-5">{renderElectrocatalystPanel()}</div>
@@ -1795,7 +1797,7 @@ export default function Calculator() {
         </div>
         {!isThermalValid ? (
           <div className="mt-4 rounded-[20px] border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-800">
-            {thermalValidationMessage}
+            <ScientificText text={thermalValidationMessage} />
           </div>
         ) : null}
 
@@ -1819,7 +1821,7 @@ export default function Calculator() {
               <div className="flex flex-wrap items-center gap-3">
                 <select value={row.selection_key ?? ''} onChange={(event) => selectThermalOption(row.id, event.target.value)} className="input-base min-w-[220px] flex-[1.5_1_320px] pr-10">
                   <option value="">{t('Select support')}</option>
-                  {supportSelectionOptions.map((support) => <option key={support.selection_key} value={support.selection_key}>{compactThermalOptionLabel(support, lang)}</option>)}
+                  {supportSelectionOptions.map((support) => <option key={support.selection_key} value={support.selection_key}>{formatScientificText(compactThermalOptionLabel(support, lang))}</option>)}
                 </select>
                 {supportIsSplit ? (
                   <div className="flex flex-none items-center gap-2">
@@ -1833,7 +1835,7 @@ export default function Calculator() {
                 {priceField(row)}
                 {supportRows.length > 1 ? <button onClick={() => removeRow(row.id)} className="flex h-10 w-10 flex-none items-center justify-center rounded-[18px] border border-slate-300 bg-white/74 text-slate-400 transition hover:border-red-300 hover:bg-red-50 hover:text-red-700" aria-label={t("Remove support")}>x</button> : null}
               </div>
-              <div className="mt-3 text-xs text-slate-600">{row.name || t('Select a support record.')}</div>
+              <div className="mt-3 text-xs text-slate-600"><ScientificText text={row.name || t('Select a support record.')} /></div>
               <RecipeConsumptionFields value={row.recipe_consumption} onChange={(value) => updateRow(row.id, { recipe_consumption: value })} />
               {row.source_type === 'manual' ? <PurchaseEvidenceFields value={row.purchase_evidence} onChange={(value) => updateRow(row.id, { purchase_evidence: value })} /> : null}
             </div>
@@ -1869,18 +1871,18 @@ export default function Calculator() {
         {activeBenchmark ? (
           <div className="rounded-[24px] border border-emerald-200 bg-emerald-50/80 px-4 py-4 text-sm text-emerald-900">
             <div className="cp-subtle-label !text-emerald-700">{t('Loaded reference baseline')}</div>
-            <div className="mt-2 font-semibold">{activeBenchmark.route.name}</div>
-            <div className="mt-2 leading-6">{activeBenchmark.screening_summary}</div>
+            <div className="mt-2 font-semibold"><ScientificText text={activeBenchmark.route.name} /></div>
+            <div className="mt-2 leading-6"><ScientificText text={activeBenchmark.screening_summary} /></div>
             <div className="mt-3 flex flex-wrap gap-2">
-              <span className="cp-chip">{catalystDomainLabel(activeBenchmark.catalyst_domain)}</span>
+              <span className="cp-chip"><ScientificText text={catalystDomainLabel(activeBenchmark.catalyst_domain)} /></span>
               <span className="cp-chip">{t(applicationFamilyLabel(activeBenchmark.application_family))}</span>
             </div>
           </div>
         ) : null}
         <div className="surface-ghost p-3.5">
           <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-            <div><div className="cp-subtle-label">{t('Production scale')}</div><div className="mt-3 flex flex-wrap items-center gap-3"><input type="number" min="1" step="1" value={orderSize} onChange={(event) => setOrderSize(Math.max(1, Number(event.target.value) || 1))} className="input-base w-32 text-center font-mono" title={t('Order size in tons; sets the Small, Medium or Large equipment basis.')} /><span className="text-sm text-slate-600">{t('tons')}</span><span className={`rounded-full border px-3 py-1 text-xs font-semibold ${scale.classes}`}>{t(scale.label)} / {scale.rate}</span></div></div>
-            <div className="cp-toolbar">{QUICK_ORDER_SIZES.map((size) => <button key={size} onClick={() => setOrderSize(size)} className={`rounded-[16px] px-3 py-2 text-xs font-semibold transition ${orderSize === size ? 'bg-slate-950 text-white' : 'text-slate-600 hover:bg-white hover:text-slate-900'}`}>{lang === 'ko' ? `${size}톤` : `${size} tons`}</button>)}</div>
+            <div><div className="cp-subtle-label">{t('Production scale')}</div><div className="mt-3 flex flex-wrap items-center gap-3"><input type="number" min="1" step="1" value={orderSize} onChange={(event) => setOrderSize(Math.max(1, Number(event.target.value) || 1))} className="input-base w-32 text-center font-mono" title={t('Order size in tons; sets the Small, Medium or Large equipment basis.')} /><span className="text-sm text-slate-600">{t('tons')}</span><span className={`rounded-full border px-3 py-1 text-xs font-semibold ${scale.classes}`}>{t(scale.label)} / <ScientificText text={scale.rate} /></span></div></div>
+            <div className="cp-toolbar">{QUICK_ORDER_SIZES.map((size) => <button key={size} onClick={() => setOrderSize(size)} className={`rounded-[16px] px-3 py-2 text-xs font-semibold transition ${orderSize === size ? 'bg-slate-950 text-white' : 'text-slate-600 hover:bg-white hover:text-slate-900'}`}><ScientificText text={lang === 'ko' ? `${size}톤` : `${size} tons`} /></button>)}</div>
           </div>
         </div>
           {catalystDomain === 'thermal' ? <details className="rounded-xl border border-slate-200 bg-white p-4" open={productionRate !== "" || undefined}>
@@ -1930,11 +1932,11 @@ export default function Calculator() {
                     return (
                       <button key={step.key} type="button" role="checkbox" aria-checked={checked} aria-label={t(step.label)}
                         data-step-key={step.key} onClick={() => available && toggleStep(step.key)} disabled={!available}
-                        title={available ? t(step.label) : `${t('Unavailable at this production scale')}: ${t(scale.label)}`}
+                        title={formatScientificText(available ? t(step.label) : `${t('Unavailable at this production scale')}: ${t(scale.label)}`)}
                         className={`flex h-14 w-full items-center gap-2 rounded-lg px-2 text-left transition-colors focus-visible:outline-2 focus-visible:outline-teal-600 ${!available ? 'cursor-not-allowed text-slate-300' : checked ? 'bg-teal-50/80 text-teal-800' : 'text-slate-600 hover:bg-slate-50'}`}>
                         <span aria-hidden="true" className={`flex h-4 w-4 shrink-0 items-center justify-center rounded border text-[11px] ${checked ? 'border-teal-600 bg-teal-600 text-white' : 'border-slate-300 text-transparent'}`}>✓</span>
                         <span className="min-w-0 flex-1"><span className="line-clamp-2 text-[12px] font-medium leading-4">{t(step.label)}</span></span>
-                        <span className="w-7 shrink-0 text-right font-mono text-[11px] text-slate-400" aria-hidden="true">{count > 1 ? `×${count}` : ''}</span>
+                        <span className="w-7 shrink-0 text-right font-mono text-[11px] text-slate-400" aria-hidden="true"><ScientificText text={count > 1 ? `×${count}` : ''} /></span>
                       </button>
                     );
                   })}
@@ -2031,7 +2033,7 @@ export default function Calculator() {
         ? renderManufacturingSection()
         : (
           <section className="surface-card p-4">
-            <div className={`rounded-[24px] border px-4 py-4 text-sm ${isValid ? 'border-emerald-200 bg-emerald-50 text-emerald-800' : 'border-amber-200 bg-amber-50 text-amber-800'}`}>{validationMessage}</div>
+            <div className={`rounded-[24px] border px-4 py-4 text-sm ${isValid ? 'border-emerald-200 bg-emerald-50 text-emerald-800' : 'border-amber-200 bg-amber-50 text-amber-800'}`}><ScientificText text={validationMessage} /></div>
             {!isRouteReady ? <div className="mt-3 rounded-[18px] border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
               {templateCostsError
                 ? t('Preparation costs could not be loaded. Refresh this page or choose the preparation steps manually.')
@@ -2050,8 +2052,8 @@ export default function Calculator() {
             {loadedSavedName ? (
               <div className="mt-4 rounded-[24px] border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
                 {lang === 'ko'
-                  ? <>저장된 계산 <span className="font-semibold">{loadedSavedName}</span>을(를) 현재 입력으로 불러왔습니다. 라이브러리 링크가 없는 행은 저장된 가격을 수동 입력값으로 복원했습니다.</>
-                  : <>{t("Loaded saved estimate")} <span className="font-semibold">{loadedSavedName}</span> {t("into the draft. Rows without a library link were restored with their saved prices as manual inputs.")}</>}
+                  ? <>저장된 계산 <span className="font-semibold"><ScientificText text={loadedSavedName} /></span>을(를) 현재 입력으로 불러왔습니다. 라이브러리 링크가 없는 행은 저장된 가격을 수동 입력값으로 복원했습니다.</>
+                  : <>{t("Loaded saved estimate")} <span className="font-semibold"><ScientificText text={loadedSavedName} /></span> {t("into the draft. Rows without a library link were restored with their saved prices as manual inputs.")}</>}
               </div>
             ) : null}
             {savedEstimates.length > 0 ? (
@@ -2059,7 +2061,7 @@ export default function Calculator() {
                 <div className="flex items-center justify-between gap-3">
                   <div className="cp-subtle-label">{t('Saved estimates')}</div>
                   <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                    {lang === 'ko' ? `${savedEstimates.length}개 저장됨` : `${savedEstimates.length} ${t('saved')}`}
+                    <ScientificText text={lang === 'ko' ? `${savedEstimates.length}개 저장됨` : `${savedEstimates.length} ${t('saved')}`} />
                   </div>
                 </div>
                 <div className="mt-2 text-xs leading-6 text-slate-600">
@@ -2072,11 +2074,11 @@ export default function Calculator() {
                     return (
                       <div key={saved.id} className="flex flex-wrap items-center justify-between gap-3 rounded-[16px] border border-slate-200 bg-white px-3.5 py-2.5">
                         <div className="min-w-0">
-                          <div className="truncate text-sm font-semibold text-[#191f28]">{saved.name}</div>
+                          <div className="truncate text-sm font-semibold text-[#191f28]"><ScientificText text={saved.name} /></div>
                           <div className="mt-0.5 text-xs text-slate-600">
-                            {saved.metal_symbol ? `${saved.metal_loading_wt_pct}% ${saved.metal_symbol}` : saved.catalyst_domain}
-                            {saved.support_name ? ` / ${saved.support_name}` : ''} · {saved.order_size_tons} {t("tons ·")}{' '}
-                            {formatPrice(toDisplay(saved.estimated_price_per_lb))}{fmtLabel} · {saved.created_at.slice(0, 10)}
+                            <ScientificText text={saved.metal_symbol ? `${saved.metal_loading_wt_pct}% ${saved.metal_symbol}` : saved.catalyst_domain} />
+                            <ScientificText text={saved.support_name ? ` / ${saved.support_name}` : ''} /> · {saved.order_size_tons} {t("tons ·")}{' '}
+                            {formatPrice(toDisplay(saved.estimated_price_per_lb))}{fmtLabel} · <ScientificText text={saved.created_at.slice(0, 10)} />
                           </div>
                         </div>
                         <div className="flex items-center gap-2">

@@ -7,9 +7,15 @@ const require = createRequire(new URL('../frontend/package.json', import.meta.ur
 const ts = require('typescript');
 async function loadHelper(name) {
   const source = readFileSync(new URL(`../frontend/src/lib/${name}.ts`, import.meta.url), 'utf8');
-  const { outputText } = ts.transpileModule(source, {
+  let { outputText } = ts.transpileModule(source, {
     compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 },
   });
+  if (name === 'export-csv') {
+    const dependency = ts.transpileModule(readFileSync(new URL('../frontend/src/lib/scientific-text.ts', import.meta.url), 'utf8'), {
+      compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 },
+    }).outputText;
+    outputText = outputText.replace('./scientific-text', `data:text/javascript;base64,${Buffer.from(dependency).toString('base64')}`);
+  }
   return import(`data:text/javascript;base64,${Buffer.from(outputText).toString('base64')}`);
 }
 

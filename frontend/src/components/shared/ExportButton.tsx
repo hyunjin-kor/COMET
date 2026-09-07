@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { exportEstimateCsv, exportEstimateJson } from '../../lib/api';
 import { useLang } from '../../lib/i18n';
+import { formatScientificText } from '../../lib/scientific-text';
 
 type ExportFormat = 'json' | 'csv';
 
@@ -52,7 +53,7 @@ export default function ExportButton({
         );
       } else {
         const payload = await exportEstimateCsv(estimateId);
-        downloadBlob(payload, 'text/csv;charset=utf-8', `${baseName}-${estimateId}.csv`);
+        downloadBlob(formatScientificText(payload), 'text/csv;charset=utf-8', `${baseName}-${estimateId}.csv`);
       }
     } catch (caughtError) {
       setError(caughtError instanceof Error ? caughtError.message : 'Export failed');

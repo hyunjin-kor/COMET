@@ -1,3 +1,5 @@
+import { ScientificText } from '../components/shared/ScientificText';
+import { formatScientificText } from '../lib/scientific-text';
 import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FitPriceText } from '../components/shared/FitPriceText';
@@ -223,7 +225,7 @@ function SourceBadge({ sourceType }: { sourceType: MetalPrice['source_type'] }) 
   return (
     <span className={`inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${badge.classes}`}>
       <span className={`h-2 w-2 rounded-full ${badge.dot}`} />
-      {badge.label}
+      <ScientificText text={badge.label} />
     </span>
   );
 }
@@ -231,9 +233,9 @@ function SourceBadge({ sourceType }: { sourceType: MetalPrice['source_type'] }) 
 function StatusTile({ label, value, detail }: { label: string; value: string; detail: string }) {
   return (
     <div className="cp-metric-tile">
-      <div className="cp-subtle-label">{label}</div>
-      <div className="mt-1.5 text-2xl font-display text-[#191f28]">{value}</div>
-      <div className="mt-1 text-xs leading-5 text-slate-600">{detail}</div>
+      <div className="cp-subtle-label"><ScientificText text={label} /></div>
+      <div className="mt-1.5 text-2xl font-display text-[#191f28]"><ScientificText text={value} /></div>
+      <div className="mt-1 text-xs leading-5 text-slate-600"><ScientificText text={detail} /></div>
     </div>
   );
 }
@@ -242,10 +244,10 @@ function InspectorRow({ label, value, detail }: { label: string; value: string; 
   return (
     <div className="cp-data-row">
       <div>
-        <div className="cp-subtle-label">{label}</div>
-        {detail ? <div className="mt-1 text-xs leading-5 text-slate-600">{detail}</div> : null}
+        <div className="cp-subtle-label"><ScientificText text={label} /></div>
+        {detail ? <div className="mt-1 text-xs leading-5 text-slate-600"><ScientificText text={detail} /></div> : null}
       </div>
-      <div className="text-right text-sm font-semibold text-[#191f28]">{value}</div>
+      <div className="text-right text-sm font-semibold text-[#191f28]"><ScientificText text={value} /></div>
     </div>
   );
 }
@@ -254,7 +256,7 @@ function DarkChartFallback({ label }: { label: string }) {
   return (
     <div className="flex h-full min-h-[320px] flex-col items-center justify-center gap-3 rounded-[28px] border border-white/10 bg-white/4 text-center">
       <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#0d9488] border-t-transparent" />
-      <div className="text-sm text-slate-300">{label}</div>
+      <div className="text-sm text-slate-300"><ScientificText text={label} /></div>
     </div>
   );
 }
@@ -504,7 +506,7 @@ export default function Prices() {
           {['Platinum Group Metals', 'Precious Metals', 'Industrial Metals'].map((title, idx) => (
             <div key={title} className="surface-ghost overflow-hidden p-4">
               <div className="mb-3 flex items-center justify-between gap-3">
-                <div className="cp-subtle-label">{title}</div>
+                <div className="cp-subtle-label"><ScientificText text={title} /></div>
                 <span className="cp-chip">{t("Loading…")}</span>
               </div>
               <SkeletonListRows count={idx === 2 ? 5 : 3} />
@@ -539,7 +541,7 @@ export default function Prices() {
               text={fmtPrice(selectedRow.price, selectedRow.unit, unit)}
               className="min-w-0 text-white"
             />
-            <div className="pb-1 text-sm text-slate-300">{displayTrackedUnit(selectedRow.unit, unit)}</div>
+            <div className="pb-1 text-sm text-slate-300"><ScientificText text={displayTrackedUnit(selectedRow.unit, unit)} /></div>
           </div>
           <div className="mt-3 flex flex-wrap gap-2">
             <SourceBadge sourceType={selectedRow.source_type} />
@@ -574,7 +576,7 @@ export default function Prices() {
                   onClick={() => navigate(`/benchmarks/${entry.family}`)}
                   className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-700 transition hover:border-[#0d9488] hover:bg-[#e6f5f2] hover:text-[#0f766e]"
                 >
-                  {entry.title.replace(/ reference family$/i, '')}
+                  <ScientificText text={entry.title.replace(/ reference family$/i, '')} />
                 </button>
               ))}
             </div>
@@ -613,13 +615,13 @@ export default function Prices() {
                     : refreshing ? t('Refreshing live quotes') : latestFetchedAt ? t('Live quotes loaded') : t('Stored pricing basis')}
                 </div>
                 <div className="mt-1 text-xs leading-5 text-slate-600">
-                  {basis === 'reference'
+                  <ScientificText text={basis === 'reference'
                     ? (lang === 'ko'
                       ? `IMF PCPS·Johnson Matthey 월평균, 금속 ${monthlyQuoteCount}종${basisMonth ? `, 최근 월 ${basisMonth}` : ''}`
                       : `IMF PCPS and Johnson Matthey monthly averages, ${monthlyQuoteCount} metals${basisMonth ? `, latest month ${basisMonth}` : ''}`)
                     : latestFetchedAt
                       ? (lang === 'ko' ? `금속 ${liveQuoteCount}종 실시간 갱신 ${formatSyncStamp(latestFetchedAt, 'ko-KR')}` : `${liveQuoteCount} metals updated live ${formatSyncStamp(latestFetchedAt)}`)
-                      : t('Indexed and manual prices are available even before a live refresh.')}
+                      : t('Indexed and manual prices are available even before a live refresh.')} />
                 </div>
               </div>
               <button onClick={handleRefresh} disabled={refreshing} className="cp-button-secondary px-4 py-2.5 text-sm">
@@ -658,8 +660,8 @@ export default function Prices() {
                 {supportSeries.map((row) => (
                   <div key={row.id} className="flex items-baseline justify-between gap-3 rounded-[14px] border border-slate-100 bg-white px-3 py-2 text-sm">
                     <div className="min-w-0">
-                      <div className="truncate font-semibold text-[#191f28]" title={row.name}>{row.material}</div>
-                      <div className="truncate text-xs text-slate-500" title={row.note}>HS {row.hs}{row.basis_month ? `, ${row.basis_month}` : ''}</div>
+                      <div className="truncate font-semibold text-[#191f28]" title={formatScientificText(row.name)}><ScientificText text={row.material} /></div>
+                      <div className="truncate text-xs text-slate-500" title={formatScientificText(row.note)}>HS <ScientificText text={row.hs} /><ScientificText text={row.basis_month ? `, ${row.basis_month}` : ''} /></div>
                     </div>
                     <div className="whitespace-nowrap font-mono text-sm text-[#191f28]">
                       {row.price != null ? `$${row.price.toFixed(2)}/kg` : t('No data')}
@@ -682,7 +684,7 @@ export default function Prices() {
                       trendPeriod === value ? 'bg-white text-[#191f28] shadow-[0_1px_3px_rgba(15,23,42,0.08)]' : 'text-slate-600 hover:text-slate-700'
                     }`}
                   >
-                    {PERIOD_LABELS[value]}
+                    <ScientificText text={PERIOD_LABELS[value]} />
                   </button>
                 ))}
               </div>
@@ -694,13 +696,13 @@ export default function Prices() {
                   onClick={() => setSelected(movers.top.symbol)}
                   className={`rounded-full border px-3 py-1 font-mono text-xs font-semibold transition hover:opacity-80 ${changeTone(movers.top.change_pct!)}`}
                 >
-                  ▲ {movers.top.symbol} {fmtChangePct(movers.top.change_pct!)}
+                  ▲ <ScientificText text={movers.top.symbol} /> <ScientificText text={fmtChangePct(movers.top.change_pct!)} />
                 </button>
                 <button
                   onClick={() => setSelected(movers.bottom.symbol)}
                   className={`rounded-full border px-3 py-1 font-mono text-xs font-semibold transition hover:opacity-80 ${changeTone(movers.bottom.change_pct!)}`}
                 >
-                  ▼ {movers.bottom.symbol} {fmtChangePct(movers.bottom.change_pct!)}
+                  ▼ <ScientificText text={movers.bottom.symbol} /> <ScientificText text={fmtChangePct(movers.bottom.change_pct!)} />
                 </button>
               </div>
             ) : null}
@@ -719,7 +721,7 @@ export default function Prices() {
                 <div key={groupKey} className="surface-ghost overflow-hidden p-4">
                   <div className="mb-3 flex items-center justify-between gap-3">
                     <div className="cp-subtle-label">{t(group.title)}</div>
-                    <span className="cp-chip">{lang === 'ko' ? `${rows.length}종` : `${rows.length} metals`}</span>
+                    <span className="cp-chip"><ScientificText text={lang === 'ko' ? `${rows.length}종` : `${rows.length} metals`} /></span>
                   </div>
 
                   <div className="space-y-2">
@@ -743,7 +745,7 @@ export default function Prices() {
                                 color: readableInk(METAL_COLORS[row.symbol] || '#0f766e'),
                               }}
                             >
-                              {row.symbol}
+                              <ScientificText text={row.symbol} />
                             </span>
                             <div className="min-w-0">
                               <div className="truncate font-semibold text-[#191f28]">{t(row.name)}</div>
@@ -758,12 +760,12 @@ export default function Prices() {
                               <>
                                 <Sparkline points={trend.points} color={trend.change_pct! >= 0 ? '#059669' : '#f04452'} />
                                 <span className={`rounded-full border px-2 py-0.5 font-mono text-xs font-semibold ${changeTone(trend.change_pct!)}`}>
-                                  {fmtChangePct(trend.change_pct!)}
+                                  <ScientificText text={fmtChangePct(trend.change_pct!)} />
                                 </span>
                               </>
                             ) : (
                               <span className="text-xs text-slate-600">
-                                {row.source_type === 'live' ? t('History accumulating') : t('No market trend')}
+                                <ScientificText text={row.source_type === 'live' ? t('History accumulating') : t('No market trend')} />
                               </span>
                             )}
                           </div>
@@ -771,14 +773,14 @@ export default function Prices() {
                           <SourceBadge sourceType={row.source_type} />
 
                           <div className="text-left sm:text-right">
-                            <div className="text-lg font-display text-[#191f28]">{fmtPrice(row.price, row.unit, unit)}</div>
+                            <div className="text-lg font-display text-[#191f28]"><ScientificText text={fmtPrice(row.price, row.unit, unit)} /></div>
                             <div className="text-xs text-slate-600">
-                              {displayTrackedUnit(row.unit, unit)}
+                              <ScientificText text={displayTrackedUnit(row.unit, unit)} />
                               {row.unit === '$/troy_oz' && row.price != null
                                 ? ` · $${row.price.toLocaleString('en-US', { maximumFractionDigits: row.price >= 100 ? 0 : 2 })}/ozt`
                                 : ''}
                             </div>
-                            {quoteAge ? <div className="mt-0.5 text-xs text-slate-600">{quoteAge}</div> : null}
+                            {quoteAge ? <div className="mt-0.5 text-xs text-slate-600"><ScientificText text={quoteAge} /></div> : null}
                           </div>
                         </button>
                       );
@@ -843,7 +845,7 @@ export default function Prices() {
           <div className="flex flex-col gap-4 border-b border-white/10 pb-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <div className="cp-subtle-label !text-slate-400">{t('Selected Metal')}</div>
-              <h2 className="font-display mt-2 text-[clamp(1.75rem,2.4vw,2.35rem)] leading-[1.0] text-white">{selectedRow ? t(selectedRow.name) : t('Choose a metal')}</h2>
+              <h2 className="font-display mt-2 text-[clamp(1.75rem,2.4vw,2.35rem)] leading-[1.0] text-white"><ScientificText text={selectedRow ? t(selectedRow.name) : t('Choose a metal')} /></h2>
               <div className="mt-2 flex flex-wrap items-center gap-2">
                 {selectedRow ? <SourceBadge sourceType={selectedRow.source_type} /> : null}
                 {pctChange != null ? (
@@ -852,7 +854,7 @@ export default function Prices() {
                       isUp ? 'border-emerald-300/30 bg-emerald-400/10 text-emerald-100' : 'border-rose-300/30 bg-rose-400/10 text-rose-100'
                     }`}
                   >
-                    {isUp ? '+' : '-'}
+                    <ScientificText text={isUp ? '+' : '-'} />
                     {Math.abs(pctChange).toFixed(1)}%
                   </span>
                 ) : null}
@@ -868,7 +870,7 @@ export default function Prices() {
                     period === value ? 'bg-[#0f766e] text-white' : 'text-slate-300 hover:bg-white/8'
                   }`}
                 >
-                  {PERIOD_LABELS[value]}
+                  <ScientificText text={PERIOD_LABELS[value]} />
                 </button>
               ))}
             </div>
@@ -911,22 +913,22 @@ export default function Prices() {
                 <div className="mt-5 grid gap-3 sm:grid-cols-3">
                   <div className="cp-metric-tile-dark">
                     <div className="cp-subtle-label !text-slate-400">{t('Current')}</div>
-                    <div className="mt-2 text-xl font-display text-white">{fmtConverted(displayHistory[displayHistory.length - 1]!.price)}</div>
-                    <div className="mt-1 text-xs leading-5 text-slate-400">{selectedDisplayUnit}</div>
+                    <div className="mt-2 text-xl font-display text-white"><ScientificText text={fmtConverted(displayHistory[displayHistory.length - 1]!.price)} /></div>
+                    <div className="mt-1 text-xs leading-5 text-slate-400"><ScientificText text={selectedDisplayUnit} /></div>
                   </div>
                   <div className="cp-metric-tile-dark">
                     <div className="cp-subtle-label !text-slate-400">{t('Period high')}</div>
                     <div className="mt-2 text-xl font-display text-white">
-                      {fmtConverted(Math.max(...displayHistory.map((point) => point.high ?? point.price)))}
+                      <ScientificText text={fmtConverted(Math.max(...displayHistory.map((point) => point.high ?? point.price)))} />
                     </div>
                     <div className="mt-1 text-xs leading-5 text-slate-400">{t('Maximum observed value')}</div>
                   </div>
                   <div className="cp-metric-tile-dark">
                     <div className="cp-subtle-label !text-slate-400">{t('Period low')}</div>
                     <div className="mt-2 text-xl font-display text-white">
-                      {fmtConverted(Math.min(...displayHistory.map((point) => point.low ?? point.price)))}
+                      <ScientificText text={fmtConverted(Math.min(...displayHistory.map((point) => point.low ?? point.price)))} />
                     </div>
-                    <div className="mt-1 text-xs leading-5 text-slate-400">{historySource || 'Stored metal price series'}</div>
+                    <div className="mt-1 text-xs leading-5 text-slate-400"><ScientificText text={historySource || 'Stored metal price series'} /></div>
                   </div>
                 </div>
 
@@ -934,9 +936,9 @@ export default function Prices() {
                   <div className="rounded-[22px] border border-white/10 bg-white/6 p-3">
                     <div className="cp-subtle-label !text-slate-400">{t('Period return')}</div>
                     <div className={`mt-2 font-mono text-xl font-semibold ${pctChange == null ? 'text-white' : pctChange >= 0 ? 'text-emerald-300' : 'text-rose-300'}`}>
-                      {pctChange != null ? fmtChangePct(pctChange) : 'N/A'}
+                      <ScientificText text={pctChange != null ? fmtChangePct(pctChange) : 'N/A'} />
                     </div>
-                    <div className="mt-1 text-xs leading-5 text-slate-400">{lang === 'ko' ? `${PERIOD_LABELS[period]} 구간 변동률` : `Over the ${PERIOD_LABELS[period]} window`}</div>
+                    <div className="mt-1 text-xs leading-5 text-slate-400"><ScientificText text={lang === 'ko' ? `${PERIOD_LABELS[period]} 구간 변동률` : `Over the ${PERIOD_LABELS[period]} window`} /></div>
                   </div>
                   <div className="rounded-[22px] border border-white/10 bg-white/6 p-3">
                     <div className="cp-subtle-label !text-slate-400">{t('Annualized volatility')}</div>
@@ -957,8 +959,8 @@ export default function Prices() {
                       color={METAL_COLORS[selected || 'Pt'] || '#0d9488'}
                     />
                     <div className="mt-2 flex justify-between text-xs text-slate-400">
-                      <span>{fmtConverted(Math.min(...displayHistory.map((point) => point.low ?? point.price)))}</span>
-                      <span>{fmtConverted(Math.max(...displayHistory.map((point) => point.high ?? point.price)))}</span>
+                      <span><ScientificText text={fmtConverted(Math.min(...displayHistory.map((point) => point.low ?? point.price)))} /></span>
+                      <span><ScientificText text={fmtConverted(Math.max(...displayHistory.map((point) => point.high ?? point.price)))} /></span>
                     </div>
                   </div>
                 </div>
@@ -968,17 +970,17 @@ export default function Prices() {
                     <div className="rounded-[22px] border border-white/10 bg-white/6 p-3">
                       <div className="cp-subtle-label !text-slate-400">{t('Source reliability')}</div>
                       <div className="mt-2 text-sm font-semibold text-white">{t(selectedRow.evidence.label)}</div>
-                      <div className="mt-1 text-xs leading-5 text-slate-400">{selectedRow.evidence.note}</div>
+                      <div className="mt-1 text-xs leading-5 text-slate-400"><ScientificText text={selectedRow.evidence.note} /></div>
                     </div>
                     <div className="rounded-[22px] border border-white/10 bg-white/6 p-3">
                       <div className="cp-subtle-label !text-slate-400">{t('Confidence')}</div>
                       <div className="mt-2 text-sm font-semibold text-white">{selectedRow.evidence.confidence_score}</div>
-                      <div className="mt-1 text-xs leading-5 text-slate-400">{selectedRow.evidence.transparency}</div>
+                      <div className="mt-1 text-xs leading-5 text-slate-400"><ScientificText text={selectedRow.evidence.transparency} /></div>
                     </div>
                     <div className="rounded-[22px] border border-white/10 bg-white/6 p-3">
                       <div className="cp-subtle-label !text-slate-400">{t('Quote age')}</div>
-                      <div className="mt-2 text-sm font-semibold text-white">{selectedRow.evidence.freshness_status}</div>
-                      <div className="mt-1 text-xs leading-5 text-slate-400">{selectedRow.evidence.acquisition_mode}</div>
+                      <div className="mt-2 text-sm font-semibold text-white"><ScientificText text={selectedRow.evidence.freshness_status} /></div>
+                      <div className="mt-1 text-xs leading-5 text-slate-400"><ScientificText text={selectedRow.evidence.acquisition_mode} /></div>
                     </div>
                   </div>
                 ) : null}
@@ -1006,7 +1008,7 @@ export default function Prices() {
                         trendPeriod === value ? 'bg-white text-[#191f28] shadow-[0_1px_3px_rgba(15,23,42,0.08)]' : 'text-slate-600 hover:text-slate-700'
                       }`}
                     >
-                      {PERIOD_LABELS[value]}
+                      <ScientificText text={PERIOD_LABELS[value]} />
                     </button>
                   ))}
                 </div>
@@ -1034,7 +1036,7 @@ export default function Prices() {
                       } ${isBase ? 'cursor-default' : ''}`}
                       style={isOn ? { backgroundColor: METAL_COLORS[symbol] || '#0d9488' } : undefined}
                     >
-                      {symbol}
+                      <ScientificText text={symbol} />
                     </button>
                   );
                 })}

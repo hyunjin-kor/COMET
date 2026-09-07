@@ -1,3 +1,4 @@
+import { ScientificText } from '../components/shared/ScientificText';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Skeleton } from '../components/shared/Skeleton';
@@ -97,11 +98,11 @@ function toCalculatorRows(candidate: DecisionCandidate): CalculatorRow[] {
 function MetricTile({ label, value, detail }: { label: string; value: string; detail: string }) {
   return (
     <div className="cp-metric-tile">
-      <div className="cp-subtle-label">{label}</div>
+      <div className="cp-subtle-label"><ScientificText text={label} /></div>
       <div className="mt-2 text-[clamp(1.35rem,2vw,2rem)] leading-[1.08] font-display text-[#191f28] [overflow-wrap:anywhere]">
-        {value}
+        <ScientificText text={value} />
       </div>
-      <div className="mt-1 text-xs leading-5 text-slate-600">{detail}</div>
+      <div className="mt-1 text-xs leading-5 text-slate-600"><ScientificText text={detail} /></div>
     </div>
   );
 }
@@ -260,8 +261,8 @@ export default function Compare() {
               <h1 className="font-display text-[clamp(1.4rem,2vw,1.8rem)] leading-[1.2] text-white">{t('Literature Benchmarks')}</h1>
               <p className="mt-2 text-sm text-white/60">{t('Screen published routes before you edit the cost estimate.')}</p>
               <div className="mt-3 flex flex-wrap gap-2">
-                {activeFamily ? <span className="cp-chip-dark">{activeFamily.title}</span> : null}
-                {benchmark.reaction ? <span className="cp-chip-dark">{benchmark.reaction}</span> : null}
+                {activeFamily ? <span className="cp-chip-dark"><ScientificText text={activeFamily.title} /></span> : null}
+                {benchmark.reaction ? <span className="cp-chip-dark"><ScientificText text={benchmark.reaction} /></span> : null}
                 <span className="cp-chip-dark">
                   {benchmark.price_basis === 'reference' ? t('Academic basis: monthly averages') : t('Practical basis: live quotes')}
                 </span>
@@ -270,11 +271,11 @@ export default function Compare() {
                 <span className="cp-chip-dark">{t(benchmark.decision_profile.label)}</span>
                 <span className="cp-chip-dark">{t('Updated')} {updatedAt}</span>
               </div>
-              <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">{benchmark.objective}</p>
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300"><ScientificText text={benchmark.objective} /></p>
               {winner ? (
                 <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-                  <div className="cp-metric-tile-dark"><div className="cp-subtle-label !text-slate-400">{t('Top route')}</div><div className="mt-2 text-xl font-display text-white">{winner.title}</div></div>
-                  <div className="cp-metric-tile-dark"><div className="cp-subtle-label !text-slate-400">{t(winner.summary.economics_basis_label)}</div><div className="mt-2 text-xl font-display text-white">{benchmarkCostValue(winner)}</div><div className="mt-1 text-xs text-slate-400">{benchmarkCostDetail(winner)}</div></div>
+                  <div className="cp-metric-tile-dark"><div className="cp-subtle-label !text-slate-400">{t('Top route')}</div><div className="mt-2 text-xl font-display text-white"><ScientificText text={winner.title} /></div></div>
+                  <div className="cp-metric-tile-dark"><div className="cp-subtle-label !text-slate-400">{t(winner.summary.economics_basis_label)}</div><div className="mt-2 text-xl font-display text-white"><ScientificText text={benchmarkCostValue(winner)} /></div><div className="mt-1 text-xs text-slate-400"><ScientificText text={benchmarkCostDetail(winner)} /></div></div>
                   <div className="cp-metric-tile-dark"><div className="cp-subtle-label !text-slate-400">{t('Price evidence')}</div><div className="mt-2 text-xl font-display text-white">{winner.scores.evidence.toFixed(1)}</div></div>
                   <div className="cp-metric-tile-dark"><div className="cp-subtle-label !text-slate-400">{t('Literature bank')}</div><div className="mt-2 text-xl font-display text-white">{benchmark.citations.length}</div><div className="mt-1 text-xs text-slate-400">{t('Public benchmark links in the active reaction family')}</div></div>
                 </div>
@@ -287,7 +288,7 @@ export default function Compare() {
                 <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                   {families.map((option) => (
                     <button type="button" key={option.family} onClick={() => handleFamilyChange(option.family)} className={`rounded-[18px] border px-3 py-2 text-left text-sm transition ${option.family === family ? 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e]' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}>
-                      <div className="font-semibold">{option.title}</div>
+                      <div className="font-semibold"><ScientificText text={option.title} /></div>
                       <div className="mt-1 text-xs leading-5 text-slate-600">{t(catalystDomainLabel(option.catalyst_domain))} / {t(applicationFamilyLabel(option.application_family))}</div>
                     </button>
                   ))}
@@ -314,16 +315,16 @@ export default function Compare() {
 
       {sectionState.activeSection.id === 'routes' ? (
         <section className="surface-card p-4">
-          <div className="flex items-start justify-between gap-3"><div><div className="cp-subtle-label">{t('Published routes')}</div><div className="cp-heading-lg mt-2">{t('How do these routes compare right now?')}</div></div><span className="cp-chip">{lang === 'ko' ? `${candidates.length}개 후보` : `${candidates.length} candidates`}</span></div>
+          <div className="flex items-start justify-between gap-3"><div><div className="cp-subtle-label">{t('Published routes')}</div><div className="cp-heading-lg mt-2">{t('How do these routes compare right now?')}</div></div><span className="cp-chip"><ScientificText text={lang === 'ko' ? `${candidates.length}개 후보` : `${candidates.length} candidates`} /></span></div>
           <div className="mt-4 space-y-3">
             {candidates.map((candidate, index) => (
               <button type="button" key={candidate.slug} onClick={() => { setActiveSlug(candidate.slug); sectionState.setActiveSection('detail'); }} className={`w-full rounded-[24px] border px-4 py-4 text-left transition ${activeCandidate.slug === candidate.slug ? 'border-emerald-200 bg-emerald-50/80' : 'border-slate-900/8 bg-white/64 hover:bg-white/88'}`}>
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                   <div className="min-w-0">
-                    <div className="flex items-center gap-3"><span className="flex h-9 w-9 items-center justify-center rounded-[16px] border border-slate-900/8 bg-white/72 text-sm font-semibold text-[#191f28]">{index + 1}</span><div className="min-w-0"><div className="truncate font-semibold text-[#191f28]">{candidate.title}</div><div className="mt-1 text-xs text-slate-600">{candidate.archetype}</div></div></div>
-                    <div className="mt-3 text-sm leading-6 text-slate-600">{candidate.screening_summary}</div>
+                    <div className="flex items-center gap-3"><span className="flex h-9 w-9 items-center justify-center rounded-[16px] border border-slate-900/8 bg-white/72 text-sm font-semibold text-[#191f28]">{index + 1}</span><div className="min-w-0"><div className="truncate font-semibold text-[#191f28]"><ScientificText text={candidate.title} /></div><div className="mt-1 text-xs text-slate-600"><ScientificText text={candidate.archetype} /></div></div></div>
+                    <div className="mt-3 text-sm leading-6 text-slate-600"><ScientificText text={candidate.screening_summary} /></div>
                   </div>
-                  <div className="grid shrink-0 gap-2 text-right sm:min-w-[150px]"><div><div className="cp-subtle-label">{t(candidate.summary.economics_basis_label)}</div><div className="mt-2 text-2xl font-display text-[#191f28]">{benchmarkCostValue(candidate)}</div><div className="text-xs text-slate-600">{benchmarkCostDetail(candidate)}</div></div><div className={`text-sm font-semibold ${scoreTone(candidate.scores.total)}`}>{t('Score')} {candidate.scores.total.toFixed(1)}</div></div>
+                  <div className="grid shrink-0 gap-2 text-right sm:min-w-[150px]"><div><div className="cp-subtle-label">{t(candidate.summary.economics_basis_label)}</div><div className="mt-2 text-2xl font-display text-[#191f28]"><ScientificText text={benchmarkCostValue(candidate)} /></div><div className="text-xs text-slate-600"><ScientificText text={benchmarkCostDetail(candidate)} /></div></div><div className={`text-sm font-semibold ${scoreTone(candidate.scores.total)}`}>{t('Score')} {candidate.scores.total.toFixed(1)}</div></div>
                 </div>
               </button>
             ))}
@@ -334,7 +335,7 @@ export default function Compare() {
       {sectionState.activeSection.id === 'detail' ? (
         <section className="surface-card p-4">
           <div className="flex flex-col gap-3 border-b border-slate-900/8 pb-4 sm:flex-row sm:items-start sm:justify-between">
-            <div className="min-w-0"><div className="cp-subtle-label">{t('Selected reference route')}</div><div className="cp-heading-lg mt-2">{activeCandidate.title}</div><div className="mt-1 text-sm text-slate-600">{activeCandidate.archetype}</div><div className="mt-2 flex flex-wrap gap-2"><span className="cp-chip">{t(catalystDomainLabel(activeCandidate.catalyst_domain))}</span><span className="cp-chip">{t(applicationFamilyLabel(activeCandidate.application_family))}</span></div></div>
+            <div className="min-w-0"><div className="cp-subtle-label">{t('Selected reference route')}</div><div className="cp-heading-lg mt-2"><ScientificText text={activeCandidate.title} /></div><div className="mt-1 text-sm text-slate-600"><ScientificText text={activeCandidate.archetype} /></div><div className="mt-2 flex flex-wrap gap-2"><span className="cp-chip">{t(catalystDomainLabel(activeCandidate.catalyst_domain))}</span><span className="cp-chip">{t(applicationFamilyLabel(activeCandidate.application_family))}</span></div></div>
             <button type="button" onClick={() => loadIntoCalculator(activeCandidate)} className="cp-button-primary">{t('Load into cost estimate')}</button>
           </div>
           <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
@@ -353,24 +354,24 @@ export default function Compare() {
             <div className="space-y-4">
               <div className="surface-ghost p-4">
                 <div className="cp-subtle-label">{t('Preparation method')}</div>
-                <div className="mt-2 cp-heading-sm">{activeCandidate.route.name}</div>
-                <div className="mt-2 text-sm leading-7 text-slate-600">{activeCandidate.route.route_note}</div>
-                <div className="mt-3 flex flex-wrap gap-2"><span className="cp-chip">{activeCandidate.route.manufacturing_mode}</span><span className="cp-chip">{activeCandidate.summary.temperature_window_c[0]}-{activeCandidate.summary.temperature_window_c[1]} °C</span><span className="cp-chip">{lang === 'ko' ? t(activeCandidate.summary.scale) : `${activeCandidate.summary.scale} scale`}</span></div>
-                <div className="mt-4 grid gap-3 md:grid-cols-3">{([['Preprocess', activeCandidate.route.preprocess], ['Synthesis', activeCandidate.route.synthesis], ['Postprocess', activeCandidate.route.postprocess]] as Array<[string, string[]]>).map(([label, items]) => <div key={label} className="rounded-[22px] border border-slate-900/8 bg-white/64 p-3"><div className="cp-subtle-label">{t(label)}</div><div className="mt-3 space-y-2">{items.map((item) => <div key={item} className="text-sm leading-6 text-slate-700">{item}</div>)}</div></div>)}</div>
+                <div className="mt-2 cp-heading-sm"><ScientificText text={activeCandidate.route.name} /></div>
+                <div className="mt-2 text-sm leading-7 text-slate-600"><ScientificText text={activeCandidate.route.route_note} /></div>
+                <div className="mt-3 flex flex-wrap gap-2"><span className="cp-chip"><ScientificText text={activeCandidate.route.manufacturing_mode} /></span><span className="cp-chip">{activeCandidate.summary.temperature_window_c[0]}-{activeCandidate.summary.temperature_window_c[1]} °C</span><span className="cp-chip"><ScientificText text={lang === 'ko' ? t(activeCandidate.summary.scale) : `${activeCandidate.summary.scale} scale`} /></span></div>
+                <div className="mt-4 grid gap-3 md:grid-cols-3">{([['Preprocess', activeCandidate.route.preprocess], ['Synthesis', activeCandidate.route.synthesis], ['Postprocess', activeCandidate.route.postprocess]] as Array<[string, string[]]>).map(([label, items]) => <div key={label} className="rounded-[22px] border border-slate-900/8 bg-white/64 p-3"><div className="cp-subtle-label">{t(label)}</div><div className="mt-3 space-y-2">{items.map((item) => <div key={item} className="text-sm leading-6 text-slate-700"><ScientificText text={item} /></div>)}</div></div>)}</div>
               </div>
               <div className="surface-ghost p-4">
                 <div className="cp-subtle-label">{t('Reference notes')}</div>
-                <div className="mt-3 space-y-2">{activeCandidate.decision_notes.map((note) => <div key={note} className="rounded-[18px] border border-slate-900/8 bg-white/64 px-3 py-2 text-sm leading-6 text-slate-700">{note}</div>)}</div>
+                <div className="mt-3 space-y-2">{activeCandidate.decision_notes.map((note) => <div key={note} className="rounded-[18px] border border-slate-900/8 bg-white/64 px-3 py-2 text-sm leading-6 text-slate-700"><ScientificText text={note} /></div>)}</div>
               </div>
             </div>
             <div className="space-y-4">
               <div className="surface-ghost p-4">
                 <div className="cp-subtle-label">{t('Key evidence')}</div>
-                <div className="mt-3 space-y-3">{activeCandidate.literature_basis.map((item) => <a key={item.id} href={item.url} target="_blank" rel="noreferrer" className="block rounded-[18px] border border-slate-900/8 bg-white/64 px-3 py-3 transition hover:bg-white"><div className="font-semibold text-[#191f28]">{item.label}</div><div className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-400">{item.kind}</div><div className="mt-2 text-sm leading-6 text-slate-600">{item.note}</div></a>)}</div>
+                <div className="mt-3 space-y-3">{activeCandidate.literature_basis.map((item) => <a key={item.id} href={item.url} target="_blank" rel="noreferrer" className="block rounded-[18px] border border-slate-900/8 bg-white/64 px-3 py-3 transition hover:bg-white"><div className="font-semibold text-[#191f28]"><ScientificText text={item.label} /></div><div className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-400"><ScientificText text={item.kind} /></div><div className="mt-2 text-sm leading-6 text-slate-600"><ScientificText text={item.note} /></div></a>)}</div>
               </div>
               <div className="surface-ghost p-4">
                 <div className="cp-subtle-label">{t('Family literature bank')}</div>
-                <div className="mt-3 space-y-3">{benchmark.citations.map((item) => <a key={item.id} href={item.url} target="_blank" rel="noreferrer" className="block rounded-[18px] border border-slate-900/8 bg-white/64 px-3 py-3 transition hover:bg-white"><div className="flex flex-wrap items-center gap-2"><div className="font-semibold text-[#191f28]">{item.label}</div><span className="cp-chip">{item.kind}</span></div><div className="mt-2 text-sm leading-6 text-slate-600">{item.note}</div></a>)}</div>
+                <div className="mt-3 space-y-3">{benchmark.citations.map((item) => <a key={item.id} href={item.url} target="_blank" rel="noreferrer" className="block rounded-[18px] border border-slate-900/8 bg-white/64 px-3 py-3 transition hover:bg-white"><div className="flex flex-wrap items-center gap-2"><div className="font-semibold text-[#191f28]"><ScientificText text={item.label} /></div><span className="cp-chip"><ScientificText text={item.kind} /></span></div><div className="mt-2 text-sm leading-6 text-slate-600"><ScientificText text={item.note} /></div></a>)}</div>
               </div>
             </div>
           </div>

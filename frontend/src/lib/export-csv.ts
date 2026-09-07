@@ -1,11 +1,12 @@
 import type { EstimateRangeResult } from './api';
 import type { CalculatorResultSnapshot } from './calculator-session';
+import { formatScientificText } from './scientific-text';
 
 type CsvCell = string | number | null | undefined;
 
 function csvEscape(cell: CsvCell): string {
   if (cell == null) return '';
-  const text = String(cell);
+  const text = typeof cell === 'string' ? formatScientificText(cell) : String(cell);
   if (/[",\n\r]/.test(text)) return `"${text.replace(/"/g, '""')}"`;
   return text;
 }

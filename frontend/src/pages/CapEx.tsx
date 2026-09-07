@@ -1,3 +1,4 @@
+import { ScientificText } from '../components/shared/ScientificText';
 import { useMemo, useState } from 'react';
 import {
   fetchCapEx,
@@ -30,9 +31,9 @@ function formatUSD(value: number): string {
 function MetricTile({ label, value, detail, dark = false }: { label: string; value: string; detail: string; dark?: boolean }) {
   return (
     <div className={dark ? 'cp-metric-tile-dark' : 'cp-metric-tile'}>
-      <div className={`cp-subtle-label ${dark ? '!text-slate-400' : ''}`}>{label}</div>
-      <div className={`mt-2 text-2xl font-display ${dark ? 'text-white' : 'text-slate-900'}`}>{value}</div>
-      <div className={`mt-1 text-xs leading-5 ${dark ? 'text-slate-400' : 'text-slate-600'}`}>{detail}</div>
+      <div className={`cp-subtle-label ${dark ? '!text-slate-400' : ''}`}><ScientificText text={label} /></div>
+      <div className={`mt-2 text-2xl font-display ${dark ? 'text-white' : 'text-slate-900'}`}><ScientificText text={value} /></div>
+      <div className={`mt-1 text-xs leading-5 ${dark ? 'text-slate-400' : 'text-slate-600'}`}><ScientificText text={detail} /></div>
     </div>
   );
 }
@@ -41,10 +42,10 @@ function RailRow({ label, value, detail }: { label: string; value: string; detai
   return (
     <div className="cp-data-row">
       <div>
-        <div className="cp-subtle-label">{label}</div>
-        {detail ? <div className="mt-1 text-xs leading-5 text-slate-600">{detail}</div> : null}
+        <div className="cp-subtle-label"><ScientificText text={label} /></div>
+        {detail ? <div className="mt-1 text-xs leading-5 text-slate-600"><ScientificText text={detail} /></div> : null}
       </div>
-      <div className="text-right text-sm font-semibold text-[#191f28]">{value}</div>
+      <div className="text-right text-sm font-semibold text-[#191f28]"><ScientificText text={value} /></div>
     </div>
   );
 }
@@ -187,7 +188,7 @@ export default function CapEx() {
         ) : (
           <div className="mt-5 space-y-3">
             <div className="rounded-[18px] border border-slate-200 bg-slate-50/80 px-4 py-3 text-xs leading-6 text-slate-600">
-              {t('Each equipment line is scaled as Cost = base cost × (target size / base size)^exponent. Exponent 0.6 (six-tenths rule) is the usual default.')}{' '}
+              {t('Equipment cost = base cost × (target size / base size)')}<sup>{t('Exponent')}</sup>. {t('The default exponent is 0.6 (six-tenths rule).')}{' '}
               {t('Live preview total:')} <span className="font-semibold text-[#191f28]">{formatUSD(equipmentSubtotal)}</span>.
             </div>
             <div className="overflow-x-auto">
@@ -385,7 +386,7 @@ export default function CapEx() {
                   <tbody>
                     {result.equipment_resolution.map((line, idx) => (
                       <tr key={`${line.name}-${idx}`} className="border-t border-slate-100">
-                        <td className="px-3 py-2 font-semibold text-slate-900">{line.name}</td>
+                        <td className="px-3 py-2 font-semibold text-slate-900"><ScientificText text={line.name} /></td>
                         <td className="px-3 py-2 text-right font-mono">{formatUSD(line.base_cost_usd)}</td>
                         <td className="px-3 py-2 text-right">{line.base_size}</td>
                         <td className="px-3 py-2 text-right">{line.target_size}</td>

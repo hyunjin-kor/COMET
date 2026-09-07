@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, type ReactNode } from 'react';
+import { formatScientificText } from './scientific-text';
 
 export type Lang = 'en' | 'ko';
 
@@ -1033,6 +1034,8 @@ const KO: Record<string, string> = {
   'Base size': '기준 규모',
   'Target size': '목표 규모',
   'Exponent': '지수',
+  'Equipment cost = base cost × (target size / base size)': '장비 비용 = 기준 비용 × (목표 규모 / 기준 규모)',
+  'The default exponent is 0.6 (six-tenths rule).': '지수의 기본값은 0.6(0.6승 법칙)입니다.',
   'Qty': '수량',
   'Scaled unit': '환산 단가',
   'Line total': '항목 합계',
@@ -1127,7 +1130,7 @@ export function LangProvider({ children }: { children: ReactNode }) {
     });
   }
 
-  const t = (text: string) => (lang === 'ko' ? (KO[text] ?? text) : text);
+  const t = (text: string) => formatScientificText(lang === 'ko' ? (KO[text] ?? text) : text);
 
   return <LangContext.Provider value={{ lang, toggle, t }}>{children}</LangContext.Provider>;
 }

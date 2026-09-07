@@ -1,3 +1,5 @@
+import { ScientificText } from './shared/ScientificText';
+import { formatScientificText } from '../lib/scientific-text';
 import { useEffect, useState, type FormEvent } from 'react';
 import { useLang } from '../lib/i18n';
 import {
@@ -112,7 +114,7 @@ export function CostEvidencePanel({ savedEstimateId }: { savedEstimateId: number
       <p className="mt-2 text-sm leading-6 text-slate-500">{t('Purchase quotes and actual production costs are stored separately. Errors are calculated only when documented full-cost conditions match the saved estimate.')}</p>
       <p className="mt-1 text-xs text-amber-700">{t('User-supplied evidence; not independently verified. No record is published externally.')}</p>
       {savedEstimateId === null ? <p className="mt-4 text-sm text-slate-600">{t('Save this estimate before adding local observations.')}</p> : <>
-        {error && <p className="mt-3 text-sm text-red-700" role="alert">{error}</p>}
+        {error && <p className="mt-3 text-sm text-red-700" role="alert"><ScientificText text={error} /></p>}
         {summary && <div className="mt-4 rounded-lg bg-slate-50 p-3 text-sm">
           <span>{t('Eligible observations')}: {summary.eligible_count}</span>
           <span className="ml-4">{t('Mean absolute percentage error')}: {summary.mape_pct === null ? t('Not estimable') : `${summary.mape_pct.toFixed(2)}%`}</span>
@@ -125,7 +127,7 @@ export function CostEvidencePanel({ savedEstimateId }: { savedEstimateId: number
             <div><dt>{t('Effective production rate (short tons/day)')}</dt><dd>{reference.production_rate_ton_per_day ?? t('Unknown')}</dd></div>
             <div><dt>{t('Template ID')}</dt><dd>{reference.template_id ?? t('Custom steps')}</dd></div>
             <div className="sm:col-span-2"><dt>{t('Manufacturing step keys')}</dt><dd className="break-words">{reference.steps.join(', ') || t('Unknown')}</dd></div>
-            {reference.components.map((component, index) => <div key={index}><dt>{component.name ?? t('Unknown')}</dt><dd>{component.wt_pct?.toFixed(3)}{' wt%'} · {component.grade ?? t('Grade not recorded')}</dd></div>)}
+            {reference.components.map((component, index) => <div key={index}><dt><ScientificText text={component.name ?? t('Unknown')} /></dt><dd>{component.wt_pct?.toFixed(3)}{' wt%'} · <ScientificText text={component.grade ?? t('Grade not recorded')} /></dd></div>)}
           </dl>
           <p className="mt-2 text-xs text-slate-500">{t('Missing saved grades or price months prevent error assessment. Add purchase evidence and recalculate a new estimate when the source is available.')}</p>
         </details>}
@@ -134,7 +136,7 @@ export function CostEvidencePanel({ savedEstimateId }: { savedEstimateId: number
           <form onSubmit={(event) => { void submit(event); }} className="mt-3 space-y-4">
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               <label className="text-xs text-slate-600">{t('Observed unit price')}<input required className={inputClass} type="number" min="0.000001" step="any" value={draft.price} onChange={(event) => update('price', event.target.value)} /></label>
-              <label className="text-xs text-slate-600">{t('Currency')}<select className={inputClass} value={draft.currency} onChange={(event) => update('currency', event.target.value)}><option>{'USD'}</option><option>{'EUR'}</option><option>{'KRW'}</option></select></label>
+              <label className="text-xs text-slate-600">{t('Currency')}<select className={inputClass} value={draft.currency} onChange={(event) => update('currency', event.target.value)}><option>{formatScientificText('USD')}</option><option>{formatScientificText('EUR')}</option><option>{formatScientificText('KRW')}</option></select></label>
               <label className="text-xs text-slate-600">{t('Price denominator')}<select className={inputClass} value={draft.unit} onChange={(event) => update('unit', event.target.value as ObservationDraft['unit'])}><option value="kg">kg</option><option value="lb">lb</option><option value="cm2">cm²</option></select></label>
               <label className="text-xs text-slate-600">{t('Observation date')}<input required className={inputClass} type="date" value={draft.date} onChange={(event) => update('date', event.target.value)} /></label>
               <label className="text-xs text-slate-600">{t('Observed price month')}<input className={inputClass} type="month" value={draft.month} onChange={(event) => update('month', event.target.value)} /></label>
@@ -172,9 +174,9 @@ export function CostEvidencePanel({ savedEstimateId }: { savedEstimateId: number
           </form>
         </details>
         {summary?.observations.map((row) => <details key={row.id} className="mt-3 rounded-lg border border-slate-200 p-3 text-sm">
-          <summary className="cursor-pointer font-medium text-slate-700">{row.observation.observation_date} · {row.observation.currency} {row.observation.observed_price}/{row.observation.price_unit} · {row.assessment.eligible ? t('Eligible for local error assessment') : t('Excluded from error assessment')}</summary>
-          <p className="mt-2 break-words text-xs text-slate-500">{row.observation.source}</p>
-          {row.assessment.eligible ? <p className="mt-2 text-sm">{t('Signed error (estimate minus observation)')}: {row.assessment.signed_error_pct?.toFixed(2)}% · {t('Absolute percentage error')}: {row.assessment.absolute_percentage_error?.toFixed(2)}%</p> : <ul className="mt-2 list-disc space-y-1 pl-4 text-xs text-amber-800">{row.assessment.exclusion_reasons.map((reason) => <li key={reason}>{reason}</li>)}</ul>}
+          <summary className="cursor-pointer font-medium text-slate-700"><ScientificText text={row.observation.observation_date} /> · <ScientificText text={row.observation.currency} /> {row.observation.observed_price}/<ScientificText text={row.observation.price_unit} /> · {row.assessment.eligible ? t('Eligible for local error assessment') : t('Excluded from error assessment')}</summary>
+          <p className="mt-2 break-words text-xs text-slate-500"><ScientificText text={row.observation.source} /></p>
+          {row.assessment.eligible ? <p className="mt-2 text-sm">{t('Signed error (estimate minus observation)')}: {row.assessment.signed_error_pct?.toFixed(2)}% · {t('Absolute percentage error')}: {row.assessment.absolute_percentage_error?.toFixed(2)}%</p> : <ul className="mt-2 list-disc space-y-1 pl-4 text-xs text-amber-800">{row.assessment.exclusion_reasons.map((reason) => <li key={reason}><ScientificText text={reason} /></li>)}</ul>}
         </details>)}
       </>}
     </section>
