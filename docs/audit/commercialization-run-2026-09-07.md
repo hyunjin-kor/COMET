@@ -19,9 +19,9 @@ No source changed for this initial log. Reused evidence is explicitly distinguis
 | ID | Status | Commit | Evidence / acceptance |
 |---|---|---|---|
 | C01 | Complete | c7f51f1 | Goal and persisted C01–C14 backlog; clean tested baseline |
-| C02 | Preparation complete; rights approval unresolved | This task commit | 81-file rights inventory,20 workbook-origin declarations,12 guard tests,792 full tests; actual public/commercial checks correctly reject unapproved data; contract drafts |
+| C02 | Preparation complete; rights approval unresolved | c2a17d1 | 81-file rights inventory,20 workbook-origin declarations,12 guard tests,792 full tests; actual public/commercial checks correctly reject unapproved data; contract drafts |
 | C03 | Complete; all CI jobs passed | a5279bd | Local780 tests; CI780/498.13s plus Windows/frontend; build227.964s, isolated smoke17.604s; user DB/log hashes unchanged |
-| C04 | Pending | — | Official journal metrics/scope and dated quartile verification or explicit unknown |
+| C04 | Evidence review complete; target eligibility pending | This task commit | Official indexed JIF displays and HTTP200 Engineering Au Article guidance; metric year/JCR category/Q1 unverified, no acceptance claim |
 | C05 | Pending | — | Controlled, reproducible scientific case studies |
 | C06 | Pending | — | Free independent validation evidence; no inferred missing conditions |
 | C07 | Pending | — | External researcher evaluation protocol; real participation remains distinct |
@@ -76,3 +76,11 @@ The new public-release gate rejects missing/modified/unreviewed data, absent rev
 Verification:12 focused tests passed, including separate-use permissions, file mutation/new nested files, review metadata and malformed/duplicate manifests. Initial test collection correctly failed because the protection module did not exist; [before](commercial-c03-rights-before-2026-09-07.log) and [after](commercial-c03-rights-after-2026-09-07.log) retain the runner's earlier C03 filename prefix. Full suite **792 passed in467.83s**, wrapper471.319s: [output](commercial-c02-pytest-2026-09-07.log). Ruff passed. Frontend and calculations were unchanged from a5279bd, so its passing frontend/Table6.2/desktop evidence is reused rather than described as newly executed.
 
 Critic: a reachable DOI or permissively licensed downloader does not clear its data. IMF terms require attention to commercial permission; UN Comtrade's free research exceptions do not automatically apply to a for-profit analytics service; yfinance's Apache license does not license Yahoo data. Data acquisition remains free. Existing workbooks, source snapshots, schemas and LICENSE were not changed. The new checker only records and enforces explicit review decisions; it cannot establish legal rights itself. Company/college/contributor authority, dependency notices and data replacements/permissions remain C14 release blockers.
+
+## C04 journal target evidence
+
+[The target review](../paper/journal-targets-2026-09-07.md) supersedes unconditional ACS SC&E targeting under the user's newer JIF minimum8. Official indexed publisher text displays7.6 for ACS SC&E,9.0 for ACS Engineering Au and9.6 on a Sustainable Production and Consumption issue page. Exact metric year/JCR category quartile are not verified. Repeated direct publisher metrics/insights responses403 prevent treating these as fully confirmed current-year eligibility. No SJR, CiteScore or aggregator quartile was substituted.
+
+Engineering Au Article guidance was retrieved HTTP200, updated2026-08-27. Its computational/process scope supports a provisional fit; the Article abstract is typically at most300 words, whereas2200 words is the Letter limit. No fixed Article text/figure cap was found in the inspected section. Existing six figures and frozen manuscript structure remain intact. APC coverage, indexing, authors and journal selection require actual confirmation. No paid access, author contact or submission took place.
+
+Verification for this documentation-only task reuses c2a17d1's792 passing backend tests and a5279bd's unchanged frontend/package evidence. Critic: citing a publisher-displayed number without its year and category is insufficient to say the Q1/JIF objective is met. Eligibility is explicitly deferred to C14; preparation and independent research analysis can continue.
