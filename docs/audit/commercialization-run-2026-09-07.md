@@ -22,8 +22,8 @@ No source changed for this initial log. Reused evidence is explicitly distinguis
 | C02 | Preparation complete; rights approval unresolved | c2a17d1 | 81-file rights inventory,20 workbook-origin declarations,12 guard tests,792 full tests; actual public/commercial checks correctly reject unapproved data; contract drafts |
 | C03 | Complete; all CI jobs passed | a5279bd | Local780 tests; CI780/498.13s plus Windows/frontend; build227.964s, isolated smoke17.604s; user DB/log hashes unchanged |
 | C04 | Evidence review complete; target eligibility pending | 248c45e | Official indexed JIF displays and HTTP200 Engineering Au Article guidance; metric year/JCR category/Q1 unverified, no acceptance claim |
-| C05 | Complete | This task commit | 30 crossed price/evidence families,21 manufacturing scenarios,9 electrode scenarios; byte-identical replay;802 full tests passed |
-| C06 | Pending | — | Free independent validation evidence; no inferred missing conditions |
+| C05 | Complete | 26a283e | 30 crossed price/evidence families,21 manufacturing scenarios,9 electrode scenarios; byte-identical replay;802 full tests passed |
+| C06 | Evidence extension complete; real observations unresolved | This task commit | 2 additional Crossref-verified papers, actual HTTP/PDF checks and private collection worksheet; matched observations remain0 |
 | C07 | Pending | — | External researcher evaluation protocol; real participation remains distinct |
 | C08 | Pending | — | Opt-in hosted identity and private resource isolation |
 | C09 | Pending | — | Subscription active/expired/revoked lifecycle and access tests |
@@ -102,3 +102,13 @@ Ten focused tests pass, including counterfactual attribution, incompatible candi
 Critic: controlled scenarios are not new empirical validation. Input states have different observation dates and support-price bases. Material LCA coverage is not a complete process inventory; price scaling of catalog electrode materials does not establish an optimal design. Rights approvals and matched independent observations remain unresolved.
 
 Final verification: **802 passed in397.81s**, wrapper401.044s: [output](commercial-c05-pytest-final-2026-09-07.log). No analysis or backend code changed during this final run. An initial shell attempt used a nonexistent worktree `.venv` path and did not start tests; the corrected run used the existing `python` runtime, also recorded in provenance. This shell invocation error was not an engine/test failure.
+
+C05 whitespace review reported Matplotlib-generated SVG path-line trailing spaces and raw command-output blank lines at EOF. These generated artifacts were retained byte-for-byte to preserve replay hashes; this is not a clean whitespace-check claim. Source lint and802 tests passed before the commit; no hook or verification was bypassed.
+
+## C06 free independent evidence extension
+
+Screened two additional primary papers and verified both DOIs/titles against actual Crossref HTTP200 responses. [The extension](../sources/independent-evidence-extension-2026-09-07.md) distinguishes an independent laboratory ABC/TCO cost model from a separate CatCost-based TEA. A DOE author copy was retrieved HTTP200 and read. Both direct publisher pages returned403; the RSC SI URL redirected to an HTML challenge despite200. No successful SI retrieval is claimed.
+
+Crossref's article license metadata and third-party input rights are separated. Full articles remain local; no new model price/data or commercial permissions were added. The bounded inventory now screens12 cases across the prior ten and these two, while matched independent full-cost observations remain0 and empirical MAPE remains unestimated. Prepared a blank private record collection worksheet matching the application's existing observation schema. No records, contacts, purchases or participant data were invented.
+
+Validation: inspected the actual Crossref metadata, PDF text, URL final destinations/content types and file hashes in the access JSON. These documentation-only changes reuse26a283e's802 passing tests and unchanged frontend/package CI. Critic: laboratory economic modeling and published-method repetition are valuable context but insufficient evidence of industrial predictive accuracy. Acquiring a voluntarily shared, condition-matched production/procurement record remains C14.
