@@ -27,8 +27,8 @@ No source changed for this initial log. Reused evidence is explicitly distinguis
 | C07 | Protocol complete; participants unresolved | b84e343 | 6 defined tasks, recording/analysis criteria, empty CSV, actual participants0 |
 | C08 | Foundation complete | de54164 | 27 account/auth/storage tests;829 full tests460.46s; frontend lint/build/i18n and Table6.2 passed; startup remains rights-gated |
 | C09 | Complete | d92c681 | Subscription periods/seats/audit/operator commands;843 full tests475.34s; no actual billing or accounts |
-| C10 | Complete | This task commit | Actual browser thermal/electrode/account/expiry QA;853 full tests511.11s; frontend lint/build/i18n, storage test, limits and new-directory recovery |
-| C11 | Pending | — | Claims/results/version aligned in publication package |
+| C10 | Complete | 2c08f1f | Actual browser thermal/electrode/account/expiry QA;853 full tests511.11s; frontend lint/build/i18n, storage test, limits and new-directory recovery |
+| C11 | Preparation complete | this commit | Controlled scientific claims,94 manuscript/1217 SI JSON-key references,13 focused tests;856 full tests504.21s |
 | C12 | Pending | — | Public portfolio and evidence-based contribution documentation |
 | C13 | Pending | — | Integrated truth signals, real UI, package and final CI |
 | C14 | External facts required | — | Rights/company/author approvals, independent observations/participants, JCR category, billing/hosting/launch choices |
@@ -39,7 +39,7 @@ No existing LICENSE change, paid source, new framework/ORM/build tool, destructi
 
 ## Next action
 
-Finish C09 subscription verification, then connect C10 account UI/limits/backup recovery before publication and portfolio alignment. No release can be described as commercially cleared before the actual data-origin permissions are resolved.
+Finish C12 public portfolio documentation, then C13 final package, replay and CI verification. No release can be described as commercially cleared before the actual data-origin permissions are resolved.
 
 ## C03 implementation and verification
 
@@ -176,3 +176,21 @@ Verification:46 auth/subscription/operating tests passed59.47s and5 backup tests
 Critic: the browser download-event waiter timed out at3s, but actual files were present and independently matched the saved payloads; the waiter failure was not hidden. Password mutation has backend tests and an inspected browser form, without claiming a browser-submitted credential change. Synthetic far-future contract dates are test fixtures, not real contracts. No external participant, live billing, paid data, internet deployment, OS-access certification or full penetration test occurred. Data rights continue to block actual hosted startup.
 
 Final C10 verification: **853 passed in511.11s**, wrapper514.697s: [output](commercial-c10-pytest-2026-09-07.log). Backend code/tests stayed unchanged during the full run; independent UI/docs were finalized and checked separately. Calculator/range/notation Node rules and Table6.2 were rerun. The cost equations/data remain unchanged: Pt27.3695, Ni19.2206(−6.65%), FCC footnote-b2.4380(+1.16%) USD/lb.
+
+## C11 publication package alignment
+
+C10 follow-up: [CI34133310090](https://github.com/hyunjin-kor/COMET/actions/runs/34133310090) at2c08f1f completed success for backend, frontend and fresh Windows package/smoke.
+
+Updated the generator and regenerated the current manuscript/SI from the preserved primary run and C05 controlled output. The abstract now leads with the controlled balanced-profile result:4 evidence-only,1 numeric-price-only and5 combined winner changes. The text explicitly separates this experiment from historical monthly replay and notes that a performance-weight-removed composite still includes evidence/route rubrics. No numerical result, price input or calculation formula changed.
+
+The route/scale section adds21 fixed-composition cases and the5-short-ton class discontinuity;9 electrode cases preserve area units and mixed catalog boundaries. SI now has one additional controlled figure and seven tables. Added the C06 primary references from the already verified Crossref responses; laboratory ABC/TCO and a CatCost-based TEA remain contextual models, not matched actual manufacturing observations. The bounded screening inventory is12, with eligible industrial full-cost observations still0 and no empirical MAPE.
+
+Data/code availability now discloses existing declared workbook origins and the unresolved distribution review instead of treating original-workbook exclusion as clearance of derived records. AI assistance and the proposed company-interest disclosure remain distinct from actual authorship, executed licenses or revenue. The prepared1.4.0 tag remains unpublished; a fresh release query still returnedv1.3.24, published2026-08-31. Added an author-readiness checklist, unsent cover letter and ten anticipated reviewer questions without fictitious approvals or participant findings.
+
+The provisional format follows the actually retrieved Engineering Au Article guidance. Removed the old SC&E7000-word-equivalent rule from the new journal's checks; Article text/figure cap is null where not verified, and the2200-word Letters rule is not used. Current abstract182 lexical words/body2565, six main figures/two main tables, one SI figure/seven SI tables. Actual JIF year/category/Q1/indexing and publication-cost coverage remain external verification.
+
+Validation: generator `--check` passes94 manuscript and1217 SI JSON-key references and verifies27 unchanged primary outputs. Controlled numerical bytes, seed and both selected price snapshots are checked before document generation.13 focused tests passed (three new provenance/claims guards plus ten controlled-study tests); Ruff passes. Cross-platform byte preservation was added for the controlled JSON/SVG and additional DOI access record. An exploratory read used the Windows default codec and failed; corrected UTF-8 reads supplied the metadata. No unknown bibliographic value was filled from that failed read.
+
+Critic: the controlled figure strengthens interpretation within the model but does not create empirical industrial validation. Independent matched observations, actual researcher participation, rights, authors and journal eligibility remain C14. The new preparation documents are unsubmitted drafts, not accepted or company-approved representations. No source articles, paid data or new price values were added.
+
+Final C11 verification: **856 passed in504.21s**, wrapper507.762s: [output](commercial-c11-pytest-2026-09-07.log). Python code and tests were held unchanged during this full run. Frontend code is unchanged from the passing C10 checks and CI above. The manuscript generator check resolves every recorded numerical key; it does not establish independent experimental accuracy or author approval.

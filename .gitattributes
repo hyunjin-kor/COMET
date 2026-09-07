@@ -16,3 +16,6 @@ docs/audit/external-cost-validation-2026-09-07.json -text
 docs/paper/submission-2026-09-07/*.json -text
 docs/paper/submission-2026-09-07/*.md -text
 docs/paper/submission-2026-09-07/figures/*.svg -text
+docs/paper/controlled-2026-09-07/*.json -text
+docs/paper/controlled-2026-09-07/*.svg -text
+docs/sources/independent-evidence-access-2026-09-07.json -text

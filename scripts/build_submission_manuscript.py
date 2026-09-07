@@ -17,6 +17,9 @@ DATE = "2026-09-07"
 META_NAME = f"submission_metadata_{DATE}.json"
 EXTERNAL_NAME = f"../audit/external-cost-validation-{DATE}.json"
 REGISTRY_NAME = f"../sources/external-cost-evidence-{DATE}.json"
+CONTROLLED_NAME = f"controlled-{DATE}/controlled_cases.json"
+CONTROLLED_PROVENANCE = f"controlled-{DATE}/provenance.json"
+EVIDENCE_EXTENSION = f"../sources/independent-evidence-access-{DATE}.json"
 
 
 def load(path):
@@ -102,6 +105,30 @@ class PaperRun:
         if digest(PAPER / REGISTRY_NAME) != self.data[EXTERNAL_NAME]["registry_sha256"]:
             raise ValueError("External evidence registry changed after its comparison audit")
         self.metadata["external_audit_sha256"] = digest(PAPER / EXTERNAL_NAME)
+        controlled = load(PAPER / CONTROLLED_NAME)
+        provenance = load(PAPER / CONTROLLED_PROVENANCE)
+        if digest(PAPER / CONTROLLED_NAME) != provenance['numerical_output_sha256']:
+            raise ValueError('Controlled numerical output changed after its recorded run')
+        for entry in provenance['input_hashes'][:2]:
+            if digest(ROOT / entry['file']) != entry['sha256']:
+                raise ValueError('Controlled price snapshot changed')
+            if digest(self.directory / Path(entry['file']).name) != entry['sha256']:
+                raise ValueError('Controlled study does not use the selected manuscript price snapshots')
+        if controlled['seed'] != self.manifest['seed']:
+            raise ValueError('Controlled and primary seeds differ')
+        self.names['ctrl'] = CONTROLLED_NAME
+        self.data[CONTROLLED_NAME] = controlled
+        extension = load(PAPER / EVIDENCE_EXTENSION)
+        self.names['ext'] = EVIDENCE_EXTENSION
+        self.data[EVIDENCE_EXTENSION] = extension
+        additional = [row['crossref'] for row in extension['sources'] if 'crossref' in row]
+        self.metadata.update(controlled_output_sha256=digest(PAPER / CONTROLLED_NAME),
+                             controlled_provenance_sha256=digest(PAPER / CONTROLLED_PROVENANCE),
+                             controlled_manufacturing_cases=len(controlled['manufacturing']['rows']),
+                             controlled_electrode_cases=len(controlled['electrode']['rows']),
+                             additional_primary_papers=len(additional),
+                             screened_evidence_total=self.data[EXTERNAL_NAME]['summary']['candidate_case_count'] + len(additional),
+                             additional_evidence_sha256=digest(PAPER / EVIDENCE_EXTENSION))
 
     def ref(self, alias, key, spec=None):
         name = self.names.get(alias, alias)
@@ -149,7 +176,7 @@ Authors, affiliations and corresponding-author contact: [to be supplied by the a
 
 ## Abstract
 
-Catalyst recommendations depend on procurement prices, manufacturing routes and the completeness of environmental inventories. We present the Catalyst Overall Manufacturing Estimation Tool (COMET), an independent implementation of published Step Method costing with traceable inputs and reproducible screening analysis. Published CatCost cases are reproduced without fitting their material inputs; platinum on carbon agrees to the cent. A frozen monthly reference state connects {r('s', 'candidates')} candidates across {r('s', 'families')} reaction families to institutional metal prices and qualified support-material trade indicators. Among candidates meeting the stated inventory-coverage conditions, preparation energy contributes a median {r('s', 'lca.route_share_median_pct', '.2f')}% of reported global warming potential. The balanced winner retains first place on a median {r('s', 'weight_sensitivity.median_balanced_winner_share_pct', '.2f')}% of the weighting grid. Replaying {r('s', 'volatility.window.states')} monthly metal-price states changes the performance-free composite recommendation in {r('s', 'volatility.families_flipping_performance_zero')} families. Cost crossings and composite-score crossings answer different selection questions. Public purchase evidence is assessed separately from method reproduction because unmatched grade, order size and commercial terms prevent a general procurement-error estimate. The study identifies conditional screening decisions and data gaps; it does not establish catalyst performance or complete environmental superiority. Frozen inputs, hashes and a single analysis command support inspection and repetition.
+Catalyst recommendations depend on prices, manufacturing assumptions and the evidence attached to their inputs. We present the Catalyst Overall Manufacturing Estimation Tool (COMET), an independent implementation of published Step Method costing with frozen inputs and reproducible screening analysis. Published CatCost cases are reproduced without fitting material inputs; platinum on carbon agrees to the cent. The reference library connects {r('s', 'candidates')} candidates across {r('s', 'families')} reaction families to declared metal and support-price states. In a controlled balanced-profile comparison, changing source-confidence annotations alone changes {r('ctrl', 'summary.changed_winner_counts.evidence_only')} winners, changing numeric prices alone changes {r('ctrl', 'summary.changed_winner_counts.price_only')}, and changing both changes {r('ctrl', 'summary.changed_winner_counts.combined')}. Combined recommendation changes therefore cannot all be attributed to market movement. Fixed-composition manufacturing scenarios expose discrete scale-class boundaries, while electrode scenarios preserve the distinct area-based cost boundary. Among candidates meeting inventory-coverage conditions, preparation energy contributes a median {r('s', 'lca.route_share_median_pct', '.2f')}% of reported global warming potential. This is a partial inventory result, not complete environmental superiority. Public procurement evidence remains unmatched for independent full-cost validation, so empirical predictive accuracy is unestimated. The study establishes inspectable, conditional screening decisions and identifies which evidence is needed to support stronger manufacturing or sustainability claims.
 
 Keywords: techno-economic analysis; preparation routes; commodity prices; life cycle assessment; multicriteria decision analysis; reproducibility.
 
@@ -179,9 +206,11 @@ The live comparison reuses a frozen collection made at {r('m', 'live_snapshot.ob
 
 ### Sensitivity and external comparison
 
-Balanced, cost-first and evidence-first profiles are accompanied by a composite with performance weight removed. The weighting grid contains {r('s', 'weight_sensitivity.grid_points')} combinations. Ties resolve by lower mass cost and then candidate slug. The historical replay spans {r('s', 'volatility.window.first')}–{r('s', 'volatility.window.last')}; series-covered metals move together by calendar month, while short support histories remain fixed at the reference baseline. It therefore measures metal-price sensitivity conditional on the stated support prices.
+Balanced, cost-first and evidence-first profiles are accompanied by a composite with performance weight removed. Evidence and route rubrics remain in that composite; it is not a purely measured-cost ranking. The weighting grid contains {r('s', 'weight_sensitivity.grid_points')} combinations. Ties resolve by lower mass cost and then candidate slug. The historical replay spans {r('s', 'volatility.window.first')}–{r('s', 'volatility.window.last')}; series-covered metals move together by calendar month, while short support histories remain fixed at the reference baseline. It therefore measures metal-price sensitivity conditional on the stated support prices.
 
 Single-metal sweeps hold all other prices fixed and identify cost and composite crossings separately. Seed {r('m', 'seed')} is recorded for reproducibility; these analyses use deterministic enumeration, not Monte Carlo sampling. Public procurement and manufacturing evidence is screened for material identity, grade, currency/date, quantity and cost boundary. Ineligible records remain evidence gaps instead of being forced into an error metric.
+
+A controlled follow-up crosses numeric reference/live costs with independently selected reference/live source-confidence annotations for the balanced profile. Composition, route/performance rubrics and decision weights remain fixed. The source-evidence score is recomputed using the selected cost shares. These hybrid states are counterfactual model inputs, not newly observed quotations. Averaging each channel's marginal score change across the other channel's states allocates their interaction and reproduces the endpoint score change; winner counts are not additive causal effects. Further controlled scenarios hold the finished Ni/alumina composition fixed across manufacturing routes and scale boundaries, and vary loading and a hypothetical powder-price multiplier in a catalog-resolved iridium-oxide electrode stack (SI Figure S1).
 
 ## Results and discussion
 
@@ -198,6 +227,8 @@ Pt/C rounds to the published cent. The Ni residual follows the published size-de
 {f(2, 'table62', 'Reproduction of the published cases using declared materials and effective-throughput assumptions.')}
 
 The separate [external evidence audit](../audit/external-cost-validation-{DATE}.md) screened {r('e', 'summary.candidate_case_count')} cases, including {r('e', 'summary.contract_price_count')} signed contract-price schedule and {r('e', 'summary.catalog_pack_price_count')} verified catalog pack offers. The contract states {r('er', 'cases[0].observation.price', '.2f')} EUR/kg on a {r('er', 'cases[0].observation.basis_month')} basis, but does not disclose a matched formulation, catalyst order mass or settled invoice. Catalog pack prices are not bulk quotes. The number of eligible full-cost matches is {r('e', 'summary.matched_full_cost_case_count')}; empirical mean absolute percentage error remains unestimated. These findings distinguish accessible purchasing evidence from validated manufacturing accuracy (SI Table S5).
+
+An extension screened {r('meta', 'additional_primary_papers')} further primary papers, bringing the bounded evidence inventory to {r('meta', 'screened_evidence_total')}. Laboratory activity-based costing of oxide synthesis provides independent methodological context;<sup>5</sup> a separate platinum–strontium titanate TEA explicitly applies CatCost.<sup>6</sup> Neither supplies a matched, independently observed industrial full-cost ledger. The [source review](../sources/independent-evidence-extension-{DATE}.md) records Crossref identity checks, the retrieved DOE author copy and publisher/SI access limitations. No new prices or empirical error estimate were imported.
 
 ### Environmental contribution and coverage
 
@@ -218,6 +249,8 @@ The balanced winner remains first on a median {r('s', 'weight_sensitivity.median
 Across {r('s', 'volatility.window.states')} monthly states, the balanced recommendation changes in {r('s', 'volatility.families_flipping_balanced')} families and the performance-free composite in {r('s', 'volatility.families_flipping_performance_zero')}. The latter families are {r('s', 'volatility.flipping_families_performance_zero', 'join')}. Composition, route and author-assigned screening judgements remain fixed; the monthly sequence is a response to price states, not evidence of changes in catalyst performance or availability.
 
 Switching from the monthly reference state to the frozen live tier changes {r('s', 'live_reference_comparison.changed_by_profile.balanced')} balanced, {r('s', 'live_reference_comparison.changed_by_profile.cost-first')} cost-first, {r('s', 'live_reference_comparison.changed_by_profile.evidence-first')} evidence-first and {r('s', 'live_reference_comparison.changed_by_profile.performance_zero')} performance-free winners. The evidence-first changes include the effect of source-confidence categories and cost weighting. Consequently, these counts cannot be attributed solely to metal-price movement.
+
+The controlled balanced-profile comparison identifies {r('ctrl', 'summary.changed_winner_counts.evidence_only')} changed winners when only source annotations change, {r('ctrl', 'summary.changed_winner_counts.price_only')} when only numeric prices change, and {r('ctrl', 'summary.changed_winner_counts.combined')} when both change. Evidence-only changes occur in {r('ctrl', 'summary.changed_winners.evidence_only', 'join')}; the price-only change occurs in {r('ctrl', 'summary.changed_winners.price_only', 'join')}. This decomposition separates the two channels within the model. The reference and live states differ in dates and support-price basis, so it is not a same-date causal estimate of market movement. These counts are distinct from the historical metal-series replay above.
 
 {f(5, 'live_reference', 'Winner changes by decision profile between the frozen live and monthly reference inputs.')}
 
@@ -241,11 +274,17 @@ Table 2. Scale-specific processing-cost ranges.
 
 Fusion, hydrothermal synthesis, hydrogen reduction, sulfiding and washcoating retain explicit equipment-proxy or missing-operation notes. No new autoclave, reduction-furnace, centrifuge, sieve, coating, freeze-drying, CVD or ALD rate was derived. SI preserves method sources, repeated operations and scale-specific costs.
 
+The controlled route/scale study contains {r('meta', 'controlled_manufacturing_cases')} scenarios. Incipient-wetness selling price changes from {r('ctrl', 'manufacturing.rows[1].selling_usd_per_lb', '.4f')} to {r('ctrl', 'manufacturing.rows[2].selling_usd_per_lb', '.4f')} USD/lb between {r('ctrl', 'manufacturing.rows[1].order_short_tons')} and {r('ctrl', 'manufacturing.rows[2].order_short_tons')} short tons with the finished-material cost held fixed. This step arises from discrete scale classes and nominal production rates, not a measured factory discount or an independently validated economy of scale. Equal activity, precursor retention and yield across routes are not demonstrated.
+
+The {r('meta', 'controlled_electrode_cases')} controlled electrode scenarios retain their area unit. At the baseline powder price, catalog-resolved costs increase from {r('ctrl', 'electrode.rows[3].cost_usd_per_m2', '.2f')} to {r('ctrl', 'electrode.rows[5].cost_usd_per_m2', '.2f')} USD/m² as loading increases from {r('ctrl', 'electrode.rows[3].loading_mg_cm2')} to {r('ctrl', 'electrode.rows[5].loading_mg_cm2')} mg/cm². These are mixed catalog material-stack scenarios, not industrial assembly quotations or designs matched for activity, lifetime or plant throughput. They illustrate the boundary required when interpreting high electrode-area costs alongside powder mass costs.
+
 ## Limitations
 
 The library contains {r('s', 'screening_basis_counts.literature_architecture_proxy')} literature-architecture proxies and {r('s', 'screening_basis_counts.engineering_proxy')} engineering proxies, alongside explicitly labelled specialised bases. Source verification is not uniform validation of all compositions. Public contract or catalog observations do not automatically match the model's grade, order size and delivery boundary. All-grade support unit values can differ substantially from catalyst-grade purchases; their short history cannot establish long-run support volatility.
 
 No generic carbon, silica or zeolite LCA factor was inferred from a chemically or geographically different inventory. Missing impacts, scale substitution, throughput, partial inflation indices and recovery scenarios are reported separately rather than combined into an unsupported universal error bar. The analysis excludes deactivation, regeneration, lifetime productivity and use-phase impacts. Monte Carlo bounds elsewhere in the software are user-defined scenarios; deterministic repetition does not establish their empirical distributions.
+
+Controlled model scenarios do not replace independent observations. A prepared external-researcher evaluation protocol has not yet produced participant results; automated browser checks establish software behavior only. Commercial access controls, test counts and repeatable calculations do not establish customer adoption or an empirical accuracy bound. Source-data reuse permissions remain separate from scientific citation and code licensing.
 
 ## Conclusions
 
@@ -255,6 +294,8 @@ COMET enables inspectable catalyst screening under fixed sources, preparation as
 
 The [COMET repository](https://github.com/hyunjin-kor/COMET) uses PolyForm Noncommercial 1.0.0, which is not an OSI-approved open-source license. The prepared version is {r('m', 'project_version')}; tag `v1.4.0` is planned, not asserted as published. The project concept DOI [10.5281/zenodo.21451931](https://doi.org/10.5281/zenodo.21451931) identifies the existing deposit, not a newly deposited submission version. No original CatCost workbook or commercial life-cycle database is redistributed.
 
+The existing library nevertheless includes legacy records declaring CatCost workbook/sheet origins. Their presence is disclosed in the [rights register](../commercial/rights-register-{DATE}.md); exclusion of the original workbook does not clear derived-record redistribution. A new release and commercial hosted startup remain gated on data-origin review. Free access to IMF, Comtrade or market websites does not itself confer commercial reuse permission. The retained research artifacts are not a blanket license to redistribute source data or a claim that the proposed company has acquired rights.
+
 The metal-history SHA-256 is {r('m', 'history.sha256')}; the support-history SHA-256 is {r('m', 'support_history.sha256')}. The [manifest]({run.names['m']}) records source snapshots, code/data hashes, package versions and commands. Reproduce this price month and all six analysis figures offline with:
 
 ```bash
@@ -262,6 +303,14 @@ The metal-history SHA-256 is {r('m', 'history.sha256')}; the support-history SHA
 ```
 
 Rebuild the manuscript and SI with `python scripts/build_submission_manuscript.py --directory docs/paper/{run.prefix}`; append `--check` to verify retained documents against their JSON inputs. All computed claims carry file/key references in HTML comments. The original earlier-month manuscript remains a historical artifact; this manuscript, SI and figure set consistently use the run above.
+
+The controlled numerical output SHA-256 is {r('meta', 'controlled_output_sha256')}; its [provenance]({CONTROLLED_PROVENANCE}) records the original analysis code/data hashes and environment. Re-run its additional SI figure using the same frozen states:
+
+```bash
+python scripts/run_controlled_cases.py --reference-basis docs/paper/{run.prefix}/reference_basis_{DATE}.json --live-basis docs/paper/{run.prefix}/live_basis_{DATE}.json --out-dir _local/controlled-replay --seed {run.manifest['seed']}
+```
+
+The publication format follows the provisional journal review in [the target record](journal-targets-{DATE}.md). Exact JIF year, JCR category/quartile, publication-cost coverage and author approval remain unconfirmed; no submission has occurred.
 
 ## Supporting information
 
@@ -273,12 +322,18 @@ Funding, contributions and acknowledgments: [to be supplied by the authors].
 
 OpenAI Codex assisted with software development, source-audit organization and manuscript drafting. Human authors retain responsibility for reviewing the evidence, calculations and submitted text; no AI system is listed as an author.
 
+## Competing interests
+
+Subscription commercialization through a professor-associated company is proposed. The authors must confirm the actual company relationship, ownership, financial interests, institutional permissions and disclosure wording before submission. This draft does not assert an executed license, commercial revenue or an absence of competing interests.
+
 ## References
 
 1. Baddour, F. G.; Snowden-Swan, L.; Super, J. D.; Van Allsburg, K. M. Estimating Precommercial Heterogeneous Catalyst Price: A Simple Step-Based Method. *Organic Process Research & Development* **2018**, *22* (12), 1599–1605. [DOI](https://doi.org/10.1021/acs.oprd.8b00245).
 2. Van Allsburg, K. M.; Tan, E. C. D.; Super, J. D.; Schaidle, J. A.; Baddour, F. G. Early-stage evaluation of catalyst manufacturing cost and environmental impact using CatCost. *Nature Catalysis* **2022**, *5* (4), 342–353. [DOI](https://doi.org/10.1038/s41929-022-00759-6).
 3. Cortes-Peña, Y.; Kumar, D.; Singh, V.; Guest, J. S. BioSTEAM: A Fast and Flexible Platform for the Design, Simulation, and Techno-Economic Analysis of Biorefineries under Uncertainty. *ACS Sustainable Chemistry & Engineering* **2020**, *8* (8), 3302–3310. [DOI](https://doi.org/10.1021/acssuschemeng.9b07040).
 4. Nuss, P.; Eckelman, M. J. Life Cycle Assessment of Metals: A Scientific Synthesis. *PLoS ONE* **2014**, *9* (7), e101298. [DOI](https://doi.org/10.1371/journal.pone.0101298).
+5. Gkika, D. A.; Kyzas, G. Z. Cost Evidence Yields the Viability of Metal Oxides Synthesis Routes. *ACS Sustainable Chemistry & Engineering* **2025**, *13* (41), 17370–17379. [DOI](https://doi.org/10.1021/acssuschemeng.5c06752).
+6. Ferdous, S.; Gracida-Alvarez, U. R.; Ferrandon, M.; Delferro, M.; Benavides, P. T.; Urgun-Demirtas, M. Techno-economic and life cycle analyses of the synthesis of a platinum–strontium titanate catalyst. *Catalysis Science & Technology* **2025**, *15* (15), 4419–4429. [DOI](https://doi.org/10.1039/d5cy00189g).
 
 ## TOC graphic
 
@@ -306,7 +361,7 @@ def supporting_information(run):
             fields = [r("a", f"families[{fi}].family"), r("a", base + ".title") + f" (`{candidate['slug']}`; {family['catalyst_domain']})", r("a", base + ".screening_basis"), r("a", base + ".route"), r("a", base + ".landed_cost_per_lb", ".4f"), r("a", base + ".lca.total_gwp", ".4f"), r("a", base + ".lca.coverage_pct", ".2f")]
             lines.append("| " + " | ".join(fields) + " |")
     lines += ["", "## Table S2. Manufacturing methods and processing costs", "",
-              "Original steps retain repeats. The frozen JSON also supplies `steps_fitted` and `substitutions`. Costs exclude materials, overhead, selling margin and missing operations. Source labels are transcribed, not newly verified literature recipes. Legacy CatCost labels are not evidence that proprietary workbook files are distributed.", "",
+              "Original steps retain repeats. The frozen JSON also supplies `steps_fitted` and `substitutions`. Costs exclude materials, overhead, selling margin and missing operations. Source labels are transcribed, not newly verified literature recipes. Legacy workbook-origin declarations require a separate rights review; excluding the original workbook does not clear derived-record redistribution.", "",
               "| Method | Original steps | Source and public links | Small (USD/lb) | Medium (USD/lb) | Large (USD/lb) | Proxy/uncosted operations |", "|---|---|---|---:|---:|---:|---|"]
     for i, template in enumerate(catalog["scales"]["20"]["templates"]):
         raw = load(ROOT / f"backend/data/process_templates/{template['id']}.json")
@@ -325,6 +380,7 @@ def supporting_information(run):
               "| Source | Role | Reuse and interpretation limit |", "|---|---|---|",
               "| COMET | Independent code and generated analysis | PolyForm Noncommercial 1.0.0; not OSI-approved; commercial use requires separate permission. |",
               "| CatCost publications and User Guide | Method and published regression cases | Academic citation; original workbook excluded; no NREL endorsement. |",
+              "| Legacy workbook-origin records | Existing materials/equipment and other retained values | Declared origins remain visible; public-release and commercial-use review unresolved. See the [rights register](../commercial/rights-register-2026-09-07.md). No new blanket redistribution permission. |",
               "| IMF PCPS / Johnson Matthey | Institutional metal history | Retained source labels and dates; provider-wide redistribution permission not inferred. |",
               "| UN Comtrade | HS-code import unit values | Public preview, no credentials. Small analytical record excerpts retain United Nations source attribution; see [source policy](https://uncomtrade.org/docs/policy-on-use-and-re-dissemination/). All-grade indicators are not catalyst-grade quotes. |",
               "| USGS / historical anchors | Metals without monthly series | Source-specific notes retained; anchors are not observed monthly volatility. |",
@@ -362,7 +418,27 @@ def supporting_information(run):
             original_price = r("er", f"cases[{original_index}].observation.price", ".2f") + " " + r("er", f"cases[{original_index}].observation.unit")
         fields = [r("er", f"cases[{original_index}].title"), r("e", f"cases[{i}].evidence_kind"), original_price, r("e", f"cases[{i}].catalog_price_usd_per_kg", ".2f"), r("e", f"cases[{i}].exclusion_reasons", "join")]
         lines.append("| " + " | ".join(fields) + " |")
-    lines.append("")
+    lines += ["", f"A further {r('meta', 'additional_primary_papers')} papers are screened in the [extension](../sources/independent-evidence-extension-{DATE}.md). Laboratory ABC/TCO modelling and a separate CatCost-based TEA add context, not matched industrial observations. Full source articles and proprietary inputs were not imported.", "",
+              "## Figure S1. Controlled price/evidence, route/scale and electrode scenarios", "",
+              f"![Controlled scenario analysis; not empirical manufacturing validation.](controlled-{DATE}/controlled_cases.png)", "",
+              f"The crossed balanced-profile design changes {r('ctrl', 'summary.changed_winner_counts.evidence_only')} winners through source annotations alone, {r('ctrl', 'summary.changed_winner_counts.price_only')} through numeric prices alone and {r('ctrl', 'summary.changed_winner_counts.combined')} through both. Each candidate's score decomposition allocates the interaction between the two channels; winner counts are not additive causal effects. Exact weights, rankings, component-cost/evidence state and contributions are retained in the controlled JSON. This is distinct from historical monthly replay.", "",
+              "## Table S6. Fixed-composition manufacturing scenarios", "",
+              "Finished composition and material-price basis stay fixed. Scale steps are discrete model classes, not measured plant discounts. Equal activity and route-dependent yields are not established.", "",
+              "| Route | Order (short tons) | Scale | Materials (USD/lb) | Processing (USD/lb) | Selling (USD/lb) |", "|---|---:|---|---:|---:|---:|"]
+    for i, row in enumerate(run.data[CONTROLLED_NAME]['manufacturing']['rows']):
+        base = f'manufacturing.rows[{i}]'
+        fields = [r('ctrl', f'{base}.{key}', '.4f' if key.endswith('usd_per_lb') else None) for key in
+                  ('route_id', 'order_short_tons', 'scale', 'materials_usd_per_lb', 'processing_usd_per_lb', 'selling_usd_per_lb')]
+        lines.append('| ' + ' | '.join(fields) + ' |')
+    lines += ["", "## Table S7. Electrode material-stack scenarios", "",
+              "Retained catalog inputs are not bulk manufacturing quotations. A hypothetical powder-price multiplier and loading vary while other selected inputs remain fixed. These designs are not matched for activity or lifetime and do not add complete industrial assembly costs.", "",
+              "| Loading (mg/cm²) | Powder-price multiplier | Cost (USD/m²) |", "|---:|---:|---:|"]
+    for i, row in enumerate(run.data[CONTROLLED_NAME]['electrode']['rows']):
+        base = f'electrode.rows[{i}]'
+        fields = [r('ctrl', f'{base}.{key}', '.2f' if key == 'cost_usd_per_m2' else None) for key in
+                  ('loading_mg_cm2', 'powder_price_multiplier', 'cost_usd_per_m2')]
+        lines.append('| ' + ' | '.join(fields) + ' |')
+    lines += ["", f"Controlled numerical SHA-256: {r('meta', 'controlled_output_sha256')}. The [provenance]({CONTROLLED_PROVENANCE}) records the original input/code hashes and environment; the original frozen primary run remains preserved.", ""]
     return "\n".join(lines)
 
 
@@ -424,8 +500,8 @@ def main():
     si = supporting_information(run)
     abstract = draft.split("## Abstract\n\n", 1)[1].split("\n\nKeywords:", 1)[0]
     abstract_words = word_count(abstract)
-    if not 150 <= abstract_words <= 200:
-        raise ValueError(f"Abstract length {abstract_words} is outside ACS 150–200 words")
+    if not 150 <= abstract_words <= 300:
+        raise ValueError(f"Abstract length {abstract_words} exceeds the provisional Article preparation range")
     text = draft.split("## Abstract\n\n", 1)[1].split("## References", 1)[0]
     text = re.sub(r"^!\[.*$|^\|.*$|^Table [12]\. .*$", "", text, flags=re.M)
     count = word_count(text)
@@ -435,10 +511,12 @@ def main():
         "text_words_excluding_tables_figures_references": count,
         "figure_count": 6,
         "table_count": 2,
-        "word_equivalents_small_graphics": count + 8 * 300,
-        "word_equivalents_large_graphics": count + 8 * 600,
-        "article_limit": 7000,
-        "word_count_note": "Approximate lexical count; all eight analytical figures/tables conservatively counted at 600 each. TOC excluded. Final typeset graphic size determines ACS count.",
+        "supporting_figure_count": 1,
+        "supporting_table_count": 7,
+        "target_journal": "ACS Engineering Au (provisional; JCR year/category eligibility unresolved)",
+        "abstract_limit": 300,
+        "article_limit": None,
+        "word_count_note": "Approximate lexical count. No fixed Article main-text/figure cap confirmed in inspected Engineering Au guidance. Six main figures are an editorial choice; the 2200-word Letters rule is not applied.",
         "manuscript_json_key_references": verify_references(draft, run),
         "si_json_key_references": verify_references(si, run),
         "frozen_outputs_verified": len(run.manifest["outputs"]),
