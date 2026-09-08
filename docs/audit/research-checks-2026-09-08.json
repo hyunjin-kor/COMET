@@ -1,0 +1,305 @@
+{
+  "checks": [
+    {
+      "check": "research-controlled",
+      "command": [
+        "python",
+        "scripts/run_controlled_cases.py",
+        "--reference-basis",
+        "docs/paper/submission-2026-09-07/reference_basis_2026-09-07.json",
+        "--live-basis",
+        "docs/paper/submission-2026-09-07/live_basis_2026-09-07.json",
+        "--out-dir",
+        "docs/paper/controlled-2026-09-08"
+      ],
+      "exit_code": 0,
+      "seconds": 2.524,
+      "at": "2026-09-08T03:14:07.222828+00:00",
+      "log": "docs/audit/prepublication-research-controlled-2026-09-08.log"
+    },
+    {
+      "check": "research-desktop-build-v2",
+      "command": [
+        "npm.cmd",
+        "run",
+        "build",
+        "--",
+        "--publish",
+        "never"
+      ],
+      "exit_code": 1,
+      "seconds": 123.572,
+      "at": "2026-09-08T03:26:04.916251+00:00",
+      "log": "docs/audit/prepublication-research-desktop-build-v2-2026-09-08.log"
+    },
+    {
+      "check": "research-desktop-build-v3",
+      "command": [
+        "npm.cmd",
+        "run",
+        "build",
+        "--",
+        "--",
+        "--publish",
+        "never"
+      ],
+      "exit_code": 0,
+      "seconds": 167.572,
+      "at": "2026-09-08T03:32:04.285694+00:00",
+      "log": "docs/audit/prepublication-research-desktop-build-v3-2026-09-08.log"
+    },
+    {
+      "check": "research-desktop-smoke",
+      "command": [
+        "npm.cmd",
+        "run",
+        "smoke:desktop"
+      ],
+      "exit_code": 0,
+      "seconds": 17.311,
+      "at": "2026-09-08T03:32:21.677829+00:00",
+      "log": "docs/audit/prepublication-research-desktop-smoke-2026-09-08.log"
+    },
+    {
+      "check": "research-final-ruff",
+      "command": [
+        "python",
+        "-m",
+        "ruff",
+        "check",
+        "backend",
+        "scripts"
+      ],
+      "exit_code": 0,
+      "seconds": 0.103,
+      "at": "2026-09-08T03:22:22.797510+00:00",
+      "log": "docs/audit/prepublication-research-final-ruff-2026-09-08.log"
+    },
+    {
+      "check": "research-frontend",
+      "command": [
+        "npm.cmd",
+        "--prefix",
+        "frontend",
+        "run",
+        "build"
+      ],
+      "exit_code": 0,
+      "seconds": 4.269,
+      "at": "2026-09-08T03:13:04.487861+00:00",
+      "log": "docs/audit/prepublication-research-frontend-2026-09-08.log"
+    },
+    {
+      "check": "research-i18n",
+      "command": [
+        "npm.cmd",
+        "--prefix",
+        "frontend",
+        "run",
+        "check:i18n"
+      ],
+      "exit_code": 0,
+      "seconds": 0.617,
+      "at": "2026-09-08T03:13:05.166861+00:00",
+      "log": "docs/audit/prepublication-research-i18n-2026-09-08.log"
+    },
+    {
+      "check": "research-lint",
+      "command": [
+        "npm.cmd",
+        "--prefix",
+        "frontend",
+        "run",
+        "lint"
+      ],
+      "exit_code": 0,
+      "seconds": 4.937,
+      "at": "2026-09-08T03:13:00.150807+00:00",
+      "log": "docs/audit/prepublication-research-lint-2026-09-08.log"
+    },
+    {
+      "check": "research-node",
+      "command": [
+        "node",
+        "--test",
+        "scripts/hosted-session.test.mjs",
+        "scripts/test_calculator_rules.mjs",
+        "scripts/test_practical_range.mjs",
+        "scripts/test_scientific_text.mjs"
+      ],
+      "exit_code": 0,
+      "seconds": 0.429,
+      "at": "2026-09-08T03:27:58.287338+00:00",
+      "log": "docs/audit/prepublication-research-node-2026-09-08.log"
+    },
+    {
+      "check": "research-paper-check",
+      "command": [
+        "python",
+        "scripts/build_submission_manuscript.py",
+        "--date",
+        "2026-09-08",
+        "--directory",
+        "docs/paper/submission-2026-09-08",
+        "--robustness",
+        "docs/paper/robustness-2026-09-08",
+        "--check"
+      ],
+      "exit_code": 0,
+      "seconds": 0.955,
+      "at": "2026-09-08T03:27:57.776464+00:00",
+      "log": "docs/audit/prepublication-research-paper-check-2026-09-08.log"
+    },
+    {
+      "check": "research-paper",
+      "command": [
+        "python",
+        "scripts/reproduce_paper.py",
+        "--price-basis",
+        "reference",
+        "--month",
+        "2026-05",
+        "--seed",
+        "20260906",
+        "--date",
+        "2026-09-08",
+        "--history",
+        "docs/paper/submission-2026-09-07/price_history_2026-09-07.json",
+        "--live-basis",
+        "docs/paper/submission-2026-09-07/live_basis_2026-09-07.json",
+        "--support-history",
+        "docs/paper/submission-2026-09-07/support_history_2026-09-07.json",
+        "--out-dir",
+        "docs/paper/submission-2026-09-08"
+      ],
+      "exit_code": 0,
+      "seconds": 26.282,
+      "at": "2026-09-08T03:13:59.680967+00:00",
+      "log": "docs/audit/prepublication-research-paper-2026-09-08.log"
+    },
+    {
+      "check": "research-pytest",
+      "command": [
+        "python",
+        "-m",
+        "pytest",
+        "backend/tests",
+        "-q"
+      ],
+      "exit_code": 0,
+      "seconds": 525.887,
+      "at": "2026-09-08T03:21:30.763327+00:00",
+      "log": "docs/audit/prepublication-research-pytest-2026-09-08.log"
+    },
+    {
+      "check": "research-ruff",
+      "command": [
+        "python",
+        "-m",
+        "ruff",
+        "check",
+        "backend",
+        "scripts"
+      ],
+      "exit_code": 0,
+      "seconds": 0.104,
+      "at": "2026-09-08T03:12:55.151373+00:00",
+      "log": "docs/audit/prepublication-research-ruff-2026-09-08.log"
+    },
+    {
+      "check": "research-study-repeat",
+      "command": [
+        "python",
+        "scripts/run_decision_robustness.py",
+        "--out-dir",
+        "_local/robustness-replay"
+      ],
+      "exit_code": 0,
+      "seconds": 41.407,
+      "at": "2026-09-08T03:14:04.630272+00:00",
+      "log": "docs/audit/prepublication-research-study-repeat-2026-09-08.log"
+    },
+    {
+      "check": "research-study-v2",
+      "command": [
+        "python",
+        "scripts/run_decision_robustness.py",
+        "--out-dir",
+        "docs/paper/robustness-2026-09-08"
+      ],
+      "exit_code": 1,
+      "seconds": 6.299,
+      "at": "2026-09-08T03:10:21.779472+00:00",
+      "log": "docs/audit/prepublication-research-study-v2-2026-09-08.log"
+    },
+    {
+      "check": "research-study-v3",
+      "command": [
+        "python",
+        "scripts/run_decision_robustness.py",
+        "--out-dir",
+        "docs/paper/robustness-2026-09-08"
+      ],
+      "exit_code": 0,
+      "seconds": 39.374,
+      "at": "2026-09-08T03:12:34.112507+00:00",
+      "log": "docs/audit/prepublication-research-study-v3-2026-09-08.log"
+    },
+    {
+      "check": "research-study",
+      "command": [
+        "python",
+        "scripts/run_decision_robustness.py",
+        "--out-dir",
+        "docs/paper/robustness-2026-09-08"
+      ],
+      "exit_code": 1,
+      "seconds": 1.255,
+      "at": "2026-09-08T03:09:53.392887+00:00",
+      "log": "docs/audit/prepublication-research-study-2026-09-08.log"
+    },
+    {
+      "check": "research-table62",
+      "command": [
+        "python",
+        "scripts/reproduce_catcost_table62.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.095,
+      "at": "2026-09-08T03:13:05.334068+00:00",
+      "log": "docs/audit/prepublication-research-table62-2026-09-08.log"
+    }
+  ],
+  "source_commit": "24d95b19d670631bd4820c3d3787d316c37a3fea",
+  "source_ci": "https://github.com/hyunjin-kor/COMET/actions/runs/34183748797",
+  "source_ci_status": "success",
+  "note": "Frozen figures intentionally preserve renderer whitespace and CRLF byte hashes; source/docs whitespace check passed. The full suite collected 898 tests before two final integrity/equivalence regressions were added; all 30 focused tests passed afterwards. CI validates the final complete count.",
+  "source_ci_details": {
+    "headSha": "24d95b19d670631bd4820c3d3787d316c37a3fea",
+    "conclusion": "success",
+    "url": "https://github.com/hyunjin-kor/COMET/actions/runs/34183748797",
+    "jobs": [
+      {
+        "name": "desktop",
+        "conclusion": "success",
+        "startedAt": "2026-09-08T03:30:32Z",
+        "completedAt": "2026-09-08T03:34:08Z"
+      },
+      {
+        "name": "backend",
+        "conclusion": "success",
+        "startedAt": "2026-09-08T03:30:31Z",
+        "completedAt": "2026-09-08T03:40:34Z"
+      },
+      {
+        "name": "frontend",
+        "conclusion": "success",
+        "startedAt": "2026-09-08T03:30:31Z",
+        "completedAt": "2026-09-08T03:30:55Z"
+      }
+    ],
+    "test_summaries": [
+      "backend\tTest\t2026-09-08T03:40:30.3099251Z ================= 900 passed, 2 warnings in 571.54s (0:09:31) =================="
+    ]
+  }
+}

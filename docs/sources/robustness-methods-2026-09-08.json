@@ -71,5 +71,12 @@
       },
       "URL": "https://doi.org/10.1787/9789264043466-en"
     }
+  },
+  {
+    "url": "https://doi.org/10.1787/9789264043466-en",
+    "status": 403,
+    "final_url": "https://www.oecd.org/en/publications/handbook-on-constructing-composite-indicators-methodology-and-user-guide_9789264043466-en.html",
+    "content_type": "text/html; charset=UTF-8",
+    "checked_at": "2026-09-08T03:36:19.882745+00:00"
   }
 ]
