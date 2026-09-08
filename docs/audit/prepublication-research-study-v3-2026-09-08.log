@@ -1,0 +1,58 @@
+aem-electrolyzer-oer: 89 months, joint retention 70.86%
+ammonia-cracking: 89 months, joint retention 41.56%
+ammonia-synthesis: 89 months, joint retention 44.77%
+co-prox: 89 months, joint retention 23.61%
+co2-electroreduction: 89 months, joint retention 95.68%
+co2-methanation: 89 months, joint retention 49.90%
+co2-methanol: 89 months, joint retention 58.33%
+co2-to-formate: 89 months, joint retention 45.74%
+dry-reforming: 89 months, joint retention 49.95%
+ethylene-epoxidation: 89 months, joint retention 65.09%
+fischer-tropsch-synthesis: 89 months, joint retention 32.88%
+formic-acid-dehydrogenation: 89 months, joint retention 44.22%
+fuel-cell-orr: 89 months, joint retention 24.43%
+glycerol-electrooxidation: 89 months, joint retention 75.81%
+hydrodeoxygenation: 89 months, joint retention 88.86%
+hydrogen-evolution-reaction: 89 months, joint retention 77.81%
+methane-pyrolysis: 89 months, joint retention 51.46%
+methanol-to-olefins: 89 months, joint retention 59.45%
+nh3-scr: 89 months, joint retention 80.83%
+nitrogen-reduction-reaction: 89 months, joint retention 95.85%
+olefin-metathesis: 89 months, joint retention 58.75%
+pem-electrolyzer-oer: 89 months, joint retention 80.97%
+photocatalytic-co2-reduction: 89 months, joint retention 79.68%
+photocatalytic-water-splitting: 89 months, joint retention 65.62%
+propane-dehydrogenation: 89 months, joint retention 68.28%
+rwgs: 89 months, joint retention 37.24%
+selective-acetylene-hydrogenation: 89 months, joint retention 62.70%
+steam-methane-reforming: 89 months, joint retention 61.55%
+syngas-methanol: 89 months, joint retention 91.88%
+water-gas-shift: 89 months, joint retention 38.60%
+{
+  "families": 30,
+  "candidates": 116,
+  "months": 89,
+  "first_month": "2019-01",
+  "last_month": "2026-05",
+  "weight_points": {
+    "0.1": 286,
+    "0.05": 1771
+  },
+  "joint_scenarios_all_families": {
+    "0.1": 763620,
+    "0.05": 4728570
+  },
+  "reference_winner_joint_share_median_pct": 60.4977825,
+  "reference_winner_joint_share_min_pct": 23.612636,
+  "reference_winner_joint_share_max_pct": 95.847582,
+  "families_reference_winner_below_half_joint": 11,
+  "candidate_removal_cases": 86,
+  "candidate_removal_winner_changes": 9,
+  "candidate_removal_families_changed": 9,
+  "rubric_robust_family_counts": {
+    "2": 20,
+    "5": 10,
+    "10": 7
+  },
+  "grid_refinement_max_share_change_pp": 7.589943
+}

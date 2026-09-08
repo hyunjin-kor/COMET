@@ -29,6 +29,7 @@ from backend.core.decision_engine import (  # noqa: E402
     _load_catalogs,
     evaluate_benchmark_family,
     list_benchmark_families,
+    rank_candidates,
 )
 from backend.database import (  # noqa: E402
     create_db_and_tables,
@@ -51,13 +52,7 @@ def simplex_grid(step: float) -> list[dict[str, float]]:
 
 
 def rank(cands: list[dict], w: dict[str, float]) -> list[str]:
-    def total(c: dict) -> float:
-        return sum(float(c["scores"][k]) * w[k] for k in DIMS)
-
-    return [
-        c["slug"]
-        for c in sorted(cands, key=lambda c: (-total(c), float(c["summary"]["landed_cost_per_lb"]), c["slug"]))
-    ]
+    return [c["slug"] for c in rank_candidates(cands, w)]
 
 
 def slim(c: dict) -> dict:

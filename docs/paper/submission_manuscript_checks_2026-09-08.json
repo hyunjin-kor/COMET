@@ -1,0 +1,17 @@
+{
+  "basis_month": "2026-05",
+  "abstract_words": 192,
+  "text_words_excluding_tables_figures_references": 3051,
+  "figure_count": 6,
+  "table_count": 2,
+  "supporting_figure_count": 2,
+  "supporting_table_count": 8,
+  "target_journal": "ACS Engineering Au (provisional; JCR year/category eligibility unresolved)",
+  "abstract_limit": 300,
+  "article_limit": null,
+  "word_count_note": "Approximate lexical count. No fixed Article main-text/figure cap confirmed in inspected Engineering Au guidance. Six main figures are an editorial choice; the 2200-word Letters rule is not applied.",
+  "manuscript_json_key_references": 109,
+  "si_json_key_references": 1307,
+  "frozen_outputs_verified": 27,
+  "reproduction_command": "python scripts/reproduce_paper.py --price-basis reference --month 2026-05 --seed 20260906 --date 2026-09-08 --out-dir _local/submission-replay-2026-09-08 --history docs/paper/submission-2026-09-08/price_history_2026-09-08.json --support-history docs/paper/submission-2026-09-08/support_history_2026-09-08.json --live-basis docs/paper/submission-2026-09-08/live_basis_2026-09-08.json"
+}

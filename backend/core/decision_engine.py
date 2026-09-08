@@ -244,6 +244,13 @@ def _economic_scores(candidates: list[dict[str, Any]]) -> None:
     low = min(costs)
     spread = high - low
     for item in candidates:
+        if not use_basis:
+            # Some electrode candidates lack assembly inputs. The existing
+            # family comparison then uses powder cost for every candidate;
+            # display and tie-break that same basis instead of mixing units.
+            item["summary"]["economics_basis_value"] = item["summary"]["landed_cost_per_lb"]
+            item["summary"]["economics_basis_unit"] = "$/lb"
+            item["summary"]["economics_basis_label"] = "Catalyst powder screening"
         price = (
             float(item["summary"]["economics_basis_value"])
             if use_basis
@@ -264,6 +271,25 @@ def _apply_total_scores(candidates: list[dict[str, Any]], weights: dict[str, flo
             + item["scores"]["performance"] * weights["performance"],
             1,
         )
+
+
+def rank_candidates(
+    candidates: list[dict[str, Any]], weights: dict[str, float] | None = None,
+) -> list[dict[str, Any]]:
+    """Order by displayed score, then the priced functional unit and stable ID.
+
+    Supplying weights scores without mutating the candidates; paper sweeps use
+    the same rounding and tie policy as the application.
+    """
+    def key(item: dict[str, Any]) -> tuple[float, float, str]:
+        score = round(sum(item["scores"][dim] * weights[dim]
+                          for dim in ("economics", "evidence", "route", "performance")), 1) if weights is not None else item["scores"]["total"]
+        cost = item["summary"].get("economics_basis_value")
+        if cost is None:
+            cost = item["summary"]["landed_cost_per_lb"]
+        return -float(score), float(cost), item["slug"]
+
+    return sorted(candidates, key=key)
 
 
 def evaluate_benchmark_family(
@@ -434,13 +460,7 @@ def evaluate_benchmark_family(
 
     _economic_scores(candidates)
     _apply_total_scores(candidates, score_weights)
-    candidates.sort(
-        key=lambda item: (
-            -float(item["scores"]["total"]),
-            float(item["summary"]["landed_cost_per_lb"]),
-            item["slug"],
-        ),
-    )
+    candidates = rank_candidates(candidates)
 
     return {
         "family": catalog["family"],

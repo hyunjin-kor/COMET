@@ -1,0 +1,561 @@
+
+> comet@1.4.0 build
+> npm run build:frontend && npm run build:backend-sidecar && npm run electron:build --publish never
+
+
+> comet@1.4.0 build:frontend
+> cd frontend && npm run build
+
+
+> frontend@1.4.0 build
+> tsc -b && vite build
+
+vite v8.1.5 building client environment for production...
+[2K
+transforming...✓ 631 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                      0.83 kB │ gzip:   0.42 kB
+dist/assets/PretendardVariable-CJuje-Rk.woff2    2,057.68 kB
+dist/assets/index-4dLGx_eP.css                      67.87 kB │ gzip:  12.26 kB
+dist/assets/format-price-xyQn9blZ.js                 0.35 kB │ gzip:   0.18 kB │ map:     1.67 kB
+dist/assets/calculator-session-OVC9PJVi.js           0.59 kB │ gzip:   0.28 kB │ map:     5.12 kB
+dist/assets/rolldown-runtime-QTnfLwEv.js             0.69 kB │ gzip:   0.42 kB
+dist/assets/recipe-inputs-CyfhZpma.js                0.69 kB │ gzip:   0.28 kB │ map:     2.25 kB
+dist/assets/ScientificText-C52m6L0G.js               0.80 kB │ gzip:   0.43 kB │ map:     1.63 kB
+dist/assets/ResultBreakdownPieChart-prW7Q3gN.js      0.83 kB │ gzip:   0.54 kB │ map:     2.34 kB
+dist/assets/EstimateRangeBarChart-CiXCqWEE.js        1.01 kB │ gzip:   0.59 kB │ map:     2.66 kB
+dist/assets/Skeleton-a7cBJvy9.js                     1.42 kB │ gzip:   0.59 kB │ map:     4.45 kB
+dist/assets/FitPriceText-D6vJwrZ6.js                 1.56 kB │ gzip:   0.78 kB │ map:     4.81 kB
+dist/assets/MetalCompareChart-CMxt7jih.js            1.71 kB │ gzip:   0.90 kB │ map:     5.27 kB
+dist/assets/MetalTrendChart-BGbbMhiI.js              1.78 kB │ gzip:   0.89 kB │ map:     5.06 kB
+dist/assets/WorkspaceSections-D9G12AR1.js            3.36 kB │ gzip:   1.51 kB │ map:     9.67 kB
+dist/assets/Account-BVZMAYTy.js                      6.50 kB │ gzip:   2.27 kB │ map:    12.76 kB
+dist/assets/export-csv-C6rU8IP_.js                   7.66 kB │ gzip:   2.94 kB │ map:    19.96 kB
+dist/assets/CostEvidencePanel-DlbIiRxL.js           15.31 kB │ gzip:   3.89 kB │ map:    34.94 kB
+dist/assets/CapEx-sxiSAfRX.js                       18.49 kB │ gzip:   4.36 kB │ map:    44.35 kB
+dist/assets/Compare-DcNW0Abw.js                     18.70 kB │ gzip:   4.93 kB │ map:    42.20 kB
+dist/assets/Uncertainty-VF35wWji.js                 20.69 kB │ gzip:   5.96 kB │ map:    47.58 kB
+dist/assets/Library-CMEv2x5R.js                     25.00 kB │ gzip:   6.00 kB │ map:    64.72 kB
+dist/assets/Prices-BPQXu1b0.js                      33.21 kB │ gzip:   8.66 kB │ map:    80.74 kB
+dist/assets/CalculatorResult-DO5MSBZe.js            54.57 kB │ gzip:  12.52 kB │ map:   114.88 kB
+dist/assets/i18n-Cnt0qZQX.js                        76.87 kB │ gzip:  27.90 kB │ map:   106.26 kB
+dist/assets/index-DC73bC8w.js                       78.50 kB │ gzip:  24.46 kB │ map:   548.28 kB
+dist/assets/Calculator-CyDPbIut.js                  92.29 kB │ gzip:  23.45 kB │ map:   239.11 kB
+dist/assets/react-CC1klYW5.js                      189.64 kB │ gzip:  59.65 kB │ map:   841.37 kB
+dist/assets/recharts-KlhfxoSq.js                   390.73 kB │ gzip: 111.46 kB │ map: 1,913.19 kB
+
+✓ built in 414ms
+
+> comet@1.4.0 build:backend-sidecar
+> powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build_backend_bundle.ps1
+
+[COMET] Using Python: C:/Users/user/AppData/Local/Programs/Python/Python311/python.exe
+[COMET] Building backend sidecar...
+[COMET] Backend sidecar ready at build/backend-sidecar\COMETBackend
+
+> comet@1.4.0 electron:build
+> npm run desktop:stop && electron-builder build --win never
+
+
+> comet@1.4.0 desktop:stop
+> powershell -NoProfile -ExecutionPolicy Bypass -File scripts/stop_comet_processes.ps1 -Quiet
+
+  • electron-builder  version=26.15.3 os=10.0.26200
+  • loaded configuration  file=package.json ("build" field)
+  ⨯ Unknown target: never  failedTask=build stackTrace=Error: Unknown target: never
+    at createCommonTarget (C:\Users\user\Desktop\COMET-autonomous-2026-09-06\node_modules\app-builder-lib\src\targets\targetFactory.ts:86:11)
+    at C:\Users\user\Desktop\COMET-autonomous-2026-09-06\node_modules\app-builder-lib\src\winPackager.ts:111:74
+    at mapper (C:\Users\user\Desktop\COMET-autonomous-2026-09-06\node_modules\app-builder-lib\src\targets\targetFactory.ts:56:16)
+    at WinPackager.createTargets (C:\Users\user\Desktop\COMET-autonomous-2026-09-06\node_modules\app-builder-lib\src\winPackager.ts:111:9)
+    at createTargets (C:\Users\user\Desktop\COMET-autonomous-2026-09-06\node_modules\app-builder-lib\src\targets\targetFactory.ts:63:12)
+    at Packager.doBuild (C:\Users\user\Desktop\COMET-autonomous-2026-09-06\node_modules\app-builder-lib\src\packager.ts:526:41)
+    at executeFinally (C:\Users\user\Desktop\COMET-autonomous-2026-09-06\node_modules\builder-util\src\promise.ts:12:14)
+    at Packager.build (C:\Users\user\Desktop\COMET-autonomous-2026-09-06\node_modules\app-builder-lib\src\packager.ts:450:31)
+    at executeFinally (C:\Users\user\Desktop\COMET-autonomous-2026-09-06\node_modules\builder-util\src\promise.ts:12:14)
+
+[plugin @tailwindcss/vite:generate:build] [33m[SOURCEMAP_BROKEN] [0mSourcemap is likely to be incorrect: a plugin (@tailwindcss/vite:generate:build) was used to transform files, but didn't generate a sourcemap for the transformation. Consult the plugin documentation for help: https://rolldown.rs/guide/troubleshooting#warning-sourcemap-is-likely-to-be-incorrect
+
+194 INFO: PyInstaller: 6.19.0, contrib hooks: 2026.3
+194 INFO: Python: 3.11.9
+211 INFO: Platform: Windows-10-10.0.26200-SP0
+211 INFO: Python environment: C:\Users\user\AppData\Local\Programs\Python\Python311
+212 INFO: wrote build/pyinstaller-spec\COMETBackend.spec
+489 WARNING: Failed to collect submodules for 'numpy.f2py.tests' because importing 'numpy.f2py.tests' raised: ModuleNotFoundError: No module named 'pytest'
+6386 INFO: Module search paths (PYTHONPATH):
+['C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06',
+ 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip',
+ 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\DLLs',
+ 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib',
+ 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311',
+ 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages',
+ 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\win32',
+ 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\win32\\lib',
+ 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\Pythonwin',
+ 'C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06']
+6871 INFO: Appending 'datas' from .spec
+6883 INFO: checking Analysis
+6883 INFO: Building Analysis because Analysis-00.toc is non existent
+6883 INFO: Looking for Python shared library...
+6883 INFO: Using Python shared library: C:\Users\user\AppData\Local\Programs\Python\Python311\python311.dll
+6883 INFO: Running Analysis Analysis-00.toc
+6883 INFO: Target bytecode optimization level: 0
+6883 INFO: Initializing module dependency graph...
+6885 INFO: Initializing module graph hook caches...
+6908 INFO: Analyzing modules for base_library.zip ...
+8001 INFO: Processing standard module hook 'hook-heapq.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+8045 INFO: Processing standard module hook 'hook-encodings.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+9123 INFO: Processing standard module hook 'hook-pickle.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+10067 INFO: Caching module dependency graph...
+10098 INFO: Analyzing C:\Users\user\Desktop\COMET-autonomous-2026-09-06\backend\launcher.py
+10102 INFO: Processing standard module hook 'hook-uvicorn.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+10719 INFO: Processing standard module hook 'hook-multiprocessing.util.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+10822 INFO: Processing standard module hook 'hook-xml.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+10987 INFO: Processing standard module hook 'hook-_ctypes.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+11560 INFO: Processing standard module hook 'hook-platform.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+11605 INFO: Processing pre-safe-import-module hook 'hook-typing_extensions.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+11605 INFO: SetuptoolsInfo: initializing cached setuptools info...
+12579 INFO: Processing standard module hook 'hook-difflib.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+12735 INFO: Processing standard module hook 'hook-IPython.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+15683 INFO: Processing standard module hook 'hook-pygments.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+17203 INFO: Processing standard module hook 'hook-xml.dom.domreg.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+17351 INFO: Processing standard module hook 'hook-numpy.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+18104 INFO: Processing standard module hook 'hook-sysconfig.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+18388 INFO: Processing standard module hook 'hook-psutil.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+19253 INFO: Processing standard module hook 'hook-charset_normalizer.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+20202 INFO: Processing standard module hook 'hook-wcwidth.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+21113 INFO: Processing standard module hook 'hook-jedi.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+40317 INFO: Processing standard module hook 'hook-parso.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+41352 INFO: Processing standard module hook 'hook-sqlite3.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+41728 INFO: Processing standard module hook 'hook-nbformat.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+41992 INFO: Processing standard module hook 'hook-jsonschema.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+42617 INFO: Processing standard module hook 'hook-jsonschema_specifications.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+42721 INFO: Processing pre-safe-import-module hook 'hook-importlib_resources.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+42763 INFO: Processing standard module hook 'hook-urllib3.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+42834 INFO: Processing pre-safe-import-module hook 'hook-backports.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+43038 INFO: Processing standard module hook 'hook-certifi.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+43209 INFO: Processing pre-safe-import-module hook 'hook-platformdirs.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+43222 INFO: Processing standard module hook 'hook-platformdirs.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+43551 INFO: Processing standard module hook 'hook-PIL.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+43603 INFO: Processing standard module hook 'hook-PIL.Image.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+44082 INFO: Processing standard module hook 'hook-xml.etree.cElementTree.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+44175 INFO: Processing standard module hook 'hook-PIL.ImageFilter.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+44358 INFO: Processing standard module hook 'hook-zmq.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+44991 INFO: Processing standard module hook 'hook-pycparser.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+45118 INFO: Processing standard module hook 'hook-setuptools.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+45128 INFO: Processing pre-safe-import-module hook 'hook-distutils.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+45132 INFO: Processing pre-find-module-path hook 'hook-distutils.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks\\pre_find_module_path'
+46331 INFO: Processing standard module hook 'hook-distutils.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+46372 INFO: Processing standard module hook 'hook-distutils.util.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+46389 INFO: Processing standard module hook 'hook-_osx_support.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+46522 INFO: Processing standard module hook 'hook-pkg_resources.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+48073 INFO: Processing pre-safe-import-module hook 'hook-importlib_metadata.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+48142 INFO: Processing pre-safe-import-module hook 'hook-packaging.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+48912 INFO: Processing standard module hook 'hook-dateutil.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+49064 INFO: Processing pre-safe-import-module hook 'hook-six.moves.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+49638 INFO: Processing pre-find-module-path hook 'hook-tkinter.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks\\pre_find_module_path'
+49640 INFO: TclTkInfo: initializing cached Tcl/Tk info...
+50504 INFO: Processing standard module hook 'hook-_tkinter.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+50540 INFO: Processing pre-safe-import-module hook 'hook-gi.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+50701 INFO: Processing standard module hook 'hook-websockets.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+51371 INFO: Processing standard module hook 'hook-anyio.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+52222 INFO: Analyzing hidden import 'backend'
+52222 INFO: Analyzing hidden import 'backend.config'
+52258 INFO: Processing standard module hook 'hook-pydantic.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+52957 INFO: Processing standard module hook 'hook-rich.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+54420 INFO: Processing standard module hook 'hook-zoneinfo.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+55174 INFO: Processing pre-safe-import-module hook 'hook-tomli.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+55205 INFO: Analyzing hidden import 'backend.core'
+55206 INFO: Analyzing hidden import 'backend.core.breakeven'
+55223 INFO: Processing standard module hook 'hook-sqlalchemy.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+58906 INFO: Analyzing hidden import 'backend.core.capex_opex'
+58906 INFO: Analyzing hidden import 'backend.core.cost_evidence'
+58922 INFO: Analyzing hidden import 'backend.core.data_rights'
+58922 INFO: Analyzing hidden import 'backend.core.uncertainty'
+58922 INFO: Analyzing hidden import 'backend.database'
+59480 INFO: Analyzing hidden import 'backend.launcher'
+59480 INFO: Analyzing hidden import 'backend.main'
+59488 INFO: Processing standard module hook 'hook-apscheduler.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+60123 INFO: Analyzing hidden import 'backend.schemas.cost_result'
+60123 INFO: Analyzing hidden import 'backend.schemas.metal_price'
+60123 INFO: Analyzing hidden import 'backend.services.bls_updater'
+60138 INFO: Analyzing hidden import 'backend.tests'
+60138 INFO: Analyzing hidden import 'backend.tests.conftest'
+60154 INFO: Analyzing hidden import 'backend.tests.test_api'
+60233 INFO: Analyzing hidden import 'backend.tests.test_benchmark_source_fidelity'
+60241 INFO: Analyzing hidden import 'backend.tests.test_benchmark_source_fidelity_expansion'
+60244 INFO: Analyzing hidden import 'backend.tests.test_benchmark_support_series'
+60247 INFO: Analyzing hidden import 'backend.tests.test_breakeven'
+60250 INFO: Analyzing hidden import 'backend.tests.test_calculation_harness'
+60258 INFO: Analyzing hidden import 'backend.tests.test_capex_api'
+60261 INFO: Analyzing hidden import 'backend.tests.test_capex_opex'
+60263 INFO: Analyzing hidden import 'backend.tests.test_comtrade_snapshot'
+60266 INFO: Analyzing hidden import 'backend.tests.test_controlled_cases'
+60270 INFO: Analyzing hidden import 'backend.tests.test_cost_engine'
+60286 INFO: Analyzing hidden import 'backend.tests.test_cost_evidence'
+60289 INFO: Analyzing hidden import 'backend.tests.test_costing_scope'
+60289 INFO: Analyzing hidden import 'backend.tests.test_curated_library_combinations'
+60289 INFO: Analyzing hidden import 'backend.tests.test_data_rights'
+60303 INFO: Analyzing hidden import 'backend.tests.test_decision_engine_prices'
+60305 INFO: Analyzing hidden import 'backend.tests.test_decision_robustness'
+60343 INFO: Analyzing hidden import 'backend.tests.test_electrocatalyst'
+60354 INFO: Analyzing hidden import 'backend.tests.test_estimate_comparison'
+60363 INFO: Analyzing hidden import 'backend.tests.test_evidence_provenance'
+60366 INFO: Analyzing hidden import 'backend.tests.test_external_cost_cases'
+60371 INFO: Analyzing hidden import 'backend.tests.test_hosted_access'
+60379 INFO: Analyzing hidden import 'backend.tests.test_hosted_backup'
+60379 INFO: Analyzing hidden import 'backend.tests.test_hosted_operations'
+60379 INFO: Analyzing hidden import 'backend.tests.test_hosted_subscription'
+60397 INFO: Analyzing hidden import 'backend.tests.test_lca'
+60397 INFO: Analyzing hidden import 'backend.tests.test_library_harness'
+60397 INFO: Analyzing hidden import 'backend.tests.test_live_snapshot'
+60420 INFO: Analyzing hidden import 'backend.tests.test_live_source_priority'
+60431 INFO: Analyzing hidden import 'backend.tests.test_loh_anchor'
+60435 INFO: Analyzing hidden import 'backend.tests.test_materials_calc'
+60435 INFO: Analyzing hidden import 'backend.tests.test_mea_manufacturing'
+60439 INFO: Analyzing hidden import 'backend.tests.test_paper_submission_claims'
+60439 INFO: Analyzing hidden import 'backend.tests.test_performance_equivalence'
+60439 INFO: Analyzing hidden import 'backend.tests.test_practical_costing'
+60439 INFO: Analyzing hidden import 'backend.tests.test_prepublication_regressions'
+60455 INFO: Analyzing hidden import 'backend.tests.test_price_escalation'
+60456 INFO: Analyzing hidden import 'backend.tests.test_price_evidence'
+60456 INFO: Analyzing hidden import 'backend.tests.test_price_fetcher'
+60456 INFO: Analyzing hidden import 'backend.tests.test_price_fetcher_http'
+60456 INFO: Analyzing hidden import 'backend.tests.test_price_freshness'
+60456 INFO: Analyzing hidden import 'backend.tests.test_price_realism'
+60475 INFO: Analyzing hidden import 'backend.tests.test_price_scheduler_guard'
+60476 INFO: Analyzing hidden import 'backend.tests.test_process_energy'
+60480 INFO: Analyzing hidden import 'backend.tests.test_reference_basis'
+60483 INFO: Analyzing hidden import 'backend.tests.test_reference_price_evidence'
+60485 INFO: Analyzing hidden import 'backend.tests.test_reproduce_paper'
+60489 INFO: Analyzing hidden import 'backend.tests.test_reproducibility'
+60489 INFO: Analyzing hidden import 'backend.tests.test_spent_catalyst'
+60489 INFO: Analyzing hidden import 'backend.tests.test_step_method'
+60489 INFO: Analyzing hidden import 'backend.tests.test_template_identity'
+60489 INFO: Analyzing hidden import 'backend.tests.test_version_sync'
+60489 INFO: Analyzing hidden import 'uvicorn.__main__'
+60489 INFO: Analyzing hidden import 'uvicorn.lifespan'
+60489 INFO: Analyzing hidden import 'uvicorn.lifespan.off'
+60489 INFO: Analyzing hidden import 'uvicorn.lifespan.on'
+60505 INFO: Analyzing hidden import 'uvicorn.loops'
+60507 INFO: Analyzing hidden import 'uvicorn.loops.asyncio'
+60509 INFO: Analyzing hidden import 'uvicorn.loops.auto'
+60514 INFO: Analyzing hidden import 'uvicorn.protocols.http.auto'
+60515 INFO: Analyzing hidden import 'uvicorn.protocols.websockets.auto'
+60516 INFO: Analyzing hidden import 'uvicorn.workers'
+60523 INFO: Analyzing hidden import 'apscheduler.executors.debug'
+60525 INFO: Analyzing hidden import 'apscheduler.executors.gevent'
+60527 INFO: Analyzing hidden import 'apscheduler.executors.tornado'
+60529 INFO: Analyzing hidden import 'apscheduler.executors.twisted'
+60531 INFO: Analyzing hidden import 'apscheduler.jobstores.etcd'
+60535 INFO: Analyzing hidden import 'apscheduler.jobstores.mongodb'
+60541 INFO: Analyzing hidden import 'apscheduler.jobstores.redis'
+60541 INFO: Analyzing hidden import 'apscheduler.jobstores.rethinkdb'
+60541 INFO: Analyzing hidden import 'apscheduler.jobstores.sqlalchemy'
+60556 INFO: Analyzing hidden import 'apscheduler.jobstores.zookeeper'
+60556 INFO: Analyzing hidden import 'apscheduler.schedulers.background'
+60562 INFO: Analyzing hidden import 'apscheduler.schedulers.gevent'
+60562 INFO: Analyzing hidden import 'apscheduler.schedulers.qt'
+60562 INFO: Analyzing hidden import 'apscheduler.schedulers.tornado'
+60573 INFO: Analyzing hidden import 'apscheduler.schedulers.twisted'
+60578 INFO: Analyzing hidden import 'apscheduler.triggers.calendarinterval'
+60583 INFO: Analyzing hidden import 'apscheduler.triggers.combining'
+60585 INFO: Analyzing hidden import 'apscheduler.triggers.cron'
+60597 INFO: Analyzing hidden import 'apscheduler.triggers.date'
+60597 INFO: Analyzing hidden import 'apscheduler.triggers.interval'
+60606 INFO: Analyzing hidden import 'sqlmodel.default'
+60606 INFO: Analyzing hidden import 'sqlmodel.ext'
+60606 INFO: Analyzing hidden import 'sqlmodel.ext.asyncio'
+60606 INFO: Analyzing hidden import 'sqlmodel.ext.asyncio.session'
+60606 INFO: Analyzing hidden import 'sqlmodel.pool'
+60606 INFO: Analyzing hidden import 'sqlalchemy.connectors.aioodbc'
+60622 INFO: Analyzing hidden import 'sqlalchemy.dialects._typing'
+60622 INFO: Analyzing hidden import 'sqlalchemy.dialects.mssql'
+60739 INFO: Analyzing hidden import 'sqlalchemy.dialects.mssql.provision'
+60739 INFO: Analyzing hidden import 'sqlalchemy.dialects.mysql'
+60869 INFO: Analyzing hidden import 'sqlalchemy.dialects.mysql.provision'
+60869 INFO: Analyzing hidden import 'sqlalchemy.dialects.oracle'
+61021 INFO: Analyzing hidden import 'sqlalchemy.dialects.oracle.provision'
+61021 INFO: Analyzing hidden import 'sqlalchemy.dialects.postgresql'
+61205 INFO: Analyzing hidden import 'sqlalchemy.dialects.postgresql.provision'
+61205 INFO: Analyzing hidden import 'sqlalchemy.dialects.sqlite'
+61334 INFO: Analyzing hidden import 'sqlalchemy.dialects.sqlite.provision'
+61339 INFO: Analyzing hidden import 'sqlalchemy.engine.strategies'
+61340 INFO: Analyzing hidden import 'sqlalchemy.events'
+61342 INFO: Analyzing hidden import 'sqlalchemy.ext.associationproxy'
+61375 INFO: Analyzing hidden import 'sqlalchemy.ext.automap'
+61391 INFO: Analyzing hidden import 'sqlalchemy.ext.baked'
+61391 INFO: Analyzing hidden import 'sqlalchemy.ext.declarative'
+61408 INFO: Analyzing hidden import 'sqlalchemy.ext.horizontal_shard'
+61408 INFO: Analyzing hidden import 'sqlalchemy.ext.hybrid'
+61421 INFO: Analyzing hidden import 'sqlalchemy.ext.indexable'
+61433 INFO: Analyzing hidden import 'sqlalchemy.ext.instrumentation'
+61435 INFO: Analyzing hidden import 'sqlalchemy.ext.mutable'
+61435 INFO: Analyzing hidden import 'sqlalchemy.ext.mypy'
+61450 INFO: Analyzing hidden import 'sqlalchemy.ext.mypy.apply'
+61481 INFO: Analyzing hidden import 'sqlalchemy.ext.mypy.decl_class'
+61488 INFO: Analyzing hidden import 'sqlalchemy.ext.mypy.plugin'
+61493 INFO: Analyzing hidden import 'sqlalchemy.ext.orderinglist'
+61498 INFO: Analyzing hidden import 'sqlalchemy.ext.serializer'
+61503 INFO: Analyzing hidden import 'sqlalchemy.testing'
+61822 INFO: Analyzing hidden import 'sqlalchemy.testing.pickleable'
+61822 INFO: Analyzing hidden import 'sqlalchemy.testing.plugin.bootstrap'
+61822 INFO: Analyzing hidden import 'sqlalchemy.testing.plugin.pytestplugin'
+61843 INFO: Analyzing hidden import 'sqlalchemy.testing.suite'
+62123 INFO: Analyzing hidden import 'sqlalchemy.util.tool_support'
+62139 INFO: Analyzing hidden import 'pydantic.class_validators'
+62139 INFO: Analyzing hidden import 'pydantic.datetime_parse'
+62139 INFO: Analyzing hidden import 'pydantic.decorator'
+62145 INFO: Analyzing hidden import 'pydantic.deprecated.decorator'
+62151 INFO: Analyzing hidden import 'pydantic.env_settings'
+62153 INFO: Analyzing hidden import 'pydantic.error_wrappers'
+62153 INFO: Analyzing hidden import 'pydantic.experimental'
+62156 INFO: Analyzing hidden import 'pydantic.experimental.arguments_schema'
+62156 INFO: Analyzing hidden import 'pydantic.experimental.missing_sentinel'
+62156 INFO: Analyzing hidden import 'pydantic.experimental.pipeline'
+62177 INFO: Analyzing hidden import 'pydantic.generics'
+62179 INFO: Analyzing hidden import 'pydantic.json'
+62180 INFO: Analyzing hidden import 'pydantic.mypy'
+62239 INFO: Analyzing hidden import 'pydantic.parse'
+62246 INFO: Analyzing hidden import 'pydantic.schema'
+62246 INFO: Analyzing hidden import 'pydantic.tools'
+62246 INFO: Analyzing hidden import 'pydantic.typing'
+62246 INFO: Analyzing hidden import 'pydantic.utils'
+62246 INFO: Analyzing hidden import 'pydantic.v1._hypothesis_plugin'
+62255 INFO: Analyzing hidden import 'pydantic.v1.generics'
+62271 INFO: Analyzing hidden import 'pydantic.v1.mypy'
+62292 INFO: Analyzing hidden import 'pydantic.validators'
+62294 INFO: Analyzing hidden import 'numpy._configtool'
+62295 INFO: Analyzing hidden import 'numpy._core._exceptions'
+62298 INFO: Analyzing hidden import 'numpy._core._multiarray_tests'
+62299 INFO: Analyzing hidden import 'numpy._core._operand_flag_tests'
+62300 INFO: Analyzing hidden import 'numpy._core._rational_tests'
+62301 INFO: Analyzing hidden import 'numpy._core._simd'
+62301 INFO: Analyzing hidden import 'numpy._core._struct_ufunc_tests'
+62301 INFO: Analyzing hidden import 'numpy._core._umath_tests'
+62301 INFO: Analyzing hidden import 'numpy._core.cversions'
+62301 INFO: Analyzing hidden import 'numpy._pyinstaller'
+62301 INFO: Analyzing hidden import 'numpy._pyinstaller.hook-numpy'
+62341 INFO: Processing standard module hook 'hook-win32ctypes.core.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+63691 INFO: Analyzing hidden import 'numpy._typing._extended_precision'
+63691 INFO: Analyzing hidden import 'numpy._utils._pep440'
+63709 INFO: Analyzing hidden import 'numpy.conftest'
+63719 INFO: Analyzing hidden import 'numpy.core._dtype'
+63720 INFO: Analyzing hidden import 'numpy.core._dtype_ctypes'
+63723 INFO: Analyzing hidden import 'numpy.core._internal'
+63723 INFO: Analyzing hidden import 'numpy.core._multiarray_umath'
+63726 INFO: Analyzing hidden import 'numpy.core.arrayprint'
+63726 INFO: Analyzing hidden import 'numpy.core.defchararray'
+63726 INFO: Analyzing hidden import 'numpy.core.einsumfunc'
+63726 INFO: Analyzing hidden import 'numpy.core.fromnumeric'
+63726 INFO: Analyzing hidden import 'numpy.core.function_base'
+63726 INFO: Analyzing hidden import 'numpy.core.getlimits'
+63726 INFO: Analyzing hidden import 'numpy.core.multiarray'
+63726 INFO: Analyzing hidden import 'numpy.core.numeric'
+63726 INFO: Analyzing hidden import 'numpy.core.numerictypes'
+63739 INFO: Analyzing hidden import 'numpy.core.overrides'
+63739 INFO: Analyzing hidden import 'numpy.core.records'
+63739 INFO: Analyzing hidden import 'numpy.core.shape_base'
+63739 INFO: Analyzing hidden import 'numpy.core.umath'
+63739 INFO: Analyzing hidden import 'numpy.distutils'
+64138 INFO: Analyzing hidden import 'numpy.distutils.armccompiler'
+64154 INFO: Analyzing hidden import 'numpy.distutils.fcompiler.absoft'
+64154 INFO: Analyzing hidden import 'numpy.distutils.fcompiler.arm'
+64154 INFO: Analyzing hidden import 'numpy.distutils.fcompiler.compaq'
+64154 INFO: Analyzing hidden import 'numpy.distutils.fcompiler.fujitsu'
+64169 INFO: Analyzing hidden import 'numpy.distutils.fcompiler.g95'
+64169 INFO: Analyzing hidden import 'numpy.distutils.fcompiler.gnu'
+64180 INFO: Analyzing hidden import 'numpy.distutils.fcompiler.hpux'
+64185 INFO: Analyzing hidden import 'numpy.distutils.fcompiler.ibm'
+64190 INFO: Analyzing hidden import 'numpy.distutils.fcompiler.intel'
+64190 INFO: Analyzing hidden import 'numpy.distutils.fcompiler.lahey'
+64190 INFO: Analyzing hidden import 'numpy.distutils.fcompiler.mips'
+64201 INFO: Analyzing hidden import 'numpy.distutils.fcompiler.nag'
+64201 INFO: Analyzing hidden import 'numpy.distutils.fcompiler.none'
+64206 INFO: Analyzing hidden import 'numpy.distutils.fcompiler.nv'
+64206 INFO: Analyzing hidden import 'numpy.distutils.fcompiler.pathf95'
+64206 INFO: Analyzing hidden import 'numpy.distutils.fcompiler.pg'
+64206 INFO: Analyzing hidden import 'numpy.distutils.fcompiler.sun'
+64206 INFO: Analyzing hidden import 'numpy.distutils.fcompiler.vast'
+64222 INFO: Analyzing hidden import 'numpy.distutils.fujitsuccompiler'
+64224 INFO: Analyzing hidden import 'numpy.distutils.intelccompiler'
+64230 INFO: Analyzing hidden import 'numpy.distutils.line_endings'
+64233 INFO: Analyzing hidden import 'numpy.distutils.pathccompiler'
+64235 INFO: Analyzing hidden import 'numpy.distutils.tests'
+64236 INFO: Analyzing hidden import 'numpy.distutils.tests.test_build_ext'
+64240 INFO: Analyzing hidden import 'numpy.distutils.tests.test_ccompiler_opt'
+64256 INFO: Analyzing hidden import 'numpy.distutils.tests.test_ccompiler_opt_conf'
+64256 INFO: Analyzing hidden import 'numpy.distutils.tests.test_exec_command'
+64306 INFO: Analyzing hidden import 'numpy.distutils.tests.test_fcompiler'
+64306 INFO: Analyzing hidden import 'numpy.distutils.tests.test_fcompiler_gnu'
+64323 INFO: Analyzing hidden import 'numpy.distutils.tests.test_fcompiler_intel'
+64325 INFO: Analyzing hidden import 'numpy.distutils.tests.test_fcompiler_nagfor'
+64325 INFO: Analyzing hidden import 'numpy.distutils.tests.test_from_template'
+64328 INFO: Analyzing hidden import 'numpy.distutils.tests.test_log'
+64328 INFO: Analyzing hidden import 'numpy.distutils.tests.test_mingw32ccompiler'
+64328 INFO: Analyzing hidden import 'numpy.distutils.tests.test_misc_util'
+64337 INFO: Analyzing hidden import 'numpy.distutils.tests.test_npy_pkg_config'
+64341 INFO: Analyzing hidden import 'numpy.distutils.tests.test_shell_utils'
+64343 INFO: Analyzing hidden import 'numpy.distutils.tests.test_system_info'
+64352 INFO: Analyzing hidden import 'numpy.f2py.__main__'
+64353 INFO: Analyzing hidden import 'numpy.f2py._src_pyf'
+64358 INFO: Analyzing hidden import 'numpy.fft.tests'
+64359 INFO: Analyzing hidden import 'numpy.fft.tests.test_helper'
+64366 INFO: Analyzing hidden import 'numpy.fft.tests.test_pocketfft'
+64373 INFO: Analyzing hidden import 'numpy.lib._user_array_impl'
+64391 INFO: Analyzing hidden import 'numpy.lib.tests'
+64391 INFO: Analyzing hidden import 'numpy.lib.tests.test__datasource'
+64391 INFO: Analyzing hidden import 'numpy.lib.tests.test__iotools'
+64406 INFO: Analyzing hidden import 'numpy.lib.tests.test__version'
+64406 INFO: Analyzing hidden import 'numpy.lib.tests.test_array_utils'
+64406 INFO: Analyzing hidden import 'numpy.lib.tests.test_arraypad'
+64441 INFO: Analyzing hidden import 'numpy.lib.tests.test_arraysetops'
+64469 INFO: Analyzing hidden import 'numpy.lib.tests.test_arrayterator'
+64472 INFO: Analyzing hidden import 'numpy.lib.tests.test_format'
+64487 INFO: Analyzing hidden import 'numpy.lib.tests.test_function_base'
+64656 INFO: Analyzing hidden import 'numpy.lib.tests.test_histograms'
+64673 INFO: Analyzing hidden import 'numpy.lib.tests.test_index_tricks'
+64705 INFO: Analyzing hidden import 'numpy.lib.tests.test_io'
+64824 INFO: Analyzing hidden import 'numpy.lib.tests.test_loadtxt'
+64837 INFO: Analyzing hidden import 'numpy.lib.tests.test_mixins'
+64837 INFO: Analyzing hidden import 'numpy.lib.tests.test_nanfunctions'
+64885 INFO: Analyzing hidden import 'numpy.lib.tests.test_packbits'
+64895 INFO: Analyzing hidden import 'numpy.lib.tests.test_polynomial'
+64907 INFO: Analyzing hidden import 'numpy.lib.tests.test_recfunctions'
+64965 INFO: Analyzing hidden import 'numpy.lib.tests.test_regression'
+64973 INFO: Analyzing hidden import 'numpy.lib.tests.test_shape_base'
+65006 INFO: Analyzing hidden import 'numpy.lib.tests.test_stride_tricks'
+65024 INFO: Analyzing hidden import 'numpy.lib.tests.test_twodim_base'
+65039 INFO: Analyzing hidden import 'numpy.lib.tests.test_type_check'
+65055 INFO: Analyzing hidden import 'numpy.lib.tests.test_ufunclike'
+65055 INFO: Analyzing hidden import 'numpy.lib.tests.test_utils'
+65055 INFO: Analyzing hidden import 'numpy.lib.user_array'
+65055 INFO: Analyzing hidden import 'numpy.linalg.lapack_lite'
+65073 INFO: Analyzing hidden import 'numpy.linalg.tests'
+65073 INFO: Analyzing hidden import 'numpy.linalg.tests.test_deprecations'
+65073 INFO: Analyzing hidden import 'numpy.linalg.tests.test_linalg'
+65130 INFO: Analyzing hidden import 'numpy.linalg.tests.test_regression'
+65157 INFO: Analyzing hidden import 'numpy.ma.tests'
+65161 INFO: Analyzing hidden import 'numpy.ma.tests.test_arrayobject'
+65161 INFO: Analyzing hidden import 'numpy.ma.tests.test_core'
+65430 INFO: Analyzing hidden import 'numpy.ma.tests.test_deprecations'
+65434 INFO: Analyzing hidden import 'numpy.ma.tests.test_extras'
+65493 INFO: Analyzing hidden import 'numpy.ma.tests.test_mrecords'
+65507 INFO: Analyzing hidden import 'numpy.ma.tests.test_old_ma'
+65551 INFO: Analyzing hidden import 'numpy.ma.tests.test_regression'
+65564 INFO: Analyzing hidden import 'numpy.ma.tests.test_subclassing'
+65575 INFO: Analyzing hidden import 'numpy.matrixlib.tests'
+65575 INFO: Analyzing hidden import 'numpy.matrixlib.tests.test_defmatrix'
+65588 INFO: Analyzing hidden import 'numpy.matrixlib.tests.test_interaction'
+65594 INFO: Analyzing hidden import 'numpy.matrixlib.tests.test_masked_matrix'
+65607 INFO: Analyzing hidden import 'numpy.matrixlib.tests.test_matrix_linalg'
+65609 INFO: Analyzing hidden import 'numpy.matrixlib.tests.test_multiarray'
+65609 INFO: Analyzing hidden import 'numpy.matrixlib.tests.test_numeric'
+65609 INFO: Analyzing hidden import 'numpy.matrixlib.tests.test_regression'
+65618 INFO: Analyzing hidden import 'numpy.polynomial.tests'
+65620 INFO: Analyzing hidden import 'numpy.polynomial.tests.test_chebyshev'
+65633 INFO: Analyzing hidden import 'numpy.polynomial.tests.test_classes'
+65694 INFO: Analyzing hidden import 'numpy.polynomial.tests.test_hermite'
+65722 INFO: Analyzing hidden import 'numpy.polynomial.tests.test_hermite_e'
+65737 INFO: Analyzing hidden import 'numpy.polynomial.tests.test_laguerre'
+65750 INFO: Analyzing hidden import 'numpy.polynomial.tests.test_legendre'
+65767 INFO: Analyzing hidden import 'numpy.polynomial.tests.test_polynomial'
+65785 INFO: Analyzing hidden import 'numpy.polynomial.tests.test_polyutils'
+65785 INFO: Analyzing hidden import 'numpy.polynomial.tests.test_printing'
+65801 INFO: Analyzing hidden import 'numpy.polynomial.tests.test_symbol'
+65806 INFO: Analyzing hidden import 'numpy.random.tests'
+65811 INFO: Analyzing hidden import 'numpy.random.tests.data'
+65811 INFO: Analyzing hidden import 'numpy.random.tests.test_direct'
+65825 INFO: Analyzing hidden import 'numpy.random.tests.test_extending'
+65838 INFO: Analyzing hidden import 'numpy.random.tests.test_generator_mt19937'
+65979 INFO: Analyzing hidden import 'numpy.random.tests.test_generator_mt19937_regressions'
+65986 INFO: Analyzing hidden import 'numpy.random.tests.test_random'
+66030 INFO: Analyzing hidden import 'numpy.random.tests.test_randomstate'
+66072 INFO: Analyzing hidden import 'numpy.random.tests.test_randomstate_regression'
+66085 INFO: Analyzing hidden import 'numpy.random.tests.test_regression'
+66090 INFO: Analyzing hidden import 'numpy.random.tests.test_seed_sequence'
+66094 INFO: Analyzing hidden import 'numpy.random.tests.test_smoke'
+66117 INFO: Analyzing hidden import 'numpy.testing.print_coercion_tables'
+66122 INFO: Analyzing hidden import 'numpy.testing.tests'
+66123 INFO: Analyzing hidden import 'numpy.testing.tests.test_utils'
+66236 INFO: Analyzing hidden import 'numpy.tests'
+66237 INFO: Analyzing hidden import 'numpy.tests.test__all__'
+66239 INFO: Analyzing hidden import 'numpy.tests.test_configtool'
+66247 INFO: Analyzing hidden import 'numpy.tests.test_ctypeslib'
+66256 INFO: Analyzing hidden import 'numpy.tests.test_lazyloading'
+66256 INFO: Analyzing hidden import 'numpy.tests.test_matlib'
+66256 INFO: Analyzing hidden import 'numpy.tests.test_numpy_config'
+66256 INFO: Analyzing hidden import 'numpy.tests.test_numpy_version'
+66272 INFO: Analyzing hidden import 'numpy.tests.test_public_api'
+66272 INFO: Analyzing hidden import 'numpy.tests.test_reloading'
+66288 INFO: Analyzing hidden import 'numpy.tests.test_scripts'
+66291 INFO: Analyzing hidden import 'numpy.tests.test_warnings'
+66294 INFO: Analyzing hidden import 'numpy.typing.mypy_plugin'
+66298 INFO: Analyzing hidden import 'numpy.typing.tests'
+66300 INFO: Analyzing hidden import 'numpy.typing.tests.test_isfile'
+66303 INFO: Analyzing hidden import 'numpy.typing.tests.test_runtime'
+66307 INFO: Analyzing hidden import 'numpy.typing.tests.test_typing'
+66313 INFO: Processing module hooks (post-graph stage)...
+66410 WARNING: Hidden import "pycparser.lextab" not found!
+66411 WARNING: Hidden import "pycparser.yacctab" not found!
+66914 INFO: Processing standard module hook 'hook-PIL.SpiderImagePlugin.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+66956 INFO: Processing pre-safe-import-module hook 'hook-win32com.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\pre_safe_import_module'
+67082 INFO: Processing standard module hook 'hook-win32com.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+67091 INFO: Processing standard module hook 'hook-pythoncom.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+67210 INFO: Processing standard module hook 'hook-pywintypes.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+67716 INFO: Processing standard module hook 'hook-jinja2.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+69805 INFO: Processing standard module hook 'hook-setuptools._vendor.importlib_metadata.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+69905 INFO: Processing standard module hook 'hook-setuptools._vendor.jaraco.text.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+70453 INFO: Processing standard module hook 'hook-sqlalchemy.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+70989 WARNING: Hidden import "MySQLdb" not found!
+71039 INFO: Processing standard module hook 'hook-_tkinter.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks'
+71040 INFO: Processing standard module hook 'hook-tzdata.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+72818 INFO: Performing binary vs. data reclassification (7231 entries)
+77657 INFO: Looking for ctypes DLLs
+77945 INFO: Analyzing run-time hooks ...
+77957 INFO: Including run-time hook 'pyi_rth_inspect.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+77977 INFO: Including run-time hook 'pyi_rth_pkgutil.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+77981 INFO: Including run-time hook 'pyi_rth_multiprocessing.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+77985 INFO: Including run-time hook 'pyi_rth_setuptools.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+77985 INFO: Including run-time hook 'pyi_rth_pkgres.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+77989 INFO: Including run-time hook 'pyi_rth_pywintypes.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\rthooks'
+77989 INFO: Including run-time hook 'pyi_rth_pythoncom.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\rthooks'
+77989 INFO: Including run-time hook 'pyi_rth_traitlets.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\rthooks'
+77989 INFO: Including run-time hook 'pyi_rth__tkinter.py' from 'C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+78183 INFO: Creating base_library.zip...
+78214 INFO: Looking for dynamic libraries
+0.00s - Debugger warning: It seems that frozen modules are being used, which may
+0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+0.00s - to python to disable frozen modules.
+0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+82539 INFO: Extra DLL search directories (AddDllDirectory): ['C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\numpy.libs']
+82539 INFO: Extra DLL search directories (PATH): []
+86471 INFO: Warnings written to C:\Users\user\Desktop\COMET-autonomous-2026-09-06\build\pyinstaller-work\COMETBackend\warn-COMETBackend.txt
+86670 INFO: Graph cross-reference written to C:\Users\user\Desktop\COMET-autonomous-2026-09-06\build\pyinstaller-work\COMETBackend\xref-COMETBackend.html
+86797 INFO: checking PYZ
+86797 INFO: Building PYZ because PYZ-00.toc is non existent
+86797 INFO: Building PYZ (ZlibArchive) C:\Users\user\Desktop\COMET-autonomous-2026-09-06\build\pyinstaller-work\COMETBackend\PYZ-00.pyz
+88438 INFO: Building PYZ (ZlibArchive) C:\Users\user\Desktop\COMET-autonomous-2026-09-06\build\pyinstaller-work\COMETBackend\PYZ-00.pyz completed successfully.
+88477 INFO: checking PKG
+88477 INFO: Building PKG because PKG-00.toc is non existent
+88477 INFO: Building PKG (CArchive) COMETBackend.pkg
+88525 INFO: Building PKG (CArchive) COMETBackend.pkg completed successfully.
+88525 INFO: Bootloader C:\Users\user\AppData\Local\Programs\Python\Python311\Lib\site-packages\PyInstaller\bootloader\Windows-64bit-intel\run.exe
+88525 INFO: checking EXE
+88525 INFO: Building EXE because EXE-00.toc is non existent
+88525 INFO: Building EXE from EXE-00.toc
+88525 INFO: Copying bootloader EXE to C:\Users\user\Desktop\COMET-autonomous-2026-09-06\build\pyinstaller-work\COMETBackend\COMETBackend.exe
+88588 INFO: Copying icon to EXE
+88620 INFO: Copying 0 resources to EXE
+88620 INFO: Embedding manifest in EXE
+88642 INFO: Appending PKG archive to EXE
+88654 INFO: Fixing EXE headers
+88870 INFO: Building EXE from EXE-00.toc completed successfully.
+88894 INFO: checking COLLECT
+88894 INFO: Building COLLECT because COLLECT-00.toc is non existent
+88894 INFO: Building COLLECT COLLECT-00.toc
+113069 INFO: Building COLLECT COLLECT-00.toc completed successfully.
+113165 INFO: Build complete! The results are available in: C:\Users\user\Desktop\COMET-autonomous-2026-09-06\build\backend-sidecar
+npm warn "never" is being parsed as a normal command line argument.
+npm warn Unknown cli config "--publish". This will stop working in the next major version of npm.
+npm warn Unknown env config "publish". This will stop working in the next major version of npm.

@@ -562,6 +562,7 @@ const KO: Record<string, string> = {
   'Evidence-first': '근거 우선',
   'Top route': '1위 경로',
   'Delivered catalyst': '납품 기준 촉매 단가',
+  'Catalyst powder screening': '촉매 분말 원가',
   'Electrode layer': '전극층',
   'Literature bank': '반응군 문헌',
   'Published routes': '발표된 제조 경로',

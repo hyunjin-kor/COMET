@@ -1,0 +1,75 @@
+[
+  {
+    "url": "https://knowledge4policy.ec.europa.eu/composite-indicators/toolkit_en/navigation-page/10-step-guide_en/step-8-sensitivity-analysis_en",
+    "status": 403,
+    "final_url": "https://knowledge4policy.ec.europa.eu/composite-indicators/toolkit_en/navigation-page/10-step-guide_en/step-8-sensitivity-analysis_en",
+    "content_type": "text/html",
+    "checked_at": "2026-09-08T03:12:20.192551+00:00"
+  },
+  {
+    "url": "https://publications.jrc.ec.europa.eu/repository/handle/JRC47008",
+    "status": 200,
+    "final_url": "https://publications.jrc.ec.europa.eu/repository/handle/JRC47008",
+    "content_type": "text/html;charset=UTF-8",
+    "checked_at": "2026-09-08T03:12:21.705476+00:00"
+  },
+  {
+    "url": "https://api.crossref.org/works/10.1787/9789264043466-en",
+    "status": 200,
+    "final_url": "https://api.crossref.org/works/10.1787/9789264043466-en",
+    "content_type": "application/json",
+    "checked_at": "2026-09-08T03:12:20.191944+00:00",
+    "metadata": {
+      "DOI": "10.1787/9789264043466-en",
+      "title": [
+        "Handbook on Constructing Composite Indicators: Methodology and User Guide"
+      ],
+      "author": [
+        {
+          "name": "OECD",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "name": "European Union",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "name": "Joint Research Centre - European Commission",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "publisher": "OECD",
+      "published": {
+        "date-parts": [
+          [
+            2008,
+            8,
+            22
+          ]
+        ]
+      },
+      "URL": "https://doi.org/10.1787/9789264043466-en"
+    }
+  }
+]

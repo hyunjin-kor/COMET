@@ -9,9 +9,11 @@ import hashlib
 import io
 import json
 import re
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 PAPER = ROOT / "docs/paper"
 DATE = "2026-09-07"
 META_NAME = f"submission_metadata_{DATE}.json"
@@ -28,6 +30,14 @@ def load(path):
 
 def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def reference_snapshot_equivalent(left, right):
+    """Reference builders attach run time and history path to identical inputs."""
+    ignored = {"generated_at", "history_file"}
+    return {k: v for k, v in left.items() if k not in ignored} == {
+        k: v for k, v in right.items() if k not in ignored
+    }
 
 
 def matches_snapshot_line_endings(data, expected_sha256):
@@ -112,7 +122,14 @@ class PaperRun:
         for entry in provenance['input_hashes'][:2]:
             if digest(ROOT / entry['file']) != entry['sha256']:
                 raise ValueError('Controlled price snapshot changed')
-            if digest(self.directory / Path(entry['file']).name) != entry['sha256']:
+            snapshot_name = Path(entry['file']).name
+            snapshot = self.directory / snapshot_name
+            if not snapshot.exists():
+                snapshot = self.directory / re.sub(r"\d{4}-\d{2}-\d{2}", DATE, snapshot_name)
+            if digest(snapshot) != entry['sha256'] and not (
+                snapshot_name.startswith("reference_basis_")
+                and reference_snapshot_equivalent(load(ROOT / entry['file']), load(snapshot))
+            ):
                 raise ValueError('Controlled study does not use the selected manuscript price snapshots')
         if controlled['seed'] != self.manifest['seed']:
             raise ValueError('Controlled and primary seeds differ')
@@ -491,13 +508,25 @@ def word_count(text):
 
 
 def main():
+    global DATE, META_NAME, CONTROLLED_NAME, CONTROLLED_PROVENANCE
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--directory", type=Path, default=PAPER / f"submission-{DATE}")
+    parser.add_argument("--date", default=DATE, help="Output run date (YYYY-MM-DD); external evidence retains its verified date")
+    parser.add_argument("--directory", type=Path)
+    parser.add_argument("--robustness", type=Path, help="Completed joint robustness output directory")
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
-    run = PaperRun(args.directory)
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", args.date):
+        parser.error("date must be YYYY-MM-DD")
+    DATE = args.date
+    META_NAME = f"submission_metadata_{DATE}.json"
+    CONTROLLED_NAME = f"controlled-{DATE}/controlled_cases.json"
+    CONTROLLED_PROVENANCE = f"controlled-{DATE}/provenance.json"
+    run = PaperRun(args.directory or PAPER / f"submission-{DATE}")
     draft = manuscript(run)
     si = supporting_information(run)
+    if args.robustness:
+        from scripts.research_manuscript_extension import extend_manuscript
+        draft, si = extend_manuscript(draft, si, run, args.robustness, DATE)
     abstract = draft.split("## Abstract\n\n", 1)[1].split("\n\nKeywords:", 1)[0]
     abstract_words = word_count(abstract)
     if not 150 <= abstract_words <= 300:
@@ -511,8 +540,8 @@ def main():
         "text_words_excluding_tables_figures_references": count,
         "figure_count": 6,
         "table_count": 2,
-        "supporting_figure_count": 1,
-        "supporting_table_count": 7,
+        "supporting_figure_count": 2 if args.robustness else 1,
+        "supporting_table_count": 8 if args.robustness else 7,
         "target_journal": "ACS Engineering Au (provisional; JCR year/category eligibility unresolved)",
         "abstract_limit": 300,
         "article_limit": None,

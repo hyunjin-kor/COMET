@@ -126,19 +126,14 @@ both residuals trace to footnotes in the table itself.
 
 ## Reproduce the paper
 
-The [unified manuscript](docs/paper/manuscript_2026-09-07.md), [supporting information](docs/paper/si_2026-09-07.md) and six figures use **May 2026**, the latest common month in the frozen metal history and ten validated support series. Reproduce their numerical results without network access:
+The [current manuscript and SI](docs/paper/research-claims-2026-09-08.ko.md) use the preserved May 2026 price basis. [Joint decision robustness](docs/paper/robustness-2026-09-08/README.md) tests prices and preferences together, candidate-set dependence and author-score sensitivity.
 
 ```bash
-python scripts/reproduce_paper.py --price-basis reference --month 2026-05 --seed 20260906 --date 2026-09-07 --history docs/paper/submission-2026-09-07/price_history_2026-09-07.json --live-basis docs/paper/submission-2026-09-07/live_basis_2026-09-07.json --support-history docs/paper/submission-2026-09-07/support_history_2026-09-07.json --out-dir _local/submission-replay-2026-09-07
+python scripts/reproduce_paper.py --price-basis reference --month 2026-05 --seed 20260906 --date 2026-09-08 --history docs/paper/submission-2026-09-07/price_history_2026-09-07.json --live-basis docs/paper/submission-2026-09-07/live_basis_2026-09-07.json --support-history docs/paper/submission-2026-09-07/support_history_2026-09-07.json --out-dir _local/submission-replay-2026-09-08
+python scripts/run_decision_robustness.py --out-dir _local/robustness-replay-new --seed 20260906
 ```
 
-Use a new or empty output directory for each run. The paper and controlled-scenario runners refuse to overwrite existing evidence; the default paper destination is `_local/paper-<date>`.
-
-Matplotlib is needed for figures. Input hashes, exact commands and Python/package versions are recorded in the reproduction manifest. `python scripts/build_submission_manuscript.py --directory docs/paper/submission-2026-09-07 --check` checks the committed manuscript/SI and their numerical source keys. The [controlled scenarios](docs/paper/controlled-2026-09-07/README.md) separate numerical price changes from source-confidence scoring and examine production scale and electrode loading. Earlier results remain available as historical snapshots.
-
-The shipped support history contains ten series and 28 observations over April–June. Alpha alumina lacks a valid June observation, so the combined paper basis is May; the app can still show each series' latest accepted quote. These all-grade import values are bulk proxies, not catalyst-grade supplier quotations. To collect a small new snapshot without credentials, run `python scripts/fetch_support_history.py --start 2026-04 --end 2026-07 --out support_history.json`; it records missing data and stops at provider rate limits. Omitting `--month` in the paper pipeline selects the common month of its supplied inputs.
-
-See the [validation and submission audit](docs/audit/validation-submission-2026-09-07.md) and [methodology](docs/methodology.md#reproducing-the-paper). The external cost evidence screen found no fully matched manufacturing-cost observation; method reproduction is not an empirical procurement-accuracy claim. Project data acquisition must remain free: no purchases, paid subscriptions or billable API calls.
+Use a new or empty output directory. Matplotlib is needed for figures. Manifests record commands, input/code hashes and package versions; older results remain historical snapshots. See [methodology](docs/methodology.md#reproducing-the-paper) for source boundaries. Public cost observations remain unmatched for independent manufacturing-accuracy validation. All data acquisition must remain free.
 
 ## Project and service preparation
 

@@ -27,6 +27,7 @@ from backend.core.decision_engine import (  # noqa: E402
     _resolve_component_pricing,
     _weighted_evidence_score,
     evaluate_benchmark_family,
+    rank_candidates,
 )
 from backend.core.electrocatalyst import calculate_electrode_layer_cost  # noqa: E402
 from backend.core.material_pricing import resolve_electrode_materials  # noqa: E402
@@ -41,7 +42,7 @@ ROUTES = ("wet_impregnation_metal_oxide", "excess_solution_impregnation_metal_ox
 
 def _rank(candidates):
     # Match the application's rounded composite and deterministic tie breaks.
-    return sorted(candidates, key=lambda c: (-c["scores"]["total"], c["summary"]["landed_cost_per_lb"], c["slug"]))
+    return rank_candidates(candidates)
 
 
 def cross_price_evidence(reference, live):
