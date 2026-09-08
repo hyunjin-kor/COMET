@@ -13,7 +13,7 @@ const rawLabels = [];
 const rawAttributes = [];
 const rawTemplateLabels = [];
 const uiAttributes = ['label', 'title', 'placeholder', 'aria-label', 'detail'];
-const technicalLabels = new Set(['Alt +', 'Esc', 'COMET', 'kg', 'lb', 'EN', ': Catalyst Overall Manufacturing Estimation Tool', 'cm²', 'mg/cm²', 'wt%', 'lb/ft³', '/hr', '/kg', '/ozt', 'CatCost Ch.7', 'FCI', 'FCI/PE', 'HS', '(DOI', 'PLOS ONE 9(7): e101298 — CC BY 4.0.']);
+const technicalLabels = new Set(['Alt +', 'Esc', 'COMET', 'kg', 'lb', 'EN', ': Catalyst Overall Manufacturing Estimation Tool', 'cm²', 'mg/cm²', 'wt%', 'lb/ft³', '/hr', '/kg', '/ozt', 'FCI', 'FCI/PE', 'HS', '(DOI', 'PLOS ONE 9(7): e101298 — CC BY 4.0.']);
 const isUntranslated = (label) => /[A-Za-z]{2}/.test(label) && !/[가-힣]/.test(label) && !technicalLabels.has(label);
 function scan(file) {
   const source = ts.createSourceFile(file, fs.readFileSync(file, 'utf8'), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);

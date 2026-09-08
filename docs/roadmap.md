@@ -2,7 +2,7 @@
 
 Last updated: 2026-09-01 (v1.3.24)
 
-COMET does local catalyst cost screening on Windows, checked against the published CatCost reference cases. The phases below are ordered by leverage rather than effort.
+COMET develops catalyst manufacturing-cost, environmental-screening and decision-analysis workflows for research and practical use. The [contribution map](research-contribution.md) separates current capabilities and evidence from adopted prior methods. Published-method reproduction remains one validation layer; the dated phases below retain the development history.
 
 ## Data acquisition policy — user decision, 2026-09-06
 

@@ -31,7 +31,7 @@ Version declarations in `package.json`, `pyproject.toml`, `frontend/package.json
 - Current prepared package version: `1.4.0`
 - Python package version: `1.4.0`
 - Frontend and backend APP_VERSION: `1.4.0`
-- Latest verified GitHub release: `v1.3.24` (published 2026-08-31T18:24:09Z; verified with `gh release list -L 1` on 2026-09-07). Version 1.4.0 has no release or tag from this run.
+- Latest verified GitHub release: `v1.3.24` (published 2026-08-31T18:24:09Z; verified with `gh release list -L 1` on 2026-09-08). Version 1.4.0 has no release or tag from this run.
 - Concept DOI `10.5281/zenodo.21451931`: DOI resolver, Zenodo and DataCite verified on 2026-09-06; resolves to the existing v1.3.24 record. Crossref 404 reflects DataCite registration, not a broken identifier. [Evidence](sources/t06-external-checks-2026-09-06.json).
 - Citation metadata: root `CITATION.cff` and `codemeta.json` describe prepared source version 1.4.0; no release date is asserted.
 - Asset name pattern: `COMET.Setup.<version>.exe` (installer), `COMET-win-unpacked.zip` (portable), plus `latest.yml` and `COMET.Setup.<version>.exe.blockmap` (auto-update metadata, from v1.3.13 on)
@@ -44,7 +44,7 @@ Use `CLAUDE.md` at the repository root as the first file for Claude or Claude Co
 
 ## Submission evidence
 
-The current [manuscript](paper/manuscript_2026-09-07.md), [SI](paper/si_2026-09-07.md), and [results](paper/submission-2026-09-07/results_2026-09-07.md) share the frozen May 2026 reference basis, with a separate [controlled experiment](paper/controlled-2026-09-07/README.md). [Source and format checks](paper/submission-format-2026-09-07.md) record the retrieved ACS guidance and existing DOI evidence; they do not establish Q1 eligibility, acceptance or the planned v1.4.0 release.
+The current [manuscript](paper/manuscript_2026-09-08.md), [SI](paper/si_2026-09-08.md), and [results](paper/submission-2026-09-08/results_2026-09-08.md) share the frozen May 2026 reference basis, with a separate [controlled experiment](paper/controlled-2026-09-08/README.md). [Source and format checks](paper/submission-format-2026-09-07.md) record the retrieved ACS guidance and existing DOI evidence; they do not establish Q1 eligibility, acceptance or the planned v1.4.0 release.
 
 ## Project and company preparation
 
@@ -55,3 +55,7 @@ The current [manuscript](paper/manuscript_2026-09-07.md), [SI](paper/si_2026-09-
 - [Hosted operation, account management and recovery](commercial/hosted-operations.ko.md)
 
 No verified public subscription endpoint or executed company contract exists in these records. GitHub repository metadata remains the existing local-desktop description and release homepage; it was read, not remotely changed in this preparation.
+
+## Current product and research description — 2026-09-08
+
+COMET is independently developed software for catalyst manufacturing cost, environmental screening and decision analysis. [The contribution map](research-contribution.md) distinguishes its implemented extensions from adopted prior methods; [the paper index](paper/README.md) identifies the current manuscript and frozen evidence. Local metadata and PR112 carry this description. The repository About field was read during this update; it still describes a local catalyst-cost application and does not present COMET as a CatCost product. No remote release or website was published.

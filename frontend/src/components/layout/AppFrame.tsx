@@ -28,6 +28,14 @@ function RouteLoadingFallback() {
 export default function AppFrame() {
   const { session } = useAuth();
   const { t } = useLang();
+  const aboutTitle = t('About COMET');
+  const aboutDescription = t('Independently developed catalyst manufacturing cost, environmental screening and decision analysis software.');
+  const aboutWorkflow = t('Traceable prices, explicit manufacturing boundaries and reproducible comparisons.');
+  const aboutPriorWork = t('Prior work for adopted thermal costing: Baddour et al. (2018); Van Allsburg et al. (2022), CatCost.');
+  const aboutButton = t('OK');
+  useEffect(() => {
+    void window.cometDesktop?.setAboutCopy?.({ title: aboutTitle, description: aboutDescription, workflow: aboutWorkflow, priorWork: aboutPriorWork, button: aboutButton });
+  }, [aboutTitle, aboutDescription, aboutWorkflow, aboutPriorWork, aboutButton]);
   const location = useLocation();
   const inactive = session.account && !session.account.subscription.can_start_work;
   const { hintsVisible, closeHints } = useKeyboardShortcuts();

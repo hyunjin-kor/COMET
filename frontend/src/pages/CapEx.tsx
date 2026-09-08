@@ -147,7 +147,7 @@ export default function CapEx() {
               {t('Factor purchased equipment into FCI and TCI using Peters & Timmerhaus Lang factors, then optionally layer annual OpEx on top.')}
             </p>
           </div>
-          <span className="cp-chip">CatCost Ch.7</span>
+          <span className="cp-chip">{t('Equipment-factor estimate')}</span>
         </div>
 
         <div className="mt-5 inline-flex rounded-full border border-slate-900/8 bg-white/60 p-1 text-sm">
@@ -337,7 +337,7 @@ export default function CapEx() {
           <div className="grid gap-3 xl:grid-cols-[minmax(0,1.15fr)_repeat(3,minmax(0,1fr))]">
             <div className="min-w-0 overflow-hidden rounded-[20px] border border-[#191f28] bg-[#191f28] p-4 text-white shadow-[0_8px_24px_rgba(15,23,42,0.18)]">
               <div className="cp-subtle-label !text-slate-400">{t('Total Capital Investment')}</div>
-              <div className="mt-2 text-sm text-slate-300">{t('CatCost Ch.7 factored estimate')}</div>
+              <div className="mt-2 text-sm text-slate-300">{t('Equipment-factor estimate')}</div>
               <div className="mt-4 text-3xl font-display">{formatUSD(result.summary.total_capital_investment_usd)}</div>
               <div className="mt-2 text-xs leading-6 text-slate-300">
                 FCI {formatUSD(result.summary.fixed_capital_investment_usd)} + {t('working capital')}{' '}
@@ -444,7 +444,8 @@ export default function CapEx() {
                     {formatUSD(result.opex.total_annual_opex)}{t("/yr")}
                   </div>
                   <div className="mt-1 text-xs leading-6 text-emerald-900">
-                    {t('Layered on top of CapEx using your direct-labor / raw-material / utilities inputs and CatCost Ch.7 factors.')}
+                    {t('Annual operating cost uses the entered labor, raw-material and utility costs with the documented operating-cost factors.')}
+                    <p>{t('Factor reference: CatCost User Guide, Chapter 7; Peters & Timmerhaus.')}</p>
                   </div>
                 </div>
               </div>

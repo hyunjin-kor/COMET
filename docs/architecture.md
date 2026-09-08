@@ -28,7 +28,7 @@ comet/
 │   │
 │   ├── core/                          # === Core calculation engine ===
 │   │   ├── __init__.py
-│   │   ├── cost_engine.py             # CatCost Step Method + CapEx/OpEx integrated calculation
+│   │   ├── cost_engine.py             # COMET manufacturing-cost calculation with cited step and factor bases
 │   │   ├── materials_calc.py          # Stoichiometry (eq 4.1~4.4), scaling (k_SF)
 │   │   ├── step_method.py             # 3a Step Method logic
 │   │   ├── capex_opex.py              # 3b~3e CapEx/OpEx Factors logic
@@ -71,7 +71,7 @@ comet/
 │   │   └── bls_updater.py             # BLS API → ChemPPI auto-update
 │   │
 │   ├── data/                          # Seed data
-│   │   ├── materials_library.json     # CatCost Materials Library compatible (independently sourced)
+│   │   ├── materials_library.json     # materials with per-record provenance; legacy origins disclosed
 │   │   ├── equipment_library.json     # Equipment cost correlations (public-literature based)
 │   │   ├── step_library.json          # Step Method hourly cost per step
 │   │   ├── spent_catalyst.json        # Spent-catalyst processing parameters
@@ -152,7 +152,7 @@ comet/
 └── docs/                              # Project documentation
     ├── index.md
     ├── getting-started.md
-    ├── methodology.md                 # CatCost Step Method + CapEx/OpEx description
+    ├── methodology.md                 # COMET methods, adopted bases and research contributions
     ├── api-reference.md
     ├── project-links.md               # Verified external links + Claude hand-off status
     └── contributing.md
@@ -174,7 +174,9 @@ current layout — this list is a navigation aid, not a contract.
 
 ---
 
-## Core calculation logic (faithful CatCost reimplementation)
+## COMET calculation layers and adopted method basis
+
+COMET integrates materials, thermal processing, electrode assemblies, environmental coverage and decision analysis. The excerpts below document adopted equations and source-table identifiers; their numbering refers to the cited CatCost User Guide, not a claim that COMET originated them. See [the contribution map](research-contribution.md) for current extensions and evidence.
 
 ### Materials calculation (eq 4.1~4.4)
 

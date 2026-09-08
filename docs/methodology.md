@@ -1,6 +1,8 @@
-# Methodology
+# COMET Methodology
 
-COMET implements the catalyst cost estimation methodology from the CatCost framework (Baddour et al. 2018, Van Allsburg et al. 2022).
+COMET connects catalyst manufacturing-cost estimation, partial environmental inventories and decision-robustness analysis in an independently developed research application. Its methodology makes price states, manufacturing boundaries, functional units and ranking assumptions explicit so comparisons can be reproduced and challenged.
+
+Published Step Method costing (Baddour et al. 2018) and CatCost (Van Allsburg et al. 2022) are prior research. COMET adopts the documented thermal step rates, overhead and selling-margin basis and retains the relevant source attribution. Its contributions extend the screening workflow and analysis; they do not establish new authorship of those equations or empirical superiority over earlier tools. The [research contribution map](research-contribution.md) separates the adopted basis, COMET extensions and available evidence.
 
 ## Current Scope
 
@@ -46,7 +48,9 @@ To include a validated support snapshot in the paper, add `--support-history bac
 
 The reference tier is the academic basis. The sidebar switch moves the whole app between the two: on the academic basis the price screen, the calculator and the benchmark rankings all price from the latest published month. The paper analysis prices from the same tier. Monthly averages from the IMF Primary Commodity Price System (aluminium, copper, nickel, zinc, tin, cobalt, molybdenum, gold, silver) and Johnson Matthey base prices averaged by month (platinum, palladium, rhodium, ruthenium, iridium), cut at the latest month both publish. Tungsten, rhenium, vanadium and iron have no published series and keep their USGS or CatCost anchors. `scripts/fetch_price_history.py` freezes the series, `scripts/build_reference_basis.py` turns one month into a price map, and the analysis scripts take that map through `--price-basis`. Every number in the paper then re-costs from a committed file rather than from whatever the app fetched that day.
 
-## Step Method (Chapter 6)
+## Thermal manufacturing-cost basis
+
+The thermal processing model uses the published Step Method and the rates documented in CatCost User Guide Chapter 6. Their mid-2017 basis and scale assumptions remain part of the source evidence.
 
 ### Reproducing the paper
 
@@ -97,7 +101,7 @@ where Q is order size in tons.
 
 ### Campaign length
 
-CatCost's term for one production run. In the app this appears as the production scale (order size in tons, which sets the Small, Medium or Large equipment basis) and the production time in days. Campaign days = order size ÷ production rate + cleaning time (0.5 d Small, 1 d Medium/Large). The nominal rates are 1 / 10 / 150 t/d. `calculate_step_method` accepts `production_rate_ton_per_day` to override the nominal rate for routes whose effective throughput is lower — CatCost Table 6.2 footnote b applies 67 t/d to the zeolite FCC campaign for ramp-up and ramp-down.
+A production run is described in the app by the production scale (order size in tons, which sets the Small, Medium or Large equipment basis) and the production time in days. Campaign days = order size ÷ production rate + cleaning time (0.5 d Small, 1 d Medium/Large). The nominal rates are 1 / 10 / 150 t/d. `calculate_step_method` accepts `production_rate_ton_per_day` to override the nominal rate for routes whose effective throughput is lower — CatCost Table 6.2 footnote b applies 67 t/d to the zeolite FCC campaign for ramp-up and ramp-down.
 
 ### Reproduction of CatCost Table 6.2
 
@@ -115,9 +119,9 @@ The calculator's Preparation Method step offers 28 named thermal methods on top 
 
 Two rules keep those costs honest. Steps are fitted to the production scale before pricing: Table 6.1 lists batch equipment at Small only and continuous equipment at Medium and Large only, so a batch kiln stands in for the continuous kiln at 2 tons and the reverse at 20 and 200 tons (`SCALE_EQUIVALENTS` in `backend/core/step_method.py`). And an operation the Step Library has no rate for (a pressure autoclave, a fusion furnace, a washcoat coating line, a hydrogen reduction furnace, gas-phase sulfiding) is either costed at the nearest listed rate and named as such, or left out and listed under `uncosted_operations`; the card shows a "partly costed" flag either way. No hourly rate is invented for them.
 
-## CapEx/OpEx Factors Method (Chapter 7)
+## Capital and operating cost screening
 
-For detailed capital and operating cost estimation using factored approaches.
+COMET uses equipment-cost factors for capital and operating estimates. The adopted factor basis is documented in CatCost User Guide Chapter 7; the Lang-factor approach is attributed to Peters & Timmerhaus below.
 
 ### Capital Cost Factors (Peters & Timmerhaus)
 
@@ -134,7 +138,9 @@ Costs are adjusted between years using:
 - **ChemPPI** - Chemical Producer Price Index (operating costs)
 - **CEPCI** - Chemical Engineering Plant Cost Index (capital costs)
 
-## Spent Catalyst Recovery (Chapter 9)
+## Spent catalyst recovery scenario
+
+The screening proxy retains the loss and recovery assumptions documented in CatCost User Guide Chapter 9. It is not a new measured recovery model.
 
 Net reclaimed value accounts for:
 

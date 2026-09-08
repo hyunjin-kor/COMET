@@ -1,0 +1,227 @@
+{
+  "checks": [
+    {
+      "check": "positioning-about-ci",
+      "command": [
+        "node",
+        "scripts/test_desktop_about.mjs"
+      ],
+      "exit_code": 0,
+      "seconds": 0.194,
+      "at": "2026-09-08T05:12:34.353525+00:00",
+      "log": "docs/audit/prepublication-positioning-about-ci-2026-09-08.log"
+    },
+    {
+      "check": "positioning-about",
+      "command": [
+        "node",
+        "_local/check_positioning_about.cjs"
+      ],
+      "exit_code": 0,
+      "seconds": 0.188,
+      "at": "2026-09-08T05:01:42.263189+00:00",
+      "log": "docs/audit/prepublication-positioning-about-2026-09-08.log"
+    },
+    {
+      "check": "positioning-desktop-build",
+      "command": [
+        "npm.cmd",
+        "run",
+        "build",
+        "--",
+        "--",
+        "--publish",
+        "never"
+      ],
+      "exit_code": 0,
+      "seconds": 195.834,
+      "at": "2026-09-08T05:08:36.414783+00:00",
+      "log": "docs/audit/prepublication-positioning-desktop-build-2026-09-08.log"
+    },
+    {
+      "check": "positioning-desktop-smoke",
+      "command": [
+        "npm.cmd",
+        "run",
+        "smoke:desktop"
+      ],
+      "exit_code": 0,
+      "seconds": 18.553,
+      "at": "2026-09-08T05:10:53.719755+00:00",
+      "log": "docs/audit/prepublication-positioning-desktop-smoke-2026-09-08.log"
+    },
+    {
+      "check": "positioning-final-i18n",
+      "command": [
+        "npm.cmd",
+        "--prefix",
+        "frontend",
+        "run",
+        "check:i18n"
+      ],
+      "exit_code": 0,
+      "seconds": 0.606,
+      "at": "2026-09-08T04:59:18.983586+00:00",
+      "log": "docs/audit/prepublication-positioning-final-i18n-2026-09-08.log"
+    },
+    {
+      "check": "positioning-final-ruff",
+      "command": [
+        "python",
+        "-m",
+        "ruff",
+        "check",
+        "backend",
+        "scripts"
+      ],
+      "exit_code": 0,
+      "seconds": 0.121,
+      "at": "2026-09-08T05:01:42.447288+00:00",
+      "log": "docs/audit/prepublication-positioning-final-ruff-2026-09-08.log"
+    },
+    {
+      "check": "positioning-frontend-build",
+      "command": [
+        "npm.cmd",
+        "--prefix",
+        "frontend",
+        "run",
+        "build"
+      ],
+      "exit_code": 0,
+      "seconds": 4.452,
+      "at": "2026-09-08T04:51:20.190379+00:00",
+      "log": "docs/audit/prepublication-positioning-frontend-build-2026-09-08.log"
+    },
+    {
+      "check": "positioning-frontend-final-build",
+      "command": [
+        "npm.cmd",
+        "--prefix",
+        "frontend",
+        "run",
+        "build"
+      ],
+      "exit_code": 0,
+      "seconds": 4.076,
+      "at": "2026-09-08T04:59:18.312814+00:00",
+      "log": "docs/audit/prepublication-positioning-frontend-final-build-2026-09-08.log"
+    },
+    {
+      "check": "positioning-frontend-final-lint",
+      "command": [
+        "npm.cmd",
+        "--prefix",
+        "frontend",
+        "run",
+        "lint"
+      ],
+      "exit_code": 0,
+      "seconds": 4.411,
+      "at": "2026-09-08T04:59:14.162713+00:00",
+      "log": "docs/audit/prepublication-positioning-frontend-final-lint-2026-09-08.log"
+    },
+    {
+      "check": "positioning-frontend-lint",
+      "command": [
+        "npm.cmd",
+        "--prefix",
+        "frontend",
+        "run",
+        "lint"
+      ],
+      "exit_code": 0,
+      "seconds": 6.003,
+      "at": "2026-09-08T04:51:15.648793+00:00",
+      "log": "docs/audit/prepublication-positioning-frontend-lint-2026-09-08.log"
+    },
+    {
+      "check": "positioning-i18n",
+      "command": [
+        "npm.cmd",
+        "--prefix",
+        "frontend",
+        "run",
+        "check:i18n"
+      ],
+      "exit_code": 0,
+      "seconds": 0.645,
+      "at": "2026-09-08T04:51:20.912762+00:00",
+      "log": "docs/audit/prepublication-positioning-i18n-2026-09-08.log"
+    },
+    {
+      "check": "positioning-manuscript",
+      "command": [
+        "python",
+        "scripts/build_submission_manuscript.py",
+        "--date",
+        "2026-09-08",
+        "--directory",
+        "docs/paper/submission-2026-09-08",
+        "--robustness",
+        "docs/paper/robustness-2026-09-08",
+        "--check"
+      ],
+      "exit_code": 0,
+      "seconds": 0.9,
+      "at": "2026-09-08T04:51:38.631038+00:00",
+      "log": "docs/audit/prepublication-positioning-manuscript-2026-09-08.log"
+    },
+    {
+      "check": "positioning-node",
+      "command": [
+        "node",
+        "--test",
+        "scripts/test_scientific_text.mjs",
+        "scripts/test_practical_range.mjs",
+        "scripts/test_calculator_rules.mjs",
+        "scripts/hosted-session.test.mjs"
+      ],
+      "exit_code": 0,
+      "seconds": 0.45,
+      "at": "2026-09-08T04:52:05.690577+00:00",
+      "log": "docs/audit/prepublication-positioning-node-2026-09-08.log"
+    },
+    {
+      "check": "positioning-pytest",
+      "command": [
+        "python",
+        "-m",
+        "pytest",
+        "backend/tests",
+        "-q"
+      ],
+      "exit_code": 0,
+      "seconds": 572.496,
+      "at": "2026-09-08T05:01:10.058950+00:00",
+      "log": "docs/audit/prepublication-positioning-pytest-2026-09-08.log"
+    },
+    {
+      "check": "positioning-ruff",
+      "command": [
+        "python",
+        "-m",
+        "ruff",
+        "check",
+        "backend",
+        "scripts"
+      ],
+      "exit_code": 0,
+      "seconds": 0.307,
+      "at": "2026-09-08T04:51:11.007979+00:00",
+      "log": "docs/audit/prepublication-positioning-ruff-2026-09-08.log"
+    },
+    {
+      "check": "positioning-table62",
+      "command": [
+        "python",
+        "scripts/reproduce_catcost_table62.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.091,
+      "at": "2026-09-08T04:51:37.657997+00:00",
+      "log": "docs/audit/prepublication-positioning-table62-2026-09-08.log"
+    }
+  ],
+  "note": "Final CI is recorded separately after push. Native About contract tests use Electron stubs; browser screenshots cover real frontend rendering."
+}

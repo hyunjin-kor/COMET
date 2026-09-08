@@ -806,7 +806,7 @@ export default function CalculatorResult() {
           <div className="mt-4 rounded-[24px] border border-emerald-200 bg-emerald-50/80 p-4">
             <div className="cp-subtle-label !text-emerald-700">{t("Lifecycle proxy")}</div>
             <div className="mt-2 text-sm leading-6 text-emerald-900">
-              {t("Net cost includes spent catalyst recovery for")} <ScientificText text={spentCatalyst.metal_symbol} />{t(". The model uses support and reactor-type loss assumptions from the CatCost-style recovery proxy, not a full deactivation-regeneration cycle.")}
+              {t("Net cost includes spent catalyst recovery for")} <ScientificText text={spentCatalyst.metal_symbol} />{t(". Recovery value uses support and reactor-type loss assumptions; deactivation and regeneration cycles are outside this estimate.")}
             </div>
           </div>
         ) : null}
@@ -1020,7 +1020,10 @@ export default function CalculatorResult() {
             </span>
           </div>
           <div className="mt-2 text-xs leading-6 text-slate-600">
-            {t('CatCost Step Method rates, brought to this year with the chemical price index, plus overhead and selling margin.')}
+            {t('COMET traces material prices to the selected basis. Manufacturing costs and their assumptions are listed separately.')}
+            <p>{electrodeModel
+              ? t('These are catalyst powder material costs. The electrode assembly result uses cost per effective area.')
+              : t('Adopted thermal method: published Step Method; CatCost User Guide, Chapter 6.')}</p>
           </div>
         </div>
 
@@ -1111,7 +1114,7 @@ export default function CalculatorResult() {
                         <span className="font-mono font-semibold">{formatPrice(toDisplay(material.normalized_price_per_lb ?? 0))}{fmtLabel}</span>.
                       </div>
                       <div className="mt-1 text-[#4e5968]">
-                        {t("ChemPPI tracks chemical-manufacturing producer prices and is the same index CatCost uses for materials and operating costs.")}
+                        {t("ChemPPI tracks chemical-manufacturing producer prices. COMET uses it to convert applicable source costs between price years.")}
                       </div>
                     </div>
                   ) : null}

@@ -1,4 +1,6 @@
-# API Reference
+# COMET API Reference
+
+The API exposes COMET's catalyst-cost, environmental-screening and decision-analysis workflows. See [methodology](methodology.md) for calculation boundaries and adopted prior methods. Compatibility endpoints retain their existing names and input contracts.
 
 Base URL:
 

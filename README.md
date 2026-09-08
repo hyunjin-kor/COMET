@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <strong>Estimate what a catalyst costs to make, using live metal prices.</strong>
+  <strong>Compare catalyst manufacturing costs, environmental coverage and decision robustness.</strong>
 </p>
 
 <p align="center">
@@ -21,10 +21,12 @@
   <a href="docs/roadmap.md">Roadmap</a>
 </p>
 
-**COMET** estimates what a catalyst costs to make. Describe the composition, the
-support and the preparation route, and it prices that recipe against current metal
-quotes using the published CatCost method. The default desktop app runs locally
-without an account. Its optional hosted service is in preparation.
+**COMET** is independently developed software for catalyst manufacturing cost,
+environmental screening and decision analysis. It connects composition, preparation
+routes and production conditions to traceable prices, explicit calculation boundaries
+and reproducible comparisons. Use live quotes for a current screening or freeze a
+reference month for research. The default desktop app runs locally without an
+account. Its optional hosted service is in preparation.
 
 Built for catalysis researchers with questions like:
 
@@ -42,7 +44,7 @@ Get the installer from the [latest release](https://github.com/hyunjin-kor/COMET
 It works offline. Without API keys it falls back to indexed and manual prices.
 
 This branch prepares **1.4.0**; the latest verified public release is **v1.3.24**
-(2026-09-07). New distribution awaits the [data rights review](docs/commercial/rights-register-2026-09-07.md).
+(2026-09-08). New distribution awaits the [data rights review](docs/commercial/rights-register-2026-09-07.md).
 
 Since v1.3.13 the app updates itself: it checks GitHub Releases at startup,
 downloads in the background, and prompts you to restart. The binary is unsigned,
@@ -50,11 +52,13 @@ so SmartScreen will warn you the first time. Pick "More info → Run anyway".
 
 ## What it does
 
-- Costs the preparation route with the Step Method, following the CatCost methodology published by NREL
+- Estimates materials, scale-specific manufacturing steps, overhead and selling margin, with the adopted Step Method documented under [method basis](#method-basis)
 - Tags every price `LIVE`, `INDEXED` or `MANUAL`, and shows the source, quote year and freshness behind it
 - Switches between a practical basis (live quotes) and an academic basis (IMF and Johnson Matthey monthly averages), so a screening result can be quoted against a citable month
 - Ships thirty literature benchmark families you can load and edit: ammonia cracking, CO₂ hydrogenation, RWGS, dry reforming, water-gas shift, fuel-cell ORR, electrolyzer OER and more
-- Covers bulk supported catalysts as well as electrode-stack electrocatalysts
+- Keeps bulk catalyst mass costs and electrode-assembly area costs on explicit functional units
+- Reports partial environmental inventories with their material coverage
+- Makes price, preference and candidate-set sensitivity reproducible through the research scripts
 - Runs Monte Carlo, so you get a range rather than one number
 - Credits spent-catalyst recovery on thermocatalyst runs, if you want it
 - Escalates older prices to this year with ChemPPI and CEPCI
@@ -126,7 +130,7 @@ both residuals trace to footnotes in the table itself.
 
 ## Reproduce the paper
 
-The [current manuscript and SI](docs/paper/research-claims-2026-09-08.ko.md) use the preserved May 2026 price basis. [Joint decision robustness](docs/paper/robustness-2026-09-08/README.md) tests prices and preferences together, candidate-set dependence and author-score sensitivity.
+The [current manuscript and SI](docs/paper/README.md) use the preserved May 2026 price basis. [Joint decision robustness](docs/paper/robustness-2026-09-08/README.md) tests prices and preferences together, candidate-set dependence and author-score sensitivity.
 
 ```bash
 python scripts/reproduce_paper.py --price-basis reference --month 2026-05 --seed 20260906 --date 2026-09-08 --history docs/paper/submission-2026-09-07/price_history_2026-09-07.json --live-basis docs/paper/submission-2026-09-07/live_basis_2026-09-07.json --support-history docs/paper/submission-2026-09-07/support_history_2026-09-07.json --out-dir _local/submission-replay-2026-09-08
@@ -160,7 +164,14 @@ COMTRADE_API_KEY=your_key        # optional scheduled collection; verified shipp
 
 ## Method basis
 
-COMET implements and academically cites the CatCost methodology and is not
+COMET develops a catalyst-screening methodology around traceable price states,
+explicit manufacturing boundaries and reproducible decision analysis. Published
+Step Method costing and CatCost are prior work: COMET adopts their documented
+thermal step-cost, overhead and margin basis and checks its implementation against
+published reference cases. Those equations and rates are attributed to their
+sources; COMET's contribution is the connected workflow and its diagnostic analyses.
+The [contribution map](docs/research-contribution.md) links each contribution to
+implementation, evidence and limits. COMET is independently developed and is not
 affiliated with or endorsed by NREL. The source audit found legacy bundled files
 that declare CatCost workbook origins. Their reuse permissions are unresolved;
 the original workbook is excluded, but that alone does not clear extracted data.

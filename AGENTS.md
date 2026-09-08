@@ -1,8 +1,8 @@
 # COMET — Codex Development Framework
 
 > Master guide for AI-coding agents (Codex / Claude) working on this project.
-> Built on the original project plan's scope, with adopted ideas from
-> GitHub benchmarking and the original CatCost methodology.
+> COMET product, research-contribution and implementation guide.
+> Adopted methods and data retain their original attribution.
 
 
 Reference detail lives beside this file:
@@ -15,9 +15,10 @@ Reference detail lives beside this file:
 ## Project identity
 
 - **Name**: COMET: Catalyst Overall Manufacturing Estimation Tool
-- **One-liner**: A desktop tool that estimates catalyst manufacturing cost from real-time metal market prices.
+- **One-liner**: Independently developed software for catalyst manufacturing cost, environmental screening and reproducible decision analysis.
 - **License**: PolyForm Noncommercial License 1.0.0 (noncommercial use permitted; commercial use requires a separate license).
-- **Differentiator**: CatCost-derived methodology, but with automatic live market-price refresh and a modern web/desktop UI.
+- **Contribution**: Traceable live/reference prices, explicit manufacturing and functional-unit boundaries, saved-case comparisons and decision-robustness analysis; see `docs/research-contribution.md`.
+- **Method basis**: Published Step Method and CatCost are prior work. Attribute the adopted equations, rates and source records; distinguish them from COMET's workflow and analytical extensions.
 - **Academic citations**: Baddour et al. 2018, Van Allsburg et al. 2022.
 
 ### Current implementation status
@@ -93,8 +94,7 @@ Run these three cases as a regression at the end of every Phase. Live tolerances
 - CatCost is owned by DOE / NREL with non-commercial internal-use restrictions.
 - **Citing the methodology is fine** (academic reference).
 - **Direct copying of CatCost data is risky** → re-collect from public sources.
-- Materials Library prices are independently sourced from ICIS public, Sigma-Aldrich,
-  USGS, etc.
+- Materials Library records have mixed origins, including legacy records declaring CatCost workbook/sheet sources. Follow the per-record provenance and rights register; do not claim that every bundled value was independently collected.
 
 ### Metal price-feed API keys
 - Metals.Dev: free tier 50 requests/month, paid $9.99/month (10 k requests).
@@ -102,5 +102,7 @@ Run these three cases as a regression at the end of every Phase. Live tolerances
 - BLS API: free (registration required).
 
 ### Relationship to CatCost
-- README states: "academically cites and uses the CatCost methodology".
-- Emphasizes: "complements CatCost rather than replacing it".
+- Introduce COMET through its own research questions, methodology contributions and software behavior.
+- Present CatCost as prior research and an adopted-method validation reference, with exact citations where its equations, rates or records are used.
+- Do not describe COMET as a CatCost interface, extension product or official successor. Do not claim new authorship of adopted formulas, independently sourced legacy data, or measured superiority without evidence.
+- Historical audits and frozen numerical packages retain their original wording and hashes.

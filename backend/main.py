@@ -108,7 +108,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="COMET API",
-    description="Loopback API sidecar for the COMET desktop app",
+    description="COMET catalyst manufacturing cost, environmental screening and decision analysis API",
     version=APP_VERSION,
     lifespan=lifespan,
     dependencies=[Depends(authorize_hosted_request)],

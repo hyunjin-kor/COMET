@@ -1,7 +1,7 @@
 {
   "name": "comet",
   "version": "1.4.0",
-  "description": "COMET: Catalyst Overall Manufacturing Estimation Tool — Windows desktop app for catalyst cost estimation and source-linked benchmark workflows",
+  "description": "COMET: independently developed software for catalyst manufacturing cost, environmental screening and decision analysis.",
   "main": "electron/main.js",
   "author": "hyunjin.kang",
   "license": "PolyForm-Noncommercial-1.0.0",

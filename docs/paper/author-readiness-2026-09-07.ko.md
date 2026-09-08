@@ -1,8 +1,10 @@
 # 저자 검토와 투고 준비
 
-대상 원고는 [manuscript_2026-09-07.md](manuscript_2026-09-07.md)이며, [저널 검토](journal-targets-2026-09-07.md)에 따라 ACS Engineering Au Article 형식으로 준비했다. 실제 Q1·JIF 연도·등재 범위·게재료 지원은 확인되지 않았다. 투고·게재 승인은 이 소프트웨어 실행으로 대신할 수 없다.
+대상 원고는 [manuscript_2026-09-08.md](manuscript_2026-09-08.md)이며, [저널 검토](journal-targets-2026-09-07.md)에 따라 ACS Engineering Au Article 형식으로 준비했다. 실제 Q1·JIF 연도·등재 범위·게재료 지원은 확인되지 않았다. 투고·게재 승인은 이 소프트웨어 실행으로 대신할 수 없다.
 
 ## 논문의 현재 주장
+
+2026-09-08 문서 연결 갱신: COMET의 자체 기여와 채택한 선행 방법은 [기여 표](../research-contribution.md)에 구분했다.
 
 연구의 중심은 고정한 가격 상태·제조 조건·가중치 아래에서 촉매 원가와 추천 결과를 다시 계산하고, 결과 변화가 어디서 나오는지 구분하는 것이다. CatCost 사례 재현은 방법 구현 검증이다. 추가한 교차 분석은 가격과 출처 점수의 영향을 분리하며, 제조 규모 경계와 전극 면적 단가의 해석 한계를 보여준다. 이는 관측된 산업 원가 정확도나 실험 성능의 검증을 대신하지 않는다.
 
@@ -20,7 +22,7 @@
 | 공개 버전 | v1.4.0은 준비 버전이다. 권리와 최종 CI 검토 전에는 태그·릴리스·Zenodo 업로드를 실행하지 않는다. concept DOI를 새 버전 DOI로 쓰지 않는다. |
 
 ```text
-python scripts/build_submission_manuscript.py --check
+python scripts/build_submission_manuscript.py --date 2026-09-08 --directory docs/paper/submission-2026-09-08 --robustness docs/paper/robustness-2026-09-08 --check
 python scripts/run_controlled_cases.py --reference-basis docs/paper/submission-2026-09-07/reference_basis_2026-09-07.json --live-basis docs/paper/submission-2026-09-07/live_basis_2026-09-07.json --out-dir _local/controlled-replay --seed 20260906
 ```
 

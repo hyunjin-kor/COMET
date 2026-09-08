@@ -1,6 +1,7 @@
 cff-version: 1.2.0
 message: "If you use COMET in your research, please cite it as below."
 title: "COMET: Catalyst Overall Manufacturing Estimation Tool"
+abstract: "COMET connects catalyst manufacturing costs, traceable price states, partial environmental inventories and reproducible decision analysis. Adopted methods are cited separately below."
 type: software
 version: "1.4.0"
 # Prepared source version; no release date until a human publishes the tag.

@@ -1,0 +1,27 @@
+{
+  "status": "pass",
+  "english_fallback": true,
+  "korean_copy": true,
+  "english_switch": true,
+  "invalid_sender_or_payload_cases_rejected": 5,
+  "scope": "Execute actual native About IPC handler/dialog construction in a Node VM with Electron stubs. Translation strings are read from the actual TypeScript dictionary. Does not claim an observed native OS dialog screenshot.",
+  "source_sha256": "5b7f5f1659b7867b5ec7621677966217a3a04de5d6c1ed8b4938568aec24efc9",
+  "korean_dialog": {
+    "type": "info",
+    "title": "COMET 정보",
+    "message": "COMET: Catalyst Overall Manufacturing Estimation Tool",
+    "detail": "Version 1.4.0\n\n촉매 제조 원가·환경 영향·의사결정 분석을 위한 독립 개발 소프트웨어입니다.\n가격 출처와 제조 원가의 산정 범위를 확인하고 같은 조건의 비교를 재현합니다.\n\n열촉매 원가 산정에 채택한 선행연구: Baddour 외(2018), Van Allsburg 외(2022), CatCost.\n\nCopyright 2026 hyunjin.kang | PolyForm Noncommercial License 1.0.0",
+    "buttons": [
+      "확인"
+    ]
+  },
+  "english_dialog": {
+    "type": "info",
+    "title": "About COMET",
+    "message": "COMET: Catalyst Overall Manufacturing Estimation Tool",
+    "detail": "Version 1.4.0\n\nIndependently developed catalyst manufacturing cost, environmental screening and decision analysis software.\nTraceable prices, explicit manufacturing boundaries and reproducible comparisons.\n\nPrior work for adopted thermal costing: Baddour et al. (2018); Van Allsburg et al. (2022), CatCost.\n\nCopyright 2026 hyunjin.kang | PolyForm Noncommercial License 1.0.0",
+    "buttons": [
+      "OK"
+    ]
+  }
+}

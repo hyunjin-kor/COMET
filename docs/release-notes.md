@@ -6,6 +6,8 @@ The package versions are 1.4.0. The latest verified public release remains v1.3.
 
 New distribution is held until the [bundled data rights review](commercial/rights-register-2026-09-07.md) is complete. The original workbook is excluded, but existing extracted records still need permission review.
 
+- Product descriptions, Korean/English result explanations and the desktop About dialog now introduce COMET through its manufacturing-cost, environmental-screening and decision-analysis workflow. Adopted methods remain attributed in source details; formulas and data are unchanged.
+- The current manuscript and contribution map distinguish COMET's analytical extensions from cited prior work, including CatCost.
 - Benchmark cards now show the same cost basis used to rank the family. Incomplete electrode families explicitly use catalyst powder cost; complete assemblies retain area cost. App and paper sweeps share rounded-score and functional-unit tie handling.
 - A reproducible research study now crosses monthly prices with preferences, tests candidate-removal and author-score sensitivity, and exports full ledgers, figures and a dated manuscript/SI. See the [research audit](audit/research-upgrade-2026-09-08.md).
 - Electrode range, latest-result cards and CSV exports now use assembly cost per area consistently. Adjunct-price changes affect the range, and kg/lb switching preserves area values. Bulk campaign/margin/recovery values are omitted from electrode result exports.
