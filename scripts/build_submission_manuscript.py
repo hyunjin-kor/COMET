@@ -515,6 +515,7 @@ def main():
     parser.add_argument("--date", default=DATE, help="Output run date (YYYY-MM-DD); external evidence retains its verified date")
     parser.add_argument("--directory", type=Path)
     parser.add_argument("--robustness", type=Path, help="Completed joint robustness output directory")
+    parser.add_argument("--methods-study", type=Path, help="Verified purchased-input, uncertainty and normalization supplement")
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
     if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", args.date):
@@ -529,6 +530,11 @@ def main():
     if args.robustness:
         from scripts.research_manuscript_extension import extend_manuscript
         draft, si = extend_manuscript(draft, si, run, args.robustness, DATE)
+    if args.methods_study:
+        if not args.robustness:
+            parser.error("--methods-study requires --robustness")
+        from scripts.paper_methods_text import extend_methods
+        draft, si = extend_methods(draft, si, run, args.methods_study)
     abstract = draft.split("## Abstract\n\n", 1)[1].split("\n\nKeywords:", 1)[0]
     abstract_words = word_count(abstract)
     if not 150 <= abstract_words <= 300:
@@ -542,8 +548,8 @@ def main():
         "text_words_excluding_tables_figures_references": count,
         "figure_count": 6,
         "table_count": 2,
-        "supporting_figure_count": 2 if args.robustness else 1,
-        "supporting_table_count": 8 if args.robustness else 7,
+        "supporting_figure_count": len(re.findall(r"^!\[", si, flags=re.M)),
+        "supporting_table_count": len(re.findall(r"^#{2,3} Table S\d+\.", si, flags=re.M)),
         "target_journal": "ACS Engineering Au (provisional; JCR year/category eligibility unresolved)",
         "abstract_limit": 300,
         "article_limit": None,

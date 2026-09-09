@@ -1,0 +1,160 @@
+{
+  "checks": [
+    {
+      "check": "frontend-build",
+      "command": [
+        "npm.cmd",
+        "--prefix",
+        "frontend",
+        "run",
+        "build"
+      ],
+      "exit_code": 0,
+      "seconds": 7.564,
+      "at": "2026-09-09T02:09:59.697148+00:00",
+      "log": "docs/audit/paper-methods-frontend-build-2026-09-09.log"
+    },
+    {
+      "check": "frontend-lint",
+      "command": [
+        "npm.cmd",
+        "--prefix",
+        "frontend",
+        "run",
+        "lint"
+      ],
+      "exit_code": 0,
+      "seconds": 11.698,
+      "at": "2026-09-09T02:09:52.068955+00:00",
+      "log": "docs/audit/paper-methods-frontend-lint-2026-09-09.log"
+    },
+    {
+      "check": "i18n",
+      "command": [
+        "npm.cmd",
+        "--prefix",
+        "frontend",
+        "run",
+        "check:i18n"
+      ],
+      "exit_code": 0,
+      "seconds": 0.618,
+      "at": "2026-09-09T02:10:00.383696+00:00",
+      "log": "docs/audit/paper-methods-i18n-2026-09-09.log"
+    },
+    {
+      "check": "manuscript-final",
+      "command": [
+        "python",
+        "scripts/build_submission_manuscript.py",
+        "--date",
+        "2026-09-08",
+        "--directory",
+        "docs/paper/submission-2026-09-08",
+        "--robustness",
+        "docs/paper/robustness-2026-09-08",
+        "--methods-study",
+        "docs/paper/methods-2026-09-09/methods_study.json",
+        "--check"
+      ],
+      "exit_code": 0,
+      "seconds": 0.828,
+      "at": "2026-09-09T02:16:09.790750+00:00",
+      "log": "docs/audit/paper-methods-manuscript-final-2026-09-09.log"
+    },
+    {
+      "check": "manuscript",
+      "command": [
+        "python",
+        "scripts/build_submission_manuscript.py",
+        "--date",
+        "2026-09-08",
+        "--directory",
+        "docs/paper/submission-2026-09-08",
+        "--robustness",
+        "docs/paper/robustness-2026-09-08",
+        "--methods-study",
+        "docs/paper/methods-2026-09-09/methods_study.json",
+        "--check"
+      ],
+      "exit_code": 0,
+      "seconds": 0.829,
+      "at": "2026-09-09T02:09:41.476819+00:00",
+      "log": "docs/audit/paper-methods-manuscript-2026-09-09.log"
+    },
+    {
+      "check": "pytest",
+      "command": [
+        "python",
+        "-m",
+        "pytest",
+        "backend/tests",
+        "-q"
+      ],
+      "exit_code": 0,
+      "seconds": 563.221,
+      "at": "2026-09-09T02:16:23.230492+00:00",
+      "log": "docs/audit/paper-methods-pytest-2026-09-09.log"
+    },
+    {
+      "check": "ruff-final",
+      "command": [
+        "python",
+        "-m",
+        "ruff",
+        "check",
+        "backend",
+        "scripts"
+      ],
+      "exit_code": 0,
+      "seconds": 0.104,
+      "at": "2026-09-09T02:16:09.958554+00:00",
+      "log": "docs/audit/paper-methods-ruff-final-2026-09-09.log"
+    },
+    {
+      "check": "ruff",
+      "command": [
+        "python",
+        "-m",
+        "ruff",
+        "check",
+        "backend",
+        "scripts"
+      ],
+      "exit_code": 0,
+      "seconds": 0.114,
+      "at": "2026-09-09T02:09:40.415560+00:00",
+      "log": "docs/audit/paper-methods-ruff-2026-09-09.log"
+    },
+    {
+      "check": "supplement-final",
+      "command": [
+        "python",
+        "-m",
+        "pytest",
+        "backend/tests/test_paper_methods_supplement.py",
+        "-q"
+      ],
+      "exit_code": 0,
+      "seconds": 3.759,
+      "at": "2026-09-09T02:16:29.442431+00:00",
+      "log": "docs/audit/paper-methods-supplement-final-2026-09-09.log"
+    },
+    {
+      "check": "table62",
+      "command": [
+        "python",
+        "scripts/reproduce_catcost_table62.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.091,
+      "at": "2026-09-09T02:09:40.580285+00:00",
+      "log": "docs/audit/paper-methods-table62-2026-09-09.log"
+    }
+  ],
+  "integrity": {
+    "local_links_checked": 112,
+    "missing": [],
+    "protected_changes": []
+  }
+}

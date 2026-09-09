@@ -29,5 +29,7 @@
   "controlled_electrode_cases": 9,
   "additional_primary_papers": 2,
   "screened_evidence_total": 12,
-  "additional_evidence_sha256": "1b068b560a9db16a66d2bc85ef4df3343860814f015a84b6d4cecdf18181f762"
+  "additional_evidence_sha256": "1b068b560a9db16a66d2bc85ef4df3343860814f015a84b6d4cecdf18181f762",
+  "methods_study_sha256": "3e0334cae853187259e65d147375c1e2b68361b42b8cd9a75dd6682bbf9725ca",
+  "methods_study_file": "methods-2026-09-09/methods_study.json"
 }

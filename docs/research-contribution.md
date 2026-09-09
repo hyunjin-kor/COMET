@@ -34,3 +34,5 @@ CatCost와 공개 Step Method는 선행연구이자 채택한 원가 산정 근�
 > COMET is independently developed software connecting catalyst manufacturing cost, partial environmental inventories and reproducible decision analysis. Building on established costing research, its methodology links traceable price states, explicit manufacturing boundaries and functional-unit-aware comparisons to diagnostics of recommendation robustness.
 
 현재 원고와 SI는 [논문 자료 안내](paper/README.md)에서 찾는다. 모델 재현과 자동 시험은 확보했으나, 조건이 일치하는 독립 산업 원가 관측과 실제 연구자 평가가 아직 부족하다. 기존 [권리 검토표](commercial/rights-register-2026-09-07.md), 라이선스와 배포 조건은 이 설명 변경으로 달라지지 않는다.
+
+2026-09-09 보완: [선행연구 8개 대조](sources/paper-methods-prior-work-2026-09-09.md)에 원가를 이용한 합성 개선과 정규화에 따른 순위 역전의 선례를 명시했다. [추가 방법 검증](paper/methods-2026-09-09/README.md)은 구매량·MC·실제 후보 제외 사례를 원고/SI의 수식에 연결한다. 이는 기존 계산식의 새 저작성이나 실측 산업 정확도를 뜻하지 않는다.

@@ -27,3 +27,6 @@ docs/paper/controlled-2026-09-08/*.svg -text
 docs/paper/robustness-2026-09-08/*.json -text
 docs/paper/robustness-2026-09-08/*.svg -text
 docs/paper/robustness-2026-09-08/*.csv -text
+docs/paper/methods-2026-09-09/*.json -text
+docs/sources/paper-methods-evidence-2026-09-09.json -text
+docs/sources/paper-methods-access-2026-09-09.json -text
