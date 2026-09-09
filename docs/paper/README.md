@@ -14,8 +14,9 @@
 - [비교 후보가 달라지면 순위가 바뀌는 이유](normalization-explained-2026-09-09.ko.md)
 - [선행연구 8개 대조와 외부 근거의 범위](../sources/paper-methods-prior-work-2026-09-09.md)
 - [2026-09-09 독립 검토: 코드·수식·참고문헌 대조와 수정 내역](../audit/paper-review-2026-09-09.md)
+- [JCIM Application Note 초안](application-note-2026-09-09.md) · [JCIM 커버레터 초안](cover-letter-jcim-2026-09-09.md) · [교수님 보고용 투고 브리핑](submission-brief-2026-09-09.ko.md) · [SCIE 기준 저널 재검토](journal-targets-2026-09-07.md#addendum-2026-09-09-scie-requirement-and-application-note-decision)
 
-현재 문서를 재생성하고 수치 키·고정 산출물 해시를 확인한다.
+현재 문서를 재생성하고 수치 키·고정 산출물 해시를 확인한다. Application Note는 `python scripts/build_application_note.py`로 같은 동결 파일에서 생성하고 `--check`로 확인한다.
 
 ```bash
 python scripts/build_submission_manuscript.py --date 2026-09-08 --directory docs/paper/submission-2026-09-08 --robustness docs/paper/robustness-2026-09-08 --methods-study docs/paper/methods-2026-09-09/methods_study.json

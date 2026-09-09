@@ -2,7 +2,7 @@
 
 대상 원고는 [manuscript_2026-09-08.md](manuscript_2026-09-08.md)이며, [저널 검토](journal-targets-2026-09-07.md)에 따라 ACS Engineering Au Article 형식으로 준비했다. 실제 Q1·JIF 연도·등재 범위·게재료 지원은 확인되지 않았다. 투고·게재 승인은 이 소프트웨어 실행으로 대신할 수 없다.
 
-2026-09-09 보완: 구매량·불확실성·정규화 수식과 검증 사례를 본문 및 SI S9–S12에 추가했다. [선행연구 대조](../sources/paper-methods-prior-work-2026-09-09.md)는 새 산업 원가 실증이나 실제 연구자 평가를 제공하지 않는다.
+2026-09-09 보완: 구매량·불확실성·정규화 수식과 검증 사례를 본문 및 SI S9–S12에 추가했다. 같은 날 연구실의 SCIE 조건에 따라 ACS Engineering Au(ESCI 표기)를 잠정 대상에서 제외하고 [JCIM Application Note](application-note-2026-09-09.md)를 준비했다. 결정 사항은 [투고 브리핑](submission-brief-2026-09-09.ko.md)에 있다. [선행연구 대조](../sources/paper-methods-prior-work-2026-09-09.md)는 새 산업 원가 실증이나 실제 연구자 평가를 제공하지 않는다.
 
 ## 논문의 현재 주장
 

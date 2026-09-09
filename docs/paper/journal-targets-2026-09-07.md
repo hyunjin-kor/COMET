@@ -34,3 +34,22 @@ For the selected journal, an authorized author should record the actual JCR prof
 
 Direct status codes and hashes for ACS requests are included in [the access record](../commercial/source-access-2026-09-07.json). Publisher-indexed text is labelled as such and is not represented as a successful direct metrics-page retrieval.
 The Clarivate explanatory page was readable as indexed official text, but a direct web open also returned403. No inaccessible journal profile or quartile was reconstructed from that explanatory text.
+
+## Addendum 2026-09-09: SCIE requirement and Application Note decision
+
+The authors' laboratory counts only Science Citation Index Expanded (SCIE) journals. On 2026-09-09 the user confirmed in JCR that Digital Discovery is listed in the Emerging Sources Citation Index (ESCI). A third-party index page (journalsearches.com), which reproduces that Digital Discovery status, lists ACS Engineering Au as ESCI as well. The Engineering Au preparation above is therefore withdrawn as a target pending confirmation in JCR. The Clarivate Master Journal List is a script-rendered page and could not be read directly; no paid database was used.
+
+SCIE candidates with Crossref-checked precedents for software or catalyst-cost papers (IF values are third-party readings of the 2026 JCR and must be confirmed in JCR):
+
+| Journal | Index | IF | Precedents (DOI) |
+|---|---|---|---|
+| Journal of Chemical Information and Modeling, Application Note | SCIE, Q1 | 6.4 | AutoDock Vina 1.2.0 (10.1021/acs.jcim.1c00203); NEXTorch (10.1021/acs.jcim.1c00637); AI4Green (10.1021/acs.jcim.3c00306); ProcessOptimizer (10.1021/acs.jcim.4c02240) |
+| ACS Sustainable Chemistry & Engineering | SCIE, Q1 | 7.6 | BioSTEAM (10.1021/acssuschemeng.9b07040); BioSTEAM-LCA (10.1021/acssuschemeng.0c05998); APPROPRIATE LCA (10.1021/acssuschemeng.2c07682); AGREEMIP (10.1021/acssuschemeng.4c03874); Gkika and Kyzas (10.1021/acssuschemeng.5c06752) |
+| Green Chemistry | SCIE, Q1 | 10.6 | ESTIMATe (10.1039/D4GC00964A); Pedersen et al. electrocatalyst TEA/LCA (10.1039/d3gc03206j); Roh et al. (10.1039/c9gc04440j) |
+| Computers & Chemical Engineering | SCIE, Q2 | 4.9 | BioProcessNexus (10.1016/j.compchemeng.2025.109220) |
+| Catalysis Science & Technology | SCIE, Q2 | 4.0 | Ferdous et al. (10.1039/d5cy00189g); Kumar et al. (10.1039/d3cy00550j) |
+| Industrial & Engineering Chemistry Research | SCIE, Q2 | 3.9 | Severino et al. MIL-100(Fe) cost (10.1021/acs.iecr.4c02618) |
+
+Excluded: Digital Discovery and ACS Engineering Au (ESCI); SoftwareX (SCIE, but an OSI-approved license is required and COMET uses PolyForm Noncommercial 1.0.0); JOSS and Software Impacts (not SCIE).
+
+Decision: prepare a JCIM Application Note. The official guidelines (`researcher-resources.acs.org/publish/author_guidelines?coden=jcisd8`, read 2026-09-09, HTTP 200) require the software name in the title, at most 5,000 words for abstract, text and graphics (300 words per single-column and 600 per double-column graphic), at least one figure, availability for evaluation or purchase for academic and commercial use, operating-system independence where possible, and reviewer testing on request. The draft `application-note-2026-09-09.md` (4,149 word-equivalents with three figures) and `cover-letter-jcim-2026-09-09.md` follow these rules; `python scripts/build_application_note.py --check` verifies the note against the frozen runs. The full manuscript remains the research record and the source of every number. Author identity, the commercial-license contact, competing interests and the reviewer version remain human decisions; see `submission-brief-2026-09-09.ko.md`.
