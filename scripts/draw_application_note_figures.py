@@ -104,7 +104,7 @@ def icon_decision(ax, x, y):
 
 
 def figure1_workflow():
-    w_mm, h_mm = 180, 112
+    w_mm, h_mm = 180, 98
     fig = plt.figure(figsize=(w_mm / 25.4, h_mm / 25.4))
     ax = fig.add_axes([0, 0, 1, 1])
     ax.set_xlim(0, w_mm)
@@ -129,10 +129,11 @@ def figure1_workflow():
     ]
     x0, w, label_w = 4, 134, 34
     rail_x, rail_w = 143, 33
-    y = 6
+    top = h_mm - 4
     heights = [17, 15, 16, 16, 16]
-    tops = []
+    bands = []
     for (title, icon, cols), h in zip(layers, heights, strict=True):
+        y = top - h
         ax.add_patch(FancyBboxPatch((x0, y), w, h, boxstyle="round,pad=0,rounding_size=1.0", fc=FILL, ec=RULE, lw=0.6))
         ax.add_patch(Rectangle((x0, y), 1.6, h, fc=ACC, ec="none"))
         icon(ax, x0 + 4.5, y + h / 2 - 1.5)
@@ -142,26 +143,26 @@ def figure1_workflow():
             cx = x0 + label_w + 2 + ci * col_w
             for li, item in enumerate(items):
                 ax.text(cx, y + h - 3.2 - li * 4.3, item, ha="left", va="center", fontsize=6.4)
-        tops.append((y, y + h))
-        y += h + 2.4
-    for (_, top), (bottom, _) in zip(tops[:-1], tops[1:], strict=True):
-        ax.add_patch(FancyArrowPatch((x0 + 9.5, top + 0.2), (x0 + 9.5, bottom - 0.2), arrowstyle="-|>",
+        bands.append((y, y + h))
+        top = y - 2.4
+    for (upper_bottom, _), (_, lower_top) in zip(bands[:-1], bands[1:], strict=True):
+        ax.add_patch(FancyArrowPatch((x0 + 9.5, upper_bottom - 0.2), (x0 + 9.5, lower_top + 0.2), arrowstyle="-|>",
                                      mutation_scale=7, color=ACC, lw=0.9, shrinkA=0, shrinkB=0))
-    rail_h = y - 2.4 - 6
-    ax.add_patch(FancyBboxPatch((rail_x, 6), rail_w, rail_h, boxstyle="round,pad=0,rounding_size=1.0", fc=ACC_DEEP, ec="none"))
-    ax.text(rail_x + rail_w / 2, 6 + rail_h - 4.5, "Travels with\nevery number", ha="center", va="center",
+    rail_bottom, rail_top = bands[-1][0], bands[0][1]
+    rail_h = rail_top - rail_bottom
+    ax.add_patch(FancyBboxPatch((rail_x, rail_bottom), rail_w, rail_h, boxstyle="round,pad=0,rounding_size=1.0",
+                                fc=ACC_DEEP, ec="none"))
+    ax.text(rail_x + rail_w / 2, rail_top - 4.5, "Carried with\nevery number", ha="center", va="center",
             fontsize=7.8, fontweight="bold", color="white")
     items = ["source and quote date", "reliability grade", "price tier", "manufacturing scope", "functional unit",
              "LCA coverage", "SHA-256 input hashes", "seed and environment"]
     for i, item in enumerate(items):
-        yy = 6 + rail_h - 13 - i * 8.6
+        yy = rail_top - 13 - i * 8.6
         ax.add_patch(Circle((rail_x + 4.2, yy), 0.9, fc="white", ec="none"))
         ax.text(rail_x + 7, yy, item, ha="left", va="center", fontsize=6.6, color="white")
-    line(ax, [rail_x + 4.2, rail_x + 4.2], [6 + rail_h - 13, 6 + rail_h - 13 - 7 * 8.6], color="white", lw=0.6)
-    for bottom, top in tops:
-        line(ax, [x0 + w, rail_x], [(bottom + top) / 2, (bottom + top) / 2], color=RULE, lw=0.5, ls=(0, (2, 2)))
-    ax.text(x0, y + 1.5, "COMET keeps the provenance of every number from source data to recommendation",
-            fontsize=8.4, fontweight="bold", va="bottom")
+    line(ax, [rail_x + 4.2, rail_x + 4.2], [rail_top - 13, rail_top - 13 - 7 * 8.6], color="white", lw=0.6)
+    for bottom, top_edge in bands:
+        line(ax, [x0 + w, rail_x], [(bottom + top_edge) / 2, (bottom + top_edge) / 2], color=RULE, lw=0.5, ls=(0, (2, 2)))
     return fig
 
 
