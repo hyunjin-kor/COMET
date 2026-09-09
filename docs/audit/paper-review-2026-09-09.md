@@ -147,12 +147,14 @@ A3·E5의 Engineering Au 판단은 사용자 조건(연구실은 SCIE만 실적 
 | `436bc01` | `scripts/draw_application_note_figures.py` → `docs/paper/figures-note-2026-09-09/` 벡터 도판 3종(계층 스택, 결과 화면 주석, 진단 3패널). 이전 초안은 Preparation Method 캡처(`docs/assets/screen-result.png`)를 결과 화면 캡션으로 쓰고 있어 `screen-cost-estimate-result.png`로 교체 | CI 34331609165 success |
 | `3c268a2` | Fig. 1을 Sources→Decision 위→아래 순서, 아래 방향 화살표로 바꾸고 그림 안 제목 제거(캡션이 대신) | CI 34339423351 success |
 | `f2cfe56` | 문장 대신 키워드 칩, 번호 원(01–05) 세로 스파인, 출처 필드 사이드 레일, 한 줄 범례로 도판 글자 수 축소. 칩·번호·카드 문법은 사용자의 디자인 아카이브(로컬, 미추적)에서 가져옴 | `--check` CHECK_OK, ruff, 노트 테스트 2 passed, CI 34341046067 success(3 job) |
+| `be97513` | 도판을 저널 스타일로 다시 그림(사용자 피드백: 칩 버전은 논문 도판 같지 않음, 예시는 유명 촉매로, 반응명 정식 표기, 패널 겹침). Fig. 1은 3c268a2식 층 스택으로 복귀하되 얇은 테두리와 평이한 용어(price sources, price basis, cost model, cost ledger, decision analysis, provenance)로 다시 씀. Fig. 2는 새 `scripts/capture_note_result_screen.py`가 로컬 백엔드(8765, 빌드된 프런트)에서 Playwright로 캡처한 20 wt% Ni/Al₂O₃ 추정(초기습윤 함침 템플릿, 20 t, live tier, 5.21 USD/lb) 화면에 주석 6개. Fig. 3은 FAMILY_NAMES 사전의 정식 반응명, Arial mathtext 아래첨자, 넓힌 오른쪽 열. 노트 본문·캡션을 새 예시로 갱신 | `--check` CHECK_OK, ruff, 노트 테스트 2 passed, CI 34345735835 success(3 job) |
 
-최종 노트 분량: 초록 171 + 본문 2,523 + 그림 3×600 = 4,494 word-equivalent(한도 5,000), JSON 키 참조 49개, 표 0개.
+최종 노트 분량: 초록 171 + 본문 2,555 + 그림 3×600 = 4,526 word-equivalent(한도 5,000), JSON 키 참조 49개, 표 0개.
 
 확인 못 한 것과 하지 않은 것:
 
 - 저자·소속·연구비·이해관계 문구·상업 라이선스 문의처·심사용 버전(v1.4.0 태그 여부)은 원고에 placeholder로 남아 있으며 사람이 정해야 한다.
 - JCIM의 SCIE 수록과 IF는 제3자 자료로만 확인했다. JCR 원본 확인은 사용자 몫이다.
 - 연구실 V8 양식 docx(영문·한글판, Word 검토 메모 6개)와 Gemini·ChatGPT 참고 렌더 6장은 `_local/`에 두고 추적하지 않는다. 원고 도판은 matplotlib 벡터본만 쓴다.
+- Fig. 2의 화면 캡처는 실행 시점의 live 시세와 UI 상태에 따라 달라지므로 바이트 단위로 재현되지 않는다. 커밋한 PNG(`screen_result_ni_al2o3.png`)가 도판의 입력이고, 캡처 스크립트는 만드는 방법의 기록이다.
 - 투고·외부 연락·태그·릴리스·병합은 하지 않았다.
