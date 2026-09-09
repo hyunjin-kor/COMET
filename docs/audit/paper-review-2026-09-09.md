@@ -136,3 +136,23 @@ python scripts/run_decision_robustness.py --out-dir _local/robustness-replay-202
 - 인계 보고의 검증 수치는 실제 명령으로 재확인한 범위(원고 검사, ruff, Table 6.2, methods·robustness 재현, 집중·전체 pytest)에서만 사실로 취급했다. Windows 패키징·프론트 검사는 최종 CI 결과로 확인한다.
 - 조건 일치 산업 원가 관측, 외부 연구자 평가, 성능·수명 대응 자료, 회사·기관 권리, 원자료 재배포 허락, 저자·지원 과제·이해관계, 투고 저널의 JIF·분위는 여전히 미확정이다. MAPE 미산정은 오차 0%가 아니다.
 - 병합·태그·릴리스·Zenodo·배포·결제·외부 연락은 하지 않았다.
+
+## H. 같은 날 후속: JCIM Application Note 투고 준비 기록
+
+A3·E5의 Engineering Au 판단은 사용자 조건(연구실은 SCIE만 실적 인정, ESCI 불가)으로 대체됐다. Digital Discovery(사용자 JCR 확인)와 ACS Engineering Au(제3자 색인 표기, Clarivate MJL은 읽지 못함)는 ESCI로 보고 제외했고, Journal of Chemical Information and Modeling의 Application Note(SCIE, 제3자 IF 6.4; JCR 원본은 확인 못 함)를 준비했다. 선례 AutoDock Vina 1.2.0, NEXTorch, AI4Green, ProcessOptimizer는 Crossref로 DOI를 확인했다. 공식 투고 안내(HTTP 200)에서 확인한 요건: 제목에 소프트웨어명, 초록+본문+그림 5,000단어(그림 300/600 환산), 그림 1개 이상, 학술·상업 모두 평가 또는 구매 가능, 가능하면 OS 무관, 심사자 직접 테스트.
+
+| 커밋 | 내용 | 검증 |
+|---|---|---|
+| `cdd9acd` | `scripts/build_application_note.py`(동결 09-08 run + robustness + methods study에서 렌더, `--check`), `docs/paper/application-note-2026-09-09.md`, `application_note_checks_2026-09-09.json`, `backend/tests/test_application_note.py`, `cover-letter-jcim-2026-09-09.md`, `submission-brief-2026-09-09.ko.md`, `journal-targets-2026-09-07.md` 부록 | `--check` CHECK_OK, ruff, 노트 테스트 통과 |
+| `436bc01` | `scripts/draw_application_note_figures.py` → `docs/paper/figures-note-2026-09-09/` 벡터 도판 3종(계층 스택, 결과 화면 주석, 진단 3패널). 이전 초안은 Preparation Method 캡처(`docs/assets/screen-result.png`)를 결과 화면 캡션으로 쓰고 있어 `screen-cost-estimate-result.png`로 교체 | CI 34331609165 success |
+| `3c268a2` | Fig. 1을 Sources→Decision 위→아래 순서, 아래 방향 화살표로 바꾸고 그림 안 제목 제거(캡션이 대신) | CI 34339423351 success |
+| `f2cfe56` | 문장 대신 키워드 칩, 번호 원(01–05) 세로 스파인, 출처 필드 사이드 레일, 한 줄 범례로 도판 글자 수 축소. 칩·번호·카드 문법은 사용자의 디자인 아카이브(로컬, 미추적)에서 가져옴 | `--check` CHECK_OK, ruff, 노트 테스트 2 passed, CI 34341046067 success(3 job) |
+
+최종 노트 분량: 초록 171 + 본문 2,523 + 그림 3×600 = 4,494 word-equivalent(한도 5,000), JSON 키 참조 49개, 표 0개.
+
+확인 못 한 것과 하지 않은 것:
+
+- 저자·소속·연구비·이해관계 문구·상업 라이선스 문의처·심사용 버전(v1.4.0 태그 여부)은 원고에 placeholder로 남아 있으며 사람이 정해야 한다.
+- JCIM의 SCIE 수록과 IF는 제3자 자료로만 확인했다. JCR 원본 확인은 사용자 몫이다.
+- 연구실 V8 양식 docx(영문·한글판, Word 검토 메모 6개)와 Gemini·ChatGPT 참고 렌더 6장은 `_local/`에 두고 추적하지 않는다. 원고 도판은 matplotlib 벡터본만 쓴다.
+- 투고·외부 연락·태그·릴리스·병합은 하지 않았다.
