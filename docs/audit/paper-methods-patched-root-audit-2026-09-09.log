@@ -1,0 +1,13 @@
+# npm audit report
+
+joi  18.0.0 - 18.2.4
+joi: Prototype pollution via a `__proto__` language key in custom messages - https://github.com/advisories/GHSA-6w3j-5fw6-r9vr
+joi: object().rename() with a template target can set the validated object's prototype - https://github.com/advisories/GHSA-gg4h-3hg2-grpc
+fix available via `npm audit fix`
+node_modules/joi
+
+1 low severity vulnerability
+
+To address all issues, run:
+  npm audit fix
+

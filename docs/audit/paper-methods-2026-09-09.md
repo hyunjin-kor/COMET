@@ -4,10 +4,11 @@ Base commit: `3296218a0a81220a4d327eb2bf2dcc37af2ee395`; branch `autonomous/2026
 
 | ID | 상태 | 커밋 | 근거 명령 출력 요약 | 메모 |
 |---|---|---|---|---|
-| J01 | 완료 | 본 소스 커밋 | 86건 재현, 상대 기준 9건·고정 기준 0건 역전; JSON/PNG 2회 동일 | 실제 코드로 종합 점수 재계산 |
-| J02 | 완료 | 본 소스 커밋 | 선정 8개 DOI Crossref 200; 공개 Ni 수율 표·각주 확인 | 산업 실측 관측/참여자 결과는 확보 못 함 |
-| J03 | 완료 | 본 소스 커밋 | 본문118/SI1353개 키, 고정 산출물27개 검사 | 본문 및 SI S9–S12·그림 S3 |
-| J04 | 진행 | — | 906 passed; Ruff·프론트·원고·Table6.2 통과; 소스 CI 대기 | 동일 PR112, CI 대기 |
+| J01 | 완료 | `d9495fd` | 86건 재현, 상대 기준 9건·고정 기준 0건 역전; JSON/PNG 2회 동일 | 실제 코드로 종합 점수 재계산 |
+| J02 | 완료 | `d9495fd` | 선정 8개 DOI Crossref 200; 공개 Ni 수율 표·각주 확인 | 산업 실측 관측/참여자 결과는 확보 못 함 |
+| J03 | 완료 | `d9495fd` | 본문118/SI1353개 키, 고정 산출물27개 검사 | 본문 및 SI S9–S12·그림 S3 |
+| J04 | 진행 | — | 906 passed; 원고·수치 검증 통과; 새 CI 대기 | 기존 CI audit 실패는 J05에서 수정 |
+| J05 | 완료 | 보안 패치 커밋 | 루트/프론트 npm audit 0건; 프론트/Node 재검사 통과 | CI가 발견한 기존 도구 의존성 패치 |
 
 ## Assumptions
 
@@ -42,3 +43,11 @@ Current approximate manuscript length is 197 abstract words and 3,771 main-text 
 Table 6.2 is unchanged: Pt/C **27.3695 USD/lb** (published cent match); Ni/Al₂O₃ **19.2206 USD/lb, −6.65%**; FCC at footnote-b effective throughput **2.4380 USD/lb, +1.16%**. The nominal FCC throughput diagnostic remains separate. No new performance improvement is claimed: API, MC and costing-engine code did not change. Windows packaging/smoke will be checked by the existing same-PR CI; no local installer or user database was replaced.
 
 The ten references now follow their first appearance in the manuscript, including the corresponding SI reference. The study's original reference set and price snapshots remain fixed. Source commit and remote CI will be recorded in the final report after push.
+
+## CI repair discovered during final verification
+
+The first source CI [34302629928](https://github.com/hyunjin-kor/COMET/actions/runs/34302629928) failed the unchanged frontend audit gate on `js-yaml`4.3.1. This is not a manuscript or calculator regression. Local `npm audit` reproduced the high-severity finding and the `@humanfs/node` moderate finding. Root audit additionally identified existing Joi low-severity advisories. All referenced GitHub advisories were read; no audit threshold was relaxed.
+
+[Exact lockfile/audit record](paper-methods-ci-repair-2026-09-09.json): `js-yaml`4.3.1→4.3.2 in both locks; frontend `@humanfs/node`0.16.7→0.16.8 with required `@humanfs/core`0.19.2 and its new indirect development-only `@humanfs/types`0.15.0; root Joi18.2.3→18.2.8. No direct dependency, framework or application version was added. The automatic root-license metadata rewrite was reverted, preserving the scope of the patch. `npm ci` installed both exact locks, and audits now report zero findings in both trees.
+
+Patched frontend lint/build/i18n and Node calculator/range/scientific-text/session/About checks pass. Backend code and Python dependencies are unchanged from the 906-test run. The subsequent exact-head CI rechecks all tests and Windows packaging. The earlier statement of no frontend change describes the research-source commit; the sole subsequent frontend change is its dependency lockfile.
