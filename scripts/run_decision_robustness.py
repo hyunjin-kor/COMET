@@ -23,6 +23,7 @@ sys.path.insert(0, str(ROOT))
 from sqlmodel import Session, SQLModel, create_engine  # noqa: E402
 
 from backend.core.decision_engine import (  # noqa: E402
+    _apply_total_scores,
     _economic_scores,
     _load_catalogs,
     evaluate_benchmark_family,
@@ -133,6 +134,7 @@ def removal_audit(candidates, weights):
         fixed = rank_candidates(survivors, weights)[0]["slug"]
         before = ledger(survivors)
         _economic_scores(survivors)
+        _apply_total_scores(survivors, weights)
         recomputed = rank_candidates(survivors, weights)[0]["slug"]
         rows.append({"removed": removed, "fixed_scale_winner": fixed,
                      "renormalized_winner": recomputed, "winner_changed": recomputed != winner,

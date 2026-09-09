@@ -8,7 +8,7 @@ import pytest
 
 from backend.core.decision_engine import evaluate_benchmark_family
 from scripts.build_submission_manuscript import reference_snapshot_equivalent
-from scripts.run_all_families import rank
+from scripts.run_all_families import DIMS, rank
 from scripts.run_controlled_cases import _rank
 from scripts.run_decision_robustness import (
     historical_states,
@@ -68,6 +68,14 @@ def test_removing_loser_can_change_minmax_normalization():
     assert removed_c["renormalized_winner"] == "a"
     assert removed_c["winner_changed"]
     assert rows[1]["scores"]["economics"] == 90
+
+
+def test_removal_audit_after_ledger_totals_use_recomputed_economics():
+    rows = [candidate("a", 100, 0, 1), candidate("b", 90, 20, 2), candidate("c", 0, 0, 11)]
+    weights = dict(economics=0.5, evidence=0.5, route=0, performance=0)
+    for row in removal_audit(rows, weights):
+        for entry in row["after"]:
+            assert entry["scores"]["total"] == round(sum(entry["scores"][d] * weights[d] for d in DIMS), 1)
 
 
 def test_rubric_bounds_and_cost_tie_are_exact():
