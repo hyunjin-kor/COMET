@@ -53,7 +53,7 @@ The separate uncertainty API multiplies selected inputs by uniform factors withi
 
 ### Economic normalization and comparison-set dependence
 
-For a candidate cost $c_i$ in a common functional unit, the economics score is $E_i=100(c_{\max}-c_i)/(c_{\max}-c_{\min})$, rounded to one decimal. Equal costs receive the same maximum economics score. The composite is the one-decimal rounded weighted sum of economics, evidence, route and performance scores. Consequently the effective sensitivity to a dollar of cost depends on the candidate-set price range, even at unchanged weights. Fixed-reference removal controls retain the original scores. They preserve the ordering of surviving candidates but do not establish an objectively correct preference scale or calibrate the other rubrics. Normalization-dependent rank reversal is established prior methodology;<sup>8</sup> COMET's contribution here is a catalyst-specific diagnosis with retained prices, scores and controls (SI Table S11).
+For a candidate cost $c_i$ in a common functional unit, the economics score is $E_i=100(c_{\max}-c_i)/(c_{\max}-c_{\min})$, rounded to one decimal. When every candidate in the set has the same cost, each receives the maximum economics score. The composite is the one-decimal rounded weighted sum of economics, evidence, route and performance scores. Consequently the effective sensitivity to a dollar of cost depends on the candidate-set price range, even at unchanged weights. Fixed-reference removal controls retain the original scores. They preserve the ordering of surviving candidates but do not establish an objectively correct preference scale or calibrate the other rubrics. Normalization-dependent rank reversal is established prior methodology;<sup>8</sup> COMET's contribution here is a catalyst-specific diagnosis with retained prices, scores and controls (SI Table S11).
 
 """
     draft = draft.replace("### Frozen prices and evidence rules", methods + "### Frozen prices and evidence rules", 1)
@@ -73,10 +73,15 @@ For a candidate cost $c_i$ in a common functional unit, the economics score is $
 """
     draft = draft.replace("### Environmental contribution and coverage", external + "### Environmental contribution and coverage", 1)
     command = "python scripts/reproduce_paper_methods.py --out-dir _local/methods-replay-new"
-    draft = draft.replace("## Supporting information", f"The methods supplement is reproduced offline with `{command}`. Its [manifest]({study_path.parent.name}/provenance.json) records input/output hashes and the execution environment. Pass `--methods-study docs/paper/{name}` when rebuilding or checking this manuscript.\n\n## Supporting information", 1)
+    robustness_prefix = ranking_source.rsplit("/", 1)[0]
+    rebuild = f"--robustness docs/paper/{robustness_prefix}`; append `--check`"
+    if rebuild not in draft:
+        raise ValueError("Manuscript rebuild command not found")
+    draft = draft.replace(rebuild, f"--robustness docs/paper/{robustness_prefix} --methods-study docs/paper/{name}`; append `--check`", 1)
+    draft = draft.replace("## Supporting information", f"The methods supplement is reproduced offline with `{command}`. Its [manifest]({study_path.parent.name}/provenance.json) records input/output hashes and the execution environment; the rebuild command above includes this supplement.\n\n## Supporting information", 1)
 
     references = """8. Mohammadi, M.; Rezaei, J. Ratio product model: A rank-preserving normalization-agnostic multi-criteria decision-making method. *Journal of Multi-Criteria Decision Analysis* **2023**, *30*, 163–172. [DOI](https://doi.org/10.1002/mcda.1806).
-9. Petel, B. E.; Van Allsburg, K. M.; Baddour, F. G. Cost-Responsive Optimization of Nickel Nanoparticle Synthesis. *Advanced Sustainable Systems* **2024**, *8*, 2300030 (published online 2023). [DOI](https://doi.org/10.1002/adsu.202300030).
+9. Petel, B. E.; Van Allsburg, K. M.; Baddour, F. G. Cost-Responsive Optimization of Nickel Nanoparticle Synthesis. *Advanced Sustainable Systems* **2024**, *8* (10), 2300030. [DOI](https://doi.org/10.1002/adsu.202300030).
 10. Mendoza Suarez, F.; Tatarchuk, B. Comparative economic analysis of batch vs. continuous manufacturing in catalytic heterogeneous processes: impact of catalyst activity maintenance and materials costs on total costs of manufacturing in the production of fine chemicals and pharmaceuticals. *Journal of Flow Chemistry* **2025**, *15*, 21–38. [DOI](https://doi.org/10.1007/s41981-024-00342-z).
 
 """

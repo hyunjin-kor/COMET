@@ -68,7 +68,7 @@ Only {r('summary.rubric_robust_family_counts["2"]')}, {r('summary.rubric_robust_
     draft = draft.replace("## Supporting information", availability + "## Supporting information")
     draft = draft.replace(f"python scripts/build_submission_manuscript.py --directory docs/paper/submission-{date}`",
                           f"python scripts/build_submission_manuscript.py --date {date} --directory docs/paper/submission-{date} --robustness docs/paper/{prefix}`")
-    draft = draft.replace("## TOC graphic", "7. OECD; European Union; Joint Research Centre - European Commission. *Handbook on Constructing Composite Indicators: Methodology and User Guide*. OECD, 2008. [DOI](https://doi.org/10.1787/9789264043466-en). Crossref and JRC bibliographic identity checked; the handbook provides methodological context, not catalyst-specific validation.\n\n## TOC graphic")
+    draft = draft.replace("## TOC graphic", "7. OECD; European Union; Joint Research Centre - European Commission. *Handbook on Constructing Composite Indicators: Methodology and User Guide*. OECD, 2008. [DOI](https://doi.org/10.1787/9789264043466-en).\n\n## TOC graphic")
     rows = []
     for i, family in enumerate(study["families"]):
         base = f"families[{i}]"

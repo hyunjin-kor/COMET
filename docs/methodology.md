@@ -65,11 +65,11 @@ Omit `--month` to choose the latest common completed publication month. The comm
 To repeat the unified May submission evidence without collecting new quotes or overwriting the committed run:
 
 ```bash
-python scripts/reproduce_paper.py --price-basis reference --month 2026-05 --seed 20260906 --date 2026-09-07 --history docs/paper/submission-2026-09-07/price_history_2026-09-07.json --live-basis docs/paper/submission-2026-09-07/live_basis_2026-09-07.json --support-history docs/paper/submission-2026-09-07/support_history_2026-09-07.json --out-dir _local/submission-replay-2026-09-07
-python scripts/build_submission_manuscript.py --directory docs/paper/submission-2026-09-07 --check
+python scripts/reproduce_paper.py --price-basis reference --month 2026-05 --seed 20260906 --date 2026-09-08 --history docs/paper/submission-2026-09-08/price_history_2026-09-08.json --live-basis docs/paper/submission-2026-09-08/live_basis_2026-09-08.json --support-history docs/paper/submission-2026-09-08/support_history_2026-09-08.json --out-dir _local/submission-replay-2026-09-08
+python scripts/build_submission_manuscript.py --date 2026-09-08 --directory docs/paper/submission-2026-09-08 --robustness docs/paper/robustness-2026-09-08 --methods-study docs/paper/methods-2026-09-09/methods_study.json --check
 ```
 
-The builder checks the committed [manuscript](paper/manuscript_2026-09-07.md) and [SI](paper/si_2026-09-07.md) against frozen output hashes and JSON keys. The source-checked ACS format, word-equivalent estimate and TOC graphic are documented in [the formatting audit](paper/submission-format-2026-09-07.md). Actual authorship and final submission remain human decisions.
+The builder checks the committed [manuscript](paper/manuscript_2026-09-08.md) and [SI](paper/si_2026-09-08.md) against frozen output hashes and JSON keys. Earlier dated drafts are historical records; rendering one exactly requires the generator commit of its date. The source-checked ACS format, word-equivalent estimate and TOC graphic are documented in [the formatting audit](paper/submission-format-2026-09-07.md). Actual authorship and final submission remain human decisions.
 
 The [external-cost screen](audit/external-cost-validation-2026-09-07.md) records ten public cases, including one contract schedule and three verified retail pack offers. None matches formulation, production scale, date and cost boundary sufficiently for a full-cost residual. Empirical MAPE remains unestimated. The [four-family literature audit](sources/free-benchmark-expansion-2026-09-07.md) corrects attribution for fifteen candidates without changing compositions, scores, prices or process steps; same-price analysis is byte-identical.
 

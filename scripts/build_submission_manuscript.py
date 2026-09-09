@@ -184,6 +184,8 @@ def manuscript(run):
     rows = []
     for i, label in enumerate(("Pt/C", "Ni/Al2O3", "USY-FCC, effective throughput")):
         rows.append(f"| {label} | {r('s', f'table62[{i}].comet_usd_per_lb', '.4f')} | {r('s', f'table62[{i}].published_usd_per_lb', '.2f')} | {r('s', f'table62[{i}].residual_pct', '+.5f' if i == 0 else '+.2f')} |")
+    between = run.summary["breakeven"]["precious_cost_crossings_between_0_1_and_10"]
+    crossing_phrase = "crossing lies" if between == 1 else "crossings lie"
     scale_rows = []
     for size in ("2", "20", "200"):
         scale_rows.append(f"| {r('c', f'scales.{size}.order_size_tons')} | {r('s', f'manufacturing.{size}.min_processing_cost_per_lb', '.4f')}–{r('s', f'manufacturing.{size}.max_processing_cost_per_lb', '.4f')} |")
@@ -203,7 +205,7 @@ Catalyst selection combines composition and preparation with quantities rarely m
 
 Published Step Method costing provides a basis for estimating precommercial catalyst prices from materials and unit operations.<sup>1</sup> CatCost connects early-stage manufacturing cost and environmental assessment,<sup>2</sup> while BioSTEAM provides uncertainty-aware process modelling.<sup>3</sup> These studies establish relevant prior methods. COMET adopts the documented thermal step rates, overhead structure and selling-margin correlation with attribution; those equations are not introduced as original COMET contributions.
 
-A cost estimate alone leaves a catalyst-selection question unresolved: whether an apparent advantage survives a change in price state, manufacturing boundary, comparison set or decision preference. COMET addresses this problem by connecting traceable live and frozen reference prices to explicit manufacturing ledgers, functional-unit-aware comparisons and reproducible decision diagnostics. Its methodological contribution is the specified connection between evidence, costing and ranking assumptions, implemented in independently developed desktop and web software. The present study evaluates that workflow through controlled scenarios and robustness analysis. It does not establish that earlier tools lack every component, or that COMET predicts industrial costs more accurately.
+A cost estimate alone leaves a catalyst-selection question unresolved: whether an apparent advantage survives a change in price state, manufacturing boundary, comparison set or decision preference. COMET addresses this problem by connecting traceable live and frozen reference prices to explicit manufacturing ledgers, functional-unit-aware comparisons and reproducible decision diagnostics. Its methodological contribution is the specified connection between evidence, costing and ranking assumptions, implemented in independently developed desktop and browser-based software. The present study evaluates that workflow through controlled scenarios and robustness analysis. It does not establish that earlier tools lack every component, or that COMET predicts industrial costs more accurately.
 
 We examine whether recommendation changes arise from weighting, historical price states or single-metal cost crossings, and retain the input evidence needed to reproduce those comparisons. An accompanying evidence audit asks which public purchasing observations are actually comparable to the model. Environmental findings concern manufacturing inputs; reaction productivity, lifetime and use-phase benefits remain outside the comparison.
 
@@ -275,7 +277,7 @@ The controlled balanced-profile comparison identifies {r('ctrl', 'summary.change
 
 ### Cost and composite-score break-even
 
-The analysis evaluates {r('s', 'breakeven.contests')} distinguishing-metal contests. Of {r('s', 'breakeven.precious_vs_base_sweeps')} precious-versus-base sweeps, {r('s', 'breakeven.precious_cost_crossings')} contain a cost crossing; the median multiplier is {r('s', 'breakeven.precious_cost_crossing_median_factor', '.5f')} relative to the reference metal price. Only {r('s', 'breakeven.precious_cost_crossings_between_0_1_and_10')} crossings lie within the one-tenth-to-tenfold interval; {r('s', 'breakeven.precious_without_cost_crossing_in_scan')} have no crossing within the recorded scan. Absence within a finite scan is not universal dominance.
+The analysis evaluates {r('s', 'breakeven.contests')} distinguishing-metal contests. Of {r('s', 'breakeven.precious_vs_base_sweeps')} precious-versus-base sweeps, {r('s', 'breakeven.precious_cost_crossings')} contain a cost crossing; the median multiplier is {r('s', 'breakeven.precious_cost_crossing_median_factor', '.5f')} relative to the reference metal price. Only {r('s', 'breakeven.precious_cost_crossings_between_0_1_and_10')} {crossing_phrase} within the one-tenth-to-tenfold interval; {r('s', 'breakeven.precious_without_cost_crossing_in_scan')} have no crossing within the recorded scan. Absence within a finite scan is not universal dominance.
 
 Composite crossings describe when cost outweighs other normalized criteria. They can occur without changing cost ordering, or remain absent after cost ordering changes. Activity, selectivity and lifetime may justify a manufacturing premium, but this model does not predict them. Figure 6 and the complete sweep ledger distinguish these questions.
 
@@ -307,7 +309,7 @@ Controlled model scenarios do not replace independent observations. A prepared e
 
 ## Conclusions
 
-COMET contributes a connected methodology and software workflow for examining catalyst choices under traceable price states, explicit manufacturing boundaries and declared decision preferences. It extends the use of established costing methods from a single estimate to reproducible comparisons with visible evidence and inventory gaps. Materials dominate reported GWP in the sufficiently covered subset, while weights and price basis can change recommendations. Cost crossings require separate interpretation from composite-score crossings. The contribution is inspectable decision analysis; industrial predictive accuracy remains an external validation question.
+COMET contributes a connected methodology and software workflow for examining catalyst choices under traceable price states, explicit manufacturing boundaries and declared decision preferences. It extends the use of established costing methods from a single estimate to reproducible comparisons with visible evidence and inventory gaps. Within the modelled process boundary, materials dominate reported GWP in the sufficiently covered subset, while weights and price basis can change recommendations. Cost crossings require separate interpretation from composite-score crossings. The contribution is inspectable decision analysis; industrial predictive accuracy remains an external validation question.
 
 ## Data and code availability
 
@@ -339,7 +341,7 @@ Candidate formulations and screening bases, manufacturing methods and scale-spec
 
 Funding, contributions and acknowledgments: [to be supplied by the authors].
 
-OpenAI Codex assisted with software development, source-audit organization and manuscript drafting. Human authors retain responsibility for reviewing the evidence, calculations and submitted text; no AI system is listed as an author.
+OpenAI Codex and Anthropic Claude assisted with software development, source-audit organization, manuscript drafting and editing. Human authors retain responsibility for reviewing the evidence, calculations and submitted text; no AI system is listed as an author.
 
 ## Competing interests
 
