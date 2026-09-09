@@ -103,7 +103,7 @@ L 0 2
      </g>
     </g>
     <g id="text_7">
-     <text style="font-size: 6.8px; font-family: 'Arial'; text-anchor: middle" x="193.889764" y="262.756845" transform="rotate(-0 193.889764 262.756845)">Reference winner keeps first rank (% of 89 × 1,771 scenarios)</text>
+     <text style="font-size: 6.8px; font-family: 'Arial'; text-anchor: middle" x="193.889764" y="262.756845" transform="rotate(-0 193.889764 262.756845)">First-rank share of joint scenarios (%)</text>
     </g>
    </g>
    <g id="matplotlib.axis_2">
@@ -860,7 +860,7 @@ z
 " style="fill: #b8702f"/>
     </g>
     <g id="text_72">
-     <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="352.995906" y="159.694159" transform="rotate(-0 352.995906 159.694159)">Ru removed, range recomputed</text>
+     <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="352.995906" y="159.694159" transform="rotate(-0 352.995906 159.694159)">Ru removed</text>
     </g>
    </g>
   </g>
