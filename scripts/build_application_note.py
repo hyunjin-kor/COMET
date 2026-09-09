@@ -80,15 +80,15 @@ The cost equations are adopted from the published method and are not claimed as 
 
 ## Implementation
 
-Figure 1 summarises the software as a stack. Price sources feed two price tiers, the costing engine turns composition, route and scale into a ledger, and a decision layer interrogates the candidate library; the rail on the right lists what travels with every number.
+Figure 1 summarises the software as a stack. Price sources feed two price tiers, the cost model turns composition, route and scale into a ledger, and a decision layer interrogates the candidate library; the panel on the right lists the provenance recorded with every value.
 
-![Figure 1. COMET as a stack of layers, from price sources to decision diagnostics, with the provenance carried by every number.](figures-note-2026-09-09/fig1_workflow_stack.png)
+![Figure 1. Structure of COMET from price sources to decision analysis; the panel on the right lists the provenance recorded with every value.](figures-note-2026-09-09/fig1_workflow_stack.png)
 
 COMET is a local application with no account. The backend is a FastAPI service on Python 3.11 or newer, using SQLModel over a single SQLite file for prices, saved estimates, purchase evidence and actual-cost observations. The renderer is a React 19 and TypeScript single-page application with a Korean and English interface and scientific notation for formulas and units. On Windows an Electron shell bundles the backend as a PyInstaller sidecar and installs as `COMET.Setup.<version>.exe`, with a portable archive as an alternative. The same application can be served to a browser from source: the renderer is built once and the backend serves it on a local port (`npm run web` on Windows, or the equivalent build and `uvicorn` commands elsewhere). The backend tests and the renderer build run on Linux in continuous integration, but the authors have exercised the complete browser mode only on Windows. A scheduler refreshes prices on startup and once a day, and the price screen can poll a fast source while it is open; without API keys the software falls back to indexed and manual prices and works offline.
 
-Figure 2 shows the result screen. The headline price sits above a cost ledger in which each component row carries the price used, its source, quote year and reliability grade, and the preparation-step table lists hourly rates, scale substitutions and operations that were left uncosted. Results export to CSV together with the price evidence and, when requested, the Monte Carlo range.
+Figure 2 shows the top of the result screen for a 20 wt% Ni/Al₂O₃ estimate on the live price tier, costed with the incipient-wetness impregnation template at a 20 t order. The headline price sits above a cost ledger in which each component row carries the price used, its source, quote year and reliability grade; the preparation-step table lists hourly rates, scale substitutions and operations that were left uncosted, and a costing-scope line counts them. Results export to CSV together with the price evidence and, when requested, the Monte Carlo range.
 
-![Figure 2. Result screen of a thermal estimate: the headline price, the cost build-up, the price evidence and the preparation basis are read together.](figures-note-2026-09-09/fig2_result_screen.png)
+![Figure 2. Result screen for a 20 wt% Ni/Al₂O₃ estimate (incipient-wetness impregnation template, 20 t order, live price tier): (1) headline price, (2) cost build-up, (3) price evidence, (4) preparation basis, (5) costing scope and (6) CSV export.](figures-note-2026-09-09/fig2_result_screen.png)
 
 ## Costing model
 
