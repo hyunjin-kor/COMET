@@ -12,7 +12,7 @@ We believe the note fits the journal's scope for software that supports chemical
 
 The note states plainly that industrial cost accuracy is not validated: no public observation has matched a candidate's composition, grade, order size, date and cost boundary closely enough to compute an empirical error. We present the software as a way to make the assumptions behind a screening decision inspectable, not as a source of factory prices.
 
-The manuscript is 4,149 word-equivalents including three figures under the journal's counting rule. It is not under consideration elsewhere. [The authors will confirm the exclusive-submission, originality, funding and competing-interest statements before sending.]
+The manuscript is 4,494 word-equivalents including three figures under the journal's counting rule. It is not under consideration elsewhere. [The authors will confirm the exclusive-submission, originality, funding and competing-interest statements before sending.]
 
 Sincerely,
 

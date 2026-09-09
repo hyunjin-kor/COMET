@@ -13,7 +13,7 @@ COMET 소프트웨어 논문은 **Journal of Chemical Information and Modeling (
 | SCIE 조건 | 앞서 검토한 Digital Discovery와 ACS Engineering Au는 ESCI로 확인돼 제외. JCIM, ACS Sustainable Chem. & Eng., Green Chemistry가 SCIE Q1 후보 |
 | 같은 유형의 게재 선례 | JCIM Application Note: AutoDock Vina 1.2.0 (2021, 피인용 7,000 이상), NEXTorch (2021, 화학공학 최적화 도구), AI4Green (2023), ProcessOptimizer (2025). 모두 소프트웨어가 본체인 6~8쪽 논문 |
 | Application Note 요건 (ACS 공식 안내) | 초록·본문·그림 합계 5,000단어 이내, 그림 1개 이상, 제목에 소프트웨어 이름, 학술·상업 용도 모두 평가 또는 구매 가능, 가능하면 OS 무관, 심사자 익명 테스트 가능 |
-| 현재 원고의 적합성 | 4,149 word-equivalent (초록 171 + 본문 2,478 + 그림 3개 1,500), 제목에 COMET 명시, 수치 49개가 동결 분석 파일에 연결됨 |
+| 현재 원고의 적합성 | 4,494 word-equivalent (초록 171 + 본문 2,523 + 그림 3개 1,800), 제목에 COMET 명시, 수치 49개가 동결 분석 파일에 연결됨 |
 | 대안 | ACS Sustainable Chem. & Eng. (IF 7.6, Q1)은 일반 Article로 가능하나 "새 촉매 결론"을 요구받을 가능성이 커서, 암모니아 성능 자료를 결합한 뒤가 적기. Computers & Chemical Engineering (Q2)은 안전망 |
 
 ## 지금까지 확보한 것
