@@ -110,6 +110,18 @@ def main():
         "costInput": request,
     }
     summary = result.get("summary", {})
+    sidecar = {
+        "captured_at": now,
+        "request": request,
+        "nickel_quote": nickel,
+        "alumina_row": alumina,
+        "template_name": template["name"],
+        "step_labels": snapshot["stepLabels"],
+        "route_summary": result.get("route_summary"),
+        "summary": summary,
+    }
+    args.out.parent.mkdir(parents=True, exist_ok=True)
+    args.out.with_suffix(".json").write_text(json.dumps(sidecar, indent=2, ensure_ascii=False) + chr(10), encoding="utf-8")
     print("estimate:", {k: summary.get(k) for k in ("estimated_price_per_lb", "net_cost_per_lb")},
           "route:", (result.get("route_summary") or {}).get("name"))
 
