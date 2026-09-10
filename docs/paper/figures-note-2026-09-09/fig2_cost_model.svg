@@ -4472,8 +4472,8 @@ L 215.414145 491.130351
    <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: start; fill: #5b6870" x="20.182677" y="344.692913" transform="rotate(-0 20.182677 344.692913)">Lowest-cost candidate in each thermal reaction family, reference month 2026-05</text>
   </g>
   <g id="text_119">
-   <text style="font-size: 5.2px; font-family: 'Arial'; fill: #5b6870" transform="translate(310.308661 306.743462)">CatCost User Guide Table 6.2; the FCC case uses</text>
-   <text style="font-size: 5.2px; font-family: 'Arial'; fill: #5b6870" transform="translate(310.308661 313.455118)">the footnote rate of 67 short tons per day</text>
+   <text style="font-size: 5.2px; font-family: 'Arial'; fill: #5b6870" transform="translate(310.308661 306.743462)">Baddour et al. 2018, Table 2; the FCC case uses</text>
+   <text style="font-size: 5.2px; font-family: 'Arial'; fill: #5b6870" transform="translate(310.308661 313.455118)">its footnote rate of 67 short tons per day</text>
   </g>
   <g id="text_120">
    <text style="font-size: 5.4px; font-family: 'Arial'; fill: #5b6870" transform="translate(37.84252 349.508654)">Each line is the leading candidate of one thermal reaction family, repriced at every month of the 89-month record and divided by its 2026-05 value.</text>

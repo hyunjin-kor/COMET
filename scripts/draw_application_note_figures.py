@@ -57,7 +57,7 @@ TEXT = {
         "b_note": "Lowest-cost candidate in each thermal reaction family, reference month 2026-05",
         "c_x": "Selling price (USD per lb, log scale)",
         "c_comet": "COMET", "c_published": "Published estimate", "c_market": "Published market price",
-        "c_note": "CatCost User Guide Table 6.2; the FCC case uses\nthe footnote rate of 67 short tons per day",
+        "c_note": "Baddour et al. 2018, Table 2; the FCC case uses\nits footnote rate of 67 short tons per day",
         "c_y": "Difference from the published market price (%)",
         "d_y": "Estimated cost relative to the reference month",
         "d_note": ("Each line is the leading candidate of one thermal reaction family, repriced at every month of the "
@@ -92,7 +92,7 @@ TEXT = {
         "b_note": "각 열촉매 반응군의 최저 원가 후보, 기준월 2026-05",
         "c_x": "판매 단가 (USD/lb, 로그 축)",
         "c_comet": "COMET", "c_published": "발표된 추정값", "c_market": "발표된 시장 가격",
-        "c_note": "CatCost 사용자 안내 표 6.2\nFCC 사례는 각주의 일 67 short ton 처리량 기준",
+        "c_note": "Baddour 외 2018, 표 2\nFCC 사례는 그 각주의 일 67 short ton 처리량 기준",
         "c_y": "발표된 시장 가격 대비 차이 (%)",
         "d_y": "기준월 대비 추정 원가 비율",
         "d_note": ("각 선은 한 열촉매 반응군의 1위 후보를 89개월 각 시점에서 다시 산정한 뒤 2026-05 값으로 나눈 것이다.\n"

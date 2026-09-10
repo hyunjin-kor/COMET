@@ -5,7 +5,9 @@ materials cost, the exact step list with multiplicities, and order size. No
 input is tuned to hit the target. Every intermediate the table prints is
 compared against COMET's value so a deviation can be traced to its cause.
 
-Source: CatCost v1.1.0 User Guide, Section 6.4, Table 6.2 (NREL, public).
+Source: Baddour, Snowden-Swan, Super and Van Allsburg, Org. Process Res. Dev. 2018, 22, 1599,
+Table 2, whose demonstration cases, intermediates and market prices the CatCost v1.1.0 User Guide
+restates as Table 6.2. The peer-reviewed paper is the primary source used here.
 
 Run:  python scripts/reproduce_catcost_table62.py [--json out.json]
 """
@@ -234,7 +236,7 @@ def print_report(results: list[dict]) -> None:
         mk = r["market"]
         print(
             f"vs market ${mk['market_price_per_lb']}: COMET {mk['comet_vs_market_pct']:+.1f}%  |  "
-            f"CatCost published {mk['published_vs_market_pct']:+.1f}%"
+            f"published estimate {mk['published_vs_market_pct']:+.1f}%"
         )
         if "with_published_rate" in r:
             w = r["with_published_rate"]
