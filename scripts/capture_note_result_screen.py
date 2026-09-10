@@ -1,8 +1,10 @@
-"""Capture the result screen used in Figure 2 of the Application Note.
+"""Record the worked example of Figure 2 in the Application Note and capture its result screen.
 
 Builds a 20 wt% Ni/Al2O3 estimate through the running COMET backend (incipient-wetness
-template, 20 t order, live price tier), seeds the browser session the same way the README
-capture does, and saves the top of the result page. Requires the backend serving the built
+template, 20 t order, live price tier), writes the request, the quotes and the full cost
+result to a JSON sidecar next to the output (the figure script reads it), seeds the browser
+session the same way the README capture does, and saves the top of the result page for
+reference. Requires the backend serving the built
 frontend at http://127.0.0.1:8765 and Python Playwright with Chrome. Run:
 
     python scripts/capture_note_result_screen.py --out docs/paper/figures-note-2026-09-09/screen_result_ni_al2o3.png
@@ -119,6 +121,8 @@ def main():
         "step_labels": snapshot["stepLabels"],
         "route_summary": result.get("route_summary"),
         "summary": summary,
+        "materials": result.get("materials"),
+        "step_method": result.get("step_method"),
     }
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.with_suffix(".json").write_text(json.dumps(sidecar, indent=2, ensure_ascii=False) + chr(10), encoding="utf-8")
