@@ -131,6 +131,20 @@ python scripts/run_decision_robustness.py --out-dir _local/robustness-replay-202
 - `README.md`의 재현 명령은 09-07 입력 파일을 사용한다. 09-08 파일과 SHA-256이 같아(price/support/live/monthly 모두 일치) 결과는 동일하지만, 원고 명령과 파일명이 다르다.
 - 이전 날짜 원고(`manuscript_2026-09-07.md` 등)는 현재 생성기로 `--check`가 실패한다. 문서 정책대로 과거 기록으로 두었다.
 
+## H2. 모범 소프트웨어 논문 조사 (2026-09-10, 공개 접근본만)
+
+사용자 요청('논문 수준이 높지 않다, 다른 소프트웨어 논문을 다시 학습해')으로 조사했다. 전문을 읽은 것: AutoDock Vina 1.2.0(PMC10683950), NEXTorch(OSTI 1977906), AI4Green(PMC10207257), ProcessOptimizer(PMC11863379), QSDsan(arXiv 2203.06243), OpenMM 7(PLOS Comput Biol), Psi4 1.4(PMC7228781), pymatgen(eScholarship 30v0j6cc), ASE(DTU Orbit 수리본), Step Method(OSTI 1477947). BioSTEAM과 CatCost 본문은 유료라 초록·기록만 확인했다(확인 못 함).
+
+얻은 판단:
+
+1. 인용 많은 소프트웨어 논문을 가르는 것은 분량이나 그림 수가 아니라 **외부 기준점**이다. Vina는 DUD-E, QSDsan은 MATLAB/Simulink 대비 상대오차 1% 미만, Step Method는 시장 가격 ±20%. 외부 기준점이 없는 논문(AI4Green, Psi4, pymatgen)도 널리 인용되지만 '도구'로 인용되지 '근거'로 인용되지 않는다.
+2. 계산 엔진 논문(Vina, NEXTorch, OpenMM, Psi4)에는 화면 캡처가 하나도 없다. 화면을 넣는 것은 웹 ELN 계열뿐이다. 이번에 캡처 도판을 뺀 결정은 관행에 맞는다.
+3. 강한 논문은 본문의 3분의 1가량을 사례 하나에 끝까지 쓴다(NEXTorch의 Applications 절 전체가 한 반응기의 두 사례). 우리 원고는 암모니아 분해 사례가 별도 절로 떨어져 있어 기능 소개처럼 읽힐 여지가 있다. 분량 여유가 73 word-equivalent 뿐이라 다른 절을 줄여야 가능하다.
+4. **라이선스가 가장 큰 투고 위험이다.** JCIM 저자 안내는 소프트웨어가 학술과 상업 용도 모두 평가 또는 구매 가능해야 한다고 명시한다. PolyForm Noncommercial만으로는 걸리므로 상업 라이선스 문의처·조건을 채우고 투고 전 에디터 확인을 권한다. docx 검토 메모에 별표로 표시했다.
+5. 재현성은 조사한 네 논문 중 셋이 약했다(Psi4는 'data sharing not applicable'). 우리 `scripts/reproduce_catcost_table62.py`와 해시 매니페스트는 이 축에서 오히려 앞선다.
+
+확인 못 한 것: BioSTEAM이 Aspen Plus와 맞춘다는 구체 수치, CatCost 본문. 유료 접근이라 보지 않았다.
+
 ## G. 가정과 확인 못 한 것
 
 - 인계 보고의 검증 수치는 실제 명령으로 재확인한 범위(원고 검사, ruff, Table 6.2, methods·robustness 재현, 집중·전체 pytest)에서만 사실로 취급했다. Windows 패키징·프론트 검사는 최종 CI 결과로 확인한다.
@@ -154,8 +168,10 @@ A3·E5의 Engineering Au 판단은 사용자 조건(연구실은 SCIE만 실적 
 | `2f84d55` | 사용자 요청((a)는 더 논문답게, (c)는 귀금속까지 연도별 USD로). Fig. 2a: 재료비·가공비를 병렬 상자로 두고 화살표에 C_m·C_p·P를 표시한 흐름도로 다시 그림, 설명 문구는 상자 안에 두 줄로. Fig. 2c: 09-08 동결 패키지의 Pt·Pd·Rh·Ru·Ir·Au·Ag·Ni 월평균(Johnson Matthey, IMF PCPS) 소형 다중 패널, 각 패널에 2026-05 기준값(청록)과 패키지의 live 시세(주황, 2026-09-04~06 관측), 89개월 재생 음영. 캡션에 b의 예시는 2026-09-10 니켈 시세를 썼음을 명시 | `--check` CHECK_OK(4,665 word-equivalent), ruff, 노트 테스트 2 passed, CI 34436195544 success(3 job) |
 | `8119167` | 사용자 지적('컴공 용어라 AI티가 난다')에 따라 원고·도판·한글판의 용어를 이 분야 관행어로 전면 교체. price tier→price basis(현물 spot / 기준월 monthly average), ledger→cost breakdown, decision diagnostics→sensitivity analyses, weight sweep→weighting sensitivity, price replay→historical repricing, candidate-removal control→leave-one-out test, score perturbation→score sensitivity, rubric→criterion, reference winner→candidate ranked first at the reference conditions, joint→combined, input hashes→checksums, renderer→user interface. 제목도 'Reproducible Decision Diagnostics'→'Reproducible Sensitivity Analysis'. Fig. 1은 레이아웃을 그대로 두고 라벨만 바꿔 재생성(Provenance→Traceability 등), 연결선 스크립트는 좌표 하드코딩 대신 원본에서 밴드·패널·태그를 측정하도록 재작성해 재생성본에도 적용됨 | `--check` CHECK_OK(4,699 word-equivalent), ruff, 노트 테스트 2 passed, CI 34439163441 3개 job success |
 | `c8b1ff9` | 사용자 요청(예시 촉매 하나로 충분한가, 상용 가격 대비 정확도와 반응별 원가 구성을 보여 달라, 한글판도 달라). Fig. 2를 4패널로 확장: (b) 동결 `all_families_2026-09-08.json`에서 열촉매 반응군 23개 각각의 최저 원가 후보 판매 단가 구성(재료비·가공비·간접비와 마진), (c) `table62_reproduction_2026-09-08.json`의 발표된 시장 가격 대비 검증(Pt/C −19.7%, Ni/Al₂O₃ −9.9%, FCC 2.4380 vs 2.73 USD/lb), (d) 금속 8종 가격 기준. 검증 절에 시장 가격 비교 문단 추가(발표된 Step Method 추정값도 비슷하게 아래에 있으므로 차이는 채택 원가 경계의 성질). 도판 스크립트에 `--lang ko` 추가(Malgun Gothic, 반응군·금속·라벨 한글 사전), Fig. 1 한글판은 라벨만 한국어로 재생성 후 같은 연결선 스크립트 적용(밴드 검출에 얇은 틈 병합 추가) | `--check` CHECK_OK(4,857 word-equivalent), ruff, 노트 테스트 2 passed, CI 34442951805 3개 job success |
+| `351dbd7` | 사용자 지적(수식이 이상하다, '무료' 표현을 빼라). Arial에는 진짜 이탤릭 수학 글꼴이 없어 matplotlib이 가짜 이탤릭으로 그리고 있었음 → mathtext를 stixsans로 바꿔 변수 이탤릭·합 기호를 정상화하고, 가공비 식을 H=Σ_j H_j로 묶어 분수로 다시 씀. 초록의 'free desktop and browser software'와 가용성의 'permits free noncommercial use'에서 free 제거(한글판 '무료' 2건 포함), 원고 전체 free 0건 | ruff, `--check` CHECK_OK, 노트 테스트 2 passed, CI 34444961066 |
+| `25b9247` | 사용자 지적(점 두 개가 겹쳐 뭘 뜻하는지 모르겠다, 쓸모없어 보인다). 옳은 지적이었음: (c)는 로그 축이라 10~20% 차이가 점 굵기에 묻혔고 (d)의 기준월·현물 두 점은 차이가 몇 %라 같은 자리에 찍혔음. (c)를 시장 가격 대비 차이 막대(COMET vs 발표된 추정값)로, (d)를 금속 시세 대신 **도구 출력의 변동**(열촉매 28개 반응군 1위 후보를 89개월 각 시점에서 재산정 후 기준월로 나눔, CO₂ 전기환원 ×6.2 ~ 프로판 탈수소 ×1.0)으로 교체. 검증 절에 원 Step Method 논문의 ±20% 시장 가격 일치 주장을 추가(OSTI 공개본 원문에서 직접 확인, 시장 가격 출처는 업계 전문가 개인 교신) | `--check` CHECK_OK(4,927 word-equivalent), ruff, 노트 테스트 2 passed, CI 34445604299 3개 job success |
 
-최종 노트 분량: 초록 175 + 본문 2,882 + 그림 3×600 = 4,857 word-equivalent(한도 5,000), JSON 키 참조 57개, 표 0개.
+최종 노트 분량: 초록 175 + 본문 2,953 + 그림 3×600 = 4,927 word-equivalent(한도 5,000), JSON 키 참조 57개, 표 0개.
 
 확인 못 한 것과 하지 않은 것:
 
