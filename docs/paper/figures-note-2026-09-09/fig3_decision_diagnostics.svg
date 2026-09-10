@@ -823,7 +823,7 @@ L 0 2
      </g>
     </g>
     <g id="text_7">
-     <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: middle" x="191.735433" y="299.765873" transform="rotate(-0 191.735433 299.765873)">Scenarios in which the candidate ranks first (%)</text>
+     <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: middle" x="191.735433" y="299.765873" transform="rotate(-0 191.735433 299.765873)">Cases in which the candidate ranks first (%)</text>
     </g>
    </g>
    <g id="matplotlib.axis_2">
@@ -1185,37 +1185,37 @@ L 274.988976 280.119685
    </g>
    <g id="legend_1">
     <g id="patch_95">
-     <path d="M 110.72189 22.603422 
-L 116.32189 22.603422 
-L 116.32189 18.683422 
-L 110.72189 18.683422 
+     <path d="M 110.72189 22.669047 
+L 116.32189 22.669047 
+L 116.32189 18.749047 
+L 110.72189 18.749047 
 z
 " style="fill: #1b6f78"/>
     </g>
     <g id="text_38">
-     <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="119.12189" y="22.603422" transform="rotate(-0 119.12189 22.603422)">Reference winner</text>
+     <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="119.12189" y="22.669047" transform="rotate(-0 119.12189 22.669047)">Ranked first at reference conditions</text>
     </g>
     <g id="patch_96">
-     <path d="M 168.04839 22.603422 
-L 173.64839 22.603422 
-L 173.64839 18.683422 
-L 168.04839 18.683422 
+     <path d="M 212.24639 22.669047 
+L 217.84639 22.669047 
+L 217.84639 18.749047 
+L 212.24639 18.749047 
 z
 " style="fill: #b8702f"/>
     </g>
     <g id="text_39">
-     <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="176.44839" y="22.603422" transform="rotate(-0 176.44839 22.603422)">Strongest challenger</text>
+     <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="220.64639" y="22.669047" transform="rotate(-0 220.64639 22.669047)">Closest competitor</text>
     </g>
     <g id="patch_97">
-     <path d="M 232.850015 22.603422 
-L 238.450015 22.603422 
-L 238.450015 18.683422 
-L 232.850015 18.683422 
+     <path d="M 272.05614 22.669047 
+L 277.65614 22.669047 
+L 277.65614 18.749047 
+L 272.05614 18.749047 
 z
 " style="fill: #d9dee1"/>
     </g>
     <g id="text_40">
-     <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="241.250015" y="22.603422" transform="rotate(-0 241.250015 22.603422)">Other candidates</text>
+     <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="280.45614" y="22.669047" transform="rotate(-0 280.45614 22.669047)">Other candidates</text>
     </g>
    </g>
   </g>
@@ -1350,14 +1350,14 @@ z
      </g>
     </g>
     <g id="text_45">
-     <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: middle" x="435.188976" y="142.10288" transform="rotate(-0 435.188976 142.10288)">Families whose reference winner survives (of 30)</text>
+     <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: middle" x="435.188976" y="142.10288" transform="rotate(-0 435.188976 142.10288)">Families keeping the same leader (of 30)</text>
     </g>
    </g>
    <g id="matplotlib.axis_4">
     <g id="ytick_31">
      <g id="line2d_43"/>
      <g id="text_46">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="372.402362" y="45.461215" transform="rotate(-0 372.402362 45.461215)">Majority of scenarios</text>
+      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="372.402362" y="45.461215" transform="rotate(-0 372.402362 45.461215)">Majority of cases</text>
      </g>
     </g>
     <g id="ytick_32">

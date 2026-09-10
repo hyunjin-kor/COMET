@@ -81,7 +81,7 @@ def figure2_cost_model():
     ax.axis("off")
     fig.text(0.012, 0.978, "a", fontsize=8, fontweight="bold")
     inputs = [("Formulation", "components, wt%", 35.5), ("Preparation route", "operations, order size", 20),
-              ("Price basis", "live or reference tier", 4.5)]
+              ("Price basis", "spot or reference month", 4.5)]
     for title, sub, y in inputs:
         _box(ax, 6, y, 26, 9.6)
         ax.text(19, y + 6.4, title, ha="center", va="center", fontsize=6.6, fontweight="bold")
@@ -111,8 +111,8 @@ def figure2_cost_model():
     _arrow(ax, mx + mw + 0.3, 11.5, px - 0.3, 19.0, label=r"$C_\mathrm{p}$", dy=-4.6)
     lx, lw_ = 147, 28
     _box(ax, lx, 11, lw_, 24, fill="#EAF1F2", edge=ACC, lw=0.6)
-    ax.text(lx + lw_ / 2, 31.7, "Ledger", ha="center", va="center", fontsize=6.8, fontweight="bold")
-    for k, line_text in enumerate(["selling price per lb", "price, source, date", "grade, price tier",
+    ax.text(lx + lw_ / 2, 31.7, "Cost breakdown", ha="center", va="center", fontsize=6.8, fontweight="bold")
+    for k, line_text in enumerate(["selling price per lb", "price, source, date", "grade, price basis",
                                    "operations priced,", "substituted, uncosted"]):
         ax.text(lx + 2.2, 27.3 - k * 3.6, line_text, ha="left", va="center", fontsize=5.5)
     _arrow(ax, px + pw + 0.3, 23.0, lx - 0.3, 23.0, label=r"$P$")
@@ -140,7 +140,7 @@ def figure2_cost_model():
                        rotation_mode="anchor")
     bx.set_ylim(0, total * 1.18)
     bx.set_ylabel("USD per lb of catalyst", fontsize=6.4)
-    bx.text(0.02, 0.97, "20 wt% Ni/Al$_2$O$_3$\nincipient wetness, 20 t, live tier", transform=bx.transAxes,
+    bx.text(0.02, 0.97, "20 wt% Ni/Al$_2$O$_3$\nincipient wetness, 20 t, spot prices", transform=bx.transAxes,
             ha="left", va="top", fontsize=5.6, color=MUTED)
     _clean(bx)
     bx.tick_params(axis="x", length=0)
@@ -177,8 +177,8 @@ def figure2_cost_model():
         cx.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
         _clean(cx)
         cx.tick_params(labelsize=5.2, length=1.5, pad=1.5)
-    fig.text(0.705, 0.625, "Monthly averages 2019-01 to 2026-07; shaded: 89-month replay window\n"
-             f"teal: reference tier ({REFERENCE_MONTH} average); orange: live quote held in the frozen package",
+    fig.text(0.705, 0.625, "Monthly averages 2019-01 to 2026-07; shaded: 89-month repricing window\n"
+             f"teal: reference basis ({REFERENCE_MONTH} monthly average); orange: spot quote in the fixed price package",
              ha="center", va="center", fontsize=5.4, color=MUTED, linespacing=1.4)
     return fig
 
@@ -233,8 +233,8 @@ def figure3_diagnostics():
 
     ax = fig.add_axes([0.215, 0.085, 0.33, 0.83])
     ys = list(range(len(rows)))
-    ax.barh(ys, [r[1] for r in rows], color=ACC, height=0.72, label="Reference winner")
-    ax.barh(ys, [r[2] for r in rows], left=[r[1] for r in rows], color=WARN, height=0.72, label="Strongest challenger")
+    ax.barh(ys, [r[1] for r in rows], color=ACC, height=0.72, label="Ranked first at reference conditions")
+    ax.barh(ys, [r[2] for r in rows], left=[r[1] for r in rows], color=WARN, height=0.72, label="Closest competitor")
     ax.barh(ys, [r[3] for r in rows], left=[r[1] + r[2] for r in rows], color="#D9DEE1", height=0.72, label="Other candidates")
     ax.axvline(50, color="white", lw=0.6)
     ax.axvline(50, color=GREY, lw=0.5, ls=(0, (1.5, 1.5)))
@@ -242,7 +242,7 @@ def figure3_diagnostics():
     ax.set_yticklabels([FAMILY_NAMES.get(r[0], r[0]) for r in rows], fontsize=5.6)
     ax.set_xlim(0, 100)
     ax.set_ylim(-0.6, len(rows) - 0.4)
-    ax.set_xlabel("Scenarios in which the candidate ranks first (%)", fontsize=6.4)
+    ax.set_xlabel("Cases in which the candidate ranks first (%)", fontsize=6.4)
     ax.legend(fontsize=5.6, frameon=False, loc="lower left", bbox_to_anchor=(0.0, 1.0), ncol=3, handlelength=1.0,
               columnspacing=0.9, handletextpad=0.5, borderaxespad=0.0)
     _clean(ax)
@@ -252,7 +252,7 @@ def figure3_diagnostics():
     bx = fig.add_axes([0.745, 0.60, 0.235, 0.29])
     n = summary["families"]
     tests = [
-        ("Majority of scenarios", n - summary["families_reference_winner_below_half_joint"]),
+        ("Majority of cases", n - summary["families_reference_winner_below_half_joint"]),
         ("Any one candidate removed", n - summary["candidate_removal_families_changed"]),
         ("Scores moved ±2 points", summary["rubric_robust_family_counts"]["2"]),
         ("Scores moved ±5 points", summary["rubric_robust_family_counts"]["5"]),
@@ -268,7 +268,7 @@ def figure3_diagnostics():
     bx.invert_yaxis()
     bx.set_xlim(0, n)
     bx.set_xticks([0, 10, 20, 30])
-    bx.set_xlabel("Families whose reference winner survives (of 30)", fontsize=6.4)
+    bx.set_xlabel("Families keeping the same leader (of 30)", fontsize=6.4)
     _clean(bx, left=False)
     bx.tick_params(axis="y", length=0)
     fig.text(0.565, 0.965, "b", fontsize=8, fontweight="bold")

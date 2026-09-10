@@ -135,7 +135,7 @@ z
     <text style="font-weight: 700; font-size: 6.6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="53.858268" y="94.788244" transform="rotate(-0 53.858268 94.788244)">Price basis</text>
    </g>
    <g id="text_6">
-    <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: middle; fill: #5b6870" x="53.858268" y="104.064876" transform="rotate(-0 53.858268 104.064876)">live or reference tier</text>
+    <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: middle; fill: #5b6870" x="53.858268" y="104.099001" transform="rotate(-0 53.858268 104.099001)">spot or reference month</text>
    </g>
    <g id="text_7">
     <text style="font-weight: 700; font-size: 6.8px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="188.503937" y="14.13863" transform="rotate(-0 188.503937 14.13863)">Materials</text>
@@ -246,7 +246,7 @@ z
     </g>
    </g>
    <g id="text_20">
-    <text style="font-weight: 700; font-size: 6.8px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="456.377953" y="41.166379" transform="rotate(-0 456.377953 41.166379)">Ledger</text>
+    <text style="font-weight: 700; font-size: 6.8px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="456.377953" y="41.211004" transform="rotate(-0 456.377953 41.211004)">Cost breakdown</text>
    </g>
    <g id="text_21">
     <text style="font-size: 5.5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="422.929134" y="52.18254" transform="rotate(-0 422.929134 52.18254)">selling price per lb</text>
@@ -255,7 +255,7 @@ z
     <text style="font-size: 5.5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="422.929134" y="61.496723" transform="rotate(-0 422.929134 61.496723)">price, source, date</text>
    </g>
    <g id="text_23">
-    <text style="font-size: 5.5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="422.929134" y="70.746453" transform="rotate(-0 422.929134 70.746453)">grade, price tier</text>
+    <text style="font-size: 5.5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="422.929134" y="70.746453" transform="rotate(-0 422.929134 70.746453)">grade, price basis</text>
    </g>
    <g id="text_24">
     <text style="font-size: 5.5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="422.929134" y="80.060636" transform="rotate(-0 422.929134 80.060636)">operations priced,</text>
@@ -617,7 +617,7 @@ L 163.984252 376.299213
       <tspan x="38.924143" y="1.04765" style="font-size: 3.92px; font-family: 'Arial'; fill: #5b6870">3</tspan>
      </text>
     </g>
-    <text style="font-size: 5.6px; font-family: 'Arial'; fill: #5b6870" transform="translate(37.892976 180.73274)">incipient wetness, 20 t, live tier</text>
+    <text style="font-size: 5.6px; font-family: 'Arial'; fill: #5b6870" transform="translate(37.892976 180.73274)">incipient wetness, 20 t, spot prices</text>
    </g>
   </g>
   <g id="axes_3">
@@ -2258,8 +2258,8 @@ L 496.998425 376.299213
    <text style="font-weight: 700; font-size: 8px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="184.166929" y="153.070866" transform="rotate(-0 184.166929 153.070866)">c</text>
   </g>
   <g id="text_109">
-   <text style="font-size: 5.4px; font-family: 'Arial'; fill: #5b6870" transform="translate(268.97206 157.501191)">Monthly averages 2019-01 to 2026-07; shaded: 89-month replay window</text>
-   <text style="font-size: 5.4px; font-family: 'Arial'; fill: #5b6870" transform="translate(255.614654 164.141166)">teal: reference tier (2026-05 average); orange: live quote held in the frozen package</text>
+   <text style="font-size: 5.4px; font-family: 'Arial'; fill: #5b6870" transform="translate(265.971685 157.501191)">Monthly averages 2019-01 to 2026-07; shaded: 89-month repricing window</text>
+   <text style="font-size: 5.4px; font-family: 'Arial'; fill: #5b6870" transform="translate(242.860107 164.141166)">teal: reference basis (2026-05 monthly average); orange: spot quote in the fixed price package</text>
   </g>
  </g>
  <defs>
