@@ -2,7 +2,7 @@
   "target": "Journal of Chemical Information and Modeling, Application Note",
   "word_limit_abstract_text_graphics": 5000,
   "abstract_words": 174,
-  "text_words_excluding_references": 2962,
+  "text_words_excluding_references": 3020,
   "graphics": [
     {
       "figure": 1,
@@ -21,7 +21,7 @@
     }
   ],
   "graphics_word_equivalent": 1800,
-  "total_word_equivalent": 4936,
+  "total_word_equivalent": 4994,
   "figure_count": 3,
   "table_count": 0,
   "software_named_in_title": true,

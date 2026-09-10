@@ -14,6 +14,7 @@ Korean. Run:
 
 import argparse
 import json
+import re
 from datetime import datetime
 from pathlib import Path
 
@@ -23,12 +24,13 @@ matplotlib.use("Agg")
 import matplotlib.dates as mdates  # noqa: E402
 import matplotlib.pyplot as plt  # noqa: E402
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch  # noqa: E402
-from matplotlib.ticker import FuncFormatter  # noqa: E402
+from matplotlib.ticker import FuncFormatter, LogLocator, NullFormatter  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 STUDY = ROOT / "docs/paper/robustness-2026-09-08/decision_robustness.json"
 METHODS = ROOT / "docs/paper/methods-2026-09-09/methods_study.json"
 EXAMPLE = ROOT / "docs/paper/figures-note-2026-09-09/screen_result_ni_al2o3.json"
+MARKET = ROOT / "docs/paper/catalyst_market_2026-09-10.json"
 FAMILIES = ROOT / "docs/paper/submission-2026-09-08/all_families_2026-09-08.json"
 VALIDATION = ROOT / "docs/paper/submission-2026-09-08/table62_reproduction_2026-09-08.json"
 REFERENCE_MONTH = "2026-05"
@@ -59,10 +61,15 @@ TEXT = {
         "c_comet": "COMET", "c_published": "Published estimate", "c_market": "Published market price",
         "c_note": "Baddour et al. 2018, Table 2; the FCC case uses\nits footnote rate of 67 short tons per day",
         "c_y": "Difference from the published market price (%)",
-        "d_y": "Estimated cost relative to the reference month",
-        "d_note": ("Each line is the leading candidate of one thermal reaction family, repriced at every month of the "
-                   "89-month record and divided by its 2026-05 value.\nThe labelled lines give the largest, a middling "
-                   "and no movement; the number is the ratio of the highest to the lowest month."),
+        "market_y": "USD per lb of catalyst",
+        "market_titles": {"nickel": "Nickel", "precious": "Precious metal", "other": "Other active substance"},
+        "market_count": "{n} reaction families",
+        "market_traded": "Traded unit value, United States imports",
+        "market_estimate": "COMET estimate for one family's leading candidate",
+        "market_note": ("Each panel holds the reaction families whose leading candidate has the active substance of "
+                        "that HS subheading, repriced at every month of the record.\nA traded unit value mixes every "
+                        "grade, loading and order size cleared under one code, so it is a market level for the "
+                        "category, not a quote for a formulation."),
         "unit_lb": "USD/lb",
         "f3_first": "Ranked first at reference conditions", "f3_second": "Closest competitor",
         "f3_other": "Other candidates", "f3_x": "Cases in which the candidate ranks first (%)",
@@ -93,10 +100,15 @@ TEXT = {
         "c_x": "판매 단가 (USD/lb, 로그 축)",
         "c_comet": "COMET", "c_published": "발표된 추정값", "c_market": "발표된 시장 가격",
         "c_note": "Baddour 외 2018, 표 2\nFCC 사례는 그 각주의 일 67 short ton 처리량 기준",
-        "c_y": "발표된 시장 가격 대비 차이 (%)",
-        "d_y": "기준월 대비 추정 원가 비율",
-        "d_note": ("각 선은 한 열촉매 반응군의 1위 후보를 89개월 각 시점에서 다시 산정한 뒤 2026-05 값으로 나눈 것이다.\n"
-                   "표시한 세 선은 변동이 가장 큰 경우, 중간인 경우, 전혀 없는 경우이며 옆의 값은 최고월/최저월 비율이다."),
+        "c_y": "시장 가격 대비 차이 (%)",
+        "market_y": "촉매 파운드당 USD",
+        "market_titles": {"nickel": "니켈", "precious": "귀금속", "other": "그 외 활성 물질"},
+        "market_count": "반응군 {n}개",
+        "market_traded": "미국 수입 거래 단가",
+        "market_estimate": "반응군 1위 후보의 COMET 추정값",
+        "market_note": ("각 패널에는 1위 후보의 활성 물질이 해당 HS 세부 코드에 해당하는 반응군을 모아 기록의 매 월에서 "
+                        "다시 산정한 값을 담았다.\n거래 단가는 한 코드로 통관된 모든 등급·담지량·주문 규모를 섞은 값이므로 "
+                        "범주의 시장 수준이지 특정 조성의 견적이 아니다."),
         "unit_lb": "USD/lb",
         "f3_first": "기준 조건 1위 후보", "f3_second": "가장 가까운 경쟁 후보",
         "f3_other": "나머지 후보", "f3_x": "후보가 1위를 차지한 경우의 비율 (%)",
@@ -195,7 +207,7 @@ def _arrow(ax, x1, y1, x2, y2, color=INK, label=None, dy=1.6):
 
 
 def _cost_model_panel(fig):
-    ax = fig.add_axes([0, 0.795, 1, 0.205])
+    ax = fig.add_axes([0, 0.815, 1, 0.185])
     ax.set_xlim(0, 178)
     ax.set_ylim(0, 47)
     ax.axis("off")
@@ -250,7 +262,7 @@ def _structure_panel(fig):
         rows.append((family["family"], total, 100 * materials / total, 100 * processing / total,
                      100 * (total - materials - processing) / total))
     rows.sort(key=lambda r: r[2])
-    ax = fig.add_axes([0.205, 0.415, 0.295, 0.325])
+    ax = fig.add_axes([0.205, 0.455, 0.295, 0.305])
     ys = range(len(rows))
     ax.barh(ys, [r[2] for r in rows], color=ACC, height=0.74, label=L["seg_materials"])
     ax.barh(ys, [r[3] for r in rows], left=[r[2] for r in rows], color=ACC_MID, height=0.74,
@@ -271,13 +283,13 @@ def _structure_panel(fig):
               handlelength=1.0, columnspacing=0.8, handletextpad=0.4, borderaxespad=0.0)
     _clean(ax)
     ax.tick_params(axis="y", length=0, labelsize=5.2)
-    fig.text(0.04, 0.360, L["b_note"], fontsize=5.2, color=MUTED)
+    fig.text(0.04, 0.410, L["b_note"], fontsize=5.2, color=MUTED)
 
 
 def _validation_panel(fig):
     """The three published CatCost cases against the market prices printed beside them."""
     cases = json.loads(VALIDATION.read_text(encoding="utf-8"))
-    ax = fig.add_axes([0.735, 0.47, 0.245, 0.245])
+    ax = fig.add_axes([0.735, 0.515, 0.245, 0.225])
     xs = range(len(cases))
     comet, published, labels = [], [], []
     for case in cases:
@@ -301,18 +313,54 @@ def _validation_panel(fig):
               handlelength=1.0, columnspacing=0.8, handletextpad=0.4, borderaxespad=0.0)
     _clean(ax)
     ax.tick_params(axis="x", length=0)
-    fig.text(0.615, 0.418, L["c_note"], fontsize=5.2, color=MUTED, linespacing=1.5)
+    fig.text(0.615, 0.468, L["c_note"], fontsize=5.2, color=MUTED, linespacing=1.5)
 
 
-HIGHLIGHT = ["co2-electroreduction", "ammonia-synthesis", "propane-dehydrogenation"]
+PRECIOUS = ("Pt", "Pd", "Rh", "Ru", "Ir", "Au", "Ag", "Os")
+MARKET_GROUPS = [("HS381511", "nickel"), ("HS381512", "precious"), ("HS381519", "other")]
+LB_PER_KG = 2.20462
 
 
-def _price_basis_panel(fig):
-    """How far the estimated cost of each family's leading candidate moves across the repriced months."""
+def _active_group(names):
+    """Classify by the active substance, following the wording of the HS subheadings."""
+    joined = " ".join(names)
+    if re.search(r"(?<![A-Za-z])Ni(?![a-z])", joined):
+        return "nickel"
+    if any(re.search(rf"(?<![A-Za-z]){symbol}(?![a-z])", joined) for symbol in PRECIOUS):
+        return "precious"
+    return "other"
+
+
+def _family_groups():
+    """Map every mass-basis family to an HS subheading through its leading candidate."""
     study = json.loads(STUDY.read_text(encoding="utf-8"))
-    series = {}
+    winners = {f["family"]: f["reference_winner"] for f in study["families"]
+               if f.get("unit") == "$/lb" and f.get("domain") == "thermal"}
+    mapping = {}
+    for path in sorted((ROOT / "backend/data").glob("*_benchmark.json")):
+        record = json.loads(path.read_text(encoding="utf-8"))
+        family = record.get("family")
+        if family not in winners:
+            continue
+        candidate = next((c for c in record["candidates"] if c["slug"] == winners[family]), None)
+        if candidate is None:
+            continue
+        actives = [c["name"] for c in candidate.get("components", [])
+                   if c["role"] in ("active_metal", "active_catalyst")]
+        if actives:
+            mapping[family] = _active_group(actives)
+    return mapping
+
+
+def _market_panel(fig):
+    """Estimated costs against the unit value of the matching traded catalyst category."""
+    market = json.loads(MARKET.read_text(encoding="utf-8"))["series"]
+    study = json.loads(STUDY.read_text(encoding="utf-8"))
+    mapping = _family_groups()
+    estimates = {}
     for family in study["families"]:
-        if family.get("unit") != "$/lb":
+        group = mapping.get(family["family"])
+        if group is None:
             continue
         slug = family["reference_winner"]
         points = []
@@ -321,48 +369,48 @@ def _price_basis_panel(fig):
             if entry is not None:
                 points.append((datetime.strptime(ledger["month"], "%Y-%m"),
                                entry["summary"]["landed_cost_per_lb"]))
-        if len(points) < 2:
-            continue
-        reference = next((v for d, v in points if d.strftime("%Y-%m") == REFERENCE_MONTH), None)
-        if not reference:
-            continue
-        series[family["family"]] = ([d for d, _ in points], [v / reference for _, v in points])
-    ax = fig.add_axes([0.075, 0.075, 0.905, 0.235])
-    ax.axhline(1.0, color=RULE, lw=0.6, zorder=1)
-    for name, (dates, values) in series.items():
-        if name in HIGHLIGHT:
-            continue
-        ax.plot(dates, values, color="#CFD6D9", lw=0.6, zorder=2)
-    for name, colour in zip(HIGHLIGHT, (WARN, ACC, INK), strict=True):
-        if name not in series:
-            continue
-        dates, values = series[name]
-        ratio = max(values) / min(values)
-        ax.plot(dates, values, color=colour, lw=1.2, zorder=4,
-                label=f"{FAM.get(name, name)}  ×{ratio:.1f}")
-    ax.set_yscale("log")
-    ax.set_ylim(0.15, 2.6)
-    ax.set_yticks([0.2, 0.3, 0.5, 1, 2])
-    ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _p: f"{v:g}"))
-    first = min(dates[0] for dates, _ in series.values())
-    last = max(dates[-1] for dates, _ in series.values())
-    ax.set_xlim(first, last)
-    ax.set_ylabel(L["d_y"], fontsize=6.2)
-    ax.xaxis.set_major_locator(mdates.YearLocator(1))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
-    ax.legend(fontsize=5.6, frameon=False, loc="lower left", ncol=3, handlelength=1.4, columnspacing=1.4,
-              handletextpad=0.5, borderaxespad=0.3)
-    _clean(ax)
-    fig.text(0.075, 0.338, L["d_note"], fontsize=5.4, color=MUTED, linespacing=1.5)
+        if len(points) > 1:
+            estimates.setdefault(group, []).append(points)
+
+    left, right, bottom, height = 0.075, 0.985, 0.062, 0.225
+    gap = 0.055
+    width = (right - left - 2 * gap) / 3
+    for index, (code, group) in enumerate(MARKET_GROUPS):
+        ax = fig.add_axes([left + index * (width + gap), bottom, width, height])
+        series = market[code]
+        dates = [datetime.strptime(pt["date"], "%Y-%m-%d") for pt in series["points"]]
+        traded = [pt["price"] / LB_PER_KG for pt in series["points"]]
+        for points in estimates.get(group, []):
+            ax.plot([d for d, _ in points], [v for _, v in points], color=ACC, lw=0.7, alpha=0.85, zorder=3)
+        ax.plot(dates, traded, color=WARN, lw=1.4, zorder=4)
+        ax.set_yscale("log")
+        ax.set_xlim(datetime(2019, 1, 1), datetime(2026, 6, 1))
+        ax.xaxis.set_major_locator(mdates.YearLocator(2))
+        ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+        ax.yaxis.set_major_locator(LogLocator(base=10.0, subs=(1.0, 2.0, 5.0), numticks=12))
+        ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _p: f"{v:g}"))
+        ax.yaxis.set_minor_formatter(NullFormatter())
+        ax.set_title(f"{L['market_titles'][group]}  ({series['hs'][:4]}.{series['hs'][4:]})",
+                     fontsize=6.0, fontweight="bold", pad=3)
+        if index == 0:
+            ax.set_ylabel(L["market_y"], fontsize=6.2)
+        ax.text(0.03, 0.04, L["market_count"].format(n=len(estimates.get(group, []))), transform=ax.transAxes,
+                fontsize=5.4, color=MUTED)
+        _clean(ax)
+    fig.text(left, bottom + height + 0.030, L["market_note"], fontsize=5.4, color=MUTED, linespacing=1.5)
+    handles = [plt.Line2D([], [], color=WARN, lw=1.4), plt.Line2D([], [], color=ACC, lw=0.9)]
+    fig.legend(handles, [L["market_traded"], L["market_estimate"]], fontsize=5.6, frameon=False, ncol=2,
+               loc="lower left", bbox_to_anchor=(left + 0.29, bottom + height + 0.074), handlelength=1.6,
+               columnspacing=1.4, handletextpad=0.5)
 
 
 def figure2_cost_model():
-    fig = plt.figure(figsize=(178 / 25.4, 190 / 25.4))
+    fig = plt.figure(figsize=(178 / 25.4, 205 / 25.4))
     _cost_model_panel(fig)
     _structure_panel(fig)
     _validation_panel(fig)
-    _price_basis_panel(fig)
-    for label, x, y in (("a", 0.012, 0.982), ("b", 0.012, 0.762), ("c", 0.60, 0.762), ("d", 0.012, 0.347)):
+    _market_panel(fig)
+    for label, x, y in (("a", 0.012, 0.982), ("b", 0.012, 0.782), ("c", 0.60, 0.782), ("d", 0.012, 0.372)):
         fig.text(x, y, label, fontsize=8, fontweight="bold")
     return fig
 
