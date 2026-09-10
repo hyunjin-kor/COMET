@@ -20,7 +20,7 @@ The cost equations are adopted from the published method and are not claimed as 
 
 Figure 1 summarises the software as a stack. Price sources feed two price tiers, the cost model turns composition, route and scale into a ledger, and a decision layer interrogates the candidate library; the panel on the right lists the provenance recorded with every value.
 
-![Figure 1. Structure of COMET from price sources to decision analysis; the panel on the right lists the provenance recorded with every value.](figures-note-2026-09-09/fig1_workflow_stack.png)
+![Figure 1. Structure of COMET from price sources to decision analysis; the panel on the right lists the provenance recorded with every value. The illustration was generated with ChatGPT image generation (OpenAI) from a written specification of the layers, labels and pictograms supplied by the authors, who then redrew the connector lines by script and checked every label.](figures-note-2026-09-09/fig1_workflow_stack.png)
 
 COMET is a local application with no account. The backend is a FastAPI service on Python 3.11 or newer, using SQLModel over a single SQLite file for prices, saved estimates, purchase evidence and actual-cost observations. The renderer is a React 19 and TypeScript single-page application with a Korean and English interface and scientific notation for formulas and units. On Windows an Electron shell bundles the backend as a PyInstaller sidecar and installs as `COMET.Setup.<version>.exe`, with a portable archive as an alternative. The same application can be served to a browser from source: the renderer is built once and the backend serves it on a local port (`npm run web` on Windows, or the equivalent build and `uvicorn` commands elsewhere). The backend tests and the renderer build run on Linux in continuous integration, but the authors have exercised the complete browser mode only on Windows. A scheduler refreshes prices on startup and once a day, and the price screen can poll a fast source while it is open; without API keys the software falls back to indexed and manual prices and works offline.
 
@@ -78,7 +78,7 @@ Source code, the Windows installer and the portable archive are at https://githu
 
 Funding, contributions and acknowledgments: [to be supplied by the authors].
 
-OpenAI Codex and Anthropic Claude assisted with software development, source-audit organization, manuscript drafting and editing. Human authors retain responsibility for reviewing the evidence, calculations and submitted text; no AI system is listed as an author.
+OpenAI Codex and Anthropic Claude assisted with software development, source-audit organization, manuscript drafting and editing. ChatGPT image generation (OpenAI) produced the Figure 1 illustration on 2026-09-10 from a specification written by the authors, who edited its connector lines and verified every label; the tool was not used for any other figure or for the graphical abstract. Human authors retain responsibility for reviewing the evidence, calculations and submitted text; no AI system is listed as an author.
 
 ## Competing interests
 
