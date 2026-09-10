@@ -3,7 +3,8 @@
 Figure 1 is an AI-assisted illustration kept as a committed PNG with its raw file, provenance
 note and the connector-line script (scripts/straighten_note_fig1_leaders.py), so it is not
 drawn here. Figure 2 draws the cost model, the price build-up of the Ni/Al2O3 example recorded by
-scripts/capture_note_result_screen.py and the nickel price basis from the frozen 2026-09-08 series. Figure 3 reads the frozen joint robustness study
+scripts/capture_note_result_screen.py and the price basis of eight metals from the frozen
+2026-09-08 price package. Figure 3 reads the frozen joint robustness study
 and the methods supplement. Run:
 
     python scripts/draw_application_note_figures.py --out-dir docs/paper/figures-note-2026-09-09
@@ -20,12 +21,14 @@ matplotlib.use("Agg")
 import matplotlib.dates as mdates  # noqa: E402
 import matplotlib.pyplot as plt  # noqa: E402
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch  # noqa: E402
+from matplotlib.ticker import FuncFormatter, MaxNLocator  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 STUDY = ROOT / "docs/paper/robustness-2026-09-08/decision_robustness.json"
 METHODS = ROOT / "docs/paper/methods-2026-09-09/methods_study.json"
 EXAMPLE = ROOT / "docs/paper/figures-note-2026-09-09/screen_result_ni_al2o3.json"
 HISTORY = ROOT / "docs/paper/submission-2026-09-08/price_history_2026-09-08.json"
+LIVE = ROOT / "docs/paper/submission-2026-09-08/live_basis_2026-09-08.json"
 REFERENCE_MONTH = "2026-05"
 INK, MUTED, RULE, GREY = "#1F2A30", "#5B6870", "#C3CBCE", "#9AA6AB"
 FILL, ACC, ACC_DEEP, WARN = "#F4F6F7", "#1B6F78", "#124C52", "#B8702F"
@@ -50,59 +53,72 @@ def _box(ax, x, y, w, h, fill=FILL, edge=RULE, lw=0.5):
     ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0,rounding_size=0.8", fc=fill, ec=edge, lw=lw))
 
 
-def _arrow(ax, x1, y1, x2, y2, color=INK):
+def _arrow(ax, x1, y1, x2, y2, color=INK, label=None, dy=1.6):
     ax.add_patch(FancyArrowPatch((x1, y1), (x2, y2), arrowstyle="-|>", mutation_scale=6, color=color, lw=0.7,
                                  shrinkA=0, shrinkB=0, zorder=4))
+    if label:
+        ax.text((x1 + x2) / 2, (y1 + y2) / 2 + dy, label, ha="center", va="bottom", fontsize=6.4, color=INK)
+
+
+METALS = [("Pt", "Platinum"), ("Pd", "Palladium"), ("Rh", "Rhodium"), ("Ru", "Ruthenium"),
+          ("Ir", "Iridium"), ("Au", "Gold"), ("Ag", "Silver"), ("Ni", "Nickel")]
+
+
+def _price_unit(unit):
+    return {"$/troy_oz": "USD/troy oz", "$/lb": "USD/lb"}.get(unit, unit)
 
 
 def figure2_cost_model():
     example = json.loads(EXAMPLE.read_text(encoding="utf-8"))
-    history = json.loads(HISTORY.read_text(encoding="utf-8"))["series"]["Ni"]
-    fig = plt.figure(figsize=(178 / 25.4, 128 / 25.4))
+    history = json.loads(HISTORY.read_text(encoding="utf-8"))["series"]
+    live = json.loads(LIVE.read_text(encoding="utf-8"))["price_basis"]
+    fig = plt.figure(figsize=(178 / 25.4, 150 / 25.4))
 
     # ---- a: cost model schematic (millimetre coordinates)
-    ax = fig.add_axes([0, 0.585, 1, 0.415])
+    ax = fig.add_axes([0, 0.715, 1, 0.285])
     ax.set_xlim(0, 178)
-    ax.set_ylim(0, 53)
+    ax.set_ylim(0, 47)
     ax.axis("off")
-    fig.text(0.012, 0.975, "a", fontsize=8, fontweight="bold")
-    inputs = [("Formulation", "components, wt%"), ("Preparation route", "operations, order size"),
-              ("Price basis", "live or reference tier")]
-    for i, (title, sub) in enumerate(inputs):
-        y = 40 - i * 13.5
-        _box(ax, 4, y, 26, 11)
-        ax.text(17, y + 7.4, title, ha="center", va="center", fontsize=6.4, fontweight="bold")
-        ax.text(17, y + 3.4, sub, ha="center", va="center", fontsize=5.6, color=MUTED)
-    stages = [
-        ("Materials", r"$C_\mathrm{m}=\sum_i w_i\,c_i$", ["unit price × mass fraction, or a", "purchased input a = w/(f·p·y)"]),
-        ("Processing (Step Method)", r"$C_\mathrm{p}=\dfrac{24\,T\,I\,\sum_j H_j}{M}$",
-         ["hourly rates by scale class,", "campaign time, index, mass"]),
-        ("Overhead and margin", r"$P=\dfrac{(C_\mathrm{m}+C_\mathrm{p})(1+g)(1+s)}{1-m}$",
-         ["G&A and S&ARD uplift,", "margin set by order size"]),
-    ]
-    x0, sw, gap = 36, 31, 3.5
-    for i, (title, eq, notes) in enumerate(stages):
-        x = x0 + i * (sw + gap)
-        _box(ax, x, 12, sw, 39, fill="white", edge=INK, lw=0.6)
-        ax.text(x + sw / 2, 47, title, ha="center", va="center", fontsize=6.4, fontweight="bold")
-        ax.text(x + sw / 2, 36.5, eq, ha="center", va="center", fontsize=7.2)
-        for k, note in enumerate(notes):
-            ax.text(x + sw / 2, 22.5 - k * 4.0, note, ha="center", va="center", fontsize=5.4, color=MUTED)
-        if i < len(stages) - 1:
-            _arrow(ax, x + sw + 0.3, 31.5, x + sw + gap - 0.3, 31.5)
-    _arrow(ax, 30.3, 45.5, 35.7, 40)
-    _arrow(ax, 30.3, 32, 35.7, 32)
-    _arrow(ax, 30.3, 18.5, 35.7, 24)
-    xo = x0 + 3 * sw + 2 * gap + 4
-    _box(ax, xo, 12, 178 - xo - 3, 39, fill="#EAF1F2", edge=ACC, lw=0.6)
-    ax.text(xo + (178 - xo - 3) / 2, 47, "Ledger", ha="center", va="center", fontsize=6.4, fontweight="bold")
-    for k, line_text in enumerate(["selling price per lb", "price, source, quote date", "reliability grade, tier",
-                                   "operations priced,", "substituted or uncosted"]):
-        ax.text(xo + 2.5, 40.5 - k * 5.4, line_text, ha="left", va="center", fontsize=5.6)
-    _arrow(ax, x0 + 3 * sw + 2 * gap + 0.3, 31.5, xo - 0.3, 31.5)
+    fig.text(0.012, 0.978, "a", fontsize=8, fontweight="bold")
+    inputs = [("Formulation", "components, wt%", 35.5), ("Preparation route", "operations, order size", 20),
+              ("Price basis", "live or reference tier", 4.5)]
+    for title, sub, y in inputs:
+        _box(ax, 6, y, 26, 9.6)
+        ax.text(19, y + 6.4, title, ha="center", va="center", fontsize=6.6, fontweight="bold")
+        ax.text(19, y + 2.7, sub, ha="center", va="center", fontsize=5.6, color=MUTED)
+    mx, mw = 38, 57
+    _box(ax, mx, 24.5, mw, 21, fill="white", edge=INK, lw=0.6)
+    ax.text(mx + mw / 2, 42.2, "Materials", ha="center", va="center", fontsize=6.8, fontweight="bold")
+    ax.text(mx + mw / 2, 35.0, r"$C_\mathrm{m}=\sum_i w_i\,c_i$", ha="center", va="center", fontsize=8.6)
+    ax.text(mx + mw / 2, 29.6, "unit price × mass fraction", ha="center", va="center", fontsize=5.6)
+    ax.text(mx + mw / 2, 26.6, "purchased input: a = w/(f·p·y)", ha="center", va="center", fontsize=5.6)
+    _box(ax, mx, 1.0, mw, 21, fill="white", edge=INK, lw=0.6)
+    ax.text(mx + mw / 2, 18.7, "Processing (Step Method)", ha="center", va="center", fontsize=6.8, fontweight="bold")
+    ax.text(mx + mw / 2, 11.5, r"$C_\mathrm{p}=24\,T\,I\,\sum_j H_j\,/\,M$", ha="center", va="center", fontsize=8.6)
+    ax.text(mx + mw / 2, 6.1, "hourly rates at the fitted scale class", ha="center", va="center", fontsize=5.6)
+    ax.text(mx + mw / 2, 3.1, "campaign time, index escalation, mass produced", ha="center", va="center", fontsize=5.6)
+    _arrow(ax, 32.3, 40.3, mx - 0.3, 38.5)
+    _arrow(ax, 32.3, 9.3, mx - 0.3, 11.5)
+    _arrow(ax, 32.3, 24.8, mx - 0.3, 31.5)
+    _arrow(ax, 32.3, 24.8, mx - 0.3, 15.5)
+    px, pw = 101, 40
+    _box(ax, px, 11, pw, 24, fill="white", edge=INK, lw=0.6)
+    ax.text(px + pw / 2, 31.7, "Overhead and margin", ha="center", va="center", fontsize=6.8, fontweight="bold")
+    ax.text(px + pw / 2, 22.5, r"$P=\dfrac{(C_\mathrm{m}+C_\mathrm{p})(1+g)(1+s)}{1-m}$", ha="center", va="center",
+            fontsize=8.6)
+    ax.text(px + pw / 2, 14.1, "G&A, S&ARD, margin set by order size", ha="center", va="center", fontsize=5.6)
+    _arrow(ax, mx + mw + 0.3, 35.0, px - 0.3, 27.0, label=r"$C_\mathrm{m}$")
+    _arrow(ax, mx + mw + 0.3, 11.5, px - 0.3, 19.0, label=r"$C_\mathrm{p}$", dy=-4.6)
+    lx, lw_ = 147, 28
+    _box(ax, lx, 11, lw_, 24, fill="#EAF1F2", edge=ACC, lw=0.6)
+    ax.text(lx + lw_ / 2, 31.7, "Ledger", ha="center", va="center", fontsize=6.8, fontweight="bold")
+    for k, line_text in enumerate(["selling price per lb", "price, source, date", "grade, price tier",
+                                   "operations priced,", "substituted, uncosted"]):
+        ax.text(lx + 2.2, 27.3 - k * 3.6, line_text, ha="left", va="center", fontsize=5.5)
+    _arrow(ax, px + pw + 0.3, 23.0, lx - 0.3, 23.0, label=r"$P$")
 
     # ---- b: price build-up for the worked example
-    bx = fig.add_axes([0.075, 0.075, 0.40, 0.44])
+    bx = fig.add_axes([0.07, 0.115, 0.255, 0.50])
     sm = example["step_method"]
     comps = example["materials"]["components"]
     items = [(c["name"].replace("2", "$_2$").replace("3", "$_3$"), c["cost_per_lb_cat"]) for c in comps]
@@ -120,41 +136,50 @@ def figure2_cost_model():
     bx.bar(len(items), total, color=INK, width=0.66)
     bx.text(len(items), total + 0.08, f"{total:.2f}", ha="center", va="bottom", fontsize=5.8, fontweight="bold")
     bx.set_xticks(range(len(items) + 1))
-    bx.set_xticklabels([label for label, _ in items] + ["Selling\nprice"], fontsize=5.8)
+    bx.set_xticklabels([label for label, _ in items] + ["Selling price"], fontsize=5.6, rotation=45, ha="right",
+                       rotation_mode="anchor")
     bx.set_ylim(0, total * 1.18)
     bx.set_ylabel("USD per lb of catalyst", fontsize=6.4)
-    bx.text(0.02, 0.97, "20 wt% Ni/Al$_2$O$_3$ · incipient wetness · 20 t · live tier", transform=bx.transAxes,
+    bx.text(0.02, 0.97, "20 wt% Ni/Al$_2$O$_3$\nincipient wetness, 20 t, live tier", transform=bx.transAxes,
             ha="left", va="top", fontsize=5.6, color=MUTED)
     _clean(bx)
     bx.tick_params(axis="x", length=0)
-    fig.text(0.012, 0.535, "b", fontsize=8, fontweight="bold")
+    fig.text(0.012, 0.64, "b", fontsize=8, fontweight="bold")
 
-    # ---- c: price basis for nickel
-    cx = fig.add_axes([0.585, 0.075, 0.40, 0.44])
-    dates = [datetime.strptime(p["date"], "%Y-%m-%d") for p in history["points"]]
-    prices = [p["price"] for p in history["points"]]
-    replay_end = next(d for d in dates if d.strftime("%Y-%m") == REFERENCE_MONTH)
-    cx.axvspan(dates[0], replay_end, color=FILL, zorder=0)
-    cx.plot(dates, prices, color=GREY, lw=0.8, zorder=2)
-    ref_price = prices[dates.index(replay_end)]
-    cx.plot(replay_end, ref_price, "o", color=ACC, ms=4.2, zorder=4)
-    cx.annotate(f"Reference tier\n{REFERENCE_MONTH} average, {ref_price:.2f}", (replay_end, ref_price),
-                xytext=(-8, 14), textcoords="offset points", ha="right", va="bottom", fontsize=5.6, color=ACC,
-                arrowprops=dict(arrowstyle="-", color=ACC, lw=0.5))
-    live_date = datetime.strptime(example["captured_at"][:10], "%Y-%m-%d")
-    live_price = example["nickel_quote"]["price"]
-    cx.plot(live_date, live_price, "o", mfc=WARN, mec=WARN, ms=4.2, zorder=4)
-    cx.annotate(f"Live tier\n{example['captured_at'][:10]} quote, {live_price:.2f}", (live_date, live_price),
-                xytext=(-6, -18), textcoords="offset points", ha="right", va="top", fontsize=5.6, color=WARN,
-                arrowprops=dict(arrowstyle="-", color=WARN, lw=0.5))
-    cx.text(dates[0] + (replay_end - dates[0]) / 2, max(prices) * 1.02, f"{len([d for d in dates if d <= replay_end])}-month replay window",
-            ha="center", va="bottom", fontsize=5.6, color=MUTED)
-    cx.set_ylabel("Nickel price (USD/lb)", fontsize=6.4)
-    cx.set_ylim(0, max(prices) * 1.15)
-    cx.xaxis.set_major_locator(mdates.YearLocator(2))
-    cx.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
-    _clean(cx)
-    fig.text(0.53, 0.535, "c", fontsize=8, fontweight="bold")
+    # ---- c: price basis of the metals that dominate catalyst cost
+    fig.text(0.365, 0.64, "c", fontsize=8, fontweight="bold")
+    x_left, x_right, y_bottom, y_top = 0.425, 0.985, 0.115, 0.585
+    cols, rows_n = 4, 2
+    pw_ = (x_right - x_left - (cols - 1) * 0.02) / cols
+    ph_ = (y_top - y_bottom - 0.10) / rows_n
+    replay_end = None
+    for k, (sym, name) in enumerate(METALS):
+        r_, c_ = divmod(k, cols)
+        cx = fig.add_axes([x_left + c_ * (pw_ + 0.02), y_top - (r_ + 1) * ph_ - r_ * 0.10, pw_, ph_])
+        series = history[sym]
+        dates = [datetime.strptime(p["date"], "%Y-%m-%d") for p in series["points"]]
+        prices = [p["price"] for p in series["points"]]
+        replay_end = next(d for d in dates if d.strftime("%Y-%m") == REFERENCE_MONTH)
+        cx.axvspan(dates[0], replay_end, color=FILL, zorder=0)
+        cx.plot(dates, prices, color=GREY, lw=0.7, zorder=2)
+        cx.plot(replay_end, prices[dates.index(replay_end)], "o", color=ACC, ms=3.4, zorder=4)
+        quote = live[sym]
+        cx.plot(datetime.strptime(quote["fetched_at"][:10], "%Y-%m-%d"), quote["price"], "o", mfc=WARN, mec=WARN,
+                ms=3.4, zorder=4)
+        top = max(max(prices), quote["price"])
+        cx.set_ylim(0, top * 1.25)
+        cx.set_xlim(dates[0], datetime(2026, 11, 1))
+        cx.text(0.03, 0.96, f"{name}  ({_price_unit(series['unit'])})", transform=cx.transAxes, ha="left", va="top",
+                fontsize=5.6, fontweight="bold")
+        cx.yaxis.set_major_locator(MaxNLocator(3))
+        cx.yaxis.set_major_formatter(FuncFormatter(lambda v, _p: f"{v / 1000:g}k" if v >= 1000 else f"{v:g}"))
+        cx.set_xticks([datetime(y, 1, 1) for y in (2020, 2023, 2026)])
+        cx.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+        _clean(cx)
+        cx.tick_params(labelsize=5.2, length=1.5, pad=1.5)
+    fig.text(0.705, 0.625, "Monthly averages 2019-01 to 2026-07; shaded: 89-month replay window\n"
+             f"teal: reference tier ({REFERENCE_MONTH} average); orange: live quote held in the frozen package",
+             ha="center", va="center", fontsize=5.4, color=MUTED, linespacing=1.4)
     return fig
 
 
