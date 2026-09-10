@@ -149,8 +149,9 @@ A3·E5의 Engineering Au 판단은 사용자 조건(연구실은 SCIE만 실적 
 | `f2cfe56` | 문장 대신 키워드 칩, 번호 원(01–05) 세로 스파인, 출처 필드 사이드 레일, 한 줄 범례로 도판 글자 수 축소. 칩·번호·카드 문법은 사용자의 디자인 아카이브(로컬, 미추적)에서 가져옴 | `--check` CHECK_OK, ruff, 노트 테스트 2 passed, CI 34341046067 success(3 job) |
 | `be97513` | 도판을 저널 스타일로 다시 그림(사용자 피드백: 칩 버전은 논문 도판 같지 않음, 예시는 유명 촉매로, 반응명 정식 표기, 패널 겹침). Fig. 1은 3c268a2식 층 스택으로 복귀하되 얇은 테두리와 평이한 용어(price sources, price basis, cost model, cost ledger, decision analysis, provenance)로 다시 씀. Fig. 2는 새 `scripts/capture_note_result_screen.py`가 로컬 백엔드(8765, 빌드된 프런트)에서 Playwright로 캡처한 20 wt% Ni/Al₂O₃ 추정(초기습윤 함침 템플릿, 20 t, live tier, 5.21 USD/lb) 화면에 주석 6개. Fig. 3은 FAMILY_NAMES 사전의 정식 반응명, Arial mathtext 아래첨자, 넓힌 오른쪽 열. 노트 본문·캡션을 새 예시로 갱신 | `--check` CHECK_OK, ruff, 노트 테스트 2 passed, CI 34345735835 success(3 job) |
 | `0a40f61` | 사용자가 matplotlib Fig. 1을 거부하고 ChatGPT 이미지 생성으로 4종(A 층 스택, B 등축, C 선화, D 일러스트)을 만들게 함 → D 채택, 그림 안 글자 제거·cm² 수정·오른쪽 아이콘 태그 패널로 재생성(D2), 연결선은 저자 요청대로 수평 점선으로 스크립트 수정. `fig1_workflow_stack.png`(최종)·`fig1_workflow_stack_raw_chatgpt.png`(원본)·`fig1_workflow_stack.provenance.md`(프롬프트 전문, 정책, 권리)·`scripts/straighten_note_fig1_leaders.py`(원본→최종 바이트 동일)를 커밋하고 SVG 삭제. 캡션과 AI 사용 문장에 ACS AI 정책(캡션 설명 + Acknowledgments 기술, TOC 그래픽 금지)대로 공개 | `--check` CHECK_OK(4,567 word-equivalent), ruff, 노트 테스트 2 passed, CI 34423057204 success(3 job) |
+| `4cd50cb` | 사용자 요청(Fig. 2·3을 더 낫게, Fig. 3은 네이처 스타일)으로 재설계. Fig. 2: 캡처 스크립트가 쓰는 JSON 사이드카(`screen_result_ni_al2o3.json`)에서 입력 요약 카드 4개(조성·템플릿·규모·가격 계층)를 그리고, 헤더를 잘라낸 결과 화면에 주석 5개(CSV 주석 삭제). 캡처는 2026-09-10 live 시세로 갱신(5.213 USD/lb). Fig. 3: (a) 반응군별 기준 1위·최강 경쟁자·나머지의 1위 비율 누적 막대, (b) 검사별 생존 반응군 수(과반 19, 후보 제거 21, ±2 20, ±5 10, ±10 7 / 30), (c) 암모니아 분해 예시 덤벨. 캡션 갱신 | `--check` CHECK_OK(4,570 word-equivalent), ruff, 노트 테스트 2 passed, CI 34426414121 success(3 job) |
 
-최종 노트 분량: 초록 171 + 본문 2,596 + 그림 3×600 = 4,567 word-equivalent(한도 5,000), JSON 키 참조 49개, 표 0개.
+최종 노트 분량: 초록 171 + 본문 2,599 + 그림 3×600 = 4,570 word-equivalent(한도 5,000), JSON 키 참조 49개, 표 0개.
 
 확인 못 한 것과 하지 않은 것:
 
