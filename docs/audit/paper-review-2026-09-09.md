@@ -150,14 +150,15 @@ A3·E5의 Engineering Au 판단은 사용자 조건(연구실은 SCIE만 실적 
 | `be97513` | 도판을 저널 스타일로 다시 그림(사용자 피드백: 칩 버전은 논문 도판 같지 않음, 예시는 유명 촉매로, 반응명 정식 표기, 패널 겹침). Fig. 1은 3c268a2식 층 스택으로 복귀하되 얇은 테두리와 평이한 용어(price sources, price basis, cost model, cost ledger, decision analysis, provenance)로 다시 씀. Fig. 2는 새 `scripts/capture_note_result_screen.py`가 로컬 백엔드(8765, 빌드된 프런트)에서 Playwright로 캡처한 20 wt% Ni/Al₂O₃ 추정(초기습윤 함침 템플릿, 20 t, live tier, 5.21 USD/lb) 화면에 주석 6개. Fig. 3은 FAMILY_NAMES 사전의 정식 반응명, Arial mathtext 아래첨자, 넓힌 오른쪽 열. 노트 본문·캡션을 새 예시로 갱신 | `--check` CHECK_OK, ruff, 노트 테스트 2 passed, CI 34345735835 success(3 job) |
 | `0a40f61` | 사용자가 matplotlib Fig. 1을 거부하고 ChatGPT 이미지 생성으로 4종(A 층 스택, B 등축, C 선화, D 일러스트)을 만들게 함 → D 채택, 그림 안 글자 제거·cm² 수정·오른쪽 아이콘 태그 패널로 재생성(D2), 연결선은 저자 요청대로 수평 점선으로 스크립트 수정. `fig1_workflow_stack.png`(최종)·`fig1_workflow_stack_raw_chatgpt.png`(원본)·`fig1_workflow_stack.provenance.md`(프롬프트 전문, 정책, 권리)·`scripts/straighten_note_fig1_leaders.py`(원본→최종 바이트 동일)를 커밋하고 SVG 삭제. 캡션과 AI 사용 문장에 ACS AI 정책(캡션 설명 + Acknowledgments 기술, TOC 그래픽 금지)대로 공개 | `--check` CHECK_OK(4,567 word-equivalent), ruff, 노트 테스트 2 passed, CI 34423057204 success(3 job) |
 | `4cd50cb` | 사용자 요청(Fig. 2·3을 더 낫게, Fig. 3은 네이처 스타일)으로 재설계. Fig. 2: 캡처 스크립트가 쓰는 JSON 사이드카(`screen_result_ni_al2o3.json`)에서 입력 요약 카드 4개(조성·템플릿·규모·가격 계층)를 그리고, 헤더를 잘라낸 결과 화면에 주석 5개(CSV 주석 삭제). 캡처는 2026-09-10 live 시세로 갱신(5.213 USD/lb). Fig. 3: (a) 반응군별 기준 1위·최강 경쟁자·나머지의 1위 비율 누적 막대, (b) 검사별 생존 반응군 수(과반 19, 후보 제거 21, ±2 20, ±5 10, ±10 7 / 30), (c) 암모니아 분해 예시 덤벨. 캡션 갱신 | `--check` CHECK_OK(4,570 word-equivalent), ruff, 노트 테스트 2 passed, CI 34426414121 success(3 job) |
+| `4cf9443` | 사용자 결정: 실제 화면 캡처 대신 방법론을 도식화한 도판으로. Fig. 2 = (a) 입력→재료비 C_m=Σw_i c_i → Step Method C_p=24·T·I·ΣH_j/M → 간접비·마진 P=(C_m+C_p)(1+g)(1+s)/(1−m) → 장부 도식, (b) 20 wt% Ni/Al₂O₃ 예시의 판매 단가 워터폴(Ni 1.51, Al₂O₃ 0.62, 가공 1.68, G&A 0.19, S&ARD 0.20, 마진 1.01 → 5.21 USD/lb; 캡처 JSON 사이드카), (c) 09-08 동결 니켈 월평균(IMF PCPS)+2026-05 기준값 8.52+2026-09-10 live 7.56+89개월 재생 구간. 본문 예시 숫자는 `ex()` 키 참조(총 53개). 캡처 도판 파일 삭제, 캡처 스크립트는 사이드카에 materials·step_method를 기록. 런칭 배너(`docs/assets/hero-banner.webp`)는 AI 생성(Claude Opus 5)·워드마크 포함이라 저널 도판에 쓰지 않음 | `--check` CHECK_OK(4,665 word-equivalent), ruff, 노트 테스트 2 passed, CI 34431773733 success(3 job) |
 
-최종 노트 분량: 초록 171 + 본문 2,599 + 그림 3×600 = 4,570 word-equivalent(한도 5,000), JSON 키 참조 49개, 표 0개.
+최종 노트 분량: 초록 171 + 본문 2,694 + 그림 3×600 = 4,665 word-equivalent(한도 5,000), JSON 키 참조 53개, 표 0개.
 
 확인 못 한 것과 하지 않은 것:
 
 - 저자·소속·연구비·이해관계 문구·상업 라이선스 문의처·심사용 버전(v1.4.0 태그 여부)은 원고에 placeholder로 남아 있으며 사람이 정해야 한다.
 - JCIM의 SCIE 수록과 IF는 제3자 자료로만 확인했다. JCR 원본 확인은 사용자 몫이다.
 - 연구실 V8 양식 docx(영문·한글판, Word 검토 메모 6개)와 Gemini·ChatGPT 참고 렌더 6장은 `_local/`에 두고 추적하지 않는다. 원고 도판은 matplotlib 벡터본만 쓴다.
-- Fig. 2의 화면 캡처는 실행 시점의 live 시세와 UI 상태에 따라 달라지므로 바이트 단위로 재현되지 않는다. 커밋한 PNG(`screen_result_ni_al2o3.png`)가 도판의 입력이고, 캡처 스크립트는 만드는 방법의 기록이다.
+- Fig. 2b의 예시 숫자는 실행 시점의 live 시세에 따라 달라지므로 바이트 단위로 재현되지 않는다. 커밋한 JSON 사이드카(`screen_result_ni_al2o3.json`)가 도판과 본문의 입력이고, 캡처 스크립트는 만드는 방법의 기록이다. 같은 이름의 PNG는 참고용 화면이며 원고에는 쓰지 않는다.
 - Fig. 1은 AI 생성 그림이라 생성 스크립트로 재현되지 않는다. 원본 PNG와 프롬프트 전문, 저자 수정 스크립트를 함께 커밋해 검증 가능하게 했다. ACS AI 정책은 공식 페이지에서 읽었고(2026-09-10), OpenAI 이용약관의 출력물 권리 조항은 자동 요청이 차단돼 확인 못 했다(저자 확인 항목).
 - 투고·외부 연락·태그·릴리스·병합은 하지 않았다.
