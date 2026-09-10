@@ -64,7 +64,13 @@ def bands(pixels, x):
             start = None
     if start is not None and pixels.shape[0] - start > 60:
         spans.append((start, pixels.shape[0] - 1))
-    return spans
+    merged = []
+    for top, bottom in spans:
+        if merged and top - merged[-1][1] <= 8:  # a thin light row inside one band
+            merged[-1] = (merged[-1][0], bottom)
+        else:
+            merged.append((top, bottom))
+    return merged
 
 
 def tag_left_edge(pixels, panel, top, bottom, fill):

@@ -769,7 +769,7 @@ L 0 2
       </g>
      </g>
      <g id="text_1">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="108.48189" y="289.914373" transform="rotate(-0 108.48189 289.914373)">0</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="108.48189" y="290.174998" transform="rotate(-0 108.48189 290.174998)">0</text>
      </g>
     </g>
     <g id="xtick_2">
@@ -779,7 +779,7 @@ L 0 2
       </g>
      </g>
      <g id="text_2">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="141.783307" y="289.914373" transform="rotate(-0 141.783307 289.914373)">20</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="141.783307" y="290.174998" transform="rotate(-0 141.783307 290.174998)">20</text>
      </g>
     </g>
     <g id="xtick_3">
@@ -789,7 +789,7 @@ L 0 2
       </g>
      </g>
      <g id="text_3">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="175.084724" y="289.914373" transform="rotate(-0 175.084724 289.914373)">40</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="175.084724" y="290.174998" transform="rotate(-0 175.084724 290.174998)">40</text>
      </g>
     </g>
     <g id="xtick_4">
@@ -799,7 +799,7 @@ L 0 2
       </g>
      </g>
      <g id="text_4">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="208.386142" y="289.914373" transform="rotate(-0 208.386142 289.914373)">60</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="208.386142" y="290.174998" transform="rotate(-0 208.386142 290.174998)">60</text>
      </g>
     </g>
     <g id="xtick_5">
@@ -809,7 +809,7 @@ L 0 2
       </g>
      </g>
      <g id="text_5">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="241.687559" y="289.914373" transform="rotate(-0 241.687559 289.914373)">80</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="241.687559" y="290.174998" transform="rotate(-0 241.687559 290.174998)">80</text>
      </g>
     </g>
     <g id="xtick_6">
@@ -819,82 +819,79 @@ L 0 2
       </g>
      </g>
      <g id="text_6">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="274.988976" y="289.914373" transform="rotate(-0 274.988976 289.914373)">100</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="274.988976" y="290.174998" transform="rotate(-0 274.988976 290.174998)">100</text>
      </g>
     </g>
     <g id="text_7">
-     <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: middle" x="191.735433" y="299.765873" transform="rotate(-0 191.735433 299.765873)">Cases in which the candidate ranks first (%)</text>
+     <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: middle" x="191.735433" y="300.590435" transform="rotate(-0 191.735433 300.590435)">후보가 1위를 차지한 경우의 비율 (%)</text>
     </g>
    </g>
    <g id="matplotlib.axis_2">
     <g id="ytick_1">
      <g id="line2d_7"/>
      <g id="text_8">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="104.98189" y="277.218731" transform="rotate(-0 104.98189 277.218731)">Preferential CO oxidation</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="104.98189" y="277.349044" transform="rotate(-0 104.98189 277.349044)">CO 선택 산화</text>
      </g>
     </g>
     <g id="ytick_2">
      <g id="line2d_8"/>
      <g id="text_9">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="104.98189" y="268.804902" transform="rotate(-0 104.98189 268.804902)">Fuel-cell ORR</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="104.98189" y="268.935215" transform="rotate(-0 104.98189 268.935215)">연료전지 ORR</text>
      </g>
     </g>
     <g id="ytick_3">
      <g id="line2d_9"/>
      <g id="text_10">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="104.98189" y="260.391073" transform="rotate(-0 104.98189 260.391073)">Fischer–Tropsch synthesis</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="104.98189" y="260.521386" transform="rotate(-0 104.98189 260.521386)">피셔–트롭슈 합성</text>
      </g>
     </g>
     <g id="ytick_4">
      <g id="line2d_10"/>
      <g id="text_11">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="104.98189" y="252.013807" transform="rotate(-0 104.98189 252.013807)">Reverse water-gas shift</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="104.98189" y="252.107557" transform="rotate(-0 104.98189 252.107557)">역 수성가스 전이</text>
      </g>
     </g>
     <g id="ytick_5">
      <g id="line2d_11"/>
      <g id="text_12">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="104.98189" y="243.599978" transform="rotate(-0 104.98189 243.599978)">Water-gas shift</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="104.98189" y="243.693728" transform="rotate(-0 104.98189 243.693728)">수성가스 전이</text>
      </g>
     </g>
     <g id="ytick_6">
      <g id="line2d_12"/>
      <g id="text_13">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="104.98189" y="235.149586" transform="rotate(-0 104.98189 235.149586)">Ammonia cracking</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="104.98189" y="235.279899" transform="rotate(-0 104.98189 235.279899)">암모니아 분해</text>
      </g>
     </g>
     <g id="ytick_7">
      <g id="line2d_13"/>
      <g id="text_14">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="104.98189" y="226.735757" transform="rotate(-0 104.98189 226.735757)">Formic acid dehydrogenation</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="104.98189" y="226.866069" transform="rotate(-0 104.98189 226.866069)">포름산 탈수소</text>
      </g>
     </g>
     <g id="ytick_8">
      <g id="line2d_14"/>
      <g id="text_15">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="104.98189" y="218.321928" transform="rotate(-0 104.98189 218.321928)">Ammonia synthesis</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="104.98189" y="218.45224" transform="rotate(-0 104.98189 218.45224)">암모니아 합성</text>
      </g>
     </g>
     <g id="ytick_9">
      <g id="line2d_15"/>
      <g id="text_16">
-      <!-- CO$_2$ to formate -->
-      <g style="fill: #1f2a30" transform="translate(64.54189 209.950755)">
+      <!-- CO$_2$ 포름산염 전환 -->
+      <g style="fill: #1f2a30" transform="translate(53.74189 210.111536)">
        <text>
-        <tspan x="0" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">C</tspan>
-        <tspan x="4.333008" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">O</tspan>
-        <tspan x="11.739068" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30"> </tspan>
-        <tspan x="13.40606" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">t</tspan>
-        <tspan x="15.073052" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">o</tspan>
-        <tspan x="18.409966" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30"> </tspan>
-        <tspan x="20.076959" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">f</tspan>
-        <tspan x="21.743951" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">o</tspan>
-        <tspan x="25.080865" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">r</tspan>
-        <tspan x="27.078912" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">m</tspan>
-        <tspan x="32.076959" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">a</tspan>
-        <tspan x="35.413873" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">t</tspan>
-        <tspan x="37.080865" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">e</tspan>
-        <tspan x="9.104541" y="1.167125" style="font-size: 4.2px; font-family: 'Arial'; fill: #1f2a30">2</tspan>
+        <tspan x="0" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">C</tspan>
+        <tspan x="3.808594" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">O</tspan>
+        <tspan x="10.970273" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+        <tspan x="13.079648" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">포</tspan>
+        <tspan x="19.079648" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">름</tspan>
+        <tspan x="25.079648" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">산</tspan>
+        <tspan x="31.079648" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">염</tspan>
+        <tspan x="37.079648" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+        <tspan x="39.189023" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">전</tspan>
+        <tspan x="45.189023" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">환</tspan>
+        <tspan x="8.503086" y="0.048438" style="font-size: 4.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">2</tspan>
        </text>
       </g>
      </g>
@@ -902,24 +899,16 @@ L 0 2
     <g id="ytick_10">
      <g id="line2d_16"/>
      <g id="text_17">
-      <!-- CO$_2$ methanation -->
-      <g style="fill: #1f2a30" transform="translate(58.54189 201.536926)">
+      <!-- CO$_2$ 메탄화 -->
+      <g style="fill: #1f2a30" transform="translate(73.90189 201.697707)">
        <text>
-        <tspan x="0" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">C</tspan>
-        <tspan x="4.333008" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">O</tspan>
-        <tspan x="11.739068" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30"> </tspan>
-        <tspan x="13.40606" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">m</tspan>
-        <tspan x="18.404107" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">e</tspan>
-        <tspan x="21.741021" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">t</tspan>
-        <tspan x="23.408013" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">h</tspan>
-        <tspan x="26.744927" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">a</tspan>
-        <tspan x="30.081841" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">n</tspan>
-        <tspan x="33.418755" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">a</tspan>
-        <tspan x="36.75567" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">t</tspan>
-        <tspan x="38.422662" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">i</tspan>
-        <tspan x="39.75567" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">o</tspan>
-        <tspan x="43.092584" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">n</tspan>
-        <tspan x="9.104541" y="1.167125" style="font-size: 4.2px; font-family: 'Arial'; fill: #1f2a30">2</tspan>
+        <tspan x="0" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">C</tspan>
+        <tspan x="3.808594" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">O</tspan>
+        <tspan x="10.970273" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+        <tspan x="13.079648" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">메</tspan>
+        <tspan x="19.079648" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">탄</tspan>
+        <tspan x="25.079648" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">화</tspan>
+        <tspan x="8.503086" y="0.048438" style="font-size: 4.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">2</tspan>
        </text>
       </g>
      </g>
@@ -927,36 +916,31 @@ L 0 2
     <g id="ytick_11">
      <g id="line2d_17"/>
      <g id="text_18">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="104.98189" y="193.117003" transform="rotate(-0 104.98189 193.117003)">Methane dry reforming</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="104.98189" y="193.210753" transform="rotate(-0 104.98189 193.210753)">메탄 건식 개질</text>
      </g>
     </g>
     <g id="ytick_12">
      <g id="line2d_18"/>
      <g id="text_19">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="104.98189" y="184.666612" transform="rotate(-0 104.98189 184.666612)">Methane pyrolysis</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="104.98189" y="184.796924" transform="rotate(-0 104.98189 184.796924)">메탄 열분해</text>
      </g>
     </g>
     <g id="ytick_13">
      <g id="line2d_19"/>
      <g id="text_20">
-      <!-- CO$_2$ to methanol -->
-      <g style="fill: #1f2a30" transform="translate(60.22189 176.295439)">
+      <!-- CO$_2$ 메탄올 전환 -->
+      <g style="fill: #1f2a30" transform="translate(59.74189 176.45622)">
        <text>
-        <tspan x="0" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">C</tspan>
-        <tspan x="4.333008" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">O</tspan>
-        <tspan x="11.739068" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30"> </tspan>
-        <tspan x="13.40606" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">t</tspan>
-        <tspan x="15.073052" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">o</tspan>
-        <tspan x="18.409966" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30"> </tspan>
-        <tspan x="20.076959" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">m</tspan>
-        <tspan x="25.075005" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">e</tspan>
-        <tspan x="28.41192" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">t</tspan>
-        <tspan x="30.078912" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">h</tspan>
-        <tspan x="33.415826" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">a</tspan>
-        <tspan x="36.75274" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">n</tspan>
-        <tspan x="40.089654" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">o</tspan>
-        <tspan x="43.426568" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">l</tspan>
-        <tspan x="9.104541" y="1.167125" style="font-size: 4.2px; font-family: 'Arial'; fill: #1f2a30">2</tspan>
+        <tspan x="0" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">C</tspan>
+        <tspan x="3.808594" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">O</tspan>
+        <tspan x="10.970273" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+        <tspan x="13.079648" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">메</tspan>
+        <tspan x="19.079648" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">탄</tspan>
+        <tspan x="25.079648" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">올</tspan>
+        <tspan x="31.079648" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+        <tspan x="33.189023" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">전</tspan>
+        <tspan x="39.189023" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">환</tspan>
+        <tspan x="8.503086" y="0.048438" style="font-size: 4.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">2</tspan>
        </text>
       </g>
      </g>
@@ -964,97 +948,79 @@ L 0 2
     <g id="ytick_14">
      <g id="line2d_20"/>
      <g id="text_21">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="104.98189" y="167.838953" transform="rotate(-0 104.98189 167.838953)">Olefin metathesis</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="104.98189" y="167.969266" transform="rotate(-0 104.98189 167.969266)">올레핀 복분해</text>
      </g>
     </g>
     <g id="ytick_15">
      <g id="line2d_21"/>
      <g id="text_22">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="104.98189" y="159.425124" transform="rotate(-0 104.98189 159.425124)">Methanol to olefins</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="104.98189" y="159.555437" transform="rotate(-0 104.98189 159.555437)">메탄올 올레핀 전환</text>
      </g>
     </g>
     <g id="ytick_16">
      <g id="line2d_22"/>
      <g id="text_23">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="104.98189" y="151.047858" transform="rotate(-0 104.98189 151.047858)">Steam methane reforming</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="104.98189" y="151.141608" transform="rotate(-0 104.98189 151.141608)">메탄 수증기 개질</text>
      </g>
     </g>
     <g id="ytick_17">
      <g id="line2d_23"/>
      <g id="text_24">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="104.98189" y="142.634029" transform="rotate(-0 104.98189 142.634029)">Selective acetylene hydrogenation</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="104.98189" y="142.727779" transform="rotate(-0 104.98189 142.727779)">아세틸렌 선택 수소화</text>
      </g>
     </g>
     <g id="ytick_18">
      <g id="line2d_24"/>
      <g id="text_25">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="104.98189" y="134.183637" transform="rotate(-0 104.98189 134.183637)">Ethylene epoxidation</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="104.98189" y="134.31395" transform="rotate(-0 104.98189 134.31395)">에틸렌 에폭시화</text>
      </g>
     </g>
     <g id="ytick_19">
      <g id="line2d_25"/>
      <g id="text_26">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="104.98189" y="125.769808" transform="rotate(-0 104.98189 125.769808)">Photocatalytic water splitting</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="104.98189" y="125.900121" transform="rotate(-0 104.98189 125.900121)">광촉매 물분해</text>
      </g>
     </g>
     <g id="ytick_20">
      <g id="line2d_26"/>
      <g id="text_27">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="104.98189" y="117.355979" transform="rotate(-0 104.98189 117.355979)">Propane dehydrogenation</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="104.98189" y="117.486292" transform="rotate(-0 104.98189 117.486292)">프로판 탈수소</text>
      </g>
     </g>
     <g id="ytick_21">
      <g id="line2d_27"/>
      <g id="text_28">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="104.98189" y="108.980588" transform="rotate(-0 104.98189 108.980588)">AEM electrolyzer OER</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="104.98189" y="109.072463" transform="rotate(-0 104.98189 109.072463)">AEM 수전해 OER</text>
      </g>
     </g>
     <g id="ytick_22">
      <g id="line2d_28"/>
      <g id="text_29">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="104.98189" y="100.564883" transform="rotate(-0 104.98189 100.564883)">Glycerol electro-oxidation</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="104.98189" y="100.658633" transform="rotate(-0 104.98189 100.658633)">글리세롤 전기산화</text>
      </g>
     </g>
     <g id="ytick_23">
      <g id="line2d_29"/>
      <g id="text_30">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="104.98189" y="92.114492" transform="rotate(-0 104.98189 92.114492)">Hydrogen evolution reaction</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="104.98189" y="92.244804" transform="rotate(-0 104.98189 92.244804)">수소 발생 반응</text>
      </g>
     </g>
     <g id="ytick_24">
      <g id="line2d_30"/>
      <g id="text_31">
-      <!-- Photocatalytic CO$_2$ reduction -->
-      <g style="fill: #1f2a30" transform="translate(27.82189 83.743319)">
+      <!-- 광촉매 CO$_2$ 환원 -->
+      <g style="fill: #1f2a30" transform="translate(59.74189 83.9341)">
        <text>
-        <tspan x="0" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">P</tspan>
-        <tspan x="4.001953" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">h</tspan>
-        <tspan x="7.338867" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">o</tspan>
-        <tspan x="10.675781" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">t</tspan>
-        <tspan x="12.342773" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">o</tspan>
-        <tspan x="15.679688" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">c</tspan>
-        <tspan x="18.679688" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">a</tspan>
-        <tspan x="22.016602" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">t</tspan>
-        <tspan x="23.683594" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">a</tspan>
-        <tspan x="27.020508" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">l</tspan>
-        <tspan x="28.353516" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">y</tspan>
-        <tspan x="31.353516" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">t</tspan>
-        <tspan x="33.020508" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">i</tspan>
-        <tspan x="34.353516" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">c</tspan>
-        <tspan x="37.353516" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30"> </tspan>
-        <tspan x="39.020508" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">C</tspan>
-        <tspan x="43.353516" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">O</tspan>
-        <tspan x="50.759576" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30"> </tspan>
-        <tspan x="52.426568" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">r</tspan>
-        <tspan x="54.424615" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">e</tspan>
-        <tspan x="57.761529" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">d</tspan>
-        <tspan x="61.098443" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">u</tspan>
-        <tspan x="64.435357" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">c</tspan>
-        <tspan x="67.435357" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">t</tspan>
-        <tspan x="69.102349" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">i</tspan>
-        <tspan x="70.435357" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">o</tspan>
-        <tspan x="73.772271" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">n</tspan>
-        <tspan x="48.125048" y="1.167125" style="font-size: 4.2px; font-family: 'Arial'; fill: #1f2a30">2</tspan>
+        <tspan x="0" y="-0.828125" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">광</tspan>
+        <tspan x="6" y="-0.828125" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">촉</tspan>
+        <tspan x="12" y="-0.828125" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">매</tspan>
+        <tspan x="18" y="-0.828125" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+        <tspan x="20.109375" y="-0.828125" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">C</tspan>
+        <tspan x="23.917969" y="-0.828125" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">O</tspan>
+        <tspan x="31.079648" y="-0.828125" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+        <tspan x="33.189023" y="-0.828125" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">환</tspan>
+        <tspan x="39.189023" y="-0.828125" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">원</tspan>
+        <tspan x="28.612461" y="0.095313" style="font-size: 4.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">2</tspan>
        </text>
       </g>
      </g>
@@ -1063,15 +1029,15 @@ L 0 2
      <g id="line2d_31"/>
      <g id="text_32">
       <!-- NH$_3$-SCR -->
-      <g style="fill: #1f2a30" transform="translate(78.88189 75.32949)">
+      <g style="fill: #1f2a30" transform="translate(80.44189 75.417146)">
        <text>
-        <tspan x="0" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">N</tspan>
-        <tspan x="4.333008" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">H</tspan>
-        <tspan x="11.405084" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">-</tspan>
-        <tspan x="13.40313" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">S</tspan>
-        <tspan x="17.405084" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">C</tspan>
-        <tspan x="21.738091" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">R</tspan>
-        <tspan x="8.770556" y="1.167125" style="font-size: 4.2px; font-family: 'Arial'; fill: #1f2a30">3</tspan>
+        <tspan x="0" y="-0.609375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">N</tspan>
+        <tspan x="4.46582" y="-0.609375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">H</tspan>
+        <tspan x="11.334531" y="-0.609375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">-</tspan>
+        <tspan x="13.795469" y="-0.609375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">S</tspan>
+        <tspan x="17.053281" y="-0.609375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">C</tspan>
+        <tspan x="20.861875" y="-0.609375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">R</tspan>
+        <tspan x="8.867344" y="0.314063" style="font-size: 4.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">3</tspan>
        </text>
       </g>
      </g>
@@ -1079,47 +1045,35 @@ L 0 2
     <g id="ytick_26">
      <g id="line2d_32"/>
      <g id="text_33">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="104.98189" y="66.911442" transform="rotate(-0 104.98189 66.911442)">PEM electrolyzer OER</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="104.98189" y="67.003317" transform="rotate(-0 104.98189 67.003317)">PEM 수전해 OER</text>
      </g>
     </g>
     <g id="ytick_27">
      <g id="line2d_33"/>
      <g id="text_34">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="104.98189" y="58.459176" transform="rotate(-0 104.98189 58.459176)">Bio-oil hydrodeoxygenation</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="104.98189" y="58.589488" transform="rotate(-0 104.98189 58.589488)">바이오오일 수첨탈산소</text>
      </g>
     </g>
     <g id="ytick_28">
      <g id="line2d_34"/>
      <g id="text_35">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="104.98189" y="50.081909" transform="rotate(-0 104.98189 50.081909)">Syngas to methanol</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="104.98189" y="50.175659" transform="rotate(-0 104.98189 50.175659)">합성가스 메탄올 전환</text>
      </g>
     </g>
     <g id="ytick_29">
      <g id="line2d_35"/>
      <g id="text_36">
-      <!-- CO$_2$ electroreduction -->
-      <g style="fill: #1f2a30" transform="translate(48.88189 41.674174)">
+      <!-- CO$_2$ 전기환원 -->
+      <g style="fill: #1f2a30" transform="translate(67.90189 41.834955)">
        <text>
-        <tspan x="0" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">C</tspan>
-        <tspan x="4.333008" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">O</tspan>
-        <tspan x="11.739068" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30"> </tspan>
-        <tspan x="13.40606" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">e</tspan>
-        <tspan x="16.742974" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">l</tspan>
-        <tspan x="18.075982" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">e</tspan>
-        <tspan x="21.412896" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">c</tspan>
-        <tspan x="24.412896" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">t</tspan>
-        <tspan x="26.079888" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">r</tspan>
-        <tspan x="28.077935" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">o</tspan>
-        <tspan x="31.414849" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">r</tspan>
-        <tspan x="33.412896" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">e</tspan>
-        <tspan x="36.74981" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">d</tspan>
-        <tspan x="40.086724" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">u</tspan>
-        <tspan x="43.423638" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">c</tspan>
-        <tspan x="46.423638" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">t</tspan>
-        <tspan x="48.09063" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">i</tspan>
-        <tspan x="49.423638" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">o</tspan>
-        <tspan x="52.760552" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">n</tspan>
-        <tspan x="9.104541" y="1.167125" style="font-size: 4.2px; font-family: 'Arial'; fill: #1f2a30">2</tspan>
+        <tspan x="0" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">C</tspan>
+        <tspan x="3.808594" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">O</tspan>
+        <tspan x="10.970273" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+        <tspan x="13.079648" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">전</tspan>
+        <tspan x="19.079648" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">기</tspan>
+        <tspan x="25.079648" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">환</tspan>
+        <tspan x="31.079648" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">원</tspan>
+        <tspan x="8.503086" y="0.048438" style="font-size: 4.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">2</tspan>
        </text>
       </g>
      </g>
@@ -1127,37 +1081,20 @@ L 0 2
     <g id="ytick_30">
      <g id="line2d_36"/>
      <g id="text_37">
-      <!-- Electrochemical N$_2$ reduction -->
-      <g style="fill: #1f2a30" transform="translate(27.52189 33.230345)">
+      <!-- 전기화학적 N$_2$ 환원 -->
+      <g style="fill: #1f2a30" transform="translate(51.64189 33.421126)">
        <text>
-        <tspan x="0" y="-0.703125" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">E</tspan>
-        <tspan x="4.001953" y="-0.703125" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">l</tspan>
-        <tspan x="5.334961" y="-0.703125" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">e</tspan>
-        <tspan x="8.671875" y="-0.703125" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">c</tspan>
-        <tspan x="11.671875" y="-0.703125" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">t</tspan>
-        <tspan x="13.338867" y="-0.703125" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">r</tspan>
-        <tspan x="15.336914" y="-0.703125" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">o</tspan>
-        <tspan x="18.673828" y="-0.703125" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">c</tspan>
-        <tspan x="21.673828" y="-0.703125" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">h</tspan>
-        <tspan x="25.010742" y="-0.703125" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">e</tspan>
-        <tspan x="28.347656" y="-0.703125" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">m</tspan>
-        <tspan x="33.345703" y="-0.703125" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">i</tspan>
-        <tspan x="34.678711" y="-0.703125" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">c</tspan>
-        <tspan x="37.678711" y="-0.703125" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">a</tspan>
-        <tspan x="41.015625" y="-0.703125" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">l</tspan>
-        <tspan x="42.348633" y="-0.703125" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30"> </tspan>
-        <tspan x="44.015625" y="-0.703125" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">N</tspan>
-        <tspan x="51.087701" y="-0.703125" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30"> </tspan>
-        <tspan x="52.754693" y="-0.703125" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">r</tspan>
-        <tspan x="54.75274" y="-0.703125" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">e</tspan>
-        <tspan x="58.089654" y="-0.703125" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">d</tspan>
-        <tspan x="61.426568" y="-0.703125" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">u</tspan>
-        <tspan x="64.763482" y="-0.703125" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">c</tspan>
-        <tspan x="67.763482" y="-0.703125" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">t</tspan>
-        <tspan x="69.430474" y="-0.703125" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">i</tspan>
-        <tspan x="70.763482" y="-0.703125" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">o</tspan>
-        <tspan x="74.100396" y="-0.703125" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">n</tspan>
-        <tspan x="48.453173" y="1.089" style="font-size: 4.2px; font-family: 'Arial'; fill: #1f2a30">2</tspan>
+        <tspan x="0" y="-0.84375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">전</tspan>
+        <tspan x="6" y="-0.84375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">기</tspan>
+        <tspan x="12" y="-0.84375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">화</tspan>
+        <tspan x="18" y="-0.84375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">학</tspan>
+        <tspan x="24" y="-0.84375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">적</tspan>
+        <tspan x="30" y="-0.84375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+        <tspan x="32.109375" y="-0.84375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">N</tspan>
+        <tspan x="39.22125" y="-0.84375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+        <tspan x="41.330625" y="-0.84375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">환</tspan>
+        <tspan x="47.330625" y="-0.84375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">원</tspan>
+        <tspan x="36.754063" y="0.079688" style="font-size: 4.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">2</tspan>
        </text>
       </g>
      </g>
@@ -1185,37 +1122,37 @@ L 274.988976 280.119685
    </g>
    <g id="legend_1">
     <g id="patch_95">
-     <path d="M 110.72189 22.669047 
-L 116.32189 22.669047 
-L 116.32189 18.749047 
-L 110.72189 18.749047 
+     <path d="M 110.72189 22.458172 
+L 116.32189 22.458172 
+L 116.32189 18.538172 
+L 110.72189 18.538172 
 z
 " style="fill: #1b6f78"/>
     </g>
     <g id="text_38">
-     <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="119.12189" y="22.669047" transform="rotate(-0 119.12189 22.669047)">Ranked first at reference conditions</text>
+     <text style="font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="119.12189" y="22.458172" transform="rotate(-0 119.12189 22.458172)">기준 조건 1위 후보</text>
     </g>
     <g id="patch_96">
-     <path d="M 212.24639 22.669047 
-L 217.84639 22.669047 
-L 217.84639 18.749047 
-L 212.24639 18.749047 
+     <path d="M 172.352515 22.458172 
+L 177.952515 22.458172 
+L 177.952515 18.538172 
+L 172.352515 18.538172 
 z
 " style="fill: #b8702f"/>
     </g>
     <g id="text_39">
-     <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="220.64639" y="22.669047" transform="rotate(-0 220.64639 22.669047)">Closest competitor</text>
+     <text style="font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="180.752515" y="22.458172" transform="rotate(-0 180.752515 22.458172)">가장 가까운 경쟁 후보</text>
     </g>
     <g id="patch_97">
-     <path d="M 272.05614 22.669047 
-L 277.65614 22.669047 
-L 277.65614 18.749047 
-L 272.05614 18.749047 
+     <path d="M 242.098765 22.458172 
+L 247.698765 22.458172 
+L 247.698765 18.538172 
+L 242.098765 18.538172 
 z
 " style="fill: #d9dee1"/>
     </g>
     <g id="text_40">
-     <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="280.45614" y="22.669047" transform="rotate(-0 280.45614 22.669047)">Other candidates</text>
+     <text style="font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="250.498765" y="22.458172" transform="rotate(-0 250.498765 22.458172)">나머지 후보</text>
     </g>
    </g>
   </g>
@@ -1316,7 +1253,7 @@ z
       </g>
      </g>
      <g id="text_41">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="353.19685" y="124.597837" transform="rotate(-0 353.19685 124.597837)">0</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="353.19685" y="124.858462" transform="rotate(-0 353.19685 124.858462)">0</text>
      </g>
     </g>
     <g id="xtick_8">
@@ -1326,7 +1263,7 @@ z
       </g>
      </g>
      <g id="text_42">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="401.130709" y="124.597837" transform="rotate(-0 401.130709 124.597837)">10</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="401.130709" y="124.858462" transform="rotate(-0 401.130709 124.858462)">10</text>
      </g>
     </g>
     <g id="xtick_9">
@@ -1336,7 +1273,7 @@ z
       </g>
      </g>
      <g id="text_43">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="449.064567" y="124.597837" transform="rotate(-0 449.064567 124.597837)">20</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="449.064567" y="124.858462" transform="rotate(-0 449.064567 124.858462)">20</text>
      </g>
     </g>
     <g id="xtick_10">
@@ -1346,42 +1283,42 @@ z
       </g>
      </g>
      <g id="text_44">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="496.998425" y="124.597837" transform="rotate(-0 496.998425 124.597837)">30</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="496.998425" y="124.858462" transform="rotate(-0 496.998425 124.858462)">30</text>
      </g>
     </g>
     <g id="text_45">
-     <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: middle" x="425.097638" y="134.449337" transform="rotate(-0 425.097638 134.449337)">Families keeping the same leader (of 30)</text>
+     <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: middle" x="425.097638" y="135.2739" transform="rotate(-0 425.097638 135.2739)">1위가 유지되는 반응군 수 (30개 중)</text>
     </g>
    </g>
    <g id="matplotlib.axis_4">
     <g id="ytick_31">
      <g id="line2d_43"/>
      <g id="text_46">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="349.69685" y="37.807671" transform="rotate(-0 349.69685 37.807671)">Majority of cases</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="349.69685" y="37.901421" transform="rotate(-0 349.69685 37.901421)">과반 경우에서 유지</text>
      </g>
     </g>
     <g id="ytick_32">
      <g id="line2d_44"/>
      <g id="text_47">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="349.69685" y="55.165526" transform="rotate(-0 349.69685 55.165526)">Any one candidate removed</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="349.69685" y="55.295838" transform="rotate(-0 349.69685 55.295838)">후보 하나 제외</text>
      </g>
     </g>
     <g id="ytick_33">
      <g id="line2d_45"/>
      <g id="text_48">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="349.69685" y="72.596505" transform="rotate(-0 349.69685 72.596505)">Scores moved ±2 points</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="349.69685" y="72.690255" transform="rotate(-0 349.69685 72.690255)">점수 ±2점 이동</text>
      </g>
     </g>
     <g id="ytick_34">
      <g id="line2d_46"/>
      <g id="text_49">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="349.69685" y="89.990921" transform="rotate(-0 349.69685 89.990921)">Scores moved ±5 points</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="349.69685" y="90.084671" transform="rotate(-0 349.69685 90.084671)">점수 ±5점 이동</text>
      </g>
     </g>
     <g id="ytick_35">
      <g id="line2d_47"/>
      <g id="text_50">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="349.69685" y="107.385338" transform="rotate(-0 349.69685 107.385338)">Scores moved ±10 points</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="349.69685" y="107.479088" transform="rotate(-0 349.69685 107.479088)">점수 ±10점 이동</text>
      </g>
     </g>
    </g>
@@ -1391,19 +1328,19 @@ L 496.998425 114.80315
 " style="fill: none; stroke: #1f2a30; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_51">
-    <text style="font-size: 6px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="447.147213" y="37.174859" transform="rotate(-0 447.147213 37.174859)">19</text>
+    <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="447.147213" y="37.192203" transform="rotate(-0 447.147213 37.192203)">19</text>
    </g>
    <g id="text_52">
-    <text style="font-size: 6px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="456.733984" y="54.569276" transform="rotate(-0 456.733984 54.569276)">21</text>
+    <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="456.733984" y="54.586619" transform="rotate(-0 456.733984 54.586619)">21</text>
    </g>
    <g id="text_53">
-    <text style="font-size: 6px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="451.940598" y="71.963692" transform="rotate(-0 451.940598 71.963692)">20</text>
+    <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="451.940598" y="71.981036" transform="rotate(-0 451.940598 71.981036)">20</text>
    </g>
    <g id="text_54">
-    <text style="font-size: 6px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="404.00674" y="89.358109" transform="rotate(-0 404.00674 89.358109)">10</text>
+    <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="404.00674" y="89.375453" transform="rotate(-0 404.00674 89.375453)">10</text>
    </g>
    <g id="text_55">
-    <text style="font-size: 6px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="389.626583" y="106.752525" transform="rotate(-0 389.626583 106.752525)">7</text>
+    <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="389.626583" y="106.769869" transform="rotate(-0 389.626583 106.769869)">7</text>
    </g>
   </g>
   <g id="axes_3">
@@ -1423,7 +1360,7 @@ z
       </g>
      </g>
      <g id="text_56">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="364.25851" y="286.852955" transform="rotate(-0 364.25851 286.852955)">40</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="364.25851" y="287.11358" transform="rotate(-0 364.25851 287.11358)">40</text>
      </g>
     </g>
     <g id="xtick_12">
@@ -1433,7 +1370,7 @@ z
       </g>
      </g>
      <g id="text_57">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="386.381829" y="286.852955" transform="rotate(-0 386.381829 286.852955)">50</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="386.381829" y="287.11358" transform="rotate(-0 386.381829 287.11358)">50</text>
      </g>
     </g>
     <g id="xtick_13">
@@ -1443,7 +1380,7 @@ z
       </g>
      </g>
      <g id="text_58">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="408.505148" y="286.852955" transform="rotate(-0 408.505148 286.852955)">60</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="408.505148" y="287.11358" transform="rotate(-0 408.505148 287.11358)">60</text>
      </g>
     </g>
     <g id="xtick_14">
@@ -1453,7 +1390,7 @@ z
       </g>
      </g>
      <g id="text_59">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="430.628468" y="286.852955" transform="rotate(-0 430.628468 286.852955)">70</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="430.628468" y="287.11358" transform="rotate(-0 430.628468 287.11358)">70</text>
      </g>
     </g>
     <g id="xtick_15">
@@ -1463,7 +1400,7 @@ z
       </g>
      </g>
      <g id="text_60">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="452.751787" y="286.852955" transform="rotate(-0 452.751787 286.852955)">80</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="452.751787" y="287.11358" transform="rotate(-0 452.751787 287.11358)">80</text>
      </g>
     </g>
     <g id="xtick_16">
@@ -1473,7 +1410,7 @@ z
       </g>
      </g>
      <g id="text_61">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="474.875106" y="286.852955" transform="rotate(-0 474.875106 286.852955)">90</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="474.875106" y="287.11358" transform="rotate(-0 474.875106 287.11358)">90</text>
      </g>
     </g>
     <g id="xtick_17">
@@ -1483,11 +1420,11 @@ z
       </g>
      </g>
      <g id="text_62">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="496.998425" y="286.852955" transform="rotate(-0 496.998425 286.852955)">100</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="496.998425" y="287.11358" transform="rotate(-0 496.998425 287.11358)">100</text>
      </g>
     </g>
     <g id="text_63">
-     <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: middle" x="425.097638" y="296.704455" transform="rotate(-0 425.097638 296.704455)">Composite score</text>
+     <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: middle" x="425.097638" y="297.391018" transform="rotate(-0 425.097638 297.391018)">종합 점수</text>
     </g>
    </g>
    <g id="matplotlib.axis_6">
@@ -1495,64 +1432,64 @@ z
      <g id="line2d_55"/>
      <g id="text_64">
       <!-- Co/MgO–La$_2$O$_3$ -->
-      <g style="fill: #1f2a30" transform="translate(307.15685 180.926829)">
+      <g style="fill: #1f2a30" transform="translate(307.39685 181.023392)">
        <text>
-        <tspan x="0" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">C</tspan>
-        <tspan x="4.333008" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">o</tspan>
-        <tspan x="7.669922" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">/</tspan>
-        <tspan x="9.336914" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">M</tspan>
-        <tspan x="14.334961" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">g</tspan>
-        <tspan x="17.671875" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">O</tspan>
-        <tspan x="22.338867" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">–</tspan>
-        <tspan x="25.675781" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">L</tspan>
-        <tspan x="29.012695" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">a</tspan>
-        <tspan x="35.088677" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">O</tspan>
-        <tspan x="32.45415" y="1.167125" style="font-size: 4.2px; font-family: 'Arial'; fill: #1f2a30">2</tspan>
-        <tspan x="39.86021" y="1.167125" style="font-size: 4.2px; font-family: 'Arial'; fill: #1f2a30">3</tspan>
+        <tspan x="0" y="-0.609375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">C</tspan>
+        <tspan x="3.808594" y="-0.609375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">o</tspan>
+        <tspan x="7.40332" y="-0.609375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">/</tspan>
+        <tspan x="9.779297" y="-0.609375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">M</tspan>
+        <tspan x="15.28125" y="-0.609375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">g</tspan>
+        <tspan x="18.893555" y="-0.609375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">O</tspan>
+        <tspan x="23.53418" y="-0.609375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">–</tspan>
+        <tspan x="26.613281" y="-0.609375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">L</tspan>
+        <tspan x="29.493164" y="-0.609375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">a</tspan>
+        <tspan x="35.134336" y="-0.609375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">O</tspan>
+        <tspan x="32.667148" y="0.314063" style="font-size: 4.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">2</tspan>
+        <tspan x="39.828828" y="0.314063" style="font-size: 4.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">3</tspan>
        </text>
       </g>
-      <text style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30" transform="translate(317.348413 187.940454)">4.74 USD/lb</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30" transform="translate(317.127163 187.989767)">4.74 USD/lb</text>
      </g>
     </g>
     <g id="ytick_37">
      <g id="line2d_56"/>
      <g id="text_65">
       <!-- Ni–MgO/CeO$_2$ -->
-      <g style="fill: #1f2a30" transform="translate(310.93685 214.972578)">
+      <g style="fill: #1f2a30" transform="translate(310.21685 215.052265)">
        <text>
-        <tspan x="0" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">N</tspan>
-        <tspan x="4.333008" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">i</tspan>
-        <tspan x="5.666016" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">–</tspan>
-        <tspan x="9.00293" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">M</tspan>
-        <tspan x="14.000977" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">g</tspan>
-        <tspan x="17.337891" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">O</tspan>
-        <tspan x="22.004883" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">/</tspan>
-        <tspan x="23.671875" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">C</tspan>
-        <tspan x="28.004883" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">e</tspan>
-        <tspan x="31.341797" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">O</tspan>
-        <tspan x="36.11333" y="1.167125" style="font-size: 4.2px; font-family: 'Arial'; fill: #1f2a30">2</tspan>
+        <tspan x="0" y="-0.5" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">N</tspan>
+        <tspan x="4.59082" y="-0.5" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">i</tspan>
+        <tspan x="6.067383" y="-0.5" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">–</tspan>
+        <tspan x="9.146484" y="-0.5" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">M</tspan>
+        <tspan x="14.648438" y="-0.5" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">g</tspan>
+        <tspan x="18.260742" y="-0.5" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">O</tspan>
+        <tspan x="22.901367" y="-0.5" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">/</tspan>
+        <tspan x="25.277344" y="-0.5" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">C</tspan>
+        <tspan x="29.085938" y="-0.5" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">e</tspan>
+        <tspan x="32.296875" y="-0.5" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">O</tspan>
+        <tspan x="36.991367" y="0.423438" style="font-size: 4.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">2</tspan>
        </text>
       </g>
-      <text style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30" transform="translate(317.348413 221.926203)">5.81 USD/lb</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30" transform="translate(317.127163 222.01864)">5.81 USD/lb</text>
      </g>
     </g>
     <g id="ytick_38">
      <g id="line2d_57"/>
      <g id="text_66">
       <!-- Ni/Al$_2$O$_3$ -->
-      <g style="fill: #1f2a30" transform="translate(326.83685 248.958326)">
+      <g style="fill: #1f2a30" transform="translate(326.11685 249.136451)">
        <text>
-        <tspan x="0" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">N</tspan>
-        <tspan x="4.333008" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">i</tspan>
-        <tspan x="5.666016" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">/</tspan>
-        <tspan x="7.333008" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">A</tspan>
-        <tspan x="11.334961" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">l</tspan>
-        <tspan x="15.407037" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">O</tspan>
-        <tspan x="12.772509" y="1.167125" style="font-size: 4.2px; font-family: 'Arial'; fill: #1f2a30">2</tspan>
-        <tspan x="20.17857" y="1.167125" style="font-size: 4.2px; font-family: 'Arial'; fill: #1f2a30">3</tspan>
+        <tspan x="0" y="-0.4375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">N</tspan>
+        <tspan x="4.59082" y="-0.4375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">i</tspan>
+        <tspan x="6.067383" y="-0.4375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">/</tspan>
+        <tspan x="8.443359" y="-0.4375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">A</tspan>
+        <tspan x="12.392578" y="-0.4375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">l</tspan>
+        <tspan x="16.390195" y="-0.4375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">O</tspan>
+        <tspan x="13.923008" y="0.485938" style="font-size: 4.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">2</tspan>
+        <tspan x="21.084688" y="0.485938" style="font-size: 4.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">3</tspan>
        </text>
       </g>
-      <text style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30" transform="translate(317.348413 255.971951)">4.36 USD/lb</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30" transform="translate(317.127163 256.021263)">4.36 USD/lb</text>
      </g>
     </g>
    </g>
@@ -1602,10 +1539,10 @@ z
     </g>
    </g>
    <g id="text_67">
-    <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: middle; fill: #1b6f78" x="473.326474" y="173.152084" transform="rotate(-0 473.326474 173.152084)">89.3 (1st)</text>
+    <text style="font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1b6f78" x="473.326474" y="173.006834" transform="rotate(-0 473.326474 173.006834)">89.3 (1위)</text>
    </g>
    <g id="text_68">
-    <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: middle; fill: #b8702f" x="446.999724" y="193.306013" transform="rotate(-0 446.999724 193.306013)">77.4</text>
+    <text style="font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #b8702f" x="446.999724" y="193.549263" transform="rotate(-0 446.999724 193.549263)">77.4</text>
    </g>
    <g id="line2d_64">
     <g clip-path="url(#p44ad44cc80)">
@@ -1613,10 +1550,10 @@ z
     </g>
    </g>
    <g id="text_69">
-    <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: middle; fill: #1b6f78" x="469.786743" y="207.233457" transform="rotate(-0 469.786743 207.233457)">87.7</text>
+    <text style="font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1b6f78" x="469.786743" y="207.022582" transform="rotate(-0 469.786743 207.022582)">87.7</text>
    </g>
    <g id="text_70">
-    <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: middle; fill: #b8702f" x="370.231806" y="227.321761" transform="rotate(-0 370.231806 227.321761)">42.7</text>
+    <text style="font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #b8702f" x="370.231806" y="227.565011" transform="rotate(-0 370.231806 227.565011)">42.7</text>
    </g>
    <g id="line2d_65">
     <g clip-path="url(#p44ad44cc80)">
@@ -1624,10 +1561,10 @@ z
     </g>
    </g>
    <g id="text_71">
-    <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: middle; fill: #1b6f78" x="468.90181" y="241.249205" transform="rotate(-0 468.90181 241.249205)">87.3</text>
+    <text style="font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1b6f78" x="468.90181" y="241.03833" transform="rotate(-0 468.90181 241.03833)">87.3</text>
    </g>
    <g id="text_72">
-    <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: middle; fill: #b8702f" x="468.90181" y="261.405759" transform="rotate(-0 468.90181 261.405759)">87.3 (1st)</text>
+    <text style="font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #b8702f" x="468.90181" y="261.701509" transform="rotate(-0 468.90181 261.701509)">87.3 (1위)</text>
    </g>
    <g id="line2d_66">
     <defs>
@@ -1686,11 +1623,11 @@ z
 " style="stroke: #1b6f78"/>
      </defs>
      <g>
-      <use xlink:href="#m1852e44320" x="359.35685" y="262.703893" style="fill: #1b6f78; stroke: #1b6f78"/>
+      <use xlink:href="#m1852e44320" x="359.35685" y="262.038893" style="fill: #1b6f78; stroke: #1b6f78"/>
      </g>
     </g>
     <g id="text_73">
-     <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="364.95685" y="264.663893" transform="rotate(-0 364.95685 264.663893)">Full candidate set</text>
+     <text style="font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="364.95685" y="263.998893" transform="rotate(-0 364.95685 263.998893)">전체 후보 집합</text>
     </g>
     <g id="line2d_70">
      <defs>
@@ -1707,22 +1644,22 @@ z
 " style="stroke: #b8702f"/>
      </defs>
      <g>
-      <use xlink:href="#mff290168fb" x="359.35685" y="270.625268" style="fill: #b8702f; stroke: #b8702f"/>
+      <use xlink:href="#mff290168fb" x="359.35685" y="270.414393" style="fill: #b8702f; stroke: #b8702f"/>
      </g>
     </g>
     <g id="text_74">
-     <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="364.95685" y="272.585268" transform="rotate(-0 364.95685 272.585268)">Ru candidate removed</text>
+     <text style="font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="364.95685" y="272.374393" transform="rotate(-0 364.95685 272.374393)">Ru 후보 제외</text>
     </g>
    </g>
   </g>
   <g id="text_75">
-   <text style="font-weight: 700; font-size: 8px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="5.045669" y="10.714961" transform="rotate(-0 5.045669 10.714961)">a</text>
+   <text style="font-weight: 700; font-size: 8px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="5.045669" y="10.714961" transform="rotate(-0 5.045669 10.714961)">a</text>
   </g>
   <g id="text_76">
-   <text style="font-weight: 700; font-size: 8px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="320.4" y="10.714961" transform="rotate(-0 320.4 10.714961)">b</text>
+   <text style="font-weight: 700; font-size: 8px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="320.4" y="10.714961" transform="rotate(-0 320.4 10.714961)">b</text>
   </g>
   <g id="text_77">
-   <text style="font-weight: 700; font-size: 8px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="320.4" y="151.540157" transform="rotate(-0 320.4 151.540157)">c</text>
+   <text style="font-weight: 700; font-size: 8px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="320.4" y="151.540157" transform="rotate(-0 320.4 151.540157)">c</text>
   </g>
  </g>
  <defs>

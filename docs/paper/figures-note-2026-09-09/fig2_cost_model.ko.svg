@@ -120,154 +120,154 @@ z
 " clip-path="url(#pe3d6105361)" style="fill: #eaf1f2; stroke: #1b6f78; stroke-width: 0.6; stroke-linejoin: miter"/>
    </g>
    <g id="text_1">
-    <text style="font-weight: 700; font-size: 6.6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="53.858268" y="14.63728" transform="rotate(-0 53.858268 14.63728)">Formulation</text>
+    <text style="font-weight: 700; font-size: 6.6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="53.858268" y="14.651718" transform="rotate(-0 53.858268 14.651718)">조성</text>
    </g>
    <g id="text_2">
-    <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: middle; fill: #5b6870" x="53.858268" y="23.786252" transform="rotate(-0 53.858268 23.786252)">components, wt%</text>
+    <text style="font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #5b6870" x="53.858268" y="23.768315" transform="rotate(-0 53.858268 23.768315)">성분, wt%</text>
    </g>
    <g id="text_3">
-    <text style="font-weight: 700; font-size: 6.6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="53.858268" y="53.923509" transform="rotate(-0 53.858268 53.923509)">Preparation route</text>
+    <text style="font-weight: 700; font-size: 6.6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="53.858268" y="53.937947" transform="rotate(-0 53.858268 53.937947)">제조 경로</text>
    </g>
    <g id="text_4">
-    <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: middle; fill: #5b6870" x="53.858268" y="63.038356" transform="rotate(-0 53.858268 63.038356)">operations, order size</text>
+    <text style="font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #5b6870" x="53.858268" y="63.054543" transform="rotate(-0 53.858268 63.054543)">공정, 주문 규모</text>
    </g>
    <g id="text_5">
-    <text style="font-weight: 700; font-size: 6.6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="53.858268" y="93.209738" transform="rotate(-0 53.858268 93.209738)">Price basis</text>
+    <text style="font-weight: 700; font-size: 6.6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="53.858268" y="93.224176" transform="rotate(-0 53.858268 93.224176)">가격 기준</text>
    </g>
    <g id="text_6">
-    <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: middle; fill: #5b6870" x="53.858268" y="102.35871" transform="rotate(-0 53.858268 102.35871)">spot or reference month</text>
+    <text style="font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #5b6870" x="53.858268" y="102.340772" transform="rotate(-0 53.858268 102.340772)">현물 또는 기준월</text>
    </g>
    <g id="text_7">
-    <text style="font-weight: 700; font-size: 6.8px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="188.503937" y="13.928745" transform="rotate(-0 188.503937 13.928745)">Materials</text>
+    <text style="font-weight: 700; font-size: 6.8px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="188.503937" y="13.94362" transform="rotate(-0 188.503937 13.94362)">재료비</text>
    </g>
    <g id="text_8">
     <!-- $C_\mathrm{m}=\sum_i w_i\,c_i$ -->
-    <g style="fill: #1f2a30" transform="translate(168.422937 29.684145)">
+    <g style="fill: #1f2a30" transform="translate(168.465937 29.512145)">
      <text>
-      <tspan x="0" y="-0.453125" style="font-style: italic; font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">C</tspan>
-      <tspan x="24.909344" y="-0.453125" style="font-style: italic; font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">w</tspan>
-      <tspan x="34.104974" y="-0.453125" style="font-style: italic; font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">c</tspan>
-      <tspan x="6.228699" y="2.115588" style="font-size: 6.02px; font-family: 'Arial'; fill: #1f2a30">m</tspan>
-      <tspan x="13.123041" y="-0.453125" style="font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">=</tspan>
-      <tspan x="19.596844" y="-0.453125" style="font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">∑</tspan>
-      <tspan x="21.596844" y="7.55625" style="font-style: italic; font-size: 6.02px; font-family: 'Arial'; fill: #1f2a30">i</tspan>
-      <tspan x="31.138043" y="2.115588" style="font-style: italic; font-size: 6.02px; font-family: 'Arial'; fill: #1f2a30">i</tspan>
-      <tspan x="38.417474" y="2.115588" style="font-style: italic; font-size: 6.02px; font-family: 'Arial'; fill: #1f2a30">i</tspan>
+      <tspan x="0" y="-0.421875" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">C</tspan>
+      <tspan x="12.536194" y="-0.421875" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">=</tspan>
+      <tspan x="20.097388" y="-0.421875" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">∑</tspan>
+      <tspan x="25.081763" y="-0.421875" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">w</tspan>
+      <tspan x="34.414491" y="-0.421875" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">c</tspan>
+      <tspan x="5.474854" y="0.965625" style="font-size: 6.02px; font-family: 'Malgun Gothic'; fill: #1f2a30">m</tspan>
+      <tspan x="22.097388" y="8.040625" style="font-size: 6.02px; font-family: 'Malgun Gothic'; fill: #1f2a30">i</tspan>
+      <tspan x="31.432593" y="0.965625" style="font-size: 6.02px; font-family: 'Malgun Gothic'; fill: #1f2a30">i</tspan>
+      <tspan x="38.491151" y="0.965625" style="font-size: 6.02px; font-family: 'Malgun Gothic'; fill: #1f2a30">i</tspan>
      </text>
     </g>
    </g>
    <g id="text_9">
-    <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="188.503937" y="45.583773" transform="rotate(-0 188.503937 45.583773)">unit price × mass fraction</text>
+    <text style="font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="188.503937" y="45.565835" transform="rotate(-0 188.503937 45.565835)">단가 × 질량 분율</text>
    </g>
    <g id="text_10">
-    <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="188.503937" y="53.154746" transform="rotate(-0 188.503937 53.154746)">purchased input: a = w/(f·p·y)</text>
+    <text style="font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="188.503937" y="53.420309" transform="rotate(-0 188.503937 53.420309)">구매 원료: a = w/(f·p·y)</text>
    </g>
    <g id="text_11">
-    <text style="font-weight: 700; font-size: 6.8px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="188.503937" y="73.48855" transform="rotate(-0 188.503937 73.48855)">Processing (Step Method)</text>
+    <text style="font-weight: 700; font-size: 6.8px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="188.503937" y="73.829081" transform="rotate(-0 188.503937 73.829081)">가공비 (Step Method)</text>
    </g>
    <g id="text_12">
     <!-- $C_\mathrm{p}=24\,T\,I\,\sum_j H_j\,/\,M$ -->
-    <g style="fill: #1f2a30" transform="translate(156.554937 88.602137)">
+    <g style="fill: #1f2a30" transform="translate(155.866937 88.344137)">
      <text>
-      <tspan x="0" y="-0.453125" style="font-style: italic; font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">C</tspan>
-      <tspan x="28.71643" y="-0.453125" style="font-style: italic; font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">T</tspan>
-      <tspan x="35.182396" y="-0.453125" style="font-style: italic; font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">I</tspan>
-      <tspan x="44.08867" y="-0.453125" style="font-style: italic; font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">H</tspan>
-      <tspan x="56.878074" y="-0.453125" style="font-style: italic; font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">M</tspan>
-      <tspan x="6.228699" y="2.115588" style="font-size: 6.02px; font-family: 'Arial'; fill: #1f2a30">p</tspan>
-      <tspan x="11.451526" y="-0.453125" style="font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">=</tspan>
-      <tspan x="17.925329" y="-0.453125" style="font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">2</tspan>
-      <tspan x="22.722143" y="-0.453125" style="font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">4</tspan>
-      <tspan x="38.77617" y="-0.453125" style="font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">∑</tspan>
-      <tspan x="53.2843" y="-0.453125" style="font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">/</tspan>
-      <tspan x="39.77617" y="7.55625" style="font-style: italic; font-size: 6.02px; font-family: 'Arial'; fill: #1f2a30">j</tspan>
-      <tspan x="50.317369" y="2.115588" style="font-style: italic; font-size: 6.02px; font-family: 'Arial'; fill: #1f2a30">j</tspan>
+      <tspan x="0" y="-0.421875" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">C</tspan>
+      <tspan x="10.849939" y="-0.421875" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">=</tspan>
+      <tspan x="18.411133" y="-0.421875" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">2</tspan>
+      <tspan x="23.161621" y="-0.421875" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">4</tspan>
+      <tspan x="29.176966" y="-0.421875" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">T</tspan>
+      <tspan x="35.044911" y="-0.421875" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">I</tspan>
+      <tspan x="38.638687" y="-0.421875" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">∑</tspan>
+      <tspan x="43.623062" y="-0.421875" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">H</tspan>
+      <tspan x="52.854715" y="-0.421875" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">/</tspan>
+      <tspan x="57.535039" y="-0.421875" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">M</tspan>
+      <tspan x="5.474854" y="0.965625" style="font-size: 6.02px; font-family: 'Malgun Gothic'; fill: #1f2a30">p</tspan>
+      <tspan x="40.638687" y="8.040625" style="font-size: 6.02px; font-family: 'Malgun Gothic'; fill: #1f2a30">j</tspan>
+      <tspan x="49.872818" y="0.965625" style="font-size: 6.02px; font-family: 'Malgun Gothic'; fill: #1f2a30">j</tspan>
      </text>
     </g>
    </g>
    <g id="text_13">
-    <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="188.503937" y="105.113952" transform="rotate(-0 188.503937 105.113952)">hourly rates at the fitted scale class</text>
+    <text style="font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="188.503937" y="105.128827" transform="rotate(-0 188.503937 105.128827)">맞춰진 규모 등급의 시간당 단가</text>
    </g>
    <g id="text_14">
-    <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="188.503937" y="112.683613" transform="rotate(-0 188.503937 112.683613)">campaign time, index escalation, mass produced</text>
+    <text style="font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="188.503937" y="112.732613" transform="rotate(-0 188.503937 112.732613)">캠페인 시간, 지수 보정, 생산 질량</text>
    </g>
    <g id="text_15">
-    <text style="font-weight: 700; font-size: 6.8px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="342.992126" y="40.53881" transform="rotate(-0 342.992126 40.53881)">Overhead and margin</text>
+    <text style="font-weight: 700; font-size: 6.8px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="342.992126" y="40.556872" transform="rotate(-0 342.992126 40.556872)">간접비와 마진</text>
    </g>
    <g id="text_16">
     <!-- $P=\dfrac{(C_\mathrm{m}+C_\mathrm{p})(1+g)(1+s)}{1-m}$ -->
-    <g style="fill: #1f2a30" transform="translate(295.047126 66.784588)">
+    <g style="fill: #1f2a30" transform="translate(294.703126 65.752588)">
      <text>
-      <tspan x="0" y="-0.38285" style="font-style: italic; font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">P</tspan>
-      <tspan x="16.535742" y="-8.453125" style="font-style: italic; font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">C</tspan>
-      <tspan x="36.132587" y="-8.453125" style="font-style: italic; font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">C</tspan>
-      <tspan x="57.371106" y="4.518712" style="font-style: italic; font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">m</tspan>
-      <tspan x="64.599115" y="-8.453125" style="font-style: italic; font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">g</tspan>
-      <tspan x="87.84787" y="-8.453125" style="font-style: italic; font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">s</tspan>
-      <tspan x="7.189746" y="-0.38285" style="font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">=</tspan>
-      <tspan x="13.66355" y="-8.453125" style="font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">(</tspan>
-      <tspan x="29.658783" y="-8.453125" style="font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">+</tspan>
-      <tspan x="44.66355" y="4.518712" style="font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">1</tspan>
-      <tspan x="46.147174" y="-8.453125" style="font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">)</tspan>
-      <tspan x="49.019366" y="-8.453125" style="font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">(</tspan>
-      <tspan x="50.897302" y="4.518712" style="font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">−</tspan>
-      <tspan x="51.891559" y="-8.453125" style="font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">1</tspan>
-      <tspan x="58.125311" y="-8.453125" style="font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">+</tspan>
-      <tspan x="69.395929" y="-8.453125" style="font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">)</tspan>
-      <tspan x="72.268121" y="-8.453125" style="font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">(</tspan>
-      <tspan x="75.140313" y="-8.453125" style="font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">1</tspan>
-      <tspan x="81.374066" y="-8.453125" style="font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">+</tspan>
-      <tspan x="92.16037" y="-8.453125" style="font-size: 8.6px; font-family: 'Arial'; fill: #1f2a30">)</tspan>
-      <tspan x="22.764441" y="-5.884412" style="font-size: 6.02px; font-family: 'Arial'; fill: #1f2a30">m</tspan>
-      <tspan x="42.361285" y="-5.884412" style="font-size: 6.02px; font-family: 'Arial'; fill: #1f2a30">p</tspan>
+      <tspan x="0" y="-0.745313" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">P</tspan>
+      <tspan x="6.440955" y="-0.745313" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">=</tspan>
+      <tspan x="14.002148" y="-7.390625" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">(</tspan>
+      <tspan x="16.630078" y="-7.390625" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">C</tspan>
+      <tspan x="29.166272" y="-7.390625" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">+</tspan>
+      <tspan x="36.727466" y="-7.390625" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">C</tspan>
+      <tspan x="44.002148" y="4.78125" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">1</tspan>
+      <tspan x="46.059607" y="-7.390625" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">)</tspan>
+      <tspan x="48.687537" y="-7.390625" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">(</tspan>
+      <tspan x="51.315466" y="-7.390625" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">1</tspan>
+      <tspan x="57.583752" y="-7.390625" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">+</tspan>
+      <tspan x="58.464334" y="4.78125" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">m</tspan>
+      <tspan x="65.144946" y="-7.390625" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">g</tspan>
+      <tspan x="70.337634" y="-7.390625" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">)</tspan>
+      <tspan x="72.965564" y="-7.390625" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">(</tspan>
+      <tspan x="75.593494" y="-7.390625" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">1</tspan>
+      <tspan x="81.86178" y="-7.390625" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">+</tspan>
+      <tspan x="89.422974" y="-7.390625" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">s</tspan>
+      <tspan x="93.158508" y="-7.390625" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">)</tspan>
+      <tspan x="22.104932" y="-6.003125" style="font-size: 6.02px; font-family: 'Malgun Gothic'; fill: #1f2a30">m</tspan>
+      <tspan x="42.202319" y="-6.003125" style="font-size: 6.02px; font-family: 'Malgun Gothic'; fill: #1f2a30">p</tspan>
+      <tspan x="50.270435" y="4.78125" style="font-size: 8.6px; font-family: 'cmsy10'; fill: #1f2a30">¡</tspan>
      </text>
-     <rect x="13.66355" y="-3.487538" width="81.369012" height="0.5375"/>
+     <rect x="14.002148" y="-3.365625" width="81.78429" height="0.5375"/>
     </g>
    </g>
    <g id="text_17">
-    <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="342.992126" y="84.837189" transform="rotate(-0 342.992126 84.837189)">G&amp;A, S&amp;ARD, margin set by order size</text>
+    <text style="font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="342.992126" y="84.852064" transform="rotate(-0 342.992126 84.852064)">일반관리비, 판매·연구개발, 주문 규모별 마진</text>
    </g>
    <g id="text_18">
     <!-- $C_\mathrm{m}$ -->
-    <g style="fill: #1f2a30" transform="translate(273.443276 34.578174)">
+    <g style="fill: #1f2a30" transform="translate(273.699276 34.985174)">
      <text>
-      <tspan x="0" y="-0.625" style="font-style: italic; font-size: 6.4px; font-family: 'Arial'; fill: #1f2a30">C</tspan>
-      <tspan x="4.603821" y="1.2866" style="font-size: 4.48px; font-family: 'Arial'; fill: #1f2a30">m</tspan>
+      <tspan x="0" y="-0.609375" style="font-size: 6.4px; font-family: 'Malgun Gothic'; fill: #1f2a30">C</tspan>
+      <tspan x="4.046631" y="0.314063" style="font-size: 4.48px; font-family: 'Malgun Gothic'; fill: #1f2a30">m</tspan>
      </text>
     </g>
    </g>
    <g id="text_19">
     <!-- $C_\mathrm{p}$ -->
-    <g style="fill: #1f2a30" transform="translate(274.051276 89.316543)">
+    <g style="fill: #1f2a30" transform="translate(274.307276 90.084543)">
      <text>
-      <tspan x="0" y="-0.625" style="font-style: italic; font-size: 6.4px; font-family: 'Arial'; fill: #1f2a30">C</tspan>
-      <tspan x="4.603821" y="1.2866" style="font-size: 4.48px; font-family: 'Arial'; fill: #1f2a30">p</tspan>
+      <tspan x="0" y="-0.609375" style="font-size: 6.4px; font-family: 'Malgun Gothic'; fill: #1f2a30">C</tspan>
+      <tspan x="4.046631" y="0.314063" style="font-size: 4.48px; font-family: 'Malgun Gothic'; fill: #1f2a30">p</tspan>
      </text>
     </g>
    </g>
    <g id="text_20">
-    <text style="font-weight: 700; font-size: 6.8px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="456.377953" y="40.541997" transform="rotate(-0 456.377953 40.541997)">Cost breakdown</text>
+    <text style="font-weight: 700; font-size: 6.8px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="456.377953" y="40.556872" transform="rotate(-0 456.377953 40.556872)">원가 내역</text>
    </g>
    <g id="text_21">
-    <text style="font-size: 5.5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="422.929134" y="51.321139" transform="rotate(-0 422.929134 51.321139)">selling price per lb</text>
+    <text style="font-size: 5.5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="422.929134" y="51.369264" transform="rotate(-0 422.929134 51.369264)">파운드당 판매 단가</text>
    </g>
    <g id="text_22">
-    <text style="font-size: 5.5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="422.929134" y="60.477909" transform="rotate(-0 422.929134 60.477909)">price, source, date</text>
+    <text style="font-size: 5.5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="422.929134" y="60.505839" transform="rotate(-0 422.929134 60.505839)">가격, 출처, 일자</text>
    </g>
    <g id="text_23">
-    <text style="font-size: 5.5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="422.929134" y="69.570226" transform="rotate(-0 422.929134 69.570226)">grade, price basis</text>
+    <text style="font-size: 5.5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="422.929134" y="69.618351" transform="rotate(-0 422.929134 69.618351)">등급, 가격 기준</text>
    </g>
    <g id="text_24">
-    <text style="font-size: 5.5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="422.929134" y="78.726996" transform="rotate(-0 422.929134 78.726996)">operations priced,</text>
+    <text style="font-size: 5.5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="422.929134" y="78.742894" transform="rotate(-0 422.929134 78.742894)">산정·대체·</text>
    </g>
    <g id="text_25">
-    <text style="font-size: 5.5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="422.929134" y="87.851539" transform="rotate(-0 422.929134 87.851539)">substituted, uncosted</text>
+    <text style="font-size: 5.5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="422.929134" y="87.867438" transform="rotate(-0 422.929134 87.867438)">미산정 공정</text>
    </g>
    <g id="text_26">
     <!-- $P$ -->
-    <g style="fill: #1f2a30" transform="translate(406.044976 55.502937)">
+    <g style="fill: #1f2a30" transform="translate(406.332976 55.261937)">
      <text>
-      <tspan x="0" y="-0.703125" style="font-style: italic; font-size: 6.4px; font-family: 'Arial'; fill: #1f2a30">P</tspan>
+      <tspan x="0" y="-0.6875" style="font-size: 6.4px; font-family: 'Malgun Gothic'; fill: #1f2a30">P</tspan>
      </text>
     </g>
    </g>
@@ -916,7 +916,7 @@ L 0 2
       </g>
      </g>
      <g id="text_27">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="103.43622" y="349.739569" transform="rotate(-0 103.43622 349.739569)">0</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="103.43622" y="350.000194" transform="rotate(-0 103.43622 350.000194)">0</text>
      </g>
     </g>
     <g id="xtick_2">
@@ -926,7 +926,7 @@ L 0 2
       </g>
      </g>
      <g id="text_28">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="140.648031" y="349.739569" transform="rotate(-0 140.648031 349.739569)">25</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="140.648031" y="350.000194" transform="rotate(-0 140.648031 350.000194)">25</text>
      </g>
     </g>
     <g id="xtick_3">
@@ -936,7 +936,7 @@ L 0 2
       </g>
      </g>
      <g id="text_29">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="177.859843" y="349.739569" transform="rotate(-0 177.859843 349.739569)">50</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="177.859843" y="350.000194" transform="rotate(-0 177.859843 350.000194)">50</text>
      </g>
     </g>
     <g id="xtick_4">
@@ -946,7 +946,7 @@ L 0 2
       </g>
      </g>
      <g id="text_30">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="215.071654" y="349.739569" transform="rotate(-0 215.071654 349.739569)">75</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="215.071654" y="350.000194" transform="rotate(-0 215.071654 350.000194)">75</text>
      </g>
     </g>
     <g id="xtick_5">
@@ -956,60 +956,42 @@ L 0 2
       </g>
      </g>
      <g id="text_31">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="252.283465" y="349.739569" transform="rotate(-0 252.283465 349.739569)">100</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="252.283465" y="350.000194" transform="rotate(-0 252.283465 350.000194)">100</text>
      </g>
     </g>
     <g id="text_32">
-     <text style="font-size: 6.2px; font-family: 'Arial'; text-anchor: middle" x="177.859843" y="359.445476" transform="rotate(-0 177.859843 359.445476)">Share of the selling price (%)</text>
+     <text style="font-size: 6.2px; font-family: 'Malgun Gothic'; text-anchor: middle" x="177.859843" y="360.259476" transform="rotate(-0 177.859843 360.259476)">판매 단가 대비 비율 (%)</text>
     </g>
    </g>
    <g id="matplotlib.axis_2">
     <g id="ytick_1">
      <g id="line2d_6"/>
      <g id="text_33">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="99.93622" y="336.156307" transform="rotate(-0 99.93622 336.156307)">Preferential CO oxidation</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="99.93622" y="336.269244" transform="rotate(-0 99.93622 336.269244)">CO 선택 산화</text>
      </g>
     </g>
     <g id="ytick_2">
      <g id="line2d_7"/>
      <g id="text_34">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="99.93622" y="328.085441" transform="rotate(-0 99.93622 328.085441)">Propane dehydrogenation</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="99.93622" y="328.198378" transform="rotate(-0 99.93622 328.198378)">프로판 탈수소</text>
      </g>
     </g>
     <g id="ytick_3">
      <g id="line2d_8"/>
      <g id="text_35">
-      <!-- Photocatalytic CO$_2$ reduction -->
-      <g style="fill: #1f2a30" transform="translate(33.06422 320.051543)">
+      <!-- 광촉매 CO$_2$ 환원 -->
+      <g style="fill: #1f2a30" transform="translate(60.72822 320.216887)">
        <text>
-        <tspan x="0" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">P</tspan>
-        <tspan x="3.501709" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">h</tspan>
-        <tspan x="6.421509" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">o</tspan>
-        <tspan x="9.341309" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">t</tspan>
-        <tspan x="10.799927" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">o</tspan>
-        <tspan x="13.719727" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">c</tspan>
-        <tspan x="16.344727" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">a</tspan>
-        <tspan x="19.264526" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">t</tspan>
-        <tspan x="20.723145" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">a</tspan>
-        <tspan x="23.642944" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">l</tspan>
-        <tspan x="24.809326" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">y</tspan>
-        <tspan x="27.434326" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">t</tspan>
-        <tspan x="28.892944" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">i</tspan>
-        <tspan x="30.059326" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">c</tspan>
-        <tspan x="32.684326" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30"> </tspan>
-        <tspan x="34.142944" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">C</tspan>
-        <tspan x="37.934326" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">O</tspan>
-        <tspan x="44.411269" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30"> </tspan>
-        <tspan x="45.869887" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">r</tspan>
-        <tspan x="47.618178" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">e</tspan>
-        <tspan x="50.537978" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">d</tspan>
-        <tspan x="53.457777" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">u</tspan>
-        <tspan x="56.377577" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">c</tspan>
-        <tspan x="59.002577" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">t</tspan>
-        <tspan x="60.461195" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">i</tspan>
-        <tspan x="61.627577" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">o</tspan>
-        <tspan x="64.547377" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">n</tspan>
-        <tspan x="42.108546" y="1.1938" style="font-size: 3.64px; font-family: 'Arial'; fill: #1f2a30">2</tspan>
+        <tspan x="0" y="-0.6875" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">광</tspan>
+        <tspan x="5.25" y="-0.6875" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">촉</tspan>
+        <tspan x="10.5" y="-0.6875" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">매</tspan>
+        <tspan x="15.75" y="-0.6875" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+        <tspan x="17.595703" y="-0.6875" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">C</tspan>
+        <tspan x="20.928223" y="-0.6875" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">O</tspan>
+        <tspan x="27.185859" y="-0.6875" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+        <tspan x="29.031562" y="-0.6875" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">환</tspan>
+        <tspan x="34.281562" y="-0.6875" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">원</tspan>
+        <tspan x="25.033613" y="0.08125" style="font-size: 3.64px; font-family: 'Malgun Gothic'; fill: #1f2a30">2</tspan>
        </text>
       </g>
      </g>
@@ -1017,30 +999,25 @@ L 0 2
     <g id="ytick_4">
      <g id="line2d_9"/>
      <g id="text_36">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="99.93622" y="311.943708" transform="rotate(-0 99.93622 311.943708)">Photocatalytic water splitting</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="99.93622" y="312.056646" transform="rotate(-0 99.93622 312.056646)">광촉매 물분해</text>
      </g>
     </g>
     <g id="ytick_5">
      <g id="line2d_10"/>
      <g id="text_37">
-      <!-- CO$_2$ to methanol -->
-      <g style="fill: #1f2a30" transform="translate(61.14422 303.909811)">
+      <!-- CO$_2$ 메탄올 전환 -->
+      <g style="fill: #1f2a30" transform="translate(60.72822 304.049155)">
        <text>
-        <tspan x="0" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">C</tspan>
-        <tspan x="3.791382" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">O</tspan>
-        <tspan x="10.268324" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30"> </tspan>
-        <tspan x="11.726942" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">t</tspan>
-        <tspan x="13.185561" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">o</tspan>
-        <tspan x="16.10536" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30"> </tspan>
-        <tspan x="17.563979" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">m</tspan>
-        <tspan x="21.93727" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">e</tspan>
-        <tspan x="24.857069" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">t</tspan>
-        <tspan x="26.315688" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">h</tspan>
-        <tspan x="29.235487" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">a</tspan>
-        <tspan x="32.155287" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">n</tspan>
-        <tspan x="35.075087" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">o</tspan>
-        <tspan x="37.994887" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">l</tspan>
-        <tspan x="7.965602" y="1.1938" style="font-size: 3.64px; font-family: 'Arial'; fill: #1f2a30">2</tspan>
+        <tspan x="0" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">C</tspan>
+        <tspan x="3.33252" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">O</tspan>
+        <tspan x="9.590156" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+        <tspan x="11.435859" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">메</tspan>
+        <tspan x="16.685859" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">탄</tspan>
+        <tspan x="21.935859" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">올</tspan>
+        <tspan x="27.185859" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+        <tspan x="29.031562" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">전</tspan>
+        <tspan x="34.281562" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">환</tspan>
+        <tspan x="7.43791" y="0.034375" style="font-size: 3.64px; font-family: 'Malgun Gothic'; fill: #1f2a30">2</tspan>
        </text>
       </g>
      </g>
@@ -1048,66 +1025,58 @@ L 0 2
     <g id="ytick_6">
      <g id="line2d_11"/>
      <g id="text_38">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="99.93622" y="295.801976" transform="rotate(-0 99.93622 295.801976)">Formic acid dehydrogenation</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="99.93622" y="295.914914" transform="rotate(-0 99.93622 295.914914)">포름산 탈수소</text>
      </g>
     </g>
     <g id="ytick_7">
      <g id="line2d_12"/>
      <g id="text_39">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="99.93622" y="287.73111" transform="rotate(-0 99.93622 287.73111)">Fischer–Tropsch synthesis</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="99.93622" y="287.844047" transform="rotate(-0 99.93622 287.844047)">피셔–트롭슈 합성</text>
      </g>
     </g>
     <g id="ytick_8">
      <g id="line2d_13"/>
      <g id="text_40">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="99.93622" y="279.691931" transform="rotate(-0 99.93622 279.691931)">Selective acetylene hydrogenation</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="99.93622" y="279.773181" transform="rotate(-0 99.93622 279.773181)">아세틸렌 선택 수소화</text>
      </g>
     </g>
     <g id="ytick_9">
      <g id="line2d_14"/>
      <g id="text_41">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="99.93622" y="271.621065" transform="rotate(-0 99.93622 271.621065)">Reverse water-gas shift</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="99.93622" y="271.702315" transform="rotate(-0 99.93622 271.702315)">역 수성가스 전이</text>
      </g>
     </g>
     <g id="ytick_10">
      <g id="line2d_15"/>
      <g id="text_42">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="99.93622" y="263.518512" transform="rotate(-0 99.93622 263.518512)">Methanol to olefins</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="99.93622" y="263.631449" transform="rotate(-0 99.93622 263.631449)">메탄올 올레핀 전환</text>
      </g>
     </g>
     <g id="ytick_11">
      <g id="line2d_16"/>
      <g id="text_43">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="99.93622" y="255.479333" transform="rotate(-0 99.93622 255.479333)">Methane dry reforming</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="99.93622" y="255.560583" transform="rotate(-0 99.93622 255.560583)">메탄 건식 개질</text>
      </g>
     </g>
     <g id="ytick_12">
      <g id="line2d_17"/>
      <g id="text_44">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="99.93622" y="247.376779" transform="rotate(-0 99.93622 247.376779)">Ammonia cracking</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="99.93622" y="247.489717" transform="rotate(-0 99.93622 247.489717)">암모니아 분해</text>
      </g>
     </g>
     <g id="ytick_13">
      <g id="line2d_18"/>
      <g id="text_45">
-      <!-- CO$_2$ methanation -->
-      <g style="fill: #1f2a30" transform="translate(59.68822 239.342882)">
+      <!-- CO$_2$ 메탄화 -->
+      <g style="fill: #1f2a30" transform="translate(73.00022 239.482226)">
        <text>
-        <tspan x="0" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">C</tspan>
-        <tspan x="3.791382" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">O</tspan>
-        <tspan x="10.268324" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30"> </tspan>
-        <tspan x="11.726942" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">m</tspan>
-        <tspan x="16.100233" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">e</tspan>
-        <tspan x="19.020033" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">t</tspan>
-        <tspan x="20.478651" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">h</tspan>
-        <tspan x="23.398451" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">a</tspan>
-        <tspan x="26.318251" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">n</tspan>
-        <tspan x="29.238051" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">a</tspan>
-        <tspan x="32.157851" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">t</tspan>
-        <tspan x="33.616469" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">i</tspan>
-        <tspan x="34.782851" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">o</tspan>
-        <tspan x="37.70265" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">n</tspan>
-        <tspan x="7.965602" y="1.1938" style="font-size: 3.64px; font-family: 'Arial'; fill: #1f2a30">2</tspan>
+        <tspan x="0" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">C</tspan>
+        <tspan x="3.33252" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">O</tspan>
+        <tspan x="9.590156" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+        <tspan x="11.435859" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">메</tspan>
+        <tspan x="16.685859" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">탄</tspan>
+        <tspan x="21.935859" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">화</tspan>
+        <tspan x="7.43791" y="0.034375" style="font-size: 3.64px; font-family: 'Malgun Gothic'; fill: #1f2a30">2</tspan>
        </text>
       </g>
      </g>
@@ -1116,15 +1085,15 @@ L 0 2
      <g id="line2d_19"/>
      <g id="text_46">
       <!-- NH$_3$-SCR -->
-      <g style="fill: #1f2a30" transform="translate(77.31622 231.272016)">
+      <g style="fill: #1f2a30" transform="translate(78.66822 231.347984)">
        <text>
-        <tspan x="0" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">N</tspan>
-        <tspan x="3.791382" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">H</tspan>
-        <tspan x="9.976088" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">-</tspan>
-        <tspan x="11.724379" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">S</tspan>
-        <tspan x="15.226088" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">C</tspan>
-        <tspan x="19.01747" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">R</tspan>
-        <tspan x="7.673366" y="1.1938" style="font-size: 3.64px; font-family: 'Arial'; fill: #1f2a30">3</tspan>
+        <tspan x="0" y="-0.34375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">N</tspan>
+        <tspan x="3.891968" y="-0.34375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">H</tspan>
+        <tspan x="9.893257" y="-0.34375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">-</tspan>
+        <tspan x="12.046577" y="-0.34375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">S</tspan>
+        <tspan x="14.897163" y="-0.34375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">C</tspan>
+        <tspan x="18.229683" y="-0.34375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">R</tspan>
+        <tspan x="7.741011" y="0.425" style="font-size: 3.64px; font-family: 'Malgun Gothic'; fill: #1f2a30">3</tspan>
        </text>
       </g>
      </g>
@@ -1132,65 +1101,62 @@ L 0 2
     <g id="ytick_15">
      <g id="line2d_20"/>
      <g id="text_47">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="99.93622" y="223.195868" transform="rotate(-0 99.93622 223.195868)">Steam methane reforming</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="99.93622" y="223.277118" transform="rotate(-0 99.93622 223.277118)">메탄 수증기 개질</text>
      </g>
     </g>
     <g id="ytick_16">
      <g id="line2d_21"/>
      <g id="text_48">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="99.93622" y="215.125002" transform="rotate(-0 99.93622 215.125002)">Water-gas shift</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="99.93622" y="215.206252" transform="rotate(-0 99.93622 215.206252)">수성가스 전이</text>
      </g>
     </g>
     <g id="ytick_17">
      <g id="line2d_22"/>
      <g id="text_49">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="99.93622" y="207.022449" transform="rotate(-0 99.93622 207.022449)">Olefin metathesis</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="99.93622" y="207.135386" transform="rotate(-0 99.93622 207.135386)">올레핀 복분해</text>
      </g>
     </g>
     <g id="ytick_18">
      <g id="line2d_23"/>
      <g id="text_50">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="99.93622" y="198.98327" transform="rotate(-0 99.93622 198.98327)">Syngas to methanol</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="99.93622" y="199.06452" transform="rotate(-0 99.93622 199.06452)">합성가스 메탄올 전환</text>
      </g>
     </g>
     <g id="ytick_19">
      <g id="line2d_24"/>
      <g id="text_51">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="99.93622" y="190.880716" transform="rotate(-0 99.93622 190.880716)">Ammonia synthesis</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="99.93622" y="190.993654" transform="rotate(-0 99.93622 190.993654)">암모니아 합성</text>
      </g>
     </g>
     <g id="ytick_20">
      <g id="line2d_25"/>
      <g id="text_52">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="99.93622" y="182.80985" transform="rotate(-0 99.93622 182.80985)">Bio-oil hydrodeoxygenation</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="99.93622" y="182.922788" transform="rotate(-0 99.93622 182.922788)">바이오오일 수첨탈산소</text>
      </g>
     </g>
     <g id="ytick_21">
      <g id="line2d_26"/>
      <g id="text_53">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="99.93622" y="174.738984" transform="rotate(-0 99.93622 174.738984)">Methane pyrolysis</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="99.93622" y="174.851922" transform="rotate(-0 99.93622 174.851922)">메탄 열분해</text>
      </g>
     </g>
     <g id="ytick_22">
      <g id="line2d_27"/>
      <g id="text_54">
-      <!-- CO$_2$ to formate -->
-      <g style="fill: #1f2a30" transform="translate(64.88822 166.705087)">
+      <!-- CO$_2$ 포름산염 전환 -->
+      <g style="fill: #1f2a30" transform="translate(55.52822 166.84443)">
        <text>
-        <tspan x="0" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">C</tspan>
-        <tspan x="3.791382" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">O</tspan>
-        <tspan x="10.268324" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30"> </tspan>
-        <tspan x="11.726942" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">t</tspan>
-        <tspan x="13.185561" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">o</tspan>
-        <tspan x="16.10536" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30"> </tspan>
-        <tspan x="17.563979" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">f</tspan>
-        <tspan x="19.022597" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">o</tspan>
-        <tspan x="21.942397" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">r</tspan>
-        <tspan x="23.690688" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">m</tspan>
-        <tspan x="28.063979" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">a</tspan>
-        <tspan x="30.983778" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">t</tspan>
-        <tspan x="32.442397" y="-0.359375" style="font-size: 5.2px; font-family: 'Arial'; fill: #1f2a30">e</tspan>
-        <tspan x="7.965602" y="1.1938" style="font-size: 3.64px; font-family: 'Arial'; fill: #1f2a30">2</tspan>
+        <tspan x="0" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">C</tspan>
+        <tspan x="3.33252" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">O</tspan>
+        <tspan x="9.590156" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+        <tspan x="11.435859" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">포</tspan>
+        <tspan x="16.685859" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">름</tspan>
+        <tspan x="21.935859" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">산</tspan>
+        <tspan x="27.185859" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">염</tspan>
+        <tspan x="32.435859" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+        <tspan x="34.281562" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">전</tspan>
+        <tspan x="39.531562" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">환</tspan>
+        <tspan x="7.43791" y="0.034375" style="font-size: 3.64px; font-family: 'Malgun Gothic'; fill: #1f2a30">2</tspan>
        </text>
       </g>
      </g>
@@ -1198,7 +1164,7 @@ L 0 2
     <g id="ytick_23">
      <g id="line2d_28"/>
      <g id="text_55">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="99.93622" y="158.597252" transform="rotate(-0 99.93622 158.597252)">Ethylene epoxidation</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="99.93622" y="158.710189" transform="rotate(-0 99.93622 158.710189)">에틸렌 에폭시화</text>
      </g>
     </g>
    </g>
@@ -1213,110 +1179,110 @@ L 252.283465 339.944882
 " style="fill: none; stroke: #1f2a30; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_56">
-    <text style="font-size: 5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="258.237354" y="335.587854" transform="rotate(-0 258.237354 335.587854)">12.14</text>
+    <text style="font-size: 5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="258.237354" y="335.602307" transform="rotate(-0 258.237354 335.602307)">12.14</text>
    </g>
    <g id="text_57">
-    <text style="font-size: 5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="258.237354" y="327.516988" transform="rotate(-0 258.237354 327.516988)">3.63</text>
+    <text style="font-size: 5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="258.237354" y="327.531441" transform="rotate(-0 258.237354 327.531441)">3.63</text>
    </g>
    <g id="text_58">
-    <text style="font-size: 5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="258.237354" y="319.446121" transform="rotate(-0 258.237354 319.446121)">10.20</text>
+    <text style="font-size: 5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="258.237354" y="319.460575" transform="rotate(-0 258.237354 319.460575)">10.20</text>
    </g>
    <g id="text_59">
-    <text style="font-size: 5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="258.237354" y="311.375255" transform="rotate(-0 258.237354 311.375255)">10.20</text>
+    <text style="font-size: 5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="258.237354" y="311.389708" transform="rotate(-0 258.237354 311.389708)">10.20</text>
    </g>
    <g id="text_60">
-    <text style="font-size: 5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="258.237354" y="303.304389" transform="rotate(-0 258.237354 303.304389)">5.84</text>
+    <text style="font-size: 5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="258.237354" y="303.318842" transform="rotate(-0 258.237354 303.318842)">5.84</text>
    </g>
    <g id="text_61">
-    <text style="font-size: 5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="258.237354" y="295.233523" transform="rotate(-0 258.237354 295.233523)">10.25</text>
+    <text style="font-size: 5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="258.237354" y="295.247976" transform="rotate(-0 258.237354 295.247976)">10.25</text>
    </g>
    <g id="text_62">
-    <text style="font-size: 5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="258.237354" y="287.162657" transform="rotate(-0 258.237354 287.162657)">5.18</text>
+    <text style="font-size: 5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="258.237354" y="287.17711" transform="rotate(-0 258.237354 287.17711)">5.18</text>
    </g>
    <g id="text_63">
-    <text style="font-size: 5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="258.237354" y="279.091791" transform="rotate(-0 258.237354 279.091791)">5.94</text>
+    <text style="font-size: 5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="258.237354" y="279.106244" transform="rotate(-0 258.237354 279.106244)">5.94</text>
    </g>
    <g id="text_64">
-    <text style="font-size: 5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="258.237354" y="271.020925" transform="rotate(-0 258.237354 271.020925)">5.61</text>
+    <text style="font-size: 5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="258.237354" y="271.035378" transform="rotate(-0 258.237354 271.035378)">5.61</text>
    </g>
    <g id="text_65">
-    <text style="font-size: 5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="258.237354" y="262.950058" transform="rotate(-0 258.237354 262.950058)">5.81</text>
+    <text style="font-size: 5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="258.237354" y="262.964512" transform="rotate(-0 258.237354 262.964512)">5.81</text>
    </g>
    <g id="text_66">
-    <text style="font-size: 5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="258.237354" y="254.879192" transform="rotate(-0 258.237354 254.879192)">5.47</text>
+    <text style="font-size: 5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="258.237354" y="254.893645" transform="rotate(-0 258.237354 254.893645)">5.47</text>
    </g>
    <g id="text_67">
-    <text style="font-size: 5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="258.237354" y="246.808326" transform="rotate(-0 258.237354 246.808326)">4.36</text>
+    <text style="font-size: 5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="258.237354" y="246.822779" transform="rotate(-0 258.237354 246.822779)">4.36</text>
    </g>
    <g id="text_68">
-    <text style="font-size: 5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="258.237354" y="238.73746" transform="rotate(-0 258.237354 238.73746)">4.82</text>
+    <text style="font-size: 5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="258.237354" y="238.751913" transform="rotate(-0 258.237354 238.751913)">4.82</text>
    </g>
    <g id="text_69">
-    <text style="font-size: 5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="258.237354" y="230.666594" transform="rotate(-0 258.237354 230.666594)">5.16</text>
+    <text style="font-size: 5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="258.237354" y="230.681047" transform="rotate(-0 258.237354 230.681047)">5.16</text>
    </g>
    <g id="text_70">
-    <text style="font-size: 5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="258.237354" y="222.595728" transform="rotate(-0 258.237354 222.595728)">4.86</text>
+    <text style="font-size: 5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="258.237354" y="222.610181" transform="rotate(-0 258.237354 222.610181)">4.86</text>
    </g>
    <g id="text_71">
-    <text style="font-size: 5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="258.237354" y="214.524862" transform="rotate(-0 258.237354 214.524862)">6.80</text>
+    <text style="font-size: 5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="258.237354" y="214.539315" transform="rotate(-0 258.237354 214.539315)">6.80</text>
    </g>
    <g id="text_72">
-    <text style="font-size: 5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="258.237354" y="206.453995" transform="rotate(-0 258.237354 206.453995)">6.37</text>
+    <text style="font-size: 5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="258.237354" y="206.468449" transform="rotate(-0 258.237354 206.468449)">6.37</text>
    </g>
    <g id="text_73">
-    <text style="font-size: 5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="258.237354" y="198.383129" transform="rotate(-0 258.237354 198.383129)">9.08</text>
+    <text style="font-size: 5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="258.237354" y="198.397582" transform="rotate(-0 258.237354 198.397582)">9.08</text>
    </g>
    <g id="text_74">
-    <text style="font-size: 5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="258.237354" y="190.312263" transform="rotate(-0 258.237354 190.312263)">5.07</text>
+    <text style="font-size: 5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="258.237354" y="190.326716" transform="rotate(-0 258.237354 190.326716)">5.07</text>
    </g>
    <g id="text_75">
-    <text style="font-size: 5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="258.237354" y="182.241397" transform="rotate(-0 258.237354 182.241397)">10.86</text>
+    <text style="font-size: 5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="258.237354" y="182.25585" transform="rotate(-0 258.237354 182.25585)">10.86</text>
    </g>
    <g id="text_76">
-    <text style="font-size: 5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="258.237354" y="174.170531" transform="rotate(-0 258.237354 174.170531)">2.43</text>
+    <text style="font-size: 5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="258.237354" y="174.184984" transform="rotate(-0 258.237354 174.184984)">2.43</text>
    </g>
    <g id="text_77">
-    <text style="font-size: 5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="258.237354" y="166.099665" transform="rotate(-0 258.237354 166.099665)">263</text>
+    <text style="font-size: 5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="258.237354" y="166.114118" transform="rotate(-0 258.237354 166.114118)">263</text>
    </g>
    <g id="text_78">
-    <text style="font-size: 5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="258.237354" y="158.028799" transform="rotate(-0 258.237354 158.028799)">237</text>
+    <text style="font-size: 5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="258.237354" y="158.043252" transform="rotate(-0 258.237354 158.043252)">237</text>
    </g>
    <g id="text_79">
-    <text style="font-size: 5px; font-family: 'Arial'; text-anchor: start; fill: #5b6870" x="258.237354" y="148.478691" transform="rotate(-0 258.237354 148.478691)">USD/lb</text>
+    <text style="font-size: 5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #5b6870" x="258.237354" y="148.29041" transform="rotate(-0 258.237354 148.29041)">USD/lb</text>
    </g>
    <g id="legend_1">
     <g id="patch_88">
-     <path d="M 7.357039 144.957209 
-L 12.757039 144.957209 
-L 12.757039 141.177209 
-L 7.357039 141.177209 
+     <path d="M 7.357039 144.817146 
+L 12.757039 144.817146 
+L 12.757039 141.037146 
+L 7.357039 141.037146 
 z
 " style="fill: #1b6f78"/>
     </g>
     <g id="text_80">
-     <text style="font-size: 5.4px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="14.917039" y="144.957209" transform="rotate(-0 14.917039 144.957209)">Materials</text>
+     <text style="font-size: 5.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="14.917039" y="144.817146" transform="rotate(-0 14.917039 144.817146)">재료비</text>
     </g>
     <g id="patch_89">
-     <path d="M 41.141633 144.957209 
-L 46.541633 144.957209 
-L 46.541633 141.177209 
-L 41.141633 141.177209 
+     <path d="M 35.437039 144.817146 
+L 40.837039 144.817146 
+L 40.837039 141.037146 
+L 35.437039 141.037146 
 z
 " style="fill: #6fa8ae"/>
     </g>
     <g id="text_81">
-     <text style="font-size: 5.4px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="48.701633" y="144.957209" transform="rotate(-0 48.701633 144.957209)">Processing</text>
+     <text style="font-size: 5.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="42.997039" y="144.817146" transform="rotate(-0 42.997039 144.817146)">가공비</text>
     </g>
     <g id="patch_90">
-     <path d="M 79.733071 144.957209 
-L 85.133071 144.957209 
-L 85.133071 141.177209 
-L 79.733071 141.177209 
+     <path d="M 63.517039 144.817146 
+L 68.917039 144.817146 
+L 68.917039 141.037146 
+L 63.517039 141.037146 
 z
 " style="fill: #d9dee1"/>
     </g>
     <g id="text_82">
-     <text style="font-size: 5.4px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="87.293071" y="144.957209" transform="rotate(-0 87.293071 144.957209)">Overhead and margin</text>
+     <text style="font-size: 5.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="71.077039" y="144.817146" transform="rotate(-0 71.077039 144.817146)">간접비와 마진</text>
     </g>
    </g>
   </g>
@@ -1337,7 +1303,7 @@ z
       </g>
      </g>
      <g id="text_83">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="379.542562" y="300.345869" transform="rotate(-0 379.542562 300.345869)">2</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="379.542562" y="300.606494" transform="rotate(-0 379.542562 300.606494)">2</text>
      </g>
     </g>
     <g id="xtick_7">
@@ -1347,7 +1313,7 @@ z
       </g>
      </g>
      <g id="text_84">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="407.207759" y="300.345869" transform="rotate(-0 407.207759 300.345869)">5</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="407.207759" y="300.606494" transform="rotate(-0 407.207759 300.606494)">5</text>
      </g>
     </g>
     <g id="xtick_8">
@@ -1357,7 +1323,7 @@ z
       </g>
      </g>
      <g id="text_85">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="428.135673" y="300.345869" transform="rotate(-0 428.135673 300.345869)">10</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="428.135673" y="300.606494" transform="rotate(-0 428.135673 300.606494)">10</text>
      </g>
     </g>
     <g id="xtick_9">
@@ -1367,7 +1333,7 @@ z
       </g>
      </g>
      <g id="text_86">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="449.063587" y="300.345869" transform="rotate(-0 449.063587 300.345869)">20</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="449.063587" y="300.606494" transform="rotate(-0 449.063587 300.606494)">20</text>
      </g>
     </g>
     <g id="xtick_10">
@@ -1377,7 +1343,7 @@ z
       </g>
      </g>
      <g id="text_87">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="476.728784" y="300.345869" transform="rotate(-0 476.728784 300.345869)">50</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="476.728784" y="300.606494" transform="rotate(-0 476.728784 300.606494)">50</text>
      </g>
     </g>
     <g id="xtick_11">
@@ -1470,37 +1436,37 @@ L 0 2
      </g>
     </g>
     <g id="text_88">
-     <text style="font-size: 6.2px; font-family: 'Arial'; text-anchor: middle" x="432.666142" y="310.051775" transform="rotate(-0 432.666142 310.051775)">Selling price (USD per lb, log scale)</text>
+     <text style="font-size: 6.2px; font-family: 'Malgun Gothic'; text-anchor: middle" x="432.666142" y="310.914212" transform="rotate(-0 432.666142 310.914212)">판매 단가 (USD/lb, 로그 축)</text>
     </g>
    </g>
    <g id="matplotlib.axis_4">
     <g id="ytick_24">
      <g id="line2d_46"/>
      <g id="text_89">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="367.356693" y="193.483842" transform="rotate(-0 367.356693 193.483842)">2 wt% Pt/C</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="367.356693" y="193.614155" transform="rotate(-0 367.356693 193.614155)">2 wt% Pt/C</text>
      </g>
     </g>
     <g id="ytick_25">
      <g id="line2d_47"/>
      <g id="text_90">
       <!-- 21 wt% Ni/Al$_2$O$_3$ -->
-      <g style="fill: #1f2a30" transform="translate(323.196693 230.272677)">
+      <g style="fill: #1f2a30" transform="translate(321.456693 230.360333)">
        <text>
-        <tspan x="0" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">2</tspan>
-        <tspan x="3.336914" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">1</tspan>
-        <tspan x="6.673828" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30"> </tspan>
-        <tspan x="8.34082" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">w</tspan>
-        <tspan x="12.673828" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">t</tspan>
-        <tspan x="14.34082" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">%</tspan>
-        <tspan x="19.675781" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30"> </tspan>
-        <tspan x="21.342773" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">N</tspan>
-        <tspan x="25.675781" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">i</tspan>
-        <tspan x="27.008789" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">/</tspan>
-        <tspan x="28.675781" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">A</tspan>
-        <tspan x="32.677734" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">l</tspan>
-        <tspan x="36.74981" y="-0.625" style="font-size: 6px; font-family: 'Arial'; fill: #1f2a30">O</tspan>
-        <tspan x="34.115283" y="1.167125" style="font-size: 4.2px; font-family: 'Arial'; fill: #1f2a30">2</tspan>
-        <tspan x="41.521343" y="1.167125" style="font-size: 4.2px; font-family: 'Arial'; fill: #1f2a30">3</tspan>
+        <tspan x="0" y="-0.4375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">2</tspan>
+        <tspan x="3.304688" y="-0.4375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">1</tspan>
+        <tspan x="6.609375" y="-0.4375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+        <tspan x="8.71875" y="-0.4375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">w</tspan>
+        <tspan x="13.136719" y="-0.4375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">t</tspan>
+        <tspan x="15.205078" y="-0.4375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">%</tspan>
+        <tspan x="20.223633" y="-0.4375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+        <tspan x="22.333008" y="-0.4375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">N</tspan>
+        <tspan x="26.923828" y="-0.4375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">i</tspan>
+        <tspan x="28.400391" y="-0.4375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">/</tspan>
+        <tspan x="30.776367" y="-0.4375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">A</tspan>
+        <tspan x="34.725586" y="-0.4375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">l</tspan>
+        <tspan x="38.723203" y="-0.4375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">O</tspan>
+        <tspan x="36.256016" y="0.485938" style="font-size: 4.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">2</tspan>
+        <tspan x="43.417695" y="0.485938" style="font-size: 4.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">3</tspan>
        </text>
       </g>
      </g>
@@ -1508,7 +1474,7 @@ L 0 2
     <g id="ytick_26">
      <g id="line2d_48"/>
      <g id="text_91">
-      <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="367.356693" y="266.9762" transform="rotate(-0 367.356693 266.9762)">USY FCC</text>
+      <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="367.356693" y="267.106512" transform="rotate(-0 367.356693 267.106512)">USY FCC</text>
      </g>
     </g>
    </g>
@@ -1559,7 +1525,7 @@ z
     </g>
    </g>
    <g id="text_92">
-    <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: start; fill: #1b6f78" x="468.586136" y="192.784186" transform="rotate(-0 468.586136 192.784186)">-19.7%</text>
+    <text style="font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1b6f78" x="468.586136" y="192.800373" transform="rotate(-0 468.586136 192.800373)">-19.7%</text>
    </g>
    <g id="line2d_56">
     <g clip-path="url(#p40093fcd5f)">
@@ -1567,7 +1533,7 @@ z
     </g>
    </g>
    <g id="text_93">
-    <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: start; fill: #1b6f78" x="454.429142" y="229.530365" transform="rotate(-0 454.429142 229.530365)">-9.9%</text>
+    <text style="font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1b6f78" x="454.429142" y="229.546552" transform="rotate(-0 454.429142 229.546552)">-9.9%</text>
    </g>
    <g id="line2d_57">
     <g clip-path="url(#p40093fcd5f)">
@@ -1575,7 +1541,7 @@ z
     </g>
    </g>
    <g id="text_94">
-    <text style="font-size: 5.6px; font-family: 'Arial'; text-anchor: start; fill: #1b6f78" x="392.35881" y="266.276543" transform="rotate(-0 392.35881 266.276543)">-10.7%</text>
+    <text style="font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1b6f78" x="392.35881" y="266.292731" transform="rotate(-0 392.35881 266.292731)">-10.7%</text>
    </g>
    <g id="line2d_58">
     <defs>
@@ -1636,11 +1602,11 @@ z
    <g id="legend_2">
     <g id="line2d_64">
      <g>
-      <use xlink:href="#mec25b7efa5" x="338.631024" y="144.335246" style="fill: #1b6f78; stroke: #1b6f78"/>
+      <use xlink:href="#mec25b7efa5" x="338.631024" y="143.256089" style="fill: #1b6f78; stroke: #1b6f78"/>
      </g>
     </g>
     <g id="text_95">
-     <text style="font-size: 5.4px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="343.491024" y="146.225246" transform="rotate(-0 343.491024 146.225246)">COMET</text>
+     <text style="font-size: 5.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="343.491024" y="145.146089" transform="rotate(-0 343.491024 145.146089)">COMET</text>
     </g>
     <g id="line2d_65">
      <defs>
@@ -1657,11 +1623,11 @@ z
 " style="stroke: #9aa6ab"/>
      </defs>
      <g>
-      <use xlink:href="#mc5ac3fe630" x="338.631024" y="151.163714" style="fill: #ffffff; stroke: #9aa6ab"/>
+      <use xlink:href="#mc5ac3fe630" x="338.631024" y="150.522464" style="fill: #ffffff; stroke: #9aa6ab"/>
      </g>
     </g>
     <g id="text_96">
-     <text style="font-size: 5.4px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="343.491024" y="153.053714" transform="rotate(-0 343.491024 153.053714)">Published estimate</text>
+     <text style="font-size: 5.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="343.491024" y="152.412464" transform="rotate(-0 343.491024 152.412464)">발표된 추정값</text>
     </g>
     <g id="line2d_66">
      <defs>
@@ -1678,11 +1644,11 @@ z
 " style="stroke: #b8702f"/>
      </defs>
      <g>
-      <use xlink:href="#mff290168fb" x="338.631024" y="157.992183" style="fill: #b8702f; stroke: #b8702f"/>
+      <use xlink:href="#mff290168fb" x="338.631024" y="157.788839" style="fill: #b8702f; stroke: #b8702f"/>
      </g>
     </g>
     <g id="text_97">
-     <text style="font-size: 5.4px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="343.491024" y="159.882183" transform="rotate(-0 343.491024 159.882183)">Published market price</text>
+     <text style="font-size: 5.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="343.491024" y="159.678839" transform="rotate(-0 343.491024 159.678839)">발표된 시장 가격</text>
     </g>
    </g>
   </g>
@@ -1716,7 +1682,7 @@ L 0 1.5
       </g>
      </g>
      <g id="text_98">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="40.826968" y="462.887417" transform="rotate(-0 40.826968 462.887417)">2020</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="40.826968" y="463.113292" transform="rotate(-0 40.826968 463.113292)">2020</text>
      </g>
     </g>
     <g id="xtick_24">
@@ -1726,7 +1692,7 @@ L 0 1.5
       </g>
      </g>
      <g id="text_99">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="83.606259" y="462.887417" transform="rotate(-0 83.606259 462.887417)">2023</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="83.606259" y="463.113292" transform="rotate(-0 83.606259 463.113292)">2023</text>
      </g>
     </g>
     <g id="xtick_25">
@@ -1736,7 +1702,7 @@ L 0 1.5
       </g>
      </g>
      <g id="text_100">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="126.38555" y="462.887417" transform="rotate(-0 126.38555 462.887417)">2026</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="126.38555" y="463.113292" transform="rotate(-0 126.38555 463.113292)">2026</text>
      </g>
     </g>
    </g>
@@ -1753,7 +1719,7 @@ L -1.5 0
       </g>
      </g>
      <g id="text_101">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="24.751181" y="458.026386" transform="rotate(-0 24.751181 458.026386)">0</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="24.751181" y="458.139323" transform="rotate(-0 24.751181 458.139323)">0</text>
      </g>
     </g>
     <g id="ytick_28">
@@ -1763,7 +1729,7 @@ L -1.5 0
       </g>
      </g>
      <g id="text_102">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="24.751181" y="433.738668" transform="rotate(-0 24.751181 433.738668)">1.5k</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="24.751181" y="433.851605" transform="rotate(-0 24.751181 433.851605)">1.5k</text>
      </g>
     </g>
     <g id="ytick_29">
@@ -1773,7 +1739,7 @@ L -1.5 0
       </g>
      </g>
      <g id="text_103">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="24.751181" y="409.45095" transform="rotate(-0 24.751181 409.45095)">3k</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="24.751181" y="409.563888" transform="rotate(-0 24.751181 409.563888)">3k</text>
      </g>
     </g>
    </g>
@@ -1882,7 +1848,7 @@ L 138.251339 456.165354
 " style="fill: none; stroke: #1f2a30; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_104">
-    <text style="font-weight: 700; font-size: 5.6px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="31.066186" y="412.824027" transform="rotate(-0 31.066186 412.824027)">Platinum  (USD/troy oz)</text>
+    <text style="font-weight: 700; font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="31.066186" y="413.119777" transform="rotate(-0 31.066186 413.119777)">백금  (USD/트로이온스)</text>
    </g>
    <g id="line2d_74">
     <defs>
@@ -1946,7 +1912,7 @@ z
       </g>
      </g>
      <g id="text_105">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="160.40933" y="462.887417" transform="rotate(-0 160.40933 462.887417)">2020</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="160.40933" y="463.113292" transform="rotate(-0 160.40933 463.113292)">2020</text>
      </g>
     </g>
     <g id="xtick_27">
@@ -1956,7 +1922,7 @@ z
       </g>
      </g>
      <g id="text_106">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="203.188621" y="462.887417" transform="rotate(-0 203.188621 462.887417)">2023</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="203.188621" y="463.113292" transform="rotate(-0 203.188621 463.113292)">2023</text>
      </g>
     </g>
     <g id="xtick_28">
@@ -1966,7 +1932,7 @@ z
       </g>
      </g>
      <g id="text_107">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="245.967912" y="462.887417" transform="rotate(-0 245.967912 462.887417)">2026</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="245.967912" y="463.113292" transform="rotate(-0 245.967912 463.113292)">2026</text>
      </g>
     </g>
    </g>
@@ -1978,7 +1944,7 @@ z
       </g>
      </g>
      <g id="text_108">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="144.333543" y="458.026386" transform="rotate(-0 144.333543 458.026386)">0</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="144.333543" y="458.139323" transform="rotate(-0 144.333543 458.139323)">0</text>
      </g>
     </g>
     <g id="ytick_31">
@@ -1988,7 +1954,7 @@ z
       </g>
      </g>
      <g id="text_109">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="144.333543" y="437.510856" transform="rotate(-0 144.333543 437.510856)">1.5k</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="144.333543" y="437.623794" transform="rotate(-0 144.333543 437.623794)">1.5k</text>
      </g>
     </g>
     <g id="ytick_32">
@@ -1998,7 +1964,7 @@ z
       </g>
      </g>
      <g id="text_110">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="144.333543" y="416.995327" transform="rotate(-0 144.333543 416.995327)">3k</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="144.333543" y="417.108265" transform="rotate(-0 144.333543 417.108265)">3k</text>
      </g>
     </g>
    </g>
@@ -2107,7 +2073,7 @@ L 257.833701 456.165354
 " style="fill: none; stroke: #1f2a30; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_111">
-    <text style="font-weight: 700; font-size: 5.6px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="150.648548" y="412.824027" transform="rotate(-0 150.648548 412.824027)">Palladium  (USD/troy oz)</text>
+    <text style="font-weight: 700; font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="150.648548" y="413.119777" transform="rotate(-0 150.648548 413.119777)">팔라듐  (USD/트로이온스)</text>
    </g>
    <g id="line2d_83">
     <g clip-path="url(#p9e1c86a55c)">
@@ -2145,7 +2111,7 @@ z
       </g>
      </g>
      <g id="text_112">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="279.991692" y="462.887417" transform="rotate(-0 279.991692 462.887417)">2020</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="279.991692" y="463.113292" transform="rotate(-0 279.991692 463.113292)">2020</text>
      </g>
     </g>
     <g id="xtick_30">
@@ -2155,7 +2121,7 @@ z
       </g>
      </g>
      <g id="text_113">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="322.770983" y="462.887417" transform="rotate(-0 322.770983 462.887417)">2023</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="322.770983" y="463.113292" transform="rotate(-0 322.770983 463.113292)">2023</text>
      </g>
     </g>
     <g id="xtick_31">
@@ -2165,7 +2131,7 @@ z
       </g>
      </g>
      <g id="text_114">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="365.550274" y="462.887417" transform="rotate(-0 365.550274 462.887417)">2026</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="365.550274" y="463.113292" transform="rotate(-0 365.550274 463.113292)">2026</text>
      </g>
     </g>
    </g>
@@ -2177,7 +2143,7 @@ z
       </g>
      </g>
      <g id="text_115">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="263.915906" y="458.026386" transform="rotate(-0 263.915906 458.026386)">0</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="263.915906" y="458.139323" transform="rotate(-0 263.915906 458.139323)">0</text>
      </g>
     </g>
     <g id="ytick_34">
@@ -2187,7 +2153,7 @@ z
       </g>
      </g>
      <g id="text_116">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="263.915906" y="437.404761" transform="rotate(-0 263.915906 437.404761)">15k</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="263.915906" y="437.517698" transform="rotate(-0 263.915906 437.517698)">15k</text>
      </g>
     </g>
     <g id="ytick_35">
@@ -2197,7 +2163,7 @@ z
       </g>
      </g>
      <g id="text_117">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="263.915906" y="416.783136" transform="rotate(-0 263.915906 416.783136)">30k</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="263.915906" y="416.896074" transform="rotate(-0 263.915906 416.896074)">30k</text>
      </g>
     </g>
    </g>
@@ -2306,7 +2272,7 @@ L 377.416063 456.165354
 " style="fill: none; stroke: #1f2a30; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_118">
-    <text style="font-weight: 700; font-size: 5.6px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="270.23091" y="412.824027" transform="rotate(-0 270.23091 412.824027)">Rhodium  (USD/troy oz)</text>
+    <text style="font-weight: 700; font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="270.23091" y="413.119777" transform="rotate(-0 270.23091 413.119777)">로듐  (USD/트로이온스)</text>
    </g>
    <g id="line2d_92">
     <g clip-path="url(#pe406193a58)">
@@ -2344,7 +2310,7 @@ z
       </g>
      </g>
      <g id="text_119">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="399.574055" y="462.887417" transform="rotate(-0 399.574055 462.887417)">2020</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="399.574055" y="463.113292" transform="rotate(-0 399.574055 463.113292)">2020</text>
      </g>
     </g>
     <g id="xtick_33">
@@ -2354,7 +2320,7 @@ z
       </g>
      </g>
      <g id="text_120">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="442.353346" y="462.887417" transform="rotate(-0 442.353346 462.887417)">2023</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="442.353346" y="463.113292" transform="rotate(-0 442.353346 463.113292)">2023</text>
      </g>
     </g>
     <g id="xtick_34">
@@ -2364,7 +2330,7 @@ z
       </g>
      </g>
      <g id="text_121">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="485.132636" y="462.887417" transform="rotate(-0 485.132636 462.887417)">2026</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="485.132636" y="463.113292" transform="rotate(-0 485.132636 463.113292)">2026</text>
      </g>
     </g>
    </g>
@@ -2376,7 +2342,7 @@ z
       </g>
      </g>
      <g id="text_122">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="383.498268" y="458.026386" transform="rotate(-0 383.498268 458.026386)">0</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="383.498268" y="458.139323" transform="rotate(-0 383.498268 458.139323)">0</text>
      </g>
     </g>
     <g id="ytick_37">
@@ -2386,7 +2352,7 @@ z
       </g>
      </g>
      <g id="text_123">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="383.498268" y="439.483052" transform="rotate(-0 383.498268 439.483052)">800</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="383.498268" y="439.59599" transform="rotate(-0 383.498268 439.59599)">800</text>
      </g>
     </g>
     <g id="ytick_38">
@@ -2396,7 +2362,7 @@ z
       </g>
      </g>
      <g id="text_124">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="383.498268" y="420.939719" transform="rotate(-0 383.498268 420.939719)">1.6k</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="383.498268" y="421.052656" transform="rotate(-0 383.498268 421.052656)">1.6k</text>
      </g>
     </g>
    </g>
@@ -2505,7 +2471,7 @@ L 496.998425 456.165354
 " style="fill: none; stroke: #1f2a30; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_125">
-    <text style="font-weight: 700; font-size: 5.6px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="389.813272" y="412.824027" transform="rotate(-0 389.813272 412.824027)">Ruthenium  (USD/troy oz)</text>
+    <text style="font-weight: 700; font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="389.813272" y="413.119777" transform="rotate(-0 389.813272 413.119777)">루테늄  (USD/트로이온스)</text>
    </g>
    <g id="line2d_101">
     <g clip-path="url(#p8d9f7f6807)">
@@ -2543,7 +2509,7 @@ z
       </g>
      </g>
      <g id="text_126">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="40.826968" y="561.674818" transform="rotate(-0 40.826968 561.674818)">2020</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="40.826968" y="561.900693" transform="rotate(-0 40.826968 561.900693)">2020</text>
      </g>
     </g>
     <g id="xtick_36">
@@ -2553,7 +2519,7 @@ z
       </g>
      </g>
      <g id="text_127">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="83.606259" y="561.674818" transform="rotate(-0 83.606259 561.674818)">2023</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="83.606259" y="561.900693" transform="rotate(-0 83.606259 561.900693)">2023</text>
      </g>
     </g>
     <g id="xtick_37">
@@ -2563,7 +2529,7 @@ z
       </g>
      </g>
      <g id="text_128">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="126.38555" y="561.674818" transform="rotate(-0 126.38555 561.674818)">2026</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="126.38555" y="561.900693" transform="rotate(-0 126.38555 561.900693)">2026</text>
      </g>
     </g>
    </g>
@@ -2575,7 +2541,7 @@ z
       </g>
      </g>
      <g id="text_129">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="24.751181" y="556.813787" transform="rotate(-0 24.751181 556.813787)">0</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="24.751181" y="556.926725" transform="rotate(-0 24.751181 556.926725)">0</text>
      </g>
     </g>
     <g id="ytick_40">
@@ -2585,7 +2551,7 @@ z
       </g>
      </g>
      <g id="text_130">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="24.751181" y="536.678775" transform="rotate(-0 24.751181 536.678775)">4k</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="24.751181" y="536.791713" transform="rotate(-0 24.751181 536.791713)">4k</text>
      </g>
     </g>
     <g id="ytick_41">
@@ -2595,7 +2561,7 @@ z
       </g>
      </g>
      <g id="text_131">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="24.751181" y="516.543764" transform="rotate(-0 24.751181 516.543764)">8k</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="24.751181" y="516.656701" transform="rotate(-0 24.751181 516.656701)">8k</text>
      </g>
     </g>
    </g>
@@ -2704,7 +2670,7 @@ L 138.251339 554.952756
 " style="fill: none; stroke: #1f2a30; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_132">
-    <text style="font-weight: 700; font-size: 5.6px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="31.066186" y="511.611428" transform="rotate(-0 31.066186 511.611428)">Iridium  (USD/troy oz)</text>
+    <text style="font-weight: 700; font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="31.066186" y="511.907178" transform="rotate(-0 31.066186 511.907178)">이리듐  (USD/트로이온스)</text>
    </g>
    <g id="line2d_110">
     <g clip-path="url(#p2cfa8f8ac6)">
@@ -2742,7 +2708,7 @@ z
       </g>
      </g>
      <g id="text_133">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="160.40933" y="561.674818" transform="rotate(-0 160.40933 561.674818)">2020</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="160.40933" y="561.900693" transform="rotate(-0 160.40933 561.900693)">2020</text>
      </g>
     </g>
     <g id="xtick_39">
@@ -2752,7 +2718,7 @@ z
       </g>
      </g>
      <g id="text_134">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="203.188621" y="561.674818" transform="rotate(-0 203.188621 561.674818)">2023</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="203.188621" y="561.900693" transform="rotate(-0 203.188621 561.900693)">2023</text>
      </g>
     </g>
     <g id="xtick_40">
@@ -2762,7 +2728,7 @@ z
       </g>
      </g>
      <g id="text_135">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="245.967912" y="561.674818" transform="rotate(-0 245.967912 561.674818)">2026</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="245.967912" y="561.900693" transform="rotate(-0 245.967912 561.900693)">2026</text>
      </g>
     </g>
    </g>
@@ -2774,7 +2740,7 @@ z
       </g>
      </g>
      <g id="text_136">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="144.333543" y="556.813787" transform="rotate(-0 144.333543 556.813787)">0</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="144.333543" y="556.926725" transform="rotate(-0 144.333543 556.926725)">0</text>
      </g>
     </g>
     <g id="ytick_43">
@@ -2784,7 +2750,7 @@ z
       </g>
      </g>
      <g id="text_137">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="144.333543" y="537.114007" transform="rotate(-0 144.333543 537.114007)">2.5k</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="144.333543" y="537.226945" transform="rotate(-0 144.333543 537.226945)">2.5k</text>
      </g>
     </g>
     <g id="ytick_44">
@@ -2794,7 +2760,7 @@ z
       </g>
      </g>
      <g id="text_138">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="144.333543" y="517.414228" transform="rotate(-0 144.333543 517.414228)">5k</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="144.333543" y="517.527165" transform="rotate(-0 144.333543 517.527165)">5k</text>
      </g>
     </g>
    </g>
@@ -2903,7 +2869,7 @@ L 257.833701 554.952756
 " style="fill: none; stroke: #1f2a30; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_139">
-    <text style="font-weight: 700; font-size: 5.6px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="150.648548" y="511.611428" transform="rotate(-0 150.648548 511.611428)">Gold  (USD/troy oz)</text>
+    <text style="font-weight: 700; font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="150.648548" y="511.907178" transform="rotate(-0 150.648548 511.907178)">금  (USD/트로이온스)</text>
    </g>
    <g id="line2d_119">
     <g clip-path="url(#p15ec1d352b)">
@@ -2941,7 +2907,7 @@ z
       </g>
      </g>
      <g id="text_140">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="279.991692" y="561.674818" transform="rotate(-0 279.991692 561.674818)">2020</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="279.991692" y="561.900693" transform="rotate(-0 279.991692 561.900693)">2020</text>
      </g>
     </g>
     <g id="xtick_42">
@@ -2951,7 +2917,7 @@ z
       </g>
      </g>
      <g id="text_141">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="322.770983" y="561.674818" transform="rotate(-0 322.770983 561.674818)">2023</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="322.770983" y="561.900693" transform="rotate(-0 322.770983 561.900693)">2023</text>
      </g>
     </g>
     <g id="xtick_43">
@@ -2961,7 +2927,7 @@ z
       </g>
      </g>
      <g id="text_142">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="365.550274" y="561.674818" transform="rotate(-0 365.550274 561.674818)">2026</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="365.550274" y="561.900693" transform="rotate(-0 365.550274 561.900693)">2026</text>
      </g>
     </g>
    </g>
@@ -2973,7 +2939,7 @@ z
       </g>
      </g>
      <g id="text_143">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="263.915906" y="556.813787" transform="rotate(-0 263.915906 556.813787)">0</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="263.915906" y="556.926725" transform="rotate(-0 263.915906 556.926725)">0</text>
      </g>
     </g>
     <g id="ytick_46">
@@ -2983,7 +2949,7 @@ z
       </g>
      </g>
      <g id="text_144">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="263.915906" y="539.485039" transform="rotate(-0 263.915906 539.485039)">40</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="263.915906" y="539.597977" transform="rotate(-0 263.915906 539.597977)">40</text>
      </g>
     </g>
     <g id="ytick_47">
@@ -2993,7 +2959,7 @@ z
       </g>
      </g>
      <g id="text_145">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="263.915906" y="522.156291" transform="rotate(-0 263.915906 522.156291)">80</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="263.915906" y="522.269229" transform="rotate(-0 263.915906 522.269229)">80</text>
      </g>
     </g>
    </g>
@@ -3102,7 +3068,7 @@ L 377.416063 554.952756
 " style="fill: none; stroke: #1f2a30; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_146">
-    <text style="font-weight: 700; font-size: 5.6px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="270.23091" y="511.611428" transform="rotate(-0 270.23091 511.611428)">Silver  (USD/troy oz)</text>
+    <text style="font-weight: 700; font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="270.23091" y="511.907178" transform="rotate(-0 270.23091 511.907178)">은  (USD/트로이온스)</text>
    </g>
    <g id="line2d_128">
     <g clip-path="url(#p8989828c64)">
@@ -3140,7 +3106,7 @@ z
       </g>
      </g>
      <g id="text_147">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="399.574055" y="561.674818" transform="rotate(-0 399.574055 561.674818)">2020</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="399.574055" y="561.900693" transform="rotate(-0 399.574055 561.900693)">2020</text>
      </g>
     </g>
     <g id="xtick_45">
@@ -3150,7 +3116,7 @@ z
       </g>
      </g>
      <g id="text_148">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="442.353346" y="561.674818" transform="rotate(-0 442.353346 561.674818)">2023</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="442.353346" y="561.900693" transform="rotate(-0 442.353346 561.900693)">2023</text>
      </g>
     </g>
     <g id="xtick_46">
@@ -3160,7 +3126,7 @@ z
       </g>
      </g>
      <g id="text_149">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="485.132636" y="561.674818" transform="rotate(-0 485.132636 561.674818)">2026</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="485.132636" y="561.900693" transform="rotate(-0 485.132636 561.900693)">2026</text>
      </g>
     </g>
    </g>
@@ -3172,7 +3138,7 @@ z
       </g>
      </g>
      <g id="text_150">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="383.498268" y="556.813787" transform="rotate(-0 383.498268 556.813787)">0</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="383.498268" y="556.926725" transform="rotate(-0 383.498268 556.926725)">0</text>
      </g>
     </g>
     <g id="ytick_49">
@@ -3182,7 +3148,7 @@ z
       </g>
      </g>
      <g id="text_151">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="383.498268" y="536.27026" transform="rotate(-0 383.498268 536.27026)">8</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="383.498268" y="536.383198" transform="rotate(-0 383.498268 536.383198)">8</text>
      </g>
     </g>
     <g id="ytick_50">
@@ -3192,7 +3158,7 @@ z
       </g>
      </g>
      <g id="text_152">
-      <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="383.498268" y="515.726733" transform="rotate(-0 383.498268 515.726733)">16</text>
+      <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="383.498268" y="515.839671" transform="rotate(-0 383.498268 515.839671)">16</text>
      </g>
     </g>
    </g>
@@ -3301,7 +3267,7 @@ L 496.998425 554.952756
 " style="fill: none; stroke: #1f2a30; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_153">
-    <text style="font-weight: 700; font-size: 5.6px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="389.813272" y="511.611428" transform="rotate(-0 389.813272 511.611428)">Nickel  (USD/lb)</text>
+    <text style="font-weight: 700; font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="389.813272" y="511.907178" transform="rotate(-0 389.813272 511.907178)">니켈  (USD/lb)</text>
    </g>
    <g id="line2d_137">
     <g clip-path="url(#pe169d9f229)">
@@ -3315,27 +3281,27 @@ L 496.998425 554.952756
    </g>
   </g>
   <g id="text_154">
-   <text style="font-size: 5.2px; font-family: 'Arial'; text-anchor: start; fill: #5b6870" x="20.182677" y="368.418898" transform="rotate(-0 20.182677 368.418898)">Lowest-cost candidate in each thermal reaction family, reference month 2026-05</text>
+   <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #5b6870" x="20.182677" y="368.418898" transform="rotate(-0 20.182677 368.418898)">각 열촉매 반응군의 최저 원가 후보, 기준월 2026-05</text>
   </g>
   <g id="text_155">
-   <text style="font-size: 5.2px; font-family: 'Arial'; fill: #5b6870" transform="translate(310.308661 327.422202)">CatCost User Guide Table 6.2; the FCC case uses</text>
-   <text style="font-size: 5.2px; font-family: 'Arial'; fill: #5b6870" transform="translate(310.308661 334.133858)">the footnote rate of 67 short tons per day</text>
+   <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #5b6870" transform="translate(310.308661 326.98264)">CatCost 사용자 안내 표 6.2</text>
+   <text style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #5b6870" transform="translate(310.308661 334.133858)">FCC 사례는 각주의 일 67 short ton 처리량 기준</text>
   </g>
   <g id="text_156">
-   <text style="font-size: 5.4px; font-family: 'Arial'; fill: #5b6870" transform="translate(172.626803 390.296466)">Monthly averages 2019-01 to 2026-07; shaded: 89-month repricing window</text>
-   <text style="font-size: 5.4px; font-family: 'Arial'; fill: #5b6870" transform="translate(149.515225 396.936441)">teal: reference basis (2026-05 monthly average); orange: spot quote in the fixed price package</text>
+   <text style="font-size: 5.4px; font-family: 'Malgun Gothic'; fill: #5b6870" transform="translate(197.012022 390.032963)">2019-01~2026-07 월평균, 음영은 89개월 재산정 구간</text>
+   <text style="font-size: 5.4px; font-family: 'Malgun Gothic'; fill: #5b6870" transform="translate(187.333788 397.278413)">청록: 기준월(2026-05) 평균, 주황: 고정 가격 묶음의 현물 시세</text>
   </g>
   <g id="text_157">
-   <text style="font-weight: 700; font-size: 8px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="6.054803" y="10.459843" transform="rotate(-0 6.054803 10.459843)">a</text>
+   <text style="font-weight: 700; font-size: 8px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="6.054803" y="10.459843" transform="rotate(-0 6.054803 10.459843)">a</text>
   </g>
   <g id="text_158">
-   <text style="font-weight: 700; font-size: 8px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="6.054803" y="138.302362" transform="rotate(-0 6.054803 138.302362)">b</text>
+   <text style="font-weight: 700; font-size: 8px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="6.054803" y="138.302362" transform="rotate(-0 6.054803 138.302362)">b</text>
   </g>
   <g id="text_159">
-   <text style="font-weight: 700; font-size: 8px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="302.740157" y="138.302362" transform="rotate(-0 302.740157 138.302362)">c</text>
+   <text style="font-weight: 700; font-size: 8px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="302.740157" y="138.302362" transform="rotate(-0 302.740157 138.302362)">c</text>
   </g>
   <g id="text_160">
-   <text style="font-weight: 700; font-size: 8px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="6.054803" y="386.433071" transform="rotate(-0 6.054803 386.433071)">d</text>
+   <text style="font-weight: 700; font-size: 8px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="6.054803" y="386.433071" transform="rotate(-0 6.054803 386.433071)">d</text>
   </g>
  </g>
  <defs>
