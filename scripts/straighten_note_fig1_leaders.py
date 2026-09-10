@@ -102,9 +102,16 @@ def main():
     tag = tag_left_edge(pixels, panel, spans[0][0], spans[-1][1], fill)
     print(f"bands {spans} | right edge {right} | panel {panel} | fill {fill} | tags from {tag}")
 
+    # The panel has rounded corners, so clearing the stubs over the full height would paint
+    # the fill colour outside them. Clear only the rows where the panel is at full width.
+    column = pixels[:, panel + 8]
+    inside = [y for y in range(height) if abs(column[y] - np.array(fill)).sum() < 40]
+    if not inside:
+        raise SystemExit("could not measure the panel's straight section")
+    top_inside, bottom_inside = min(inside) + 6, max(inside) - 6
     draw = ImageDraw.Draw(image)
     draw.rectangle([right + 2, 0, panel - 2, height - 1], fill=(255, 255, 255))
-    draw.rectangle([panel + 3, spans[0][0] - 30, tag - 3, spans[-1][1] + 30], fill=fill)
+    draw.rectangle([panel + 3, top_inside, tag - 3, bottom_inside], fill=fill)
     for top, bottom in spans:
         y = (top + bottom) // 2
         x = right + 5

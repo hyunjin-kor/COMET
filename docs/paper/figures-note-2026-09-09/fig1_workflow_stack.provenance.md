@@ -14,7 +14,7 @@
 - Tool: ChatGPT image generation (OpenAI), used through the chatgpt.com web interface in a conversation titled "Generate Figure Schematic". The interface names the chat model tier ("Pro") but not the image model, so the image model version is not recorded here.
 - Dates: candidate versions A to D on 2026-09-09; a cleaned variant of D on 2026-09-10; the adopted version, with the labels rewritten in the conventional terminology of the field, later on 2026-09-10.
 - Content: every label, layer name and pictogram was specified in writing by the authors. The tool contributed the drawing only. The authors compared every word of the output with the specification; the only correction needed was `cm2` to `cm²`, which a later prompt fixed. The labels were rewritten once more so that the figure uses the same conventional terminology as the manuscript.
-- Authors' edits: the raw image had stepped dotted leaders between the five bands and the traceability panel. The script measures the band and panel geometry from the raw file, clears the gap between the bands and the panel, removes the leader stubs inside the panel and draws one straight horizontal dotted leader per band. Nothing else was altered.
+- Authors' edits: the raw image had stepped dotted leaders between the five bands and the traceability panel. The script measures the band and panel geometry from the raw file, clears the gap between the bands and the panel, removes the leader stubs inside the panel and draws one straight horizontal dotted leader per band. Clearing is confined to the rows where the panel is at full width, so its rounded corners and border are left untouched. Nothing else was altered.
 
 ## Prompts (verbatim, in order)
 
