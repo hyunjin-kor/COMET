@@ -13,6 +13,8 @@ a comet nucleus being the same irregular porous geometry as a catalyst pellet. R
 import argparse
 import io
 import json
+import math
+import random
 from pathlib import Path
 
 import matplotlib
@@ -51,14 +53,30 @@ TEXT = {
 }
 
 
-def _pellet(ax, cx, cy, r):
-    """A pitted porous sphere: the comet nucleus that gives the software its name."""
-    ax.add_patch(Circle((cx, cy), r, fc=ACC_PALE, ec=ACC, lw=0.9, zorder=2))
-    pits = [(-0.42, 0.34, 0.17), (0.30, 0.44, 0.12), (-0.10, 0.02, 0.21), (0.46, -0.10, 0.15),
-            (-0.48, -0.30, 0.13), (0.10, -0.48, 0.16), (-0.16, 0.62, 0.09), (0.60, 0.20, 0.09)]
-    for dx, dy, pr in pits:
-        ax.add_patch(Ellipse((cx + dx * r, cy + dy * r), 2 * pr * r, 1.6 * pr * r,
-                             fc=ACC_MID, ec="none", alpha=0.75, zorder=3))
+def _pellet(ax, cx, cy, r, seed=20260910):
+    """A pitted porous sphere: the comet nucleus that gives the software its name.
+
+    Pit centres are drawn from a fixed seed so the figure is reproducible, rejected when they
+    would cross the rim, and sized from a small set so the surface reads as porous rather than
+    speckled.
+    """
+    rng = random.Random(seed)
+    ax.add_patch(Circle((cx, cy), r, fc=ACC_PALE, ec=ACC, lw=1.0, zorder=2))
+    placed = []
+    while len(placed) < 26:
+        angle = rng.uniform(0, 2 * math.pi)
+        radius = r * math.sqrt(rng.uniform(0, 1)) * 0.84
+        size = rng.choice((0.055, 0.075, 0.075, 0.10, 0.10, 0.135, 0.17)) * r
+        x, y = cx + radius * math.cos(angle), cy + radius * math.sin(angle)
+        if math.hypot(x - cx, y - cy) + size > r * 0.93:
+            continue
+        if any(math.hypot(x - px, y - py) < (size + ps) * 1.25 for px, py, ps in placed):
+            continue
+        placed.append((x, y, size))
+    for x, y, size in placed:
+        shade = ACC if size > 0.09 * r else ACC_MID
+        ax.add_patch(Ellipse((x, y), 2 * size, 1.75 * size, fc=shade, ec="none",
+                             alpha=0.9 if shade == ACC_MID else 0.8, zorder=3))
 
 
 def graphic(lang):
@@ -80,12 +98,12 @@ def graphic(lang):
     fig.subplots_adjust(0, 0, 1, 1)
     ax.set(xlim=(0, 3.25), ylim=(0, 1.75))
     ax.axis("off")
-    ax.text(1.625, 1.585, label["title"], ha="center", va="center", fontsize=8.4, fontweight="bold")
+    ax.text(1.625, 1.575, label["title"], ha="center", va="center", fontsize=9.0, fontweight="bold")
 
-    _pellet(ax, 0.40, 0.86, 0.245)
-    ax.text(0.40, 0.41, label["left"], ha="center", va="top", fontsize=5.8, color=MUTED, linespacing=1.5)
+    _pellet(ax, 0.42, 0.88, 0.275)
+    ax.text(0.42, 0.42, label["left"], ha="center", va="top", fontsize=6.0, color=MUTED, linespacing=1.55)
 
-    bx, bw, by, bh = 1.10, 0.30, 0.44, 0.80
+    bx, bw, by, bh = 1.13, 0.33, 0.47, 0.78
     ax.add_patch(FancyBboxPatch((bx - 0.13, by - 0.05), bw + 0.26, bh + 0.10,
                                 boxstyle="round,pad=0,rounding_size=0.05", fc="white", ec=RULE, lw=0.6))
     bottom = by
@@ -93,29 +111,30 @@ def graphic(lang):
         ax.add_patch(FancyBboxPatch((bx, bottom), bw, share * bh, boxstyle="round,pad=0,rounding_size=0.008",
                                     fc=colour, ec="none"))
         bottom += share * bh
-    for i, (name, colour) in enumerate(zip(label["seg"], (ACC, ACC_MID, "#B9C2C6"), strict=True)):
+    legend = list(zip(label["seg"], (ACC, ACC_MID, "#B9C2C6"), strict=True))[::-1]
+    for i, (name, colour) in enumerate(legend):
         y = by + bh - 0.11 - i * 0.155
         ax.add_patch(Circle((bx + bw + 0.115, y + 0.022), 0.028, fc=colour, ec="none"))
-        ax.text(bx + bw + 0.165, y + 0.022, name, ha="left", va="center", fontsize=5.4, color=INK)
-    ax.text(bx + bw / 2, by + bh + 0.10, label["mid"], ha="center", va="bottom", fontsize=6.2, fontweight="bold")
-    ax.text(bx - 0.055, by - 0.115, label["mid_unit"], ha="left", va="center", fontsize=5.4, color=MUTED)
+        ax.text(bx + bw + 0.165, y + 0.022, name, ha="left", va="center", fontsize=5.6, color=INK)
+    ax.text(bx + bw / 2, by + bh + 0.11, label["mid"], ha="center", va="bottom", fontsize=6.6, fontweight="bold")
+    ax.text(bx + bw / 2, by - 0.135, label["mid_unit"], ha="center", va="center", fontsize=5.8, color=MUTED)
 
-    rx, rw, ry = 2.42, 0.72, 0.86
-    ax.add_patch(FancyBboxPatch((rx, ry - 0.115), rw, 0.23, boxstyle="round,pad=0,rounding_size=0.03",
-                                fc="#F4EAE0", ec=WARN, lw=0.7))
-    ax.text(rx + rw / 2, ry + 0.20, label["right"], ha="center", va="bottom", fontsize=6.2, fontweight="bold")
-    ax.text(rx, ry - 0.175, f"{low:.0f}", ha="left", va="top", fontsize=5.4, color=WARN)
-    ax.text(rx + rw, ry - 0.175, f"{high:.0f}", ha="right", va="top", fontsize=5.4, color=WARN)
-    position = rx + rw * min(max((total - low) / (high - low), 0.08), 0.92)
+    rx, rw, ry = 2.40, 0.76, 0.88
+    ax.add_patch(FancyBboxPatch((rx, ry - 0.135), rw, 0.27, boxstyle="round,pad=0,rounding_size=0.135",
+                                fc="#F7EFE6", ec=WARN, lw=0.8))
+    ax.text(rx + rw / 2, ry + 0.215, label["right"], ha="center", va="bottom", fontsize=6.6, fontweight="bold")
+    ax.text(rx, ry - 0.215, f"{low:.0f}", ha="left", va="center", fontsize=6.0, color=WARN)
+    ax.text(rx + rw, ry - 0.215, f"{high:.0f}", ha="right", va="center", fontsize=6.0, color=WARN)
+    position = rx + rw * min(max((total - low) / (high - low), 0.13), 0.55)
     ax.add_patch(Circle((position, ry), 0.055, fc=ACC, ec="white", lw=0.9, zorder=5))
-    ax.text(position, ry + 0.155, f"{total:.2f}", ha="center", va="bottom", fontsize=5.6, color=ACC,
+    ax.text(position + 0.075, ry, f"{total:.2f}", ha="left", va="center", fontsize=6.2, color=ACC,
             fontweight="bold")
-    ax.text(rx + rw / 2, ry - 0.325, label["right_note"], ha="center", va="center", fontsize=5.2, color=MUTED)
+    ax.text(rx + rw / 2, ry - 0.365, label["right_note"], ha="center", va="center", fontsize=5.6, color=MUTED)
 
-    for x0, x1 in ((0.70, 0.94), (1.98, 2.37)):
-        ax.add_patch(FancyArrowPatch((x0, 0.86), (x1, 0.86), arrowstyle="-|>", mutation_scale=6,
-                                     color=INK, lw=0.8, shrinkA=0, shrinkB=0))
-    ax.text(1.625, 0.14, label["foot"], ha="center", va="center", fontsize=5.8, color=MUTED)
+    for x0, x1 in ((0.75, 0.97), (2.03, 2.35)):
+        ax.add_patch(FancyArrowPatch((x0, 0.88), (x1, 0.88), arrowstyle="-|>", mutation_scale=7,
+                                     color=MUTED, lw=0.9, shrinkA=0, shrinkB=0))
+    ax.text(1.625, 0.135, label["foot"], ha="center", va="center", fontsize=6.0, color=MUTED)
     return fig
 
 
