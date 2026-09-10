@@ -153,14 +153,16 @@ A3·E5의 Engineering Au 판단은 사용자 조건(연구실은 SCIE만 실적 
 | `4cf9443` | 사용자 결정: 실제 화면 캡처 대신 방법론을 도식화한 도판으로. Fig. 2 = (a) 입력→재료비 C_m=Σw_i c_i → Step Method C_p=24·T·I·ΣH_j/M → 간접비·마진 P=(C_m+C_p)(1+g)(1+s)/(1−m) → 장부 도식, (b) 20 wt% Ni/Al₂O₃ 예시의 판매 단가 워터폴(Ni 1.51, Al₂O₃ 0.62, 가공 1.68, G&A 0.19, S&ARD 0.20, 마진 1.01 → 5.21 USD/lb; 캡처 JSON 사이드카), (c) 09-08 동결 니켈 월평균(IMF PCPS)+2026-05 기준값 8.52+2026-09-10 live 7.56+89개월 재생 구간. 본문 예시 숫자는 `ex()` 키 참조(총 53개). 캡처 도판 파일 삭제, 캡처 스크립트는 사이드카에 materials·step_method를 기록. 런칭 배너(`docs/assets/hero-banner.webp`)는 AI 생성(Claude Opus 5)·워드마크 포함이라 저널 도판에 쓰지 않음 | `--check` CHECK_OK(4,665 word-equivalent), ruff, 노트 테스트 2 passed, CI 34431773733 success(3 job) |
 | `2f84d55` | 사용자 요청((a)는 더 논문답게, (c)는 귀금속까지 연도별 USD로). Fig. 2a: 재료비·가공비를 병렬 상자로 두고 화살표에 C_m·C_p·P를 표시한 흐름도로 다시 그림, 설명 문구는 상자 안에 두 줄로. Fig. 2c: 09-08 동결 패키지의 Pt·Pd·Rh·Ru·Ir·Au·Ag·Ni 월평균(Johnson Matthey, IMF PCPS) 소형 다중 패널, 각 패널에 2026-05 기준값(청록)과 패키지의 live 시세(주황, 2026-09-04~06 관측), 89개월 재생 음영. 캡션에 b의 예시는 2026-09-10 니켈 시세를 썼음을 명시 | `--check` CHECK_OK(4,665 word-equivalent), ruff, 노트 테스트 2 passed, CI 34436195544 success(3 job) |
 | `8119167` | 사용자 지적('컴공 용어라 AI티가 난다')에 따라 원고·도판·한글판의 용어를 이 분야 관행어로 전면 교체. price tier→price basis(현물 spot / 기준월 monthly average), ledger→cost breakdown, decision diagnostics→sensitivity analyses, weight sweep→weighting sensitivity, price replay→historical repricing, candidate-removal control→leave-one-out test, score perturbation→score sensitivity, rubric→criterion, reference winner→candidate ranked first at the reference conditions, joint→combined, input hashes→checksums, renderer→user interface. 제목도 'Reproducible Decision Diagnostics'→'Reproducible Sensitivity Analysis'. Fig. 1은 레이아웃을 그대로 두고 라벨만 바꿔 재생성(Provenance→Traceability 등), 연결선 스크립트는 좌표 하드코딩 대신 원본에서 밴드·패널·태그를 측정하도록 재작성해 재생성본에도 적용됨 | `--check` CHECK_OK(4,699 word-equivalent), ruff, 노트 테스트 2 passed, CI 34439163441 3개 job success |
+| `c8b1ff9` | 사용자 요청(예시 촉매 하나로 충분한가, 상용 가격 대비 정확도와 반응별 원가 구성을 보여 달라, 한글판도 달라). Fig. 2를 4패널로 확장: (b) 동결 `all_families_2026-09-08.json`에서 열촉매 반응군 23개 각각의 최저 원가 후보 판매 단가 구성(재료비·가공비·간접비와 마진), (c) `table62_reproduction_2026-09-08.json`의 발표된 시장 가격 대비 검증(Pt/C −19.7%, Ni/Al₂O₃ −9.9%, FCC 2.4380 vs 2.73 USD/lb), (d) 금속 8종 가격 기준. 검증 절에 시장 가격 비교 문단 추가(발표된 Step Method 추정값도 비슷하게 아래에 있으므로 차이는 채택 원가 경계의 성질). 도판 스크립트에 `--lang ko` 추가(Malgun Gothic, 반응군·금속·라벨 한글 사전), Fig. 1 한글판은 라벨만 한국어로 재생성 후 같은 연결선 스크립트 적용(밴드 검출에 얇은 틈 병합 추가) | `--check` CHECK_OK(4,857 word-equivalent), ruff, 노트 테스트 2 passed, CI 34442951805 3개 job success |
 
-최종 노트 분량: 초록 175 + 본문 2,724 + 그림 3×600 = 4,699 word-equivalent(한도 5,000), JSON 키 참조 53개, 표 0개.
+최종 노트 분량: 초록 175 + 본문 2,882 + 그림 3×600 = 4,857 word-equivalent(한도 5,000), JSON 키 참조 57개, 표 0개.
 
 확인 못 한 것과 하지 않은 것:
 
 - 저자·소속·연구비·이해관계 문구·상업 라이선스 문의처·심사용 버전(v1.4.0 태그 여부)은 원고에 placeholder로 남아 있으며 사람이 정해야 한다.
 - JCIM의 SCIE 수록과 IF는 제3자 자료로만 확인했다. JCR 원본 확인은 사용자 몫이다.
 - 연구실 V8 양식 docx(영문·한글판, Word 검토 메모 6개)와 Gemini·ChatGPT 참고 렌더 6장은 `_local/`에 두고 추적하지 않는다. 원고 도판은 matplotlib 벡터본만 쓴다.
-- Fig. 2b의 예시 숫자는 실행 시점의 live 시세에 따라 달라지므로 바이트 단위로 재현되지 않는다. 커밋한 JSON 사이드카(`screen_result_ni_al2o3.json`)가 도판과 본문의 입력이고, 캡처 스크립트는 만드는 방법의 기록이다. 같은 이름의 PNG는 참고용 화면이며 원고에는 쓰지 않는다.
+- 상용 촉매 가격과의 비교는 CatCost 표 6.2에 함께 실린 시장 가격 3건이 전부다. 조건이 일치하는 다른 상용 가격 관측은 찾지 못했으므로 반응군 전체에 대한 오차표는 만들지 않았다. Fig. 2b는 모델 출력이지 실측 원가가 아니다.
+- 본문의 예시 숫자는 실행 시점의 현물 시세에 따라 달라지므로 바이트 단위로 재현되지 않는다. 커밋한 JSON 사이드카(`screen_result_ni_al2o3.json`)가 도판과 본문의 입력이고, 캡처 스크립트는 만드는 방법의 기록이다. 같은 이름의 PNG는 참고용 화면이며 원고에는 쓰지 않는다.
 - Fig. 1은 AI 생성 그림이라 생성 스크립트로 재현되지 않는다. 원본 PNG와 프롬프트 전문, 저자 수정 스크립트를 함께 커밋해 검증 가능하게 했다. ACS AI 정책은 공식 페이지에서 읽었고(2026-09-10), OpenAI 이용약관의 출력물 권리 조항은 자동 요청이 차단돼 확인 못 했다(저자 확인 항목).
 - 투고·외부 연락·태그·릴리스·병합은 하지 않았다.
