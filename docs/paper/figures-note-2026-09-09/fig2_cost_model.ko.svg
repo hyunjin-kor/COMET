@@ -142,86 +142,132 @@ z
    </g>
    <g id="text_8">
     <!-- $C_\mathrm{m}=\sum_i w_i\,c_i$ -->
-    <g style="fill: #1f2a30" transform="translate(168.465937 29.512145)">
+    <g style="fill: #1f2a30" transform="translate(168.973937 26.70163)">
      <text>
-      <tspan x="0" y="-0.421875" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">C</tspan>
-      <tspan x="12.536194" y="-0.421875" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">=</tspan>
-      <tspan x="20.097388" y="-0.421875" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">∑</tspan>
-      <tspan x="25.081763" y="-0.421875" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">w</tspan>
-      <tspan x="34.414491" y="-0.421875" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">c</tspan>
-      <tspan x="5.474854" y="0.965625" style="font-size: 6.02px; font-family: 'Malgun Gothic'; fill: #1f2a30">m</tspan>
-      <tspan x="22.097388" y="8.040625" style="font-size: 6.02px; font-family: 'Malgun Gothic'; fill: #1f2a30">i</tspan>
-      <tspan x="31.432593" y="0.965625" style="font-size: 6.02px; font-family: 'Malgun Gothic'; fill: #1f2a30">i</tspan>
-      <tspan x="38.491151" y="0.965625" style="font-size: 6.02px; font-family: 'Malgun Gothic'; fill: #1f2a30">i</tspan>
+      <tspan x="0" y="-0.890625" style="font-style: italic; font-size: 8.4px; font-family: 'STIXGeneral'; fill: #1f2a30">𝘊</tspan>
+      <tspan x="25.174231" y="-0.890625" style="font-style: italic; font-size: 8.4px; font-family: 'STIXGeneral'; fill: #1f2a30">𝘸</tspan>
+      <tspan x="33.579729" y="-0.890625" style="font-style: italic; font-size: 8.4px; font-family: 'STIXGeneral'; fill: #1f2a30">𝘤</tspan>
+      <tspan x="5.619614" y="0.196875" style="font-size: 5.88px; font-family: 'STIXGeneral'; fill: #1f2a30">𝗆</tspan>
+      <tspan x="11.499197" y="-0.890625" style="font-size: 8.4px; font-family: 'STIXGeneral'; fill: #1f2a30">=</tspan>
+      <tspan x="18.502356" y="-0.890625" style="font-size: 8.4px; font-family: 'STIXGeneral'; fill: #1f2a30">∑</tspan>
+      <tspan x="21.502356" y="6.56875" style="font-style: italic; font-size: 5.88px; font-family: 'STIXGeneral'; fill: #1f2a30">𝘪</tspan>
+      <tspan x="31.053473" y="0.196875" style="font-style: italic; font-size: 5.88px; font-family: 'STIXGeneral'; fill: #1f2a30">𝘪</tspan>
+      <tspan x="37.398714" y="0.196875" style="font-style: italic; font-size: 5.88px; font-family: 'STIXGeneral'; fill: #1f2a30">𝘪</tspan>
      </text>
     </g>
    </g>
    <g id="text_9">
-    <text style="font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="188.503937" y="45.565835" transform="rotate(-0 188.503937 45.565835)">단가 × 질량 분율</text>
+    <text style="font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="188.503937" y="43.03124" transform="rotate(-0 188.503937 43.03124)">단가 × 질량 분율</text>
    </g>
    <g id="text_10">
-    <text style="font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="188.503937" y="53.420309" transform="rotate(-0 188.503937 53.420309)">구매 원료: a = w/(f·p·y)</text>
+    <!-- 구매 원료    $a = w/(f\,p\,y)$ -->
+    <g style="fill: #1f2a30" transform="translate(154.150937 52.695627)">
+     <text>
+      <tspan x="0" y="-0.015625" style="font-size: 6.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">구</tspan>
+      <tspan x="6.625" y="-0.015625" style="font-size: 6.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">매</tspan>
+      <tspan x="13.25" y="-0.015625" style="font-size: 6.6px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+      <tspan x="15.579102" y="-0.015625" style="font-size: 6.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">원</tspan>
+      <tspan x="22.204102" y="-0.015625" style="font-size: 6.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">료</tspan>
+      <tspan x="28.829102" y="-0.015625" style="font-size: 6.6px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+      <tspan x="31.158203" y="-0.015625" style="font-size: 6.6px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+      <tspan x="33.487305" y="-0.015625" style="font-size: 6.6px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+      <tspan x="35.816406" y="-0.015625" style="font-size: 6.6px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+      <tspan x="38.145508" y="-0.015625" style="font-style: italic; font-size: 6.6px; font-family: 'STIXGeneral'; fill: #1f2a30">𝘢</tspan>
+      <tspan x="47.655005" y="-0.015625" style="font-style: italic; font-size: 6.6px; font-family: 'STIXGeneral'; fill: #1f2a30">𝘸</tspan>
+      <tspan x="56.353598" y="-0.015625" style="font-style: italic; font-size: 6.6px; font-family: 'STIXGeneral'; fill: #1f2a30">𝘧</tspan>
+      <tspan x="59.41436" y="-0.015625" style="font-style: italic; font-size: 6.6px; font-family: 'STIXGeneral'; fill: #1f2a30">𝘱</tspan>
+      <tspan x="63.548364" y="-0.015625" style="font-style: italic; font-size: 6.6px; font-family: 'STIXGeneral'; fill: #1f2a30">𝘺</tspan>
+      <tspan x="42.115192" y="-0.015625" style="font-size: 6.6px; font-family: 'STIXGeneral'; fill: #1f2a30">=</tspan>
+      <tspan x="52.305746" y="-0.015625" style="font-size: 6.6px; font-family: 'STIXGeneral'; fill: #1f2a30">/</tspan>
+      <tspan x="54.147482" y="-0.015625" style="font-size: 6.6px; font-family: 'STIXGeneral'; fill: #1f2a30">(</tspan>
+      <tspan x="66.754861" y="-0.015625" style="font-size: 6.6px; font-family: 'STIXGeneral'; fill: #1f2a30">)</tspan>
+     </text>
+    </g>
    </g>
    <g id="text_11">
     <text style="font-weight: 700; font-size: 6.8px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="188.503937" y="73.829081" transform="rotate(-0 188.503937 73.829081)">가공비 (Step Method)</text>
    </g>
    <g id="text_12">
-    <!-- $C_\mathrm{p}=24\,T\,I\,\sum_j H_j\,/\,M$ -->
-    <g style="fill: #1f2a30" transform="translate(155.866937 88.344137)">
+    <!-- $C_\mathrm{p}=\dfrac{24\,T\,I\,H}{M}$ -->
+    <g style="fill: #1f2a30" transform="translate(166.663937 88.108244)">
      <text>
-      <tspan x="0" y="-0.421875" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">C</tspan>
-      <tspan x="10.849939" y="-0.421875" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">=</tspan>
-      <tspan x="18.411133" y="-0.421875" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">2</tspan>
-      <tspan x="23.161621" y="-0.421875" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">4</tspan>
-      <tspan x="29.176966" y="-0.421875" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">T</tspan>
-      <tspan x="35.044911" y="-0.421875" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">I</tspan>
-      <tspan x="38.638687" y="-0.421875" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">∑</tspan>
-      <tspan x="43.623062" y="-0.421875" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">H</tspan>
-      <tspan x="52.854715" y="-0.421875" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">/</tspan>
-      <tspan x="57.535039" y="-0.421875" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">M</tspan>
-      <tspan x="5.474854" y="0.965625" style="font-size: 6.02px; font-family: 'Malgun Gothic'; fill: #1f2a30">p</tspan>
-      <tspan x="40.638687" y="8.040625" style="font-size: 6.02px; font-family: 'Malgun Gothic'; fill: #1f2a30">j</tspan>
-      <tspan x="49.872818" y="0.965625" style="font-size: 6.02px; font-family: 'Malgun Gothic'; fill: #1f2a30">j</tspan>
+      <tspan x="0" y="-0.520312" style="font-style: italic; font-size: 8.4px; font-family: 'STIXGeneral'; fill: #1f2a30">𝘊</tspan>
+      <tspan x="25.98983" y="4.328125" style="font-style: italic; font-size: 8.4px; font-family: 'STIXGeneral'; fill: #1f2a30">𝘔</tspan>
+      <tspan x="26.420068" y="-3.59375" style="font-style: italic; font-size: 8.4px; font-family: 'STIXGeneral'; fill: #1f2a30">𝘛</tspan>
+      <tspan x="32.567316" y="-3.59375" style="font-style: italic; font-size: 8.4px; font-family: 'STIXGeneral'; fill: #1f2a30">𝘐</tspan>
+      <tspan x="36.980952" y="-3.59375" style="font-style: italic; font-size: 8.4px; font-family: 'STIXGeneral'; fill: #1f2a30">𝘏</tspan>
+      <tspan x="5.619614" y="0.567188" style="font-size: 5.88px; font-family: 'STIXGeneral'; fill: #1f2a30">𝗉</tspan>
+      <tspan x="9.986671" y="-0.520312" style="font-size: 8.4px; font-family: 'STIXGeneral'; fill: #1f2a30">=</tspan>
+      <tspan x="16.98983" y="-3.59375" style="font-size: 8.4px; font-family: 'STIXGeneral'; fill: #1f2a30">𝟤</tspan>
+      <tspan x="21.177315" y="-3.59375" style="font-size: 8.4px; font-family: 'STIXGeneral'; fill: #1f2a30">𝟦</tspan>
      </text>
+     <rect x="16.98983" y="-2.49375" width="25.501864" height="0.525"/>
     </g>
    </g>
    <g id="text_13">
-    <text style="font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="188.503937" y="105.128827" transform="rotate(-0 188.503937 105.128827)">맞춰진 규모 등급의 시간당 단가</text>
+    <!-- $H=\sum_j H_j$, 선택한 공정들의 시간당 단가 -->
+    <g style="fill: #1f2a30" transform="translate(137.713937 101.737655)">
+     <text>
+      <tspan x="0" y="-0.875" style="font-style: italic; font-size: 6px; font-family: 'STIXGeneral'; fill: #1f2a30">𝘏</tspan>
+      <tspan x="14.653647" y="-0.875" style="font-style: italic; font-size: 6px; font-family: 'STIXGeneral'; fill: #1f2a30">𝘏</tspan>
+      <tspan x="4.855197" y="-0.875" style="font-size: 6px; font-family: 'STIXGeneral'; fill: #1f2a30">=</tspan>
+      <tspan x="9.872397" y="-0.875" style="font-size: 6px; font-family: 'STIXGeneral'; fill: #1f2a30">∑</tspan>
+      <tspan x="10.872397" y="4.651562" style="font-style: italic; font-size: 4.2px; font-family: 'STIXGeneral'; fill: #1f2a30">𝘫</tspan>
+      <tspan x="18.601645" y="-0.059375" style="font-style: italic; font-size: 4.2px; font-family: 'STIXGeneral'; fill: #1f2a30">𝘫</tspan>
+      <tspan x="19.804384" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">,</tspan>
+      <tspan x="21.116884" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+      <tspan x="23.226259" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">선</tspan>
+      <tspan x="29.226259" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">택</tspan>
+      <tspan x="35.226259" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">한</tspan>
+      <tspan x="41.226259" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+      <tspan x="43.335634" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">공</tspan>
+      <tspan x="49.335634" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">정</tspan>
+      <tspan x="55.335634" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">들</tspan>
+      <tspan x="61.335634" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">의</tspan>
+      <tspan x="67.335634" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+      <tspan x="69.445009" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">시</tspan>
+      <tspan x="75.445009" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">간</tspan>
+      <tspan x="81.445009" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">당</tspan>
+      <tspan x="87.445009" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+      <tspan x="89.554384" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">단</tspan>
+      <tspan x="95.554384" y="-0.875" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">가</tspan>
+     </text>
+    </g>
    </g>
    <g id="text_14">
-    <text style="font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="188.503937" y="112.732613" transform="rotate(-0 188.503937 112.732613)">캠페인 시간, 지수 보정, 생산 질량</text>
+    <text style="font-size: 5.6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="188.503937" y="112.479154" transform="rotate(-0 188.503937 112.479154)">맞춰진 규모 등급 기준</text>
    </g>
    <g id="text_15">
     <text style="font-weight: 700; font-size: 6.8px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="342.992126" y="40.556872" transform="rotate(-0 342.992126 40.556872)">간접비와 마진</text>
    </g>
    <g id="text_16">
     <!-- $P=\dfrac{(C_\mathrm{m}+C_\mathrm{p})(1+g)(1+s)}{1-m}$ -->
-    <g style="fill: #1f2a30" transform="translate(294.703126 65.752588)">
+    <g style="fill: #1f2a30" transform="translate(296.767126 65.236588)">
      <text>
-      <tspan x="0" y="-0.745313" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">P</tspan>
-      <tspan x="6.440955" y="-0.745313" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">=</tspan>
-      <tspan x="14.002148" y="-7.390625" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">(</tspan>
-      <tspan x="16.630078" y="-7.390625" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">C</tspan>
-      <tspan x="29.166272" y="-7.390625" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">+</tspan>
-      <tspan x="36.727466" y="-7.390625" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">C</tspan>
-      <tspan x="44.002148" y="4.78125" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">1</tspan>
-      <tspan x="46.059607" y="-7.390625" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">)</tspan>
-      <tspan x="48.687537" y="-7.390625" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">(</tspan>
-      <tspan x="51.315466" y="-7.390625" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">1</tspan>
-      <tspan x="57.583752" y="-7.390625" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">+</tspan>
-      <tspan x="58.464334" y="4.78125" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">m</tspan>
-      <tspan x="65.144946" y="-7.390625" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">g</tspan>
-      <tspan x="70.337634" y="-7.390625" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">)</tspan>
-      <tspan x="72.965564" y="-7.390625" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">(</tspan>
-      <tspan x="75.593494" y="-7.390625" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">1</tspan>
-      <tspan x="81.86178" y="-7.390625" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">+</tspan>
-      <tspan x="89.422974" y="-7.390625" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">s</tspan>
-      <tspan x="93.158508" y="-7.390625" style="font-size: 8.6px; font-family: 'Malgun Gothic'; fill: #1f2a30">)</tspan>
-      <tspan x="22.104932" y="-6.003125" style="font-size: 6.02px; font-family: 'Malgun Gothic'; fill: #1f2a30">m</tspan>
-      <tspan x="42.202319" y="-6.003125" style="font-size: 6.02px; font-family: 'Malgun Gothic'; fill: #1f2a30">p</tspan>
-      <tspan x="50.270435" y="4.78125" style="font-size: 8.6px; font-family: 'cmsy10'; fill: #1f2a30">¡</tspan>
+      <tspan x="0" y="-0.978125" style="font-style: italic; font-size: 8.6px; font-family: 'STIXGeneral'; fill: #1f2a30">𝘗</tspan>
+      <tspan x="15.916547" y="-6.90625" style="font-style: italic; font-size: 8.6px; font-family: 'STIXGeneral'; fill: #1f2a30">𝘊</tspan>
+      <tspan x="34.988475" y="-6.90625" style="font-style: italic; font-size: 8.6px; font-family: 'STIXGeneral'; fill: #1f2a30">𝘊</tspan>
+      <tspan x="55.873239" y="4.454687" style="font-style: italic; font-size: 8.6px; font-family: 'STIXGeneral'; fill: #1f2a30">𝘮</tspan>
+      <tspan x="62.55946" y="-6.90625" style="font-style: italic; font-size: 8.6px; font-family: 'STIXGeneral'; fill: #1f2a30">𝘨</tspan>
+      <tspan x="85.410501" y="-6.90625" style="font-style: italic; font-size: 8.6px; font-family: 'STIXGeneral'; fill: #1f2a30">𝘴</tspan>
+      <tspan x="5.83222" y="-0.978125" style="font-size: 8.6px; font-family: 'STIXGeneral'; fill: #1f2a30">=</tspan>
+      <tspan x="13.044431" y="-6.90625" style="font-size: 8.6px; font-family: 'STIXGeneral'; fill: #1f2a30">(</tspan>
+      <tspan x="27.776265" y="-6.90625" style="font-size: 8.6px; font-family: 'STIXGeneral'; fill: #1f2a30">+</tspan>
+      <tspan x="43.044431" y="4.454687" style="font-size: 8.6px; font-family: 'STIXGeneral'; fill: #1f2a30">𝟣</tspan>
+      <tspan x="43.98642" y="-6.90625" style="font-size: 8.6px; font-family: 'STIXGeneral'; fill: #1f2a30">)</tspan>
+      <tspan x="46.858536" y="-6.90625" style="font-size: 8.6px; font-family: 'STIXGeneral'; fill: #1f2a30">(</tspan>
+      <tspan x="48.661029" y="4.454687" style="font-size: 8.6px; font-family: 'STIXGeneral'; fill: #1f2a30">−</tspan>
+      <tspan x="49.730652" y="-6.90625" style="font-size: 8.6px; font-family: 'STIXGeneral'; fill: #1f2a30">𝟣</tspan>
+      <tspan x="55.34725" y="-6.90625" style="font-size: 8.6px; font-family: 'STIXGeneral'; fill: #1f2a30">+</tspan>
+      <tspan x="66.83746" y="-6.90625" style="font-size: 8.6px; font-family: 'STIXGeneral'; fill: #1f2a30">)</tspan>
+      <tspan x="69.709576" y="-6.90625" style="font-size: 8.6px; font-family: 'STIXGeneral'; fill: #1f2a30">(</tspan>
+      <tspan x="72.581693" y="-6.90625" style="font-size: 8.6px; font-family: 'STIXGeneral'; fill: #1f2a30">𝟣</tspan>
+      <tspan x="78.198291" y="-6.90625" style="font-size: 8.6px; font-family: 'STIXGeneral'; fill: #1f2a30">+</tspan>
+      <tspan x="88.765619" y="-6.90625" style="font-size: 8.6px; font-family: 'STIXGeneral'; fill: #1f2a30">)</tspan>
+      <tspan x="21.703915" y="-5.682812" style="font-size: 6.02px; font-family: 'STIXGeneral'; fill: #1f2a30">𝗆</tspan>
+      <tspan x="40.775844" y="-5.682812" style="font-size: 6.02px; font-family: 'STIXGeneral'; fill: #1f2a30">𝗉</tspan>
      </text>
-     <rect x="14.002148" y="-3.365625" width="81.78429" height="0.5375"/>
+     <rect x="13.044431" y="-3.176563" width="78.593304" height="0.5375"/>
     </g>
    </g>
    <g id="text_17">
@@ -229,19 +275,19 @@ z
    </g>
    <g id="text_18">
     <!-- $C_\mathrm{m}$ -->
-    <g style="fill: #1f2a30" transform="translate(273.699276 34.985174)">
+    <g style="fill: #1f2a30" transform="translate(273.859276 34.985174)">
      <text>
-      <tspan x="0" y="-0.609375" style="font-size: 6.4px; font-family: 'Malgun Gothic'; fill: #1f2a30">C</tspan>
-      <tspan x="4.046631" y="0.314063" style="font-size: 4.48px; font-family: 'Malgun Gothic'; fill: #1f2a30">m</tspan>
+      <tspan x="0" y="-0.9375" style="font-style: italic; font-size: 6.4px; font-family: 'STIXGeneral'; fill: #1f2a30">𝘊</tspan>
+      <tspan x="4.277634" y="-0.121875" style="font-size: 4.48px; font-family: 'STIXGeneral'; fill: #1f2a30">𝗆</tspan>
      </text>
     </g>
    </g>
    <g id="text_19">
     <!-- $C_\mathrm{p}$ -->
-    <g style="fill: #1f2a30" transform="translate(274.307276 90.084543)">
+    <g style="fill: #1f2a30" transform="translate(274.435276 90.276543)">
      <text>
-      <tspan x="0" y="-0.609375" style="font-size: 6.4px; font-family: 'Malgun Gothic'; fill: #1f2a30">C</tspan>
-      <tspan x="4.046631" y="0.314063" style="font-size: 4.48px; font-family: 'Malgun Gothic'; fill: #1f2a30">p</tspan>
+      <tspan x="0" y="-0.9375" style="font-style: italic; font-size: 6.4px; font-family: 'STIXGeneral'; fill: #1f2a30">𝘊</tspan>
+      <tspan x="4.277634" y="-0.121875" style="font-size: 4.48px; font-family: 'STIXGeneral'; fill: #1f2a30">𝗉</tspan>
      </text>
     </g>
    </g>
@@ -265,9 +311,9 @@ z
    </g>
    <g id="text_26">
     <!-- $P$ -->
-    <g style="fill: #1f2a30" transform="translate(406.332976 55.261937)">
+    <g style="fill: #1f2a30" transform="translate(406.492976 55.261937)">
      <text>
-      <tspan x="0" y="-0.6875" style="font-size: 6.4px; font-family: 'Malgun Gothic'; fill: #1f2a30">P</tspan>
+      <tspan x="0" y="-0.03125" style="font-style: italic; font-size: 6.4px; font-family: 'STIXGeneral'; fill: #1f2a30">𝘗</tspan>
      </text>
     </g>
    </g>
@@ -980,7 +1026,7 @@ L 0 2
      <g id="line2d_8"/>
      <g id="text_35">
       <!-- 광촉매 CO$_2$ 환원 -->
-      <g style="fill: #1f2a30" transform="translate(60.72822 320.216887)">
+      <g style="fill: #1f2a30" transform="translate(60.93622 320.164887)">
        <text>
         <tspan x="0" y="-0.6875" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">광</tspan>
         <tspan x="5.25" y="-0.6875" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">촉</tspan>
@@ -988,10 +1034,10 @@ L 0 2
         <tspan x="15.75" y="-0.6875" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
         <tspan x="17.595703" y="-0.6875" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">C</tspan>
         <tspan x="20.928223" y="-0.6875" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">O</tspan>
-        <tspan x="27.185859" y="-0.6875" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
-        <tspan x="29.031562" y="-0.6875" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">환</tspan>
-        <tspan x="34.281562" y="-0.6875" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">원</tspan>
-        <tspan x="25.033613" y="0.08125" style="font-size: 3.64px; font-family: 'Malgun Gothic'; fill: #1f2a30">2</tspan>
+        <tspan x="26.979199" y="-0.6875" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+        <tspan x="28.824902" y="-0.6875" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">환</tspan>
+        <tspan x="34.074902" y="-0.6875" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">원</tspan>
+        <tspan x="25.028418" y="-0.007812" style="font-size: 3.64px; font-family: 'STIXGeneral'; fill: #1f2a30">𝟤</tspan>
        </text>
       </g>
      </g>
@@ -1006,18 +1052,18 @@ L 0 2
      <g id="line2d_10"/>
      <g id="text_37">
       <!-- CO$_2$ 메탄올 전환 -->
-      <g style="fill: #1f2a30" transform="translate(60.72822 304.049155)">
+      <g style="fill: #1f2a30" transform="translate(60.93622 303.997155)">
        <text>
         <tspan x="0" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">C</tspan>
         <tspan x="3.33252" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">O</tspan>
-        <tspan x="9.590156" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
-        <tspan x="11.435859" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">메</tspan>
-        <tspan x="16.685859" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">탄</tspan>
-        <tspan x="21.935859" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">올</tspan>
-        <tspan x="27.185859" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
-        <tspan x="29.031562" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">전</tspan>
-        <tspan x="34.281562" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">환</tspan>
-        <tspan x="7.43791" y="0.034375" style="font-size: 3.64px; font-family: 'Malgun Gothic'; fill: #1f2a30">2</tspan>
+        <tspan x="9.383496" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+        <tspan x="11.229199" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">메</tspan>
+        <tspan x="16.479199" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">탄</tspan>
+        <tspan x="21.729199" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">올</tspan>
+        <tspan x="26.979199" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+        <tspan x="28.824902" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">전</tspan>
+        <tspan x="34.074902" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">환</tspan>
+        <tspan x="7.432715" y="-0.054688" style="font-size: 3.64px; font-family: 'STIXGeneral'; fill: #1f2a30">𝟤</tspan>
        </text>
       </g>
      </g>
@@ -1068,15 +1114,15 @@ L 0 2
      <g id="line2d_18"/>
      <g id="text_45">
       <!-- CO$_2$ 메탄화 -->
-      <g style="fill: #1f2a30" transform="translate(73.00022 239.482226)">
+      <g style="fill: #1f2a30" transform="translate(73.15622 239.430226)">
        <text>
         <tspan x="0" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">C</tspan>
         <tspan x="3.33252" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">O</tspan>
-        <tspan x="9.590156" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
-        <tspan x="11.435859" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">메</tspan>
-        <tspan x="16.685859" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">탄</tspan>
-        <tspan x="21.935859" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">화</tspan>
-        <tspan x="7.43791" y="0.034375" style="font-size: 3.64px; font-family: 'Malgun Gothic'; fill: #1f2a30">2</tspan>
+        <tspan x="9.383496" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+        <tspan x="11.229199" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">메</tspan>
+        <tspan x="16.479199" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">탄</tspan>
+        <tspan x="21.729199" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">화</tspan>
+        <tspan x="7.432715" y="-0.054688" style="font-size: 3.64px; font-family: 'STIXGeneral'; fill: #1f2a30">𝟤</tspan>
        </text>
       </g>
      </g>
@@ -1085,15 +1131,15 @@ L 0 2
      <g id="line2d_19"/>
      <g id="text_46">
       <!-- NH$_3$-SCR -->
-      <g style="fill: #1f2a30" transform="translate(78.66822 231.347984)">
+      <g style="fill: #1f2a30" transform="translate(78.87622 231.347984)">
        <text>
         <tspan x="0" y="-0.34375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">N</tspan>
         <tspan x="3.891968" y="-0.34375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">H</tspan>
-        <tspan x="9.893257" y="-0.34375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">-</tspan>
-        <tspan x="12.046577" y="-0.34375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">S</tspan>
-        <tspan x="14.897163" y="-0.34375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">C</tspan>
-        <tspan x="18.229683" y="-0.34375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">R</tspan>
-        <tspan x="7.741011" y="0.425" style="font-size: 3.64px; font-family: 'Malgun Gothic'; fill: #1f2a30">3</tspan>
+        <tspan x="9.686597" y="-0.34375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">-</tspan>
+        <tspan x="11.839917" y="-0.34375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">S</tspan>
+        <tspan x="14.690503" y="-0.34375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">C</tspan>
+        <tspan x="18.023022" y="-0.34375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">R</tspan>
+        <tspan x="7.735815" y="0.335938" style="font-size: 3.64px; font-family: 'STIXGeneral'; fill: #1f2a30">𝟥</tspan>
        </text>
       </g>
      </g>
@@ -1144,19 +1190,19 @@ L 0 2
      <g id="line2d_27"/>
      <g id="text_54">
       <!-- CO$_2$ 포름산염 전환 -->
-      <g style="fill: #1f2a30" transform="translate(55.52822 166.84443)">
+      <g style="fill: #1f2a30" transform="translate(55.73622 166.79243)">
        <text>
         <tspan x="0" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">C</tspan>
         <tspan x="3.33252" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">O</tspan>
-        <tspan x="9.590156" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
-        <tspan x="11.435859" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">포</tspan>
-        <tspan x="16.685859" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">름</tspan>
-        <tspan x="21.935859" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">산</tspan>
-        <tspan x="27.185859" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">염</tspan>
-        <tspan x="32.435859" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
-        <tspan x="34.281562" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">전</tspan>
-        <tspan x="39.531562" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">환</tspan>
-        <tspan x="7.43791" y="0.034375" style="font-size: 3.64px; font-family: 'Malgun Gothic'; fill: #1f2a30">2</tspan>
+        <tspan x="9.383496" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+        <tspan x="11.229199" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">포</tspan>
+        <tspan x="16.479199" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">름</tspan>
+        <tspan x="21.729199" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">산</tspan>
+        <tspan x="26.979199" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">염</tspan>
+        <tspan x="32.229199" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30"> </tspan>
+        <tspan x="34.074902" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">전</tspan>
+        <tspan x="39.324902" y="-0.734375" style="font-size: 5.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">환</tspan>
+        <tspan x="7.432715" y="-0.054688" style="font-size: 3.64px; font-family: 'STIXGeneral'; fill: #1f2a30">𝟤</tspan>
        </text>
       </g>
      </g>
@@ -1450,7 +1496,7 @@ L 0 2
      <g id="line2d_47"/>
      <g id="text_90">
       <!-- 21 wt% Ni/Al$_2$O$_3$ -->
-      <g style="fill: #1f2a30" transform="translate(321.456693 230.360333)">
+      <g style="fill: #1f2a30" transform="translate(321.936693 230.360333)">
        <text>
         <tspan x="0" y="-0.4375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">2</tspan>
         <tspan x="3.304688" y="-0.4375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">1</tspan>
@@ -1464,9 +1510,9 @@ L 0 2
         <tspan x="28.400391" y="-0.4375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">/</tspan>
         <tspan x="30.776367" y="-0.4375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">A</tspan>
         <tspan x="34.725586" y="-0.4375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">l</tspan>
-        <tspan x="38.723203" y="-0.4375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">O</tspan>
-        <tspan x="36.256016" y="0.485938" style="font-size: 4.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">2</tspan>
-        <tspan x="43.417695" y="0.485938" style="font-size: 4.2px; font-family: 'Malgun Gothic'; fill: #1f2a30">3</tspan>
+        <tspan x="38.485664" y="-0.4375" style="font-size: 6px; font-family: 'Malgun Gothic'; fill: #1f2a30">O</tspan>
+        <tspan x="36.249727" y="0.378125" style="font-size: 4.2px; font-family: 'STIXGeneral'; fill: #1f2a30">𝟤</tspan>
+        <tspan x="43.173867" y="0.378125" style="font-size: 4.2px; font-family: 'STIXGeneral'; fill: #1f2a30">𝟥</tspan>
        </text>
       </g>
      </g>

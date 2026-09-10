@@ -46,9 +46,10 @@ TEXT = {
         "route": "Preparation route", "route_sub": "operations, order size",
         "basis": "Price basis", "basis_sub": "spot or reference month",
         "materials": "Materials", "materials_1": "unit price × mass fraction",
-        "materials_2": "purchased input: a = w/(f·p·y)",
-        "processing": "Processing (Step Method)", "processing_1": "hourly rates at the fitted scale class",
-        "processing_2": "campaign time, index escalation, mass produced",
+        "materials_2": "purchased input",
+        "processing": "Processing (Step Method)",
+        "processing_1": r"$H=\sum_j H_j$, the hourly rates of the selected operations",
+        "processing_2": "at the fitted scale class",
         "overhead": "Overhead and margin", "overhead_1": "G&A, S&ARD, margin set by order size",
         "breakdown": "Cost breakdown",
         "breakdown_lines": ["selling price per lb", "price, source, date", "grade, price basis",
@@ -79,9 +80,10 @@ TEXT = {
         "route": "제조 경로", "route_sub": "공정, 주문 규모",
         "basis": "가격 기준", "basis_sub": "현물 또는 기준월",
         "materials": "재료비", "materials_1": "단가 × 질량 분율",
-        "materials_2": "구매 원료: a = w/(f·p·y)",
-        "processing": "가공비 (Step Method)", "processing_1": "맞춰진 규모 등급의 시간당 단가",
-        "processing_2": "캠페인 시간, 지수 보정, 생산 질량",
+        "materials_2": "구매 원료",
+        "processing": "가공비 (Step Method)",
+        "processing_1": r"$H=\sum_j H_j$, 선택한 공정들의 시간당 단가",
+        "processing_2": "맞춰진 규모 등급 기준",
         "overhead": "간접비와 마진", "overhead_1": "일반관리비, 판매·연구개발, 주문 규모별 마진",
         "breakdown": "원가 내역",
         "breakdown_lines": ["파운드당 판매 단가", "가격, 출처, 일자", "등급, 가격 기준",
@@ -169,8 +171,7 @@ def set_language(lang):
         "font.family": L["font"], "font.size": 7.5, "text.color": INK, "svg.fonttype": "none",
         "svg.hashsalt": "comet-note-figures-2026-09-09", "axes.edgecolor": INK, "axes.linewidth": 0.6,
         "xtick.color": INK, "ytick.color": INK, "axes.unicode_minus": False,
-        "mathtext.fontset": "custom", "mathtext.rm": L["font"], "mathtext.it": f"{L['font']}:italic",
-        "mathtext.bf": f"{L['font']}:bold",
+        "mathtext.fontset": "stixsans",
     })
 
 
@@ -209,14 +210,15 @@ def _cost_model_panel(fig):
     mx, mw = 38, 57
     _box(ax, mx, 24.5, mw, 21, fill="white", edge=INK, lw=0.6)
     ax.text(mx + mw / 2, 42.2, L["materials"], ha="center", va="center", fontsize=6.8, fontweight="bold")
-    ax.text(mx + mw / 2, 35.0, r"$C_\mathrm{m}=\sum_i w_i\,c_i$", ha="center", va="center", fontsize=8.6)
-    ax.text(mx + mw / 2, 29.6, L["materials_1"], ha="center", va="center", fontsize=5.6)
-    ax.text(mx + mw / 2, 26.6, L["materials_2"], ha="center", va="center", fontsize=5.6)
+    ax.text(mx + mw / 2, 36.2, r"$C_\mathrm{m}=\sum_i w_i\,c_i$", ha="center", va="center", fontsize=8.4)
+    ax.text(mx + mw / 2, 30.6, L["materials_1"], ha="center", va="center", fontsize=5.6)
+    ax.text(mx + mw / 2, 27.0, L["materials_2"] + r"    $a = w/(f\,p\,y)$", ha="center", va="center",
+            fontsize=6.6)
     _box(ax, mx, 1.0, mw, 21, fill="white", edge=INK, lw=0.6)
     ax.text(mx + mw / 2, 18.7, L["processing"], ha="center", va="center", fontsize=6.8, fontweight="bold")
-    ax.text(mx + mw / 2, 11.5, r"$C_\mathrm{p}=24\,T\,I\,\sum_j H_j\,/\,M$", ha="center", va="center", fontsize=8.6)
-    ax.text(mx + mw / 2, 6.1, L["processing_1"], ha="center", va="center", fontsize=5.6)
-    ax.text(mx + mw / 2, 3.1, L["processing_2"], ha="center", va="center", fontsize=5.6)
+    ax.text(mx + mw / 2, 13.0, r"$C_\mathrm{p}=\dfrac{24\,T\,I\,H}{M}$", ha="center", va="center", fontsize=8.4)
+    ax.text(mx + mw / 2, 6.6, L["processing_1"], ha="center", va="center", fontsize=6.0)
+    ax.text(mx + mw / 2, 3.2, L["processing_2"], ha="center", va="center", fontsize=5.6)
     _arrow(ax, 32.3, 40.3, mx - 0.3, 38.5)
     _arrow(ax, 32.3, 9.3, mx - 0.3, 11.5)
     _arrow(ax, 32.3, 24.8, mx - 0.3, 31.5)
