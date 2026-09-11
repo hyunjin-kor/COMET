@@ -211,6 +211,12 @@ A3·E5의 Engineering Au 판단은 사용자 조건(연구실은 SCIE만 실적 
 - 커버레터(손으로 쓴 초안)를 현재 원고에 맞췄다: 옛 제목('Reproducible Decision Diagnostics'), 'free', 'tiers', 'weight sweeps·price replays·candidate-removal controls·score-perturbation', 'renderer', '4,494 word-equivalents'를 고쳤다. '산업 원가 정확도는 검증되지 않았다'는 서술은 발표된 시장 가격 대비 비교와 무역 통계 비교가 들어간 현재 원고에 맞게 바꾸되, 새 조성의 오차는 계산하지 않았다는 점은 유지했다. 공개 경로는 저자 결정 대기로 표시했다.
 - 검증: `--check` CHECK_OK(4,994), 인용 첫 등장 순서 1–14, 노트 테스트 2 passed, `python -m ruff check` 통과.
 
+### H6. Data and Software Availability 절 (2026-09-11)
+
+- JCIM 투고 요건을 원문으로 확인했다. JCIM 저자 체크리스트(`jcisd8_checklist.pdf`, 2022-11-16)와 2020 사설(*J. Chem. Inf. Model.* **2020**, *60*, 5868; DOI 10.1021/acs.jcim.0c01389, Crossref 확인, 본문은 브라우저로 읽음)은 원고 끝에 별도의 'Data and Software Availability' 절을 요구하고, 없으면 심사 없이 반려한다고 적는다. 라이선스가 필요한 소프트웨어는 심사자에게 한시적 무료 평가 라이선스를 익명으로 제공해야 하고, 데이터는 SI나 공개 저장소, 또는 공개 출처에서 다시 추출하는 스크립트로 제공한다. JCIM은 커버레터 대신 이 체크리스트 양식을 받는다.
+- 'Availability' 절을 'Data and Software Availability'로 바꾸고, 소프트웨어 접근 경로에 더해 데이터(동결 가격 스냅샷, 수치·그림의 근거 산출물, SHA-256 manifest, 재생성 명령)의 위치와 공개 출처 재추출 스크립트를 적었다. 이 절과 겹치는 검증 절의 저장소 재생성 문장은 빼고, 'The repository carries'는 'COMET carries'로 바꿨다. 합계 4,994 → 4,991 word-equivalent, `--check`·노트 테스트·ruff 통과. 검토 메모가 붙은 첫 문장은 그대로 두어 메모 위치를 유지했다.
+- 사용자 지시(2026-09-11): 2026-09-14 회의에서 정할 때까지 GitHub·Zenodo에 올리지 않는다. 이 커밋부터는 로컬에만 두고 푸시하지 않았다.
+
 확인 못 한 것과 하지 않은 것:
 
 - 저자·소속·연구비·이해관계 문구·상업 라이선스 문의처·심사용 버전(v1.4.0 태그 여부)은 원고에 placeholder로 남아 있으며 사람이 정해야 한다.
