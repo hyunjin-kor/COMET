@@ -1,3 +1,4 @@
+import { ScientificText } from '../components/shared/ScientificText';
 import { useMemo, useState } from 'react';
 import {
   fetchCapEx,
@@ -30,9 +31,9 @@ function formatUSD(value: number): string {
 function MetricTile({ label, value, detail, dark = false }: { label: string; value: string; detail: string; dark?: boolean }) {
   return (
     <div className={dark ? 'cp-metric-tile-dark' : 'cp-metric-tile'}>
-      <div className={`cp-subtle-label ${dark ? '!text-slate-400' : ''}`}>{label}</div>
-      <div className={`mt-2 text-2xl font-display ${dark ? 'text-white' : 'text-slate-900'}`}>{value}</div>
-      <div className={`mt-1 text-xs leading-5 ${dark ? 'text-slate-400' : 'text-slate-600'}`}>{detail}</div>
+      <div className={`cp-subtle-label ${dark ? '!text-slate-400' : ''}`}><ScientificText text={label} /></div>
+      <div className={`mt-2 text-2xl font-display ${dark ? 'text-white' : 'text-slate-900'}`}><ScientificText text={value} /></div>
+      <div className={`mt-1 text-xs leading-5 ${dark ? 'text-slate-400' : 'text-slate-600'}`}><ScientificText text={detail} /></div>
     </div>
   );
 }
@@ -41,10 +42,10 @@ function RailRow({ label, value, detail }: { label: string; value: string; detai
   return (
     <div className="cp-data-row">
       <div>
-        <div className="cp-subtle-label">{label}</div>
-        {detail ? <div className="mt-1 text-xs leading-5 text-slate-600">{detail}</div> : null}
+        <div className="cp-subtle-label"><ScientificText text={label} /></div>
+        {detail ? <div className="mt-1 text-xs leading-5 text-slate-600"><ScientificText text={detail} /></div> : null}
       </div>
-      <div className="text-right text-sm font-semibold text-[#191f28]">{value}</div>
+      <div className="text-right text-sm font-semibold text-[#191f28]"><ScientificText text={value} /></div>
     </div>
   );
 }
@@ -146,7 +147,7 @@ export default function CapEx() {
               {t('Factor purchased equipment into FCI and TCI using Peters & Timmerhaus Lang factors, then optionally layer annual OpEx on top.')}
             </p>
           </div>
-          <span className="cp-chip">CatCost Ch.7</span>
+          <span className="cp-chip">{t('Equipment-factor estimate')}</span>
         </div>
 
         <div className="mt-5 inline-flex rounded-full border border-slate-900/8 bg-white/60 p-1 text-sm">
@@ -187,7 +188,7 @@ export default function CapEx() {
         ) : (
           <div className="mt-5 space-y-3">
             <div className="rounded-[18px] border border-slate-200 bg-slate-50/80 px-4 py-3 text-xs leading-6 text-slate-600">
-              {t('Each equipment line is scaled as Cost = base cost × (target size / base size)^exponent. Exponent 0.6 (six-tenths rule) is the usual default.')}{' '}
+              {t('Equipment cost = base cost × (target size / base size)')}<sup>{t('Exponent')}</sup>. {t('The default exponent is 0.6 (six-tenths rule).')}{' '}
               {t('Live preview total:')} <span className="font-semibold text-[#191f28]">{formatUSD(equipmentSubtotal)}</span>.
             </div>
             <div className="overflow-x-auto">
@@ -320,7 +321,7 @@ export default function CapEx() {
 
         {error ? (
           <div className="mt-4 rounded-[18px] border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700" role="alert">
-            {error}
+            {t(error)}
           </div>
         ) : null}
 
@@ -336,7 +337,7 @@ export default function CapEx() {
           <div className="grid gap-3 xl:grid-cols-[minmax(0,1.15fr)_repeat(3,minmax(0,1fr))]">
             <div className="min-w-0 overflow-hidden rounded-[20px] border border-[#191f28] bg-[#191f28] p-4 text-white shadow-[0_8px_24px_rgba(15,23,42,0.18)]">
               <div className="cp-subtle-label !text-slate-400">{t('Total Capital Investment')}</div>
-              <div className="mt-2 text-sm text-slate-300">{t('CatCost Ch.7 factored estimate')}</div>
+              <div className="mt-2 text-sm text-slate-300">{t('Equipment-factor estimate')}</div>
               <div className="mt-4 text-3xl font-display">{formatUSD(result.summary.total_capital_investment_usd)}</div>
               <div className="mt-2 text-xs leading-6 text-slate-300">
                 FCI {formatUSD(result.summary.fixed_capital_investment_usd)} + {t('working capital')}{' '}
@@ -385,7 +386,7 @@ export default function CapEx() {
                   <tbody>
                     {result.equipment_resolution.map((line, idx) => (
                       <tr key={`${line.name}-${idx}`} className="border-t border-slate-100">
-                        <td className="px-3 py-2 font-semibold text-slate-900">{line.name}</td>
+                        <td className="px-3 py-2 font-semibold text-slate-900"><ScientificText text={line.name} /></td>
                         <td className="px-3 py-2 text-right font-mono">{formatUSD(line.base_cost_usd)}</td>
                         <td className="px-3 py-2 text-right">{line.base_size}</td>
                         <td className="px-3 py-2 text-right">{line.target_size}</td>
@@ -440,10 +441,11 @@ export default function CapEx() {
                 <div>
                   <div className="cp-subtle-label !text-emerald-700">{t('Annual OpEx')}</div>
                   <div className="cp-heading-sm mt-2">
-                    {formatUSD(result.opex.total_annual_opex)}/yr
+                    {formatUSD(result.opex.total_annual_opex)}{t("/yr")}
                   </div>
                   <div className="mt-1 text-xs leading-6 text-emerald-900">
-                    {t('Layered on top of CapEx using your direct-labor / raw-material / utilities inputs and CatCost Ch.7 factors.')}
+                    {t('Annual operating cost uses the entered labor, raw-material and utility costs with the documented operating-cost factors.')}
+                    <p>{t('Factor reference: CatCost User Guide, Chapter 7; Peters & Timmerhaus.')}</p>
                   </div>
                 </div>
               </div>

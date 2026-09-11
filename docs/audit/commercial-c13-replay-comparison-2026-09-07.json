@@ -1,0 +1,47 @@
+{
+  "scientific_json_equal": {
+    "all_families": true,
+    "all_families_live": true,
+    "paper_summary": true,
+    "table62_reproduction": true,
+    "manufacturing_costs": true,
+    "breakeven_sweep_points": true,
+    "monthly_history": true
+  },
+  "only_generated_at_excluded": {
+    "reference_basis": false,
+    "price_volatility": false,
+    "active_metal_breakeven": false
+  },
+  "figure_equal": {
+    "figure1_architecture_2026-09-07.png": true,
+    "figure1_architecture_2026-09-07.svg": true,
+    "figure2_table62_2026-09-07.png": true,
+    "figure2_table62_2026-09-07.svg": true,
+    "figure3_gwp_cost_2026-09-07.png": true,
+    "figure3_gwp_cost_2026-09-07.svg": true,
+    "figure4_weight_sensitivity_2026-09-07.png": true,
+    "figure4_weight_sensitivity_2026-09-07.svg": true,
+    "figure5_live_reference_2026-09-07.png": true,
+    "figure5_live_reference_2026-09-07.svg": true,
+    "figure6_breakeven_sweeps_2026-09-07.png": true,
+    "figure6_breakeven_sweeps_2026-09-07.svg": true
+  },
+  "status": "complete",
+  "code_changed_during_run": [],
+  "basis_month": "2026-05",
+  "seed": 20260906,
+  "history_status": "provided_snapshot",
+  "outputs_verified": 27,
+  "output_count": 27,
+  "code_inputs_match": true,
+  "data_inputs_match": true,
+  "controlled_equal": {
+    "controlled_cases.json": true,
+    "controlled_cases.png": true,
+    "controlled_cases.svg": true
+  },
+  "controlled_numerical_sha256": "495b0fe9c5a60476bb29143082d745575976339aab5db4a3aca9c4c9fbd902ee",
+  "controlled_provenance_note": "Provenance changes reflect added account/rights modules since C05; frozen scientific JSON and figures are compared separately.",
+  "frozen_primary_outputs_preserved": true
+}

@@ -1,0 +1,188 @@
+{
+  "captured_at": "2026-09-10T02:56:36.147943+00:00",
+  "request": {
+    "catalyst_domain": "thermal",
+    "application_family": "general",
+    "template_id": "wet_impregnation_metal_oxide",
+    "order_size_tons": 20,
+    "steps": [
+      "mixer_slurry",
+      "incipient_wetness",
+      "dryer_rotary_100_300C",
+      "kiln_continuous_indirect",
+      "mill",
+      "scrubber_nox"
+    ],
+    "components": [
+      {
+        "role": "active_metal",
+        "name": "Ni",
+        "wt_pct": 20,
+        "price_per_lb": 7.5609
+      },
+      {
+        "role": "support",
+        "name": "Al2O3",
+        "wt_pct": 80,
+        "price_per_lb": 0.775
+      }
+    ]
+  },
+  "nickel_quote": {
+    "symbol": "Ni",
+    "name": "Nickel",
+    "price": 7.5609,
+    "unit": "$/lb",
+    "source": "Markets Insider (live)",
+    "source_type": "live",
+    "is_live": true,
+    "fetched_at": "2026-09-10T02:56:27.331959",
+    "basis": "live",
+    "basis_month": null,
+    "evidence": {
+      "tier": "screen_scrape",
+      "confidence_score": 77,
+      "transparency": "screen_quote",
+      "acquisition_mode": "scrape",
+      "freshness_target_hours": 24,
+      "freshness_status": "current",
+      "age_hours": 0.0,
+      "label": "Screen-scraped market page",
+      "note": "Public commodity screen scraped when direct API coverage is unavailable."
+    },
+    "needs_review": false
+  },
+  "alumina_row": {
+    "material_key": "catcost:19e041fbf3a31fe6",
+    "name": "Alumina, metalurgical grade, bulk, spot",
+    "display_name": "Al2O3",
+    "symbol": null,
+    "formula": null,
+    "category": "Support",
+    "price_per_lb": 0.775,
+    "price_unit": "$/lb",
+    "price_scope": "historical_bulk",
+    "quote_source": "ICIS",
+    "quote_year": 2006,
+    "reference_url": "",
+    "source_type": "indexed",
+    "selection_key": "library:catcost:19e041fbf3a31fe6",
+    "label": "Al2O3 | Support | ICIS"
+  },
+  "template_name": "Incipient Wetness Impregnation - Metal on Oxide Support",
+  "step_labels": [
+    "Mixer, slurry",
+    "Incipient wetness (impregnation)",
+    "Dryer, rotary (100–300 °C)",
+    "Kiln, continuous indirect (300–1290 °C)",
+    "Mill",
+    "Scrubber, NOx"
+  ],
+  "route_summary": {
+    "template_id": "wet_impregnation_metal_oxide",
+    "name": "Incipient Wetness Impregnation - Metal on Oxide Support",
+    "catalyst_domain": "thermal",
+    "application_family": "general",
+    "manufacturing_mode": "batch",
+    "preprocess": [],
+    "synthesis": [],
+    "postprocess": [],
+    "quality_gates": [],
+    "steps": [
+      "mixer_slurry",
+      "incipient_wetness",
+      "dryer_rotary_100_300C",
+      "kiln_continuous_indirect",
+      "mill",
+      "scrubber_nox"
+    ],
+    "route_note": "Renamed from 'Wet Impregnation'. The step list has never contained a filtration stage, which is the defining difference between the two routes, so the previous name described a route this template does not model.",
+    "source": "Jimenez et al., Industrial Catalyst Impregnation: Modern Equipment, Techniques, and Scaling Challenges, Ind. Eng. Chem. Res. 65, 12447 (2026)",
+    "reference_urls": [
+      "https://doi.org/10.1021/acs.iecr.6c01082"
+    ],
+    "uncosted_operations": []
+  },
+  "summary": {
+    "estimated_price_per_lb": 5.213,
+    "estimated_price_per_kg": 11.4927,
+    "net_cost_per_lb": 5.213,
+    "net_cost_per_kg": 11.4927,
+    "materials_pct": 40.9,
+    "processing_pct": 32.1,
+    "gwp_kg_co2eq_per_kg_catalyst": 8.1029,
+    "ced_mj_per_kg_catalyst": 132.3522,
+    "lca_coverage_pct": 100.0
+  },
+  "materials": {
+    "components": [
+      {
+        "role": "active_metal",
+        "name": "Ni",
+        "wt_pct": 20.0,
+        "wt_frac": 0.2,
+        "price_per_lb": 7.5609,
+        "precursor_markup": 1.0,
+        "cost_per_lb_cat": 1.51218,
+        "cost_pct": 70.9
+      },
+      {
+        "role": "support",
+        "name": "Al2O3",
+        "wt_pct": 80.0,
+        "wt_frac": 0.8,
+        "price_per_lb": 0.775,
+        "precursor_markup": 1.0,
+        "cost_per_lb_cat": 0.62,
+        "cost_pct": 29.1
+      }
+    ],
+    "total_materials_cost_per_lb": 2.13218
+  },
+  "step_method": {
+    "scale": "medium",
+    "order_size_tons": 20.0,
+    "production_rate_ton_per_day": 10,
+    "campaign_days": 3.0,
+    "step_cost_per_hr": 930.98,
+    "chemppi_escalation": 1.3299711815561959,
+    "campaign_cost": 67030.55,
+    "total_production_lb": 40000.0,
+    "materials_cost_per_lb": 2.1322,
+    "processing_cost_per_lb": 1.6758,
+    "subtotal_per_lb": 3.8079,
+    "ga_per_lb": 0.1904,
+    "sard_per_lb": 0.1999,
+    "pre_margin_per_lb": 4.1983,
+    "margin_pct": 19.47,
+    "margin_per_lb": 1.0148,
+    "estimated_price_per_lb": 5.213,
+    "estimated_price_per_kg": 11.4928,
+    "step_details": [
+      {
+        "step": "mixer_slurry",
+        "hourly_cost": 100
+      },
+      {
+        "step": "incipient_wetness",
+        "hourly_cost": 100
+      },
+      {
+        "step": "dryer_rotary_100_300C",
+        "hourly_cost": 150
+      },
+      {
+        "step": "kiln_continuous_indirect",
+        "hourly_cost": 175
+      },
+      {
+        "step": "mill",
+        "hourly_cost": 100
+      },
+      {
+        "step": "scrubber_nox",
+        "hourly_cost": 75
+      }
+    ]
+  }
+}

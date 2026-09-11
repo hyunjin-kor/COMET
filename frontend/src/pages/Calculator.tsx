@@ -1,5 +1,13 @@
+import { ScientificText } from '../components/shared/ScientificText';
+import { useAuth } from '../lib/auth';
+import { formatScientificText } from '../lib/scientific-text';
 import { useEffect, useRef, useState } from 'react';
+import { ConsumablesFields, RecipeConsumptionFields } from '../components/RecipeConsumptionFields';
+import CostEvidencePanel, { PurchaseEvidenceFields } from '../components/CostEvidencePanel';
+import { SavedEstimateComparison } from '../components/SavedEstimateComparison';
+import { validConsumables, validRecipe, type ConsumableDraft } from '../lib/recipe-inputs';
 import { useNavigate } from 'react-router-dom';
+import { ManufacturingMethods } from '../components/ManufacturingMethods';
 import { FitPriceText } from '../components/shared/FitPriceText';
 import { WorkspaceSectionFooter, WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
 import {
@@ -17,6 +25,8 @@ import {
   refreshPrices as refreshPriceFeed,
   type ComponentInput,
   type CostInput,
+  type PrecursorConsumption,
+  type ConsumableInput,
   type SavedEstimateSummary,
   type MaterialItem,
   type MetalPrice,
@@ -35,6 +45,8 @@ import {
   type CalculatorRow,
 } from '../lib/calculator-session';
 import { formatPrice } from '../lib/format-price';
+import { compareElectroPreference } from '../lib/electrode-defaults';
+import { fitPreparationSelection, isThermalTemplateReady, matchThermalTemplate, sameSteps, togglePreparationStep, type PreparationSelection } from '../lib/preparation-selection';
 import { useLang } from '../lib/i18n';
 import { LB_PER_KG, TROY_OZ_PER_LB } from '../lib/unit-conversion';
 import { useBasis } from '../lib/use-basis';
@@ -416,85 +428,13 @@ function calculatorMaterialLabel(material: MaterialItem) {
   return material.name;
 }
 
-function preferredScopeRank(material: MaterialItem) {
-  switch (material.price_scope) {
-    case 'literature_high_volume':
-      return 0;
-    case 'historical_bulk':
-      return 1;
-    case 'vendor_lab':
-      return 2;
-    default:
-      return 3;
-  }
-}
-
-function electrocatalystTemplateRank(
-  material: MaterialItem,
-  category: string,
-  applicationFamily: ApplicationFamily,
-  templateId: string,
-) {
-  const text = `${material.name} ${material.formula ?? ''} ${material.symbol ?? ''}`.toLowerCase();
-  const symbol = (material.symbol ?? '').toLowerCase();
-  const exactFamilyRank =
-    material.application_family === applicationFamily
-      ? 0
-      : material.application_family === 'general'
-        ? 1
-        : 2;
-
-  const isPemElectrolyzer = templateId === 'pem_electrolyzer_ccm';
-  const isDmfc = templateId === 'dmfc_gde_route';
-  const isPemRoute = templateId === 'pem_fuel_cell_ccm' || isDmfc;
-
-  if (applicationFamily !== 'electrolyzer' && !isPemRoute) {
-    return exactFamilyRank;
-  }
-  const isPfsa = text.includes('pfsa') || text.includes('aquivion');
-  const isAem = text.includes('aem') || text.includes('piperion') || text.includes('sustainion') || text.includes('pdt');
-  const isTitanium = text.includes('titanium') || text.includes('ptl') || text.includes('frit');
-  const isNickel = text.includes('nickel');
-  const isCarbon = text.includes('carbon');
-
-  if (category === 'Ionomer' || category === 'Membrane') {
-    if (isPemElectrolyzer || isPemRoute) return isPfsa ? 0 : isAem ? 1 : 2;
-    return isAem ? 0 : isPfsa ? 1 : 2;
-  }
-
-  if (category === 'Gas Diffusion Layer') {
-    if (isPemElectrolyzer) return isTitanium ? 0 : isCarbon ? 1 : isNickel ? 2 : 3;
-    if (isPemRoute) return isCarbon ? 0 : isTitanium ? 1 : isNickel ? 2 : 3;
-    return isNickel ? 0 : isCarbon ? 1 : isTitanium ? 2 : 3;
-  }
-
-  if (category === 'Electrocatalyst Powder') {
-    if (isPemElectrolyzer) {
-      if (symbol === 'ir') return 0;
-      if (symbol === 'ru') return 1;
-      if (symbol === 'ptir') return 2;
-      return 3;
-    }
-    if (isPemRoute) {
-      if (symbol === 'ptru') return isDmfc ? 0 : 1;
-      if (symbol === 'pt') return isDmfc ? 1 : 0;
-      return 2;
-    }
-    if (symbol === 'ni') return 0;
-    if (symbol === 'ag') return 1;
-    if (symbol === 'ir' || symbol === 'ru') return 2;
-    return 3;
-  }
-
-  return exactFamilyRank;
-}
 
 function MetricTile({ label, value, detail, dark = false }: { label: string; value: string; detail: string; dark?: boolean }) {
   return (
     <div className={dark ? 'cp-metric-tile-dark' : 'cp-metric-tile'}>
-      <div className={`cp-subtle-label ${dark ? '!text-slate-400' : ''}`}>{label}</div>
-      <div className={`mt-2 text-2xl font-display ${dark ? 'text-white' : 'text-slate-900'}`}>{value}</div>
-      <div className={`mt-1 text-xs leading-5 ${dark ? 'text-slate-400' : 'text-slate-600'}`}>{detail}</div>
+      <div className={`cp-subtle-label ${dark ? '!text-slate-400' : ''}`}><ScientificText text={label} /></div>
+      <div className={`mt-2 text-2xl font-display ${dark ? 'text-white' : 'text-slate-900'}`}><ScientificText text={value} /></div>
+      <div className={`mt-1 text-xs leading-5 ${dark ? 'text-slate-400' : 'text-slate-600'}`}><ScientificText text={detail} /></div>
     </div>
   );
 }
@@ -503,15 +443,16 @@ function CompactValueRow({ label, value, detail }: { label: string; value: strin
   return (
     <div className="cp-data-row">
       <div>
-        <div className="cp-subtle-label">{label}</div>
-        {detail ? <div className="mt-1 text-xs leading-5 text-slate-600">{detail}</div> : null}
+        <div className="cp-subtle-label"><ScientificText text={label} /></div>
+        {detail ? <div className="mt-1 text-xs leading-5 text-slate-600"><ScientificText text={detail} /></div> : null}
       </div>
-      <div className="text-right text-sm font-semibold text-[#191f28]">{value}</div>
+      <div className="text-right text-sm font-semibold text-[#191f28]"><ScientificText text={value} /></div>
     </div>
   );
 }
 
 export default function Calculator() {
+  const { session: accountSession } = useAuth();
   const navigate = useNavigate();
   const { toDisplay, toInternal, fmtLabel } = useUnit();
   const { lang, t } = useLang();
@@ -521,11 +462,20 @@ export default function Calculator() {
   const sectionState = useWorkspaceSections(ESTIMATE_SECTIONS, 'estimate');
   const storedDraft = loadCalculatorDraft();
   const [rows, setRows] = useState<CalculatorRow[]>(() => storedDraft?.rows?.length ? storedDraft.rows : defaultRows());
-  const [steps, setSteps] = useState<string[]>(() => storedDraft?.steps?.length ? storedDraft.steps : DEFAULT_STEPS);
+  const [preparation, setPreparation] = useState<PreparationSelection>(() => ({
+    steps: storedDraft?.steps ?? DEFAULT_STEPS,
+    basis: storedDraft?.preparationStepBasis ?? storedDraft?.steps ?? DEFAULT_STEPS,
+    substitutions: storedDraft?.preparationStepSubstitutions ?? [],
+  }));
+  const steps = preparation.steps;
+  const [selectedThermalTemplateId, setSelectedThermalTemplateId] = useState<string | null>(() => storedDraft?.thermalTemplateId ?? null);
   const [catalystDomain, setCatalystDomain] = useState<'thermal' | 'electrocatalyst'>(() => storedDraft?.catalystDomain ?? 'thermal');
   const [applicationFamily, setApplicationFamily] = useState<ApplicationFamily>(() => storedDraft?.applicationFamily ?? 'fuel_cell');
   const [electrocatalystConfig, setElectrocatalystConfig] = useState<ElectrocatalystDraft>(() => ({ ...defaultElectrocatalystConfig(), ...storedDraft?.electrocatalystConfig }));
   const [orderSize, setOrderSize] = useState<number>(() => storedDraft?.orderSize ?? 20);
+  const [productionRate, setProductionRate] = useState<number | ''>(() => storedDraft?.productionRate ?? '');
+  const [productionRateNote, setProductionRateNote] = useState(() => storedDraft?.productionRateNote ?? '');
+  const [consumables, setConsumables] = useState<ConsumableDraft[]>(() => storedDraft?.consumables ?? []);
   const [includeSpentValue, setIncludeSpentValue] = useState<boolean>(() => storedDraft?.includeSpentValue ?? false);
   const [reactorType, setReactorType] = useState<'fixed' | 'slurry'>(() => storedDraft?.reactorType ?? 'fixed');
   const [catalystBulkDensity, setCatalystBulkDensity] = useState<number>(() => storedDraft?.catalystBulkDensity ?? 50);
@@ -540,9 +490,12 @@ export default function Calculator() {
   const [electroTemplates, setElectroTemplates] = useState<ProcessTemplate[]>([]);
   const [thermalTemplates, setThermalTemplates] = useState<ProcessTemplate[]>([]);
   const [templateCosts, setTemplateCosts] = useState<Record<string, TemplateCost>>({});
+  const [templateCostsOrderSize, setTemplateCostsOrderSize] = useState<number | null>(null);
+  const [templateCostsError, setTemplateCostsError] = useState(false);
   const [savedEstimates, setSavedEstimates] = useState<SavedEstimateSummary[]>([]);
   const [savedBusyId, setSavedBusyId] = useState<number | null>(null);
   const [loadedSavedName, setLoadedSavedName] = useState<string | null>(null);
+  const [evidenceEstimateId, setEvidenceEstimateId] = useState<number | null>(null);
   const [latestSnapshot, setLatestSnapshot] = useState<CalculatorResultSnapshot | null>(() => loadCalculatorResultSnapshot());
   const [pricesUpdatedAt, setPricesUpdatedAt] = useState<Date | null>(() => storedDraft?.pricesUpdatedAt ? new Date(storedDraft.pricesUpdatedAt) : null);
   const [pricesLoading, setPricesLoading] = useState(true);
@@ -554,9 +507,15 @@ export default function Calculator() {
     saveCalculatorDraft({
       rows,
       steps,
+      preparationStepBasis: preparation.basis,
+      preparationStepSubstitutions: preparation.substitutions,
+      thermalTemplateId: selectedThermalTemplateId,
       catalystDomain,
       applicationFamily,
       orderSize,
+      productionRate,
+      productionRateNote,
+      consumables,
       pricesUpdatedAt: pricesUpdatedAt ? pricesUpdatedAt.toISOString() : null,
       includeSpentValue,
       reactorType,
@@ -571,37 +530,57 @@ export default function Calculator() {
     electrocatalystConfig,
     includeSpentValue,
     orderSize,
+    productionRate,
+    productionRateNote,
+    consumables,
     pricesUpdatedAt,
     reactorType,
     rows,
     selectedBenchmark,
+    selectedThermalTemplateId,
     steps,
+    preparation.basis,
+    preparation.substitutions,
   ]);
 
   useEffect(() => {
-    setSteps((previous) => previous.filter((key) => {
+    if (catalystDomain === 'thermal' && selectedThermalTemplateId) return;
+    const available = (key: string) => {
       const step = ALL_STEPS.find((item) => item.key === key);
       return step ? (step.scales as readonly Scale[]).includes(currentScale) : false;
+    };
+    setPreparation((previous) => ({
+      ...previous, steps: previous.steps.filter(available), basis: previous.basis.filter(available),
     }));
-  }, [currentScale]);
+  }, [currentScale, catalystDomain, selectedThermalTemplateId]);
 
   // Processing cost of every method at the current production scale, so the
   // method cards can show what the route itself costs before materials.
   useEffect(() => {
     if (catalystDomain !== 'thermal') return;
     let cancelled = false;
+    setTemplateCostsError(false);
     fetchTemplateCosts(orderSize, 'thermal')
       .then((payload) => {
         if (cancelled) return;
         setTemplateCosts(Object.fromEntries(payload.templates.map((item) => [item.id, item])));
+        setTemplateCostsOrderSize(payload.order_size_tons);
+        const selected = payload.templates.find((item) => item.id === selectedThermalTemplateId);
+        if (selected?.steps_fitted.length) {
+          const available = ALL_STEPS.filter((step) => (step.scales as readonly Scale[]).includes(getScale(orderSize))).map((step) => step.key);
+          setPreparation((previous) => fitPreparationSelection(previous, selected, available));
+        }
       })
       .catch(() => {
-        if (!cancelled) setTemplateCosts({});
+        if (!cancelled) {
+          setTemplateCosts({});
+          setTemplateCostsError(true);
+        }
       });
     return () => {
       cancelled = true;
     };
-  }, [orderSize, catalystDomain]);
+  }, [orderSize, catalystDomain, selectedThermalTemplateId]);
 
   // Fetch live prices ONCE on mount. Each fetchPrices() returns a fresh array
   // reference, and the dedupe/derived options below depend on it — putting
@@ -731,28 +710,18 @@ export default function Calculator() {
       return;
     }
 
-    setSteps(activeTemplate.steps);
+    setPreparation({ steps: [...activeTemplate.steps], basis: [...activeTemplate.steps] });
   }, [catalystDomain, electroTemplates, electrocatalystConfig.templateId]);
 
   useEffect(() => {
     if (catalystDomain !== 'electrocatalyst' || electroMaterials.length === 0) return;
 
-    const compareElectroPreference = (left: MaterialItem, right: MaterialItem, category: string) => {
-      const templateDelta =
-        electrocatalystTemplateRank(left, category, applicationFamily, electrocatalystConfig.templateId)
-        - electrocatalystTemplateRank(right, category, applicationFamily, electrocatalystConfig.templateId);
-      if (templateDelta !== 0) return templateDelta;
-      const scopeDelta = preferredScopeRank(left) - preferredScopeRank(right);
-      if (scopeDelta !== 0) return scopeDelta;
-      const leftPrice = left.price ?? Number.POSITIVE_INFINITY;
-      const rightPrice = right.price ?? Number.POSITIVE_INFINITY;
-      if (leftPrice !== rightPrice) return leftPrice - rightPrice;
-      return left.name.localeCompare(right.name);
-    };
+    const comparePreference = (left: MaterialItem, right: MaterialItem, category: string) =>
+      compareElectroPreference(left, right, category, applicationFamily, electrocatalystConfig.templateId);
 
     const pickPreferredKey = (options: MaterialItem[], category: string) => {
       if (options.length === 0) return '';
-      const preferred = [...options].sort((left, right) => compareElectroPreference(left, right, category));
+      const preferred = [...options].sort((left, right) => comparePreference(left, right, category));
       return String(preferred[0]?.id ?? '');
     };
 
@@ -762,7 +731,7 @@ export default function Calculator() {
       const current = options.find((material) => String(material.id) === currentKey);
       const preferred = options.find((material) => String(material.id) === preferredKey);
       if (!current || !preferred) return preferredKey;
-      return compareElectroPreference(current, preferred, category) > 0 ? preferredKey : '';
+      return comparePreference(current, preferred, category) > 0 ? preferredKey : '';
     };
 
     const catalystOptions = electroMaterials.filter((material) => material.category === 'Electrocatalyst Powder');
@@ -852,7 +821,7 @@ export default function Calculator() {
   async function syncPrices() {
     setRefreshing(true);
     try {
-      await refreshPriceFeed();
+      if (accountSession.mode !== 'hosted') await refreshPriceFeed();
       applyPriceRows(await fetchPrices(basis));
     } finally {
       setRefreshing(false);
@@ -883,14 +852,17 @@ export default function Calculator() {
     const fitted = templateCosts[template.id]?.steps_fitted;
     return fitted?.length ? fitted : template.steps;
   };
-  const sameSteps = (left: string[], right: string[]) => left.length === right.length && left.every((key) => right.includes(key));
   const matchedThermalTemplate =
-    catalystDomain === 'thermal' ? thermalTemplates.find((template) => sameSteps(routeStepsFor(template), steps)) ?? null : null;
+    catalystDomain === 'thermal' ? matchThermalTemplate(thermalTemplates, templateCosts, steps, selectedThermalTemplateId) : null;
+  const selectedThermalTemplate = thermalTemplates.find((template) => template.id === selectedThermalTemplateId) ?? null;
+  const thermalStepsEdited = !sameSteps(steps, preparation.basis);
   const benchmarkTemplate = activeBenchmark?.route.calculator_template_id
     ? thermalTemplates.find((template) => template.id === activeBenchmark.route.calculator_template_id) ?? null
     : null;
-  const thermalTemplateId = matchedThermalTemplate && matchedThermalTemplate.id !== benchmarkTemplate?.id ? matchedThermalTemplate.id : undefined;
-  const thermalRouteLabel = thermalTemplateId
+  const thermalTemplateId = selectedThermalTemplateId ?? (matchedThermalTemplate && matchedThermalTemplate.id !== benchmarkTemplate?.id ? matchedThermalTemplate.id : undefined);
+  const thermalRouteLabel = selectedThermalTemplate
+    ? `${selectedThermalTemplate.name}${thermalStepsEdited ? ` (${t('edited')})` : ''}`
+    : thermalTemplateId
     ? matchedThermalTemplate?.name ?? t('Manual step selection')
     : activeBenchmark
       ? benchmarkTemplate && !sameSteps(routeStepsFor(benchmarkTemplate), steps)
@@ -935,7 +907,9 @@ export default function Calculator() {
               const step = ALL_STEPS.find((item) => item.key === key);
               return step ? (step.scales as readonly Scale[]).includes(currentScale) : false;
             });
-      setSteps(thermalBenchmarkSteps);
+      const nextSteps = selectedThermalTemplateId && templateCosts[selectedThermalTemplateId]?.steps_fitted.length
+        ? [...templateCosts[selectedThermalTemplateId].steps_fitted] : thermalBenchmarkSteps;
+      setPreparation({ steps: nextSteps, basis: [...nextSteps], substitutions: templateCosts[selectedThermalTemplateId ?? ""]?.substitutions });
       return;
     }
 
@@ -954,7 +928,7 @@ export default function Calculator() {
     if (!option) return;
     setRows((previous) => previous.map((row) => {
       if (row.id !== rowId) return row;
-      return applyOptionToRow(row, option);
+      return applyOptionToRow({ ...row, recipe_consumption: undefined, purchase_evidence: undefined }, option);
     }));
   };
   const updateElectroConfig = (patch: Partial<ElectrocatalystDraft>) => setElectrocatalystConfig((previous) => ({ ...previous, ...patch }));
@@ -973,7 +947,9 @@ export default function Calculator() {
     }
     return previous.filter((row) => row.id !== id);
   });
-  const toggleStep = (stepKey: string) => setSteps((previous) => previous.includes(stepKey) ? previous.filter((item) => item !== stepKey) : [...previous, stepKey]);
+  const toggleStep = (stepKey: string) => {
+    setPreparation((previous) => togglePreparationStep(previous, stepKey));
+  };
   const thermalRows = rows.filter((row) => row.role === 'active_metal' || row.role === 'promoter' || row.role === 'support');
   const supportRows = thermalRows.filter((row) => row.role === 'support');
   const nonSupportRows = thermalRows.filter((row) => row.role !== 'support');
@@ -1031,9 +1007,16 @@ export default function Calculator() {
               ? t('Active metals and promoters must stay below 100 wt% so support remains positive.')
               : t('Enter a valid non-zero loading for the active portion of the formulation.');
   const electrocatalystValidationMessage = t('Select catalyst powder, ionomer, membrane, substrate / GDL, and a preparation template before continuing.');
-  const isCompositionSectionValid = catalystDomain === 'electrocatalyst' ? isElectroValid : isThermalValid;
-  const isManufacturingSectionValid = isCompositionSectionValid && steps.length > 0;
+  const isRecipeValid = thermalRows.every((row) => validRecipe(row.recipe_consumption)) && validConsumables(consumables);
+  const isRateValid = productionRate === '' || (Number.isFinite(productionRate) && productionRate > 0 && productionRateNote.trim().length > 0);
+  const isCompositionSectionValid = catalystDomain === 'electrocatalyst' ? isElectroValid : isThermalValid && isRecipeValid;
+  const isManufacturingSectionValid = isCompositionSectionValid && steps.length > 0 && (catalystDomain === 'electrocatalyst' || isRateValid);
   const isValid = catalystDomain === 'electrocatalyst' ? isElectroValid : isThermalValid;
+  const isRouteReady = catalystDomain !== 'thermal' || isThermalTemplateReady(
+    selectedThermalTemplateId, templateCosts, steps, orderSize, templateCostsOrderSize,
+    thermalStepsEdited,
+  );
+  const canCalculate = isValid && isManufacturingSectionValid && isRouteReady;
   const latestSnapshotForCurrentCase = latestSnapshot
     && latestSnapshot.result.input_summary.catalyst_domain === catalystDomain
     && (
@@ -1081,6 +1064,12 @@ export default function Calculator() {
     try {
       const detail = await fetchSavedEstimate(summary.id);
       const input = detail.input as unknown as CostInput;
+      setProductionRate(input.production_rate_ton_per_day ?? '');
+      setProductionRateNote(input.production_rate_note ?? '');
+      setConsumables(input.consumables ?? []);
+      setIncludeSpentValue(input.include_spent_value ?? false);
+      setReactorType(input.reactor_type === 'slurry' ? 'slurry' : 'fixed');
+      setCatalystBulkDensity(input.catalyst_bulk_density ?? 50);
 
       if (summary.catalyst_domain === 'electrocatalyst') {
         const electrode = input.electrode_input;
@@ -1109,7 +1098,7 @@ export default function Calculator() {
           const role = component.role as 'active_metal' | 'promoter' | 'support';
           const selectionKey = component.material_key ? `library:${component.material_key}` : '';
           const option = selectionKey ? findThermalOption(selectionKey) : undefined;
-          if (option) return createRowFromOption(role, option, component.wt_pct);
+          if (option) return { ...createRowFromOption(role, option, component.wt_pct), recipe_consumption: component.recipe_consumption, purchase_evidence: component.purchase_evidence };
           return {
             id: uid(),
             role,
@@ -1121,12 +1110,18 @@ export default function Calculator() {
             price_per_lb: component.price_per_lb ?? 0,
             source_type: 'manual' as const,
             source: 'Saved estimate',
+            recipe_consumption: component.recipe_consumption,
+            purchase_evidence: component.purchase_evidence,
           };
         });
       if (nextRows.length === 0) return;
       setCatalystDomain('thermal');
       setRows(nextRows);
-      setSteps(input.steps ?? []);
+      setSelectedThermalTemplateId(input.template_id ?? null);
+      const savedCost = input.template_id
+        ? (await fetchTemplateCosts(input.order_size_tons ?? 20, 'thermal')).templates.find((item) => item.id === input.template_id)
+        : undefined;
+      setPreparation({ steps: input.steps ?? [], basis: savedCost?.steps_fitted ?? input.steps ?? [], substitutions: savedCost?.substitutions });
       setOrderSize(input.order_size_tons ?? 20);
       setLoadedSavedName(summary.name);
     } catch {
@@ -1160,7 +1155,7 @@ export default function Calculator() {
   }
 
   async function handleCalculate() {
-    if (!isValid || steps.length === 0) return;
+    if (!canCalculate) return;
     setLoading(true);
     setError('');
 
@@ -1205,6 +1200,8 @@ export default function Calculator() {
             material_key: row.source_type === 'manual' ? undefined : row.material_key ?? undefined,
             wt_pct: row.wt_pct,
             price_per_lb: row.source_type === 'manual' || !row.material_key ? row.price_per_lb : undefined,
+            recipe_consumption: row.recipe_consumption as PrecursorConsumption | undefined,
+            purchase_evidence: row.purchase_evidence,
           })),
           ...completedSupportRows.map((row, index) => ({
             role: 'support' as const,
@@ -1212,6 +1209,8 @@ export default function Calculator() {
             material_key: row.source_type === 'manual' ? undefined : row.material_key ?? undefined,
             wt_pct: supportIsSplit ? row.wt_pct : index === 0 ? supportWtPct : 0,
             price_per_lb: row.source_type === 'manual' || !row.material_key ? row.price_per_lb : undefined,
+            recipe_consumption: row.recipe_consumption as PrecursorConsumption | undefined,
+            purchase_evidence: row.purchase_evidence,
           })).filter((row) => row.wt_pct > 0),
         ];
         input = {
@@ -1222,6 +1221,9 @@ export default function Calculator() {
           application_family: applicationFamily,
           order_size_tons: orderSize,
           include_spent_value: includeSpentValue,
+          production_rate_ton_per_day: productionRate === '' ? undefined : productionRate,
+          production_rate_note: productionRate === '' ? undefined : productionRateNote,
+          consumables: consumables as ConsumableInput[],
           reactor_type: reactorType,
           catalyst_bulk_density: catalystBulkDensity,
           price_basis: basis,
@@ -1266,9 +1268,9 @@ export default function Calculator() {
     const dotClass = row.source_type === 'live' ? 'bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.32)]' : row.source_type === 'indexed' ? 'bg-amber-500' : 'bg-slate-500';
     const className = `inline-flex items-center gap-2 rounded-full border px-3 py-2 text-xs font-semibold transition ${sourceTone(row.source_type)}`;
     const content = <><span className={`h-2 w-2 rounded-full ${dotClass}`} /><span>{t(sourceTypeLabel(row.source_type))}</span></>;
-    if (!option || option.source_type === 'manual') return <span className={`${className} cursor-default`} title={row.source}>{content}</span>;
+    if (!option || option.source_type === 'manual') return <span className={`${className} cursor-default`} title={formatScientificText(row.source)}>{content}</span>;
     const title = row.source_type === 'manual' ? `Manual input. Switch to ${sourceTypeLabel(option.source_type)} pricing from ${option.source}.` : `${row.source}. Switch back to manual input.`;
-    return <button onClick={() => toggleRowSource(row.id)} title={title} className={className}>{content}</button>;
+    return <button onClick={() => toggleRowSource(row.id)} title={formatScientificText(title)} className={className}>{content}</button>;
   }
 
   function priceField(row: CalculatorRow) {
@@ -1286,19 +1288,19 @@ export default function Calculator() {
     return (
       <div className="rounded-[24px] border border-slate-900/8 bg-white/72 p-4">
         <div className="cp-subtle-label">{t(label)}</div>
-        <div className="mt-2 font-semibold text-[#191f28]">{material?.name ?? t(fallback)}</div>
-        <div className="mt-1 text-sm text-slate-600">{material ? materialQuoteLabel(material) : t('Select a library record to lock pricing.')}</div>
+        <div className="mt-2 font-semibold text-[#191f28]"><ScientificText text={material?.name ?? t(fallback)} /></div>
+        <div className="mt-1 text-sm text-slate-600"><ScientificText text={material ? materialQuoteLabel(material) : t('Select a library record to lock pricing.')} /></div>
         {material ? (
           <div className="mt-2 space-y-2">
             <div className="text-xs leading-6 text-slate-600">
-              {priceScopeLabel(material.price_scope)} / {pricingBasisDisplay(material.pricing_basis)}
-              {material.quote_year ? ` / ${material.quote_year}` : ''}
-              {material.quote_source ? ` / ${material.quote_source}` : ''}
+              <ScientificText text={priceScopeLabel(material.price_scope)} /> / <ScientificText text={pricingBasisDisplay(material.pricing_basis)} />
+              <ScientificText text={material.quote_year ? ` / ${material.quote_year}` : ''} />
+              <ScientificText text={material.quote_source ? ` / ${material.quote_source}` : ''} />
             </div>
             <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.16em] ${
               material.reference_url ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : 'border-amber-200 bg-amber-50 text-amber-700'
             }`}>
-              {materialSourceTrust(material)}
+              <ScientificText text={materialSourceTrust(material)} />
             </span>
             {material.reference_url ? (
               <a
@@ -1365,7 +1367,7 @@ export default function Calculator() {
                   <option value="">{t('Select catalyst powder')}</option>
                   {catalystPowders.map((material) => (
                     <option key={String(material.id)} value={String(material.id)}>
-                      {calculatorMaterialLabel(material)}
+                      {formatScientificText(calculatorMaterialLabel(material))}
                     </option>
                   ))}
                 </select>
@@ -1377,7 +1379,7 @@ export default function Calculator() {
                   <option value="">{t('Select ionomer')}</option>
                   {ionomerOptions.map((material) => (
                     <option key={String(material.id)} value={String(material.id)}>
-                      {calculatorMaterialLabel(material)}
+                      {formatScientificText(calculatorMaterialLabel(material))}
                     </option>
                   ))}
                 </select>
@@ -1389,7 +1391,7 @@ export default function Calculator() {
                   <option value="">{t('Select membrane')}</option>
                   {membraneOptions.map((material) => (
                     <option key={String(material.id)} value={String(material.id)}>
-                      {calculatorMaterialLabel(material)}
+                      {formatScientificText(calculatorMaterialLabel(material))}
                     </option>
                   ))}
                 </select>
@@ -1401,7 +1403,7 @@ export default function Calculator() {
                   <option value="">{t('Select substrate / GDL')}</option>
                   {substrateOptions.map((material) => (
                     <option key={String(material.id)} value={String(material.id)}>
-                      {calculatorMaterialLabel(material)}
+                      {formatScientificText(calculatorMaterialLabel(material))}
                     </option>
                   ))}
                 </select>
@@ -1451,7 +1453,7 @@ export default function Calculator() {
                 <select value={electrocatalystConfig.templateId} onChange={(event) => updateElectroConfig({ templateId: event.target.value })} className="input-base mt-2">
                   {electroTemplates.map((template) => (
                     <option key={template.id} value={template.id}>
-                      {template.name}
+                      {formatScientificText(template.name)}
                     </option>
                   ))}
                 </select>
@@ -1470,30 +1472,30 @@ export default function Calculator() {
         {activeElectroTemplate ? (
           <div className="rounded-[24px] border border-emerald-200 bg-emerald-50/80 p-4">
             <div className="cp-subtle-label !text-emerald-700">{t('Selected preparation template')}</div>
-            <div className="mt-2 cp-heading-sm">{activeElectroTemplate.name}</div>
-            <div className="mt-2 text-sm leading-6 text-emerald-900">{activeElectroTemplate.description}</div>
+            <div className="mt-2 cp-heading-sm"><ScientificText text={activeElectroTemplate.name} /></div>
+            <div className="mt-2 text-sm leading-6 text-emerald-900"><ScientificText text={activeElectroTemplate.description} /></div>
             <div className="mt-3 flex flex-wrap gap-2">
               <span className="cp-chip">{t(applicationFamilyLabel(applicationFamily))}</span>
-              {activeElectroTemplate.manufacturing_mode ? <span className="cp-chip">{activeElectroTemplate.manufacturing_mode}</span> : null}
-              <span className="cp-chip">{activeElectroTemplate.steps.length} steps</span>
+              {activeElectroTemplate.manufacturing_mode ? <span className="cp-chip"><ScientificText text={activeElectroTemplate.manufacturing_mode} /></span> : null}
+              <span className="cp-chip">{activeElectroTemplate.steps.length} {t("steps")}</span>
             </div>
             <div className="mt-4 grid gap-3 lg:grid-cols-3">
               <div>
                 <div className="cp-subtle-label !text-emerald-700">{t('Pre-treatment')}</div>
                 <div className="mt-2 flex flex-wrap gap-2">
-                  {(activeElectroTemplate.preprocess ?? []).map((item) => <span key={item} className="cp-chip">{item}</span>)}
+                  {(activeElectroTemplate.preprocess ?? []).map((item) => <span key={item} className="cp-chip"><ScientificText text={item} /></span>)}
                 </div>
               </div>
               <div>
                 <div className="cp-subtle-label !text-emerald-700">{t('Synthesis / coating')}</div>
                 <div className="mt-2 flex flex-wrap gap-2">
-                  {(activeElectroTemplate.synthesis ?? []).map((item) => <span key={item} className="cp-chip">{item}</span>)}
+                  {(activeElectroTemplate.synthesis ?? []).map((item) => <span key={item} className="cp-chip"><ScientificText text={item} /></span>)}
                 </div>
               </div>
               <div>
                 <div className="cp-subtle-label !text-emerald-700">{t('Post-treatment')}</div>
                 <div className="mt-2 flex flex-wrap gap-2">
-                  {(activeElectroTemplate.postprocess ?? []).map((item) => <span key={item} className="cp-chip">{item}</span>)}
+                  {(activeElectroTemplate.postprocess ?? []).map((item) => <span key={item} className="cp-chip"><ScientificText text={item} /></span>)}
                 </div>
               </div>
             </div>
@@ -1525,15 +1527,17 @@ export default function Calculator() {
               <div key={row.id} className="surface-ghost p-4">
                 <div className="flex flex-wrap items-center gap-3">
                   <select value={row.selection_key ?? ''} onChange={(event) => selectThermalOption(row.id, event.target.value)} className="input-base min-w-[220px] flex-[1.6_1_320px] pr-10">
-                    <option value="">{role === 'active_metal' ? t('Select active metal or precursor') : t('Select promoter material')}</option>
-                    {selectionOptions.map((option) => <option key={option.selection_key} value={option.selection_key}>{compactThermalOptionLabel(option, lang)}</option>)}
+                    <option value="">{formatScientificText(role === 'active_metal' ? t('Select active metal or precursor') : t('Select promoter material'))}</option>
+                    {selectionOptions.map((option) => <option key={option.selection_key} value={option.selection_key}>{formatScientificText(compactThermalOptionLabel(option, lang))}</option>)}
                   </select>
                   <div className="flex flex-none items-center gap-2"><input type="number" step="0.1" min="0" max="100" value={row.wt_pct} onChange={(event) => updateRow(row.id, { wt_pct: Number(event.target.value) })} className="input-base w-28 text-right font-mono" /><span className="text-xs text-slate-600">wt%</span></div>
                   {sourceChip(row)}
                   {priceField(row)}
-                  <button onClick={() => removeRow(row.id)} className="flex h-10 w-10 flex-none items-center justify-center rounded-[18px] border border-slate-300 bg-white/74 text-slate-400 transition hover:border-red-300 hover:bg-red-50 hover:text-red-700" aria-label="Remove row">x</button>
+                  <button onClick={() => removeRow(row.id)} className="flex h-10 w-10 flex-none items-center justify-center rounded-[18px] border border-slate-300 bg-white/74 text-slate-400 transition hover:border-red-300 hover:bg-red-50 hover:text-red-700" aria-label={t("Remove row")}>x</button>
                 </div>
-                <div className="mt-3 text-xs text-slate-600">{row.name || 'Select a material record.'}</div>
+                <div className="mt-3 text-xs text-slate-600"><ScientificText text={row.name || 'Select a material record.'} /></div>
+                <RecipeConsumptionFields value={row.recipe_consumption} onChange={(value) => updateRow(row.id, { recipe_consumption: value })} />
+                {row.source_type === 'manual' ? <PurchaseEvidenceFields value={row.purchase_evidence} onChange={(value) => updateRow(row.id, { purchase_evidence: value })} /> : null}
               </div>
             ))}
           </div>
@@ -1563,6 +1567,18 @@ export default function Calculator() {
         ? `${t('Recovery credit on')} / ${reactorType === 'fixed' ? t('Fixed bed') : t('Slurry')} / ${catalystBulkDensity.toFixed(1)} lb/ft³`
         : t('Recovery credit off')
       : t(applicationFamilyLabel(applicationFamily));
+
+    if (sectionState.activeSection.id === 'manufacturing') {
+      return (
+        <section className="surface-card px-4 py-3">
+          <dl className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_minmax(0,.65fr)_minmax(0,1.4fr)]">
+            <div className="min-w-0"><dt className="text-[11px] text-slate-400">{t('Composition')}</dt><dd className="mt-1 truncate text-xs font-medium text-slate-700" title={formatScientificText(recipeSummary)}><ScientificText text={recipeSummary} /></dd></div>
+            <div className="min-w-0"><dt className="text-[11px] text-slate-400">{t('Price basis')}</dt><dd className="mt-1 truncate text-xs font-medium text-slate-700">{basis === 'reference' ? t('Monthly average') : t('Live prices')}</dd></div>
+            <div className="min-w-0"><dt className="text-[11px] text-slate-400">{t('Preparation basis')}</dt><dd className="mt-1 truncate text-xs font-medium text-slate-700" title={formatScientificText(preparationSummary)}><ScientificText text={preparationSummary} /></dd></div>
+          </dl>
+        </section>
+      );
+    }
 
     return (
       <section className="surface-card p-4">
@@ -1619,19 +1635,19 @@ export default function Calculator() {
           <div className="rounded-[22px] border border-slate-900/8 bg-white/62 p-4">
             <div className="cp-subtle-label">{t('Current case')}</div>
             <div className="mt-2 text-base font-semibold text-[#191f28]">{t(catalystDomainLabel(catalystDomain))}</div>
-            <div className="mt-2 text-sm leading-6 text-slate-600">{recipeSummary}</div>
+            <div className="mt-2 text-sm leading-6 text-slate-600"><ScientificText text={recipeSummary} /></div>
             <div className="mt-3 flex flex-wrap gap-2">
               <span className="cp-chip">{t(catalystDomainLabel(catalystDomain))}</span>
               {catalystDomain === 'electrocatalyst' ? <span className="cp-chip">{t(applicationFamilyLabel(applicationFamily))}</span> : null}
-              {activeBenchmark ? <span className="cp-chip">{activeBenchmark.title}</span> : null}
+              {activeBenchmark ? <span className="cp-chip"><ScientificText text={activeBenchmark.title} /></span> : null}
             </div>
           </div>
 
           <div className="rounded-[22px] border border-slate-900/8 bg-white/62 p-4">
             <div className="cp-subtle-label">{t('Preparation basis')}</div>
-            <div className="mt-2 text-base font-semibold text-[#191f28]">{preparationSummary}</div>
+            <div className="mt-2 text-base font-semibold text-[#191f28]"><ScientificText text={preparationSummary} /></div>
             <div className="mt-2 space-y-1">
-              <CompactValueRow label={t('Production scale')} value={lang === 'ko' ? `${orderSize}톤` : `${orderSize} tons`} detail={lang === 'ko' ? `${t(scale.label)} / ${scale.rate}` : `${scale.label} scale / ${scale.rate}`} />
+              {catalystDomain === 'thermal' ? <CompactValueRow label={t('Production scale')} value={lang === 'ko' ? `${orderSize}톤` : `${orderSize} tons`} detail={lang === 'ko' ? `${t(scale.label)} / ${scale.rate}` : `${scale.label} scale / ${scale.rate}`} /> : <CompactValueRow label={t('Active area')} value={`${electrocatalystConfig.activeAreaCm2} cm²`} detail={`${electrocatalystConfig.catalystLoadingMgCm2} mg/cm²`} />}
               <CompactValueRow
                 label={t('Steps')}
                 value={String(steps.length)}
@@ -1660,20 +1676,20 @@ export default function Calculator() {
               {latestSnapshotForCurrentCase ? (
                 <FitPriceText
                   size="md"
-                  text={formatPrice(toDisplay(latestSnapshotForCurrentCase.result.summary.estimated_price_per_lb))}
+                  text={formatPrice(latestSnapshotForCurrentCase.result.electrode_model?.cost_per_cm2_usd ?? toDisplay(latestSnapshotForCurrentCase.result.summary.estimated_price_per_lb))}
                   className="min-w-0 text-white"
                 />
               ) : (
                 <div className="font-display text-[1.6rem] leading-none text-white">{t('Pending')}</div>
               )}
-              <div className="pb-1 text-sm text-slate-300">{latestSnapshotForCurrentCase ? fmtLabel : ''}</div>
+              <div className="pb-1 text-sm text-slate-300"><ScientificText text={latestSnapshotForCurrentCase ? latestSnapshotForCurrentCase.result.electrode_model ? '/cm²' : fmtLabel : ''} /></div>
             </div>
             <div className="mt-2 text-xs leading-6 text-slate-300">
-              {latestSnapshotForCurrentCase
+              <ScientificText text={latestSnapshotForCurrentCase
                 ? lang === 'ko'
                   ? `${latestGenerated} 계산. 담체 ${latestSnapshotForCurrentCase.selectedSupportName ?? '미지정'} 기준.`
                   : `Generated ${latestGenerated}. ${latestSnapshotForCurrentCase.selectedSupportName ?? 'Support'} remained the active basis.`
-                : t('No result for this catalyst class yet. Run the estimate once to populate this summary.')}
+                : t('No result for this catalyst class yet. Run the estimate once to populate this summary.')} />
             </div>
           </div>
         </div>
@@ -1764,7 +1780,7 @@ export default function Calculator() {
           </div>
           {!isElectroValid ? (
             <div className="mt-4 rounded-[20px] border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-800">
-              {electrocatalystValidationMessage}
+              <ScientificText text={electrocatalystValidationMessage} />
             </div>
           ) : null}
           <div className="mt-5">{renderElectrocatalystPanel()}</div>
@@ -1783,7 +1799,7 @@ export default function Calculator() {
         </div>
         {!isThermalValid ? (
           <div className="mt-4 rounded-[20px] border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-800">
-            {thermalValidationMessage}
+            <ScientificText text={thermalValidationMessage} />
           </div>
         ) : null}
 
@@ -1807,7 +1823,7 @@ export default function Calculator() {
               <div className="flex flex-wrap items-center gap-3">
                 <select value={row.selection_key ?? ''} onChange={(event) => selectThermalOption(row.id, event.target.value)} className="input-base min-w-[220px] flex-[1.5_1_320px] pr-10">
                   <option value="">{t('Select support')}</option>
-                  {supportSelectionOptions.map((support) => <option key={support.selection_key} value={support.selection_key}>{compactThermalOptionLabel(support, lang)}</option>)}
+                  {supportSelectionOptions.map((support) => <option key={support.selection_key} value={support.selection_key}>{formatScientificText(compactThermalOptionLabel(support, lang))}</option>)}
                 </select>
                 {supportIsSplit ? (
                   <div className="flex flex-none items-center gap-2">
@@ -1819,9 +1835,11 @@ export default function Calculator() {
                 )}
                 {sourceChip(row)}
                 {priceField(row)}
-                {supportRows.length > 1 ? <button onClick={() => removeRow(row.id)} className="flex h-10 w-10 flex-none items-center justify-center rounded-[18px] border border-slate-300 bg-white/74 text-slate-400 transition hover:border-red-300 hover:bg-red-50 hover:text-red-700" aria-label="Remove support">x</button> : null}
+                {supportRows.length > 1 ? <button onClick={() => removeRow(row.id)} className="flex h-10 w-10 flex-none items-center justify-center rounded-[18px] border border-slate-300 bg-white/74 text-slate-400 transition hover:border-red-300 hover:bg-red-50 hover:text-red-700" aria-label={t("Remove support")}>x</button> : null}
               </div>
-              <div className="mt-3 text-xs text-slate-600">{row.name || t('Select a support record.')}</div>
+              <div className="mt-3 text-xs text-slate-600"><ScientificText text={row.name || t('Select a support record.')} /></div>
+              <RecipeConsumptionFields value={row.recipe_consumption} onChange={(value) => updateRow(row.id, { recipe_consumption: value })} />
+              {row.source_type === 'manual' ? <PurchaseEvidenceFields value={row.purchase_evidence} onChange={(value) => updateRow(row.id, { purchase_evidence: value })} /> : null}
             </div>
           ))}
           <div className="mt-3 rounded-[18px] border border-slate-200 bg-white/76 px-4 py-3 text-xs leading-6 text-slate-600">
@@ -1832,6 +1850,8 @@ export default function Calculator() {
           </div>
         </div>
         </div>
+        <ConsumablesFields value={consumables} onChange={setConsumables} />
+        {!isRecipeValid ? <p className="mt-3 text-sm text-amber-800">{t('Complete recipe and consumable inputs before continuing.')}</p> : null}
       </section>
     );
   }
@@ -1841,166 +1861,93 @@ export default function Calculator() {
       ? [...ALL_STEPS]
       : ALL_STEPS.filter((step) => !ELECTRO_ONLY_STEPS.has(step.key));
     const visibleCategories = [...new Set(visibleSteps.map((step) => step.category))];
-    const selectedCategoryCount = visibleCategories.filter(
-      (category) => selectedStepKeysForCategory(category, steps).length > 0,
-    ).length;
+
 
     return (
       <section className="surface-card p-5">
-        <div>
-          <div className="cp-subtle-label">{t('Preparation method')}</div>
-          <h2 className="cp-heading-lg mt-2">{t('Choose the preparation basis.')}</h2>
-          <p className="mt-2 text-sm leading-7 text-slate-600">
-            {catalystDomain === 'electrocatalyst'
-              ? t('Templates add pretreatment, coating, drying, lamination, and break-in steps. Adjust them if the lab route differs.')
-              : t('Pick the industrial steps that best approximate the synthesis route, then let the production scale set the equipment basis.')}
-          </p>
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div><div className="cp-subtle-label">{t('Preparation method')}</div><h2 className="mt-2 text-xl font-semibold text-slate-900">{t('Manufacturing setup')}</h2></div>
+          <p className="text-xs text-slate-500">{t('Set the production scale, choose a method and check its operations.')}</p>
         </div>
-
-        <div className="mt-5 space-y-4">
-        <div className="grid gap-3 lg:grid-cols-3">
-          <div className="rounded-[20px] border border-slate-200 bg-white/82 px-4 py-3">
-            <div className="cp-subtle-label">{t('Route building')}</div>
-            <div className="mt-2 text-sm font-semibold text-[#191f28]">{t('Select every preparation step that applies')}</div>
-            <div className="mt-1 text-xs leading-6 text-slate-600">
-              {t('You are assembling the full preparation route, not choosing a single option.')}
-            </div>
-          </div>
-          <div className="rounded-[20px] border border-slate-200 bg-white/82 px-4 py-3">
-            <div className="cp-subtle-label">{t('Operation groups')}</div>
-            <div className="mt-2 text-sm font-semibold text-[#191f28]">{t('One group can hold several preparation steps')}</div>
-            <div className="mt-1 text-xs leading-6 text-slate-600">
-              {t('Saved thermal and electrochemical routes often include several operations from the same group.')}
-            </div>
-          </div>
-          <div className="rounded-[20px] border border-[#0d9488] bg-[#e6f5f2] px-4 py-3">
-            <div className="cp-subtle-label !text-[#0f766e]">{t('Current route')}</div>
-            <div className="mt-2 text-sm font-semibold text-[#191f28]">
-              {lang === 'ko'
-                ? `${selectedCategoryCount}개 그룹에서 제조 단계 ${steps.length}개 선택됨`
-                : `${steps.length} preparation step${steps.length === 1 ? '' : 's'} across ${selectedCategoryCount} group${selectedCategoryCount === 1 ? '' : 's'}`}
-            </div>
-            <div className="mt-1 text-xs leading-6 text-slate-600">
-              {t('Add or remove operations until the route matches the actual lab or pilot procedure.')}
-            </div>
-          </div>
-        </div>
+        <div className="mt-5 space-y-5">
         {activeBenchmark ? (
           <div className="rounded-[24px] border border-emerald-200 bg-emerald-50/80 px-4 py-4 text-sm text-emerald-900">
             <div className="cp-subtle-label !text-emerald-700">{t('Loaded reference baseline')}</div>
-            <div className="mt-2 font-semibold">{activeBenchmark.route.name}</div>
-            <div className="mt-2 leading-6">{activeBenchmark.screening_summary}</div>
+            <div className="mt-2 font-semibold"><ScientificText text={activeBenchmark.route.name} /></div>
+            <div className="mt-2 leading-6"><ScientificText text={activeBenchmark.screening_summary} /></div>
             <div className="mt-3 flex flex-wrap gap-2">
-              <span className="cp-chip">{catalystDomainLabel(activeBenchmark.catalyst_domain)}</span>
+              <span className="cp-chip"><ScientificText text={catalystDomainLabel(activeBenchmark.catalyst_domain)} /></span>
               <span className="cp-chip">{t(applicationFamilyLabel(activeBenchmark.application_family))}</span>
             </div>
           </div>
         ) : null}
+        <div className="surface-ghost p-3.5">
+          <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+            <div><div className="cp-subtle-label">{t('Production scale')}</div><div className="mt-3 flex flex-wrap items-center gap-3"><input type="number" min="1" step="1" value={orderSize} onChange={(event) => setOrderSize(Math.max(1, Number(event.target.value) || 1))} className="input-base w-32 text-center font-mono" title={t('Order size in tons; sets the Small, Medium or Large equipment basis.')} /><span className="text-sm text-slate-600">{t('tons')}</span><span className={`rounded-full border px-3 py-1 text-xs font-semibold ${scale.classes}`}>{t(scale.label)} / <ScientificText text={scale.rate} /></span></div></div>
+            <div className="cp-toolbar">{QUICK_ORDER_SIZES.map((size) => <button key={size} onClick={() => setOrderSize(size)} className={`rounded-[16px] px-3 py-2 text-xs font-semibold transition ${orderSize === size ? 'bg-slate-950 text-white' : 'text-slate-600 hover:bg-white hover:text-slate-900'}`}><ScientificText text={lang === 'ko' ? `${size}톤` : `${size} tons`} /></button>)}</div>
+          </div>
+        </div>
+          {catalystDomain === 'thermal' ? <details className="rounded-xl border border-slate-200 bg-white p-4" open={productionRate !== "" || undefined}>
+            <summary className="cursor-pointer text-sm font-medium text-slate-700">{t('Effective production rate')} <span className="ml-2 font-normal text-slate-400">{t('optional')}</span></summary>
+            <p className="mt-2 text-xs leading-6 text-slate-600">{t('Optional short ton/day input. Leave blank to use the scale default. Production duration includes the existing cleaning allowance; method-card prices use the default rate.')}</p>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              <label className="text-xs">{t('Effective rate (short ton/day)')}<input className="input-base mt-1 w-full" type="number" min="0" step="any" value={productionRate} onChange={(e) => setProductionRate(e.target.value === '' ? '' : Number(e.target.value))} /></label>
+              <label className="text-xs">{t('Production-rate source or assumption')}<input className="input-base mt-1 w-full" value={productionRateNote} onChange={(e) => setProductionRateNote(e.target.value)} /></label>
+            </div>
+            {isRateValid ? <p className="mt-2 text-sm">{t('Production duration including cleaning')}: {(orderSize / (productionRate || (currentScale === 'small' ? 1 : currentScale === 'medium' ? 10 : 150)) + (currentScale === 'small' ? 0.5 : 1)).toFixed(2)} {t('days')}</p> : <p className="mt-2 text-sm text-amber-800">{t('Enter a positive production rate and its source or assumption.')}</p>}
+          </details> : null}
         {catalystDomain === 'thermal' && thermalTemplates.length > 0 ? (
-          <div className="surface-ghost p-3.5">
-            <div className="flex items-center justify-between gap-3">
-              <div className="cp-subtle-label">{t('Start from a standard method')}</div>
-              <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                {lang === 'ko' ? `제조법 ${thermalTemplates.length}개` : `${thermalTemplates.length} ${t('methods')}`}
-              </div>
-            </div>
-            <div className="mt-2 text-xs leading-6 text-slate-600">
-              {t('Loads the full unit-operation sequence for a named preparation method — co-precipitation, sol-gel, impregnation, zeolite synthesis and more. Operations stay editable afterward.')}
-              {' '}
-              {t('Each card shows the processing cost of the route alone at the current production scale, before materials.')}
-            </div>
-            {[...new Set(thermalTemplates.map((template) => template.category || 'Other'))].map((category) => (
-              <div key={category} className="mt-3">
-                <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">{t(category)}</div>
-                <div className="mt-1.5 grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
-                  {thermalTemplates.filter((template) => (template.category || 'Other') === category).map((template) => {
-                    const cost = templateCosts[template.id];
-                    const routeSteps = cost?.steps_fitted?.length ? cost.steps_fitted : template.steps;
-                    const active = routeSteps.length === steps.length && routeSteps.every((key) => steps.includes(key));
-                    const uncosted = cost?.uncosted_operations ?? template.uncosted_operations ?? [];
-                    const substitutions = cost?.substitutions ?? [];
-                    const costLabel = cost?.processing_cost_per_lb != null
-                      ? `${formatPrice(toDisplay(cost.processing_cost_per_lb))}${fmtLabel}`
-                      : null;
+          <ManufacturingMethods templates={thermalTemplates} costs={templateCosts}
+            selectedId={selectedThermalTemplateId ?? matchedThermalTemplate?.id ?? null}
+            edited={thermalStepsEdited} loading={templateCostsOrderSize !== orderSize || templateCostsError}
+            formatStep={formatStepLabel} formatCost={(value) => `${formatPrice(toDisplay(value))}${fmtLabel}`}
+            onSelect={(template) => {
+              if (selectedThermalTemplateId === template.id) return;
+              const cost = templateCosts[template.id];
+              const nextSteps = cost?.steps_fitted?.length ? cost.steps_fitted : template.steps;
+              setSelectedThermalTemplateId(template.id);
+              setPreparation({ steps: [...nextSteps], basis: [...nextSteps], substitutions: cost?.substitutions });
+            }}
+            onReset={() => setPreparation((previous) => ({ ...previous, steps: [...previous.basis] }))}
+          />
+        ) : null}
+        <section aria-label={t('Manufacturing operations')}>
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <h3 className="text-sm font-semibold text-slate-900">{t('Manufacturing operations')}</h3>
+            <span className="text-xs tabular-nums text-slate-500">{steps.length} {t('steps')}</span>
+          </div>
+          <p className="mb-4 text-xs leading-6 text-slate-500">{t('Check each operation used. Repeated operations retain the method count when reselected.')}</p>
+          <div className="grid items-start gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {visibleCategories.map((category) => {
+            const selectedInCategory = selectedStepKeysForCategory(category, steps);
+            return (
+              <div key={category} className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+                <div className="flex h-11 items-center justify-between gap-3 border-b border-slate-100 px-3">
+                  <div className="text-xs font-semibold text-slate-700">{t(category)}</div>
+                  <span className="w-7 text-right font-mono text-xs text-slate-400">{selectedInCategory.length}</span>
+                </div>
+                <div className="p-1.5">
+                  {visibleSteps.filter((step) => step.category === category).map((step) => {
+                    const available = (step.scales as readonly Scale[]).includes(currentScale);
+                    const checked = steps.includes(step.key);
+                    const count = steps.filter((key) => key === step.key).length;
                     return (
-                      <button
-                        key={template.id}
-                        onClick={() => setSteps([...routeSteps])}
-                        title={[
-                          template.description,
-                          routeSteps.map(formatStepLabel).join(' → '),
-                          substitutions.length ? `${t('Scale-fitted')}: ${substitutions.map((s) => `${formatStepLabel(s.from)} → ${formatStepLabel(s.to)}`).join(', ')}` : '',
-                          uncosted.length ? `${t('Not costed')}: ${uncosted.join('; ')}` : '',
-                        ].filter(Boolean).join('\n')}
-                        className={`rounded-[16px] border px-3 py-2.5 text-left transition ${
-                          active
-                            ? 'border-[#0d9488] bg-[#e6f5f2]'
-                            : 'border-slate-200 bg-white hover:border-slate-300'
-                        }`}
-                      >
-                        <div className="flex items-start justify-between gap-2">
-                          <div className={`text-sm font-semibold ${active ? 'text-[#0f766e]' : 'text-[#191f28]'}`}>{template.name}</div>
-                          {costLabel ? <div className="whitespace-nowrap font-mono text-sm text-[#191f28]">{costLabel}</div> : null}
-                        </div>
-                        <div className="mt-1 truncate text-xs text-slate-500">
-                          {template.example_catalysts.slice(0, 3).join(', ')}
-                        </div>
-                        <div className="mt-1.5 flex flex-wrap gap-1.5 text-[11px] text-slate-500">
-                          <span>{routeSteps.length} {t('steps')}</span>
-                          {substitutions.length ? <span className="rounded-full border border-slate-200 px-1.5">{t('Scale-fitted')}</span> : null}
-                          {uncosted.length ? <span className="rounded-full border border-amber-200 bg-amber-50 px-1.5 text-amber-700">{t('Partly costed')}</span> : null}
-                        </div>
+                      <button key={step.key} type="button" role="checkbox" aria-checked={checked} aria-label={t(step.label)}
+                        data-step-key={step.key} onClick={() => available && toggleStep(step.key)} disabled={!available}
+                        title={formatScientificText(available ? t(step.label) : `${t('Unavailable at this production scale')}: ${t(scale.label)}`)}
+                        className={`flex h-14 w-full items-center gap-2 rounded-lg px-2 text-left transition-colors focus-visible:outline-2 focus-visible:outline-teal-600 ${!available ? 'cursor-not-allowed text-slate-300' : checked ? 'bg-teal-50/80 text-teal-800' : 'text-slate-600 hover:bg-slate-50'}`}>
+                        <span aria-hidden="true" className={`flex h-4 w-4 shrink-0 items-center justify-center rounded border text-[11px] ${checked ? 'border-teal-600 bg-teal-600 text-white' : 'border-slate-300 text-transparent'}`}>✓</span>
+                        <span className="min-w-0 flex-1"><span className="line-clamp-2 text-[12px] font-medium leading-4">{t(step.label)}</span></span>
+                        <span className="w-7 shrink-0 text-right font-mono text-[11px] text-slate-400" aria-hidden="true"><ScientificText text={count > 1 ? `×${count}` : ''} /></span>
                       </button>
                     );
                   })}
                 </div>
               </div>
-            ))}
-          </div>
-        ) : null}
-        <div className="surface-ghost p-3.5">
-          <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-            <div><div className="cp-subtle-label">{t('Production scale')}</div><div className="mt-3 flex flex-wrap items-center gap-3"><input type="number" min="1" step="1" value={orderSize} onChange={(event) => setOrderSize(Math.max(1, Number(event.target.value) || 1))} className="input-base w-32 text-center font-mono" title={t('Order size in tons; sets the Small, Medium or Large equipment basis.')} /><span className="text-sm text-slate-600">{t('tons')}</span><span className={`rounded-full border px-3 py-1 text-xs font-semibold ${scale.classes}`}>{t(scale.label)} / {scale.rate}</span></div></div>
-            <div className="cp-toolbar">{QUICK_ORDER_SIZES.map((size) => <button key={size} onClick={() => setOrderSize(size)} className={`rounded-[16px] px-3 py-2 text-xs font-semibold transition ${orderSize === size ? 'bg-slate-950 text-white' : 'text-slate-600 hover:bg-white hover:text-slate-900'}`}>{lang === 'ko' ? `${size}톤` : `${size} tons`}</button>)}</div>
-          </div>
-        </div>
-        <div className="grid gap-3 lg:grid-cols-2 xl:grid-cols-3">
-          {visibleCategories.map((category) => {
-            const selectedInCategory = selectedStepKeysForCategory(category, steps);
-            return (
-              <div key={category} className="surface-ghost p-3.5">
-                <div className="flex items-center justify-between gap-3">
-                  <div className="cp-subtle-label">{t(category)}</div>
-                  <div className={`rounded-full border px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${
-                    selectedInCategory.length > 0
-                      ? 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e]'
-                      : 'border-slate-200 bg-white text-slate-400'
-                  }`}>
-                    {lang === 'ko' ? `${selectedInCategory.length}개 선택` : `${selectedInCategory.length} selected`}
-                  </div>
-                </div>
-                <div className="mt-2 text-xs leading-6 text-slate-600">{t('Select every operation your route uses in this group.')}</div>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {visibleSteps.filter((step) => step.category === category).map((step) => {
-                    const available = (step.scales as readonly Scale[]).includes(currentScale);
-                    const checked = steps.includes(step.key);
-                    const availabilityLabel = step.scales.length === 3 ? null : step.scales.map((item) => item.charAt(0).toUpperCase()).join('/');
-                    return <button key={step.key} onClick={() => available && toggleStep(step.key)} disabled={!available} title={available ? t(step.label) : `Not available at ${scale.label.toLowerCase()} scale`} className={`rounded-[16px] border px-3 py-2 text-left text-sm transition ${!available ? 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400' : checked ? 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e]' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'}`}><div className="flex items-center justify-between gap-3"><div className="font-medium">{t(step.label)}</div>{checked ? <span className="rounded-full border border-[#0d9488] bg-white px-2 py-0.5 text-xs font-semibold uppercase tracking-[0.18em] text-[#0f766e]">On</span> : null}</div>{availabilityLabel ? <div className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-400">{availabilityLabel}</div> : null}</button>;
-                  })}
-                </div>
-                {selectedInCategory.length > 0 ? (
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {selectedInCategory.map((stepKey) => (
-                      <span key={stepKey} className="rounded-full border border-slate-200 bg-white px-2.5 py-1 text-xs text-slate-600">
-                        {t(formatStepLabel(stepKey))}
-                      </span>
-                    ))}
-                  </div>
-                ) : null}
-              </div>
             );
           })}
-        </div>
+          </div>
+        </section>
         {catalystDomain === 'thermal' ? (
           <div className="rounded-[24px] border border-slate-900/8 bg-white/72 p-4">
             <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
@@ -2088,23 +2035,27 @@ export default function Calculator() {
         ? renderManufacturingSection()
         : (
           <section className="surface-card p-4">
-            <div className={`rounded-[24px] border px-4 py-4 text-sm ${isValid ? 'border-emerald-200 bg-emerald-50 text-emerald-800' : 'border-amber-200 bg-amber-50 text-amber-800'}`}>{validationMessage}</div>
+            <div className={`rounded-[24px] border px-4 py-4 text-sm ${isValid ? 'border-emerald-200 bg-emerald-50 text-emerald-800' : 'border-amber-200 bg-amber-50 text-amber-800'}`}><ScientificText text={validationMessage} /></div>
+            {!isRouteReady ? <div className="mt-3 rounded-[18px] border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+              {templateCostsError
+                ? t('Preparation costs could not be loaded. Refresh this page or choose the preparation steps manually.')
+                : t('Waiting for the preparation steps at the selected production scale.')}
+            </div> : null}
             <div className="mt-4 grid gap-3 sm:grid-cols-3">
               <MetricTile label={t('Catalyst type')} value={t(catalystDomainLabel(catalystDomain))} detail={t('Current case basis')} />
-              <MetricTile label={t('Preparation steps')} value={String(steps.length)} detail={steps.length > 0 ? t('Ready to run') : t('Choose at least one preparation step')} />
-              <MetricTile label={t('Production scale')} value={lang === 'ko' ? `${orderSize}톤` : `${orderSize} tons`} detail={`${t(scale.label)} / ${scale.rate}`} />
+              <MetricTile label={t('Preparation steps')} value={String(steps.length)} detail={!isRouteReady ? t('Pending') : steps.length > 0 ? t('Ready to run') : t('Choose at least one preparation step')} />
+              {catalystDomain === 'thermal' ? <MetricTile label={t('Production scale')} value={lang === 'ko' ? `${orderSize}톤` : `${orderSize} tons`} detail={`${t(scale.label)} / ${scale.rate}`} /> : <MetricTile label={t('Active area')} value={`${electrocatalystConfig.activeAreaCm2} cm²`} detail={`${electrocatalystConfig.catalystLoadingMgCm2} mg/cm²`} />}
             </div>
             <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <button onClick={handleCalculate} disabled={loading || !isValid || steps.length === 0} className="cp-button-primary min-w-[250px]">{loading ? <><span className="mr-2 inline-flex h-4 w-4 animate-spin rounded-full border-2 border-slate-950 border-t-transparent" />{t('Running estimate')}</> : t('Run estimate')}</button>
+              <button onClick={handleCalculate} disabled={loading || !canCalculate} className="cp-button-primary min-w-[250px]">{loading ? <><span className="mr-2 inline-flex h-4 w-4 animate-spin rounded-full border-2 border-slate-950 border-t-transparent" />{t('Running estimate')}</> : t('Run estimate')}</button>
               <div className="text-xs leading-6 text-slate-600">{t('The result screen opens separately and keeps these inputs intact.')}</div>
             </div>
-            {error ? <div className="mt-4 rounded-[24px] border border-red-200 bg-red-50 px-4 py-4 text-sm text-red-700"><span className="font-semibold">{t('Calculation failed.')}</span> {error}</div> : null}
+            {error ? <div className="mt-4 rounded-[24px] border border-red-200 bg-red-50 px-4 py-4 text-sm text-red-700"><span className="font-semibold">{t('Calculation failed.')}</span> {t(error)}</div> : null}
             {loadedSavedName ? (
               <div className="mt-4 rounded-[24px] border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
                 {lang === 'ko'
-                  ? <>저장된 계산 <span className="font-semibold">{loadedSavedName}</span>을(를) 현재 입력으로 불러왔습니다. 라이브러리 링크가 없는 행은 저장된 가격을 수동 입력값으로 복원했습니다.</>
-                  : <>Loaded saved estimate <span className="font-semibold">{loadedSavedName}</span> into the draft. Rows without a
-                library link were restored with their saved prices as manual inputs.</>}
+                  ? <>저장된 계산 <span className="font-semibold"><ScientificText text={loadedSavedName} /></span>을(를) 현재 입력으로 불러왔습니다. 라이브러리 링크가 없는 행은 저장된 가격을 수동 입력값으로 복원했습니다.</>
+                  : <>{t("Loaded saved estimate")} <span className="font-semibold"><ScientificText text={loadedSavedName} /></span> {t("into the draft. Rows without a library link were restored with their saved prices as manual inputs.")}</>}
               </div>
             ) : null}
             {savedEstimates.length > 0 ? (
@@ -2112,7 +2063,7 @@ export default function Calculator() {
                 <div className="flex items-center justify-between gap-3">
                   <div className="cp-subtle-label">{t('Saved estimates')}</div>
                   <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                    {lang === 'ko' ? `${savedEstimates.length}개 저장됨` : `${savedEstimates.length} ${t('saved')}`}
+                    <ScientificText text={lang === 'ko' ? `${savedEstimates.length}개 저장됨` : `${savedEstimates.length} ${t('saved')}`} />
                   </div>
                 </div>
                 <div className="mt-2 text-xs leading-6 text-slate-600">
@@ -2125,19 +2076,19 @@ export default function Calculator() {
                     return (
                       <div key={saved.id} className="flex flex-wrap items-center justify-between gap-3 rounded-[16px] border border-slate-200 bg-white px-3.5 py-2.5">
                         <div className="min-w-0">
-                          <div className="truncate text-sm font-semibold text-[#191f28]">{saved.name}</div>
+                          <div className="truncate text-sm font-semibold text-[#191f28]"><ScientificText text={saved.name} /></div>
                           <div className="mt-0.5 text-xs text-slate-600">
-                            {saved.metal_symbol ? `${saved.metal_loading_wt_pct}% ${saved.metal_symbol}` : saved.catalyst_domain}
-                            {saved.support_name ? ` / ${saved.support_name}` : ''} · {saved.order_size_tons} tons ·{' '}
-                            {formatPrice(toDisplay(saved.estimated_price_per_lb))}{fmtLabel} · {saved.created_at.slice(0, 10)}
+                            <ScientificText text={saved.metal_symbol ? `${saved.metal_loading_wt_pct}% ${saved.metal_symbol}` : saved.catalyst_domain} />
+                            <ScientificText text={saved.support_name ? ` / ${saved.support_name}` : ''} /> · {saved.catalyst_domain === 'thermal' ? <>{saved.order_size_tons} {t("tons ·")}{' '}{formatPrice(toDisplay(saved.estimated_price_per_lb))}{fmtLabel} · </> : null}<ScientificText text={saved.created_at.slice(0, 10)} />
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
+                          <button className="cp-button-secondary px-3 py-1.5 text-xs" onClick={() => setEvidenceEstimateId(saved.id)}>{t('Actual-cost records')}</button>
                           <button
                             type="button"
                             onClick={() => void handleLoadSaved(saved)}
                             disabled={busy || !loadable}
-                            title="Restore this case into the draft"
+                            title={t("Restore this case into the draft")}
                             className={`rounded-[14px] border px-3 py-1.5 text-xs font-semibold transition ${
                               loadable
                                 ? 'border-[#0d9488] bg-[#e6f5f2] text-[#0f766e] hover:bg-[#d3efe9]'
@@ -2159,6 +2110,8 @@ export default function Calculator() {
                     );
                   })}
                 </div>
+                <SavedEstimateComparison savedEstimates={savedEstimates} priceBasis={basis} />
+                {evidenceEstimateId !== null ? <CostEvidencePanel key={evidenceEstimateId} savedEstimateId={evidenceEstimateId} /> : null}
               </div>
             ) : null}
           </section>

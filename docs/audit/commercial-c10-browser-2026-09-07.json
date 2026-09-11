@@ -1,0 +1,69 @@
+{
+  "at": "2026-09-07T14:27:59.609380+00:00",
+  "environment": "disposable loopback hosted QA; synthetic test identities; injected test-only rights result",
+  "real_customer_records": 0,
+  "production_rights_approval": false,
+  "browser": "Codex in-app browser through CUA/Playwright locators",
+  "observed": [
+    "English sign-in and Korean account screen rendered",
+    "Ni/alumina thermal route calculated and saved",
+    "Second account did not see first saved estimate",
+    "Logout in tab2 closed tab1 research view",
+    "Second account electrode route calculated and saved with area output",
+    "Expired first account retained saved historical result and identical download",
+    "Expired first account calculator screen blocked new work"
+  ],
+  "synthetic_accounts_saved_counts": [
+    1,
+    1
+  ],
+  "thermal_usd_per_kg": 10.4111,
+  "electrode_usd_per_cm2": 0.15727,
+  "download_verification": [
+    {
+      "file": "comet-estimate-1.json",
+      "sha256": "eaa8170e6945e9be8fca1f23257078cacfc4a8ac253788fe55d3e8fc6c63d017",
+      "bytes": 16082,
+      "saved_result_equal": true
+    },
+    {
+      "file": "comet-estimate-1 (1).json",
+      "sha256": "eaa8170e6945e9be8fca1f23257078cacfc4a8ac253788fe55d3e8fc6c63d017",
+      "bytes": 16082,
+      "saved_result_equal": true
+    }
+  ],
+  "screens": [
+    {
+      "file": "docs/audit/screens/hosted-account-2026-09-07.png",
+      "sha256": "0e871e3cbfba6a2cc7b85f573101c86aeac0d4e806697f16eaf153e5be7c1eec"
+    },
+    {
+      "file": "docs/audit/screens/hosted-electrode-2026-09-07.png",
+      "sha256": "5b0454d9469daa37a98ac6699e81f729170b546f565c97cc9e71a9d9de98bc93"
+    },
+    {
+      "file": "docs/audit/screens/hosted-expired-block-2026-09-07.png",
+      "sha256": "d94740ccc718343d55ed4001f8477d7d1fd3ce11c4ee4ad2c27cfd8fcb935b61"
+    },
+    {
+      "file": "docs/audit/screens/hosted-expired-saved-2026-09-07.png",
+      "sha256": "5703256a27d1cb553f19f35c397928a7bc5f9baa978761f490c2f88651fe317a"
+    },
+    {
+      "file": "docs/audit/screens/hosted-login-2026-09-07.png",
+      "sha256": "3a2aa4ae8323da695042b13178adc53246acec7708e71527506d84ccc4835909"
+    },
+    {
+      "file": "docs/audit/screens/hosted-second-account-2026-09-07.png",
+      "sha256": "071ceff3e8f921030b7c0f54fb3021bd971e6ac33d95e27b05282481cd166f7c"
+    }
+  ],
+  "browser_errors_last10_each_tab": [],
+  "limitations": [
+    "Download event waiter timed out at3s; actual downloaded files were then verified against private saved DB results.",
+    "Password mutation verified by backend tests; browser form was inspected without submitting a credential change.",
+    "No customer load, internet TLS, OS ACL or participant usability study was tested.",
+    "Initial active contract used a synthetic far-future end date; no actual contract."
+  ]
+}

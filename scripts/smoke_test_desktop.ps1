@@ -8,7 +8,9 @@ $ErrorActionPreference = "Stop"
 
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $packagedExe = Join-Path $projectRoot "dist-electron\win-unpacked\COMET.exe"
-$logPath = Join-Path $env:APPDATA "COMET\comet-launcher.log"
+$taskPreviousProfile = $env:COMET_PROFILE_DIR
+$taskSmokeProfile = Join-Path ([IO.Path]::GetFullPath($env:TEMP)) ("COMET-smoke-" + [Guid]::NewGuid().ToString("N"))
+$logPath = Join-Path $taskSmokeProfile "comet-launcher.log"
 # Port 8765 must match BACKEND_PORT in electron/main.js (single source of truth).
 $healthUrl = "http://127.0.0.1:8765/api/health"
 $pricesUrl = "http://127.0.0.1:8765/api/prices"
@@ -87,6 +89,8 @@ function Assert-PortFree {
     }
 }
 
+try {
+$env:COMET_PROFILE_DIR = $taskSmokeProfile
 Set-Location $projectRoot
 
 if (-not (Test-Path $packagedExe)) {
@@ -94,11 +98,10 @@ if (-not (Test-Path $packagedExe)) {
 }
 
 & (Join-Path $PSScriptRoot "stop_comet_processes.ps1") -Quiet
-Remove-Item $logPath -ErrorAction SilentlyContinue
 Assert-PortFree -Url $healthUrl
 
 Write-Host "[COMET] Launching packaged desktop app..."
-Start-Process -FilePath $packagedExe | Out-Null
+Start-Process -FilePath $packagedExe -WindowStyle Hidden | Out-Null
 
 $health = Wait-ForHttpOk -Url $healthUrl -TimeoutSeconds $TimeoutSeconds
 $healthData = $health.Content | ConvertFrom-Json
@@ -107,8 +110,12 @@ $processes = @(Assert-ProcessRunning -Name "COMET")
 $windowCount = Wait-ForMainWindow -Name "COMET"
 
 Write-Host "[COMET] Re-launching app to verify single-instance recovery..."
-Start-Process -FilePath $packagedExe | Out-Null
+Start-Process -FilePath $packagedExe -WindowStyle Hidden | Out-Null
 Start-Sleep -Seconds 3
+$windowCount = Wait-ForMainWindow -Name "COMET"
+if ($windowCount -ne 1) {
+    throw "Expected exactly one main window after relaunch, found $windowCount"
+}
 
 $pricesResponse = Wait-ForHttpOk -Url $pricesUrl -TimeoutSeconds 10
 
@@ -134,6 +141,9 @@ $calcData = $calcResponse.Content | ConvertFrom-Json
 if (-not (Test-Path $logPath)) {
     throw "Launcher log not found: $logPath"
 }
+if (-not (Test-Path -LiteralPath (Join-Path $taskSmokeProfile "comet.db"))) {
+    throw "Packaged backend did not create its database in the isolated smoke profile"
+}
 
 $logTail = Get-Content $logPath | Select-Object -Last 20
 $packagedBackendStart = $logTail | Where-Object { $_ -match "Starting packaged backend sidecar" }
@@ -154,8 +164,12 @@ if (-not $relaunchLogged) {
     CalculateStatus = $calcResponse.StatusCode
     EstimatedPricePerKg = $calcData.summary.estimated_price_per_kg
     LauncherLog = $logPath
+    IsolatedProfile = $taskSmokeProfile
 } | Format-List
 
+} finally {
 if (-not $LeaveRunning) {
     & (Join-Path $PSScriptRoot "stop_comet_processes.ps1") -Quiet
+}
+$env:COMET_PROFILE_DIR = $taskPreviousProfile
 }

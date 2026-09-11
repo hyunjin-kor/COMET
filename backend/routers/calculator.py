@@ -1,12 +1,14 @@
 """Calculator API endpoints."""
 
 import json
+import re
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
 
 from backend.core.cost_engine import estimate_catalyst_cost, estimate_catalyst_cost_simple
 from backend.core.material_pricing import resolve_component_input, resolve_electrode_materials
+from backend.core.step_method import determine_scale, fit_steps_to_scale
 from backend.database import get_session
 from backend.models.estimate import Estimate
 from backend.paths import data_dir
@@ -21,8 +23,10 @@ def _load_template(template_id: str | None) -> dict | None:
 
     if not template_id:
         return None
+    if not re.fullmatch(r"[A-Za-z0-9_-]+", template_id):
+        raise ValueError("Invalid template identifier")
     template_path = _DATA_DIR / "process_templates" / f"{template_id}.json"
-    if not template_path.exists():
+    if not template_path.resolve().is_relative_to((_DATA_DIR / "process_templates").resolve()) or not template_path.is_file():
         raise ValueError(f"Template '{template_id}' not found")
     with open(template_path, encoding="utf-8") as handle:
         return json.load(handle)
@@ -47,6 +51,7 @@ def _template_summary(template: dict | None) -> dict | None:
         "route_note": template.get("route_note", ""),
         "source": template.get("source", ""),
         "reference_urls": template.get("reference_urls", []),
+        "uncosted_operations": template.get("uncosted_operations", []),
     }
 
 
@@ -54,7 +59,7 @@ def _component_payload(req: CostCalculationRequest) -> list[dict]:
     """Build the component payload before DB-backed price resolution."""
 
     if req.components:
-        return [component.model_dump(exclude_none=True) for component in req.components]
+        return [component.model_dump(exclude_none=True, mode="json") for component in req.components]
 
     if (
         req.catalyst_domain == "electrocatalyst"
@@ -76,6 +81,8 @@ def _prepare_calculation_context(req: CostCalculationRequest, session: Session) 
     """Resolve template and library-backed materials into a reusable calculation context."""
 
     template = _load_template(req.template_id)
+    if template and template.get("catalyst_domain", "thermal") != req.catalyst_domain:
+        raise ValueError("Template and calculation catalyst domains must match")
     route_summary = _template_summary(template)
 
     application_family = req.application_family
@@ -114,8 +121,8 @@ def _prepare_calculation_context(req: CostCalculationRequest, session: Session) 
                 electrode_payload["catalyst_price_per_lb"] = float(primary["price_per_lb"])
 
     steps = req.steps
-    if template and (not steps):
-        steps = template.get("steps", steps)
+    if template and ("steps" not in req.model_fields_set or not steps):
+        steps, _, _ = fit_steps_to_scale(template.get("steps", []), determine_scale(req.order_size_tons))
 
     return {
         "resolved_components": resolved_components,
@@ -161,6 +168,9 @@ def _estimate_from_context(
         electrode_input=electrode_payload if electrode_payload is not None else context["electrode_payload"],
         route_summary=context["route_summary"],
         resolved_materials=context["resolved_materials"],
+        production_rate_ton_per_day=req.production_rate_ton_per_day,
+        production_rate_note=req.production_rate_note,
+        consumables=[c.model_dump() for c in req.consumables],
     )
 
 
@@ -197,7 +207,9 @@ def calculate_cost_quick(req: QuickCalculationRequest):
         if req.template_id:
             template = _load_template(req.template_id)
             if template is not None:
-                steps = template.get("steps", steps)
+                if template.get("catalyst_domain", "thermal") != req.catalyst_domain:
+                    raise ValueError("Template and calculation catalyst domains must match")
+                steps, _, _ = fit_steps_to_scale(template.get("steps", steps), determine_scale(req.order_size_tons))
 
         result = estimate_catalyst_cost_simple(
             metal_symbol=req.metal_symbol,
@@ -251,7 +263,7 @@ def save_estimate(
         support_name=str(primary_support["name"]) if supports else "",
         order_size_tons=req.order_size_tons,
         estimated_price_per_lb=result["summary"]["estimated_price_per_lb"],
-        input_json=json.dumps(req.model_dump()),
+        input_json=json.dumps({**req.model_dump(mode="json"), "steps": result["costing_scope"]["actual_steps"]}),
         result_json=json.dumps(result),
     )
     session.add(estimate)

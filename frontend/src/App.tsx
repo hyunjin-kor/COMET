@@ -4,6 +4,7 @@ import AppFrame from './components/layout/AppFrame';
 import { BasisProvider } from './lib/basis';
 import { LangProvider } from './lib/i18n';
 import { UnitProvider } from './lib/units';
+import { AuthProvider } from './lib/auth';
 
 const Calculator = lazy(() => import('./pages/Calculator'));
 const CalculatorResult = lazy(() => import('./pages/CalculatorResult'));
@@ -12,6 +13,7 @@ const Compare = lazy(() => import('./pages/Compare'));
 const Library = lazy(() => import('./pages/Library'));
 const Prices = lazy(() => import('./pages/Prices'));
 const Uncertainty = lazy(() => import('./pages/Uncertainty'));
+const Account = lazy(() => import('./pages/Account'));
 
 export default function App() {
   const Router =
@@ -21,6 +23,7 @@ export default function App() {
 
   return (
     <LangProvider>
+    <AuthProvider>
     <UnitProvider>
     <BasisProvider>
       <Router>
@@ -36,12 +39,14 @@ export default function App() {
             <Route path="/uncertainty" element={<Uncertainty />} />
             <Route path="/capex" element={<CapEx />} />
             <Route path="/library" element={<Library />} />
+            <Route path="/account" element={<Account />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>
       </Router>
     </BasisProvider>
     </UnitProvider>
+    </AuthProvider>
     </LangProvider>
   );
 }

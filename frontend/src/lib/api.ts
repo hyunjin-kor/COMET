@@ -1,3 +1,7 @@
+import type { PurchaseEvidence } from './cost-evidence';
+import { scientificSearchText } from './scientific-text';
+import { hostedRequestState, invalidateBrowserAccount } from './hosted-session';
+
 // Port 8765 must match BACKEND_PORT in electron/main.js (single source of truth).
 const API_ROOT =
   typeof window !== 'undefined' && window.location.protocol === 'file:'
@@ -13,6 +17,11 @@ function buildRequestInit(options?: RequestInit): RequestInit {
   const body = options?.body;
   if (!(body instanceof FormData) && !headers.has('Content-Type')) {
     headers.set('Content-Type', 'application/json');
+  }
+  const session = hostedRequestState();
+  if (session.mode === 'hosted') {
+    headers.set('X-Comet-Request', '1');
+    if (session.accountId) headers.set('X-Comet-Account', session.accountId);
   }
   return {
     ...options,
@@ -95,18 +104,34 @@ async function fetchWithBootRetry(input: RequestInfo, init?: RequestInit): Promi
   throw lastError;
 }
 
-async function request<T>(path: string, options?: RequestInit): Promise<T> {
-  const res = await ensureOk(await fetchWithBootRetry(apiUrl(path), buildRequestInit(options)));
+async function sessionResponse(path: string, options?: RequestInit) {
+  const before = hostedRequestState();
+  const res = await fetchWithBootRetry(apiUrl(path), buildRequestInit(options));
+  if (before.mode === 'hosted' && !['/auth/login', '/auth/session'].includes(path)) {
+    if (before.generation !== hostedRequestState().generation) throw new Error('Account changed; reload your workspace');
+    if (res.status === 401 || res.status === 409) invalidateBrowserAccount();
+  }
+  return ensureOk(res);
+}
+
+export async function request<T>(path: string, options?: RequestInit): Promise<T> {
+  const before = hostedRequestState();
+  const res = await sessionResponse(path, options);
   try {
-    return (await res.json()) as T;
+    const value = (await res.json()) as T;
+    if (before.mode === 'hosted' && before.generation !== hostedRequestState().generation) throw new Error('Account changed; reload your workspace');
+    return value;
   } catch {
     throw new Error(`Expected JSON from ${path} but got non-JSON response (status ${res.status}).`);
   }
 }
 
 async function requestText(path: string, options?: RequestInit): Promise<string> {
-  const res = await ensureOk(await fetchWithBootRetry(apiUrl(path), buildRequestInit(options)));
-  return res.text();
+  const before = hostedRequestState();
+  const res = await sessionResponse(path, options);
+  const value = await res.text();
+  if (before.mode === 'hosted' && before.generation !== hostedRequestState().generation) throw new Error('Account changed; reload your workspace');
+  return value;
 }
 
 // Calculator
@@ -123,6 +148,24 @@ export interface ComponentInput {
   wt_pct: number;
   price_per_lb?: number;
   precursor_markup?: number;
+  recipe_consumption?: PrecursorConsumption;
+  purchase_evidence?: PurchaseEvidence;
+}
+
+export interface PrecursorConsumption {
+  precursor_name: string;
+  retained_component_fraction: number;
+  purity_fraction: number;
+  yield_fraction: number;
+  price_per_kg: number;
+  source_note: string;
+}
+
+export interface ConsumableInput {
+  name: string;
+  kg_per_kg_catalyst: number;
+  price_per_kg: number;
+  source_note: string;
 }
 
 export interface ElectrodeCostInput {
@@ -159,6 +202,9 @@ export interface CostInput {
   catalyst_bulk_density?: number;
   electrode_input?: ElectrodeCostInput;
   price_basis?: PriceBasis;
+  production_rate_ton_per_day?: number;
+  production_rate_note?: string;
+  consumables?: ConsumableInput[];
 }
 
 export interface ComponentBreakdown {
@@ -170,14 +216,18 @@ export interface ComponentBreakdown {
   precursor_markup: number;
   cost_per_lb_cat: number;
   cost_pct: number;
+  recipe_consumption?: PrecursorConsumption & { purchased_kg_per_kg_catalyst: number; cost_per_kg_catalyst: number };
 }
 
 export interface CostResult {
+  purchase_evidence?: Array<{ name: string; role: string; price_per_lb: number; evidence: PurchaseEvidence; verification: string }>;
   warnings?: string[];
   input_summary: Record<string, unknown>;
   materials: {
     components: ComponentBreakdown[];
     total_materials_cost_per_lb: number;
+    consumables?: Array<ConsumableInput & { cost_per_lb_cat: number; cost_pct: number }>;
+    costing_basis?: string;
   };
   step_method: {
     scale: string;
@@ -232,7 +282,23 @@ export interface CostResult {
     route_note: string;
     source: string;
     reference_urls: string[];
+    uncosted_operations?: string[];
   } | null;
+  costing_scope?: {
+    status: 'modeled_steps' | 'proxy' | 'partial';
+    boundary: string;
+    actual_steps: string[];
+    costed_steps: Array<{ step: string; name: string; status: 'costed' | 'proxy'; source: string; reference_url: string | null; basis: string }>;
+    declared_steps: string[];
+    substitutions: Array<{ from: string; to: string }>;
+    dropped_steps: string[];
+    omitted_template_steps: string[];
+    added_steps: string[];
+    uncosted_operations: string[];
+    route_modified: boolean;
+    template_name: string | null;
+    area_cost_boundary: string | null;
+  };
   spent_catalyst?: {
     metal_symbol: string;
     metal_loading_lb_per_lb: number;
@@ -270,6 +336,7 @@ export interface CostResult {
     live_override?:
       | {
           applied: true;
+          basis?: PriceBasis;
           live_price: number;
           live_price_unit: string;
           live_source: string;
@@ -278,6 +345,7 @@ export interface CostResult {
           fallback_price_unit: string;
           fallback_source: string;
           fallback_quote_year: number | null;
+          fallback_reference_url?: string;
         }
       | {
           applied: false;
@@ -416,6 +484,7 @@ export interface MetalPrice {
   fetched_at: string | null;
   basis: PriceBasis;
   basis_month: string | null;
+  needs_review: boolean;
   evidence: {
     tier: string;
     confidence_score: number;
@@ -608,7 +677,7 @@ export const fetchMaterials = (
 ) => {
   const params = new URLSearchParams();
   if (category) params.set('category', category);
-  if (q) params.set('q', q);
+  if (q) params.set('q', scientificSearchText(q));
   if (catalystDomain) params.set('catalyst_domain', catalystDomain);
   if (applicationFamily) params.set('application_family', applicationFamily);
   if (limit) params.set('limit', String(limit));
@@ -957,6 +1026,7 @@ export const refreshPrices = (source?: 'yahoo') => {
 };
 
 export interface EstimateRangeResult {
+  fixed_recipe_assumptions?: string;
   mean: number;
   median: number;
   std: number;
@@ -968,9 +1038,14 @@ export interface EstimateRangeResult {
   p95: number;
   n_simulations: number;
   n_successful: number;
-  unit: string;
-  baseline_price_per_lb: number;
-  baseline_price_per_kg: number;
+  n_failed: number;
+  failure_reasons: Record<string, number>;
+  seed: number | null;
+  unit: '$/lb' | '$/cm2';
+  metric: 'selling_price' | 'selling_price_less_recovery' | 'electrode_assembly_cost';
+  baseline: number;
+  baseline_price_per_lb?: number;
+  baseline_price_per_kg?: number;
   composition: string;
   catalyst_domain: Extract<CatalystDomain, 'thermal' | 'electrocatalyst'>;
   application_family: ApplicationFamily;

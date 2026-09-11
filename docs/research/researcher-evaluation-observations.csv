@@ -1,0 +1,1 @@
+participant_id,task_id,task_order,app_commit,snapshot_sha256,language,domain_experience,outcome,elapsed_seconds,assistance_count,comprehension,error_category,anonymous_note

@@ -1,5 +1,8 @@
+import { ScientificText } from '../components/shared/ScientificText';
 import { lazy, Suspense, useLayoutEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import CostEvidencePanel from '../components/CostEvidencePanel';
+import { PracticalCostingResult } from '../components/PracticalCostingResult';
 import { FitPriceText } from '../components/shared/FitPriceText';
 import {
   WorkspaceSectionFooter,
@@ -9,9 +12,10 @@ import {
 } from '../components/shared/WorkspaceSections';
 import { saveEstimate, type CostResult } from '../lib/api';
 import { LB_PER_KG, TROY_OZ_PER_LB } from '../lib/unit-conversion';
-import { loadCalculatorResultSnapshot } from '../lib/calculator-session';
+import { loadCalculatorResultSnapshot, saveCalculatorResultSnapshot } from '../lib/calculator-session';
 import { buildResultCsv, downloadCsv, resultCsvFilename } from '../lib/export-csv';
 import { formatPrice } from '../lib/format-price';
+import { electrodeCostRows } from '../lib/electrode-result';
 import { useLang } from '../lib/i18n';
 import { useUnit } from '../lib/use-unit';
 
@@ -120,9 +124,9 @@ function MetricTile({
 }) {
   return (
     <div className={dark ? 'cp-metric-tile-dark' : 'cp-metric-tile'}>
-      <div className={`cp-subtle-label ${dark ? '!text-slate-400' : ''}`}>{label}</div>
-      <div className={`mt-2 text-2xl font-display ${dark ? 'text-white' : 'text-slate-900'}`}>{value}</div>
-      <div className={`mt-1 text-xs leading-5 ${dark ? 'text-slate-400' : 'text-slate-600'}`}>{detail}</div>
+      <div className={`cp-subtle-label ${dark ? '!text-slate-400' : ''}`}><ScientificText text={label} /></div>
+      <div className={`mt-2 text-2xl font-display ${dark ? 'text-white' : 'text-slate-900'}`}><ScientificText text={value} /></div>
+      <div className={`mt-1 text-xs leading-5 ${dark ? 'text-slate-400' : 'text-slate-600'}`}><ScientificText text={detail} /></div>
     </div>
   );
 }
@@ -131,19 +135,20 @@ function RailRow({ label, value, detail }: { label: string; value: string; detai
   return (
     <div className="cp-data-row">
       <div>
-        <div className="cp-subtle-label">{label}</div>
-        {detail ? <div className="mt-1 text-xs leading-5 text-slate-600">{detail}</div> : null}
+        <div className="cp-subtle-label"><ScientificText text={label} /></div>
+        {detail ? <div className="mt-1 text-xs leading-5 text-slate-600"><ScientificText text={detail} /></div> : null}
       </div>
-      <div className="text-right text-sm font-semibold text-[#191f28]">{value}</div>
+      <div className="text-right text-sm font-semibold text-[#191f28]"><ScientificText text={value} /></div>
     </div>
   );
 }
 
 function ChartFallback() {
+  const { t } = useLang();
   return (
     <div className="flex h-full min-h-[240px] items-center justify-center gap-3 rounded-[24px] border border-slate-200 bg-slate-50/80 text-center">
       <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#0d9488] border-t-transparent" />
-      <div className="text-sm text-slate-600">Loading breakdown chart...</div>
+      <div className="text-sm text-slate-600">{t("Loading breakdown chart...")}</div>
     </div>
   );
 }
@@ -162,7 +167,7 @@ export default function CalculatorResult() {
   const { unit, toDisplay, fmtLabel, catLabel } = useUnit();
   const { lang, t } = useLang();
   const sectionState = useWorkspaceSections(RESULT_SECTIONS, 'result');
-  const [snapshot] = useState(() => loadCalculatorResultSnapshot());
+  const [snapshot, setSnapshot] = useState(() => loadCalculatorResultSnapshot());
   const [saveName, setSaveName] = useState('');
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved' | 'failed'>('idle');
 
@@ -174,7 +179,10 @@ export default function CalculatorResult() {
         : 'Untitled estimate');
     setSaveState('saving');
     try {
-      await saveEstimate(snapshot.costInput, name);
+      const saved = await saveEstimate(snapshot.costInput, name);
+      const savedSnapshot = { ...snapshot, savedEstimateId: saved.id, result: saved.result };
+      setSnapshot(savedSnapshot);
+      saveCalculatorResultSnapshot(savedSnapshot);
       setSaveState('saved');
     } catch {
       setSaveState('failed');
@@ -232,9 +240,13 @@ export default function CalculatorResult() {
   const catalystDomain =
     result.input_summary.catalyst_domain === 'electrocatalyst' ? 'Electrocatalyst' : 'Thermocatalyst';
   const routeSummary = result.route_summary ?? null;
+  const costingScope = result.costing_scope ?? null;
   const electrodeModel = result.electrode_model ?? null;
-  const spentCatalyst = result.spent_catalyst ?? null;
+  const spentCatalyst = electrodeModel ? null : result.spent_catalyst ?? null;
   const resolvedMaterials = result.resolved_materials ?? [];
+  const recipeReferenceKeys = new Set(snapshotState.costInput?.components
+    ?.filter((component) => component.recipe_consumption && component.material_key)
+    .map((component) => component.material_key) ?? []);
   const publicSourceCount = resolvedMaterials.filter((material) => Boolean(material.reference_url)).length;
   const historicalOnlyCount = resolvedMaterials.filter(
     (material) => material.price_scope === 'historical_bulk' && !material.reference_url,
@@ -245,7 +257,12 @@ export default function CalculatorResult() {
   );
   const routeReferenceCount = routeSummary?.reference_urls?.length ?? 0;
   const pctOfSelling = (pct: number) => (lang === 'ko' ? `판매가의 ${pct.toFixed(1)}%` : `${pct.toFixed(1)}% of selling price`);
-  const ledgerRows = [
+  const electrodeRows = electrodeCostRows(result);
+  const ledgerRows = electrodeRows ? electrodeRows.map((item) => ({
+    label: item.label,
+    value: `${formatPrice(item.costPerCm2)}/cm²`,
+    detail: `${item.share.toFixed(1)}%`,
+  })) : [
     {
       label: 'Materials',
       value: `${formatPrice(toDisplay(result.materials.total_materials_cost_per_lb))}${fmtLabel}`,
@@ -278,7 +295,11 @@ export default function CalculatorResult() {
         }
       : null,
   ].filter(Boolean) as Array<{ label: string; value: string; detail: string }>;
-  const summaryRows = [
+  const summaryRows = electrodeRows ? electrodeRows.map((item) => ({
+    label: item.label,
+    share: item.share,
+    value: `${formatPrice(item.costPerCm2)}/cm²`,
+  })) : [
     {
       label: 'Materials',
       share: result.summary.materials_pct,
@@ -295,7 +316,9 @@ export default function CalculatorResult() {
       value: 'Included',
     },
   ];
-  const pieData = [
+  const sellingPriceShare = (costPerLb: number) => result.summary.estimated_price_per_lb > 0
+    ? costPerLb / result.summary.estimated_price_per_lb * 100 : 0;
+  const pieData = electrodeRows ? electrodeRows.map((item) => ({ name: item.label, value: item.share })) : [
     ...result.materials.components.map((component) => ({
       name:
         component.role === 'support'
@@ -303,11 +326,70 @@ export default function CalculatorResult() {
           : component.role === 'promoter'
             ? `${component.name} promoter`
             : component.name,
-      value: component.cost_pct,
+      value: sellingPriceShare(component.cost_per_lb_cat),
     })),
-    { name: 'Processing', value: result.summary.processing_pct },
-    { name: 'Overhead + margin', value: Math.max(0, 100 - result.summary.materials_pct - result.summary.processing_pct) },
+    ...(result.materials.consumables ?? []).map((consumable) => ({
+      name: consumable.name,
+      value: sellingPriceShare(consumable.cost_per_lb_cat),
+    })),
+    { name: 'Processing', value: sellingPriceShare(Number(result.step_method.processing_cost_per_lb)) },
+    { name: 'Overhead + margin', value: sellingPriceShare(Math.max(0,
+      result.summary.estimated_price_per_lb - result.materials.total_materials_cost_per_lb
+      - Number(result.step_method.processing_cost_per_lb))) },
   ];
+
+  function renderCostingScope(detailed: boolean) {
+    if (!costingScope) return null;
+    const partial = costingScope.status === 'partial';
+    const proxyCount = costingScope.costed_steps.filter((step) => step.status === 'proxy').length;
+    const stepName = (key: string) => costingScope.costed_steps.find((step) => step.step === key)?.name ?? key.replace(/_/g, ' ');
+    return (
+      <div className={`mt-4 rounded-[20px] border p-4 ${partial ? 'border-amber-200 bg-amber-50/80 text-amber-950' : 'border-slate-200 bg-slate-50/80 text-slate-700'}`}>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="cp-subtle-label">{t('Costing scope')}</div>
+          <span className="cp-chip">{partial ? t('Partly costed') : costingScope.status === 'proxy' ? t('Includes proxy equipment') : t('Selected steps priced')}</span>
+        </div>
+        <p className="mt-2 text-sm leading-6"><ScientificText text={costingScope.boundary} /></p>
+        {costingScope.area_cost_boundary ? <p className="mt-2 text-sm leading-6"><ScientificText text={costingScope.area_cost_boundary} /></p> : null}
+        <div className="mt-2 flex flex-wrap gap-2 text-xs">
+          <span>{t('Costed steps')}: {costingScope.costed_steps.length}</span>
+          <span>{t('Proxy rates')}: {proxyCount}</span>
+          <span>{t('Scale substitutions')}: {costingScope.substitutions.length}</span>
+          <span>{t('Uncosted operations')}: {costingScope.uncosted_operations.length + costingScope.dropped_steps.length + costingScope.omitted_template_steps.length}</span>
+        </div>
+        {costingScope.route_modified ? <p className="mt-2 text-sm font-semibold">{t('Modified from the selected template')}. {t('The result uses the actual steps listed below; the template name is a reference.')}</p> : null}
+        {detailed ? (
+          <div className="mt-4 space-y-4">
+            {costingScope.uncosted_operations.length ? <div>
+              <div className="cp-subtle-label">{t('Uncosted operations')}</div>
+              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">{costingScope.uncosted_operations.map((operation, index) => <li key={index}><ScientificText text={operation} /></li>)}</ul>
+            </div> : null}
+            {costingScope.substitutions.length ? <div>
+              <div className="cp-subtle-label">{t('Scale substitutions')}</div>
+              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">{costingScope.substitutions.map((entry, index) => <li key={index}><ScientificText text={stepName(entry.from)} /> → <ScientificText text={stepName(entry.to)} /></li>)}</ul>
+            </div> : null}
+            {costingScope.dropped_steps.length ? <p className="text-sm"><strong>{t('Unavailable at this scale')}:</strong> <ScientificText text={costingScope.dropped_steps.map(stepName).join(', ')} /></p> : null}
+            {costingScope.omitted_template_steps.length ? <p className="text-sm"><strong>{t('Omitted template steps')}:</strong> <ScientificText text={costingScope.omitted_template_steps.map(stepName).join(', ')} /></p> : null}
+            {costingScope.added_steps.length ? <p className="text-sm"><strong>{t('Added steps')}:</strong> <ScientificText text={costingScope.added_steps.map(stepName).join(', ')} /></p> : null}
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead><tr className="border-b border-slate-200">
+                  <th className="py-2 pr-3">{t('Actual costed steps')}</th>
+                  <th className="py-2 pr-3">{t('Status')}</th>
+                  <th className="py-2">{t('Source')}</th>
+                </tr></thead>
+                <tbody>{costingScope.costed_steps.map((entry, index) => <tr key={index} className="border-b border-slate-200/60 align-top">
+                  <td className="py-2 pr-3"><ScientificText text={entry.name} /></td>
+                  <td className="py-2 pr-3 whitespace-nowrap">{entry.status === 'proxy' ? t('Proxy rate') : t('Costed step')}</td>
+                  <td className="py-2">{entry.reference_url ? <a href={entry.reference_url} target="_blank" rel="noreferrer" className="underline"><ScientificText text={entry.source} /></a> : entry.source}<div className="mt-1 text-slate-500"><ScientificText text={entry.basis} /></div></td>
+                </tr>)}</tbody>
+              </table>
+            </div>
+          </div>
+        ) : null}
+      </div>
+    );
+  }
 
   function renderResultOverview() {
     return (
@@ -315,7 +397,7 @@ export default function CalculatorResult() {
         <div className="grid gap-3 xl:grid-cols-[minmax(0,1.15fr)_repeat(3,minmax(0,1fr))]">
           <div className="min-w-0 overflow-hidden rounded-[20px] border border-[#191f28] bg-[#191f28] p-4 text-white shadow-[0_8px_24px_rgba(15,23,42,0.18)]">
             <div className="cp-subtle-label !text-slate-400">{t('Final result')}</div>
-            <div className="mt-2 text-sm text-slate-300">{composition}</div>
+            <div className="mt-2 text-sm text-slate-300"><ScientificText text={composition} /></div>
             <div className="mt-4 flex items-end gap-3">
               <FitPriceText
                 size="xl"
@@ -324,35 +406,27 @@ export default function CalculatorResult() {
                   : formatPrice(toDisplay(result.summary.estimated_price_per_lb))}
                 className="min-w-0 text-white"
               />
-              <div className="pb-1 text-base text-slate-300">{electrodeModel ? '/cm²' : fmtLabel}</div>
+              <div className="pb-1 text-base text-slate-300"><ScientificText text={electrodeModel ? '/cm²' : fmtLabel} /></div>
             </div>
             <div className="mt-2 text-xs leading-6 text-slate-300">
               {electrodeModel ? (
-                lang === 'ko' ? (
-                  <>유효 면적 cm²당 전극 조립체 원가입니다 (모델 면적 {electrodeModel.active_area_cm2.toFixed(1)} cm²). 질량 기준으로는 공급사 포장 단가 기준 {formatPrice(toDisplay(result.summary.estimated_price_per_lb))}{fmtLabel}입니다.</>
-                ) : (
-                  <>
-                    Electrode-stack cost per cm² of active area ({electrodeModel.active_area_cm2.toFixed(1)} cm² modeled).
-                    Per-mass view {formatPrice(toDisplay(result.summary.estimated_price_per_lb))}
-                    {fmtLabel} on vendor-pack material prices.
-                  </>
-                )
+                t('Electrode assembly cost per cm² of active area.')
               ) : (
                 lang === 'ko' ? (
-                  <>폐촉매 회수 가치를 뺀 순원가 {formatPrice(toDisplay(result.summary.net_cost_per_lb))}{fmtLabel}. 다른 단위로는 {formatPrice(altPrice)}{altLabel}.</>
+                  <>폐촉매 회수 가치를 뺀 순원가 {formatPrice(toDisplay(result.summary.net_cost_per_lb))}{fmtLabel}. 다른 단위로는 {formatPrice(altPrice)}<ScientificText text={altLabel} />.</>
                 ) : (
                   <>
-                    Net cost {formatPrice(toDisplay(result.summary.net_cost_per_lb))}
-                    {fmtLabel} before selling margin treatment. Alternate view {formatPrice(altPrice)}
-                    {altLabel}.
+                    {t("Net cost")} {formatPrice(toDisplay(result.summary.net_cost_per_lb))}
+                    {fmtLabel} {t('after recovery value, with selling margin included. Alternate view')} {formatPrice(altPrice)}
+                    <ScientificText text={altLabel} />.
                   </>
                 )
               )}
             </div>
             <div className="mt-3 flex flex-wrap gap-2">
               <span className="cp-chip-dark">{t(domainDisplay(catalystDomain))}</span>
-              <span className="cp-chip-dark">{lang === 'ko' ? t(result.step_method.scale) : `${result.step_method.scale} scale`}</span>
-              <span className="cp-chip-dark">{generatedAt}</span>
+              {!electrodeModel ? <span className="cp-chip-dark"><ScientificText text={lang === 'ko' ? t(result.step_method.scale) : `${result.step_method.scale} scale`} /></span> : null}
+              <span className="cp-chip-dark"><ScientificText text={generatedAt} /></span>
             </div>
           </div>
 
@@ -371,7 +445,7 @@ export default function CalculatorResult() {
               <RailRow
                 label={t('Public links')}
                 value={`${publicSourceCount}/${resolvedMaterials.length || 0}`}
-                detail={lang === 'ko' ? `실시간 ${snapshotState.liveFeedCount}건 / 지수 보정 ${snapshotState.indexedFeedCount}건` : `${snapshotState.liveFeedCount} live / ${snapshotState.indexedFeedCount} indexed rows in the draft`}
+                detail={electrodeModel ? t('Electrode material sources') : lang === 'ko' ? `실시간 ${snapshotState.liveFeedCount}건 / 지수 보정 ${snapshotState.indexedFeedCount}건` : `${snapshotState.liveFeedCount} live / ${snapshotState.indexedFeedCount} indexed rows in the draft`}
               />
               <RailRow
                 label={t('Latest quote year')}
@@ -385,9 +459,9 @@ export default function CalculatorResult() {
               />
               {result.lca && result.lca.gwp_kg_co2eq_per_kg_catalyst != null ? (
                 <RailRow
-                  label="Cradle-to-gate GWP"
+                  label={t("Cradle-to-gate GWP")}
                   value={`${formatLcaNumber(result.lca.gwp_kg_co2eq_per_kg_catalyst)} kg CO2-eq/kg`}
-                  detail={`${result.lca.coverage_pct}% mass coverage / Nuss & Eckelman 2014`}
+                  detail={`${result.lca.coverage_pct}% ${t('mass coverage / Nuss & Eckelman 2014')}`}
                 />
               ) : null}
             </div>
@@ -396,14 +470,21 @@ export default function CalculatorResult() {
           <div className="rounded-[22px] border border-slate-900/8 bg-white/62 p-4">
             <div className="cp-subtle-label">{t('Preparation basis')}</div>
             <div className="mt-2 text-base font-semibold text-[#191f28]">
-              {routeSummary?.name ?? benchmarkCandidate?.route.name ?? t('Custom route')}
+              <ScientificText text={routeSummary?.name ?? benchmarkCandidate?.route.name ?? t('Custom route')} />
             </div>
+            {costingScope?.route_modified ? (
+              <p className="mt-2 text-xs font-semibold text-amber-800">{t('Modified from the selected template')}</p>
+            ) : null}
             <div className="mt-3 space-y-1">
-              <RailRow
+              {electrodeModel ? <RailRow
+                label={t('Active area')}
+                value={`${electrodeModel.active_area_cm2.toFixed(1)} cm²`}
+                detail={t('Per modeled layer')}
+              /> : <RailRow
                 label={t('Production scale')}
                 value={lang === 'ko' ? `${snapshotState.orderSize}톤` : `${snapshotState.orderSize} tons`}
                 detail={lang === 'ko' ? `${t(result.step_method.scale)} / ${Number(result.step_method.campaign_days).toFixed(1)}일` : `${result.step_method.scale} scale / ${Number(result.step_method.campaign_days).toFixed(1)} days`}
-              />
+              />}
               <RailRow
                 label={t('Steps')}
                 value={String(snapshotState.stepLabels.length)}
@@ -424,6 +505,7 @@ export default function CalculatorResult() {
             </div>
           </div>
         </div>
+        {renderCostingScope(false)}
       </section>
     );
   }
@@ -437,7 +519,7 @@ export default function CalculatorResult() {
               <div className="cp-subtle-label !text-slate-400">
                 {electrodeModel ? t('Estimated electrode cost') : t('Estimated selling price')}
               </div>
-              <div className="mt-2 text-sm text-slate-300">{composition}</div>
+              <div className="mt-2 text-sm text-slate-300"><ScientificText text={composition} /></div>
               <div className="mt-4 flex flex-wrap items-end gap-3">
                 <FitPriceText
                   size="xl"
@@ -446,43 +528,40 @@ export default function CalculatorResult() {
                     : formatPrice(toDisplay(result.summary.estimated_price_per_lb))}
                   className="min-w-0 text-white"
                 />
-                <div className="pb-2 text-xl text-slate-300">{electrodeModel ? '/cm²' : fmtLabel}</div>
+                <div className="pb-2 text-xl text-slate-300"><ScientificText text={electrodeModel ? '/cm²' : fmtLabel} /></div>
               </div>
               <div className="mt-3 text-sm text-slate-300">
                 {electrodeModel ? (
-                  lang === 'ko' ? (
-                    <>유효 면적 cm²당 전극 조립체 원가입니다. 질량 기준으로는 공급사 포장 단가 기준 {formatPrice(toDisplay(result.summary.estimated_price_per_lb))}{fmtLabel}입니다.</>
-                  ) : (
-                    <>
-                      Electrode-stack cost per cm² of active area. Per-mass view{' '}
-                      {formatPrice(toDisplay(result.summary.estimated_price_per_lb))}
-                      {fmtLabel} on vendor-pack material prices.
-                    </>
-                  )
+                  t('Electrode assembly cost per cm² of active area.')
                 ) : (
                   lang === 'ko' ? (
                     <>폐촉매 회수 가치를 뺀 순원가 {formatPrice(toDisplay(result.summary.net_cost_per_lb))}{fmtLabel}.</>
                   ) : (
                     <>
-                      Net cost {formatPrice(toDisplay(result.summary.net_cost_per_lb))}
-                      {fmtLabel} before selling margin treatment.
+                      {t("Net cost")} {formatPrice(toDisplay(result.summary.net_cost_per_lb))}
+                      {fmtLabel} {t('after recovery value, with selling margin included.')}
                     </>
                   )
                 )}
               </div>
               <div className="mt-4 flex flex-wrap gap-2">
                 <span className="cp-chip-dark">{t(domainDisplay(catalystDomain))}</span>
-                <span className="cp-chip-dark">{lang === 'ko' ? t(result.step_method.scale) : `${result.step_method.scale} scale`}</span>
-                <span className="cp-chip-dark">{generatedAt}</span>
+                {!electrodeModel ? <span className="cp-chip-dark"><ScientificText text={lang === 'ko' ? t(result.step_method.scale) : `${result.step_method.scale} scale`} /></span> : null}
+                <span className="cp-chip-dark"><ScientificText text={generatedAt} /></span>
                 {benchmarkCandidate ? <span className="cp-chip-dark">{t('Reference-loaded')}</span> : null}
               </div>
             </div>
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
-            <MetricTile label={t('Production time')} value={`${Number(result.step_method.campaign_days).toFixed(1)} d`} detail={lang === 'ko' ? `${snapshotState.orderSize}톤 1회 생산` : `${snapshotState.orderSize} tons per run`} />
-            <MetricTile label={t('Margin')} value={`${Number(result.step_method.margin_pct).toFixed(1)}%`} detail={t('Selling margin basis')} />
-            <MetricTile label={t('Price sources')} value={String(snapshotState.liveFeedCount + snapshotState.indexedFeedCount)} detail={lang === 'ko' ? `실시간 ${snapshotState.liveFeedCount}건 / 지수 보정 ${snapshotState.indexedFeedCount}건` : `${snapshotState.liveFeedCount} live / ${snapshotState.indexedFeedCount} indexed`} />
+            {electrodeModel ? <>
+              <MetricTile label={t('Active area')} value={`${electrodeModel.active_area_cm2.toFixed(1)} cm²`} detail={t('Per modeled layer')} />
+              <MetricTile label={t('Electrode total')} value={formatPrice(electrodeModel.total_cost_usd)} detail={t('For selected active area')} />
+            </> : <>
+              <MetricTile label={t('Production time')} value={`${Number(result.step_method.campaign_days).toFixed(1)} d`} detail={lang === 'ko' ? `${snapshotState.orderSize}톤 1회 생산` : `${snapshotState.orderSize} tons per run`} />
+              <MetricTile label={t('Margin')} value={`${Number(result.step_method.margin_pct).toFixed(1)}%`} detail={t('Selling margin basis')} />
+            </>}
+            <MetricTile label={t('Price sources')} value={String(electrodeModel ? resolvedMaterials.length : snapshotState.liveFeedCount + snapshotState.indexedFeedCount)} detail={electrodeModel ? t('Electrode material sources') : lang === 'ko' ? `실시간 ${snapshotState.liveFeedCount}건 / 지수 보정 ${snapshotState.indexedFeedCount}건` : `${snapshotState.liveFeedCount} live / ${snapshotState.indexedFeedCount} indexed`} />
             <MetricTile label={t('Public links')} value={`${publicSourceCount}/${resolvedMaterials.length || 0}`} detail={t('Resolved rows with a public URL.')} />
           </div>
         </div>
@@ -493,7 +572,7 @@ export default function CalculatorResult() {
             <div className="mt-2 space-y-2">
               {result.warnings.map((warning) => (
                 <p key={warning} className="leading-6">
-                  {warning}
+                  <ScientificText text={warning} />
                 </p>
               ))}
             </div>
@@ -507,7 +586,7 @@ export default function CalculatorResult() {
                 <div className="cp-subtle-label">{t('Electrode Assembly')}</div>
                 <div className="cp-heading-sm mt-2">{t('Area-based electrocatalyst layer model')}</div>
                 <div className="mt-1 text-xs leading-6 text-slate-600">
-                  {t('Catalyst powder, ionomer, membrane, and substrate are costed on an active-area basis and displayed alongside the powder estimate.')}
+                  {t('Catalyst powder, ionomer, membrane, and substrate are costed on an active-area basis.')}
                 </div>
               </div>
               <span className="cp-chip">{t(applicationDisplay(electrodeModel.application_family))}</span>
@@ -523,11 +602,9 @@ export default function CalculatorResult() {
               <div className="mt-4 rounded-[16px] border border-slate-200 bg-slate-50/80 p-4 text-xs leading-6 text-slate-600">
                 <div className="cp-subtle-label">{t('Manufacturing line cost')}</div>
                 <div className="mt-1">
-                  {electrodeModel.manufacturing.label}: {formatPrice(electrodeModel.manufacturing_cost_usd ?? 0)} added
-                  ({electrodeModel.manufacturing.usd_per_cm2.toFixed(4)} $/cm² — equipment, labor, facility; consumables stay priced as materials).
-                  Derived from {electrodeModel.manufacturing.eur_per_m2.toFixed(1)} €/m² at EUR→USD {electrodeModel.manufacturing.eur_to_usd}
-                  {' '}({electrodeModel.manufacturing.fx_basis}).{' '}
-                  <a className="underline" href={electrodeModel.manufacturing.reference_url} target="_blank" rel="noreferrer">Source</a>
+                  <ScientificText text={electrodeModel.manufacturing.label} />: {formatPrice(electrodeModel.manufacturing_cost_usd ?? 0)} {t("added (")}{electrodeModel.manufacturing.usd_per_cm2.toFixed(4)} {t("$/cm² — equipment, labor, facility; consumables stay priced as materials). Derived from")} {electrodeModel.manufacturing.eur_per_m2.toFixed(1)} {t("€/m² at EUR→USD")} {electrodeModel.manufacturing.eur_to_usd}
+                  {' '}(<ScientificText text={electrodeModel.manufacturing.fx_basis} />).{' '}
+                  <a className="underline" href={electrodeModel.manufacturing.reference_url} target="_blank" rel="noreferrer">{t("Source")}</a>
                 </div>
               </div>
             ) : null}
@@ -544,7 +621,7 @@ export default function CalculatorResult() {
                   {t('This is a simplified end-of-life recovery credit. It is useful for early screening, but it does not yet model deactivation kinetics or regeneration frequency.')}
                 </div>
               </div>
-              <span className="cp-chip">{spentCatalyst.metal_symbol}</span>
+              <span className="cp-chip"><ScientificText text={spentCatalyst.metal_symbol} /></span>
             </div>
 
             <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
@@ -586,7 +663,7 @@ export default function CalculatorResult() {
               {t('This surface is for production scale, selected preparation steps, route metadata, and the main cost split.')}
             </div>
           </div>
-          <span className="cp-chip">{lang === 'ko' ? `재료 ${result.materials.components.length}종` : `${result.materials.components.length} material${result.materials.components.length === 1 ? '' : 's'}`}</span>
+          <span className="cp-chip"><ScientificText text={lang === 'ko' ? `재료 ${result.materials.components.length}종` : `${result.materials.components.length} material${result.materials.components.length === 1 ? '' : 's'}`} /></span>
         </div>
 
         <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
@@ -609,13 +686,13 @@ export default function CalculatorResult() {
         <div className="mt-4 grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(240px,0.88fr)]">
           <div className="rounded-[24px] border border-slate-900/8 bg-white/58 p-4">
             <div className="cp-subtle-label">{t('Cost Structure')}</div>
-            <div className="cp-heading-lg mt-2">{t('Materials versus processing')}</div>
+            <div className="cp-heading-lg mt-2">{electrodeModel ? t('Electrode Assembly') : t('Materials versus processing')}</div>
             <div className="mt-4 space-y-3">
               {summaryRows.map((item, index) => (
                 <div key={item.label}>
                   <div className="flex items-center justify-between gap-3 text-sm">
                     <span className="text-slate-600">{t(item.label)}</span>
-                    <span className="font-semibold text-[#191f28]">{item.value === 'Included' ? t('Included') : item.value}</span>
+                    <span className="font-semibold text-[#191f28]"><ScientificText text={item.value === 'Included' ? t('Included') : item.value} /></span>
                   </div>
                   <div className="mt-2 h-2 rounded-full bg-slate-200/80">
                     <div
@@ -631,7 +708,7 @@ export default function CalculatorResult() {
 
           <div className="rounded-[24px] border border-slate-900/8 bg-white/58 p-4">
             <div className="cp-heading-sm">{t('Cost breakdown')}</div>
-            <div className="mt-1 text-xs text-slate-600">{t('Materials, processing, and selling adjustments.')}</div>
+            <div className="mt-1 text-xs text-slate-600">{electrodeModel ? t('For selected active area') : t('Materials, processing, and selling adjustments.')}</div>
             <div className="mt-4 h-[240px]">
               <Suspense fallback={<ChartFallback />}>
                 <ResultBreakdownPieChart data={pieData} colors={CHART_COLORS} />
@@ -662,28 +739,32 @@ export default function CalculatorResult() {
         {benchmarkCandidate ? (
           <div className="mt-4 rounded-[24px] border border-emerald-200 bg-emerald-50/80 p-4">
             <div className="cp-subtle-label !text-emerald-700">{t('Reference baseline')}</div>
-            <div className="mt-2 cp-heading-sm">{benchmarkCandidate.title}</div>
-            <div className="mt-2 text-sm leading-6 text-emerald-900">{benchmarkCandidate.screening_summary}</div>
+            <div className="mt-2 cp-heading-sm"><ScientificText text={benchmarkCandidate.title} /></div>
+            <div className="mt-2 text-sm leading-6 text-emerald-900"><ScientificText text={benchmarkCandidate.screening_summary} /></div>
             <div className="mt-3 flex flex-wrap gap-2">
-              <span className="cp-chip">{benchmarkCandidate.archetype}</span>
-              <span className="cp-chip">{benchmarkCandidate.route.name}</span>
+              <span className="cp-chip"><ScientificText text={benchmarkCandidate.archetype} /></span>
+              <span className="cp-chip"><ScientificText text={benchmarkCandidate.route.name} /></span>
               <span className="cp-chip">
                 {t(benchmarkCandidate.catalyst_domain === 'electrocatalyst' ? 'Electrocatalyst' : 'Thermocatalyst')}
               </span>
-              <span className="cp-chip">{t('Evidence')} {benchmarkCandidate.scores.evidence.toFixed(1)}</span>
+              <span className="cp-chip">{t('Price evidence')} {benchmarkCandidate.scores.evidence.toFixed(1)}</span>
             </div>
           </div>
         ) : null}
 
+        {renderCostingScope(true)}
+        <PracticalCostingResult result={result} />
+
         {routeSummary ? (
           <div className="mt-4 rounded-[24px] border border-sky-200 bg-sky-50/75 p-4">
             <div className="cp-subtle-label !text-sky-700">{t('Preparation method')}</div>
-            <div className="mt-2 cp-heading-sm">{routeSummary.name}</div>
+            <div className="mt-2 cp-heading-sm"><ScientificText text={routeSummary.name} /></div>
+            {costingScope?.route_modified ? <p className="mt-2 text-sm font-semibold text-amber-800">{t('Modified from the selected template')}</p> : null}
             <div className="mt-2 text-sm leading-6 text-sky-900">
-              {routeSummary.route_note || t('The route template details are attached to this estimate.')}
+              <ScientificText text={routeSummary.route_note || t('The route template details are attached to this estimate.')} />
             </div>
             <div className="mt-3 flex flex-wrap gap-2">
-              <span className="cp-chip">{modeDisplay(routeSummary.manufacturing_mode)}</span>
+              <span className="cp-chip"><ScientificText text={modeDisplay(routeSummary.manufacturing_mode)} /></span>
               <span className="cp-chip">{t(applicationDisplay(routeSummary.application_family))}</span>
             </div>
             <div className="mt-4 grid gap-3 lg:grid-cols-3">
@@ -692,7 +773,7 @@ export default function CalculatorResult() {
                 <div className="mt-2 flex flex-wrap gap-2">
                   {routeSummary.preprocess.map((item) => (
                     <span key={item} className="cp-chip">
-                      {item}
+                      <ScientificText text={item} />
                     </span>
                   ))}
                 </div>
@@ -702,7 +783,7 @@ export default function CalculatorResult() {
                 <div className="mt-2 flex flex-wrap gap-2">
                   {routeSummary.synthesis.map((item) => (
                     <span key={item} className="cp-chip">
-                      {item}
+                      <ScientificText text={item} />
                     </span>
                   ))}
                 </div>
@@ -712,7 +793,7 @@ export default function CalculatorResult() {
                 <div className="mt-2 flex flex-wrap gap-2">
                   {routeSummary.postprocess.map((item) => (
                     <span key={item} className="cp-chip">
-                      {item}
+                      <ScientificText text={item} />
                     </span>
                   ))}
                 </div>
@@ -723,9 +804,9 @@ export default function CalculatorResult() {
 
         {spentCatalyst ? (
           <div className="mt-4 rounded-[24px] border border-emerald-200 bg-emerald-50/80 p-4">
-            <div className="cp-subtle-label !text-emerald-700">Lifecycle proxy</div>
+            <div className="cp-subtle-label !text-emerald-700">{t("Lifecycle proxy")}</div>
             <div className="mt-2 text-sm leading-6 text-emerald-900">
-              Net cost includes spent catalyst recovery for {spentCatalyst.metal_symbol}. The model uses support and reactor-type loss assumptions from the CatCost-style recovery proxy, not a full deactivation-regeneration cycle.
+              {t("Net cost includes spent catalyst recovery for")} <ScientificText text={spentCatalyst.metal_symbol} />{t(". Recovery value uses support and reactor-type loss assumptions; deactivation and regeneration cycles are outside this estimate.")}
             </div>
           </div>
         ) : null}
@@ -764,13 +845,13 @@ export default function CalculatorResult() {
             </div>
           </div>
           <span className={`cp-chip shrink-0 ${dataGap > 0 ? 'border-amber-200 bg-amber-50 text-amber-700' : 'border-emerald-200 bg-emerald-50 text-emerald-700'}`}>
-            {lang === 'ko' ? `반영률 ${coverage}%` : `${coverage}% covered`}
+            <ScientificText text={lang === 'ko' ? `반영률 ${coverage}%` : `${coverage}% covered`} />
           </span>
         </div>
 
         <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
           <MetricTile
-            label="GWP (100a)"
+            label={t("GWP (100a)")}
             value={`${formatLcaNumber(gwp)} kg`}
             detail={t('kg CO2-eq per kg of finished catalyst (IPCC GWP100a).')}
           />
@@ -796,7 +877,7 @@ export default function CalculatorResult() {
             <div className="font-semibold">{t('LCA notes')}</div>
             <ul className="mt-2 list-disc space-y-1 pl-5">
               {lca.warnings.map((warning, idx) => (
-                <li key={idx}>{warning}</li>
+                <li key={idx}><ScientificText text={warning} /></li>
               ))}
             </ul>
           </div>
@@ -810,35 +891,35 @@ export default function CalculatorResult() {
                 <th className="px-3 py-2 font-semibold">{t('Role')}</th>
                 <th className="px-3 py-2 font-semibold">wt%</th>
                 <th className="px-3 py-2 font-semibold">{t('Status')}</th>
-                <th className="px-3 py-2 font-semibold text-right">GWP (kg CO2-eq/kg cat)</th>
-                <th className="px-3 py-2 font-semibold text-right">CED (MJ/kg cat)</th>
+                <th className="px-3 py-2 font-semibold text-right">{t("GWP (kg CO2-eq/kg cat)")}</th>
+                <th className="px-3 py-2 font-semibold text-right">{t("CED (MJ/kg cat)")}</th>
               </tr>
             </thead>
             <tbody>
               {lca.per_component.map((entry, idx) => (
                 <tr key={`${entry.name}-${idx}`} className="border-t border-slate-100">
                   <td className="px-3 py-2 font-semibold text-slate-900">
-                    {entry.name}
+                    <ScientificText text={entry.name} />
                     {entry.matched_key && entry.matched_key !== entry.name ? (
-                      <span className="ml-1 text-xs text-slate-600">(via {entry.matched_key})</span>
+                      <span className="ml-1 text-xs text-slate-600">{t("(via")} <ScientificText text={entry.matched_key} />)</span>
                     ) : null}
                   </td>
-                  <td className="px-3 py-2 text-slate-600">{entry.role ?? '—'}</td>
+                  <td className="px-3 py-2 text-slate-600"><ScientificText text={entry.role ?? '—'} /></td>
                   <td className="px-3 py-2 text-slate-600">{entry.wt_pct.toFixed(2)}</td>
                   <td className="px-3 py-2">
                     <span className={`inline-flex rounded-full border px-2 py-0.5 text-xs font-semibold uppercase tracking-[0.16em] ${lcaFactorStatusTone(entry.factor_status)}`}>
-                      {lcaFactorStatusLabel(entry.factor_status)}
+                      <ScientificText text={lcaFactorStatusLabel(entry.factor_status)} />
                     </span>
                   </td>
                   <td className="px-3 py-2 text-right font-mono text-slate-900">
-                    {entry.gwp_contribution_kg_co2eq_per_kg_catalyst != null
+                    <ScientificText text={entry.gwp_contribution_kg_co2eq_per_kg_catalyst != null
                       ? formatLcaNumber(entry.gwp_contribution_kg_co2eq_per_kg_catalyst)
-                      : '—'}
+                      : '—'} />
                   </td>
                   <td className="px-3 py-2 text-right font-mono text-slate-900">
-                    {entry.ced_contribution_mj_per_kg_catalyst != null
+                    <ScientificText text={entry.ced_contribution_mj_per_kg_catalyst != null
                       ? formatLcaNumber(entry.ced_contribution_mj_per_kg_catalyst)
-                      : '—'}
+                      : '—'} />
                   </td>
                 </tr>
               ))}
@@ -848,16 +929,16 @@ export default function CalculatorResult() {
 
         <div className="mt-5 rounded-[20px] border border-slate-200 bg-white/72 p-4">
           <div className="cp-subtle-label">{t('Reference')}</div>
-          <div className="mt-2 text-sm font-semibold text-slate-900">{ref.citation}</div>
+          <div className="mt-2 text-sm font-semibold text-slate-900"><ScientificText text={ref.citation} /></div>
           <div className="mt-1 text-xs leading-6 text-slate-600">
-            {ref.table_of_origin}. Underlying LCI: {ref.underlying_lci_database}. Uncertainty: {ref.uncertainty_basis}. License: {ref.license}.
+            <ScientificText text={ref.table_of_origin} />{t(". Underlying LCI:")} <ScientificText text={ref.underlying_lci_database} />{t(". Uncertainty:")} <ScientificText text={ref.uncertainty_basis} />{t(". License:")} <ScientificText text={ref.license} />.
           </div>
           <div className="mt-2 text-xs">
             <a href={ref.url} target="_blank" rel="noreferrer" className="text-[#0f766e] underline-offset-4 hover:underline">
-              {t('Open the source paper')} (DOI {ref.doi})
+              {t('Open the source paper')} (DOI <ScientificText text={ref.doi} />)
             </a>
           </div>
-          <div className="mt-3 text-xs leading-6 text-slate-600">{ref.notes}</div>
+          <div className="mt-3 text-xs leading-6 text-slate-600"><ScientificText text={ref.notes} /></div>
         </div>
       </section>
     );
@@ -874,7 +955,7 @@ export default function CalculatorResult() {
               {t('Each record shows raw quote, pack basis, normalization basis, and public link status when available.')}
             </div>
           </div>
-          <span className="cp-chip shrink-0">{snapshotState.selectedSupportName ?? 'Support'}</span>
+          <span className="cp-chip shrink-0"><ScientificText text={snapshotState.selectedSupportName ?? 'Support'} /></span>
         </div>
 
         <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
@@ -903,26 +984,29 @@ export default function CalculatorResult() {
                 <div className="min-w-0">
                   <div className="flex items-center gap-2.5">
                     <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: CHART_COLORS[index % CHART_COLORS.length] }} />
-                    <div className="cp-heading-sm">{component.name}</div>
+                    <div className="cp-heading-sm"><ScientificText text={component.name} /></div>
                   </div>
                   <div className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-400">
-                    {component.role.replace('_', ' ')}
+                    <ScientificText text={component.role.replace('_', ' ')} />
                   </div>
                 </div>
                 <div className="text-left sm:text-right">
                   <div className="cp-subtle-label">{t('Per catalyst')}</div>
                   <div className="mt-2 font-display text-[1.45rem] text-[#191f28]">
                     {formatPrice(toDisplay(component.cost_per_lb_cat))}
-                    {catLabel}
+                    <ScientificText text={catLabel} />
                   </div>
                 </div>
               </div>
 
               <div className="mt-4 grid gap-2.5 sm:grid-cols-3 xl:grid-cols-1 2xl:grid-cols-3">
                 <MetricTile label="wt%" value={(component.wt_frac * 100).toFixed(1)} detail={t('Loaded into catalyst')} />
-                <MetricTile label={t('Unit price')} value={formatPrice(toDisplay(component.price_per_lb))} detail={`Per${fmtLabel}`} />
+                <MetricTile label={component.recipe_consumption ? t('Purchased precursor unit price') : t('Unit price')} value={formatPrice(toDisplay(component.recipe_consumption ? component.recipe_consumption.price_per_kg / LB_PER_KG : component.price_per_lb))} detail={`${t('Per unit mass')} (${unit})`} />
                 <MetricTile label={t('Share')} value={`${Number(component.cost_pct).toFixed(1)}%`} detail={t('Of material cost')} />
               </div>
+              {component.recipe_consumption ? <p className="mt-3 text-xs leading-6 text-slate-600">
+                {t('Recipe purchase price replaces the component price in material cost. Reference component price:')} {formatPrice(toDisplay(component.price_per_lb))}{fmtLabel}.
+              </p> : null}
             </div>
           ))}
         </div>
@@ -932,11 +1016,14 @@ export default function CalculatorResult() {
             <span className="text-slate-600">{t('Total material cost')}</span>
             <span className="font-semibold text-[#191f28]">
               {formatPrice(toDisplay(result.materials.total_materials_cost_per_lb))}
-              {catLabel}
+              <ScientificText text={catLabel} />
             </span>
           </div>
           <div className="mt-2 text-xs leading-6 text-slate-600">
-            {t('CatCost Step Method rates, brought to this year with the chemical price index, plus overhead and selling margin.')}
+            {t('COMET traces material prices to the selected basis. Manufacturing costs and their assumptions are listed separately.')}
+            <p>{electrodeModel
+              ? t('These are catalyst powder material costs. The electrode assembly result uses cost per effective area.')
+              : t('Adopted thermal method: published Step Method; CatCost User Guide, Chapter 6.')}</p>
           </div>
         </div>
 
@@ -955,23 +1042,23 @@ export default function CalculatorResult() {
                 <div key={`${material.used_for}-${material.material_key}`} className="rounded-[18px] border border-slate-200 bg-white px-4 py-3">
                   <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                     <div className="min-w-0">
-                      <div className="font-semibold text-[#191f28]">{material.name}</div>
+                      <div className="font-semibold text-[#191f28]"><ScientificText text={material.name} /></div>
                       <div className="mt-1 text-xs text-slate-600">
-                        {material.used_for} / {material.price_scope} / {material.pricing_basis}
+                        <ScientificText text={material.used_for} /> / <ScientificText text={material.price_scope} /> / <ScientificText text={material.pricing_basis} />
                       </div>
                     </div>
                     <div className="text-left sm:text-right">
                       <div className="font-mono text-slate-900">
-                        {formatPrice(material.price)} {material.price_unit}
+                        {formatPrice(material.price)} <ScientificText text={material.price_unit} />
                       </div>
                       {material.normalized_price_per_lb != null && material.price_unit !== `$${fmtLabel}` ? (
                         <div className="mt-0.5 font-mono text-xs text-slate-600">
-                          ≈ {formatPrice(toDisplay(material.normalized_price_per_lb))}{fmtLabel} {t('in calculator')}
+                          ≈ {formatPrice(toDisplay(material.normalized_price_per_lb))}{fmtLabel} {recipeReferenceKeys.has(material.material_key) ? t('reference price only') : t('in calculator')}
                         </div>
                       ) : null}
                       <div className="mt-1 text-xs text-slate-600">
-                        {material.quote_source}
-                        {material.quote_year ? ` / ${material.quote_year}` : ''}
+                        <ScientificText text={material.quote_source} />
+                        <ScientificText text={material.quote_year ? ` / ${material.quote_year}` : ''} />
                       </div>
                       <div className="mt-2 flex flex-wrap items-center gap-2 sm:justify-end">
                         <span
@@ -992,50 +1079,52 @@ export default function CalculatorResult() {
                       </div>
                     </div>
                   </div>
+                  {recipeReferenceKeys.has(material.material_key) ? <p className="mt-3 rounded-lg bg-amber-50 p-3 text-xs leading-6 text-amber-900">
+                    {t('This library quote is retained as a reference. The purchased-precursor recipe supplies the price used for this component cost.')}
+                  </p> : null}
                   <div className="mt-3 grid gap-2.5 sm:grid-cols-3">
                     <div className="rounded-[16px] border border-slate-200 bg-slate-50/80 px-3 py-2.5">
                       <div className="cp-subtle-label">{t('Pack Basis')}</div>
-                      <div className="mt-1 text-sm font-semibold text-slate-900">{formatResolvedPack(material)}</div>
+                      <div className="mt-1 text-sm font-semibold text-slate-900"><ScientificText text={formatResolvedPack(material)} /></div>
                     </div>
                     <div className="rounded-[16px] border border-slate-200 bg-slate-50/80 px-3 py-2.5">
                       <div className="cp-subtle-label">{t('Normalization')}</div>
                       <div className="mt-1 text-sm font-semibold text-slate-900">
-                        {formatResolvedNormalization(material, toDisplay, fmtLabel)}
+                        <ScientificText text={formatResolvedNormalization(material, toDisplay, fmtLabel)} />
                       </div>
                     </div>
                     <div className="rounded-[16px] border border-slate-200 bg-slate-50/80 px-3 py-2.5">
                       <div className="cp-subtle-label">{t('Pricing Basis')}</div>
                       <div className="mt-1 text-sm font-semibold text-slate-900">
-                        {material.pricing_basis.replace(/_/g, ' ')}
+                        <ScientificText text={material.pricing_basis.replace(/_/g, ' ')} />
                       </div>
                     </div>
                   </div>
-                  {material.escalation_factor != null && material.escalation_factor !== 1 && material.escalation_basis_year ? (
+                  {!recipeReferenceKeys.has(material.material_key) && material.escalation_factor != null && material.escalation_factor !== 1 && material.escalation_basis_year ? (
                     <div className="mt-3 rounded-[14px] border border-[#7950f2] bg-[#f3edff] px-3 py-2.5 text-xs leading-5 text-[#4d2eb5]">
                       <div className="font-bold uppercase tracking-[0.16em] text-[#4d2eb5]">
-                        Inflated to {material.escalation_target_year ?? new Date().getFullYear()} basis
+                        {t("Inflated to")} {material.escalation_target_year ?? new Date().getFullYear()} {t("basis")}
                       </div>
                       <div className="mt-1 text-[#191f28]">
-                        Original {material.escalation_basis_year} quote of{' '}
+                        {t("Original")} {material.escalation_basis_year} {t("quote of")}{' '}
                         <span className="font-mono font-semibold">{formatPrice(toDisplay(material.raw_price_per_lb ?? material.price))}{fmtLabel}</span>{' '}
-                        is multiplied by ChemPPI factor{' '}
+                        {t("is multiplied by ChemPPI factor")}{' '}
                         <span className="font-mono font-semibold">×{material.escalation_factor.toFixed(2)}</span>{' '}
-                        to land at the in-calculator value{' '}
+                        {t("to land at the in-calculator value")}{' '}
                         <span className="font-mono font-semibold">{formatPrice(toDisplay(material.normalized_price_per_lb ?? 0))}{fmtLabel}</span>.
                       </div>
                       <div className="mt-1 text-[#4e5968]">
-                        ChemPPI tracks chemical-manufacturing producer prices and is the same index CatCost uses for materials and operating costs.
+                        {t("ChemPPI tracks chemical-manufacturing producer prices. COMET uses it to convert applicable source costs between price years.")}
                       </div>
                     </div>
                   ) : null}
-                  {material.live_override?.applied ? (
+                  {!recipeReferenceKeys.has(material.material_key) && material.live_override?.applied ? (
                     <div className="mt-3 rounded-[14px] border border-[#0d9488] bg-[#e6f5f2] px-3 py-2.5 text-xs leading-5 text-[#115e59]">
                       <div className="font-bold uppercase tracking-[0.16em] text-[#0f766e]">
-                        Live market quote in use
+                        {material.live_override.basis === 'reference' ? t('Monthly reference quote in use') : t('Live market quote in use')}
                       </div>
                       <div className="mt-1 text-[#191f28]">
-                        Catalyst price uses the latest <span className="font-semibold">{material.live_override.live_source}</span> quote
-                        of <span className="font-mono font-semibold">{formatPrice(material.live_override.live_price)} {material.live_override.live_price_unit}</span>
+                        {t("Catalyst price uses the latest")} <span className="font-semibold"><ScientificText text={material.live_override.live_source} /></span> {t("quote of")} <span className="font-mono font-semibold">{formatPrice(material.live_override.live_price)} <ScientificText text={material.live_override.live_price_unit} /></span>
                         {(() => {
                           const perLb = quotePerLb(material.live_override.live_price, material.live_override.live_price_unit);
                           return perLb != null && material.live_override.live_price_unit !== `$${fmtLabel}`
@@ -1043,29 +1132,34 @@ export default function CalculatorResult() {
                             : null;
                         })()}
                         {material.live_override.live_fetched_at
-                          ? ` (fetched ${new Date(material.live_override.live_fetched_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })})`
+                          ? material.live_override.basis === 'reference'
+                            ? ` (${t('Observation month')} ${material.live_override.live_fetched_at.slice(0, 7)})`
+                            : ` (${t('Fetched')} ${new Date(material.live_override.live_fetched_at).toLocaleString(lang === 'ko' ? 'ko-KR' : 'en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })})`
                           : ''}
                         .
                       </div>
                       <div className="mt-1 text-[#4e5968]">
-                        Offline reference price: <span className="font-mono">{formatPrice(material.live_override.fallback_price)} {material.live_override.fallback_price_unit}</span> from {material.live_override.fallback_source}
-                        {material.live_override.fallback_quote_year ? ` (${material.live_override.fallback_quote_year})` : ''}
+                        {t('Original library price:')} <span className="font-mono">{formatPrice(material.live_override.fallback_price)} <ScientificText text={material.live_override.fallback_price_unit} /></span> {t("from")} <ScientificText text={material.live_override.fallback_source} />
+                        <ScientificText text={material.live_override.fallback_quote_year ? ` (${material.live_override.fallback_quote_year})` : ''} />
                         .
+                        {material.live_override.fallback_reference_url ? (
+                          <> <a href={material.live_override.fallback_reference_url} target="_blank" rel="noreferrer" className="underline underline-offset-2">{t('Open original library source')} ↗</a></>
+                        ) : null}
                       </div>
                     </div>
-                  ) : material.live_override && material.live_override.applied === false ? (
+                  ) : !recipeReferenceKeys.has(material.material_key) && material.live_override && material.live_override.applied === false ? (
                     <div className="mt-3 rounded-[14px] border border-[#ffa800] bg-[#fff4dd] px-3 py-2.5 text-xs leading-5 text-[#7a5a00]">
-                      <span className="font-bold uppercase tracking-[0.16em]">No live quote</span>
+                      <span className="font-bold uppercase tracking-[0.16em]">{t("No live quote")}</span>
                       <span className="ml-2">
-                        This metal can carry a live market quote, but none is stored. Using the static catalog price. Refresh the prices feed to populate.
+                        {t("This metal can carry a live market quote, but none is stored. Using the static catalog price. Refresh the prices feed to populate.")}
                       </span>
                     </div>
                   ) : null}
                   {!material.reference_url ? (
                     <div className="mt-2 text-xs leading-5 text-slate-600">
                       {material.price_scope === 'historical_bulk'
-                        ? 'Historical bulk row without a stable public permalink.'
-                        : 'No public source URL stored for this row.'}
+                        ? t('Historical bulk row without a stable public permalink.')
+                        : t('No public source URL stored for this row.')}
                     </div>
                   ) : null}
                 </div>
@@ -1076,11 +1170,11 @@ export default function CalculatorResult() {
 
         {routeSummary?.reference_urls?.length ? (
           <div className="mt-4 rounded-[22px] border border-slate-900/8 bg-white/60 p-4">
-            <div className="cp-subtle-label">Route References</div>
+            <div className="cp-subtle-label">{t("Route References")}</div>
             <div className="mt-3 flex flex-wrap gap-2">
               {routeSummary.reference_urls.map((url) => (
                 <a key={url} href={url} target="_blank" rel="noreferrer" className="cp-button-secondary px-3 py-2 text-xs">
-                  Open route reference
+                  {t("Open route reference")}
                 </a>
               ))}
             </div>
@@ -1144,6 +1238,7 @@ export default function CalculatorResult() {
       {sectionState.activeSection.id === 'manufacturing' ? renderManufacturingSection() : null}
       {sectionState.activeSection.id === 'environmental' ? renderEnvironmentalSection() : null}
       {sectionState.activeSection.id === 'sources' ? renderSourcesSection() : null}
+      {sectionState.activeSection.id === 'sources' ? <CostEvidencePanel savedEstimateId={snapshotState.savedEstimateId ?? null} /> : null}
 
       <WorkspaceSectionFooter
         activeSection={sectionState.activeSection}

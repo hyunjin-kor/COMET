@@ -1,0 +1,20 @@
+[
+  {
+    "path": "C:\\Users\\user\\AppData\\Roaming\\COMET\\comet.db",
+    "before": "dcc4c9490050bc5e5d6a9cba32b47294ce8ebc403eafdcadfa51373e3129261f",
+    "after": "dcc4c9490050bc5e5d6a9cba32b47294ce8ebc403eafdcadfa51373e3129261f",
+    "unchanged": true
+  },
+  {
+    "path": "C:\\Users\\user\\AppData\\Roaming\\COMET\\comet-launcher.log",
+    "before": "8c1f4aeb3ebacc929dff3b36ee39bbb585850b00e77b56d6b5f1d24b2aefc92f",
+    "after": "8c1f4aeb3ebacc929dff3b36ee39bbb585850b00e77b56d6b5f1d24b2aefc92f",
+    "unchanged": true
+  },
+  {
+    "path": "C:\\Users\\user\\AppData\\Local\\Programs\\COMET\\COMET.exe",
+    "before": "1e562ccd72777b0d8045cd5fc9e9abde2cb50077fc43d6a3bd466f145dbf586e",
+    "after": "1e562ccd72777b0d8045cd5fc9e9abde2cb50077fc43d6a3bd466f145dbf586e",
+    "unchanged": true
+  }
+]

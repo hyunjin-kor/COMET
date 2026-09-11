@@ -2,7 +2,13 @@
 
 Last updated: 2026-09-01 (v1.3.24)
 
-COMET does local catalyst cost screening on Windows, checked against the published CatCost reference cases. The phases below are ordered by leverage rather than effort.
+COMET develops catalyst manufacturing-cost, environmental-screening and decision-analysis workflows for research and practical use. The [contribution map](research-contribution.md) separates current capabilities and evidence from adopted prior methods. Published-method reproduction remains one validation layer; the dated phases below retain the development history.
+
+## Data acquisition policy — user decision, 2026-09-06
+
+The data acquisition budget is zero. Do not purchase datasets or individual papers, subscribe to paid data services, or make billable API calls. Prioritize freely accessible papers and supplementary information, author manuscripts, institutional repositories, public agency reports and statistics, and public supplier information. A free API tier may be used only within its zero-cost allowance, without paid upgrades or automatic charges.
+
+For each adopted value, retain the original source location (page/table where applicable), units, material grade, reference year, relevant process/system boundary, and reuse conditions. Free access does not establish redistribution permission. When a suitable free source cannot be verified, keep the data gap explicit and document the search; do not invent a replacement value. This policy governs subsequent data supplementation and does not itself change existing calculation inputs or the COMET license.
 
 ## Phase 1 — Credibility (make it citable)
 

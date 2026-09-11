@@ -1,0 +1,69 @@
+{
+  "checked_at_utc": "2026-09-08T04:51:10.648324+00:00",
+  "crossref": [
+    {
+      "doi": "10.1021/acs.oprd.8b00245",
+      "url": "https://api.crossref.org/works/10.1021/acs.oprd.8b00245",
+      "status": 200,
+      "title": [
+        "Estimating Precommercial Heterogeneous Catalyst Price: A Simple Step-Based Method"
+      ],
+      "publisher": "American Chemical Society (ACS)",
+      "published": {
+        "date-parts": [
+          [
+            2018,
+            9,
+            21
+          ]
+        ]
+      },
+      "type": "journal-article"
+    },
+    {
+      "doi": "10.1038/s41929-022-00759-6",
+      "url": "https://api.crossref.org/works/10.1038/s41929-022-00759-6",
+      "status": 200,
+      "title": [
+        "Early-stage evaluation of catalyst manufacturing cost and environmental impact using CatCost"
+      ],
+      "publisher": "Springer Science and Business Media LLC",
+      "published": {
+        "date-parts": [
+          [
+            2022,
+            3,
+            31
+          ]
+        ]
+      },
+      "type": "journal-article"
+    }
+  ],
+  "pages": [
+    {
+      "url": "https://pubs.acs.org/doi/10.1021/acs.oprd.8b00245",
+      "status": 403,
+      "final_url": "https://pubs.acs.org/doi/10.1021/acs.oprd.8b00245",
+      "content_type": "text/html; charset=UTF-8"
+    },
+    {
+      "url": "https://www.nature.com/articles/s41929-022-00759-6",
+      "status": 200,
+      "final_url": "https://www.nature.com/articles/s41929-022-00759-6",
+      "content_type": "text/html; charset=utf-8"
+    },
+    {
+      "url": "https://biosteam.readthedocs.io/en/latest/",
+      "status": 200,
+      "final_url": "https://biosteam.readthedocs.io/en/latest/",
+      "content_type": "text/html; charset=utf-8"
+    }
+  ],
+  "interpretation": "Crossref verifies bibliographic identity only. Publisher access failures are not claims that the DOI is invalid. Prior published-method evidence and adopted source values remain as already audited; no novel absence or numerical superiority claim is made. BioSTEAM official documentation describes process simulation, TEA, LCA and scenario analysis. No source data or full papers imported.",
+  "web_tool_access": {
+    "ACS": "403 Forbidden",
+    "Nature": "unsafe identity redirect; main page unavailable",
+    "BioSTEAM": "official documentation text retrieved"
+  }
+}

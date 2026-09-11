@@ -1,0 +1,481 @@
+{
+  "at": "2026-09-07T16:35:59.625671+00:00",
+  "checks": [
+    {
+      "check": "defects-before",
+      "command": [
+        "python",
+        "-m",
+        "pytest",
+        "backend/tests/test_prepublication_regressions.py",
+        "backend/tests/test_reproduce_paper.py",
+        "-q",
+        "--tb=short"
+      ],
+      "exit_code": 1,
+      "seconds": 9.55,
+      "at": "2026-09-07T15:59:34.200840+00:00",
+      "log": "docs/audit/prepublication-defects-before-2026-09-08.log"
+    },
+    {
+      "check": "focused-first",
+      "command": [
+        "python",
+        "-m",
+        "pytest",
+        "backend/tests/test_prepublication_regressions.py",
+        "backend/tests/test_reproduce_paper.py",
+        "backend/tests/test_template_identity.py",
+        "backend/tests/test_reproducibility.py",
+        "backend/tests/test_practical_costing.py",
+        "backend/tests/test_performance_equivalence.py",
+        "-q",
+        "--tb=short"
+      ],
+      "exit_code": 0,
+      "seconds": 11.654,
+      "at": "2026-09-07T16:04:11.562022+00:00",
+      "log": "docs/audit/prepublication-focused-first-2026-09-08.log"
+    },
+    {
+      "check": "login-race-before",
+      "command": [
+        "python",
+        "-m",
+        "pytest",
+        "backend/tests/test_hosted_access.py",
+        "-k",
+        "reset_revokes_a_sign",
+        "-q",
+        "--tb=short"
+      ],
+      "exit_code": 1,
+      "seconds": 6.096,
+      "at": "2026-09-07T16:04:50.215851+00:00",
+      "log": "docs/audit/prepublication-login-race-before-2026-09-08.log"
+    },
+    {
+      "check": "range-node",
+      "command": [
+        "node",
+        "scripts/test_practical_range.mjs"
+      ],
+      "exit_code": 0,
+      "seconds": 0.291,
+      "at": "2026-09-07T16:09:42.134825+00:00",
+      "log": "docs/audit/prepublication-range-node-2026-09-08.log"
+    },
+    {
+      "check": "frontend-build",
+      "command": [
+        "npm.cmd",
+        "--prefix",
+        "frontend",
+        "run",
+        "build"
+      ],
+      "exit_code": 0,
+      "seconds": 4.377,
+      "at": "2026-09-07T16:10:25.234754+00:00",
+      "log": "docs/audit/prepublication-frontend-build-2026-09-08.log"
+    },
+    {
+      "check": "focused-second",
+      "command": [
+        "python",
+        "-m",
+        "pytest",
+        "backend/tests/test_prepublication_regressions.py",
+        "backend/tests/test_reproduce_paper.py",
+        "backend/tests/test_paper_submission_claims.py",
+        "backend/tests/test_hosted_access.py",
+        "backend/tests/test_hosted_subscription.py",
+        "backend/tests/test_hosted_operations.py",
+        "-q",
+        "--tb=short"
+      ],
+      "exit_code": 0,
+      "seconds": 69.938,
+      "at": "2026-09-07T16:10:51.781841+00:00",
+      "log": "docs/audit/prepublication-focused-second-2026-09-08.log"
+    },
+    {
+      "check": "lint",
+      "command": [
+        "python",
+        "-m",
+        "ruff",
+        "check",
+        "backend",
+        "scripts"
+      ],
+      "exit_code": 0,
+      "seconds": 0.113,
+      "at": "2026-09-07T16:10:59.390711+00:00",
+      "log": "docs/audit/prepublication-lint-2026-09-08.log"
+    },
+    {
+      "check": "translations",
+      "command": [
+        "npm.cmd",
+        "--prefix",
+        "frontend",
+        "run",
+        "check:i18n"
+      ],
+      "exit_code": 0,
+      "seconds": 0.648,
+      "at": "2026-09-07T16:10:59.839242+00:00",
+      "log": "docs/audit/prepublication-translations-2026-09-08.log"
+    },
+    {
+      "check": "frontend-lint",
+      "command": [
+        "npm.cmd",
+        "--prefix",
+        "frontend",
+        "run",
+        "lint"
+      ],
+      "exit_code": 0,
+      "seconds": 3.737,
+      "at": "2026-09-07T16:11:03.199857+00:00",
+      "log": "docs/audit/prepublication-frontend-lint-2026-09-08.log"
+    },
+    {
+      "check": "paper-replay",
+      "command": [
+        "python",
+        "scripts/reproduce_paper.py",
+        "--price-basis",
+        "reference",
+        "--month",
+        "2026-05",
+        "--seed",
+        "20260906",
+        "--date",
+        "2026-09-07",
+        "--history",
+        "docs/paper/submission-2026-09-07/price_history_2026-09-07.json",
+        "--live-basis",
+        "docs/paper/submission-2026-09-07/live_basis_2026-09-07.json",
+        "--support-history",
+        "docs/paper/submission-2026-09-07/support_history_2026-09-07.json",
+        "--out-dir",
+        "_local/prepublication-paper-replay"
+      ],
+      "exit_code": 0,
+      "seconds": 29.042,
+      "at": "2026-09-07T16:12:36.866195+00:00",
+      "log": "docs/audit/prepublication-paper-replay-2026-09-08.log"
+    },
+    {
+      "check": "electrode-csv-before",
+      "command": [
+        "node",
+        "scripts/test_calculator_rules.mjs"
+      ],
+      "exit_code": 1,
+      "seconds": 0.264,
+      "at": "2026-09-07T16:15:56.514936+00:00",
+      "log": "docs/audit/prepublication-electrode-csv-before-2026-09-08.log"
+    },
+    {
+      "check": "calculator-node",
+      "command": [
+        "node",
+        "scripts/test_calculator_rules.mjs"
+      ],
+      "exit_code": 0,
+      "seconds": 0.282,
+      "at": "2026-09-07T16:16:42.504650+00:00",
+      "log": "docs/audit/prepublication-calculator-node-2026-09-08.log"
+    },
+    {
+      "check": "range-node-final",
+      "command": [
+        "node",
+        "scripts/test_practical_range.mjs"
+      ],
+      "exit_code": 0,
+      "seconds": 0.297,
+      "at": "2026-09-07T16:16:42.877509+00:00",
+      "log": "docs/audit/prepublication-range-node-final-2026-09-08.log"
+    },
+    {
+      "check": "frontend-build-final",
+      "command": [
+        "npm.cmd",
+        "--prefix",
+        "frontend",
+        "run",
+        "build"
+      ],
+      "exit_code": 2,
+      "seconds": 1.376,
+      "at": "2026-09-07T16:16:43.597898+00:00",
+      "log": "docs/audit/prepublication-frontend-build-final-2026-09-08.log"
+    },
+    {
+      "check": "frontend-build-corrected",
+      "command": [
+        "npm.cmd",
+        "--prefix",
+        "frontend",
+        "run",
+        "build"
+      ],
+      "exit_code": 0,
+      "seconds": 3.746,
+      "at": "2026-09-07T16:17:12.746564+00:00",
+      "log": "docs/audit/prepublication-frontend-build-corrected-2026-09-08.log"
+    },
+    {
+      "check": "controlled-replay",
+      "command": [
+        "python",
+        "scripts/run_controlled_cases.py",
+        "--reference-basis",
+        "docs/paper/submission-2026-09-07/reference_basis_2026-09-07.json",
+        "--live-basis",
+        "docs/paper/submission-2026-09-07/live_basis_2026-09-07.json",
+        "--out-dir",
+        "_local/prepublication-controlled-replay",
+        "--seed",
+        "20260906"
+      ],
+      "exit_code": 0,
+      "seconds": 2.625,
+      "at": "2026-09-07T16:17:28.881867+00:00",
+      "log": "docs/audit/prepublication-controlled-replay-2026-09-08.log"
+    },
+    {
+      "check": "table62",
+      "command": [
+        "python",
+        "scripts/reproduce_catcost_table62.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.084,
+      "at": "2026-09-07T16:17:29.031019+00:00",
+      "log": "docs/audit/prepublication-table62-2026-09-08.log"
+    },
+    {
+      "check": "full-pytest",
+      "command": [
+        "python",
+        "-m",
+        "pytest",
+        "backend/tests",
+        "-q"
+      ],
+      "exit_code": 0,
+      "seconds": 518.795,
+      "at": "2026-09-07T16:20:46.579271+00:00",
+      "log": "docs/audit/prepublication-full-pytest-2026-09-08.log"
+    },
+    {
+      "check": "replay-comparison",
+      "command": [
+        "python",
+        "_local/check_prepub_replay.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.14,
+      "at": "2026-09-07T16:23:11.049445+00:00",
+      "log": "docs/audit/prepublication-replay-comparison-2026-09-08.log"
+    },
+    {
+      "check": "frontend-build-browser-final",
+      "command": [
+        "npm.cmd",
+        "--prefix",
+        "frontend",
+        "run",
+        "build"
+      ],
+      "exit_code": 0,
+      "seconds": 3.551,
+      "at": "2026-09-07T16:24:40.107608+00:00",
+      "log": "docs/audit/prepublication-frontend-build-browser-final-2026-09-08.log"
+    },
+    {
+      "check": "node-final",
+      "command": [
+        "node",
+        "--test",
+        "scripts/test_calculator_rules.mjs",
+        "scripts/test_practical_range.mjs",
+        "scripts/test_scientific_text.mjs",
+        "scripts/hosted-session.test.mjs"
+      ],
+      "exit_code": 0,
+      "seconds": 0.397,
+      "at": "2026-09-07T16:27:02.513346+00:00",
+      "log": "docs/audit/prepublication-node-final-2026-09-08.log"
+    },
+    {
+      "check": "i18n-final",
+      "command": [
+        "npm.cmd",
+        "--prefix",
+        "frontend",
+        "run",
+        "check:i18n"
+      ],
+      "exit_code": 0,
+      "seconds": 0.64,
+      "at": "2026-09-07T16:27:02.744313+00:00",
+      "log": "docs/audit/prepublication-i18n-final-2026-09-08.log"
+    },
+    {
+      "check": "manuscript-final",
+      "command": [
+        "python",
+        "scripts/build_submission_manuscript.py",
+        "--directory",
+        "docs/paper/submission-2026-09-07",
+        "--check"
+      ],
+      "exit_code": 0,
+      "seconds": 0.939,
+      "at": "2026-09-07T16:27:03.055975+00:00",
+      "log": "docs/audit/prepublication-manuscript-final-2026-09-08.log"
+    },
+    {
+      "check": "frontend-lint-final",
+      "command": [
+        "npm.cmd",
+        "--prefix",
+        "frontend",
+        "run",
+        "lint"
+      ],
+      "exit_code": 0,
+      "seconds": 7.533,
+      "at": "2026-09-07T16:27:09.625725+00:00",
+      "log": "docs/audit/prepublication-frontend-lint-final-2026-09-08.log"
+    },
+    {
+      "check": "frontend-build-complete",
+      "command": [
+        "npm.cmd",
+        "--prefix",
+        "frontend",
+        "run",
+        "build"
+      ],
+      "exit_code": 0,
+      "seconds": 3.573,
+      "at": "2026-09-07T16:29:04.197858+00:00",
+      "log": "docs/audit/prepublication-frontend-build-complete-2026-09-08.log"
+    },
+    {
+      "check": "ruff-complete",
+      "command": [
+        "python",
+        "-m",
+        "ruff",
+        "check",
+        "."
+      ],
+      "exit_code": 0,
+      "seconds": 0.135,
+      "at": "2026-09-07T16:30:34.835003+00:00",
+      "log": "docs/audit/prepublication-ruff-complete-2026-09-08.log"
+    },
+    {
+      "check": "node-complete",
+      "command": [
+        "node",
+        "--test",
+        "scripts/test_calculator_rules.mjs",
+        "scripts/test_practical_range.mjs",
+        "scripts/test_scientific_text.mjs",
+        "scripts/hosted-session.test.mjs"
+      ],
+      "exit_code": 0,
+      "seconds": 0.411,
+      "at": "2026-09-07T16:30:35.110916+00:00",
+      "log": "docs/audit/prepublication-node-complete-2026-09-08.log"
+    },
+    {
+      "check": "i18n-complete",
+      "command": [
+        "npm.cmd",
+        "--prefix",
+        "frontend",
+        "run",
+        "check:i18n"
+      ],
+      "exit_code": 0,
+      "seconds": 0.68,
+      "at": "2026-09-07T16:30:35.391391+00:00",
+      "log": "docs/audit/prepublication-i18n-complete-2026-09-08.log"
+    },
+    {
+      "check": "frontend-lint-complete",
+      "command": [
+        "npm.cmd",
+        "--prefix",
+        "frontend",
+        "run",
+        "lint"
+      ],
+      "exit_code": 0,
+      "seconds": 3.734,
+      "at": "2026-09-07T16:30:38.434148+00:00",
+      "log": "docs/audit/prepublication-frontend-lint-complete-2026-09-08.log"
+    },
+    {
+      "check": "desktop-build",
+      "command": [
+        "npm.cmd",
+        "run",
+        "build",
+        "--",
+        "--",
+        "--publish",
+        "never"
+      ],
+      "exit_code": 0,
+      "seconds": 173.711,
+      "at": "2026-09-07T16:33:04.748330+00:00",
+      "log": "docs/audit/prepublication-desktop-build-2026-09-08.log"
+    },
+    {
+      "check": "desktop-smoke",
+      "command": [
+        "npm.cmd",
+        "run",
+        "smoke:desktop"
+      ],
+      "exit_code": 0,
+      "seconds": 16.614,
+      "at": "2026-09-07T16:34:55.743352+00:00",
+      "log": "docs/audit/prepublication-desktop-smoke-2026-09-08.log"
+    },
+    {
+      "check": "profile-isolation",
+      "command": [
+        "python",
+        "_local/check_prepub_profile.py",
+        "after"
+      ],
+      "exit_code": 0,
+      "seconds": 0.193,
+      "at": "2026-09-07T16:35:04.599631+00:00",
+      "log": "docs/audit/prepublication-profile-isolation-2026-09-08.log"
+    }
+  ],
+  "package": {
+    "path": "dist-electron/COMET.Setup.1.4.0.exe",
+    "sha256": "2e330a7b582e0d9dd6987724308e9dd3266aabb683324849aa88fec7aec92a7a"
+  },
+  "note": "Local package prepared without publishing or updating the installed app; source CI34144072490 passed all three jobs. Final documentation-commit CI is linked in PR112.",
+  "source_ci": {
+    "commit": "1c0d1dc920181c512dc73c38430ef39eac470cc0",
+    "url": "https://github.com/hyunjin-kor/COMET/actions/runs/34144072490",
+    "conclusion": "success"
+  }
+}

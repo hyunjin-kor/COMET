@@ -1,0 +1,16 @@
+
+=================================== ERRORS ====================================
+_________ ERROR collecting backend/tests/test_hosted_subscription.py __________
+ImportError while importing test module 'C:\Users\user\Desktop\COMET-autonomous-2026-09-06\backend\tests\test_hosted_subscription.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+C:\Python314\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\tests\test_hosted_subscription.py:8: in <module>
+    from backend.models.hosted import HostedAccount, HostedAuditEvent, HostedOrganization
+E   ImportError: cannot import name 'HostedAuditEvent' from 'backend.models.hosted' (C:\Users\user\Desktop\COMET-autonomous-2026-09-06\backend\models\hosted.py)
+=========================== short test summary info ===========================
+ERROR backend/tests/test_hosted_subscription.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.51s

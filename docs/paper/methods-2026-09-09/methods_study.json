@@ -1,0 +1,1003 @@
+{
+  "classification": "Additional method verification; not new industrial accuracy or a changed recommendation model",
+  "inputs": {
+    "docs/paper/robustness-2026-09-08/decision_robustness.json": "1b3cf44a148cf2b95435d6148b75d4f12f915c1c58c8743ef106821c9bd28059",
+    "docs/sources/paper-methods-evidence-2026-09-09.json": "266434b73858e383cf8826af4fef98ec613cb4862b497939d44af4d945f1cf60"
+  },
+  "normalization": {
+    "cases": 86,
+    "changed": 9,
+    "example": {
+      "family": "ammonia-cracking",
+      "fixed_winner": "co-mgo-la2o3",
+      "reference_winner": "co-mgo-la2o3",
+      "removed": "ru-mgo-premium",
+      "removed_cost": 1265.9574,
+      "renormalized_winner": "ni-alumina-baseline",
+      "rows": [
+        {
+          "cost": 4.7411,
+          "economics_after": 73.6,
+          "economics_before": 100.0,
+          "slug": "co-mgo-la2o3",
+          "total_after": 77.4,
+          "total_before": 89.3
+        },
+        {
+          "cost": 5.8131,
+          "economics_after": 0.0,
+          "economics_before": 99.9,
+          "slug": "ni-mgo-ceo2-interface",
+          "total_after": 42.7,
+          "total_before": 87.7
+        },
+        {
+          "cost": 4.3573,
+          "economics_after": 100.0,
+          "economics_before": 100.0,
+          "slug": "ni-alumina-baseline",
+          "total_after": 87.3,
+          "total_before": 87.3
+        }
+      ],
+      "unit": "$/lb",
+      "weights": {
+        "economics": 0.45,
+        "evidence": 0.2,
+        "performance": 0.15,
+        "route": 0.2
+      }
+    },
+    "fixed_changed": 0,
+    "ledger_note": "Totals are recomputed with application rounding; historical removal ledgers retain a carried-forward total field that the original weighted ranking did not use.",
+    "removals": [
+      {
+        "changed": false,
+        "family": "aem-electrolyzer-oer",
+        "fixed_winner": "cr-doped-amorphous",
+        "reference_winner": "cr-doped-amorphous",
+        "removed": "nico2o4-spinel",
+        "renormalized_winner": "cr-doped-amorphous"
+      },
+      {
+        "changed": false,
+        "family": "aem-electrolyzer-oer",
+        "fixed_winner": "cr-doped-amorphous",
+        "reference_winner": "cr-doped-amorphous",
+        "removed": "nife-ldh-scalable",
+        "renormalized_winner": "cr-doped-amorphous"
+      },
+      {
+        "changed": false,
+        "family": "aem-electrolyzer-oer",
+        "fixed_winner": "cr-doped-amorphous",
+        "reference_winner": "cr-doped-amorphous",
+        "removed": "nife-seed-assisted",
+        "renormalized_winner": "cr-doped-amorphous"
+      },
+      {
+        "changed": false,
+        "family": "ammonia-cracking",
+        "fixed_winner": "co-mgo-la2o3",
+        "reference_winner": "co-mgo-la2o3",
+        "removed": "ni-alumina-baseline",
+        "renormalized_winner": "co-mgo-la2o3"
+      },
+      {
+        "changed": false,
+        "family": "ammonia-cracking",
+        "fixed_winner": "co-mgo-la2o3",
+        "reference_winner": "co-mgo-la2o3",
+        "removed": "ni-mgo-ceo2-interface",
+        "renormalized_winner": "co-mgo-la2o3"
+      },
+      {
+        "changed": true,
+        "family": "ammonia-cracking",
+        "fixed_winner": "co-mgo-la2o3",
+        "reference_winner": "co-mgo-la2o3",
+        "removed": "ru-mgo-premium",
+        "renormalized_winner": "ni-alumina-baseline"
+      },
+      {
+        "changed": false,
+        "family": "ammonia-synthesis",
+        "fixed_winner": "cs-co3mo3n",
+        "reference_winner": "cs-co3mo3n",
+        "removed": "fused-iron-baseline",
+        "renormalized_winner": "cs-co3mo3n"
+      },
+      {
+        "changed": false,
+        "family": "ammonia-synthesis",
+        "fixed_winner": "cs-co3mo3n",
+        "reference_winner": "cs-co3mo3n",
+        "removed": "ru-cafh-lowtemp",
+        "renormalized_winner": "cs-co3mo3n"
+      },
+      {
+        "changed": false,
+        "family": "ammonia-synthesis",
+        "fixed_winner": "cs-co3mo3n",
+        "reference_winner": "cs-co3mo3n",
+        "removed": "ru-graphite-kaap",
+        "renormalized_winner": "cs-co3mo3n"
+      },
+      {
+        "changed": false,
+        "family": "co-prox",
+        "fixed_winner": "cuo-ceo2",
+        "reference_winner": "cuo-ceo2",
+        "removed": "au-tio2-nanogold",
+        "renormalized_winner": "cuo-ceo2"
+      },
+      {
+        "changed": false,
+        "family": "co-prox",
+        "fixed_winner": "cuo-ceo2",
+        "reference_winner": "cuo-ceo2",
+        "removed": "pt-fe-alumina",
+        "renormalized_winner": "cuo-ceo2"
+      },
+      {
+        "changed": true,
+        "family": "co2-electroreduction",
+        "fixed_winner": "ag-co-mea",
+        "reference_winner": "ag-co-mea",
+        "removed": "au-co-co2rr",
+        "renormalized_winner": "cu-multicarbon-co2rr"
+      },
+      {
+        "changed": false,
+        "family": "co2-electroreduction",
+        "fixed_winner": "ag-co-mea",
+        "reference_winner": "ag-co-mea",
+        "removed": "cu-multicarbon-co2rr",
+        "renormalized_winner": "ag-co-mea"
+      },
+      {
+        "changed": false,
+        "family": "co2-electroreduction",
+        "fixed_winner": "ag-co-mea",
+        "reference_winner": "ag-co-mea",
+        "removed": "sn-formate-co2rr",
+        "renormalized_winner": "ag-co-mea"
+      },
+      {
+        "changed": false,
+        "family": "co2-methanation",
+        "fixed_winner": "ni-ceo2-lowtemp",
+        "reference_winner": "ni-ceo2-lowtemp",
+        "removed": "ni-alumina-baseline",
+        "renormalized_winner": "ni-ceo2-lowtemp"
+      },
+      {
+        "changed": false,
+        "family": "co2-methanation",
+        "fixed_winner": "ni-ceo2-lowtemp",
+        "reference_winner": "ni-ceo2-lowtemp",
+        "removed": "ru-layered-titanate",
+        "renormalized_winner": "ni-ceo2-lowtemp"
+      },
+      {
+        "changed": false,
+        "family": "co2-methanation",
+        "fixed_winner": "ni-ceo2-lowtemp",
+        "reference_winner": "ni-ceo2-lowtemp",
+        "removed": "ru-mnox-photothermal",
+        "renormalized_winner": "ni-ceo2-lowtemp"
+      },
+      {
+        "changed": false,
+        "family": "co2-methanol",
+        "fixed_winner": "cza-baseline",
+        "reference_winner": "cza-baseline",
+        "removed": "cu-zrox-interface",
+        "renormalized_winner": "cza-baseline"
+      },
+      {
+        "changed": false,
+        "family": "co2-methanol",
+        "fixed_winner": "cza-baseline",
+        "reference_winner": "cza-baseline",
+        "removed": "in2o3-zro2-lowtemp",
+        "renormalized_winner": "cza-baseline"
+      },
+      {
+        "changed": false,
+        "family": "co2-methanol",
+        "fixed_winner": "cza-baseline",
+        "reference_winner": "cza-baseline",
+        "removed": "pd-in2o3",
+        "renormalized_winner": "cza-baseline"
+      },
+      {
+        "changed": true,
+        "family": "co2-to-formate",
+        "fixed_winner": "pdag-ndcarbon-co2fa",
+        "reference_winner": "pdag-ndcarbon-co2fa",
+        "removed": "ir-pincer-co2fa",
+        "renormalized_winner": "ru-sa-ldh"
+      },
+      {
+        "changed": false,
+        "family": "co2-to-formate",
+        "fixed_winner": "pdag-ndcarbon-co2fa",
+        "reference_winner": "pdag-ndcarbon-co2fa",
+        "removed": "ru-pincer-co2fa",
+        "renormalized_winner": "pdag-ndcarbon-co2fa"
+      },
+      {
+        "changed": false,
+        "family": "co2-to-formate",
+        "fixed_winner": "pdag-ndcarbon-co2fa",
+        "reference_winner": "pdag-ndcarbon-co2fa",
+        "removed": "ru-sa-ldh",
+        "renormalized_winner": "pdag-ndcarbon-co2fa"
+      },
+      {
+        "changed": true,
+        "family": "dry-reforming",
+        "fixed_winner": "ni-co-almgo",
+        "reference_winner": "ni-co-almgo",
+        "removed": "ir-ceria-premium",
+        "renormalized_winner": "ni-zeolite-stable"
+      },
+      {
+        "changed": false,
+        "family": "dry-reforming",
+        "fixed_winner": "ni-co-almgo",
+        "reference_winner": "ni-co-almgo",
+        "removed": "ni-single-atom-ceria",
+        "renormalized_winner": "ni-co-almgo"
+      },
+      {
+        "changed": false,
+        "family": "dry-reforming",
+        "fixed_winner": "ni-co-almgo",
+        "reference_winner": "ni-co-almgo",
+        "removed": "ni-zeolite-stable",
+        "renormalized_winner": "ni-co-almgo"
+      },
+      {
+        "changed": false,
+        "family": "ethylene-epoxidation",
+        "fixed_winner": "agcs-industrial",
+        "reference_winner": "agcs-industrial",
+        "removed": "ag-alumina-baseline",
+        "renormalized_winner": "agcs-industrial"
+      },
+      {
+        "changed": false,
+        "family": "ethylene-epoxidation",
+        "fixed_winner": "agcs-industrial",
+        "reference_winner": "agcs-industrial",
+        "removed": "agcsre-modern",
+        "renormalized_winner": "agcs-industrial"
+      },
+      {
+        "changed": false,
+        "family": "ethylene-epoxidation",
+        "fixed_winner": "agcs-industrial",
+        "reference_winner": "agcs-industrial",
+        "removed": "cu-ag-bimetallic",
+        "renormalized_winner": "agcs-industrial"
+      },
+      {
+        "changed": false,
+        "family": "fischer-tropsch-synthesis",
+        "fixed_winner": "fe-silica-lower-olefin",
+        "reference_winner": "fe-silica-lower-olefin",
+        "removed": "co-alumina-fts",
+        "renormalized_winner": "fe-silica-lower-olefin"
+      },
+      {
+        "changed": false,
+        "family": "fischer-tropsch-synthesis",
+        "fixed_winner": "fe-silica-lower-olefin",
+        "reference_winner": "fe-silica-lower-olefin",
+        "removed": "co-cnt-structured",
+        "renormalized_winner": "fe-silica-lower-olefin"
+      },
+      {
+        "changed": false,
+        "family": "fischer-tropsch-synthesis",
+        "fixed_winner": "fe-silica-lower-olefin",
+        "reference_winner": "fe-silica-lower-olefin",
+        "removed": "fe-cu-k-precipitated",
+        "renormalized_winner": "fe-silica-lower-olefin"
+      },
+      {
+        "changed": false,
+        "family": "formic-acid-dehydrogenation",
+        "fixed_winner": "co-nc-nonnoble",
+        "reference_winner": "co-nc-nonnoble",
+        "removed": "aupd-mil101",
+        "renormalized_winner": "co-nc-nonnoble"
+      },
+      {
+        "changed": false,
+        "family": "formic-acid-dehydrogenation",
+        "fixed_winner": "co-nc-nonnoble",
+        "reference_winner": "co-nc-nonnoble",
+        "removed": "pd-carbon-baseline",
+        "renormalized_winner": "co-nc-nonnoble"
+      },
+      {
+        "changed": false,
+        "family": "formic-acid-dehydrogenation",
+        "fixed_winner": "co-nc-nonnoble",
+        "reference_winner": "co-nc-nonnoble",
+        "removed": "ptmo-gasphase-premium",
+        "renormalized_winner": "co-nc-nonnoble"
+      },
+      {
+        "changed": false,
+        "family": "fuel-cell-orr",
+        "fixed_winner": "fen-c-pgmfree-cathode",
+        "reference_winner": "fen-c-pgmfree-cathode",
+        "removed": "ptc-baseline-cathode",
+        "renormalized_winner": "fen-c-pgmfree-cathode"
+      },
+      {
+        "changed": false,
+        "family": "fuel-cell-orr",
+        "fixed_winner": "fen-c-pgmfree-cathode",
+        "reference_winner": "fen-c-pgmfree-cathode",
+        "removed": "ptco-intermetallic-cathode",
+        "renormalized_winner": "fen-c-pgmfree-cathode"
+      },
+      {
+        "changed": false,
+        "family": "fuel-cell-orr",
+        "fixed_winner": "fen-c-pgmfree-cathode",
+        "reference_winner": "fen-c-pgmfree-cathode",
+        "removed": "ptni-octahedra",
+        "renormalized_winner": "fen-c-pgmfree-cathode"
+      },
+      {
+        "changed": false,
+        "family": "glycerol-electrooxidation",
+        "fixed_winner": "niooh-glycerol-anode",
+        "reference_winner": "niooh-glycerol-anode",
+        "removed": "au-c-glycerol-selectivity",
+        "renormalized_winner": "niooh-glycerol-anode"
+      },
+      {
+        "changed": false,
+        "family": "glycerol-electrooxidation",
+        "fixed_winner": "niooh-glycerol-anode",
+        "reference_winner": "niooh-glycerol-anode",
+        "removed": "pt-bi-dha",
+        "renormalized_winner": "niooh-glycerol-anode"
+      },
+      {
+        "changed": false,
+        "family": "glycerol-electrooxidation",
+        "fixed_winner": "niooh-glycerol-anode",
+        "reference_winner": "niooh-glycerol-anode",
+        "removed": "pt-c-glycerol-anode",
+        "renormalized_winner": "niooh-glycerol-anode"
+      },
+      {
+        "changed": false,
+        "family": "hydrodeoxygenation",
+        "fixed_winner": "comos-hdo",
+        "reference_winner": "comos-hdo",
+        "removed": "nimo-carbon-hdo",
+        "renormalized_winner": "comos-hdo"
+      },
+      {
+        "changed": false,
+        "family": "hydrodeoxygenation",
+        "fixed_winner": "comos-hdo",
+        "reference_winner": "comos-hdo",
+        "removed": "pt-silica-hdo",
+        "renormalized_winner": "comos-hdo"
+      },
+      {
+        "changed": false,
+        "family": "hydrodeoxygenation",
+        "fixed_winner": "comos-hdo",
+        "reference_winner": "comos-hdo",
+        "removed": "ru-carbon-hdo",
+        "renormalized_winner": "comos-hdo"
+      },
+      {
+        "changed": false,
+        "family": "hydrogen-evolution-reaction",
+        "fixed_winner": "nimo-alkaline-her-cathode",
+        "reference_winner": "nimo-alkaline-her-cathode",
+        "removed": "mos2-acidic-her-cathode",
+        "renormalized_winner": "nimo-alkaline-her-cathode"
+      },
+      {
+        "changed": false,
+        "family": "hydrogen-evolution-reaction",
+        "fixed_winner": "nimo-alkaline-her-cathode",
+        "reference_winner": "nimo-alkaline-her-cathode",
+        "removed": "pt-carbon-her-cathode",
+        "renormalized_winner": "nimo-alkaline-her-cathode"
+      },
+      {
+        "changed": false,
+        "family": "hydrogen-evolution-reaction",
+        "fixed_winner": "nimo-alkaline-her-cathode",
+        "reference_winner": "nimo-alkaline-her-cathode",
+        "removed": "ru-c2n-her",
+        "renormalized_winner": "nimo-alkaline-her-cathode"
+      },
+      {
+        "changed": false,
+        "family": "methane-pyrolysis",
+        "fixed_winner": "activated-carbon-autocatalytic",
+        "reference_winner": "activated-carbon-autocatalytic",
+        "removed": "fe-alumina-pyrolysis",
+        "renormalized_winner": "activated-carbon-autocatalytic"
+      },
+      {
+        "changed": false,
+        "family": "methane-pyrolysis",
+        "fixed_winner": "activated-carbon-autocatalytic",
+        "reference_winner": "activated-carbon-autocatalytic",
+        "removed": "molten-ni-bi",
+        "renormalized_winner": "activated-carbon-autocatalytic"
+      },
+      {
+        "changed": false,
+        "family": "methane-pyrolysis",
+        "fixed_winner": "activated-carbon-autocatalytic",
+        "reference_winner": "activated-carbon-autocatalytic",
+        "removed": "ni-sio2-highload",
+        "renormalized_winner": "activated-carbon-autocatalytic"
+      },
+      {
+        "changed": false,
+        "family": "methanol-to-olefins",
+        "fixed_winner": "hzsm5-mth",
+        "reference_winner": "hzsm5-mth",
+        "removed": "nano-sapo-34",
+        "renormalized_winner": "hzsm5-mth"
+      },
+      {
+        "changed": false,
+        "family": "methanol-to-olefins",
+        "fixed_winner": "hzsm5-mth",
+        "reference_winner": "hzsm5-mth",
+        "removed": "sapo-34-light-olefin",
+        "renormalized_winner": "hzsm5-mth"
+      },
+      {
+        "changed": false,
+        "family": "methanol-to-olefins",
+        "fixed_winner": "hzsm5-mth",
+        "reference_winner": "hzsm5-mth",
+        "removed": "zn-zsm5-aromatics",
+        "renormalized_winner": "hzsm5-mth"
+      },
+      {
+        "changed": true,
+        "family": "nh3-scr",
+        "fixed_winner": "v2o5-wo3-tio2",
+        "reference_winner": "v2o5-wo3-tio2",
+        "removed": "cu-ssz-13",
+        "renormalized_winner": "fe-zsm-5"
+      },
+      {
+        "changed": false,
+        "family": "nh3-scr",
+        "fixed_winner": "v2o5-wo3-tio2",
+        "reference_winner": "v2o5-wo3-tio2",
+        "removed": "fe-zsm-5",
+        "renormalized_winner": "v2o5-wo3-tio2"
+      },
+      {
+        "changed": false,
+        "family": "nitrogen-reduction-reaction",
+        "fixed_winner": "li-mediated-nrr",
+        "reference_winner": "li-mediated-nrr",
+        "removed": "aqueous-nrr-cu",
+        "renormalized_winner": "li-mediated-nrr"
+      },
+      {
+        "changed": true,
+        "family": "nitrogen-reduction-reaction",
+        "fixed_winner": "li-mediated-nrr",
+        "reference_winner": "li-mediated-nrr",
+        "removed": "li-flow-shuttle",
+        "renormalized_winner": "plasma-nrr"
+      },
+      {
+        "changed": false,
+        "family": "nitrogen-reduction-reaction",
+        "fixed_winner": "li-mediated-nrr",
+        "reference_winner": "li-mediated-nrr",
+        "removed": "plasma-nrr",
+        "renormalized_winner": "li-mediated-nrr"
+      },
+      {
+        "changed": false,
+        "family": "olefin-metathesis",
+        "fixed_winner": "wo3-silica-oct",
+        "reference_winner": "wo3-silica-oct",
+        "removed": "mo-silica-alumina",
+        "renormalized_winner": "wo3-silica-oct"
+      },
+      {
+        "changed": false,
+        "family": "olefin-metathesis",
+        "fixed_winner": "wo3-silica-oct",
+        "reference_winner": "wo3-silica-oct",
+        "removed": "re2o7-alumina-mild",
+        "renormalized_winner": "wo3-silica-oct"
+      },
+      {
+        "changed": false,
+        "family": "olefin-metathesis",
+        "fixed_winner": "wo3-silica-oct",
+        "reference_winner": "wo3-silica-oct",
+        "removed": "w-h-alumina",
+        "renormalized_winner": "wo3-silica-oct"
+      },
+      {
+        "changed": false,
+        "family": "pem-electrolyzer-oer",
+        "fixed_winner": "pem-low-ir-interface",
+        "reference_winner": "pem-low-ir-interface",
+        "removed": "iro2-tio2-supported",
+        "renormalized_winner": "pem-low-ir-interface"
+      },
+      {
+        "changed": false,
+        "family": "pem-electrolyzer-oer",
+        "fixed_winner": "pem-low-ir-interface",
+        "reference_winner": "pem-low-ir-interface",
+        "removed": "pem-irox-baseline",
+        "renormalized_winner": "pem-low-ir-interface"
+      },
+      {
+        "changed": false,
+        "family": "pem-electrolyzer-oer",
+        "fixed_winner": "pem-low-ir-interface",
+        "reference_winner": "pem-low-ir-interface",
+        "removed": "pem-ru-rich-acidic",
+        "renormalized_winner": "pem-low-ir-interface"
+      },
+      {
+        "changed": false,
+        "family": "photocatalytic-co2-reduction",
+        "fixed_winner": "tio2-photo-co2",
+        "reference_winner": "tio2-photo-co2",
+        "removed": "bivo4-visible",
+        "renormalized_winner": "tio2-photo-co2"
+      },
+      {
+        "changed": false,
+        "family": "photocatalytic-co2-reduction",
+        "fixed_winner": "tio2-photo-co2",
+        "reference_winner": "tio2-photo-co2",
+        "removed": "cu2o-mof-co2",
+        "renormalized_winner": "tio2-photo-co2"
+      },
+      {
+        "changed": false,
+        "family": "photocatalytic-co2-reduction",
+        "fixed_winner": "tio2-photo-co2",
+        "reference_winner": "tio2-photo-co2",
+        "removed": "gcn-sns2-zscheme",
+        "renormalized_winner": "tio2-photo-co2"
+      },
+      {
+        "changed": false,
+        "family": "photocatalytic-water-splitting",
+        "fixed_winner": "pt-tio2-cocatalyst",
+        "reference_winner": "pt-tio2-cocatalyst",
+        "removed": "gcn-metal-free",
+        "renormalized_winner": "pt-tio2-cocatalyst"
+      },
+      {
+        "changed": true,
+        "family": "photocatalytic-water-splitting",
+        "fixed_winner": "pt-tio2-cocatalyst",
+        "reference_winner": "pt-tio2-cocatalyst",
+        "removed": "srtio3-al-qe-benchmark",
+        "renormalized_winner": "tio2-anatase-baseline"
+      },
+      {
+        "changed": false,
+        "family": "photocatalytic-water-splitting",
+        "fixed_winner": "pt-tio2-cocatalyst",
+        "reference_winner": "pt-tio2-cocatalyst",
+        "removed": "tio2-anatase-baseline",
+        "renormalized_winner": "pt-tio2-cocatalyst"
+      },
+      {
+        "changed": false,
+        "family": "propane-dehydrogenation",
+        "fixed_winner": "crox-alumina-catofin",
+        "reference_winner": "crox-alumina-catofin",
+        "removed": "bn-odhp",
+        "renormalized_winner": "crox-alumina-catofin"
+      },
+      {
+        "changed": false,
+        "family": "propane-dehydrogenation",
+        "fixed_winner": "crox-alumina-catofin",
+        "reference_winner": "crox-alumina-catofin",
+        "removed": "ptsn-alumina-pdh",
+        "renormalized_winner": "crox-alumina-catofin"
+      },
+      {
+        "changed": false,
+        "family": "propane-dehydrogenation",
+        "fixed_winner": "crox-alumina-catofin",
+        "reference_winner": "crox-alumina-catofin",
+        "removed": "ptzn-intermetallic-pdh",
+        "renormalized_winner": "crox-alumina-catofin"
+      },
+      {
+        "changed": false,
+        "family": "rwgs",
+        "fixed_winner": "cu-ceria-baseline",
+        "reference_winner": "cu-ceria-baseline",
+        "removed": "cs-fe-cu-alumina",
+        "renormalized_winner": "cu-ceria-baseline"
+      },
+      {
+        "changed": false,
+        "family": "rwgs",
+        "fixed_winner": "cu-ceria-baseline",
+        "reference_winner": "cu-ceria-baseline",
+        "removed": "mo2n-hightemp",
+        "renormalized_winner": "cu-ceria-baseline"
+      },
+      {
+        "changed": false,
+        "family": "rwgs",
+        "fixed_winner": "cu-ceria-baseline",
+        "reference_winner": "cu-ceria-baseline",
+        "removed": "pt-tio2-premium",
+        "renormalized_winner": "cu-ceria-baseline"
+      },
+      {
+        "changed": false,
+        "family": "selective-acetylene-hydrogenation",
+        "fixed_winner": "nizn-intermetallic",
+        "reference_winner": "nizn-intermetallic",
+        "removed": "pd-alumina-baseline",
+        "renormalized_winner": "nizn-intermetallic"
+      },
+      {
+        "changed": false,
+        "family": "selective-acetylene-hydrogenation",
+        "fixed_winner": "nizn-intermetallic",
+        "reference_winner": "nizn-intermetallic",
+        "removed": "pdag-bimetallic",
+        "renormalized_winner": "nizn-intermetallic"
+      },
+      {
+        "changed": false,
+        "family": "selective-acetylene-hydrogenation",
+        "fixed_winner": "nizn-intermetallic",
+        "reference_winner": "nizn-intermetallic",
+        "removed": "pdcu-saa",
+        "renormalized_winner": "nizn-intermetallic"
+      },
+      {
+        "changed": true,
+        "family": "steam-methane-reforming",
+        "fixed_winner": "ni-calcium-aluminate",
+        "reference_winner": "ni-calcium-aluminate",
+        "removed": "rh-alumina-compact",
+        "renormalized_winner": "sn-ni-coking-resistant"
+      },
+      {
+        "changed": false,
+        "family": "steam-methane-reforming",
+        "fixed_winner": "ni-calcium-aluminate",
+        "reference_winner": "ni-calcium-aluminate",
+        "removed": "sn-ni-coking-resistant",
+        "renormalized_winner": "ni-calcium-aluminate"
+      },
+      {
+        "changed": false,
+        "family": "syngas-methanol",
+        "fixed_winner": "cza-industrial",
+        "reference_winner": "cza-industrial",
+        "removed": "ga-promoted-cza",
+        "renormalized_winner": "cza-industrial"
+      },
+      {
+        "changed": false,
+        "family": "syngas-methanol",
+        "fixed_winner": "cza-industrial",
+        "reference_winner": "cza-industrial",
+        "removed": "pd-zno-intermetallic",
+        "renormalized_winner": "cza-industrial"
+      },
+      {
+        "changed": false,
+        "family": "water-gas-shift",
+        "fixed_winner": "cu-zno-baseline",
+        "reference_winner": "cu-zno-baseline",
+        "removed": "co-ceria-interface",
+        "renormalized_winner": "cu-zno-baseline"
+      },
+      {
+        "changed": false,
+        "family": "water-gas-shift",
+        "fixed_winner": "cu-zno-baseline",
+        "reference_winner": "cu-zno-baseline",
+        "removed": "fe-cr-hts",
+        "renormalized_winner": "cu-zno-baseline"
+      },
+      {
+        "changed": true,
+        "family": "water-gas-shift",
+        "fixed_winner": "cu-zno-baseline",
+        "reference_winner": "cu-zno-baseline",
+        "removed": "pt-ceria-premium",
+        "renormalized_winner": "fe-cr-hts"
+      }
+    ]
+  },
+  "published_yield_case": [
+    {
+      "charged_ni_per_recovered_ni": 1.2484394506866419,
+      "fixed_input_yield_cost_ratio_to_gen1": 1.0,
+      "generation": "Gen 1",
+      "reported_materials_cost_usd_per_kg": 116.25,
+      "yield_pct": 80.1
+    },
+    {
+      "charged_ni_per_recovered_ni": 76.92307692307692,
+      "fixed_input_yield_cost_ratio_to_gen1": 61.615384615384606,
+      "generation": "Gen 2",
+      "reported_materials_cost_usd_per_kg": 6691.16,
+      "yield_pct": 1.3
+    },
+    {
+      "charged_ni_per_recovered_ni": 1.17096018735363,
+      "fixed_input_yield_cost_ratio_to_gen1": 0.9379391100702574,
+      "generation": "Gen 4",
+      "reported_materials_cost_usd_per_kg": 49.19,
+      "yield_pct": 85.4
+    }
+  ],
+  "recipe": {
+    "classification": "Synthetic arithmetic demonstration",
+    "components": [
+      {
+        "name": "Ni",
+        "price_per_lb": 10,
+        "recipe_consumption": {
+          "precursor_name": "Synthetic arithmetic precursor",
+          "price_per_kg": 5,
+          "purity_fraction": 0.8,
+          "retained_component_fraction": 0.25,
+          "source_note": "Illustrative assumptions, not a supplier quotation or measured synthesis",
+          "yield_fraction": 0.5
+        },
+        "role": "active_metal",
+        "wt_pct": 20
+      },
+      {
+        "name": "Al2O3",
+        "price_per_lb": 0.9071858188712795,
+        "role": "support",
+        "wt_pct": 80
+      }
+    ],
+    "consumables": [
+      {
+        "kg_per_kg_catalyst": 3,
+        "name": "Synthetic net wash consumption",
+        "price_per_kg": 0.5,
+        "source_note": "Illustrative net purchase; no inferred recycling"
+      }
+    ],
+    "consumables_usd_per_kg": 1.5,
+    "engine_result": {
+      "components": [
+        {
+          "cost_pct": 76.3,
+          "cost_per_lb_cat": 4.535929,
+          "name": "Ni",
+          "precursor_markup": 1.0,
+          "price_per_lb": 10.0,
+          "recipe_consumption": {
+            "cost_per_kg_catalyst": 10.0,
+            "precursor_name": "Synthetic arithmetic precursor",
+            "price_per_kg": 5.0,
+            "purchased_kg_per_kg_catalyst": 2.0,
+            "purity_fraction": 0.8,
+            "retained_component_fraction": 0.25,
+            "source_note": "Illustrative assumptions, not a supplier quotation or measured synthesis",
+            "yield_fraction": 0.5
+          },
+          "role": "active_metal",
+          "wt_frac": 0.2,
+          "wt_pct": 20.0
+        },
+        {
+          "cost_pct": 12.2,
+          "cost_per_lb_cat": 0.725749,
+          "name": "Al2O3",
+          "precursor_markup": 1.0,
+          "price_per_lb": 0.9072,
+          "role": "support",
+          "wt_frac": 0.8,
+          "wt_pct": 80.0
+        }
+      ],
+      "consumables": [
+        {
+          "cost_pct": 11.5,
+          "cost_per_lb_cat": 0.680389,
+          "kg_per_kg_catalyst": 3.0,
+          "name": "Synthetic net wash consumption",
+          "price_per_kg": 0.5,
+          "source_note": "Illustrative net purchase; no inferred recycling"
+        }
+      ],
+      "costing_basis": "User-supplied purchased inputs per kg of finished catalyst; no solvent recovery credit.",
+      "total_materials_cost_per_lb": 5.942067
+    },
+    "precursor_usd_per_kg": 10,
+    "purchased_precursor_kg_per_kg": 2,
+    "support_usd_per_kg": 1.6,
+    "total_usd_per_kg": 13.1
+  },
+  "schema_version": 1,
+  "seed": 20260906,
+  "uncertainty": [
+    {
+      "classification": "Synthetic scenario; no calibrated distribution",
+      "fixed_input_point_equal": true,
+      "input": {
+        "basis_year": 2017,
+        "components": [
+          {
+            "name": "Ni",
+            "price_per_lb": 10,
+            "recipe_consumption": {
+              "precursor_name": "Synthetic arithmetic precursor",
+              "price_per_kg": 5,
+              "purity_fraction": 0.8,
+              "retained_component_fraction": 0.25,
+              "source_note": "Illustrative assumptions, not a supplier quotation or measured synthesis",
+              "yield_fraction": 0.5
+            },
+            "role": "active_metal",
+            "wt_pct": 20
+          },
+          {
+            "name": "Al2O3",
+            "price_per_lb": 0.9071858188712795,
+            "role": "support",
+            "wt_pct": 80
+          }
+        ],
+        "consumables": [
+          {
+            "kg_per_kg_catalyst": 3,
+            "name": "Synthetic net wash consumption",
+            "price_per_kg": 0.5,
+            "source_note": "Illustrative net purchase; no inferred recycling"
+          }
+        ],
+        "order_size_tons": 20,
+        "steps": [
+          "mixer_slurry",
+          "incipient_wetness",
+          "dryer_rotary_100_300C"
+        ],
+        "target_year": 2017
+      },
+      "name": "thermal_recipe",
+      "ranges": {
+        "active_component_price": [
+          0.8,
+          1.2
+        ]
+      },
+      "result": {
+        "application_family": "general",
+        "baseline": 8.9971,
+        "baseline_price_per_kg": 19.8352,
+        "baseline_price_per_lb": 8.9971,
+        "catalyst_domain": "thermal",
+        "composition": "20.0% Ni/Al2O3",
+        "failure_reasons": {},
+        "fixed_recipe_assumptions": "Precursor content, purity, retention yield, production rate and consumable quantities/prices are fixed; precursor purchase prices follow their component role.",
+        "max": 10.2334,
+        "mean": 8.9997,
+        "median": 9.0312,
+        "metric": "selling_price",
+        "min": 7.7554,
+        "n_failed": 0,
+        "n_simulations": 1000,
+        "n_successful": 1000,
+        "p25": 8.3678,
+        "p5": 7.889,
+        "p75": 9.6007,
+        "p95": 10.1152,
+        "seed": 20260906,
+        "std": 0.7142,
+        "uncertainties_applied": {
+          "active_component_price": [
+            0.8,
+            1.2
+          ]
+        },
+        "unit": "$/lb"
+      },
+      "same_seed_equal": true
+    },
+    {
+      "classification": "Synthetic scenario; no calibrated distribution",
+      "fixed_input_point_equal": true,
+      "input": {
+        "application_family": "fuel_cell",
+        "basis_year": 2017,
+        "catalyst_domain": "electrocatalyst",
+        "components": [
+          {
+            "name": "Pt/C",
+            "price_per_lb": 100,
+            "role": "active_catalyst",
+            "wt_pct": 100
+          }
+        ],
+        "electrode_input": {
+          "active_area_cm2": 25,
+          "catalyst_loading_mg_cm2": 0.5,
+          "membrane_cost_per_cm2": 0.2,
+          "substrate_cost_per_cm2": 0.1
+        },
+        "order_size_tons": 2,
+        "steps": [
+          "membrane_pretreatment"
+        ],
+        "target_year": 2017
+      },
+      "name": "electrode_assembly",
+      "ranges": {
+        "electrode_adjunct_price": [
+          0.8,
+          1.2
+        ]
+      },
+      "result": {
+        "application_family": "fuel_cell",
+        "baseline": 0.30011,
+        "catalyst_domain": "electrocatalyst",
+        "composition": "Pt/C",
+        "failure_reasons": {},
+        "max": 0.359947,
+        "mean": 0.300204,
+        "median": 0.302266,
+        "metric": "electrode_assembly_cost",
+        "min": 0.240134,
+        "n_failed": 0,
+        "n_simulations": 1000,
+        "n_successful": 1000,
+        "p25": 0.269194,
+        "p5": 0.24459,
+        "p75": 0.330816,
+        "p95": 0.353403,
+        "seed": 20260906,
+        "std": 0.034845,
+        "uncertainties_applied": {
+          "electrode_adjunct_price": [
+            0.8,
+            1.2
+          ]
+        },
+        "unit": "$/cm2"
+      },
+      "same_seed_equal": true
+    }
+  ],
+  "yield_case_note": "Published yields are experimental, reported costs are modeled with CatCost. Inverse-yield arithmetic holds all other inputs fixed and does not reproduce their changed-reagent estimates or measure prediction error."
+}

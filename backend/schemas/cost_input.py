@@ -8,6 +8,8 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from backend.core.material_pricing import mass_price_to_per_lb
 from backend.core.price_escalation import latest_index_year
+from backend.schemas.cost_evidence import PurchaseEvidence
+from backend.schemas.recipe_input import ConsumableInput, PrecursorConsumption
 
 PriceUnit = Literal["$/lb", "$/kg", "$/troy_oz"]
 PriceBasis = Literal["live", "reference"]
@@ -22,7 +24,7 @@ ApplicationFamily = Literal[
 class ComponentInput(BaseModel):
     """One component of the catalyst formulation."""
 
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra="ignore", allow_inf_nan=False)
 
     role: Literal["active_metal", "active_catalyst", "promoter", "support"] = "active_metal"
     material_key: str | None = Field(
@@ -39,9 +41,13 @@ class ComponentInput(BaseModel):
         default=1.0, ge=1.0,
         description="Precursor conversion markup (1.0 = use pure metal price)",
     )
+    recipe_consumption: PrecursorConsumption | None = None
+    purchase_evidence: PurchaseEvidence | None = None
 
     @model_validator(mode="after")
     def validate_component(self) -> ComponentInput:
+        if self.recipe_consumption is not None and self.precursor_markup != 1.0:
+            raise ValueError("Recipe consumption cannot also apply a precursor markup")
         if not self.material_key and not self.name:
             raise ValueError("Component requires either name or material_key")
         if self.price_per_lb is None and not self.material_key:
@@ -52,7 +58,7 @@ class ComponentInput(BaseModel):
 class ElectrodeCostInput(BaseModel):
     """Optional area-based coating model for electrocatalyst workflows."""
 
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra="ignore", allow_inf_nan=False)
 
     application_family: ApplicationFamily = "general"
     catalyst_material_key: str | None = None
@@ -91,7 +97,7 @@ class CostCalculationRequest(BaseModel):
     so you do not need to pre-normalize (though it is good practice).
     """
 
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra="ignore", allow_inf_nan=False)
 
     components: list[ComponentInput] | None = Field(
         default=None,
@@ -114,6 +120,9 @@ class CostCalculationRequest(BaseModel):
     application_family: ApplicationFamily = Field(default="general")
     template_id: str | None = None
     order_size_tons: float = Field(default=10.0, gt=0)
+    production_rate_ton_per_day: float | None = Field(default=None, gt=0, allow_inf_nan=False)
+    production_rate_note: str = Field(default="", max_length=2000)
+    consumables: list[ConsumableInput] = Field(default_factory=list, max_length=30)
     ga_overhead_pct: float = Field(default=0.05, ge=0, le=1)
     sard_pct: float = Field(default=0.05, ge=0, le=1)
     basis_year: int = Field(default=2017)
@@ -132,6 +141,13 @@ class CostCalculationRequest(BaseModel):
 
     @model_validator(mode="after")
     def validate_payload(self) -> CostCalculationRequest:
+        if self.production_rate_ton_per_day is not None and not self.production_rate_note.strip():
+            raise ValueError("An effective production rate requires a source or assumption note")
+        if self.catalyst_domain == "electrocatalyst" and (
+            self.production_rate_ton_per_day is not None or self.consumables
+            or any(c.recipe_consumption is not None for c in self.components or [])
+        ):
+            raise ValueError("Production-rate and recipe consumption inputs apply to thermal manufacture only")
         if self.components:
             if self.catalyst_domain == "thermal" and len(self.components) > 10:
                 raise ValueError("Thermal workflows support at most ten total components")
@@ -194,7 +210,7 @@ class CostCalculationRequest(BaseModel):
 class QuickCalculationRequest(BaseModel):
     """Simplified single-metal input for POST /api/calculate/quick."""
 
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra="ignore", allow_inf_nan=False)
 
     metal_symbol: str = Field(..., min_length=1, max_length=64)
     metal_price: float = Field(..., gt=0)

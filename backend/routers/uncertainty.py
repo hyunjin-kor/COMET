@@ -1,33 +1,42 @@
 """Monte Carlo uncertainty analysis endpoint."""
 
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 from sqlmodel import Session
 
 from backend.core.uncertainty import run_cost_request_monte_carlo, run_monte_carlo
 from backend.database import get_session
 from backend.routers.calculator import _prepare_calculation_context
-from backend.schemas.cost_input import CostCalculationRequest
+from backend.schemas.cost_input import CostCalculationRequest, PriceUnit
 
 router = APIRouter(prefix="/api", tags=["uncertainty"])
 
 
 class UncertaintyRequest(BaseModel):
+    model_config = ConfigDict(allow_inf_nan=False)
+
     calculation_input: CostCalculationRequest | None = None
     metal_symbol: str | None = None
     metal_price: float | None = Field(default=None, gt=0)
-    metal_price_unit: str = "$/troy_oz"
+    metal_price_unit: PriceUnit = "$/troy_oz"
     metal_loading_wt_pct: float | None = Field(default=None, gt=0, le=100)
     support_name: str = "Al2O3"
-    support_price_per_lb: float = 0.50
+    support_price_per_lb: float = Field(default=0.50, ge=0)
     steps: list[str] = ["mixer_slurry", "incipient_wetness", "dryer_rotary_100_300C"]
-    order_size_tons: float = 10.0
+    order_size_tons: float = Field(default=10.0, gt=0)
     n_simulations: int = Field(default=1000, ge=100, le=10000)
+    seed: int | None = Field(default=None, ge=0)
     uncertainties: dict[str, list[float]] | None = None
 
     @model_validator(mode="after")
     def validate_payload(self) -> "UncertaintyRequest":
         if self.uncertainties:
+            supported = ({"active_component_price", "promoter_price", "support_price",
+                          "electrode_adjunct_price", "order_size_tons"} if self.calculation_input is not None
+                         else {"metal_price", "support_price_per_lb", "order_size_tons", "metal_loading_wt_pct"})
+            unknown = set(self.uncertainties) - supported
+            if unknown:
+                raise ValueError(f"Unsupported uncertainty parameters: {', '.join(sorted(unknown))}")
             for name, bounds in self.uncertainties.items():
                 if len(bounds) != 2:
                     raise ValueError(
@@ -66,7 +75,7 @@ def uncertainty_analysis(
 ):
     """Run Monte Carlo simulation on cost estimation."""
     uncertainties = None
-    if req.uncertainties:
+    if req.uncertainties is not None:
         uncertainties = {k: tuple(v) for k, v in req.uncertainties.items()}
 
     try:
@@ -77,7 +86,7 @@ def uncertainty_analysis(
                 context=context,
                 uncertainties=uncertainties,
                 n_simulations=req.n_simulations,
-                seed=42,
+                seed=req.seed,
             )
 
         base_params = {
@@ -94,7 +103,7 @@ def uncertainty_analysis(
             base_params=base_params,
             uncertainties=uncertainties,
             n_simulations=req.n_simulations,
-            seed=42,
+            seed=req.seed,
         )
         return result
     except ValueError as e:

@@ -1,0 +1,13 @@
+
+> comet@1.4.0 dev:frontend
+> cross-env VITE_BACKEND_PORT=8765 npm --prefix frontend run dev
+
+
+> frontend@1.4.0 dev
+> vite
+
+
+  VITE v8.1.5  ready in 343 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose

@@ -1,0 +1,33 @@
+{
+  "target": "Journal of Chemical Information and Modeling, Application Note",
+  "word_limit_abstract_text_graphics": 5000,
+  "abstract_words": 174,
+  "text_words_excluding_references": 3020,
+  "graphics": [
+    {
+      "figure": 1,
+      "width": "double",
+      "word_equivalent": 600
+    },
+    {
+      "figure": 2,
+      "width": "double",
+      "word_equivalent": 600
+    },
+    {
+      "figure": 3,
+      "width": "double",
+      "word_equivalent": 600
+    }
+  ],
+  "graphics_word_equivalent": 1800,
+  "total_word_equivalent": 4994,
+  "figure_count": 3,
+  "table_count": 0,
+  "software_named_in_title": true,
+  "json_key_references": 57,
+  "primary_run": "submission-2026-09-08",
+  "basis_month": "2026-05",
+  "seed": 20260906,
+  "count_note": "Lexical count by the shared manuscript checker; graphics use the ACS 300/600 word-equivalent rule. References and the two placeholder lines are excluded from the limit only where the journal excludes them."
+}

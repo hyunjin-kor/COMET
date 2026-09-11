@@ -10,6 +10,15 @@ const http = require('http');
 const fs = require('fs');
 const { autoUpdater } = require('electron-updater');
 
+// Isolated profiles keep packaged verification away from saved user estimates.
+if (process.env.COMET_PROFILE_DIR) {
+  if (!path.isAbsolute(process.env.COMET_PROFILE_DIR)) {
+    throw new Error('COMET_PROFILE_DIR must be an absolute path');
+  }
+  fs.mkdirSync(process.env.COMET_PROFILE_DIR, { recursive: true });
+  app.setPath('userData', process.env.COMET_PROFILE_DIR);
+}
+
 // Prevent black-window rendering issues on some Windows GPU/driver setups.
 app.disableHardwareAcceleration();
 
@@ -608,20 +617,30 @@ function setupAutoUpdater() {
   });
 }
 
+let aboutCopy;
+ipcMain.handle('about:set-copy', (event, copy) => {
+  if (event.sender !== mainWindow?.webContents) return;
+  const keys = ['title', 'description', 'workflow', 'priorWork', 'button'];
+  if (!copy || !keys.every((key) => typeof copy[key] === 'string' && copy[key].length > 0 && copy[key].length <= 500)) return;
+  aboutCopy = Object.fromEntries(keys.map((key) => [key, copy[key]]));
+});
+
 function showAbout() {
   dialog.showMessageBox(mainWindow, {
     type: 'info',
-    title: 'About COMET',
+    title: aboutCopy?.title ?? 'About COMET',
     message: 'COMET: Catalyst Overall Manufacturing Estimation Tool',
     detail: [
       `Version ${app.getVersion()}`,
       '',
-      'Real-time metal price based catalyst manufacturing cost estimator.',
-      'Based on CatCost methodology (Baddour et al. 2018, Van Allsburg et al. 2022).',
+      aboutCopy?.description ?? 'Independently developed catalyst manufacturing cost, environmental screening and decision analysis software.',
+      aboutCopy?.workflow ?? 'Traceable prices, explicit manufacturing boundaries and reproducible comparisons.',
+      '',
+      aboutCopy?.priorWork ?? 'Prior work for adopted thermal costing: Baddour et al. (2018); Van Allsburg et al. (2022), CatCost.',
       '',
       'Copyright 2026 hyunjin.kang | PolyForm Noncommercial License 1.0.0',
     ].join('\n'),
-    buttons: ['OK'],
+    buttons: [aboutCopy?.button ?? 'OK'],
   });
   mainWindow.center();
 }

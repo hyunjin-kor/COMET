@@ -2,15 +2,16 @@
  * `<FitPriceText>` — a headline-price display that shrinks its font when the
  * formatted string gets long.
  *
- * The container box stays the same; only the font-size changes. Sizing is
- * picked from a small set of buckets keyed off `text.length` so the result is
- * deterministic and SSR-stable (no ResizeObserver, no measurement flicker).
+ * Length-based font buckets set the preferred size. Measure the available
+ * width as well so a narrow result card never splits the amount across lines.
  *
  * Three named scales:
  *   - `xl`   used for the FINAL RESULT and Estimated-selling-price hero cards
  *   - `lg`   used for the selected-metal price hero on /prices
  *   - `md`   reserved for inline metric tiles and other smaller surfaces
  */
+
+import { useLayoutEffect, useRef } from 'react';
 
 type FitSize = 'xl' | 'lg' | 'md';
 
@@ -47,14 +48,45 @@ export function FitPriceText({
   size?: FitSize;
   className?: string;
 }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLSpanElement>(null);
   const buckets = BUCKETS[size];
   const bucket = buckets.find((entry) => text.length <= entry.max) ?? buckets[buckets.length - 1]!;
+
+  useLayoutEffect(() => {
+    const container = containerRef.current;
+    const content = textRef.current;
+    if (!container || !content) return;
+    let active = true;
+    const fit = () => {
+      if (!active) return;
+      content.style.fontSize = '';
+      const available = container.clientWidth;
+      const natural = content.getBoundingClientRect().width;
+      if (available > 0 && natural > available) {
+        const preferred = Number.parseFloat(getComputedStyle(container).fontSize);
+        content.style.fontSize = `${preferred * available / natural}px`;
+      }
+    };
+    fit();
+    const observer = new ResizeObserver(fit);
+    observer.observe(container);
+    window.addEventListener('resize', fit);
+    void document.fonts.ready.then(fit);
+    return () => {
+      active = false;
+      observer.disconnect();
+      window.removeEventListener('resize', fit);
+    };
+  }, [text, size]);
+
   return (
     <div
-      className={`font-display tabular-nums leading-[1.05] [overflow-wrap:anywhere] ${className}`}
+      ref={containerRef}
+      className={`min-w-0 max-w-full font-display tabular-nums leading-[1.05] whitespace-nowrap ${className}`}
       style={{ fontSize: bucket.font }}
     >
-      {text}
+      <span ref={textRef} className="inline-block">{text}</span>
     </div>
   );
 }

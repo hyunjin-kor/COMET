@@ -23,7 +23,7 @@ jobs:
 
       - uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
           cache-dependency-path: |
             package-lock.json
@@ -53,12 +53,46 @@ jobs:
         working-directory: frontend
         run: npm run lint
 
-      - name: Build desktop app
+      - name: Verify calculations and published reference cases
         run: |
+          python -m pytest backend/tests -q
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python scripts/reproduce_catcost_table62.py
+          exit $LASTEXITCODE
+
+      - name: Verify translations and frontend rules
+        run: |
+          npm --prefix frontend run check:i18n
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          node scripts/test_calculator_rules.mjs
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          node scripts/test_practical_range.mjs
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          node scripts/test_scientific_text.mjs
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          node --test scripts/hosted-session.test.mjs
+          exit $LASTEXITCODE
+
+      - name: Verify data redistribution rights
+        # A reachable source URL does not establish redistribution permission.
+        # The current inventory deliberately fails until an authorized review.
+        # Local/PR packaging remains available for verification without publishing.
+        run: python scripts/check_data_rights.py --purpose public_distribution
+
+      - name: Build reviewed desktop app
+        run: |
+          $env:COMET_PYTHON = (Get-Command python).Source
           npm run build:frontend
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           npm run build:backend-sidecar
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           npm run desktop:stop
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           npx electron-builder build --win --publish never
+          exit $LASTEXITCODE
+
+      - name: Verify packaged desktop before publication
+        run: npm run smoke:desktop
 
       - name: Archive unpacked desktop build
         shell: powershell

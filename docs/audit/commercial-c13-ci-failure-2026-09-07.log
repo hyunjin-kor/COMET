@@ -1,0 +1,140 @@
+backend	Test	2026-09-07T15:04:07.6215958Z =================================== FAILURES ===================================
+backend	Test	2026-09-07T15:04:07.6216861Z ___ test_submission_distinguishes_controlled_channels_from_historical_replay ___
+backend	Test	2026-09-07T15:04:07.6217996Z 
+backend	Test	2026-09-07T15:04:07.6218473Z     def test_submission_distinguishes_controlled_channels_from_historical_replay():
+backend	Test	2026-09-07T15:04:07.6219478Z >       run = paper.PaperRun(paper.PAPER / 'submission-2026-09-07')
+backend	Test	2026-09-07T15:04:07.6220236Z               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend	Test	2026-09-07T15:04:07.6220645Z 
+backend	Test	2026-09-07T15:04:07.6220897Z backend/tests/test_paper_submission_claims.py:9: 
+backend	Test	2026-09-07T15:04:07.6221421Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend	Test	2026-09-07T15:04:07.6221901Z scripts/build_submission_manuscript.py:72: in __init__
+backend	Test	2026-09-07T15:04:07.6222410Z     if digest(self.directory / output["file"]) != output["sha256"]:
+backend	Test	2026-09-07T15:04:07.6222840Z        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend	Test	2026-09-07T15:04:07.6223216Z scripts/build_submission_manuscript.py:30: in digest
+backend	Test	2026-09-07T15:04:07.6223599Z     return hashlib.sha256(path.read_bytes()).hexdigest()
+backend	Test	2026-09-07T15:04:07.6223932Z                           ^^^^^^^^^^^^^^^^^
+backend	Test	2026-09-07T15:04:07.6224358Z /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/pathlib.py:1050: in read_bytes
+backend	Test	2026-09-07T15:04:07.6224809Z     with self.open(mode='rb') as f:
+backend	Test	2026-09-07T15:04:07.6225071Z          ^^^^^^^^^^^^^^^^^^^^
+backend	Test	2026-09-07T15:04:07.6225380Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend	Test	2026-09-07T15:04:07.6225622Z 
+backend	Test	2026-09-07T15:04:07.6226079Z self = PosixPath('/home/runner/work/COMET/COMET/docs/paper/submission-2026-09-07/figures\\figure1_architecture_2026-09-07.png')
+backend	Test	2026-09-07T15:04:07.6226796Z mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+backend	Test	2026-09-07T15:04:07.6227091Z 
+backend	Test	2026-09-07T15:04:07.6227240Z     def open(self, mode='r', buffering=-1, encoding=None,
+backend	Test	2026-09-07T15:04:07.6227959Z              errors=None, newline=None):
+backend	Test	2026-09-07T15:04:07.6228270Z         """
+backend	Test	2026-09-07T15:04:07.6228562Z         Open the file pointed by this path and return a file object, as
+backend	Test	2026-09-07T15:04:07.6228949Z         the built-in open() function does.
+backend	Test	2026-09-07T15:04:07.6229226Z         """
+backend	Test	2026-09-07T15:04:07.6229425Z         if "b" not in mode:
+backend	Test	2026-09-07T15:04:07.6229687Z             encoding = io.text_encoding(encoding)
+backend	Test	2026-09-07T15:04:07.6230076Z >       return io.open(self, mode, buffering, encoding, errors, newline)
+backend	Test	2026-09-07T15:04:07.6230465Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend	Test	2026-09-07T15:04:07.6231213Z E       FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/COMET/COMET/docs/paper/submission-2026-09-07/figures\\figure1_architecture_2026-09-07.png'
+backend	Test	2026-09-07T15:04:07.6231836Z 
+backend	Test	2026-09-07T15:04:07.6232098Z /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/pathlib.py:1044: FileNotFoundError
+backend	Test	2026-09-07T15:04:07.6232676Z ___________ test_changed_controlled_numerics_cannot_build_submission ___________
+backend	Test	2026-09-07T15:04:07.6232999Z 
+backend	Test	2026-09-07T15:04:07.6233207Z monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f04f42e9c50>
+backend	Test	2026-09-07T15:04:07.6233514Z 
+backend	Test	2026-09-07T15:04:07.6233734Z     def test_changed_controlled_numerics_cannot_build_submission(monkeypatch):
+backend	Test	2026-09-07T15:04:07.6234145Z         original = paper.digest
+backend	Test	2026-09-07T15:04:07.6234713Z         monkeypatch.setattr(paper, 'digest', lambda path: 'changed' if path == paper.PAPER / paper.CONTROLLED_NAME else original(path))
+backend	Test	2026-09-07T15:04:07.6235453Z         with pytest.raises(ValueError, match='Controlled numerical output changed'):
+backend	Test	2026-09-07T15:04:07.6235966Z >           paper.PaperRun(paper.PAPER / 'submission-2026-09-07')
+backend	Test	2026-09-07T15:04:07.6236221Z 
+backend	Test	2026-09-07T15:04:07.6236362Z backend/tests/test_paper_submission_claims.py:24: 
+backend	Test	2026-09-07T15:04:07.6236735Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend	Test	2026-09-07T15:04:07.6237327Z scripts/build_submission_manuscript.py:72: in __init__
+backend	Test	2026-09-07T15:04:07.6238011Z     if digest(self.directory / output["file"]) != output["sha256"]:
+backend	Test	2026-09-07T15:04:07.6238374Z        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend	Test	2026-09-07T15:04:07.6238869Z backend/tests/test_paper_submission_claims.py:22: in <lambda>
+backend	Test	2026-09-07T15:04:07.6239520Z     monkeypatch.setattr(paper, 'digest', lambda path: 'changed' if path == paper.PAPER / paper.CONTROLLED_NAME else original(path))
+backend	Test	2026-09-07T15:04:07.6240205Z                                                                                                                     ^^^^^^^^^^^^^^
+backend	Test	2026-09-07T15:04:07.6240632Z scripts/build_submission_manuscript.py:30: in digest
+backend	Test	2026-09-07T15:04:07.6241003Z     return hashlib.sha256(path.read_bytes()).hexdigest()
+backend	Test	2026-09-07T15:04:07.6241332Z                           ^^^^^^^^^^^^^^^^^
+backend	Test	2026-09-07T15:04:07.6241746Z /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/pathlib.py:1050: in read_bytes
+backend	Test	2026-09-07T15:04:07.6242192Z     with self.open(mode='rb') as f:
+backend	Test	2026-09-07T15:04:07.6242456Z          ^^^^^^^^^^^^^^^^^^^^
+backend	Test	2026-09-07T15:04:07.6242763Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend	Test	2026-09-07T15:04:07.6243009Z 
+backend	Test	2026-09-07T15:04:07.6243409Z self = PosixPath('/home/runner/work/COMET/COMET/docs/paper/submission-2026-09-07/figures\\figure1_architecture_2026-09-07.png')
+backend	Test	2026-09-07T15:04:07.6244086Z mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+backend	Test	2026-09-07T15:04:07.6244376Z 
+backend	Test	2026-09-07T15:04:07.6244523Z     def open(self, mode='r', buffering=-1, encoding=None,
+backend	Test	2026-09-07T15:04:07.6244856Z              errors=None, newline=None):
+backend	Test	2026-09-07T15:04:07.6245122Z         """
+backend	Test	2026-09-07T15:04:07.6245406Z         Open the file pointed by this path and return a file object, as
+backend	Test	2026-09-07T15:04:07.6245790Z         the built-in open() function does.
+backend	Test	2026-09-07T15:04:07.6246056Z         """
+backend	Test	2026-09-07T15:04:07.6246252Z         if "b" not in mode:
+backend	Test	2026-09-07T15:04:07.6246525Z             encoding = io.text_encoding(encoding)
+backend	Test	2026-09-07T15:04:07.6246902Z >       return io.open(self, mode, buffering, encoding, errors, newline)
+backend	Test	2026-09-07T15:04:07.6247293Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend	Test	2026-09-07T15:04:07.6248285Z E       FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/COMET/COMET/docs/paper/submission-2026-09-07/figures\\figure1_architecture_2026-09-07.png'
+backend	Test	2026-09-07T15:04:07.6248913Z 
+backend	Test	2026-09-07T15:04:07.6249165Z /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/pathlib.py:1044: FileNotFoundError
+backend	Test	2026-09-07T15:04:07.6249726Z __________________ test_controlled_seed_mismatch_is_rejected ___________________
+backend	Test	2026-09-07T15:04:07.6250019Z 
+backend	Test	2026-09-07T15:04:07.6250234Z monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f04f39a41d0>
+backend	Test	2026-09-07T15:04:07.6250534Z 
+backend	Test	2026-09-07T15:04:07.6250698Z     def test_controlled_seed_mismatch_is_rejected(monkeypatch):
+backend	Test	2026-09-07T15:04:07.6251071Z         original = paper.load
+backend	Test	2026-09-07T15:04:07.6251309Z     
+backend	Test	2026-09-07T15:04:07.6251504Z         def load(path):
+backend	Test	2026-09-07T15:04:07.6251745Z             value = original(path)
+backend	Test	2026-09-07T15:04:07.6252066Z             if path == paper.PAPER / paper.CONTROLLED_NAME:
+backend	Test	2026-09-07T15:04:07.6252404Z                 value['seed'] += 1
+backend	Test	2026-09-07T15:04:07.6252668Z             return value
+backend	Test	2026-09-07T15:04:07.6252890Z     
+backend	Test	2026-09-07T15:04:07.6253116Z         monkeypatch.setattr(paper, 'load', load)
+backend	Test	2026-09-07T15:04:07.6253487Z         with pytest.raises(ValueError, match='seeds differ'):
+backend	Test	2026-09-07T15:04:07.6253890Z >           paper.PaperRun(paper.PAPER / 'submission-2026-09-07')
+backend	Test	2026-09-07T15:04:07.6254145Z 
+backend	Test	2026-09-07T15:04:07.6254279Z backend/tests/test_paper_submission_claims.py:38: 
+backend	Test	2026-09-07T15:04:07.6254643Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend	Test	2026-09-07T15:04:07.6255035Z scripts/build_submission_manuscript.py:72: in __init__
+backend	Test	2026-09-07T15:04:07.6255588Z     if digest(self.directory / output["file"]) != output["sha256"]:
+backend	Test	2026-09-07T15:04:07.6255948Z        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend	Test	2026-09-07T15:04:07.6256272Z scripts/build_submission_manuscript.py:30: in digest
+backend	Test	2026-09-07T15:04:07.6256638Z     return hashlib.sha256(path.read_bytes()).hexdigest()
+backend	Test	2026-09-07T15:04:07.6257088Z                           ^^^^^^^^^^^^^^^^^
+backend	Test	2026-09-07T15:04:07.6257746Z /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/pathlib.py:1050: in read_bytes
+backend	Test	2026-09-07T15:04:07.6258204Z     with self.open(mode='rb') as f:
+backend	Test	2026-09-07T15:04:07.6258470Z          ^^^^^^^^^^^^^^^^^^^^
+backend	Test	2026-09-07T15:04:07.6258759Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend	Test	2026-09-07T15:04:07.6259004Z 
+backend	Test	2026-09-07T15:04:07.6259398Z self = PosixPath('/home/runner/work/COMET/COMET/docs/paper/submission-2026-09-07/figures\\figure1_architecture_2026-09-07.png')
+backend	Test	2026-09-07T15:04:07.6260079Z mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+backend	Test	2026-09-07T15:04:07.6260370Z 
+backend	Test	2026-09-07T15:04:07.6260517Z     def open(self, mode='r', buffering=-1, encoding=None,
+backend	Test	2026-09-07T15:04:07.6260846Z              errors=None, newline=None):
+backend	Test	2026-09-07T15:04:07.6261107Z         """
+backend	Test	2026-09-07T15:04:07.6261403Z         Open the file pointed by this path and return a file object, as
+backend	Test	2026-09-07T15:04:07.6261776Z         the built-in open() function does.
+backend	Test	2026-09-07T15:04:07.6262041Z         """
+backend	Test	2026-09-07T15:04:07.6262240Z         if "b" not in mode:
+backend	Test	2026-09-07T15:04:07.6262517Z             encoding = io.text_encoding(encoding)
+backend	Test	2026-09-07T15:04:07.6262895Z >       return io.open(self, mode, buffering, encoding, errors, newline)
+backend	Test	2026-09-07T15:04:07.6263281Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend	Test	2026-09-07T15:04:07.6264016Z E       FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/COMET/COMET/docs/paper/submission-2026-09-07/figures\\figure1_architecture_2026-09-07.png'
+backend	Test	2026-09-07T15:04:07.6264644Z 
+backend	Test	2026-09-07T15:04:07.6264900Z /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/pathlib.py:1044: FileNotFoundError
+backend	Test	2026-09-07T15:04:07.6265395Z =============================== warnings summary ===============================
+backend	Test	2026-09-07T15:04:07.6265930Z ../../../../../opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/fastapi/testclient.py:1
+backend	Test	2026-09-07T15:04:07.6266997Z   /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+backend	Test	2026-09-07T15:04:07.6268230Z     from starlette.testclient import TestClient as TestClient  # noqa
+backend	Test	2026-09-07T15:04:07.6268522Z 
+backend	Test	2026-09-07T15:04:07.6268817Z ../../../../../opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/starlette/testclient.py:53
+backend	Test	2026-09-07T15:04:07.6269903Z   /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/starlette/testclient.py:53: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+backend	Test	2026-09-07T15:04:07.6270944Z     _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
+backend	Test	2026-09-07T15:04:07.6271304Z 
+backend	Test	2026-09-07T15:04:07.6271527Z -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+backend	Test	2026-09-07T15:04:07.6271990Z =========================== short test summary info ============================
+backend	Test	2026-09-07T15:04:07.6273228Z FAILED backend/tests/test_paper_submission_claims.py::test_submission_distinguishes_controlled_channels_from_historical_replay - FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/COMET/COMET/docs/paper/submission-2026-09-07/figures\\figure1_architecture_2026-09-07.png'
+backend	Test	2026-09-07T15:04:07.7671134Z FAILED backend/tests/test_paper_submission_claims.py::test_changed_controlled_numerics_cannot_build_submission - FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/COMET/COMET/docs/paper/submission-2026-09-07/figures\\figure1_architecture_2026-09-07.png'
+backend	Test	2026-09-07T15:04:07.7674244Z FAILED backend/tests/test_paper_submission_claims.py::test_controlled_seed_mismatch_is_rejected - FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/COMET/COMET/docs/paper/submission-2026-09-07/figures\\figure1_architecture_2026-09-07.png'
+backend	Test	2026-09-07T15:04:07.7676072Z ============ 3 failed, 853 passed, 2 warnings in 766.97s (0:12:46) =============
+backend	Test	2026-09-07T15:04:08.0595317Z ##[error]Process completed with exit code 1.

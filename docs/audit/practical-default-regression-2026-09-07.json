@@ -1,0 +1,649 @@
+{
+  "generated_at": "2026-09-07T03:37:37.709589+00:00",
+  "baseline_commit": "ff6155e1b56d1e400438fbcb5a4f40dea06e605e",
+  "current_working_tree_base_commit": "68ddbf328f994626cb4fe8443d4b002ce4e9912e",
+  "environment": {
+    "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "executable": "C:\\Python314\\python.exe",
+    "packages": {
+      "fastapi": "0.135.1",
+      "sqlmodel": "0.0.37",
+      "numpy": "2.3.5",
+      "httpx": "0.28.1",
+      "pydantic": "2.12.5",
+      "sqlalchemy": "2.0.48"
+    }
+  },
+  "conditions": [
+    "Offline execution with explicit frozen May 2026 reference prices and separate fresh SQLite files.",
+    "Archive extracted to a new temporary directory; no branches, worktrees, production databases or paper files modified.",
+    "Synthetic API prices are fixed unit-test inputs, not observed purchase data.",
+    "HTTP timings use in-process FastAPI TestClient, not a running socket server. Three calculate warmups precede 20 samples; MC seed=20260906.",
+    "Timing is observational on this workstation while other validation may run. No production throughput or statistically established speedup is claimed."
+  ],
+  "input_hashes": {
+    "docs\\paper\\submission-2026-09-07\\reference_basis_2026-09-07.json": "6ec710eebc2bbee8a390b3fc413e8c70c9947beec1a8fe89f2bdc5167944f506",
+    "docs\\paper\\submission-2026-09-07\\all_families_2026-09-07.json": "d25a24e6a1cbb5ad384e1bf47d98bf04ce9586b86edfda5e81beea1167a4236e"
+  },
+  "source_hashes": {
+    "backend/core/cost_engine.py": {
+      "current_before": "14c36ffc513d8e1883ac45d82076bc82b8d398e7e0d45a6b54cc419645e0a88f",
+      "current_after": "14c36ffc513d8e1883ac45d82076bc82b8d398e7e0d45a6b54cc419645e0a88f",
+      "baseline": "032ffe6b277e7d695fc74eb77705258780000c9e44e2d3a056d9975e941f212c"
+    },
+    "backend/core/materials_calc.py": {
+      "current_before": "516fa4edcfdab2a77f05085a8a173accde5d58ac2c9284ac3cadc5fa810cddcc",
+      "current_after": "516fa4edcfdab2a77f05085a8a173accde5d58ac2c9284ac3cadc5fa810cddcc",
+      "baseline": "516fa4edcfdab2a77f05085a8a173accde5d58ac2c9284ac3cadc5fa810cddcc"
+    },
+    "backend/core/step_method.py": {
+      "current_before": "4fac130bb6225bf30757cc7e0671c5dc198d9656b1a1932fccad63612a470995",
+      "current_after": "4fac130bb6225bf30757cc7e0671c5dc198d9656b1a1932fccad63612a470995",
+      "baseline": "4fac130bb6225bf30757cc7e0671c5dc198d9656b1a1932fccad63612a470995"
+    },
+    "backend/core/uncertainty.py": {
+      "current_before": "a704eebb5bca09666c7ff64490d52bb2d1bd26628e0a0fbb14c291cd17779668",
+      "current_after": "a704eebb5bca09666c7ff64490d52bb2d1bd26628e0a0fbb14c291cd17779668",
+      "baseline": "1cddfee0902a8c1f54daba547853458517d6b946ad983bd0ea60a434f7b61293"
+    },
+    "backend/core/decision_engine.py": {
+      "current_before": "69b893a146e2b7c70a333c62cde117995dc52e8534e3492ffc944d9483734948",
+      "current_after": "69b893a146e2b7c70a333c62cde117995dc52e8534e3492ffc944d9483734948",
+      "baseline": "d2984903800792fa48b7429fac2eec3a4e95fbdf3d49d49e66f1aae0dba2cb87"
+    },
+    "backend/core/costing_scope.py": {
+      "current_before": "26a68aa5079321a70505b3bfecac0a39c2e45ac6fe99ee57b07093b1924681dc",
+      "current_after": "26a68aa5079321a70505b3bfecac0a39c2e45ac6fe99ee57b07093b1924681dc",
+      "baseline": null
+    },
+    "backend/core/recipe_costing.py": {
+      "current_before": "8ec89fd419231e07c3d817b2531f1c7f5e9ef9bd49557088e2d32cb37c776b2c",
+      "current_after": "8ec89fd419231e07c3d817b2531f1c7f5e9ef9bd49557088e2d32cb37c776b2c",
+      "baseline": null
+    },
+    "backend/schemas/cost_input.py": {
+      "current_before": "41b827d1d9d561f69e0c2e43277ece966145d9ca8a2553c67ccc34efe61cd629",
+      "current_after": "41b827d1d9d561f69e0c2e43277ece966145d9ca8a2553c67ccc34efe61cd629",
+      "baseline": "dde165a392ebf48a5ebac2596d22e653161bfda0b97f19cab3b05a4e062946a2"
+    },
+    "backend/routers/calculator.py": {
+      "current_before": "e203ac0339595356b9d8835f1070e5e5e95b4278a0db82e41421cb4863f077e1",
+      "current_after": "e203ac0339595356b9d8835f1070e5e5e95b4278a0db82e41421cb4863f077e1",
+      "baseline": "fa6d36c456b2e8bc13bb6a11a34ae88f4dfd33bc8b7c065b50feb18a34acdcd7"
+    },
+    "backend/routers/uncertainty.py": {
+      "current_before": "916605e35b49d1ae92aeeb029b7a0ff0a36d05c81f59be4f977a2fe3b2829ca7",
+      "current_after": "916605e35b49d1ae92aeeb029b7a0ff0a36d05c81f59be4f977a2fe3b2829ca7",
+      "baseline": "7b0bf3b31d9dbade7f13bf0bff22e2fc4c1bd2c96fb3223e764a9d0e22f59d01"
+    },
+    "scripts/run_all_families.py": {
+      "current_before": "222fc992c28b4935d598415fdcf5cd24bbec11ae228827287272c5330f71ac03",
+      "current_after": "222fc992c28b4935d598415fdcf5cd24bbec11ae228827287272c5330f71ac03",
+      "baseline": "74775341a0c1bd31698402408517580872acd18db2a5e00e703c61f37b886eff"
+    }
+  },
+  "source_unchanged_during_run": true,
+  "family_results": {
+    "families": 30,
+    "candidates": 116,
+    "profile_rankings": 90,
+    "performance_zero_rankings": 30,
+    "simplex_points_per_family": 286,
+    "current_runs_byte_identical": true,
+    "baseline_current_difference_count": 0,
+    "baseline_current_differences": [],
+    "frozen_paper_current_difference_count": 0,
+    "frozen_paper_current_differences": [],
+    "runs": [
+      {
+        "label": "baseline",
+        "seconds": 1.9070931000023847,
+        "output_sha256": "d25a24e6a1cbb5ad384e1bf47d98bf04ce9586b86edfda5e81beea1167a4236e",
+        "output": "C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06\\_local\\practical-regression\\families-baseline.json"
+      },
+      {
+        "label": "current1",
+        "seconds": 1.8299208999960683,
+        "output_sha256": "d25a24e6a1cbb5ad384e1bf47d98bf04ce9586b86edfda5e81beea1167a4236e",
+        "output": "C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06\\_local\\practical-regression\\families-current1.json"
+      },
+      {
+        "label": "current2",
+        "seconds": 1.717680100002326,
+        "output_sha256": "d25a24e6a1cbb5ad384e1bf47d98bf04ce9586b86edfda5e81beea1167a4236e",
+        "output": "C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06\\_local\\practical-regression\\families-current2.json"
+      }
+    ]
+  },
+  "api_results": {
+    "payload": {
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Ni",
+          "wt_pct": 15,
+          "price_per_lb": 7.5
+        },
+        {
+          "role": "support",
+          "name": "Al2O3",
+          "wt_pct": 85,
+          "price_per_lb": 0.5
+        }
+      ],
+      "steps": [
+        "mixer_slurry",
+        "incipient_wetness",
+        "dryer_rotary_100_300C"
+      ],
+      "order_size_tons": 10,
+      "basis_year": 2017,
+      "target_year": 2026,
+      "price_basis": "reference"
+    },
+    "baseline_twenty_equal": true,
+    "current_twenty_equal": true,
+    "numeric_section_differences": {
+      "summary": [],
+      "materials": [],
+      "step_method": [],
+      "spent_catalyst": [],
+      "electrode_model": [],
+      "lca": []
+    },
+    "new_top_level_fields": {
+      "costing_scope": {
+        "status": "modeled_steps",
+        "boundary": "Selected Step Method operations, materials, overhead and selling margin only. A priced operation list does not establish complete plant coverage.",
+        "actual_steps": [
+          "mixer_slurry",
+          "incipient_wetness",
+          "dryer_rotary_100_300C"
+        ],
+        "costed_steps": [
+          {
+            "step": "mixer_slurry",
+            "name": "Mixer, slurry",
+            "status": "costed",
+            "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+            "reference_url": null,
+            "basis": "$/hr, mid-2017"
+          },
+          {
+            "step": "incipient_wetness",
+            "name": "Incipient wetness (impregnation)",
+            "status": "costed",
+            "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+            "reference_url": null,
+            "basis": "$/hr, mid-2017"
+          },
+          {
+            "step": "dryer_rotary_100_300C",
+            "name": "Dryer, rotary (100–300 °C)",
+            "status": "costed",
+            "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+            "reference_url": null,
+            "basis": "$/hr, mid-2017"
+          }
+        ],
+        "declared_steps": [],
+        "substitutions": [],
+        "dropped_steps": [],
+        "omitted_template_steps": [],
+        "added_steps": [],
+        "uncosted_operations": [],
+        "route_modified": false,
+        "template_name": null,
+        "area_cost_boundary": null
+      }
+    },
+    "other_differences": [
+      {
+        "path": "/costing_scope",
+        "baseline": null,
+        "current": {
+          "status": "modeled_steps",
+          "boundary": "Selected Step Method operations, materials, overhead and selling margin only. A priced operation list does not establish complete plant coverage.",
+          "actual_steps": [
+            "mixer_slurry",
+            "incipient_wetness",
+            "dryer_rotary_100_300C"
+          ],
+          "costed_steps": [
+            {
+              "step": "mixer_slurry",
+              "name": "Mixer, slurry",
+              "status": "costed",
+              "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+              "reference_url": null,
+              "basis": "$/hr, mid-2017"
+            },
+            {
+              "step": "incipient_wetness",
+              "name": "Incipient wetness (impregnation)",
+              "status": "costed",
+              "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+              "reference_url": null,
+              "basis": "$/hr, mid-2017"
+            },
+            {
+              "step": "dryer_rotary_100_300C",
+              "name": "Dryer, rotary (100–300 °C)",
+              "status": "costed",
+              "source": "CatCost_v1-1-1.xlsx, Step Library sheet",
+              "reference_url": null,
+              "basis": "$/hr, mid-2017"
+            }
+          ],
+          "declared_steps": [],
+          "substitutions": [],
+          "dropped_steps": [],
+          "omitted_template_steps": [],
+          "added_steps": [],
+          "uncosted_operations": [],
+          "route_modified": false,
+          "template_name": null,
+          "area_cost_boundary": null
+        }
+      }
+    ]
+  },
+  "monte_carlo_results": {
+    "seed": 20260906,
+    "differences": [
+      [],
+      [],
+      []
+    ],
+    "current_10000_repeats_equal": true,
+    "baseline": [
+      {
+        "iterations": 1000,
+        "elapsed_seconds": 0.07302710000658408,
+        "result": {
+          "n_simulations": 1000,
+          "n_successful": 1000,
+          "mean": 3.8324,
+          "median": 3.8348,
+          "std": 0.3175,
+          "min": 3.0972,
+          "max": 4.6028,
+          "p5": 3.3354,
+          "p25": 3.5885,
+          "p75": 4.0728,
+          "p95": 4.3403,
+          "unit": "$/lb",
+          "baseline_price_per_lb": 3.8133,
+          "baseline_price_per_kg": 8.4069,
+          "composition": "15.0% Ni/Al2O3",
+          "catalyst_domain": "thermal",
+          "application_family": "general",
+          "uncertainties_applied": {
+            "active_component_price": [
+              0.7,
+              1.3
+            ],
+            "promoter_price": [
+              0.8,
+              1.2
+            ],
+            "support_price": [
+              0.8,
+              1.2
+            ],
+            "electrode_adjunct_price": [
+              0.85,
+              1.15
+            ],
+            "order_size_tons": [
+              0.8,
+              1.2
+            ]
+          }
+        }
+      },
+      {
+        "iterations": 10000,
+        "elapsed_seconds": 0.4430756000074325,
+        "result": {
+          "n_simulations": 10000,
+          "n_successful": 10000,
+          "mean": 3.8292,
+          "median": 3.8288,
+          "std": 0.3186,
+          "min": 3.0742,
+          "max": 4.6745,
+          "p5": 3.3207,
+          "p25": 3.5793,
+          "p75": 4.072,
+          "p95": 4.349,
+          "unit": "$/lb",
+          "baseline_price_per_lb": 3.8133,
+          "baseline_price_per_kg": 8.4069,
+          "composition": "15.0% Ni/Al2O3",
+          "catalyst_domain": "thermal",
+          "application_family": "general",
+          "uncertainties_applied": {
+            "active_component_price": [
+              0.7,
+              1.3
+            ],
+            "promoter_price": [
+              0.8,
+              1.2
+            ],
+            "support_price": [
+              0.8,
+              1.2
+            ],
+            "electrode_adjunct_price": [
+              0.85,
+              1.15
+            ],
+            "order_size_tons": [
+              0.8,
+              1.2
+            ]
+          }
+        }
+      },
+      {
+        "iterations": 10000,
+        "elapsed_seconds": 0.4292325999995228,
+        "result": {
+          "n_simulations": 10000,
+          "n_successful": 10000,
+          "mean": 3.8292,
+          "median": 3.8288,
+          "std": 0.3186,
+          "min": 3.0742,
+          "max": 4.6745,
+          "p5": 3.3207,
+          "p25": 3.5793,
+          "p75": 4.072,
+          "p95": 4.349,
+          "unit": "$/lb",
+          "baseline_price_per_lb": 3.8133,
+          "baseline_price_per_kg": 8.4069,
+          "composition": "15.0% Ni/Al2O3",
+          "catalyst_domain": "thermal",
+          "application_family": "general",
+          "uncertainties_applied": {
+            "active_component_price": [
+              0.7,
+              1.3
+            ],
+            "promoter_price": [
+              0.8,
+              1.2
+            ],
+            "support_price": [
+              0.8,
+              1.2
+            ],
+            "electrode_adjunct_price": [
+              0.85,
+              1.15
+            ],
+            "order_size_tons": [
+              0.8,
+              1.2
+            ]
+          }
+        }
+      }
+    ],
+    "current": [
+      {
+        "iterations": 1000,
+        "elapsed_seconds": 0.07936410000547767,
+        "result": {
+          "n_simulations": 1000,
+          "n_successful": 1000,
+          "mean": 3.8324,
+          "median": 3.8348,
+          "std": 0.3175,
+          "min": 3.0972,
+          "max": 4.6028,
+          "p5": 3.3354,
+          "p25": 3.5885,
+          "p75": 4.0728,
+          "p95": 4.3403,
+          "unit": "$/lb",
+          "baseline_price_per_lb": 3.8133,
+          "baseline_price_per_kg": 8.4069,
+          "composition": "15.0% Ni/Al2O3",
+          "catalyst_domain": "thermal",
+          "application_family": "general",
+          "uncertainties_applied": {
+            "active_component_price": [
+              0.7,
+              1.3
+            ],
+            "promoter_price": [
+              0.8,
+              1.2
+            ],
+            "support_price": [
+              0.8,
+              1.2
+            ],
+            "electrode_adjunct_price": [
+              0.85,
+              1.15
+            ],
+            "order_size_tons": [
+              0.8,
+              1.2
+            ]
+          }
+        }
+      },
+      {
+        "iterations": 10000,
+        "elapsed_seconds": 0.5503727000032086,
+        "result": {
+          "n_simulations": 10000,
+          "n_successful": 10000,
+          "mean": 3.8292,
+          "median": 3.8288,
+          "std": 0.3186,
+          "min": 3.0742,
+          "max": 4.6745,
+          "p5": 3.3207,
+          "p25": 3.5793,
+          "p75": 4.072,
+          "p95": 4.349,
+          "unit": "$/lb",
+          "baseline_price_per_lb": 3.8133,
+          "baseline_price_per_kg": 8.4069,
+          "composition": "15.0% Ni/Al2O3",
+          "catalyst_domain": "thermal",
+          "application_family": "general",
+          "uncertainties_applied": {
+            "active_component_price": [
+              0.7,
+              1.3
+            ],
+            "promoter_price": [
+              0.8,
+              1.2
+            ],
+            "support_price": [
+              0.8,
+              1.2
+            ],
+            "electrode_adjunct_price": [
+              0.85,
+              1.15
+            ],
+            "order_size_tons": [
+              0.8,
+              1.2
+            ]
+          }
+        }
+      },
+      {
+        "iterations": 10000,
+        "elapsed_seconds": 0.5579969999962486,
+        "result": {
+          "n_simulations": 10000,
+          "n_successful": 10000,
+          "mean": 3.8292,
+          "median": 3.8288,
+          "std": 0.3186,
+          "min": 3.0742,
+          "max": 4.6745,
+          "p5": 3.3207,
+          "p25": 3.5793,
+          "p75": 4.072,
+          "p95": 4.349,
+          "unit": "$/lb",
+          "baseline_price_per_lb": 3.8133,
+          "baseline_price_per_kg": 8.4069,
+          "composition": "15.0% Ni/Al2O3",
+          "catalyst_domain": "thermal",
+          "application_family": "general",
+          "uncertainties_applied": {
+            "active_component_price": [
+              0.7,
+              1.3
+            ],
+            "promoter_price": [
+              0.8,
+              1.2
+            ],
+            "support_price": [
+              0.8,
+              1.2
+            ],
+            "electrode_adjunct_price": [
+              0.85,
+              1.15
+            ],
+            "order_size_tons": [
+              0.8,
+              1.2
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "performance": [
+    {
+      "metric": "calculate_20_request_median",
+      "baseline": 2.5388499998371117,
+      "current": 2.590800002508331,
+      "unit": "ms",
+      "current_change_pct": 2.046202125944907
+    },
+    {
+      "metric": "mc_1000_one_run",
+      "baseline": 0.07302710000658408,
+      "current": 0.07936410000547767,
+      "unit": "s",
+      "current_change_pct": 8.677600504911531
+    },
+    {
+      "metric": "mc_10000_median_two_runs",
+      "baseline": 0.43615410000347765,
+      "current": 0.5541848499997286,
+      "unit": "s",
+      "current_change_pct": 27.061708234614755
+    },
+    {
+      "metric": "run_all_families",
+      "baseline": 1.9070931000023847,
+      "current": 1.7738004999991972,
+      "unit": "s",
+      "current_change_pct": -6.989307444037252
+    }
+  ],
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "archive",
+        "--format=zip",
+        "--output=C:\\Users\\Public\\Documents\\ESTsoft\\CreatorTemp\\comet-practical-default-baseline-24sw0zby\\baseline.zip",
+        "ff6155e1b56d1e400438fbcb5a4f40dea06e605e",
+        "backend",
+        "scripts",
+        "pyproject.toml"
+      ],
+      "cwd": "C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06",
+      "elapsed_seconds": 0.4839789999969071,
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "C:\\Users\\Public\\Documents\\ESTsoft\\CreatorTemp\\comet-practical-default-baseline-24sw0zby\\scripts\\run_all_families.py",
+        "--out",
+        "C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06\\_local\\practical-regression\\families-baseline.json",
+        "--price-basis",
+        "C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06\\docs\\paper\\submission-2026-09-07\\reference_basis_2026-09-07.json",
+        "--basis-type",
+        "reference"
+      ],
+      "cwd": "C:\\Users\\Public\\Documents\\ESTsoft\\CreatorTemp\\comet-practical-default-baseline-24sw0zby",
+      "elapsed_seconds": 1.9070931000023847,
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06\\scripts\\run_all_families.py",
+        "--out",
+        "C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06\\_local\\practical-regression\\families-current1.json",
+        "--price-basis",
+        "C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06\\docs\\paper\\submission-2026-09-07\\reference_basis_2026-09-07.json",
+        "--basis-type",
+        "reference"
+      ],
+      "cwd": "C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06",
+      "elapsed_seconds": 1.8299208999960683,
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06\\scripts\\run_all_families.py",
+        "--out",
+        "C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06\\_local\\practical-regression\\families-current2.json",
+        "--price-basis",
+        "C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06\\docs\\paper\\submission-2026-09-07\\reference_basis_2026-09-07.json",
+        "--basis-type",
+        "reference"
+      ],
+      "cwd": "C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06",
+      "elapsed_seconds": 1.717680100002326,
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06\\_local\\practical_runtime_probe.py",
+        "C:\\Users\\Public\\Documents\\ESTsoft\\CreatorTemp\\comet-practical-default-baseline-24sw0zby",
+        "C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06\\_local\\practical-regression\\runtime-baseline.json"
+      ],
+      "cwd": "C:\\Users\\Public\\Documents\\ESTsoft\\CreatorTemp\\comet-practical-default-baseline-24sw0zby",
+      "elapsed_seconds": 2.8030453999963356,
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06\\_local\\practical_runtime_probe.py",
+        "C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06",
+        "C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06\\_local\\practical-regression\\runtime-current.json"
+      ],
+      "cwd": "C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06",
+      "elapsed_seconds": 2.812103999996907,
+      "returncode": 0
+    }
+  ]
+}

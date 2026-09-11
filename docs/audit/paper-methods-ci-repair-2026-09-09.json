@@ -1,0 +1,82 @@
+{
+  "first_failed_run": "https://github.com/hyunjin-kor/COMET/actions/runs/34302629928",
+  "first_failed_step": "frontend: npm audit --audit-level=high",
+  "advisories": [
+    "https://github.com/advisories/GHSA-2883-xcg3-v3hh",
+    "https://github.com/advisories/GHSA-p498-v437-472g",
+    "https://github.com/advisories/GHSA-6w3j-5fw6-r9vr",
+    "https://github.com/advisories/GHSA-gg4h-3hg2-grpc"
+  ],
+  "root_audit_after": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    },
+    "dependencies": {
+      "prod": 18,
+      "dev": 293,
+      "optional": 23,
+      "peer": 13,
+      "peerOptional": 0,
+      "total": 310
+    }
+  },
+  "frontend_audit_after": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    },
+    "dependencies": {
+      "prod": 80,
+      "dev": 146,
+      "optional": 45,
+      "peer": 1,
+      "peerOptional": 0,
+      "total": 271
+    }
+  },
+  "changes": {
+    "root": [
+      {
+        "package": "node_modules/joi",
+        "before": "18.2.3",
+        "after": "18.2.8"
+      },
+      {
+        "package": "node_modules/js-yaml",
+        "before": "4.3.1",
+        "after": "4.3.2"
+      }
+    ],
+    "frontend": [
+      {
+        "package": "node_modules/@humanfs/core",
+        "before": "0.19.1",
+        "after": "0.19.2"
+      },
+      {
+        "package": "node_modules/@humanfs/node",
+        "before": "0.16.7",
+        "after": "0.16.8"
+      },
+      {
+        "package": "node_modules/@humanfs/types",
+        "before": null,
+        "after": "0.15.0"
+      },
+      {
+        "package": "node_modules/js-yaml",
+        "before": "4.3.1",
+        "after": "4.3.2"
+      }
+    ]
+  }
+}

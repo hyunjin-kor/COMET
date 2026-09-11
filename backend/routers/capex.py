@@ -58,7 +58,10 @@ def _resolve_equipment(req: CapExRequest) -> tuple[float, list[EquipmentResoluti
 
 @router.post("/capex", response_model=CapExResult)
 def calculate_capex_endpoint(req: CapExRequest) -> CapExResult:
-    """Run the CatCost Chapter-7 factored CapEx (and optional OpEx) estimate."""
+    """Estimate capital and optional operating costs in COMET.
+
+    Adopted factor reference: CatCost User Guide, Chapter 7.
+    """
 
     try:
         purchased_equipment_cost, resolutions = _resolve_equipment(req)

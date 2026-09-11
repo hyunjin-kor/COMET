@@ -1,0 +1,95 @@
+{
+  "note": "HTTP reachability only; read evidence is summarized separately. Full fetched pages stay local and are not redistributed. No permissions requested and no accounts/keys or paid endpoints used.",
+  "sources": [
+    {
+      "id": "polyform",
+      "requested_url": "https://polyformproject.org/licenses/noncommercial/1.0.0",
+      "checked_at": "2026-09-07T12:41:33.067703+00:00",
+      "status": 200,
+      "final_url": "https://polyformproject.org/licenses/noncommercial/1.0.0",
+      "bytes": 7352,
+      "response_sha256": "8fb635fd3e464830fd511800aaf65966e0855637e98ed8c1545e66a9c47da733"
+    },
+    {
+      "id": "korean_copyright_article9",
+      "requested_url": "https://www.law.go.kr/lsLinkCommonInfo.do?lsJoLnkSeq=1024713185",
+      "checked_at": "2026-09-07T12:41:33.366340+00:00",
+      "status": 200,
+      "final_url": "https://www.law.go.kr/lsLinkCommonInfo.do?lsJoLnkSeq=1024713185",
+      "bytes": 12492,
+      "response_sha256": "eba298afa6b8245433b4795a4339452d04e73d16ef56a30622c10ad1c2731360"
+    },
+    {
+      "id": "imf_data_terms",
+      "requested_url": "https://www.imf.org/en/about/copyright-and-terms",
+      "checked_at": "2026-09-07T12:41:33.517493+00:00",
+      "status": 403,
+      "final_url": "https://www.imf.org/en/about/copyright-and-terms",
+      "bytes": 409,
+      "response_sha256": "d62c780aaf9392735b3a4b26b93d99af14d78bf945b24d38b4c348118a7c2c4e"
+    },
+    {
+      "id": "bls_copyright",
+      "requested_url": "https://www.bls.gov/opub/copyright-information.htm",
+      "checked_at": "2026-09-07T12:41:33.595390+00:00",
+      "status": 403,
+      "final_url": "https://www.bls.gov/opub/copyright-information.htm",
+      "bytes": 1323,
+      "response_sha256": "0db079b1cf24b3b8f24347147bbc106bba4c6e1daa5a21a6e0d8b87f0f524fc2"
+    },
+    {
+      "id": "comtrade_redistribution",
+      "requested_url": "https://uncomtrade.org/docs/policy-on-use-and-re-dissemination/",
+      "checked_at": "2026-09-07T12:41:33.837259+00:00",
+      "status": 200,
+      "final_url": "https://uncomtrade.org/docs/policy-on-use-and-re-dissemination/",
+      "bytes": 463385,
+      "response_sha256": "6cf626ad6194e12fe71a410d12b7b2044b231753278be66cb29f082fee903ac4"
+    },
+    {
+      "id": "comtrade_agreement",
+      "requested_url": "https://comtrade.un.org/licenseagreement.html",
+      "checked_at": "2026-09-07T12:41:36.521662+00:00",
+      "status": 200,
+      "final_url": "https://comtrade.un.org/licenseagreement.html",
+      "bytes": 25281,
+      "response_sha256": "0cf1c816f0be1816478b6d84397b4463f7f53bbeebcafd1929db2a713893f3e8"
+    },
+    {
+      "id": "yfinance",
+      "requested_url": "https://github.com/ranaroussi/yfinance",
+      "checked_at": "2026-09-07T12:41:37.988667+00:00",
+      "status": 200,
+      "final_url": "https://github.com/ranaroussi/yfinance",
+      "bytes": 313208,
+      "response_sha256": "5305cdbd9db3a128821fe72152ab01f91af50da95f01bcb2394ea2c6d2178010"
+    },
+    {
+      "id": "acs_metrics",
+      "requested_url": "https://pubs.acs.org/journal-metrics",
+      "checked_at": "2026-09-07T12:41:38.666014+00:00",
+      "status": 403,
+      "final_url": "https://pubs.acs.org/journal-metrics",
+      "bytes": 5448,
+      "response_sha256": "3b3d3df3df6e4bfae3cb4edce0868c363f35f3804addce399e32a0cbe6b2f916"
+    },
+    {
+      "id": "acs_engineering_about",
+      "requested_url": "https://pubs.acs.org/page/aeacb3/about.html",
+      "checked_at": "2026-09-07T12:41:38.690558+00:00",
+      "status": 403,
+      "final_url": "https://pubs.acs.org/page/aeacb3/about.html",
+      "bytes": 5490,
+      "response_sha256": "40717ca00fb1275b76a8b3939fca562835185c6cb6b1d092fd9cdd86b7d6495a"
+    },
+    {
+      "id": "acs_engineering_guidelines",
+      "requested_url": "https://researcher-resources.acs.org/publish/author_guidelines?coden=aeacb3",
+      "checked_at": "2026-09-07T12:41:38.718746+00:00",
+      "status": 200,
+      "final_url": "https://researcher-resources.acs.org/publish/author_guidelines?coden=aeacb3",
+      "bytes": 135013,
+      "response_sha256": "9bab0cbc43931f13d0a8609afb3a2aaf72619b17d7f781d4651c491ddb758c18"
+    }
+  ]
+}

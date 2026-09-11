@@ -1,4 +1,6 @@
 import type { ApplicationFamily, CostInput, CostResult, DecisionCandidate } from './api';
+import type { PurchaseEvidence } from './cost-evidence';
+import type { ConsumableDraft, RecipeDraft } from './recipe-inputs';
 
 export type CalculatorRole = 'active_metal' | 'active_catalyst' | 'promoter' | 'support';
 export type CalculatorSourceType = 'live' | 'indexed' | 'manual';
@@ -14,14 +16,22 @@ export interface CalculatorRow {
   price_per_lb: number;
   source_type: CalculatorSourceType;
   source: string;
+  recipe_consumption?: RecipeDraft;
+  purchase_evidence?: PurchaseEvidence;
 }
 
 export interface CalculatorDraft {
   rows: CalculatorRow[];
   steps: string[];
+  preparationStepBasis?: string[];
+  preparationStepSubstitutions?: Array<{ from: string; to: string }>;
+  thermalTemplateId?: string | null;
   catalystDomain: 'thermal' | 'electrocatalyst';
   applicationFamily?: ApplicationFamily;
   orderSize: number;
+  productionRate?: number | '';
+  productionRateNote?: string;
+  consumables?: ConsumableDraft[];
   pricesUpdatedAt: string | null;
   includeSpentValue?: boolean;
   reactorType?: 'fixed' | 'slurry';
@@ -35,11 +45,13 @@ export interface CalculatorDraft {
     catalystLoadingMgCm2: number;
     ionomerToCatalystRatio: number;
     templateId: string;
+    manufacturingScenario?: '' | 'rnd_batch' | 'pilot_roll_to_roll';
   } | null;
   benchmarkCandidate?: CalculatorBenchmarkPreset | null;
 }
 
 export interface CalculatorResultSnapshot {
+  savedEstimateId?: number;
   result: CostResult;
   orderSize: number;
   steps: string[];

@@ -1,0 +1,488 @@
+{
+  "parent_head": "d972f188276258743dfe2ad248d810fe2d1834bc",
+  "source_state": "One-line manifest separator correction; four preserved snapshot blobs re-added under existing -text attributes. Other changes are audit/checklist/journal evidence.",
+  "manuscript_script_sha256": "7a9582979210b5e7e31d2e7a98be00be59cdd3b90e560e3ea1f5dcdaa90c13a6",
+  "backend_passed": 856,
+  "backend_test_seconds": 511.02,
+  "checks": [
+    {
+      "task": "c13",
+      "check": "browser-state",
+      "command": [
+        "node",
+        "--test",
+        "scripts/hosted-session.test.mjs"
+      ],
+      "exit_code": 0,
+      "seconds": 0.337,
+      "at": "2026-09-07T14:51:58.208888+00:00",
+      "log": "docs/audit/commercial-c13-browser-state-2026-09-07.log"
+    },
+    {
+      "task": "c13",
+      "check": "calculator-rules",
+      "command": [
+        "node",
+        "scripts/test_calculator_rules.mjs"
+      ],
+      "exit_code": 0,
+      "seconds": 0.311,
+      "at": "2026-09-07T14:51:58.148268+00:00",
+      "log": "docs/audit/commercial-c13-calculator-rules-2026-09-07.log"
+    },
+    {
+      "task": "c13",
+      "check": "commercial-rights",
+      "command": [
+        "python",
+        "scripts/check_data_rights.py",
+        "--purpose",
+        "commercial_use"
+      ],
+      "exit_code": 1,
+      "seconds": 0.245,
+      "at": "2026-09-07T14:51:58.129456+00:00",
+      "log": "docs/audit/commercial-c13-commercial-rights-2026-09-07.log"
+    },
+    {
+      "task": "c13",
+      "check": "controlled-replay",
+      "command": [
+        "python",
+        "scripts/run_controlled_cases.py",
+        "--reference-basis",
+        "docs/paper/submission-2026-09-07/reference_basis_2026-09-07.json",
+        "--live-basis",
+        "docs/paper/submission-2026-09-07/live_basis_2026-09-07.json",
+        "--out-dir",
+        "_local/commercial-final-controlled",
+        "--seed",
+        "20260906"
+      ],
+      "exit_code": 0,
+      "seconds": 2.677,
+      "at": "2026-09-07T14:53:30.256833+00:00",
+      "log": "docs/audit/commercial-c13-controlled-replay-2026-09-07.log"
+    },
+    {
+      "task": "c13",
+      "check": "desktop-build-verified",
+      "command": [
+        "npm.cmd",
+        "run",
+        "build",
+        "--",
+        "--",
+        "--publish",
+        "never"
+      ],
+      "exit_code": 0,
+      "seconds": 172.791,
+      "at": "2026-09-07T14:56:11.431200+00:00",
+      "log": "docs/audit/commercial-c13-desktop-build-verified-2026-09-07.log"
+    },
+    {
+      "task": "c13",
+      "check": "desktop-build",
+      "command": [
+        "npm.cmd",
+        "run",
+        "build",
+        "--",
+        "--",
+        "--publish",
+        "never"
+      ],
+      "exit_code": 1,
+      "seconds": 22.233,
+      "at": "2026-09-07T14:51:53.794103+00:00",
+      "log": "docs/audit/commercial-c13-desktop-build-2026-09-07.log"
+    },
+    {
+      "task": "c13",
+      "check": "desktop-smoke",
+      "command": [
+        "npm.cmd",
+        "run",
+        "smoke:desktop"
+      ],
+      "exit_code": 0,
+      "seconds": 17.651,
+      "at": "2026-09-07T14:57:38.646149+00:00",
+      "log": "docs/audit/commercial-c13-desktop-smoke-2026-09-07.log"
+    },
+    {
+      "task": "c13",
+      "check": "frontend-lint",
+      "command": [
+        "npm.cmd",
+        "--prefix",
+        "frontend",
+        "run",
+        "lint"
+      ],
+      "exit_code": 0,
+      "seconds": 4.021,
+      "at": "2026-09-07T14:52:01.830817+00:00",
+      "log": "docs/audit/commercial-c13-frontend-lint-2026-09-07.log"
+    },
+    {
+      "task": "c13",
+      "check": "i18n",
+      "command": [
+        "npm.cmd",
+        "--prefix",
+        "frontend",
+        "run",
+        "check:i18n"
+      ],
+      "exit_code": 0,
+      "seconds": 0.759,
+      "at": "2026-09-07T14:51:58.601519+00:00",
+      "log": "docs/audit/commercial-c13-i18n-2026-09-07.log"
+    },
+    {
+      "task": "c13",
+      "check": "links",
+      "command": [
+        "python",
+        "_local/check_c13_links.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.059,
+      "at": "2026-09-07T15:02:37.686565+00:00",
+      "log": "docs/audit/commercial-c13-links-2026-09-07.log"
+    },
+    {
+      "task": "c13",
+      "check": "manuscript-check",
+      "command": [
+        "python",
+        "scripts/build_submission_manuscript.py",
+        "--directory",
+        "docs/paper/submission-2026-09-07",
+        "--check"
+      ],
+      "exit_code": 0,
+      "seconds": 0.772,
+      "at": "2026-09-07T14:54:22.775170+00:00",
+      "log": "docs/audit/commercial-c13-manuscript-check-2026-09-07.log"
+    },
+    {
+      "task": "c13",
+      "check": "manuscript-portable-check",
+      "command": [
+        "python",
+        "scripts/build_submission_manuscript.py",
+        "--directory",
+        "docs/paper/submission-2026-09-07",
+        "--check"
+      ],
+      "exit_code": 0,
+      "seconds": 0.854,
+      "at": "2026-09-07T15:07:02.289911+00:00",
+      "log": "docs/audit/commercial-c13-manuscript-portable-check-2026-09-07.log"
+    },
+    {
+      "task": "c13",
+      "check": "notation-rules",
+      "command": [
+        "node",
+        "scripts/test_scientific_text.mjs"
+      ],
+      "exit_code": 0,
+      "seconds": 0.375,
+      "at": "2026-09-07T14:51:58.236180+00:00",
+      "log": "docs/audit/commercial-c13-notation-rules-2026-09-07.log"
+    },
+    {
+      "task": "c13",
+      "check": "paper-replay-portable",
+      "command": [
+        "python",
+        "scripts/reproduce_paper.py",
+        "--price-basis",
+        "reference",
+        "--month",
+        "2026-05",
+        "--seed",
+        "20260906",
+        "--date",
+        "2026-09-07",
+        "--history",
+        "docs/paper/submission-2026-09-07/price_history_2026-09-07.json",
+        "--live-basis",
+        "docs/paper/submission-2026-09-07/live_basis_2026-09-07.json",
+        "--support-history",
+        "docs/paper/submission-2026-09-07/support_history_2026-09-07.json",
+        "--out-dir",
+        "_local/commercial-final-paper-portable"
+      ],
+      "exit_code": 0,
+      "seconds": 26.009,
+      "at": "2026-09-07T15:08:01.696302+00:00",
+      "log": "docs/audit/commercial-c13-paper-replay-portable-2026-09-07.log"
+    },
+    {
+      "task": "c13",
+      "check": "paper-replay-stable",
+      "command": [
+        "python",
+        "scripts/reproduce_paper.py",
+        "--price-basis",
+        "reference",
+        "--month",
+        "2026-05",
+        "--seed",
+        "20260906",
+        "--date",
+        "2026-09-07",
+        "--history",
+        "docs/paper/submission-2026-09-07/price_history_2026-09-07.json",
+        "--live-basis",
+        "docs/paper/submission-2026-09-07/live_basis_2026-09-07.json",
+        "--support-history",
+        "docs/paper/submission-2026-09-07/support_history_2026-09-07.json",
+        "--out-dir",
+        "_local/commercial-final-paper-stable"
+      ],
+      "exit_code": 0,
+      "seconds": 30.522,
+      "at": "2026-09-07T14:57:51.517857+00:00",
+      "log": "docs/audit/commercial-c13-paper-replay-stable-2026-09-07.log"
+    },
+    {
+      "task": "c13",
+      "check": "paper-replay",
+      "command": [
+        "python",
+        "scripts/reproduce_paper.py",
+        "--price-basis",
+        "reference",
+        "--month",
+        "2026-05",
+        "--seed",
+        "20260906",
+        "--date",
+        "2026-09-07",
+        "--history",
+        "docs/paper/submission-2026-09-07/price_history_2026-09-07.json",
+        "--live-basis",
+        "docs/paper/submission-2026-09-07/live_basis_2026-09-07.json",
+        "--support-history",
+        "docs/paper/submission-2026-09-07/support_history_2026-09-07.json",
+        "--out-dir",
+        "_local/commercial-final-paper-replay"
+      ],
+      "exit_code": 0,
+      "seconds": 30.004,
+      "at": "2026-09-07T14:52:01.563468+00:00",
+      "log": "docs/audit/commercial-c13-paper-replay-2026-09-07.log"
+    },
+    {
+      "task": "c13",
+      "check": "portability-focused",
+      "command": [
+        "python",
+        "-m",
+        "pytest",
+        "backend/tests/test_paper_submission_claims.py",
+        "-q"
+      ],
+      "exit_code": 0,
+      "seconds": 4.288,
+      "at": "2026-09-07T15:07:01.242696+00:00",
+      "log": "docs/audit/commercial-c13-portability-focused-2026-09-07.log"
+    },
+    {
+      "task": "c13",
+      "check": "profile-isolation",
+      "command": [
+        "python",
+        "_local/check_c13_profile.py",
+        "after"
+      ],
+      "exit_code": 0,
+      "seconds": 0.195,
+      "at": "2026-09-07T14:58:29.765304+00:00",
+      "log": "docs/audit/commercial-c13-profile-isolation-2026-09-07.log"
+    },
+    {
+      "task": "c13",
+      "check": "public-rights",
+      "command": [
+        "python",
+        "scripts/check_data_rights.py",
+        "--purpose",
+        "public_distribution"
+      ],
+      "exit_code": 1,
+      "seconds": 0.242,
+      "at": "2026-09-07T14:51:58.130779+00:00",
+      "log": "docs/audit/commercial-c13-public-rights-2026-09-07.log"
+    },
+    {
+      "task": "c13",
+      "check": "pytest-portable",
+      "command": [
+        "python",
+        "-m",
+        "pytest",
+        "backend/tests",
+        "-q"
+      ],
+      "exit_code": 0,
+      "seconds": 515.073,
+      "at": "2026-09-07T15:16:10.759720+00:00",
+      "log": "docs/audit/commercial-c13-pytest-portable-2026-09-07.log"
+    },
+    {
+      "task": "c13",
+      "check": "pytest",
+      "command": [
+        "python",
+        "-m",
+        "pytest",
+        "backend/tests",
+        "-q"
+      ],
+      "exit_code": 0,
+      "seconds": 582.502,
+      "at": "2026-09-07T15:01:14.062686+00:00",
+      "log": "docs/audit/commercial-c13-pytest-2026-09-07.log"
+    },
+    {
+      "task": "c13",
+      "check": "range-rules",
+      "command": [
+        "node",
+        "scripts/test_practical_range.mjs"
+      ],
+      "exit_code": 0,
+      "seconds": 0.288,
+      "at": "2026-09-07T14:51:58.134185+00:00",
+      "log": "docs/audit/commercial-c13-range-rules-2026-09-07.log"
+    },
+    {
+      "task": "c13",
+      "check": "replay-comparison",
+      "command": [
+        "python",
+        "_local/check_c13_replay.py"
+      ],
+      "exit_code": 1,
+      "seconds": 0.138,
+      "at": "2026-09-07T14:54:21.939476+00:00",
+      "log": "docs/audit/commercial-c13-replay-comparison-2026-09-07.log"
+    },
+    {
+      "task": "c13",
+      "check": "replay-portable-check",
+      "command": [
+        "python",
+        "_local/check_c13_portable.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.127,
+      "at": "2026-09-07T15:09:23.587751+00:00",
+      "log": "docs/audit/commercial-c13-replay-portable-check-2026-09-07.log"
+    },
+    {
+      "task": "c13",
+      "check": "replay-stable-check",
+      "command": [
+        "python",
+        "_local/check_c13_stable.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.14,
+      "at": "2026-09-07T14:58:29.497521+00:00",
+      "log": "docs/audit/commercial-c13-replay-stable-check-2026-09-07.log"
+    },
+    {
+      "task": "c13",
+      "check": "replay-verified",
+      "command": [
+        "python",
+        "_local/check_c13_replay.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.194,
+      "at": "2026-09-07T14:55:07.429961+00:00",
+      "log": "docs/audit/commercial-c13-replay-verified-2026-09-07.log"
+    },
+    {
+      "task": "c13",
+      "check": "ruff",
+      "command": [
+        "python",
+        "-m",
+        "ruff",
+        "check",
+        "."
+      ],
+      "exit_code": 0,
+      "seconds": 0.174,
+      "at": "2026-09-07T14:51:57.980294+00:00",
+      "log": "docs/audit/commercial-c13-ruff-2026-09-07.log"
+    },
+    {
+      "task": "c13",
+      "check": "snapshot-blobs",
+      "command": [
+        "python",
+        "_local/check_c13_blobs.py"
+      ],
+      "exit_code": 1,
+      "seconds": 1.537,
+      "at": "2026-09-07T15:09:23.338818+00:00",
+      "log": "docs/audit/commercial-c13-snapshot-blobs-2026-09-07.log"
+    },
+    {
+      "task": "c13",
+      "check": "snapshot-index",
+      "command": [
+        "python",
+        "_local/check_c13_index.py"
+      ],
+      "exit_code": 0,
+      "seconds": 1.605,
+      "at": "2026-09-07T15:10:18.078976+00:00",
+      "log": "docs/audit/commercial-c13-snapshot-index-2026-09-07.log"
+    },
+    {
+      "task": "c13",
+      "check": "source-review",
+      "command": [
+        "python",
+        "_local/check_c13_source.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.925,
+      "at": "2026-09-07T14:59:05.974225+00:00",
+      "log": "docs/audit/commercial-c13-source-review-2026-09-07.log"
+    },
+    {
+      "task": "c13",
+      "check": "table62",
+      "command": [
+        "python",
+        "scripts/reproduce_catcost_table62.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.131,
+      "at": "2026-09-07T14:51:58.015807+00:00",
+      "log": "docs/audit/commercial-c13-table62-2026-09-07.log"
+    }
+  ],
+  "browser_evidence": "docs/audit/commercial-c10-browser-2026-09-07.json",
+  "source_review": "docs/audit/commercial-c13-source-review-2026-09-07.json",
+  "replay_comparison": "docs/audit/commercial-c13-replay-portable-2026-09-07.json",
+  "notes": [
+    "Final Linux/frontend/Windows CI result for the exact pushed head is recorded in PR112.",
+    "Rights exit1 remains a distribution/commercial hold.",
+    "Initial desktop-build, replay-comparison and snapshot-blobs failures are retained and followed by corrected checks.",
+    "Local tests/replay Python3.14; successful package Python3.11.9/PyInstaller6.19.0.",
+    "No cost equation/input numerical value, actual user DB, installed executable, LICENSE or declared dependency/lock changed."
+  ]
+}
