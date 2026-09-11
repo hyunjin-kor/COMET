@@ -200,6 +200,17 @@ A3·E5의 Engineering Au 판단은 사용자 조건(연구실은 SCIE만 실적 
 - 사용자가 v1.4.0 전체 릴리스를 지시했다. 먼저 확인한 결과 `release.yml`의 데이터 권리 게이트(`scripts/check_data_rights.py --purpose public_distribution`, 매니페스트 `docs/commercial/data-rights-2026-09-07.json`)가 로컬에서 exit 1, 데이터 파일 81개에 걸쳐 405건(공개 배포 미승인, 검토자·검토일·근거 없음)으로 실패한다. 태그를 밀면 워크플로가 이 단계에서 멈춰 설치본·GitHub Release·Zenodo 버전이 만들어지지 않는다. 게이트는 `c2a17d1`(2026-09-07)에 들어왔고 v1.3.24에는 없었다. 권리 검토는 사람의 판단이므로 매니페스트를 대신 채우거나 게이트를 우회하지 않았고, 병합·태그·릴리스는 하지 않았다.
 - 같은 날 재확인: GitHub 최신 릴리스 v1.3.24(2026-08-31), Zenodo 개념 기록의 최신 버전 v1.3.24(10.5281/zenodo.22213096), `package.json`·`frontend/package.json`·`pyproject.toml` 1.4.0(준비 버전).
 
+### H5. 참고문헌 보강과 커버레터 갱신 (2026-09-11)
+
+교수님 결정을 기다리는 동안 결정과 무관한 부분만 고쳤다. Availability(버전·문의처), Competing interests, 연구비 문구는 그대로 두었다.
+
+- 참고문헌 8편 → 14편. 소프트웨어가 실제로 쓰는 가격 출처 네 곳(Johnson Matthey PGM 가격 페이지, Westmetall 시장 데이터, IMF PCPS, UN Comtrade)을 원고가 처음 언급하는 자리에 인용했다. 가격 출처 추적이 이 소프트웨어의 핵심인데 원고가 출처를 하나도 인용하지 않고 있었다. 서론에는 09-09 Crossref 확인을 거친 촉매 합성 원가 연구 2편(Gkika & Kyzas 2025, Ferdous et al. 2025)을 넣었다. 번호는 첫 등장 순으로 다시 매겼다(1–14, 목록 전부 인용됨을 검사).
+- 출처 URL 접근 확인(2026-09-11, 자동 요청): Johnson Matthey·Westmetall은 200이고 본문이 읽힌다. UN Comtrade Plus는 200이지만 브라우저 앱 껍데기만 와서 내용은 자동으로 확인하지 못했다. IMF 안내 페이지 두 곳은 403(Access Denied)이어서, 소프트웨어가 호출하는 IMF SDMX 데이터 서비스 주소를 인용했다(데이터플로 200, 이름 'Primary Commodity Price System (PCPS)'; 니켈 시계열 200, 61 KB).
+- 분량을 유지하려고 세 곳을 줄였다: 가격 화면의 빠른 조회 설명, 니켈 예시의 설명 문장, 테스트 수 괄호 '(907 at the time of writing)'. 마지막 것은 오늘 수집 기준 909개라 이미 낡은 숫자였다. 공용 검사기는 인용 태그 `<sup>n</sup>`의 'sup'까지 단어로 세므로 인용 하나가 3단어로 잡힌다. 합계는 4,994 word-equivalent로 그대로다.
+- 한글판 초안(`_local/`)에 같은 변경을 반영했다. 영어에 없던 '무료 공개 무역 통계'의 '무료'도 지웠다(사용자 지시: 무료 표현 금지).
+- 커버레터(손으로 쓴 초안)를 현재 원고에 맞췄다: 옛 제목('Reproducible Decision Diagnostics'), 'free', 'tiers', 'weight sweeps·price replays·candidate-removal controls·score-perturbation', 'renderer', '4,494 word-equivalents'를 고쳤다. '산업 원가 정확도는 검증되지 않았다'는 서술은 발표된 시장 가격 대비 비교와 무역 통계 비교가 들어간 현재 원고에 맞게 바꾸되, 새 조성의 오차는 계산하지 않았다는 점은 유지했다. 공개 경로는 저자 결정 대기로 표시했다.
+- 검증: `--check` CHECK_OK(4,994), 인용 첫 등장 순서 1–14, 노트 테스트 2 passed, `python -m ruff check` 통과.
+
 확인 못 한 것과 하지 않은 것:
 
 - 저자·소속·연구비·이해관계 문구·상업 라이선스 문의처·심사용 버전(v1.4.0 태그 여부)은 원고에 placeholder로 남아 있으며 사람이 정해야 한다.
