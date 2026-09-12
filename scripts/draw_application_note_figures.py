@@ -44,18 +44,11 @@ FILL, ACC, ACC_MID, WARN = "#F4F6F7", "#1B6F78", "#6FA8AE", "#B8702F"
 TEXT = {
     "en": {
         "font": "Arial",
-        "formulation": "Formulation", "formulation_sub": "components, wt%",
-        "route": "Preparation route", "route_sub": "operations, order size",
-        "basis": "Price basis", "basis_sub": "spot or monthly average",
-        "materials": "Materials", "materials_1": "unit price × mass fraction",
-        "materials_2": "purchased precursor",
+        "formulation": "Formulation", "route": "Preparation route",
+        "basis": "Price basis", "order_size": "Order size",
+        "materials": "Materials",
         "processing": "Processing (Step Method)",
-        "processing_1": r"$H=\sum_j H_j$, hourly rates of the chosen operations",
-        "processing_2": "at the fitted production scale",
-        "overhead": "Overhead and margin", "overhead_1": "G&A and S&ARD uplifts,\nmargin set by order size",
-        "breakdown": "Cost breakdown",
-        "breakdown_lines": ["selling price per lb", "price, source, date", "reliability grade",
-                            "price basis", "each step priced,", "substituted or uncosted"],
+        "selling_price": "Selling price",
         "share_x": "Share of the selling price (%)",
         "seg_materials": "Materials", "seg_processing": "Processing", "seg_overhead": "Overhead and margin",
         "total_head": "USD/lb",
@@ -81,18 +74,11 @@ TEXT = {
     },
     "ko": {
         "font": "Malgun Gothic",
-        "formulation": "조성", "formulation_sub": "성분, wt%",
-        "route": "제조 경로", "route_sub": "공정, 주문 규모",
-        "basis": "가격 기준", "basis_sub": "현물 또는 월평균",
-        "materials": "재료비", "materials_1": "단가 × 질량 분율",
-        "materials_2": "구매 전구체",
+        "formulation": "조성", "route": "제조 경로",
+        "basis": "가격 기준", "order_size": "주문량",
+        "materials": "재료비",
         "processing": "가공비 (Step Method)",
-        "processing_1": r"$H=\sum_j H_j$, 선택한 공정들의 시간당 단가",
-        "processing_2": "맞춰진 생산 규모 기준",
-        "overhead": "간접비와 마진", "overhead_1": "일반관리비와 판매·연구개발 가산,\n주문 규모로 정해지는 마진",
-        "breakdown": "원가 내역",
-        "breakdown_lines": ["파운드당 판매 단가", "가격, 출처, 일자", "신뢰도 등급",
-                            "가격 기준", "공정별 산정·대체·", "미산정 표시"],
+        "selling_price": "판매 단가",
         "share_x": "판매 단가 대비 비율 (%)",
         "seg_materials": "재료비", "seg_processing": "가공비", "seg_overhead": "간접비와 마진",
         "total_head": "USD/lb",
@@ -196,11 +182,9 @@ def _box(ax, x, y, w, h, fill=FILL, edge=RULE, lw=0.5):
     ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0,rounding_size=0.8", fc=fill, ec=edge, lw=lw))
 
 
-def _arrow(ax, x1, y1, x2, y2, color=INK, label=None, dy=1.6):
+def _arrow(ax, x1, y1, x2, y2, color=INK):
     ax.add_patch(FancyArrowPatch((x1, y1), (x2, y2), arrowstyle="-|>", mutation_scale=6, color=color, lw=0.7,
                                  shrinkA=0, shrinkB=0, zorder=4))
-    if label:
-        ax.text((x1 + x2) / 2, (y1 + y2) / 2 + dy, label, ha="center", va="bottom", fontsize=8.0, color=INK)
 
 
 def _cost_model_panel(fig):
@@ -208,56 +192,38 @@ def _cost_model_panel(fig):
     ax.set_xlim(0, 178)
     ax.set_ylim(0, 47)
     ax.axis("off")
-    for title, sub, y in ((L["formulation"], L["formulation_sub"], 35.5),
-                          (L["route"], L["route_sub"], 20),
-                          (L["basis"], L["basis_sub"], 4.5)):
-        _box(ax, 4, y, 26, 9.6)
-        ax.text(17, y + 6.4, title, ha="center", va="center", fontsize=8.2, fontweight="bold")
-        ax.text(17, y + 2.7, sub, ha="center", va="center", fontsize=7.0, color=MUTED)
+    for key, y in (("formulation", 36), ("basis", 26), ("route", 16), ("order_size", 6)):
+        _box(ax, 4, y, 34, 8)
+        ax.text(21, y + 4, L[key], ha="center", va="center", fontsize=8.5, fontweight="bold")
+        _arrow(ax, 38.4, y + 4, 49.6, y + 4)
 
-    mx, mw = 38, 52
-    _box(ax, mx, 24.5, mw, 21, fill="white", edge=INK, lw=0.6)
-    ax.text(mx + mw / 2, 42.2, L["materials"], ha="center", va="center", fontsize=8.5, fontweight="bold")
-    ax.text(mx + mw / 2, 36.4, r"$C_\mathrm{m}=\sum_i w_i\,c_i$", ha="center", va="center", fontsize=10.0)
-    ax.text(mx + mw / 2, 30.8, L["materials_1"], ha="center", va="center", fontsize=7.0)
-    ax.text(mx + mw / 2, 27.2, L["materials_2"] + r"    $a = w/(f\,p\,y)$", ha="center", va="center", fontsize=7.4)
-    _box(ax, mx, 1.0, mw, 21, fill="white", edge=INK, lw=0.6)
-    ax.text(mx + mw / 2, 18.7, L["processing"], ha="center", va="center", fontsize=8.5, fontweight="bold")
-    ax.text(mx + mw / 2, 13.0, r"$C_\mathrm{p}=\dfrac{24\,T\,I\,H}{M}$", ha="center", va="center", fontsize=10.0)
-    ax.text(mx + mw / 2, 6.6, L["processing_1"], ha="center", va="center", fontsize=6.6)
-    ax.text(mx + mw / 2, 3.2, L["processing_2"], ha="center", va="center", fontsize=7.0)
+    mx, mw = 50, 46
+    _box(ax, mx, 26, mw, 18, fill="white", edge=INK, lw=0.6)
+    ax.text(73, 40, L["materials"], ha="center", va="center", fontsize=9.0, fontweight="bold")
+    ax.text(73, 32, r"$C_\mathrm{m}=\sum_i w_i\,c_i$", ha="center", va="center", fontsize=11.0)
+    _box(ax, mx, 6, mw, 18, fill="white", edge=INK, lw=0.6)
+    ax.text(73, 20, L["processing"], ha="center", va="center", fontsize=8.5, fontweight="bold")
+    ax.text(73, 12, r"$C_\mathrm{p}=\dfrac{24\,T\,I\,H}{M}$", ha="center", va="center", fontsize=11.0)
 
-    # The three inputs meet one vertical trunk, so no line crosses another.
-    trunk = 34.0
-    _arrow(ax, 30.3, 40.3, mx - 0.4, 40.3)
-    _arrow(ax, 30.3, 9.3, mx - 0.4, 9.3)
-    ax.plot([30.3, trunk], [24.8, 24.8], color=INK, lw=0.7, solid_capstyle="round", zorder=3)
-    ax.plot([trunk, trunk], [15.5, 31.5], color=INK, lw=0.7, solid_capstyle="round", zorder=3)
-    _arrow(ax, trunk, 31.5, mx - 0.4, 31.5)
-    _arrow(ax, trunk, 15.5, mx - 0.4, 15.5)
+    px, pw = 112, 62
+    _box(ax, px, 15, pw, 22, fill="#EAF1F2", edge=ACC, lw=0.6)
+    ax.text(143, 32.5, L["selling_price"], ha="center", va="center", fontsize=9.0, fontweight="bold")
+    ax.text(143, 23.5, r"$P=\dfrac{(C_\mathrm{m}+C_\mathrm{p})(1+g)(1+s)}{1-m}$", ha="center",
+            va="center", fontsize=11.0)
 
-    px, pw = 96.5, 47
-    _box(ax, px, 11, pw, 24, fill="white", edge=INK, lw=0.6)
-    ax.text(px + pw / 2, 31.7, L["overhead"], ha="center", va="center", fontsize=8.5, fontweight="bold")
-    ax.text(px + pw / 2, 22.6, r"$P=\dfrac{(C_\mathrm{m}+C_\mathrm{p})(1+g)(1+s)}{1-m}$", ha="center",
-            va="center", fontsize=9.4)
-    ax.text(px + pw / 2, 13.4, L["overhead_1"], ha="center", va="center", fontsize=6.6, linespacing=1.5)
+    # Independent orthogonal paths preserve the two cost contributions.
+    for start_y, end_y, label_y, label, va in (
+        (35, 30, 36.5, r"$C_\mathrm{m}$", "bottom"),
+        (15, 22, 13.5, r"$C_\mathrm{p}$", "top"),
+    ):
+        ax.plot([96.4, 103, 103], [start_y, start_y, end_y], color=INK, lw=0.7, zorder=3)
+        _arrow(ax, 103, end_y, px - 0.4, end_y)
+        ax.text(100, label_y, label, ha="center", va=va, fontsize=8.5)
 
-    # The two costs enter the price box at their own height rather than merging into one line.
-    bus = 93.0
-    ax.plot([mx + mw + 0.4, bus, bus], [35.0, 35.0, 28.0], color=INK, lw=0.7, solid_capstyle="round", zorder=3)
-    ax.plot([mx + mw + 0.4, bus, bus], [11.5, 11.5, 18.0], color=INK, lw=0.7, solid_capstyle="round", zorder=3)
-    _arrow(ax, bus, 28.0, px - 0.4, 28.0)
-    _arrow(ax, bus, 18.0, px - 0.4, 18.0)
-    ax.text((mx + mw + bus) / 2, 35.6, r"$C_\mathrm{m}$", ha="center", va="bottom", fontsize=7.6)
-    ax.text((mx + mw + bus) / 2, 10.9, r"$C_\mathrm{p}$", ha="center", va="top", fontsize=7.6)
-
-    lx, lw_ = 147, 29
-    _box(ax, lx, 11, lw_, 24, fill="#EAF1F2", edge=ACC, lw=0.6)
-    ax.text(lx + lw_ / 2, 31.7, L["breakdown"], ha="center", va="center", fontsize=8.5, fontweight="bold")
-    for k, line_text in enumerate(L["breakdown_lines"]):
-        ax.text(lx + 2.4, 27.2 - k * 3.0, line_text, ha="left", va="center", fontsize=6.6)
-    _arrow(ax, px + pw + 0.4, 23.0, lx - 0.4, 23.0, label=r"$P$", dy=1.2)
+    # Order size also sets the selling-margin fraction, independently of processing cost.
+    ax.plot([44, 44, 143], [10, 2, 2], color=INK, lw=0.7, zorder=3)
+    _arrow(ax, 143, 2, 143, 14.6)
+    ax.text(145, 8, r"$m$", ha="left", va="center", fontsize=9.0)
 
 
 def _structure_panel(fig):
