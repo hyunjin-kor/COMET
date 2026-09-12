@@ -1193,29 +1193,29 @@ z
 " style="fill: #1b6f78"/>
     </g>
     <g id="text_37">
-     <text style="font-size: 7px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="147.010236" y="25.490498" transform="rotate(-0 147.010236 25.490498)">Reference leader</text>
+     <text style="font-size: 7px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="147.010236" y="25.490498" transform="rotate(-0 147.010236 25.490498)">Top-ranked at baseline</text>
     </g>
     <g id="patch_98">
-     <path d="M 207.005705 25.490498 
-L 214.005705 25.490498 
-L 214.005705 20.590498 
-L 207.005705 20.590498 
+     <path d="M 224.12508 25.490498 
+L 231.12508 25.490498 
+L 231.12508 20.590498 
+L 224.12508 20.590498 
 z
 " style="fill: #b8702f"/>
     </g>
     <g id="text_38">
-     <text style="font-size: 7px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="217.505705" y="25.490498" transform="rotate(-0 217.505705 25.490498)">Leading alternative</text>
+     <text style="font-size: 7px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="234.62508" y="25.490498" transform="rotate(-0 234.62508 25.490498)">Leading alternative</text>
     </g>
     <g id="patch_99">
-     <path d="M 282.955705 25.490498 
-L 289.955705 25.490498 
-L 289.955705 20.590498 
-L 282.955705 20.590498 
+     <path d="M 300.07508 25.490498 
+L 307.07508 25.490498 
+L 307.07508 20.590498 
+L 300.07508 20.590498 
 z
 " style="fill: #d9dee1"/>
     </g>
     <g id="text_39">
-     <text style="font-size: 7px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="293.455705" y="25.490498" transform="rotate(-0 293.455705 25.490498)">Other candidates</text>
+     <text style="font-size: 7px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="310.57508" y="25.490498" transform="rotate(-0 310.57508 25.490498)">Other candidates</text>
     </g>
    </g>
   </g>
@@ -1350,7 +1350,7 @@ z
      </g>
     </g>
     <g id="text_44">
-     <text style="font-size: 8px; font-family: 'Arial'; text-anchor: middle" x="445.280315" y="149.741789" transform="rotate(-0 445.280315 149.741789)">Leader retained (families)</text>
+     <text style="font-size: 8px; font-family: 'Arial'; text-anchor: middle" x="445.280315" y="149.741789" transform="rotate(-0 445.280315 149.741789)">Top rank retained (families)</text>
     </g>
    </g>
    <g id="matplotlib.axis_4">
@@ -1963,11 +1963,11 @@ z
    <g id="legend_2">
     <g id="line2d_111">
      <g>
-      <use xlink:href="#m589ea090a3" x="409.773543" y="194.763546" style="fill-opacity: 0; stroke: #1b6f78"/>
+      <use xlink:href="#m589ea090a3" x="409.773543" y="194.680671" style="fill-opacity: 0; stroke: #1b6f78"/>
      </g>
     </g>
     <g id="text_68">
-     <text style="font-size: 6.8px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="416.573543" y="197.143546" transform="rotate(-0 416.573543 197.143546)">Reference leader</text>
+     <text style="font-size: 6.8px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="416.573543" y="197.060671" transform="rotate(-0 416.573543 197.060671)">Top-ranked at baseline</text>
     </g>
     <g id="line2d_112">
      <g>
@@ -1975,7 +1975,7 @@ z
      </g>
     </g>
     <g id="text_69">
-     <text style="font-size: 6.8px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="416.573543" y="206.762358" transform="rotate(-0 416.573543 206.762358)">Leader after removal</text>
+     <text style="font-size: 6.8px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="416.573543" y="206.762358" transform="rotate(-0 416.573543 206.762358)">Top-ranked after removal</text>
     </g>
    </g>
   </g>

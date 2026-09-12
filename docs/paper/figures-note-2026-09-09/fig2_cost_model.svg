@@ -4060,7 +4060,7 @@ L 148.11877 438.720813
 " style="fill: none; stroke: #1b6f78; stroke-width: 0.9; stroke-linecap: square"/>
    </g>
    <g id="text_126">
-    <text style="font-size: 7px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="151.61877" y="441.170813" transform="rotate(-0 151.61877 441.170813)">Reference-leading candidates</text>
+    <text style="font-size: 7px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="151.61877" y="441.170813" transform="rotate(-0 151.61877 441.170813)">Top-ranked candidates at baseline</text>
    </g>
   </g>
  </g>
