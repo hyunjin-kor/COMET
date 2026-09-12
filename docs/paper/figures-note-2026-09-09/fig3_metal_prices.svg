@@ -325,6 +325,9 @@ L -2 0
       </g>
      </g>
     </g>
+    <g id="text_12">
+     <text style="font-size: 7px; font-family: 'Arial'; text-anchor: middle" x="16.929109" y="87.32126" transform="rotate(-90 16.929109 87.32126)">Price (USD/troy oz)</text>
+    </g>
    </g>
    <g id="line2d_35">
     <path d="M 50.322288 68.168599 
@@ -416,7 +419,7 @@ L 185.292246 46.859671
 L 186.910841 46.525943 
 L 188.477224 48.080083 
 L 190.095819 48.616774 
-" clip-path="url(#pdc0790fb90)" style="fill: none; stroke: #1b6f78; stroke-linecap: square"/>
+" clip-path="url(#pdc0790fb90)" style="fill: none; stroke: #0072b2; stroke-linecap: square"/>
    </g>
    <g id="line2d_36">
     <path d="M 50.322288 75.516527 
@@ -508,7 +511,7 @@ L 185.292246 54.020063
 L 186.910841 51.983579 
 L 188.477224 51.713508 
 L 190.095819 52.357545 
-" clip-path="url(#pdc0790fb90)" style="fill: none; stroke: #307880; stroke-linecap: square"/>
+" clip-path="url(#pdc0790fb90)" style="fill: none; stroke: #d55e00; stroke-linecap: square"/>
    </g>
    <g id="line2d_37">
     <path d="M 50.322288 77.462396 
@@ -600,7 +603,7 @@ L 185.292246 58.062476
 L 186.910841 58.502382 
 L 188.477224 58.928654 
 L 190.095819 59.326458 
-" clip-path="url(#pdc0790fb90)" style="fill: none; stroke: #458189; stroke-linecap: square"/>
+" clip-path="url(#pdc0790fb90)" style="fill: none; stroke: #009e73; stroke-linecap: square"/>
    </g>
    <g id="line2d_38">
     <path d="M 50.322288 84.174721 
@@ -692,7 +695,7 @@ L 185.292246 70.170157
 L 186.910841 70.81774 
 L 188.477224 70.997926 
 L 190.095819 71.189502 
-" clip-path="url(#pdc0790fb90)" style="fill: none; stroke: #5a8a92; stroke-linecap: square"/>
+" clip-path="url(#pdc0790fb90)" style="fill: none; stroke: #cc79a7; stroke-linecap: square"/>
    </g>
    <g id="line2d_39">
     <path d="M 50.322288 77.025923 
@@ -784,7 +787,7 @@ L 185.292246 73.154525
 L 186.910841 74.758989 
 L 188.477224 75.074731 
 L 190.095819 75.830652 
-" clip-path="url(#pdc0790fb90)" style="fill: none; stroke: #70949a; stroke-linecap: square"/>
+" clip-path="url(#pdc0790fb90)" style="fill: none; stroke: #9c6b00; stroke-linecap: square"/>
    </g>
    <g id="line2d_40">
     <path d="M 50.322288 99.85103 
@@ -876,7 +879,7 @@ L 185.292246 76.05818
 L 186.910841 73.882746 
 L 188.477224 73.494343 
 L 190.095819 74.423821 
-" clip-path="url(#pdc0790fb90)" style="fill: none; stroke: #859da2; stroke-linecap: square"/>
+" clip-path="url(#pdc0790fb90)" style="fill: none; stroke: #508da8; stroke-linecap: square"/>
    </g>
    <g id="line2d_41">
     <path d="M 50.322288 140.639578 
@@ -968,7 +971,7 @@ L 185.292246 116.800982
 L 186.910841 117.525385 
 L 188.477224 118.112248 
 L 190.095819 117.700175 
-" clip-path="url(#pdc0790fb90)" style="fill: none; stroke: #9aa6ab; stroke-linecap: square"/>
+" clip-path="url(#pdc0790fb90)" style="fill: none; stroke: #555555; stroke-linecap: square"/>
    </g>
    <g id="patch_3">
     <path d="M 48.755906 146.976378 
@@ -990,33 +993,68 @@ L 190.148031 146.976378
 L 190.148031 27.666142 
 " style="fill: none; stroke: #1f2a30; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
-   <g id="text_12">
-    <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: start; fill: #1b6f78" x="192.975874" y="50.271274" transform="rotate(-0 192.975874 50.271274)">Rh</text>
+   <g id="patch_7">
+    <path d="M 193.682835 48.616774 
+Q 191.889327 48.616774 190.095819 48.616774 
+" style="fill: none; stroke: #0072b2; stroke-width: 0.5; stroke-linecap: round"/>
    </g>
    <g id="text_13">
-    <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: start; fill: #307880" x="192.975874" y="59.448985" transform="rotate(-0 192.975874 59.448985)">Ir</text>
+    <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: start; fill: #0072b2" x="196.510677" y="50.271274" transform="rotate(-0 196.510677 50.271274)">Rh</text>
+   </g>
+   <g id="patch_8">
+    <path d="M 193.682835 57.794485 
+Q 191.889327 55.076015 190.095819 52.357545 
+" style="fill: none; stroke: #d55e00; stroke-width: 0.5; stroke-linecap: round"/>
    </g>
    <g id="text_14">
-    <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: start; fill: #458189" x="192.975874" y="68.626695" transform="rotate(-0 192.975874 68.626695)">Au</text>
+    <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: start; fill: #d55e00" x="196.510677" y="59.448985" transform="rotate(-0 196.510677 59.448985)">Ir</text>
+   </g>
+   <g id="patch_9">
+    <path d="M 193.682835 66.972195 
+Q 191.889327 63.149327 190.095819 59.326458 
+" style="fill: none; stroke: #009e73; stroke-width: 0.5; stroke-linecap: round"/>
    </g>
    <g id="text_15">
-    <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: start; fill: #5a8a92" x="192.975874" y="77.804406" transform="rotate(-0 192.975874 77.804406)">Pt</text>
+    <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: start; fill: #009e73" x="196.510677" y="68.626695" transform="rotate(-0 196.510677 68.626695)">Au</text>
+   </g>
+   <g id="patch_10">
+    <path d="M 193.682835 76.149906 
+Q 191.889327 73.669704 190.095819 71.189502 
+" style="fill: none; stroke: #cc79a7; stroke-width: 0.5; stroke-linecap: round"/>
    </g>
    <g id="text_16">
-    <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: start; fill: #859da2" x="192.975874" y="86.982116" transform="rotate(-0 192.975874 86.982116)">Ru</text>
+    <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: start; fill: #cc79a7" x="196.510677" y="77.804406" transform="rotate(-0 196.510677 77.804406)">Pt</text>
+   </g>
+   <g id="patch_11">
+    <path d="M 193.682835 85.327616 
+Q 191.889327 79.875719 190.095819 74.423821 
+" style="fill: none; stroke: #508da8; stroke-width: 0.5; stroke-linecap: round"/>
    </g>
    <g id="text_17">
-    <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: start; fill: #70949a" x="192.975874" y="96.159827" transform="rotate(-0 192.975874 96.159827)">Pd</text>
+    <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: start; fill: #508da8" x="196.510677" y="86.982116" transform="rotate(-0 196.510677 86.982116)">Ru</text>
+   </g>
+   <g id="patch_12">
+    <path d="M 193.682835 94.505327 
+Q 191.889327 85.167989 190.095819 75.830652 
+" style="fill: none; stroke: #9c6b00; stroke-width: 0.5; stroke-linecap: round"/>
    </g>
    <g id="text_18">
-    <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: start; fill: #9aa6ab" x="192.975874" y="119.317175" transform="rotate(-0 192.975874 119.317175)">Ag</text>
+    <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: start; fill: #9c6b00" x="196.510677" y="96.159827" transform="rotate(-0 196.510677 96.159827)">Pd</text>
+   </g>
+   <g id="patch_13">
+    <path d="M 193.682835 117.700175 
+Q 191.889327 117.700175 190.095819 117.700175 
+" style="fill: none; stroke: #555555; stroke-width: 0.5; stroke-linecap: round"/>
    </g>
    <g id="text_19">
-    <text style="font-weight: 700; font-size: 7.6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="119.451969" y="23.666142" transform="rotate(-0 119.451969 23.666142)">Precious metals, USD per troy ounce</text>
+    <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: start; fill: #555555" x="196.510677" y="119.317175" transform="rotate(-0 196.510677 119.317175)">Ag</text>
+   </g>
+   <g id="text_20">
+    <text style="font-weight: 700; font-size: 7.6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="119.451969" y="23.666142" transform="rotate(-0 119.451969 23.666142)">Precious metals</text>
    </g>
   </g>
   <g id="axes_2">
-   <g id="patch_7">
+   <g id="patch_14">
     <path d="M 48.755906 309.514961 
 L 190.148031 309.514961 
 L 190.148031 190.204724 
@@ -1031,7 +1069,7 @@ z
        <use xlink:href="#m8ad9843059" x="67.813559" y="309.514961" style="fill: #1f2a30; stroke: #1f2a30; stroke-width: 0.5"/>
       </g>
      </g>
-     <g id="text_20">
+     <g id="text_21">
       <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="67.813559" y="320.38332" transform="rotate(-0 67.813559 320.38332)">2020</text>
      </g>
     </g>
@@ -1041,7 +1079,7 @@ z
        <use xlink:href="#m8ad9843059" x="105.981079" y="309.514961" style="fill: #1f2a30; stroke: #1f2a30; stroke-width: 0.5"/>
       </g>
      </g>
-     <g id="text_21">
+     <g id="text_22">
       <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="105.981079" y="320.38332" transform="rotate(-0 105.981079 320.38332)">2022</text>
      </g>
     </g>
@@ -1051,7 +1089,7 @@ z
        <use xlink:href="#m8ad9843059" x="144.096386" y="309.514961" style="fill: #1f2a30; stroke: #1f2a30; stroke-width: 0.5"/>
       </g>
      </g>
-     <g id="text_22">
+     <g id="text_23">
       <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="144.096386" y="320.38332" transform="rotate(-0 144.096386 320.38332)">2024</text>
      </g>
     </g>
@@ -1061,7 +1099,7 @@ z
        <use xlink:href="#m8ad9843059" x="182.263906" y="309.514961" style="fill: #1f2a30; stroke: #1f2a30; stroke-width: 0.5"/>
       </g>
      </g>
-     <g id="text_23">
+     <g id="text_24">
       <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="182.263906" y="320.38332" transform="rotate(-0 182.263906 320.38332)">2026</text>
      </g>
     </g>
@@ -1073,7 +1111,7 @@ z
        <use xlink:href="#m0b9b464e97" x="48.755906" y="293.008716" style="fill: #1f2a30; stroke: #1f2a30; stroke-width: 0.5"/>
       </g>
      </g>
-     <g id="text_24">
+     <g id="text_25">
       <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="43.255906" y="295.692896" transform="rotate(-0 43.255906 295.692896)">1</text>
      </g>
     </g>
@@ -1083,7 +1121,7 @@ z
        <use xlink:href="#m0b9b464e97" x="48.755906" y="263.46883" style="fill: #1f2a30; stroke: #1f2a30; stroke-width: 0.5"/>
       </g>
      </g>
-     <g id="text_25">
+     <g id="text_26">
       <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="43.255906" y="266.153009" transform="rotate(-0 43.255906 266.153009)">3</text>
      </g>
     </g>
@@ -1093,7 +1131,7 @@ z
        <use xlink:href="#m0b9b464e97" x="48.755906" y="231.095971" style="fill: #1f2a30; stroke: #1f2a30; stroke-width: 0.5"/>
       </g>
      </g>
-     <g id="text_26">
+     <g id="text_27">
       <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="43.255906" y="233.78015" transform="rotate(-0 43.255906 233.78015)">10</text>
      </g>
     </g>
@@ -1103,7 +1141,7 @@ z
        <use xlink:href="#m0b9b464e97" x="48.755906" y="201.556084" style="fill: #1f2a30; stroke: #1f2a30; stroke-width: 0.5"/>
       </g>
      </g>
-     <g id="text_27">
+     <g id="text_28">
       <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="43.255906" y="204.240264" transform="rotate(-0 43.255906 204.240264)">30</text>
      </g>
     </g>
@@ -1198,6 +1236,9 @@ z
       </g>
      </g>
     </g>
+    <g id="text_29">
+     <text style="font-size: 7px; font-family: 'Arial'; text-anchor: middle" x="29.441218" y="249.859843" transform="rotate(-90 29.441218 249.859843)">Price (USD/lb)</text>
+    </g>
    </g>
    <g id="line2d_63">
     <path d="M 50.322288 248.540761 
@@ -1289,7 +1330,7 @@ L 185.292246 237.812565
 L 186.910841 237.964529 
 L 188.477224 236.75063 
 L 190.095819 235.389079 
-" clip-path="url(#p381fffcf6a)" style="fill: none; stroke: #1b6f78; stroke-linecap: square"/>
+" clip-path="url(#p381fffcf6a)" style="fill: none; stroke: #0072b2; stroke-linecap: square"/>
    </g>
    <g id="line2d_64">
     <path d="M 50.322288 266.362618 
@@ -1381,7 +1422,7 @@ L 185.292246 245.399158
 L 186.910841 246.291215 
 L 188.477224 245.525323 
 L 190.095819 244.259263 
-" clip-path="url(#p381fffcf6a)" style="fill: none; stroke: #307880; stroke-linecap: square"/>
+" clip-path="url(#p381fffcf6a)" style="fill: none; stroke: #d55e00; stroke-linecap: square"/>
    </g>
    <g id="line2d_65">
     <path d="M 50.322288 214.608029 
@@ -1473,7 +1514,7 @@ L 185.292246 206.098484
 L 186.910841 206.10273 
 L 188.477224 206.098909 
 L 190.095819 206.100713 
-" clip-path="url(#p381fffcf6a)" style="fill: none; stroke: #458189; stroke-linecap: square"/>
+" clip-path="url(#p381fffcf6a)" style="fill: none; stroke: #009e73; stroke-linecap: square"/>
    </g>
    <g id="line2d_66">
     <path d="M 50.322288 227.843072 
@@ -1565,7 +1606,7 @@ L 185.292246 202.456054
 L 186.910841 202.236838 
 L 188.477224 202.215887 
 L 190.095819 201.75959 
-" clip-path="url(#p381fffcf6a)" style="fill: none; stroke: #5a8a92; stroke-linecap: square"/>
+" clip-path="url(#p381fffcf6a)" style="fill: none; stroke: #cc79a7; stroke-linecap: square"/>
    </g>
    <g id="line2d_67">
     <path d="M 50.322288 233.106613 
@@ -1657,7 +1698,7 @@ L 185.292246 209.789034
 L 186.910841 210.556724 
 L 188.477224 209.859856 
 L 190.095819 207.390078 
-" clip-path="url(#p381fffcf6a)" style="fill: none; stroke: #70949a; stroke-linecap: square"/>
+" clip-path="url(#p381fffcf6a)" style="fill: none; stroke: #9c6b00; stroke-linecap: square"/>
    </g>
    <g id="line2d_68">
     <path d="M 50.322288 297.671198 
@@ -1749,7 +1790,7 @@ L 185.292246 284.148475
 L 186.910841 281.57572 
 L 188.477224 279.865002 
 L 190.095819 279.392561 
-" clip-path="url(#p381fffcf6a)" style="fill: none; stroke: #859da2; stroke-linecap: square"/>
+" clip-path="url(#p381fffcf6a)" style="fill: none; stroke: #508da8; stroke-linecap: square"/>
    </g>
    <g id="line2d_69">
     <path d="M 50.322288 288.888452 
@@ -1841,52 +1882,93 @@ L 185.292246 281.970533
 L 186.910841 283.138785 
 L 188.477224 281.721992 
 L 190.095819 280.753594 
-" clip-path="url(#p381fffcf6a)" style="fill: none; stroke: #9aa6ab; stroke-linecap: square"/>
+" clip-path="url(#p381fffcf6a)" style="fill: none; stroke: #555555; stroke-linecap: square"/>
    </g>
-   <g id="patch_8">
+   <g id="patch_15">
     <path d="M 48.755906 309.514961 
 L 48.755906 190.204724 
 " style="fill: none; stroke: #1f2a30; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
-   <g id="patch_9">
+   <g id="patch_16">
     <path d="M 190.148031 309.514961 
 L 190.148031 190.204724 
 " style="fill: none; stroke: #1f2a30; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
-   <g id="patch_10">
+   <g id="patch_17">
     <path d="M 48.755906 309.514961 
 L 190.148031 309.514961 
 " style="fill: none; stroke: #1f2a30; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
-   <g id="patch_11">
+   <g id="patch_18">
     <path d="M 48.755906 190.204724 
 L 190.148031 190.204724 
 " style="fill: none; stroke: #1f2a30; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
-   <g id="text_28">
-    <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: start; fill: #5a8a92" x="192.975874" y="203.41409" transform="rotate(-0 192.975874 203.41409)">Mo</text>
-   </g>
-   <g id="text_29">
-    <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: start; fill: #458189" x="192.975874" y="212.591801" transform="rotate(-0 192.975874 212.591801)">Co</text>
+   <g id="patch_19">
+    <path d="M 193.682835 201.75959 
+Q 191.889327 201.75959 190.095819 201.75959 
+" style="fill: none; stroke: #cc79a7; stroke-width: 0.5; stroke-linecap: round"/>
    </g>
    <g id="text_30">
-    <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: start; fill: #70949a" x="192.975874" y="221.769511" transform="rotate(-0 192.975874 221.769511)">Sn</text>
+    <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: start; fill: #cc79a7" x="196.510677" y="203.41409" transform="rotate(-0 196.510677 203.41409)">Mo</text>
+   </g>
+   <g id="patch_20">
+    <path d="M 193.682835 210.937301 
+Q 191.889327 208.519007 190.095819 206.100713 
+" style="fill: none; stroke: #009e73; stroke-width: 0.5; stroke-linecap: round"/>
    </g>
    <g id="text_31">
-    <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: start; fill: #1b6f78" x="192.975874" y="237.043579" transform="rotate(-0 192.975874 237.043579)">Ni</text>
+    <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: start; fill: #009e73" x="196.510677" y="212.591801" transform="rotate(-0 196.510677 212.591801)">Co</text>
+   </g>
+   <g id="patch_21">
+    <path d="M 193.682835 220.115011 
+Q 191.889327 213.752545 190.095819 207.390078 
+" style="fill: none; stroke: #9c6b00; stroke-width: 0.5; stroke-linecap: round"/>
    </g>
    <g id="text_32">
-    <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: start; fill: #307880" x="192.975874" y="246.22129" transform="rotate(-0 192.975874 246.22129)">Cu</text>
+    <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: start; fill: #9c6b00" x="196.510677" y="221.769511" transform="rotate(-0 196.510677 221.769511)">Sn</text>
+   </g>
+   <g id="patch_22">
+    <path d="M 193.682835 235.389079 
+Q 191.889327 235.389079 190.095819 235.389079 
+" style="fill: none; stroke: #0072b2; stroke-width: 0.5; stroke-linecap: round"/>
    </g>
    <g id="text_33">
-    <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: start; fill: #859da2" x="192.975874" y="281.047061" transform="rotate(-0 192.975874 281.047061)">Al</text>
+    <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: start; fill: #0072b2" x="196.510677" y="237.043579" transform="rotate(-0 196.510677 237.043579)">Ni</text>
+   </g>
+   <g id="patch_23">
+    <path d="M 193.682835 244.56679 
+Q 191.889327 244.413027 190.095819 244.259263 
+" style="fill: none; stroke: #d55e00; stroke-width: 0.5; stroke-linecap: round"/>
    </g>
    <g id="text_34">
-    <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: start; fill: #9aa6ab" x="192.975874" y="290.224772" transform="rotate(-0 192.975874 290.224772)">Zn</text>
+    <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: start; fill: #d55e00" x="196.510677" y="246.22129" transform="rotate(-0 196.510677 246.22129)">Cu</text>
+   </g>
+   <g id="patch_24">
+    <path d="M 193.682835 279.392561 
+Q 191.889327 279.392561 190.095819 279.392561 
+" style="fill: none; stroke: #508da8; stroke-width: 0.5; stroke-linecap: round"/>
    </g>
    <g id="text_35">
-    <text style="font-weight: 700; font-size: 7.6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="119.451969" y="186.204724" transform="rotate(-0 119.451969 186.204724)">Base metals, USD per pound</text>
+    <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: start; fill: #508da8" x="196.510677" y="281.047061" transform="rotate(-0 196.510677 281.047061)">Al</text>
    </g>
+   <g id="patch_25">
+    <path d="M 193.682835 288.570272 
+Q 191.889327 284.661933 190.095819 280.753594 
+" style="fill: none; stroke: #555555; stroke-width: 0.5; stroke-linecap: round"/>
+   </g>
+   <g id="text_36">
+    <text style="font-size: 6.4px; font-family: 'Arial'; text-anchor: start; fill: #555555" x="196.510677" y="290.224772" transform="rotate(-0 196.510677 290.224772)">Zn</text>
+   </g>
+   <g id="text_37">
+    <text style="font-weight: 700; font-size: 7.6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="119.451969" y="186.204724" transform="rotate(-0 119.451969 186.204724)">Base metals</text>
+   </g>
+  </g>
+  <g id="text_38">
+   <text style="font-weight: 700; font-size: 10px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="3.656693" y="15.562205" transform="rotate(-0 3.656693 15.562205)">a</text>
+  </g>
+  <g id="text_39">
+   <text style="font-weight: 700; font-size: 10px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="3.656693" y="178.100787" transform="rotate(-0 3.656693 178.100787)">b</text>
   </g>
  </g>
  <defs>

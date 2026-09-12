@@ -1465,7 +1465,7 @@ L -2 0
      </g>
     </g>
     <g id="text_79">
-     <text style="font-size: 7.8px; font-family: 'Arial'; text-anchor: middle" x="348.876365" y="252.311811" transform="rotate(-90 348.876365 252.311811)">Gap to the published market price (%)</text>
+     <text style="font-size: 7.8px; font-family: 'Arial'; text-anchor: middle" x="348.876365" y="252.311811" transform="rotate(-90 348.876365 252.311811)">Deviation from market price (%)</text>
     </g>
    </g>
    <g id="line2d_41">
@@ -1497,7 +1497,7 @@ L 494.475591 175.776378
     <text style="font-size: 7px; font-family: 'Arial'; text-anchor: middle; fill: #1b6f78" x="384.156437" y="305.428718" transform="rotate(-0 384.156437 305.428718)">-19.7</text>
    </g>
    <g id="text_81">
-    <text style="font-size: 7px; font-family: 'Arial'; text-anchor: middle; fill: #5b6870" x="400.326339" y="305.420976" transform="rotate(-0 400.326339 305.420976)">-19.7</text>
+    <text style="font-size: 7px; font-family: 'Arial'; text-anchor: middle; fill: #5b6870" x="400.326339" y="316.505418" transform="rotate(-0 400.326339 316.505418)">-19.7</text>
    </g>
    <g id="text_82">
     <text style="font-size: 7px; font-family: 'Arial'; text-anchor: middle; fill: #1b6f78" x="424.581191" y="253.571293" transform="rotate(-0 424.581191 253.571293)">-9.9</text>
@@ -1509,7 +1509,7 @@ L 494.475591 175.776378
     <text style="font-size: 7px; font-family: 'Arial'; text-anchor: middle; fill: #1b6f78" x="465.005945" y="257.828842" transform="rotate(-0 465.005945 257.828842)">-10.7</text>
    </g>
    <g id="text_85">
-    <text style="font-size: 7px; font-family: 'Arial'; text-anchor: middle; fill: #5b6870" x="481.175846" y="263.242489" transform="rotate(-0 481.175846 263.242489)">-11.7</text>
+    <text style="font-size: 7px; font-family: 'Arial'; text-anchor: middle; fill: #5b6870" x="481.175846" y="274.326931" transform="rotate(-0 481.175846 274.326931)">-11.7</text>
    </g>
    <g id="legend_2">
     <g id="patch_104">
@@ -1532,7 +1532,7 @@ z
 " style="fill: #9aa6ab"/>
     </g>
     <g id="text_87">
-     <text style="font-size: 6.8px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="392.94147" y="170.174169" transform="rotate(-0 392.94147 170.174169)">Published estimate</text>
+     <text style="font-size: 6.8px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="392.94147" y="170.174169" transform="rotate(-0 392.94147 170.174169)">Published method</text>
     </g>
    </g>
   </g>
@@ -1712,7 +1712,7 @@ L 86.237221 552.057867
 L 87.727817 532.966705 
 L 89.2681 577.630615 
 L 90.758697 547.983163 
-L 110.434571 535.851818 
+M 110.434571 535.851818 
 L 111.974854 555.274978 
 L 113.366078 581.266891 
 L 114.906361 581.496335 
@@ -1792,7 +1792,7 @@ L 86.237221 536.382313
 L 87.727817 515.660859 
 L 89.2681 557.814268 
 L 90.758697 523.727996 
-L 110.434571 528.293108 
+M 110.434571 528.293108 
 L 111.974854 553.549033 
 L 113.366078 578.851317 
 L 114.906361 579.030148 
@@ -1872,7 +1872,7 @@ L 86.237221 534.28138
 L 87.727817 515.036149 
 L 89.2681 559.57805 
 L 90.758697 529.866254 
-L 110.434571 515.930469 
+M 110.434571 515.930469 
 L 111.974854 535.737191 
 L 113.366078 562.560814 
 L 114.906361 562.76747 
@@ -1952,7 +1952,7 @@ L 86.237221 538.478052
 L 87.727817 519.390287 
 L 89.2681 563.8947 
 L 90.758697 534.22329 
-L 110.434571 520.061792 
+M 110.434571 520.061792 
 L 111.974854 539.82935 
 L 113.366078 566.644563 
 L 114.906361 566.752548 
@@ -1996,9 +1996,6 @@ L 170.853418 511.936313
 " clip-path="url(#pa6b8c3b7d6)" style="fill: none; stroke: #1b6f78; stroke-opacity: 0.85; stroke-width: 0.8; stroke-linecap: square"/>
    </g>
    <g id="text_96">
-    <text style="font-size: 6.8px; font-family: 'Arial'; text-anchor: start; fill: #5b6870" x="41.879055" y="606.387685" transform="rotate(-0 41.879055 606.387685)">4 reaction families</text>
-   </g>
-   <g id="text_97">
     <text style="font-weight: 700; font-size: 7.5px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="105.11811" y="461.888976" transform="rotate(-0 105.11811 461.888976)">Nickel catalysts  (3815.11)</text>
    </g>
    <g id="line2d_57">
@@ -2023,7 +2020,7 @@ z
        <use xlink:href="#m8ad9843059" x="218.280473" y="612.283465" style="fill: #1f2a30; stroke: #1f2a30; stroke-width: 0.5"/>
       </g>
      </g>
-     <g id="text_98">
+     <g id="text_97">
       <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="218.280473" y="623.151824" transform="rotate(-0 218.280473 623.151824)">2020</text>
      </g>
     </g>
@@ -2033,7 +2030,7 @@ z
        <use xlink:href="#m8ad9843059" x="254.601342" y="612.283465" style="fill: #1f2a30; stroke: #1f2a30; stroke-width: 0.5"/>
       </g>
      </g>
-     <g id="text_99">
+     <g id="text_98">
       <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="254.601342" y="623.151824" transform="rotate(-0 254.601342 623.151824)">2022</text>
      </g>
     </g>
@@ -2043,7 +2040,7 @@ z
        <use xlink:href="#m8ad9843059" x="290.872525" y="612.283465" style="fill: #1f2a30; stroke: #1f2a30; stroke-width: 0.5"/>
       </g>
      </g>
-     <g id="text_100">
+     <g id="text_99">
       <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="290.872525" y="623.151824" transform="rotate(-0 290.872525 623.151824)">2024</text>
      </g>
     </g>
@@ -2053,7 +2050,7 @@ z
        <use xlink:href="#m8ad9843059" x="327.193394" y="612.283465" style="fill: #1f2a30; stroke: #1f2a30; stroke-width: 0.5"/>
       </g>
      </g>
-     <g id="text_101">
+     <g id="text_100">
       <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="327.193394" y="623.151824" transform="rotate(-0 327.193394 623.151824)">2026</text>
      </g>
     </g>
@@ -2065,7 +2062,7 @@ z
        <use xlink:href="#m0b9b464e97" x="200.144882" y="604.16301" style="fill: #1f2a30; stroke: #1f2a30; stroke-width: 0.5"/>
       </g>
      </g>
-     <g id="text_102">
+     <g id="text_101">
       <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="194.644882" y="606.84719" transform="rotate(-0 194.644882 606.84719)">0.5</text>
      </g>
     </g>
@@ -2075,7 +2072,7 @@ z
        <use xlink:href="#m0b9b464e97" x="200.144882" y="587.162259" style="fill: #1f2a30; stroke: #1f2a30; stroke-width: 0.5"/>
       </g>
      </g>
-     <g id="text_103">
+     <g id="text_102">
       <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="194.644882" y="589.846439" transform="rotate(-0 194.644882 589.846439)">1</text>
      </g>
     </g>
@@ -2085,7 +2082,7 @@ z
        <use xlink:href="#m0b9b464e97" x="200.144882" y="570.161508" style="fill: #1f2a30; stroke: #1f2a30; stroke-width: 0.5"/>
       </g>
      </g>
-     <g id="text_104">
+     <g id="text_103">
       <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="194.644882" y="572.845688" transform="rotate(-0 194.644882 572.845688)">2</text>
      </g>
     </g>
@@ -2095,7 +2092,7 @@ z
        <use xlink:href="#m0b9b464e97" x="200.144882" y="547.687738" style="fill: #1f2a30; stroke: #1f2a30; stroke-width: 0.5"/>
       </g>
      </g>
-     <g id="text_105">
+     <g id="text_104">
       <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="194.644882" y="550.371917" transform="rotate(-0 194.644882 550.371917)">5</text>
      </g>
     </g>
@@ -2105,7 +2102,7 @@ z
        <use xlink:href="#m0b9b464e97" x="200.144882" y="530.686986" style="fill: #1f2a30; stroke: #1f2a30; stroke-width: 0.5"/>
       </g>
      </g>
-     <g id="text_106">
+     <g id="text_105">
       <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="194.644882" y="533.371166" transform="rotate(-0 194.644882 533.371166)">10</text>
      </g>
     </g>
@@ -2115,7 +2112,7 @@ z
        <use xlink:href="#m0b9b464e97" x="200.144882" y="513.686235" style="fill: #1f2a30; stroke: #1f2a30; stroke-width: 0.5"/>
       </g>
      </g>
-     <g id="text_107">
+     <g id="text_106">
       <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="194.644882" y="516.370415" transform="rotate(-0 194.644882 516.370415)">20</text>
      </g>
     </g>
@@ -2125,7 +2122,7 @@ z
        <use xlink:href="#m0b9b464e97" x="200.144882" y="491.212465" style="fill: #1f2a30; stroke: #1f2a30; stroke-width: 0.5"/>
       </g>
      </g>
-     <g id="text_108">
+     <g id="text_107">
       <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="194.644882" y="493.896644" transform="rotate(-0 194.644882 493.896644)">50</text>
      </g>
     </g>
@@ -2135,7 +2132,7 @@ z
        <use xlink:href="#m0b9b464e97" x="200.144882" y="474.211714" style="fill: #1f2a30; stroke: #1f2a30; stroke-width: 0.5"/>
       </g>
      </g>
-     <g id="text_109">
+     <g id="text_108">
       <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="194.644882" y="476.895893" transform="rotate(-0 194.644882 476.895893)">100</text>
      </g>
     </g>
@@ -2316,7 +2313,7 @@ L 248.539583 493.430632
 L 250.030179 506.160722 
 L 251.570463 508.095656 
 L 253.061059 519.327965 
-L 272.736933 511.094683 
+M 272.736933 511.094683 
 L 274.277217 511.200431 
 L 275.66844 472.276306 
 L 277.208723 514.49081 
@@ -2396,7 +2393,7 @@ L 248.539583 582.558408
 L 250.030179 594.088519 
 L 251.570463 595.153152 
 L 253.061059 605.583715 
-L 272.736933 595.076504 
+M 272.736933 595.076504 
 L 274.277217 594.125914 
 L 275.66844 553.483866 
 L 277.208723 594.016398 
@@ -2476,7 +2473,7 @@ L 248.539583 551.135658
 L 250.030179 561.636659 
 L 251.570463 563.206347 
 L 253.061059 574.000206 
-L 272.736933 562.253902 
+M 272.736933 562.253902 
 L 274.277217 561.755552 
 L 275.66844 520.659634 
 L 277.208723 562.460629 
@@ -2519,10 +2516,7 @@ L 331.665183 541.863223
 L 333.15578 556.46154 
 " clip-path="url(#p8587f8ba85)" style="fill: none; stroke: #1b6f78; stroke-opacity: 0.85; stroke-width: 0.8; stroke-linecap: square"/>
    </g>
-   <g id="text_110">
-    <text style="font-size: 6.8px; font-family: 'Arial'; text-anchor: start; fill: #5b6870" x="204.181417" y="606.387685" transform="rotate(-0 204.181417 606.387685)">3 reaction families</text>
-   </g>
-   <g id="text_111">
+   <g id="text_109">
     <text style="font-weight: 700; font-size: 7.5px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="267.420472" y="461.888976" transform="rotate(-0 267.420472 461.888976)">Precious-metal catalysts  (3815.12)</text>
    </g>
    <g id="line2d_90">
@@ -2547,7 +2541,7 @@ z
        <use xlink:href="#m8ad9843059" x="380.582835" y="612.283465" style="fill: #1f2a30; stroke: #1f2a30; stroke-width: 0.5"/>
       </g>
      </g>
-     <g id="text_112">
+     <g id="text_110">
       <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="380.582835" y="623.151824" transform="rotate(-0 380.582835 623.151824)">2020</text>
      </g>
     </g>
@@ -2557,7 +2551,7 @@ z
        <use xlink:href="#m8ad9843059" x="416.903704" y="612.283465" style="fill: #1f2a30; stroke: #1f2a30; stroke-width: 0.5"/>
       </g>
      </g>
-     <g id="text_113">
+     <g id="text_111">
       <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="416.903704" y="623.151824" transform="rotate(-0 416.903704 623.151824)">2022</text>
      </g>
     </g>
@@ -2567,7 +2561,7 @@ z
        <use xlink:href="#m8ad9843059" x="453.174887" y="612.283465" style="fill: #1f2a30; stroke: #1f2a30; stroke-width: 0.5"/>
       </g>
      </g>
-     <g id="text_114">
+     <g id="text_112">
       <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="453.174887" y="623.151824" transform="rotate(-0 453.174887 623.151824)">2024</text>
      </g>
     </g>
@@ -2577,7 +2571,7 @@ z
        <use xlink:href="#m8ad9843059" x="489.495756" y="612.283465" style="fill: #1f2a30; stroke: #1f2a30; stroke-width: 0.5"/>
       </g>
      </g>
-     <g id="text_115">
+     <g id="text_113">
       <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="489.495756" y="623.151824" transform="rotate(-0 489.495756 623.151824)">2026</text>
      </g>
     </g>
@@ -2589,7 +2583,7 @@ z
        <use xlink:href="#m0b9b464e97" x="362.447244" y="598.441415" style="fill: #1f2a30; stroke: #1f2a30; stroke-width: 0.5"/>
       </g>
      </g>
-     <g id="text_116">
+     <g id="text_114">
       <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="356.947244" y="601.125595" transform="rotate(-0 356.947244 601.125595)">0.2</text>
      </g>
     </g>
@@ -2599,7 +2593,7 @@ z
        <use xlink:href="#m0b9b464e97" x="362.447244" y="570.363944" style="fill: #1f2a30; stroke: #1f2a30; stroke-width: 0.5"/>
       </g>
      </g>
-     <g id="text_117">
+     <g id="text_115">
       <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="356.947244" y="573.048124" transform="rotate(-0 356.947244 573.048124)">0.5</text>
      </g>
     </g>
@@ -2609,7 +2603,7 @@ z
        <use xlink:href="#m0b9b464e97" x="362.447244" y="549.124157" style="fill: #1f2a30; stroke: #1f2a30; stroke-width: 0.5"/>
       </g>
      </g>
-     <g id="text_118">
+     <g id="text_116">
       <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="356.947244" y="551.808337" transform="rotate(-0 356.947244 551.808337)">1</text>
      </g>
     </g>
@@ -2619,7 +2613,7 @@ z
        <use xlink:href="#m0b9b464e97" x="362.447244" y="527.88437" style="fill: #1f2a30; stroke: #1f2a30; stroke-width: 0.5"/>
       </g>
      </g>
-     <g id="text_119">
+     <g id="text_117">
       <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="356.947244" y="530.56855" transform="rotate(-0 356.947244 530.56855)">2</text>
      </g>
     </g>
@@ -2629,7 +2623,7 @@ z
        <use xlink:href="#m0b9b464e97" x="362.447244" y="499.806899" style="fill: #1f2a30; stroke: #1f2a30; stroke-width: 0.5"/>
       </g>
      </g>
-     <g id="text_120">
+     <g id="text_118">
       <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="356.947244" y="502.491079" transform="rotate(-0 356.947244 502.491079)">5</text>
      </g>
     </g>
@@ -2639,7 +2633,7 @@ z
        <use xlink:href="#m0b9b464e97" x="362.447244" y="478.567112" style="fill: #1f2a30; stroke: #1f2a30; stroke-width: 0.5"/>
       </g>
      </g>
-     <g id="text_121">
+     <g id="text_119">
       <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="356.947244" y="481.251292" transform="rotate(-0 356.947244 481.251292)">10</text>
      </g>
     </g>
@@ -2785,7 +2779,7 @@ L 410.841945 542.734991
 L 412.332542 552.301857 
 L 413.872825 555.584677 
 L 415.363421 552.757214 
-L 435.039296 562.848412 
+M 435.039296 562.848412 
 L 436.579579 572.428986 
 L 437.970802 551.161819 
 L 439.511085 554.620365 
@@ -2865,7 +2859,7 @@ L 410.841945 473.796097
 L 412.332542 483.380949 
 L 413.872825 487.036644 
 L 415.363421 484.936532 
-L 435.039296 491.408156 
+M 435.039296 491.408156 
 L 436.579579 492.241831 
 L 437.970802 471.588726 
 L 439.511085 476.967361 
@@ -2945,7 +2939,7 @@ L 410.841945 513.512855
 L 412.332542 523.690008 
 L 413.872825 528.21313 
 L 415.363421 527.25903 
-L 435.039296 532.99251 
+M 435.039296 532.99251 
 L 436.579579 539.59084 
 L 437.970802 517.620674 
 L 439.511085 521.250308 
@@ -3025,7 +3019,7 @@ L 410.841945 530.11738
 L 412.332542 539.69079 
 L 413.872825 544.332932 
 L 415.363421 543.591218 
-L 435.039296 549.984523 
+M 435.039296 549.984523 
 L 436.579579 556.669784 
 L 437.970802 534.798613 
 L 439.511085 538.487042 
@@ -3105,7 +3099,7 @@ L 410.841945 539.135365
 L 412.332542 549.373259 
 L 413.872825 553.884346 
 L 415.363421 552.908978 
-L 435.039296 558.577027 
+M 435.039296 558.577027 
 L 436.579579 565.16688 
 L 437.970802 543.186948 
 L 439.511085 546.810928 
@@ -3185,7 +3179,7 @@ L 410.841945 518.490643
 L 412.332542 528.522201 
 L 413.872825 532.647519 
 L 415.363421 531.070074 
-L 435.039296 538.135789 
+M 435.039296 538.135789 
 L 436.579579 545.593964 
 L 437.970802 523.812199 
 L 439.511085 527.390599 
@@ -3265,7 +3259,7 @@ L 410.841945 522.426321
 L 412.332542 532.265664 
 L 413.872825 536.375625 
 L 415.363421 534.962102 
-L 435.039296 539.876207 
+M 435.039296 539.876207 
 L 436.579579 540.150649 
 L 437.970802 519.250341 
 L 439.511085 524.55916 
@@ -3345,7 +3339,7 @@ L 410.841945 562.280165
 L 412.332542 572.51806 
 L 413.872825 577.029146 
 L 415.363421 576.053779 
-L 435.039296 581.721828 
+M 435.039296 581.721828 
 L 436.579579 588.311681 
 L 437.970802 566.331749 
 L 439.511085 569.955728 
@@ -3425,7 +3419,7 @@ L 410.841945 535.580046
 L 412.332542 545.817941 
 L 413.872825 550.329027 
 L 415.363421 549.35366 
-L 435.039296 555.021709 
+M 435.039296 555.021709 
 L 436.579579 561.611562 
 L 437.970802 539.63163 
 L 439.511085 543.255609 
@@ -3505,7 +3499,7 @@ L 410.841945 534.063161
 L 412.332542 544.301056 
 L 413.872825 548.812142 
 L 415.363421 547.836775 
-L 435.039296 553.504824 
+M 435.039296 553.504824 
 L 436.579579 560.094676 
 L 437.970802 538.114745 
 L 439.511085 541.738724 
@@ -3585,7 +3579,7 @@ L 410.841945 532.777615
 L 412.332542 543.01551 
 L 413.872825 547.526596 
 L 415.363421 546.551229 
-L 435.039296 552.219278 
+M 435.039296 552.219278 
 L 436.579579 558.809131 
 L 437.970802 536.829199 
 L 439.511085 540.453178 
@@ -3665,7 +3659,7 @@ L 410.841945 518.354533
 L 412.332542 528.592428 
 L 413.872825 533.103514 
 L 415.363421 532.128147 
-L 435.039296 537.796196 
+M 435.039296 537.796196 
 L 436.579579 544.386048 
 L 437.970802 522.406117 
 L 439.511085 526.030096 
@@ -3745,7 +3739,7 @@ L 410.841945 550.033852
 L 412.332542 560.271747 
 L 413.872825 564.782833 
 L 415.363421 563.807466 
-L 435.039296 569.475515 
+M 435.039296 569.475515 
 L 436.579579 576.065367 
 L 437.970802 554.085436 
 L 439.511085 557.709415 
@@ -3825,7 +3819,7 @@ L 410.841945 539.046104
 L 412.332542 548.986186 
 L 413.872825 553.555783 
 L 415.363421 552.685432 
-L 435.039296 558.676643 
+M 435.039296 558.676643 
 L 436.579579 565.309288 
 L 437.970802 543.376973 
 L 439.511085 547.029558 
@@ -3905,7 +3899,7 @@ L 410.841945 527.571779
 L 412.332542 537.069389 
 L 413.872825 541.726232 
 L 415.363421 541.011133 
-L 435.039296 547.487945 
+M 435.039296 547.487945 
 L 436.579579 554.184754 
 L 437.970802 532.326687 
 L 439.511085 536.022186 
@@ -3985,7 +3979,7 @@ L 410.841945 531.524436
 L 412.332542 541.143361 
 L 413.872825 545.776881 
 L 415.363421 545.019018 
-L 435.039296 551.361624 
+M 435.039296 551.361624 
 L 436.579579 558.040485 
 L 437.970802 536.161588 
 L 439.511085 539.845404 
@@ -4028,10 +4022,7 @@ L 493.967546 559.188898
 L 495.458142 560.087016 
 " clip-path="url(#pf089112e25)" style="fill: none; stroke: #1b6f78; stroke-opacity: 0.85; stroke-width: 0.8; stroke-linecap: square"/>
    </g>
-   <g id="text_122">
-    <text style="font-size: 6.8px; font-family: 'Arial'; text-anchor: start; fill: #5b6870" x="366.48378" y="606.387685" transform="rotate(-0 366.48378 606.387685)">16 reaction families</text>
-   </g>
-   <g id="text_123">
+   <g id="text_120">
     <text style="font-weight: 700; font-size: 7.5px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="429.722835" y="461.888976" transform="rotate(-0 429.722835 461.888976)">Other active substances  (3815.19)</text>
    </g>
    <g id="line2d_129">
@@ -4040,36 +4031,36 @@ L 496.998425 549.124157
 " clip-path="url(#pf089112e25)" style="fill: none; stroke: #b8702f; stroke-width: 1.4; stroke-linecap: square"/>
    </g>
   </g>
-  <g id="text_124">
+  <g id="text_121">
    <text style="font-weight: 700; font-size: 10px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="6.054803" y="11.352756" transform="rotate(-0 6.054803 11.352756)">a</text>
   </g>
-  <g id="text_125">
+  <g id="text_122">
    <text style="font-weight: 700; font-size: 10px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="6.054803" y="150.264567" transform="rotate(-0 6.054803 150.264567)">b</text>
   </g>
-  <g id="text_126">
+  <g id="text_123">
    <text style="font-weight: 700; font-size: 10px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="302.740157" y="150.264567" transform="rotate(-0 302.740157 150.264567)">c</text>
   </g>
-  <g id="text_127">
+  <g id="text_124">
    <text style="font-weight: 700; font-size: 10px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="6.054803" y="445.053543" transform="rotate(-0 6.054803 445.053543)">d</text>
   </g>
   <g id="legend_3">
    <g id="line2d_130">
-    <path d="M 44.14252 407.468845 
-L 49.74252 407.468845 
-L 55.34252 407.468845 
+    <path d="M 44.14252 438.720813 
+L 49.74252 438.720813 
+L 55.34252 438.720813 
 " style="fill: none; stroke: #b8702f; stroke-width: 1.4; stroke-linecap: square"/>
    </g>
-   <g id="text_128">
-    <text style="font-size: 7px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="58.84252" y="409.918845" transform="rotate(-0 58.84252 409.918845)">US import unit value (= 1)</text>
+   <g id="text_125">
+    <text style="font-size: 7px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="58.84252" y="441.170813" transform="rotate(-0 58.84252 441.170813)">Import unit value (= 1)</text>
    </g>
    <g id="line2d_131">
-    <path d="M 148.198613 407.468845 
-L 153.798613 407.468845 
-L 159.398613 407.468845 
+    <path d="M 136.91877 438.720813 
+L 142.51877 438.720813 
+L 148.11877 438.720813 
 " style="fill: none; stroke: #1b6f78; stroke-width: 0.9; stroke-linecap: square"/>
    </g>
-   <g id="text_129">
-    <text style="font-size: 7px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="162.898613" y="409.918845" transform="rotate(-0 162.898613 409.918845)">COMET estimate, one line per reaction family</text>
+   <g id="text_126">
+    <text style="font-size: 7px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="151.61877" y="441.170813" transform="rotate(-0 151.61877 441.170813)">Reference-leading candidates</text>
    </g>
   </g>
  </g>
