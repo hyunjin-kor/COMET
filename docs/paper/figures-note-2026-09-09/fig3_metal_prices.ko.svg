@@ -976,37 +976,47 @@ L 48.755906 27.666142
 " style="fill: none; stroke: #1f2a30; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="patch_4">
+    <path d="M 190.148031 146.976378 
+L 190.148031 27.666142 
+" style="fill: none; stroke: #1f2a30; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_5">
     <path d="M 48.755906 146.976378 
 L 190.148031 146.976378 
 " style="fill: none; stroke: #1f2a30; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
+   <g id="patch_6">
+    <path d="M 48.755906 27.666142 
+L 190.148031 27.666142 
+" style="fill: none; stroke: #1f2a30; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
    <g id="text_12">
-    <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1b6f78" x="192.975874" y="50.289774" transform="rotate(-0 192.975874 50.289774)">Rh ×11.6</text>
+    <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1b6f78" x="192.975874" y="50.289774" transform="rotate(-0 192.975874 50.289774)">Rh</text>
    </g>
    <g id="text_13">
-    <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #307880" x="192.975874" y="59.467485" transform="rotate(-0 192.975874 59.467485)">Ir ×5.3</text>
+    <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #307880" x="192.975874" y="59.467485" transform="rotate(-0 192.975874 59.467485)">Ir</text>
    </g>
    <g id="text_14">
-    <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #458189" x="192.975874" y="68.645195" transform="rotate(-0 192.975874 68.645195)">Au ×3.9</text>
+    <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #458189" x="192.975874" y="68.645195" transform="rotate(-0 192.975874 68.645195)">Au</text>
    </g>
    <g id="text_15">
-    <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #5a8a92" x="192.975874" y="77.822906" transform="rotate(-0 192.975874 77.822906)">Pt ×3.2</text>
+    <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #5a8a92" x="192.975874" y="77.822906" transform="rotate(-0 192.975874 77.822906)">Pt</text>
    </g>
    <g id="text_16">
-    <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #859da2" x="192.975874" y="87.000616" transform="rotate(-0 192.975874 87.000616)">Ru ×6.8</text>
+    <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #859da2" x="192.975874" y="87.000616" transform="rotate(-0 192.975874 87.000616)">Ru</text>
    </g>
    <g id="text_17">
-    <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #70949a" x="192.975874" y="96.178327" transform="rotate(-0 192.975874 96.178327)">Pd ×3.1</text>
+    <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #70949a" x="192.975874" y="96.178327" transform="rotate(-0 192.975874 96.178327)">Pd</text>
    </g>
    <g id="text_18">
-    <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #9aa6ab" x="192.975874" y="119.339175" transform="rotate(-0 192.975874 119.339175)">Ag ×6.2</text>
+    <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #9aa6ab" x="192.975874" y="119.339175" transform="rotate(-0 192.975874 119.339175)">Ag</text>
    </g>
    <g id="text_19">
     <text style="font-weight: 700; font-size: 7.6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="119.451969" y="23.666142" transform="rotate(-0 119.451969 23.666142)">귀금속, 트로이온스당 USD</text>
    </g>
   </g>
   <g id="axes_2">
-   <g id="patch_5">
+   <g id="patch_7">
     <path d="M 48.755906 309.514961 
 L 190.148031 309.514961 
 L 190.148031 190.204724 
@@ -1833,44 +1843,50 @@ L 188.477224 281.721992
 L 190.095819 280.753594 
 " clip-path="url(#p381fffcf6a)" style="fill: none; stroke: #9aa6ab; stroke-linecap: square"/>
    </g>
-   <g id="patch_6">
+   <g id="patch_8">
     <path d="M 48.755906 309.514961 
 L 48.755906 190.204724 
 " style="fill: none; stroke: #1f2a30; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
-   <g id="patch_7">
+   <g id="patch_9">
+    <path d="M 190.148031 309.514961 
+L 190.148031 190.204724 
+" style="fill: none; stroke: #1f2a30; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_10">
     <path d="M 48.755906 309.514961 
 L 190.148031 309.514961 
 " style="fill: none; stroke: #1f2a30; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
+   <g id="patch_11">
+    <path d="M 48.755906 190.204724 
+L 190.148031 190.204724 
+" style="fill: none; stroke: #1f2a30; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
    <g id="text_28">
-    <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #5a8a92" x="192.975874" y="203.43259" transform="rotate(-0 192.975874 203.43259)">Mo ×4.8</text>
+    <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #5a8a92" x="192.975874" y="203.43259" transform="rotate(-0 192.975874 203.43259)">Mo</text>
    </g>
    <g id="text_29">
-    <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #458189" x="192.975874" y="212.610301" transform="rotate(-0 192.975874 212.610301)">Co ×3.8</text>
+    <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #458189" x="192.975874" y="212.610301" transform="rotate(-0 192.975874 212.610301)">Co</text>
    </g>
    <g id="text_30">
-    <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #70949a" x="192.975874" y="221.788011" transform="rotate(-0 192.975874 221.788011)">Sn ×3.6</text>
+    <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #70949a" x="192.975874" y="221.788011" transform="rotate(-0 192.975874 221.788011)">Sn</text>
    </g>
    <g id="text_31">
-    <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1b6f78" x="192.975874" y="237.062079" transform="rotate(-0 192.975874 237.062079)">Ni ×2.9</text>
+    <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1b6f78" x="192.975874" y="237.062079" transform="rotate(-0 192.975874 237.062079)">Ni</text>
    </g>
    <g id="text_32">
-    <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #307880" x="192.975874" y="246.23979" transform="rotate(-0 192.975874 246.23979)">Cu ×2.7</text>
+    <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #307880" x="192.975874" y="246.23979" transform="rotate(-0 192.975874 246.23979)">Cu</text>
    </g>
    <g id="text_33">
-    <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #859da2" x="192.975874" y="281.065561" transform="rotate(-0 192.975874 281.065561)">Al ×2.5</text>
+    <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #859da2" x="192.975874" y="281.065561" transform="rotate(-0 192.975874 281.065561)">Al</text>
    </g>
    <g id="text_34">
-    <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #9aa6ab" x="192.975874" y="290.243272" transform="rotate(-0 192.975874 290.243272)">Zn ×2.3</text>
+    <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #9aa6ab" x="192.975874" y="290.243272" transform="rotate(-0 192.975874 290.243272)">Zn</text>
    </g>
    <g id="text_35">
     <text style="font-weight: 700; font-size: 7.6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="119.451969" y="186.204724" transform="rotate(-0 119.451969 186.204724)">일반 금속, 파운드당 USD</text>
    </g>
-  </g>
-  <g id="text_36">
-   <text style="font-size: 6.2px; font-family: 'Malgun Gothic'; fill: #5b6870" transform="translate(7.313386 326.925515)">2019-01부터 기준월까지의 월평균.</text>
-   <text style="font-size: 6.2px; font-family: 'Malgun Gothic'; fill: #5b6870" transform="translate(7.313386 335.451969)">라벨의 배수는 가장 비싼 달을 가장 싼 달로 나눈 값.</text>
   </g>
  </g>
  <defs>

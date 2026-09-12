@@ -59,32 +59,25 @@ TEXT = {
         "share_x": "Share of the selling price (%)",
         "seg_materials": "Materials", "seg_processing": "Processing", "seg_overhead": "Overhead and margin",
         "total_head": "USD/lb",
-        "b_note": "The cheapest candidate in each thermal reaction family, priced at the 2026-05 reference month",
         "c_x": "Selling price (USD per lb, log scale)",
         "c_comet": "COMET", "c_published": "Published estimate", "c_market": "Published market price",
-        "c_note": "Reference cases from Table 2 of Baddour et al. 2018; the FCC\ncase uses the 67 short tons per day given in its footnote",
         "c_y": "Gap to the published market price (%)",
-        "market_y": "USD per pound of catalyst",
+        "market_ratio_y": "Estimate ÷ traded unit value",
         "market_titles": {"nickel": "Nickel catalysts", "precious": "Precious-metal catalysts", "other": "Other active substances"},
         "market_count": "{n} reaction families",
-        "market_traded": "US import unit value",
+        "market_traded": "US import unit value (= 1)",
         "market_estimate": "COMET estimate, one line per reaction family",
-        "market_note": ("Each panel gathers the reaction families whose leading candidate carries that "
-                        "subheading's active substance, repriced at every month.\nA unit value mixes every grade, "
-                        "loading and order size cleared under one code, so it marks where the category trades, not "
-                        "what one formulation costs."),
         "unit_lb": "USD/lb",
         "metals_base": "Base metals, USD per pound",
         "metals_precious": "Precious metals, USD per troy ounce",
-        "metals_note": ("Monthly averages from 2019-01 to the reference month.\n"
-                        "Each label divides the dearest month by the cheapest."),
         "f3_first": "First at the reference conditions", "f3_second": "Runner-up",
         "f3_other": "The rest", "f3_x": "How often the candidate ranks first (%)",
         "f3_tests": ["Leads in most\ncases", "One candidate\nremoved", "Scores shifted\n2 points",
                      "Scores shifted\n5 points", "Scores shifted\n10 points"],
-        "f3_b_x": "Families with the same leader (of 30)",
-        "f3_c_x": "Composite score", "f3_full": "All four candidates", "f3_removed": "Ruthenium candidate removed",
-        "f3_first_tag": " (1st)", "usd_lb": "USD/lb",
+        "f3_b_x": "Families keeping the leader (of 30)",
+        "f3_c_x": "Leading candidate cost (USD per lb)",
+        "f3_before": "Leader, full set", "f3_after": "Leader after removal",
+        "usd_lb": "USD/lb",
     },
     "ko": {
         "font": "Malgun Gothic",
@@ -103,31 +96,25 @@ TEXT = {
         "share_x": "판매 단가 대비 비율 (%)",
         "seg_materials": "재료비", "seg_processing": "가공비", "seg_overhead": "간접비와 마진",
         "total_head": "USD/lb",
-        "b_note": "기준월 2026-05에서 각 열촉매 반응군의 가장 싼 후보",
         "c_x": "판매 단가 (USD/lb, 로그 축)",
         "c_comet": "COMET", "c_published": "발표된 추정값", "c_market": "발표된 시장 가격",
-        "c_note": "기준 사례는 Baddour 외 2018의 표 2\nFCC 사례는 각주의 하루 67 short ton 처리량을 쓴다",
         "c_y": "발표된 시장 가격과의 차이 (%)",
-        "market_y": "촉매 파운드당 USD",
+        "market_ratio_y": "추정값 ÷ 거래 단가",
         "market_titles": {"nickel": "니켈계 촉매", "precious": "귀금속계 촉매", "other": "그 밖의 활성 물질"},
         "market_count": "반응군 {n}개",
-        "market_traded": "미국 수입 단가",
+        "market_traded": "미국 수입 단가 (= 1)",
         "market_estimate": "COMET 추정값, 반응군마다 한 줄",
-        "market_note": ("각 패널에는 1위 후보의 활성 물질이 그 세부 코드에 해당하는 반응군을 모아 매 월 다시 산정한 "
-                        "값을 담았다.\n거래 단가는 한 코드로 통관된 모든 등급·담지량·주문 규모를 섞은 값이라, 범주가 "
-                        "거래되는 수준을 보일 뿐 한 조성의 값이 아니다."),
         "unit_lb": "USD/lb",
         "metals_base": "일반 금속, 파운드당 USD",
         "metals_precious": "귀금속, 트로이온스당 USD",
-        "metals_note": ("2019-01부터 기준월까지의 월평균.\n"
-                        "라벨의 배수는 가장 비싼 달을 가장 싼 달로 나눈 값."),
         "f3_first": "기준 조건에서 1위", "f3_second": "바로 뒤 후보",
         "f3_other": "나머지", "f3_x": "1위를 차지한 경우의 비율 (%)",
         "f3_tests": ["과반에서\n1위 유지", "후보 하나를\n빼도", "점수를 2점\n흔들어도",
                      "점수를 5점\n흔들어도", "점수를 10점\n흔들어도"],
         "f3_b_x": "1위가 그대로인 반응군 (30개 중)",
-        "f3_c_x": "종합 점수", "f3_full": "네 후보 모두", "f3_removed": "루테늄 후보를 뺀 경우",
-        "f3_first_tag": " (1위)", "usd_lb": "USD/lb",
+        "f3_c_x": "1위 후보 원가 (파운드당 USD)",
+        "f3_before": "전체 후보일 때 1위", "f3_after": "하나를 뺀 뒤 1위",
+        "usd_lb": "USD/lb",
     },
 }
 
@@ -197,11 +184,9 @@ def set_language(lang):
 
 
 def _clean(ax, left=True):
-    for side in ("top", "right"):
-        ax.spines[side].set_visible(False)
-    if not left:
-        ax.spines["left"].set_visible(False)
-    for side in ("left", "bottom"):
+    """A closed box on all four sides, which is what the author asked for in review."""
+    for side in ("top", "right", "bottom", "left"):
+        ax.spines[side].set_visible(True)
         ax.spines[side].set_linewidth(0.5)
     ax.tick_params(width=0.5, length=2, labelsize=7.5)
 
@@ -240,18 +225,23 @@ def _cost_model_panel(fig):
     ax.text(mx + mw / 2, 13.0, r"$C_\mathrm{p}=\dfrac{24\,T\,I\,H}{M}$", ha="center", va="center", fontsize=10.5)
     ax.text(mx + mw / 2, 6.6, L["processing_1"], ha="center", va="center", fontsize=6.6)
     ax.text(mx + mw / 2, 3.2, L["processing_2"], ha="center", va="center", fontsize=7.0)
-    _arrow(ax, 32.3, 40.3, mx - 0.3, 38.5)
-    _arrow(ax, 32.3, 9.3, mx - 0.3, 11.5)
-    _arrow(ax, 32.3, 24.8, mx - 0.3, 31.5)
-    _arrow(ax, 32.3, 24.8, mx - 0.3, 15.5)
+    _arrow(ax, 32.3, 40.3, mx - 0.3, 40.3)
+    _arrow(ax, 32.3, 9.3, mx - 0.3, 9.3)
+    ax.plot([32.3, 35.0, 35.0], [24.8, 24.8, 31.5], color=INK, lw=0.7, solid_capstyle="round", zorder=3)
+    ax.plot([35.0, 35.0], [24.8, 15.5], color=INK, lw=0.7, solid_capstyle="round", zorder=3)
+    _arrow(ax, 35.0, 31.5, mx - 0.3, 31.5)
+    _arrow(ax, 35.0, 15.5, mx - 0.3, 15.5)
     px, pw = 101, 40
     _box(ax, px, 11, pw, 24, fill="white", edge=INK, lw=0.6)
     ax.text(px + pw / 2, 31.7, L["overhead"], ha="center", va="center", fontsize=8.5, fontweight="bold")
     ax.text(px + pw / 2, 22.5, r"$P=\dfrac{(C_\mathrm{m}+C_\mathrm{p})(1+g)(1+s)}{1-m}$", ha="center", va="center",
             fontsize=10.8)
     ax.text(px + pw / 2, 13.4, L["overhead_1"], ha="center", va="center", fontsize=6.6, linespacing=1.5)
-    _arrow(ax, mx + mw + 0.3, 35.0, px - 0.3, 27.0, label=r"$C_\mathrm{m}$")
-    _arrow(ax, mx + mw + 0.3, 11.5, px - 0.3, 19.0, label=r"$C_\mathrm{p}$", dy=-4.6)
+    ax.plot([mx + mw + 0.3, 98.0, 98.0], [35.0, 35.0, 23.0], color=INK, lw=0.7, solid_capstyle="round", zorder=3)
+    ax.plot([mx + mw + 0.3, 98.0, 98.0], [11.5, 11.5, 23.0], color=INK, lw=0.7, solid_capstyle="round", zorder=3)
+    ax.text(96.5, 36.2, r"$C_\mathrm{m}$", ha="center", va="bottom", fontsize=8.0)
+    ax.text(96.5, 10.3, r"$C_\mathrm{p}$", ha="center", va="top", fontsize=8.0)
+    _arrow(ax, 98.0, 23.0, px - 0.3, 23.0)
     lx, lw_ = 147, 28
     _box(ax, lx, 11, lw_, 24, fill="#EAF1F2", edge=ACC, lw=0.6)
     ax.text(lx + lw_ / 2, 31.7, L["breakdown"], ha="center", va="center", fontsize=8.5, fontweight="bold")
@@ -294,7 +284,6 @@ def _structure_panel(fig):
               handlelength=1.0, columnspacing=0.8, handletextpad=0.4, borderaxespad=0.0)
     _clean(ax)
     ax.tick_params(axis="y", length=0, labelsize=6.5)
-    fig.text(0.04, 0.3720, L["b_note"], fontsize=6.5, color=MUTED)
 
 
 def _validation_panel(fig):
@@ -324,7 +313,6 @@ def _validation_panel(fig):
               handlelength=1.0, columnspacing=0.8, handletextpad=0.4, borderaxespad=0.0)
     _clean(ax)
     ax.tick_params(axis="x", length=0)
-    fig.text(0.615, 0.4230, L["c_note"], fontsize=6.5, color=MUTED, linespacing=1.5)
 
 
 PRECIOUS = ("Pt", "Pd", "Rh", "Ru", "Ir", "Au", "Ag", "Os")
@@ -364,7 +352,7 @@ def _family_groups():
 
 
 def _market_panel(fig):
-    """Estimated costs against the unit value of the matching traded catalyst category."""
+    """How far each estimate sits from the unit value of the matching traded category."""
     market = json.loads(MARKET.read_text(encoding="utf-8"))["series"]
     study = json.loads(STUDY.read_text(encoding="utf-8"))
     mapping = _family_groups()
@@ -389,11 +377,13 @@ def _market_panel(fig):
     for index, (code, group) in enumerate(MARKET_GROUPS):
         ax = fig.add_axes([left + index * (width + gap), bottom, width, height])
         series = market[code]
-        dates = [datetime.strptime(pt["date"], "%Y-%m-%d") for pt in series["points"]]
-        traded = [pt["price"] / LB_PER_KG for pt in series["points"]]
+        traded = {pt["date"][:7]: pt["price"] / LB_PER_KG for pt in series["points"] if pt["price"] > 0}
         for points in estimates.get(group, []):
-            ax.plot([d for d, _ in points], [v for _, v in points], color=ACC, lw=0.7, alpha=0.85, zorder=3)
-        ax.plot(dates, traded, color=WARN, lw=1.4, zorder=4)
+            ratios = [(date, value / traded[date.strftime("%Y-%m")]) for date, value in points
+                      if date.strftime("%Y-%m") in traded]
+            if len(ratios) > 1:
+                ax.plot([d for d, _ in ratios], [r for _, r in ratios], color=ACC, lw=0.8, alpha=0.85, zorder=3)
+        ax.axhline(1.0, color=WARN, lw=1.4, zorder=4)
         ax.set_yscale("log")
         ax.set_xlim(datetime(2019, 1, 1), datetime(2026, 6, 1))
         ax.xaxis.set_major_locator(mdates.YearLocator(2))
@@ -404,11 +394,10 @@ def _market_panel(fig):
         ax.set_title(f"{L['market_titles'][group]}  ({series['hs'][:4]}.{series['hs'][4:]})",
                      fontsize=7.5, fontweight="bold", pad=3)
         if index == 0:
-            ax.set_ylabel(L["market_y"], fontsize=7.8)
+            ax.set_ylabel(L["market_ratio_y"], fontsize=7.8)
         ax.text(0.03, 0.04, L["market_count"].format(n=len(estimates.get(group, []))), transform=ax.transAxes,
                 fontsize=6.8, color=MUTED)
         _clean(ax)
-    fig.text(left, bottom + height + 0.030, L["market_note"], fontsize=6.8, color=MUTED, linespacing=1.5)
     handles = [plt.Line2D([], [], color=WARN, lw=1.4), plt.Line2D([], [], color=ACC, lw=0.9)]
     fig.legend(handles, [L["market_traded"], L["market_estimate"]], fontsize=7.0, frameon=False, ncol=2,
                loc="lower left", bbox_to_anchor=(left, bottom + height + 0.074), handlelength=1.6,
@@ -428,7 +417,7 @@ def _ramp(index, count):
 
 
 def _label_ends(ax, ends, fontsize=6.4):
-    """Symbol and high-to-low factor at the end of each line, pushed apart where lines converge."""
+    """The element symbol at the end of each line, pushed apart where lines converge."""
     low, high = ax.get_ylim()
     step = (math.log10(high) - math.log10(low)) / 13
     placed = None
@@ -437,7 +426,7 @@ def _label_ends(ax, ends, fontsize=6.4):
         if placed is not None and placed - position < step:
             position = placed - step
         placed = position
-        ax.text(1.02, 10 ** position, f"{symbol} ×{factor:.1f}", transform=ax.get_yaxis_transform(),
+        ax.text(1.02, 10 ** position, symbol, transform=ax.get_yaxis_transform(),
                 ha="left", va="center", fontsize=fontsize, color=colour)
 
 
@@ -483,13 +472,11 @@ def figure3_metal_prices():
         ax.set_title(title, fontsize=7.6, fontweight="bold", pad=4)
         _clean(ax)
         _label_ends(ax, ends)
-    fig.text(0.03, 0.030, L["metals_note"], fontsize=6.2, color=MUTED, linespacing=1.5)
     return fig
 
 
 def figure4_diagnostics():
     study = json.loads(STUDY.read_text(encoding="utf-8"))
-    methods = json.loads(METHODS.read_text(encoding="utf-8"))
     summary = study["summary"]
     rows = []
     for family in study["families"]:
@@ -500,9 +487,9 @@ def figure4_diagnostics():
         second = others[0] if others else 0.0
         rows.append((family["family"], first, second, max(0.0, 100.0 - first - second)))
     rows.sort(key=lambda r: r[1])
-    fig = plt.figure(figsize=(178 / 25.4, 120 / 25.4))
+    fig = plt.figure(figsize=(178 / 25.4, 150 / 25.4))
 
-    ax = fig.add_axes([0.265, 0.085, 0.30, 0.83])
+    ax = fig.add_axes([0.265, 0.070, 0.30, 0.860])
     ys = list(range(len(rows)))
     ax.barh(ys, [r[1] for r in rows], color=ACC, height=0.72, label=L["f3_first"])
     ax.barh(ys, [r[2] for r in rows], left=[r[1] for r in rows], color=WARN, height=0.72, label=L["f3_second"])
@@ -519,9 +506,9 @@ def figure4_diagnostics():
               columnspacing=0.9, handletextpad=0.5, borderaxespad=0.0)
     _clean(ax)
     ax.tick_params(axis="y", length=0)
-    fig.text(0.01, 0.965, "a", fontsize=10.0, fontweight="bold")
+    fig.text(0.01, 0.975, "a", fontsize=10.0, fontweight="bold")
 
-    bx = fig.add_axes([0.70, 0.625, 0.285, 0.29])
+    bx = fig.add_axes([0.75, 0.700, 0.225, 0.230])
     n = summary["families"]
     counts = [n - summary["families_reference_winner_below_half_joint"],
               n - summary["candidate_removal_families_changed"],
@@ -539,35 +526,39 @@ def figure4_diagnostics():
     bx.set_xlabel(L["f3_b_x"], fontsize=8.0)
     _clean(bx, left=False)
     bx.tick_params(axis="y", length=0)
-    fig.text(0.635, 0.965, "b", fontsize=10.0, fontweight="bold")
+    fig.text(0.635, 0.975, "b", fontsize=10.0, fontweight="bold")
 
-    cx = fig.add_axes([0.70, 0.095, 0.285, 0.40])
-    example = methods["normalization"]["example"]["rows"]
-    names = ["Co/MgO–La$_2$O$_3$", "Ni–MgO/CeO$_2$", "Ni/Al$_2$O$_3$"]
-    before = [r["total_before"] for r in example]
-    after = [r["total_after"] for r in example]
-    win_b, win_a = before.index(max(before)), after.index(max(after))
-    ys = [2, 1, 0]
-    for i, y in enumerate(ys):
-        cx.plot([after[i], before[i]], [y, y], color=RULE, lw=1.0, zorder=2)
-        cx.plot(before[i], y, "o", color=ACC, ms=4.2, zorder=3)
-        cx.plot(after[i], y, "o", mfc="white" if after[i] == before[i] else WARN, mec=WARN, mew=0.9, ms=4.2, zorder=4)
-        cx.text(before[i], y + 0.22, f"{before[i]:.1f}" + (L["f3_first_tag"] if i == win_b else ""), ha="center",
-                va="bottom", fontsize=7.0, color=ACC)
-        cx.text(after[i], y - 0.22, f"{after[i]:.1f}" + (L["f3_first_tag"] if i == win_a else ""), ha="center",
-                va="top", fontsize=7.0, color=WARN)
-    cx.set_yticks(ys)
-    cx.set_yticklabels([f"{n}\n{r['cost']:.2f} {L['usd_lb']}" for n, r in zip(names, example, strict=True)],
-                       fontsize=7.2)
-    cx.set_ylim(-0.8, 2.8)
-    cx.set_xlim(35, 100)
+    flips = []
+    for family in study["families"]:
+        for removal in family.get("candidate_removal", []):
+            if not removal.get("winner_changed"):
+                continue
+            costs = {row["slug"]: row["summary"]["landed_cost_per_lb"] for row in removal["before"]}
+            before, after = family["reference_winner"], removal["renormalized_winner"]
+            if before in costs and after in costs:
+                flips.append((family["family"], costs[before], costs[after]))
+    flips.sort(key=lambda row: row[1] / row[2])
+
+    cx = fig.add_axes([0.76, 0.085, 0.215, 0.415])
+    for index, (_family, before, after) in enumerate(flips):
+        cx.plot([after, before], [index, index], color=RULE, lw=1.0, zorder=2)
+        cx.plot(before, index, "o", color=ACC, ms=4.0, zorder=3)
+        cx.plot(after, index, "o", color=WARN, ms=4.0, zorder=4)
+    cx.set_yticks(range(len(flips)))
+    cx.set_yticklabels([FAM.get(family, family) for family, _b, _a in flips], fontsize=6.8)
+    cx.set_ylim(-0.7, len(flips) - 0.3)
+    cx.set_xscale("log")
+    cx.xaxis.set_major_locator(LogLocator(base=10.0, subs=(1.0,), numticks=8))
+    cx.xaxis.set_major_formatter(FuncFormatter(lambda value, _p: f"{value:g}"))
+    cx.xaxis.set_minor_formatter(NullFormatter())
     cx.set_xlabel(L["f3_c_x"], fontsize=8.0)
-    cx.plot([], [], "o", color=ACC, ms=4, label=L["f3_full"])
-    cx.plot([], [], "o", mfc=WARN, mec=WARN, ms=4, label=L["f3_removed"])
-    cx.legend(fontsize=7.0, frameon=False, loc="lower left", handlelength=1.0, handletextpad=0.5, borderaxespad=0.2)
+    cx.plot([], [], "o", color=ACC, ms=4, label=L["f3_before"])
+    cx.plot([], [], "o", color=WARN, ms=4, label=L["f3_after"])
+    cx.legend(fontsize=6.8, frameon=False, loc="lower left", bbox_to_anchor=(0.0, 1.01), ncol=1,
+              handlelength=1.0, handletextpad=0.5, borderaxespad=0.0)
     _clean(cx)
     cx.tick_params(axis="y", length=0)
-    fig.text(0.635, 0.505, "c", fontsize=10.0, fontweight="bold")
+    fig.text(0.635, 0.545, "c", fontsize=10.0, fontweight="bold")
     return fig
 
 

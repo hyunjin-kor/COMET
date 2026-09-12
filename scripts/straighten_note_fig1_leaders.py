@@ -2,9 +2,9 @@
 
 The raw illustration was generated with ChatGPT image generation from an author-written
 specification (see docs/paper/figures-note-2026-09-09/fig1_workflow_stack.provenance.md).
-Its dotted leaders between the five bands and the traceability panel were stepped; this
-script clears the gap between the bands and the panel, removes the leader stubs inside the
-panel and draws one straight horizontal dotted leader per band. The geometry is measured
+Its dotted leaders between the five bands and the traceability panel were stepped and, in
+review, the author asked for them to go altogether; this script clears the gap between the
+bands and the panel and removes the leader stubs inside the panel, leaving no connectors. The geometry is measured
 from the raw file rather than hard-coded, so a regenerated illustration in the same layout
 still works, and every measurement is checked before anything is drawn. Run:
 
@@ -18,8 +18,6 @@ import numpy as np
 from PIL import Image, ImageDraw
 
 BANDS_EXPECTED = 5
-LEADER = (51, 151, 160)
-DOT, STEP = 4, 9
 
 
 def is_grey(pixel):
@@ -112,12 +110,6 @@ def main():
     draw = ImageDraw.Draw(image)
     draw.rectangle([right + 2, 0, panel - 2, height - 1], fill=(255, 255, 255))
     draw.rectangle([panel + 3, top_inside, tag - 3, bottom_inside], fill=fill)
-    for top, bottom in spans:
-        y = (top + bottom) // 2
-        x = right + 5
-        while x + DOT <= panel - 3:
-            draw.rounded_rectangle([x, y - 2, x + DOT, y + 2], radius=2, fill=LEADER)
-            x += STEP
     args.out.parent.mkdir(parents=True, exist_ok=True)
     image.save(args.out)
     print("wrote", args.out)
