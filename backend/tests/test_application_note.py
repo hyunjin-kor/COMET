@@ -55,3 +55,25 @@ def test_trade_plot_preserves_months_with_missing_observations():
         assert gaps > 0, "The frozen trade record includes missing monthly observations"
     finally:
         figures.plt.close(fig)
+
+
+def test_rank_reversal_cost_difference_matches_independent_ammonia_example():
+    pytest.importorskip("matplotlib")
+    from scripts import draw_application_note_figures as figures
+
+    methods = json.loads(figures.METHODS.read_text(encoding="utf-8"))
+    example = methods["normalization"]["example"]["rows"]
+    baseline, alternative = example[0]["cost"], example[2]["cost"]
+    expected = 100 * (alternative - baseline) / baseline
+    figures.set_language("en")
+    fig = figures.figure4_diagnostics()
+    try:
+        ax = fig.axes[-1]
+        labels = [label.get_text().replace("\n", " ") for label in ax.get_yticklabels()]
+        assert len(ax.patches) == len(labels) == 9
+        bar = ax.patches[labels.index("Ammonia cracking")]
+        assert bar.get_width() == pytest.approx(expected)
+        assert bar.get_x() == 0
+        assert ax.get_xscale() == "linear"
+    finally:
+        figures.plt.close(fig)

@@ -3,9 +3,9 @@
 Figure 1 is a programmatic workflow diagram based on the layout of an earlier AI-assisted
 illustration; its generation history is retained in fig1_workflow_stack.provenance.md.
 Figure 2 draws the cost model, the cost structure of the cheapest candidate in
-every thermal reaction family, the three published CatCost validation cases against their
-published market prices, and the estimates against the traded unit value of the matching
-catalyst category. Figure 3 is the monthly price record of every metal the library prices, in
+every thermal reaction family, and the three published CatCost validation cases against their
+published market prices. The trade comparison helper is retained for the audit record.
+Figure 3 is the monthly price record of every metal the library prices, in
 one column. Figure 4 reads the frozen combined robustness study and the methods supplement.
 All four render in English or Korean. Run:
 
@@ -17,6 +17,7 @@ import argparse
 import json
 import math
 import re
+import textwrap
 from datetime import datetime
 from pathlib import Path
 
@@ -25,7 +26,14 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.dates as mdates  # noqa: E402
 import matplotlib.pyplot as plt  # noqa: E402
-from matplotlib.patches import FancyArrowPatch, FancyBboxPatch  # noqa: E402
+from matplotlib.patches import (  # noqa: E402
+    Circle,
+    Ellipse,
+    FancyArrowPatch,
+    FancyBboxPatch,
+    Polygon,
+    Rectangle,
+)
 from matplotlib.ticker import FuncFormatter, LogLocator, NullFormatter  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -70,8 +78,7 @@ TEXT = {
         "f3_tests": ["Rank 1 in\n≥50% of scenarios", "Candidate\nremoval", "Score variation\n±2 points",
                      "Score variation\n±5 points", "Score variation\n±10 points"],
         "f3_b_x": "Number of reaction families",
-        "f3_c_x": "Cost (USD/lb)",
-        "f3_before": "Top-ranked at baseline", "f3_after": "Top-ranked after removal",
+        "f3_c_x": "Cost difference (%)",
         "usd_lb": "USD/lb",
     },
     "ko": {
@@ -102,8 +109,7 @@ TEXT = {
         "f3_tests": ["시나리오 ≥50%에서\n1위", "후보 제거", "점수 변화\n±2점",
                      "점수 변화\n±5점", "점수 변화\n±10점"],
         "f3_b_x": "반응군 수",
-        "f3_c_x": "원가 (USD/lb)",
-        "f3_before": "기준 조건의 1위", "f3_after": "제거 후 1위",
+        "f3_c_x": "원가 차이 (%)",
         "usd_lb": "USD/lb",
     },
 }
@@ -191,6 +197,46 @@ def _arrow(ax, x1, y1, x2, y2, color=INK):
                                  shrinkA=0, shrinkB=0, zorder=4))
 
 
+def _workflow_icon(ax, index, x, y):
+    """Original geometric icons for input, price date, calculation, costs, and ranking."""
+    stroke = {"color": ACC, "lw": 0.9, "solid_capstyle": "round"}
+    if index == 0:
+        ax.add_patch(Rectangle((x - 4, y - 3), 8, 6, fc="white", ec="none"))
+        for level in (-3, 0, 3):
+            ax.add_patch(Ellipse((x, y + level), 8, 2.3, fc="white", ec=ACC, lw=0.9))
+        for side in (-4, 4):
+            ax.plot([x + side, x + side], [y - 3, y + 3], **stroke)
+    elif index == 1:
+        ax.add_patch(Rectangle((x - 4.5, y - 4), 9, 8, fc="white", ec=ACC, lw=0.9))
+        ax.plot([x - 4.5, x + 4.5], [y + 1.5, y + 1.5], **stroke)
+        for dx in (-2.3, 2.3):
+            ax.plot([x + dx, x + dx], [y + 3, y + 5], **stroke)
+        for dx in (-2, 0, 2):
+            for dy in (-0.3, -2.3):
+                ax.add_patch(Circle((x + dx, y + dy), 0.4, fc=ACC, ec="none"))
+    elif index == 2:
+        ax.add_patch(FancyBboxPatch((x - 3.7, y - 4.5), 7.4, 9,
+                                   boxstyle="round,pad=0,rounding_size=0.7", fc="white", ec=ACC, lw=0.9))
+        ax.add_patch(Rectangle((x - 2.3, y + 1.4), 4.6, 1.7, fc="#EAF1F2", ec=ACC, lw=0.6))
+        for dx in (-1.6, 1.6):
+            for dy in (-0.4, -1.9, -3.4):
+                ax.add_patch(Circle((x + dx, y + dy), 0.45, fc=ACC, ec="none"))
+    elif index == 3:
+        for dx, height in ((-3, 5), (0, 8), (3, 6.5)):
+            ax.add_patch(Rectangle((x + dx - 0.9, y - 4), 1.8, height,
+                                   fc=ACC_MID, ec=ACC, lw=0.6))
+            ax.add_patch(Rectangle((x + dx - 0.9, y - 4), 1.8, height * 0.45,
+                                   fc=ACC, ec=ACC, lw=0.6))
+        ax.plot([x - 4.5, x + 4.5], [y - 4.3, y - 4.3], **stroke)
+    else:
+        for dx, height in ((-3, 3), (0, 6), (3, 4.5)):
+            ax.add_patch(Rectangle((x + dx - 1.25, y - 4), 2.5, height,
+                                   fc="white" if dx else "#EAF1F2", ec=ACC, lw=0.8))
+        points = [(x + (1.3 if i % 2 == 0 else 0.6) * math.sin(i * math.pi / 5),
+                   y + 4.1 + (1.3 if i % 2 == 0 else 0.6) * math.cos(i * math.pi / 5)) for i in range(10)]
+        ax.add_patch(Polygon(points, closed=True, fc=ACC, ec=ACC, lw=0.4))
+
+
 def figure1_workflow():
     """Five calculation stages with the associated analysis records."""
     fig = plt.figure(figsize=(178 / 25.4, 100 / 25.4))
@@ -208,7 +254,8 @@ def figure1_workflow():
     for index, label in enumerate(L["workflow_stages"]):
         y = 80 - index * 18
         _box(ax, 5, y, 98, 13, fill=FILL, edge=RULE, lw=0.7)
-        ax.text(54, y + 6.5, label, ha="center", va="center", fontsize=11, fontweight="bold")
+        _workflow_icon(ax, index, 18, y + 6.5)
+        ax.text(32, y + 6.5, label, ha="left", va="center", fontsize=11, fontweight="bold")
         ax.plot([103.5, 115.5], [y + 6.5, y + 6.5], color=ACC, lw=0.7, ls=(0, (1.5, 2)))
         if index < 4:
             _arrow(ax, 54, y - 0.4, 54, y - 4.6, color=ACC)
@@ -216,7 +263,7 @@ def figure1_workflow():
 
 
 def _cost_model_panel(fig):
-    ax = fig.add_axes([0, 0.8044, 1, 0.1956])
+    ax = fig.add_axes([0, 0.96 - 47 / 164, 1, 47 / 164])
     ax.set_xlim(0, 178)
     ax.set_ylim(0, 47)
     ax.axis("off")
@@ -267,7 +314,7 @@ def _structure_panel(fig):
         rows.append((family["family"], total, 100 * materials / total, 100 * processing / total,
                      100 * (total - materials - processing) / total))
     rows.sort(key=lambda r: r[2])
-    ax = fig.add_axes([0.205, 0.4222, 0.295, 0.3200])
+    ax = fig.add_axes([0.24, 0.085, 0.30, 0.50])
     ys = range(len(rows))
     ax.barh(ys, [r[2] for r in rows], color=ACC, height=0.74, label=L["seg_materials"])
     ax.barh(ys, [r[3] for r in rows], left=[r[2] for r in rows], color=ACC_MID, height=0.74,
@@ -284,7 +331,8 @@ def _structure_panel(fig):
     ax.set_ylim(-0.7, len(rows) - 0.3)
     ax.set_xticks([0, 25, 50, 75, 100])
     ax.set_xlabel(L["share_x"], fontsize=7.8)
-    ax.legend(fontsize=6.8, frameon=False, loc="lower left", bbox_to_anchor=(-0.66, 1.015), ncol=3,
+    handles, labels = ax.get_legend_handles_labels()
+    fig.legend(handles, labels, fontsize=6.8, frameon=False, loc="upper left", bbox_to_anchor=(0.07, 0.648), ncol=3,
               handlelength=1.0, columnspacing=0.8, handletextpad=0.4, borderaxespad=0.0)
     _clean(ax)
     ax.tick_params(axis="y", length=0, labelsize=6.5)
@@ -293,7 +341,7 @@ def _structure_panel(fig):
 def _validation_panel(fig):
     """The three published CatCost cases against the market prices printed beside them."""
     cases = json.loads(VALIDATION.read_text(encoding="utf-8"))
-    ax = fig.add_axes([0.735, 0.4844, 0.245, 0.2400])
+    ax = fig.add_axes([0.74, 0.17, 0.235, 0.415])
     xs = range(len(cases))
     comet, published, labels = [], [], []
     for case in cases:
@@ -314,7 +362,8 @@ def _validation_panel(fig):
     ax.set_xticklabels(labels, fontsize=6.8)
     ax.set_ylim(-26, 3)
     ax.set_ylabel(L["c_y"], fontsize=7.8)
-    ax.legend(fontsize=6.8, frameon=False, loc="lower left", bbox_to_anchor=(-0.24, 1.01), ncol=2,
+    handles, labels = ax.get_legend_handles_labels()
+    fig.legend(handles, labels, fontsize=6.8, frameon=False, loc="upper left", bbox_to_anchor=(0.70, 0.648), ncol=2,
               handlelength=1.0, columnspacing=0.8, handletextpad=0.4, borderaxespad=0.0)
     _clean(ax)
     ax.tick_params(axis="x", length=0)
@@ -357,7 +406,7 @@ def _family_groups():
 
 
 def _market_panel(fig):
-    """How far each estimate sits from the unit value of the matching traded category."""
+    """Retained audit comparison with trade unit values; excluded from the note figures."""
     market = json.loads(MARKET.read_text(encoding="utf-8"))["series"]
     study = json.loads(STUDY.read_text(encoding="utf-8"))
     mapping = _family_groups()
@@ -432,14 +481,12 @@ def _label_ends(ax, ends, fontsize=6.4):
 
 
 def figure2_cost_model():
-    fig = plt.figure(figsize=(178 / 25.4, 225 / 25.4))
+    fig = plt.figure(figsize=(178 / 25.4, 164 / 25.4))
     _cost_model_panel(fig)
     _structure_panel(fig)
     _validation_panel(fig)
-    _market_panel(fig)
-    for label, x, y in (("a", 0.012, 0.9822), ("b", 0.012, 0.7644), ("c", 0.60, 0.7644),
-                        ("d", 0.012, 0.3022)):
-        fig.text(x, y, label, fontsize=10.0, fontweight="bold")
+    for label, x, y in (("(a)", 0.012, 0.995), ("(b)", 0.012, 0.653), ("(c)", 0.64, 0.653)):
+        fig.text(x, y, label, fontsize=10.0, fontweight="bold", va="top")
     return fig
 
 
@@ -473,7 +520,7 @@ def figure3_metal_prices():
         ax.set_ylabel(f"{L['metal_price']} ({unit})", fontsize=7.0)
         _clean(ax)
         _label_ends(ax, ends)
-        fig.text(0.015, 0.955 - index * 0.47, "ab"[index], fontsize=10.0, fontweight="bold")
+        fig.text(0.015, 0.955 - index * 0.47, f"({'ab'[index]})", fontsize=10.0, fontweight="bold")
     return fig
 
 
@@ -489,9 +536,9 @@ def figure4_diagnostics():
         second = others[0] if others else 0.0
         rows.append((family["family"], first, second, max(0.0, 100.0 - first - second)))
     rows.sort(key=lambda r: r[1])
-    fig = plt.figure(figsize=(178 / 25.4, 150 / 25.4))
+    fig = plt.figure(figsize=(178 / 25.4, 164 / 25.4))
 
-    ax = fig.add_axes([0.265, 0.070, 0.265, 0.860])
+    ax = fig.add_axes([0.285, 0.078, 0.245, 0.800])
     ys = list(range(len(rows)))
     ax.barh(ys, [r[1] for r in rows], color=ACC, height=0.72, label=L["f3_first"])
     ax.barh(ys, [r[2] for r in rows], left=[r[1] for r in rows], color=WARN, height=0.72, label=L["f3_second"])
@@ -505,13 +552,13 @@ def figure4_diagnostics():
     ax.set_xticks([0, 25, 50, 75, 100])
     ax.set_ylim(-0.6, len(rows) - 0.4)
     ax.set_xlabel(L["f3_x"], fontsize=8.0)
-    ax.legend(fontsize=7.0, frameon=False, loc="lower left", bbox_to_anchor=(0.0, 1.0), ncol=3, handlelength=1.0,
+    ax.legend(fontsize=7.0, frameon=False, loc="lower left", bbox_to_anchor=(0.0, 1.02), ncol=1, handlelength=1.0,
               columnspacing=0.9, handletextpad=0.5, borderaxespad=0.0)
     _clean(ax)
     ax.tick_params(axis="y", length=0)
-    fig.text(0.01, 0.975, "a", fontsize=10.0, fontweight="bold")
+    fig.text(0.012, 0.985, "(a)", fontsize=10.0, fontweight="bold", va="top")
 
-    bx = fig.add_axes([0.79, 0.700, 0.185, 0.230])
+    bx = fig.add_axes([0.80, 0.66, 0.175, 0.218])
     n = summary["families"]
     counts = [n - summary["families_reference_winner_below_half_joint"],
               n - summary["candidate_removal_families_changed"],
@@ -529,7 +576,7 @@ def figure4_diagnostics():
     bx.set_xlabel(L["f3_b_x"], fontsize=8.0)
     _clean(bx, left=False)
     bx.tick_params(axis="y", length=0)
-    fig.text(0.635, 0.975, "b", fontsize=10.0, fontweight="bold")
+    fig.text(0.61, 0.985, "(b)", fontsize=10.0, fontweight="bold", va="top")
 
     flips = []
     for family in study["families"]:
@@ -542,26 +589,21 @@ def figure4_diagnostics():
                 flips.append((family["family"], costs[before], costs[after]))
     flips.sort(key=lambda row: row[1] / row[2])
 
-    cx = fig.add_axes([0.80, 0.085, 0.175, 0.415])
+    cx = fig.add_axes([0.80, 0.078, 0.175, 0.46])
     for index, (_family, before, after) in enumerate(flips):
-        cx.plot([after, before], [index, index], color=RULE, lw=1.0, zorder=2)
-        cx.plot(before, index, "o", color=ACC, mfc="none", ms=5.0, zorder=3)
-        cx.plot(after, index, "o", color=WARN, ms=3.0, zorder=4)
+        difference = 100 * (after - before) / before
+        cx.barh(index, difference, height=0.58, color=ACC, edgecolor=ACC, lw=0.5)
+        cx.text(difference - 2, index, f"{difference:.1f}", ha="right", va="center", fontsize=6.5)
     cx.set_yticks(range(len(flips)))
-    cx.set_yticklabels([FAM.get(family, family) for family, _b, _a in flips], fontsize=6.8)
+    cx.set_yticklabels([textwrap.fill(FAM.get(family, family), width=27, break_long_words=False)
+                       for family, _b, _a in flips], fontsize=6.8)
     cx.set_ylim(-0.7, len(flips) - 0.3)
-    cx.set_xscale("log")
-    cx.xaxis.set_major_locator(LogLocator(base=10.0, subs=(1.0,), numticks=8))
-    cx.xaxis.set_major_formatter(FuncFormatter(lambda value, _p: f"{value:g}"))
-    cx.xaxis.set_minor_formatter(NullFormatter())
+    cx.set_xlim(-125, 0)
+    cx.set_xticks([-100, -50, 0])
     cx.set_xlabel(L["f3_c_x"], fontsize=8.0)
-    cx.plot([], [], "o", color=ACC, mfc="none", ms=5, label=L["f3_before"])
-    cx.plot([], [], "o", color=WARN, ms=3, label=L["f3_after"])
-    cx.legend(fontsize=6.8, frameon=False, loc="lower left", bbox_to_anchor=(0.0, 1.01), ncol=1,
-              handlelength=1.0, handletextpad=0.5, borderaxespad=0.0)
     _clean(cx)
     cx.tick_params(axis="y", length=0)
-    fig.text(0.635, 0.545, "c", fontsize=10.0, fontweight="bold")
+    fig.text(0.61, 0.575, "(c)", fontsize=10.0, fontweight="bold", va="top")
     return fig
 
 
