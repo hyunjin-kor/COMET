@@ -1,7 +1,7 @@
 """Draw the four Application Note figures from labels and frozen runs.
 
-Figure 1 is a programmatic workflow diagram based on the layout of an earlier AI-assisted
-illustration; its generation history is retained in fig1_workflow_stack.provenance.md.
+Figure 1 combines programmatic labels and layout with icons extracted from an earlier
+AI-assisted illustration; its history is retained in fig1_workflow_stack.provenance.md.
 Figure 2 draws the cost model, the cost structure of the cheapest candidate in
 every thermal reaction family, and the three published CatCost validation cases against their
 published market prices. The trade comparison helper is retained for the audit record.
@@ -26,15 +26,9 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.dates as mdates  # noqa: E402
 import matplotlib.pyplot as plt  # noqa: E402
-from matplotlib.patches import (  # noqa: E402
-    Circle,
-    Ellipse,
-    FancyArrowPatch,
-    FancyBboxPatch,
-    Polygon,
-    Rectangle,
-)
+from matplotlib.patches import FancyArrowPatch, FancyBboxPatch  # noqa: E402
 from matplotlib.ticker import FuncFormatter, LogLocator, NullFormatter  # noqa: E402
+from PIL import Image, ImageDraw  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 STUDY = ROOT / "docs/paper/robustness-2026-09-08/decision_robustness.json"
@@ -198,43 +192,20 @@ def _arrow(ax, x1, y1, x2, y2, color=INK):
 
 
 def _workflow_icon(ax, index, x, y):
-    """Original geometric icons for input, price date, calculation, costs, and ranking."""
-    stroke = {"color": ACC, "lw": 0.9, "solid_capstyle": "round"}
-    if index == 0:
-        ax.add_patch(Rectangle((x - 4, y - 3), 8, 6, fc="white", ec="none"))
-        for level in (-3, 0, 3):
-            ax.add_patch(Ellipse((x, y + level), 8, 2.3, fc="white", ec=ACC, lw=0.9))
-        for side in (-4, 4):
-            ax.plot([x + side, x + side], [y - 3, y + 3], **stroke)
-    elif index == 1:
-        ax.add_patch(Rectangle((x - 4.5, y - 4), 9, 8, fc="white", ec=ACC, lw=0.9))
-        ax.plot([x - 4.5, x + 4.5], [y + 1.5, y + 1.5], **stroke)
-        for dx in (-2.3, 2.3):
-            ax.plot([x + dx, x + dx], [y + 3, y + 5], **stroke)
-        for dx in (-2, 0, 2):
-            for dy in (-0.3, -2.3):
-                ax.add_patch(Circle((x + dx, y + dy), 0.4, fc=ACC, ec="none"))
-    elif index == 2:
-        ax.add_patch(FancyBboxPatch((x - 3.7, y - 4.5), 7.4, 9,
-                                   boxstyle="round,pad=0,rounding_size=0.7", fc="white", ec=ACC, lw=0.9))
-        ax.add_patch(Rectangle((x - 2.3, y + 1.4), 4.6, 1.7, fc="#EAF1F2", ec=ACC, lw=0.6))
-        for dx in (-1.6, 1.6):
-            for dy in (-0.4, -1.9, -3.4):
-                ax.add_patch(Circle((x + dx, y + dy), 0.45, fc=ACC, ec="none"))
-    elif index == 3:
-        for dx, height in ((-3, 5), (0, 8), (3, 6.5)):
-            ax.add_patch(Rectangle((x + dx - 0.9, y - 4), 1.8, height,
-                                   fc=ACC_MID, ec=ACC, lw=0.6))
-            ax.add_patch(Rectangle((x + dx - 0.9, y - 4), 1.8, height * 0.45,
-                                   fc=ACC, ec=ACC, lw=0.6))
-        ax.plot([x - 4.5, x + 4.5], [y - 4.3, y - 4.3], **stroke)
-    else:
-        for dx, height in ((-3, 3), (0, 6), (3, 4.5)):
-            ax.add_patch(Rectangle((x + dx - 1.25, y - 4), 2.5, height,
-                                   fc="white" if dx else "#EAF1F2", ec=ACC, lw=0.8))
-        points = [(x + (1.3 if i % 2 == 0 else 0.6) * math.sin(i * math.pi / 5),
-                   y + 4.1 + (1.3 if i % 2 == 0 else 0.6) * math.cos(i * math.pi / 5)) for i in range(10)]
-        ax.add_patch(Polygon(points, closed=True, fc=ACC, ec=ACC, lw=0.4))
+    """Reuse the five stage illustrations from the unchanged 1672 x 941 px source."""
+    crops = [(64, 37, 311, 181), (68, 209, 309, 359), (78, 387, 302, 543),
+             (77, 573, 305, 719), (56, 748, 313, 902)]
+    source = ROOT / "docs/paper/figures-note-2026-09-09/fig1_workflow_stack_raw_chatgpt.png"
+    with Image.open(source) as original:
+        icon = original.crop(crops[index]).convert("RGBA")
+    # Remove only the pale background connected to the crop border; retain interior detail.
+    ImageDraw.floodfill(icon, (0, 0), (244, 246, 247, 0), thresh=50)
+    background = Image.new("RGBA", icon.size, FILL)
+    background.alpha_composite(icon)
+    height = 11.5
+    width = height * icon.width / icon.height
+    ax.imshow(background.convert("RGB"), extent=(x - width / 2, x + width / 2, y - height / 2, y + height / 2),
+              interpolation="lanczos", aspect="auto", zorder=3)
 
 
 def figure1_workflow():
@@ -254,8 +225,8 @@ def figure1_workflow():
     for index, label in enumerate(L["workflow_stages"]):
         y = 80 - index * 18
         _box(ax, 5, y, 98, 13, fill=FILL, edge=RULE, lw=0.7)
-        _workflow_icon(ax, index, 18, y + 6.5)
-        ax.text(32, y + 6.5, label, ha="left", va="center", fontsize=11, fontweight="bold")
+        _workflow_icon(ax, index, 20, y + 6.5)
+        ax.text(36, y + 6.5, label, ha="left", va="center", fontsize=11, fontweight="bold")
         ax.plot([103.5, 115.5], [y + 6.5, y + 6.5], color=ACC, lw=0.7, ls=(0, (1.5, 2)))
         if index < 4:
             _arrow(ax, 54, y - 0.4, 54, y - 4.6, color=ACC)
