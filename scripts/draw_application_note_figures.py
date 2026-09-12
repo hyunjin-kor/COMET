@@ -4,7 +4,8 @@ Figure 1 is an AI-assisted illustration kept as a committed PNG with its raw fil
 note and the connector-line script (scripts/straighten_note_fig1_leaders.py), so it is not
 drawn here. Figure 2 draws the cost model, the cost structure of the lowest-cost candidate in
 every thermal reaction family, the three published CatCost validation cases against their
-published market prices, and the price basis of eight metals. Figure 3 reads the frozen
+published market prices, the estimates against the traded unit value of the matching catalyst
+category, and the monthly price record of every metal the library prices. Figure 3 reads the frozen
 combined robustness study and the methods supplement. Both figures render in English or
 Korean. Run:
 
@@ -14,6 +15,7 @@ Korean. Run:
 
 import argparse
 import json
+import math
 import re
 from datetime import datetime
 from pathlib import Path
@@ -33,6 +35,7 @@ EXAMPLE = ROOT / "docs/paper/figures-note-2026-09-09/screen_result_ni_al2o3.json
 MARKET = ROOT / "docs/paper/catalyst_market_2026-09-10.json"
 FAMILIES = ROOT / "docs/paper/submission-2026-09-08/all_families_2026-09-08.json"
 VALIDATION = ROOT / "docs/paper/submission-2026-09-08/table62_reproduction_2026-09-08.json"
+HISTORY = ROOT / "docs/paper/submission-2026-09-08/monthly_history_2026-09-08.json"
 REFERENCE_MONTH = "2026-05"
 INK, MUTED, RULE, GREY = "#1F2A30", "#5B6870", "#C3CBCE", "#9AA6AB"
 FILL, ACC, ACC_MID, WARN = "#F4F6F7", "#1B6F78", "#6FA8AE", "#B8702F"
@@ -71,6 +74,10 @@ TEXT = {
                         "grade, loading and order size cleared under one code, so it is a market level for the "
                         "category, not a quote for a formulation."),
         "unit_lb": "USD/lb",
+        "metals_base": "Base metals (USD per pound)",
+        "metals_precious": "Precious metals (USD per troy ounce)",
+        "metals_note": ("Monthly averages of every metal the library prices, from 2019-01 to the reference month.\n"
+                        "Each label gives the factor between the cheapest and the dearest month of the record."),
         "f3_first": "Ranked first at reference conditions", "f3_second": "Closest competitor",
         "f3_other": "Other candidates", "f3_x": "Cases in which the candidate ranks first (%)",
         "f3_tests": ["Majority of cases", "Any one candidate removed", "Scores moved ±2 points",
@@ -110,6 +117,10 @@ TEXT = {
                         "다시 산정한 값을 담았다.\n거래 단가는 한 코드로 통관된 모든 등급·담지량·주문 규모를 섞은 값이므로 "
                         "범주의 시장 수준이지 특정 조성의 견적이 아니다."),
         "unit_lb": "USD/lb",
+        "metals_base": "일반 금속 (파운드당 USD)",
+        "metals_precious": "귀금속 (트로이온스당 USD)",
+        "metals_note": ("라이브러리가 가격을 매기는 모든 금속의 월평균으로, 2019-01부터 기준월까지다.\n"
+                        "각 라벨의 배수는 기록에서 가장 싼 달과 가장 비싼 달의 비율이다."),
         "f3_first": "기준 조건 1위 후보", "f3_second": "가장 가까운 경쟁 후보",
         "f3_other": "나머지 후보", "f3_x": "후보가 1위를 차지한 경우의 비율 (%)",
         "f3_tests": ["과반 경우에서 유지", "후보 하나 제외", "점수 ±2점 이동",
@@ -207,7 +218,7 @@ def _arrow(ax, x1, y1, x2, y2, color=INK, label=None, dy=1.6):
 
 
 def _cost_model_panel(fig):
-    ax = fig.add_axes([0, 0.815, 1, 0.185])
+    ax = fig.add_axes([0, 0.8471, 1, 0.1529])
     ax.set_xlim(0, 178)
     ax.set_ylim(0, 47)
     ax.axis("off")
@@ -262,7 +273,7 @@ def _structure_panel(fig):
         rows.append((family["family"], total, 100 * materials / total, 100 * processing / total,
                      100 * (total - materials - processing) / total))
     rows.sort(key=lambda r: r[2])
-    ax = fig.add_axes([0.205, 0.455, 0.295, 0.305])
+    ax = fig.add_axes([0.205, 0.5495, 0.295, 0.2521])
     ys = range(len(rows))
     ax.barh(ys, [r[2] for r in rows], color=ACC, height=0.74, label=L["seg_materials"])
     ax.barh(ys, [r[3] for r in rows], left=[r[2] for r in rows], color=ACC_MID, height=0.74,
@@ -283,13 +294,13 @@ def _structure_panel(fig):
               handlelength=1.0, columnspacing=0.8, handletextpad=0.4, borderaxespad=0.0)
     _clean(ax)
     ax.tick_params(axis="y", length=0, labelsize=5.2)
-    fig.text(0.04, 0.410, L["b_note"], fontsize=5.2, color=MUTED)
+    fig.text(0.04, 0.5123, L["b_note"], fontsize=5.2, color=MUTED)
 
 
 def _validation_panel(fig):
     """The three published CatCost cases against the market prices printed beside them."""
     cases = json.loads(VALIDATION.read_text(encoding="utf-8"))
-    ax = fig.add_axes([0.735, 0.515, 0.245, 0.225])
+    ax = fig.add_axes([0.735, 0.5991, 0.245, 0.1860])
     xs = range(len(cases))
     comet, published, labels = [], [], []
     for case in cases:
@@ -313,7 +324,7 @@ def _validation_panel(fig):
               handlelength=1.0, columnspacing=0.8, handletextpad=0.4, borderaxespad=0.0)
     _clean(ax)
     ax.tick_params(axis="x", length=0)
-    fig.text(0.615, 0.468, L["c_note"], fontsize=5.2, color=MUTED, linespacing=1.5)
+    fig.text(0.615, 0.5602, L["c_note"], fontsize=5.2, color=MUTED, linespacing=1.5)
 
 
 PRECIOUS = ("Pt", "Pd", "Rh", "Ru", "Ir", "Au", "Ag", "Os")
@@ -372,7 +383,7 @@ def _market_panel(fig):
         if len(points) > 1:
             estimates.setdefault(group, []).append(points)
 
-    left, right, bottom, height = 0.075, 0.985, 0.062, 0.225
+    left, right, bottom, height = 0.075, 0.985, 0.2246, 0.1860
     gap = 0.055
     width = (right - left - 2 * gap) / 3
     for index, (code, group) in enumerate(MARKET_GROUPS):
@@ -404,13 +415,70 @@ def _market_panel(fig):
                columnspacing=1.4, handletextpad=0.5)
 
 
+BASE_METALS = ("Ni", "Cu", "Co", "Mo", "Sn", "Al", "Zn")
+PRECIOUS_METALS = ("Rh", "Ir", "Au", "Pt", "Pd", "Ru", "Ag")
+
+
+def _ramp(index, count):
+    """Teal to grey: seven lines stay apart in print without spending space on a legend."""
+    start, end = (0x1B, 0x6F, 0x78), (0x9A, 0xA6, 0xAB)
+    share = index / max(count - 1, 1)
+    red, green, blue = (round(a + (b - a) * share) for a, b in zip(start, end, strict=True))
+    return f"#{red:02x}{green:02x}{blue:02x}"
+
+
+def _label_ends(ax, ends):
+    """Symbol and high-to-low factor at the end of each line, pushed apart where lines converge."""
+    low, high = ax.get_ylim()
+    step = (math.log10(high) - math.log10(low)) / 13
+    placed = None
+    for value, symbol, colour, factor in sorted(ends, key=lambda end: end[0], reverse=True):
+        position = math.log10(value)
+        if placed is not None and placed - position < step:
+            position = placed - step
+        placed = position
+        ax.text(1.02, 10 ** position, f"{symbol} ×{factor:.1f}", transform=ax.get_yaxis_transform(),
+                ha="left", va="center", fontsize=5.0, color=colour)
+
+
+def _metal_price_panel(fig):
+    """The monthly price record of every metal the library prices, each in its quoted unit."""
+    series = json.loads(HISTORY.read_text(encoding="utf-8"))["series"]
+    left, right, bottom, height, gap = 0.075, 0.92, 0.035, 0.105, 0.10
+    width = (right - left - gap) / 2
+    for index, (symbols, title) in enumerate(((BASE_METALS, L["metals_base"]),
+                                              (PRECIOUS_METALS, L["metals_precious"]))):
+        ax = fig.add_axes([left + index * (width + gap), bottom, width, height])
+        ends = []
+        for order, symbol in enumerate(symbols):
+            points = series[symbol]["points"]
+            prices = [point["price"] for point in points]
+            colour = _ramp(order, len(symbols))
+            ax.plot([datetime.strptime(point["date"], "%Y-%m-%d") for point in points], prices,
+                    color=colour, lw=0.8)
+            ends.append((prices[-1], symbol, colour, max(prices) / min(prices)))
+        ax.set_yscale("log")
+        ax.set_xlim(datetime(2019, 1, 1), datetime(2026, 6, 1))
+        ax.xaxis.set_major_locator(mdates.YearLocator(2))
+        ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+        ax.yaxis.set_major_locator(LogLocator(base=10.0, subs=(1.0, 2.0, 5.0), numticks=12))
+        ax.yaxis.set_major_formatter(FuncFormatter(lambda value, _p: f"{value:g}"))
+        ax.yaxis.set_minor_formatter(NullFormatter())
+        ax.set_title(title, fontsize=6.0, fontweight="bold", pad=3)
+        _clean(ax)
+        _label_ends(ax, ends)
+    fig.text(left, bottom + height + 0.030, L["metals_note"], fontsize=5.4, color=MUTED, linespacing=1.5)
+
+
 def figure2_cost_model():
-    fig = plt.figure(figsize=(178 / 25.4, 205 / 25.4))
+    fig = plt.figure(figsize=(178 / 25.4, 248 / 25.4))
     _cost_model_panel(fig)
     _structure_panel(fig)
     _validation_panel(fig)
     _market_panel(fig)
-    for label, x, y in (("a", 0.012, 0.982), ("b", 0.012, 0.782), ("c", 0.60, 0.782), ("d", 0.012, 0.372)):
+    _metal_price_panel(fig)
+    for label, x, y in (("a", 0.012, 0.9851), ("b", 0.012, 0.8198), ("c", 0.60, 0.8198),
+                        ("d", 0.012, 0.4809), ("e", 0.012, 0.1900)):
         fig.text(x, y, label, fontsize=8, fontweight="bold")
     return fig
 
