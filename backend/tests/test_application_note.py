@@ -2,6 +2,7 @@
 
 import json
 import math
+import shutil
 
 import pytest
 
@@ -77,3 +78,20 @@ def test_rank_reversal_cost_difference_matches_independent_ammonia_example():
         assert ax.get_xscale() == "linear"
     finally:
         figures.plt.close(fig)
+
+
+@pytest.mark.parametrize("changed_file", ["fig2a_cost_model.pptx", "exports/fig2a_cost_model.en.png"])
+def test_changed_diagram_source_or_image_requires_a_new_powerpoint_export(tmp_path, monkeypatch, changed_file):
+    pytest.importorskip("matplotlib")
+    from scripts import draw_application_note_figures as figures
+
+    diagrams = tmp_path / "diagrams"
+    shutil.copytree(figures.DIAGRAMS, diagrams)
+    monkeypatch.setattr(figures, "DIAGRAMS", diagrams)
+    figures.set_language("en")
+    assert figures._diagram_asset("fig2a_cost_model", "png").is_file()
+    modified = diagrams / changed_file
+    modified.write_bytes(modified.read_bytes() + b"changed after export")
+    with pytest.raises(ValueError, match="run scripts/export_note_diagram_slides.ps1"):
+        figures.figure2_cost_model()
+    figures.plt.close("all")

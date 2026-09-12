@@ -1,7 +1,8 @@
 """Draw the four Application Note figures from labels and frozen runs.
 
-Figure 1 combines programmatic labels and layout with icons extracted from an earlier
-AI-assisted illustration; its history is retained in fig1_workflow_stack.provenance.md.
+Figure 1 and the Figure 2(a) schematic use checked exports of editable PowerPoint
+sources. Data panels remain bound to the frozen JSON. Run
+scripts/export_note_diagram_slides.ps1 after editing the source decks.
 Figure 2 draws the cost model, the cost structure of the cheapest candidate in
 every thermal reaction family, and the three published CatCost validation cases against their
 published market prices. The trade comparison helper is retained for the audit record.
@@ -14,10 +15,13 @@ All four render in English or Korean. Run:
 """
 
 import argparse
+import hashlib
 import json
 import math
 import re
+import shutil
 import textwrap
+import xml.etree.ElementTree as ET
 from datetime import datetime
 from pathlib import Path
 
@@ -26,11 +30,10 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.dates as mdates  # noqa: E402
 import matplotlib.pyplot as plt  # noqa: E402
-from matplotlib.patches import FancyArrowPatch, FancyBboxPatch  # noqa: E402
 from matplotlib.ticker import FuncFormatter, LogLocator, NullFormatter  # noqa: E402
-from PIL import Image, ImageDraw  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
+DIAGRAMS = ROOT / "docs/paper/diagram-sources-2026-09-12"
 STUDY = ROOT / "docs/paper/robustness-2026-09-08/decision_robustness.json"
 METHODS = ROOT / "docs/paper/methods-2026-09-09/methods_study.json"
 EXAMPLE = ROOT / "docs/paper/figures-note-2026-09-09/screen_result_ni_al2o3.json"
@@ -39,22 +42,13 @@ FAMILIES = ROOT / "docs/paper/submission-2026-09-08/all_families_2026-09-08.json
 VALIDATION = ROOT / "docs/paper/submission-2026-09-08/table62_reproduction_2026-09-08.json"
 HISTORY = ROOT / "docs/paper/submission-2026-09-08/monthly_history_2026-09-08.json"
 REFERENCE_MONTH = "2026-05"
-INK, MUTED, RULE, GREY = "#1F2A30", "#5B6870", "#C3CBCE", "#9AA6AB"
-FILL, ACC, ACC_MID, WARN = "#F4F6F7", "#1B6F78", "#6FA8AE", "#B8702F"
+INK, MUTED, GREY = "#1F2A30", "#5B6870", "#9AA6AB"
+ACC, ACC_MID, WARN = "#1B6F78", "#6FA8AE", "#B8702F"
 
 
 TEXT = {
     "en": {
         "font": "Arial",
-        "workflow_stages": ["Input data", "Price basis", "Cost estimation", "Cost breakdown", "Candidate ranking"],
-        "workflow_records_title": "Analysis records",
-        "workflow_records": ["Price source and date", "Source reliability", "Price basis", "System boundary",
-                             "Functional unit", "Inventory coverage", "File checksums", "Software version and random seed"],
-        "formulation": "Formulation", "route": "Preparation route",
-        "basis": "Price basis", "order_size": "Order size",
-        "materials": "Materials",
-        "processing": "Processing (Step Method)",
-        "selling_price": "Selling price",
         "share_x": "Share of the selling price (%)",
         "seg_materials": "Materials", "seg_processing": "Processing", "seg_overhead": "Overhead and margin",
         "total_head": "USD/lb",
@@ -77,15 +71,6 @@ TEXT = {
     },
     "ko": {
         "font": "Malgun Gothic",
-        "workflow_stages": ["입력 데이터", "가격 기준", "원가 추정", "원가 구성", "후보 순위"],
-        "workflow_records_title": "분석 기록",
-        "workflow_records": ["가격 출처와 기준일", "출처 신뢰도", "가격 기준", "시스템 경계",
-                             "기능 단위", "환경 목록 반영률", "파일 체크섬", "소프트웨어 버전과 난수 시드"],
-        "formulation": "조성", "route": "제조 경로",
-        "basis": "가격 기준", "order_size": "주문량",
-        "materials": "재료비",
-        "processing": "가공비 (Step Method)",
-        "selling_price": "판매 단가",
         "share_x": "판매 단가 대비 비율 (%)",
         "seg_materials": "재료비", "seg_processing": "가공비", "seg_overhead": "간접비와 마진",
         "total_head": "USD/lb",
@@ -157,13 +142,15 @@ VALIDATION_NAMES = {
            "USY-based FCC (with RE)": "USY\nFCC"},
 }
 
+LANG = "en"
 L = TEXT["en"]
 FAM = FAMILY_NAMES["en"]
 VAL = VALIDATION_NAMES["en"]
 
 
 def set_language(lang):
-    global L, FAM, VAL
+    global LANG, L, FAM, VAL
+    LANG = lang
     L, FAM, VAL = TEXT[lang], FAMILY_NAMES[lang], VALIDATION_NAMES[lang]
     plt.rcParams.update({
         "font.family": L["font"], "font.size": 7.5, "text.color": INK, "svg.fonttype": "none",
@@ -182,94 +169,46 @@ def _clean(ax, left=True):
     ax.tick_params(width=0.5, length=2, labelsize=7.5)
 
 
-def _box(ax, x, y, w, h, fill=FILL, edge=RULE, lw=0.5):
-    ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0,rounding_size=0.8", fc=fill, ec=edge, lw=lw))
-
-
-def _arrow(ax, x1, y1, x2, y2, color=INK):
-    ax.add_patch(FancyArrowPatch((x1, y1), (x2, y2), arrowstyle="-|>", mutation_scale=6, color=color, lw=0.7,
-                                 shrinkA=0, shrinkB=0, zorder=4))
-
-
-def _workflow_icon(ax, index, x, y):
-    """Reuse the five stage illustrations from the unchanged 1672 x 941 px source."""
-    crops = [(64, 37, 311, 181), (68, 209, 309, 359), (78, 387, 302, 543),
-             (77, 573, 305, 719), (56, 748, 313, 902)]
-    source = ROOT / "docs/paper/figures-note-2026-09-09/fig1_workflow_stack_raw_chatgpt.png"
-    with Image.open(source) as original:
-        icon = original.crop(crops[index]).convert("RGBA")
-    # Remove only the pale background connected to the crop border; retain interior detail.
-    ImageDraw.floodfill(icon, (0, 0), (244, 246, 247, 0), thresh=50)
-    background = Image.new("RGBA", icon.size, FILL)
-    background.alpha_composite(icon)
-    height = 11.5
-    width = height * icon.width / icon.height
-    ax.imshow(background.convert("RGB"), extent=(x - width / 2, x + width / 2, y - height / 2, y + height / 2),
-              interpolation="lanczos", aspect="auto", zorder=3)
-
-
-def figure1_workflow():
-    """Five calculation stages with the associated analysis records."""
-    fig = plt.figure(figsize=(178 / 25.4, 100 / 25.4))
-    ax = fig.add_axes([0, 0, 1, 1])
-    ax.set_xlim(0, 178)
-    ax.set_ylim(0, 100)
-    ax.axis("off")
-    _box(ax, 116, 5, 57, 90, fill="#EAF1F2", edge=ACC, lw=0.7)
-    ax.text(144.5, 89.5, L["workflow_records_title"], ha="center", va="center",
-            fontsize=10, fontweight="bold", color=ACC)
-    for index, label in enumerate(L["workflow_records"]):
-        y = 76 - index * 9.4
-        _box(ax, 120, y, 49, 7.5, fill="white", edge=RULE, lw=0.5)
-        ax.text(144.5, y + 3.75, label, ha="center", va="center", fontsize=7.6)
-    for index, label in enumerate(L["workflow_stages"]):
-        y = 80 - index * 18
-        _box(ax, 5, y, 98, 13, fill=FILL, edge=RULE, lw=0.7)
-        _workflow_icon(ax, index, 20, y + 6.5)
-        ax.text(36, y + 6.5, label, ha="left", va="center", fontsize=11, fontweight="bold")
-        ax.plot([103.5, 115.5], [y + 6.5, y + 6.5], color=ACC, lw=0.7, ls=(0, (1.5, 2)))
-        if index < 4:
-            _arrow(ax, 54, y - 0.4, 54, y - 4.6, color=ACC)
-    return fig
+def _diagram_asset(name, kind):
+    """Refuse stale exports after a source slide or exported image has changed."""
+    manifest = json.loads((DIAGRAMS / "exports.json").read_text(encoding="utf-8"))
+    record = next(row for row in manifest["diagrams"] if row["source"] == f"{name}.pptx")
+    exported = next(row for row in record["exports"] if row["language"] == LANG)
+    for relative, expected in ((record["source"], record["source_sha256"]),
+                               (exported[kind], exported[f"{kind}_sha256"])):
+        asset = DIAGRAMS / relative
+        if hashlib.sha256(asset.read_bytes()).hexdigest() != expected:
+            raise ValueError(f"Stale PowerPoint export: {relative}; run scripts/export_note_diagram_slides.ps1")
+    return DIAGRAMS / exported[kind]
 
 
 def _cost_model_panel(fig):
-    ax = fig.add_axes([0, 0.96 - 47 / 164, 1, 47 / 164])
-    ax.set_xlim(0, 178)
-    ax.set_ylim(0, 47)
+    ax = fig.add_axes([0, 0.968 - 76 / 194, 1, 76 / 194])
+    ax.imshow(plt.imread(_diagram_asset("fig2a_cost_model", "png")), aspect="auto")
     ax.axis("off")
-    for key, y in (("formulation", 36), ("basis", 26), ("route", 16), ("order_size", 6)):
-        _box(ax, 4, y, 34, 8)
-        ax.text(21, y + 4, L[key], ha="center", va="center", fontsize=8.5, fontweight="bold")
-        _arrow(ax, 38.4, y + 4, 49.6, y + 4)
 
-    mx, mw = 50, 46
-    _box(ax, mx, 26, mw, 18, fill="white", edge=INK, lw=0.6)
-    ax.text(73, 40, L["materials"], ha="center", va="center", fontsize=9.0, fontweight="bold")
-    ax.text(73, 32, r"$C_\mathrm{m}=\sum_i w_i\,c_i$", ha="center", va="center", fontsize=11.0)
-    _box(ax, mx, 6, mw, 18, fill="white", edge=INK, lw=0.6)
-    ax.text(73, 20, L["processing"], ha="center", va="center", fontsize=8.5, fontweight="bold")
-    ax.text(73, 12, r"$C_\mathrm{p}=\dfrac{24\,T\,I\,H}{M}$", ha="center", va="center", fontsize=11.0)
 
-    px, pw = 112, 62
-    _box(ax, px, 15, pw, 22, fill="#EAF1F2", edge=ACC, lw=0.6)
-    ax.text(143, 32.5, L["selling_price"], ha="center", va="center", fontsize=9.0, fontweight="bold")
-    ax.text(143, 23.5, r"$P=\dfrac{(C_\mathrm{m}+C_\mathrm{p})(1+g)(1+s)}{1-m}$", ha="center",
-            va="center", fontsize=11.0)
-
-    # Independent orthogonal paths preserve the two cost contributions.
-    for start_y, end_y, label_y, label, va in (
-        (35, 30, 36.5, r"$C_\mathrm{m}$", "bottom"),
-        (15, 22, 13.5, r"$C_\mathrm{p}$", "top"),
-    ):
-        ax.plot([96.4, 103, 103], [start_y, start_y, end_y], color=INK, lw=0.7, zorder=3)
-        _arrow(ax, 103, end_y, px - 0.4, end_y)
-        ax.text(100, label_y, label, ha="center", va=va, fontsize=8.5)
-
-    # Order size also sets the selling-margin fraction, independently of processing cost.
-    ax.plot([44, 44, 143], [10, 2, 2], color=INK, lw=0.7, zorder=3)
-    _arrow(ax, 143, 2, 143, 14.6)
-    ax.text(145, 8, r"$m$", ha="left", va="center", fontsize=9.0)
+def _save_cost_model_svg(fig, destination):
+    """Keep the PowerPoint schematic and the matplotlib data panels vector-based."""
+    panel = fig.axes[0]
+    panel.images[0].set_visible(False)
+    try:
+        fig.savefig(destination, facecolor="white", metadata={"Date": None})
+    finally:
+        panel.images[0].set_visible(True)
+    tree = ET.parse(destination)
+    diagram = ET.parse(_diagram_asset("fig2a_cost_model", "svg")).getroot()
+    diagram.set("viewBox", f"0 0 {diagram.attrib['width']} {diagram.attrib['height']}")
+    position = panel.get_position()
+    width, height = fig.get_size_inches() * 72
+    for key, value in (("x", position.x0 * width), ("y", (1 - position.y1) * height),
+                       ("width", position.width * width), ("height", position.height * height)):
+        diagram.set(key, str(value))
+    tree.getroot().append(diagram)
+    ET.register_namespace("", "http://www.w3.org/2000/svg")
+    ET.register_namespace("xlink", "http://www.w3.org/1999/xlink")
+    svg = ET.tostring(tree.getroot(), encoding="utf-8", xml_declaration=True).decode("utf-8")
+    destination.write_text("\n".join(line.rstrip() for line in svg.splitlines()) + "\n", encoding="utf-8")
 
 
 def _structure_panel(fig):
@@ -285,7 +224,7 @@ def _structure_panel(fig):
         rows.append((family["family"], total, 100 * materials / total, 100 * processing / total,
                      100 * (total - materials - processing) / total))
     rows.sort(key=lambda r: r[2])
-    ax = fig.add_axes([0.24, 0.085, 0.30, 0.50])
+    ax = fig.add_axes([0.24, 0.085 * 164 / 194, 0.30, 0.50 * 164 / 194])
     ys = range(len(rows))
     ax.barh(ys, [r[2] for r in rows], color=ACC, height=0.74, label=L["seg_materials"])
     ax.barh(ys, [r[3] for r in rows], left=[r[2] for r in rows], color=ACC_MID, height=0.74,
@@ -303,7 +242,7 @@ def _structure_panel(fig):
     ax.set_xticks([0, 25, 50, 75, 100])
     ax.set_xlabel(L["share_x"], fontsize=7.8)
     handles, labels = ax.get_legend_handles_labels()
-    fig.legend(handles, labels, fontsize=6.8, frameon=False, loc="upper left", bbox_to_anchor=(0.07, 0.648), ncol=3,
+    fig.legend(handles, labels, fontsize=6.8, frameon=False, loc="upper left", bbox_to_anchor=(0.07, 0.648 * 164 / 194), ncol=3,
               handlelength=1.0, columnspacing=0.8, handletextpad=0.4, borderaxespad=0.0)
     _clean(ax)
     ax.tick_params(axis="y", length=0, labelsize=6.5)
@@ -312,7 +251,7 @@ def _structure_panel(fig):
 def _validation_panel(fig):
     """The three published CatCost cases against the market prices printed beside them."""
     cases = json.loads(VALIDATION.read_text(encoding="utf-8"))
-    ax = fig.add_axes([0.74, 0.17, 0.235, 0.415])
+    ax = fig.add_axes([0.74, 0.17 * 164 / 194, 0.235, 0.415 * 164 / 194])
     xs = range(len(cases))
     comet, published, labels = [], [], []
     for case in cases:
@@ -334,7 +273,7 @@ def _validation_panel(fig):
     ax.set_ylim(-26, 3)
     ax.set_ylabel(L["c_y"], fontsize=7.8)
     handles, labels = ax.get_legend_handles_labels()
-    fig.legend(handles, labels, fontsize=6.8, frameon=False, loc="upper left", bbox_to_anchor=(0.70, 0.648), ncol=2,
+    fig.legend(handles, labels, fontsize=6.8, frameon=False, loc="upper left", bbox_to_anchor=(0.70, 0.648 * 164 / 194), ncol=2,
               handlelength=1.0, columnspacing=0.8, handletextpad=0.4, borderaxespad=0.0)
     _clean(ax)
     ax.tick_params(axis="x", length=0)
@@ -452,11 +391,11 @@ def _label_ends(ax, ends, fontsize=6.4):
 
 
 def figure2_cost_model():
-    fig = plt.figure(figsize=(178 / 25.4, 164 / 25.4))
+    fig = plt.figure(figsize=(178 / 25.4, 194 / 25.4))
     _cost_model_panel(fig)
     _structure_panel(fig)
     _validation_panel(fig)
-    for label, x, y in (("(a)", 0.012, 0.995), ("(b)", 0.012, 0.653), ("(c)", 0.64, 0.653)):
+    for label, x, y in (("(a)", 0.012, 0.995), ("(b)", 0.012, 0.653 * 164 / 194), ("(c)", 0.64, 0.653 * 164 / 194)):
         fig.text(x, y, label, fontsize=10.0, fontweight="bold", va="top")
     return fig
 
@@ -586,14 +525,20 @@ def main():
     set_language(args.lang)
     args.out_dir.mkdir(parents=True, exist_ok=True)
     suffix = "" if args.lang == "en" else f".{args.lang}"
-    for name, function in (("fig1_workflow_stack", figure1_workflow),
-                           ("fig2_cost_model", figure2_cost_model),
+    for kind in ("png", "svg"):
+        shutil.copyfile(_diagram_asset("fig1_workflow", kind), args.out_dir / f"fig1_workflow_stack{suffix}.{kind}")
+    print("wrote", args.out_dir / f"fig1_workflow_stack{suffix}")
+    for name, function in (("fig2_cost_model", figure2_cost_model),
                            ("fig3_metal_prices", figure3_metal_prices),
                            ("fig4_decision_diagnostics", figure4_diagnostics)):
         figure = function()
         figure.savefig(args.out_dir / f"{name}{suffix}.png", dpi=400, facecolor="white",
                        metadata={"Software": "COMET"})
-        figure.savefig(args.out_dir / f"{name}{suffix}.svg", facecolor="white", metadata={"Date": None})
+        svg_path = args.out_dir / f"{name}{suffix}.svg"
+        if name == "fig2_cost_model":
+            _save_cost_model_svg(figure, svg_path)
+        else:
+            figure.savefig(svg_path, facecolor="white", metadata={"Date": None})
         plt.close(figure)
         print("wrote", args.out_dir / f"{name}{suffix}")
 
