@@ -823,7 +823,7 @@ L 0 2
      </g>
     </g>
     <g id="text_7">
-     <text style="font-size: 8px; font-family: 'Arial'; text-anchor: middle" x="209.395276" y="333.426829" transform="rotate(-0 209.395276 333.426829)">Cases in which the candidate ranks first (%)</text>
+     <text style="font-size: 8px; font-family: 'Arial'; text-anchor: middle" x="209.395276" y="333.426829" transform="rotate(-0 209.395276 333.426829)">How often the candidate ranks first (%)</text>
     </g>
    </g>
    <g id="matplotlib.axis_2">
@@ -1193,29 +1193,29 @@ z
 " style="fill: #1b6f78"/>
     </g>
     <g id="text_38">
-     <text style="font-size: 7px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="147.010236" y="24.722136" transform="rotate(-0 147.010236 24.722136)">Ranked first at reference conditions</text>
+     <text style="font-size: 7px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="147.010236" y="24.722136" transform="rotate(-0 147.010236 24.722136)">First at the reference conditions</text>
     </g>
     <g id="patch_96">
-     <path d="M 263.415861 24.722136 
-L 270.415861 24.722136 
-L 270.415861 19.822136 
-L 263.415861 19.822136 
+     <path d="M 251.350705 24.722136 
+L 258.350705 24.722136 
+L 258.350705 19.822136 
+L 251.350705 19.822136 
 z
 " style="fill: #b8702f"/>
     </g>
     <g id="text_39">
-     <text style="font-size: 7px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="273.915861" y="24.722136" transform="rotate(-0 273.915861 24.722136)">Closest competitor</text>
+     <text style="font-size: 7px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="261.850705" y="24.722136" transform="rotate(-0 261.850705 24.722136)">Runner-up</text>
     </g>
     <g id="patch_97">
-     <path d="M 338.178049 24.722136 
-L 345.178049 24.722136 
-L 345.178049 19.822136 
-L 338.178049 19.822136 
+     <path d="M 301.223517 24.722136 
+L 308.223517 24.722136 
+L 308.223517 19.822136 
+L 301.223517 19.822136 
 z
 " style="fill: #d9dee1"/>
     </g>
     <g id="text_40">
-     <text style="font-size: 7px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="348.678049" y="24.722136" transform="rotate(-0 348.678049 24.722136)">Other candidates</text>
+     <text style="font-size: 7px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="311.723517" y="24.722136" transform="rotate(-0 311.723517 24.722136)">The rest</text>
     </g>
    </g>
   </g>
@@ -1350,38 +1350,43 @@ z
      </g>
     </g>
     <g id="text_45">
-     <text style="font-size: 8px; font-family: 'Arial'; text-anchor: middle" x="425.097638" y="149.741789" transform="rotate(-0 425.097638 149.741789)">Families keeping the same leader (of 30)</text>
+     <text style="font-size: 8px; font-family: 'Arial'; text-anchor: middle" x="425.097638" y="149.741789" transform="rotate(-0 425.097638 149.741789)">Families with the same leader (of 30)</text>
     </g>
    </g>
    <g id="matplotlib.axis_4">
     <g id="ytick_31">
      <g id="line2d_43"/>
      <g id="text_46">
-      <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="349.69685" y="42.311844" transform="rotate(-0 349.69685 42.311844)">Majority of cases</text>
+      <text style="font-size: 7.5px; font-family: 'Arial'; fill: #1f2a30" transform="translate(303.008179 38.836649)">Leads in most</text>
+      <text style="font-size: 7.5px; font-family: 'Arial'; fill: #1f2a30" transform="translate(330.105444 46.769305)">cases</text>
      </g>
     </g>
     <g id="ytick_32">
      <g id="line2d_44"/>
      <g id="text_47">
-      <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="349.69685" y="61.593271" transform="rotate(-0 349.69685 61.593271)">Any one candidate removed</text>
+      <text style="font-size: 7.5px; font-family: 'Arial'; fill: #1f2a30" transform="translate(300.914038 58.163778)">One candidate</text>
+      <text style="font-size: 7.5px; font-family: 'Arial'; fill: #1f2a30" transform="translate(320.519507 66.096435)">removed</text>
      </g>
     </g>
     <g id="ytick_33">
      <g id="line2d_45"/>
      <g id="text_48">
-      <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="349.69685" y="80.966103" transform="rotate(-0 349.69685 80.966103)">Scores moved ±2 points</text>
+      <text style="font-size: 7.5px; font-family: 'Arial'; fill: #1f2a30" transform="translate(302.176147 77.479775)">Scores shifted</text>
+      <text style="font-size: 7.5px; font-family: 'Arial'; fill: #1f2a30" transform="translate(323.430444 85.43915)">2 points</text>
      </g>
     </g>
     <g id="ytick_34">
      <g id="line2d_46"/>
      <g id="text_49">
-      <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="349.69685" y="100.293233" transform="rotate(-0 349.69685 100.293233)">Scores moved ±5 points</text>
+      <text style="font-size: 7.5px; font-family: 'Arial'; fill: #1f2a30" transform="translate(302.176147 96.818038)">Scores shifted</text>
+      <text style="font-size: 7.5px; font-family: 'Arial'; fill: #1f2a30" transform="translate(323.430444 104.750694)">5 points</text>
      </g>
     </g>
     <g id="ytick_35">
      <g id="line2d_47"/>
      <g id="text_50">
-      <text style="font-size: 7.5px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="349.69685" y="119.620362" transform="rotate(-0 349.69685 119.620362)">Scores moved ±10 points</text>
+      <text style="font-size: 7.5px; font-family: 'Arial'; fill: #1f2a30" transform="translate(302.176147 116.134034)">Scores shifted</text>
+      <text style="font-size: 7.5px; font-family: 'Arial'; fill: #1f2a30" transform="translate(319.259741 124.093409)">10 points</text>
      </g>
     </g>
    </g>
@@ -1660,7 +1665,7 @@ z
      </g>
     </g>
     <g id="text_70">
-     <text style="font-size: 7px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="367.89685" y="292.349551" transform="rotate(-0 367.89685 292.349551)">Full candidate set</text>
+     <text style="font-size: 7px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="367.89685" y="292.349551" transform="rotate(-0 367.89685 292.349551)">All four candidates</text>
     </g>
     <g id="line2d_67">
      <defs>
@@ -1681,7 +1686,7 @@ z
      </g>
     </g>
     <g id="text_71">
-     <text style="font-size: 7px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="367.89685" y="302.25127" transform="rotate(-0 367.89685 302.25127)">Ru candidate removed</text>
+     <text style="font-size: 7px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="367.89685" y="302.25127" transform="rotate(-0 367.89685 302.25127)">Ruthenium candidate removed</text>
     </g>
    </g>
   </g>

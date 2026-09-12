@@ -823,7 +823,7 @@ L 0 2
      </g>
     </g>
     <g id="text_7">
-     <text style="font-size: 8px; font-family: 'Malgun Gothic'; text-anchor: middle" x="209.395276" y="334.457532" transform="rotate(-0 209.395276 334.457532)">후보가 1위를 차지한 경우의 비율 (%)</text>
+     <text style="font-size: 8px; font-family: 'Malgun Gothic'; text-anchor: middle" x="209.395276" y="334.457532" transform="rotate(-0 209.395276 334.457532)">1위를 차지한 경우의 비율 (%)</text>
     </g>
    </g>
    <g id="matplotlib.axis_2">
@@ -1130,29 +1130,29 @@ z
 " style="fill: #1b6f78"/>
     </g>
     <g id="text_38">
-     <text style="font-size: 7px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="147.010236" y="24.458542" transform="rotate(-0 147.010236 24.458542)">기준 조건 1위 후보</text>
+     <text style="font-size: 7px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="147.010236" y="24.458542" transform="rotate(-0 147.010236 24.458542)">기준 조건에서 1위</text>
     </g>
     <g id="patch_96">
-     <path d="M 213.548517 24.458542 
-L 220.548517 24.458542 
-L 220.548517 19.558542 
-L 213.548517 19.558542 
+     <path d="M 211.08758 24.458542 
+L 218.08758 24.458542 
+L 218.08758 19.558542 
+L 211.08758 19.558542 
 z
 " style="fill: #b8702f"/>
     </g>
     <g id="text_39">
-     <text style="font-size: 7px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="224.048517" y="24.458542" transform="rotate(-0 224.048517 24.458542)">가장 가까운 경쟁 후보</text>
+     <text style="font-size: 7px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="221.58758" y="24.458542" transform="rotate(-0 221.58758 24.458542)">바로 뒤 후보</text>
     </g>
     <g id="patch_97">
-     <path d="M 300.73133 24.458542 
-L 307.73133 24.458542 
-L 307.73133 19.558542 
-L 300.73133 19.558542 
+     <path d="M 267.809455 24.458542 
+L 274.809455 24.458542 
+L 274.809455 19.558542 
+L 267.809455 19.558542 
 z
 " style="fill: #d9dee1"/>
     </g>
     <g id="text_40">
-     <text style="font-size: 7px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="311.23133" y="24.458542" transform="rotate(-0 311.23133 24.458542)">나머지 후보</text>
+     <text style="font-size: 7px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="278.309455" y="24.458542" transform="rotate(-0 278.309455 24.458542)">나머지</text>
     </g>
    </g>
   </g>
@@ -1287,38 +1287,43 @@ z
      </g>
     </g>
     <g id="text_45">
-     <text style="font-size: 8px; font-family: 'Malgun Gothic'; text-anchor: middle" x="425.097638" y="150.772493" transform="rotate(-0 425.097638 150.772493)">1위가 유지되는 반응군 수 (30개 중)</text>
+     <text style="font-size: 8px; font-family: 'Malgun Gothic'; text-anchor: middle" x="425.097638" y="150.772493" transform="rotate(-0 425.097638 150.772493)">1위가 그대로인 반응군 (30개 중)</text>
     </g>
    </g>
    <g id="matplotlib.axis_4">
     <g id="ytick_31">
      <g id="line2d_43"/>
      <g id="text_46">
-      <text style="font-size: 7.5px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="349.69685" y="42.429032" transform="rotate(-0 349.69685 42.429032)">과반 경우에서 유지</text>
+      <text style="font-size: 7.5px; font-family: 'Malgun Gothic'; fill: #1f2a30" transform="translate(319.69685 38.695438)">과반에서</text>
+      <text style="font-size: 7.5px; font-family: 'Malgun Gothic'; fill: #1f2a30" transform="translate(320.429272 47.301454)">1위 유지</text>
      </g>
     </g>
     <g id="ytick_32">
      <g id="line2d_44"/>
      <g id="text_47">
-      <text style="font-size: 7.5px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="349.69685" y="61.756161" transform="rotate(-0 349.69685 61.756161)">후보 하나 제외</text>
+      <text style="font-size: 7.5px; font-family: 'Malgun Gothic'; fill: #1f2a30" transform="translate(309.560132 58.022567)">후보 하나를</text>
+      <text style="font-size: 7.5px; font-family: 'Malgun Gothic'; fill: #1f2a30" transform="translate(334.69685 66.628583)">빼도</text>
      </g>
     </g>
     <g id="ytick_33">
      <g id="line2d_45"/>
      <g id="text_48">
-      <text style="font-size: 7.5px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="349.69685" y="81.083291" transform="rotate(-0 349.69685 81.083291)">점수 ±2점 이동</text>
+      <text style="font-size: 7.5px; font-family: 'Malgun Gothic'; fill: #1f2a30" transform="translate(312.929272 77.349697)">점수를 2점</text>
+      <text style="font-size: 7.5px; font-family: 'Malgun Gothic'; fill: #1f2a30" transform="translate(319.69685 85.955713)">흔들어도</text>
      </g>
     </g>
     <g id="ytick_34">
      <g id="line2d_46"/>
      <g id="text_49">
-      <text style="font-size: 7.5px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="349.69685" y="100.41042" transform="rotate(-0 349.69685 100.41042)">점수 ±5점 이동</text>
+      <text style="font-size: 7.5px; font-family: 'Malgun Gothic'; fill: #1f2a30" transform="translate(312.929272 96.676827)">점수를 5점</text>
+      <text style="font-size: 7.5px; font-family: 'Malgun Gothic'; fill: #1f2a30" transform="translate(319.69685 105.282842)">흔들어도</text>
      </g>
     </g>
     <g id="ytick_35">
      <g id="line2d_47"/>
      <g id="text_50">
-      <text style="font-size: 7.5px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #1f2a30" x="349.69685" y="119.73755" transform="rotate(-0 349.69685 119.73755)">점수 ±10점 이동</text>
+      <text style="font-size: 7.5px; font-family: 'Malgun Gothic'; fill: #1f2a30" transform="translate(308.798413 116.003956)">점수를 10점</text>
+      <text style="font-size: 7.5px; font-family: 'Malgun Gothic'; fill: #1f2a30" transform="translate(319.69685 124.609972)">흔들어도</text>
      </g>
     </g>
    </g>
@@ -1597,7 +1602,7 @@ z
      </g>
     </g>
     <g id="text_70">
-     <text style="font-size: 7px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="367.89685" y="291.518301" transform="rotate(-0 367.89685 291.518301)">전체 후보 집합</text>
+     <text style="font-size: 7px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="367.89685" y="291.518301" transform="rotate(-0 367.89685 291.518301)">네 후보 모두</text>
     </g>
     <g id="line2d_67">
      <defs>
@@ -1618,7 +1623,7 @@ z
      </g>
     </g>
     <g id="text_71">
-     <text style="font-size: 7px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="367.89685" y="301.987676" transform="rotate(-0 367.89685 301.987676)">Ru 후보 제외</text>
+     <text style="font-size: 7px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="367.89685" y="301.987676" transform="rotate(-0 367.89685 301.987676)">루테늄 후보를 뺀 경우</text>
     </g>
    </g>
   </g>

@@ -1002,7 +1002,7 @@ L 190.148031 146.976378
     <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #9aa6ab" x="192.975874" y="119.339175" transform="rotate(-0 192.975874 119.339175)">Ag ×6.2</text>
    </g>
    <g id="text_19">
-    <text style="font-weight: 700; font-size: 7.6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="119.451969" y="23.666142" transform="rotate(-0 119.451969 23.666142)">귀금속 (트로이온스당 USD)</text>
+    <text style="font-weight: 700; font-size: 7.6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="119.451969" y="23.666142" transform="rotate(-0 119.451969 23.666142)">귀금속, 트로이온스당 USD</text>
    </g>
   </g>
   <g id="axes_2">
@@ -1865,12 +1865,12 @@ L 190.148031 309.514961
     <text style="font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #9aa6ab" x="192.975874" y="290.243272" transform="rotate(-0 192.975874 290.243272)">Zn ×2.3</text>
    </g>
    <g id="text_35">
-    <text style="font-weight: 700; font-size: 7.6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="119.451969" y="186.204724" transform="rotate(-0 119.451969 186.204724)">일반 금속 (파운드당 USD)</text>
+    <text style="font-weight: 700; font-size: 7.6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="119.451969" y="186.204724" transform="rotate(-0 119.451969 186.204724)">일반 금속, 파운드당 USD</text>
    </g>
   </g>
   <g id="text_36">
-   <text style="font-size: 6.2px; font-family: 'Malgun Gothic'; fill: #5b6870" transform="translate(7.313386 326.925515)">월평균, 2019-01부터 기준월까지.</text>
-   <text style="font-size: 6.2px; font-family: 'Malgun Gothic'; fill: #5b6870" transform="translate(7.313386 335.451969)">라벨의 배수는 가장 비싼 달 ÷ 가장 싼 달.</text>
+   <text style="font-size: 6.2px; font-family: 'Malgun Gothic'; fill: #5b6870" transform="translate(7.313386 326.925515)">2019-01부터 기준월까지의 월평균.</text>
+   <text style="font-size: 6.2px; font-family: 'Malgun Gothic'; fill: #5b6870" transform="translate(7.313386 335.451969)">라벨의 배수는 가장 비싼 달을 가장 싼 달로 나눈 값.</text>
   </g>
  </g>
  <defs>

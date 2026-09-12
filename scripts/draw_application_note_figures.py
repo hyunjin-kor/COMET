@@ -1,13 +1,13 @@
-"""Draw Application Note Figures 2 and 3 from repository assets and frozen runs.
+"""Draw Application Note Figures 2, 3 and 4 from repository assets and frozen runs.
 
 Figure 1 is an AI-assisted illustration kept as a committed PNG with its raw file, provenance
 note and the connector-line script (scripts/straighten_note_fig1_leaders.py), so it is not
-drawn here. Figure 2 draws the cost model, the cost structure of the lowest-cost candidate in
+drawn here. Figure 2 draws the cost model, the cost structure of the cheapest candidate in
 every thermal reaction family, the three published CatCost validation cases against their
-published market prices, the estimates against the traded unit value of the matching catalyst
-category, and the monthly price record of every metal the library prices. Figure 3 reads the frozen
-combined robustness study and the methods supplement. Both figures render in English or
-Korean. Run:
+published market prices, and the estimates against the traded unit value of the matching
+catalyst category. Figure 3 is the monthly price record of every metal the library prices, in
+one column. Figure 4 reads the frozen combined robustness study and the methods supplement.
+All three render in English or Korean. Run:
 
     python scripts/draw_application_note_figures.py --out-dir docs/paper/figures-note-2026-09-09
     python scripts/draw_application_note_figures.py --lang ko
@@ -46,87 +46,87 @@ TEXT = {
         "font": "Arial",
         "formulation": "Formulation", "formulation_sub": "components, wt%",
         "route": "Preparation route", "route_sub": "operations, order size",
-        "basis": "Price basis", "basis_sub": "spot or reference month",
+        "basis": "Price basis", "basis_sub": "spot or monthly average",
         "materials": "Materials", "materials_1": "unit price × mass fraction",
-        "materials_2": "purchased input",
+        "materials_2": "purchased precursor",
         "processing": "Processing (Step Method)",
-        "processing_1": r"$H=\sum_j H_j$, the hourly rates of the selected operations",
-        "processing_2": "at the fitted scale class",
-        "overhead": "Overhead and margin", "overhead_1": "G&A, S&ARD, margin set by order size",
+        "processing_1": r"$H=\sum_j H_j$, hourly rates of the chosen operations",
+        "processing_2": "at the fitted production scale",
+        "overhead": "Overhead and margin", "overhead_1": "G&A and S&ARD uplifts,\nmargin set by order size",
         "breakdown": "Cost breakdown",
-        "breakdown_lines": ["selling price per lb", "price, source, date", "grade, price basis",
-                            "operations priced,", "substituted, uncosted"],
+        "breakdown_lines": ["selling price per lb", "price, source, date", "reliability grade",
+                            "price basis", "each step priced,", "substituted or uncosted"],
         "share_x": "Share of the selling price (%)",
         "seg_materials": "Materials", "seg_processing": "Processing", "seg_overhead": "Overhead and margin",
         "total_head": "USD/lb",
-        "b_note": "Lowest-cost candidate in each thermal reaction family, reference month 2026-05",
+        "b_note": "The cheapest candidate in each thermal reaction family, priced at the 2026-05 reference month",
         "c_x": "Selling price (USD per lb, log scale)",
         "c_comet": "COMET", "c_published": "Published estimate", "c_market": "Published market price",
-        "c_note": "Baddour et al. 2018, Table 2; the FCC case uses\nits footnote rate of 67 short tons per day",
-        "c_y": "Difference from the published market price (%)",
-        "market_y": "USD per lb of catalyst",
-        "market_titles": {"nickel": "Nickel", "precious": "Precious metal", "other": "Other active substance"},
+        "c_note": "Reference cases from Table 2 of Baddour et al. 2018; the FCC\ncase uses the 67 short tons per day given in its footnote",
+        "c_y": "Gap to the published market price (%)",
+        "market_y": "USD per pound of catalyst",
+        "market_titles": {"nickel": "Nickel catalysts", "precious": "Precious-metal catalysts", "other": "Other active substances"},
         "market_count": "{n} reaction families",
-        "market_traded": "Traded unit value, United States imports",
-        "market_estimate": "COMET estimate for one family's leading candidate",
-        "market_note": ("Each panel holds the reaction families whose leading candidate has the active substance of "
-                        "that HS subheading, repriced at every month of the record.\nA traded unit value mixes every "
-                        "grade, loading and order size cleared under one code, so it is a market level for the "
-                        "category, not a quote for a formulation."),
+        "market_traded": "US import unit value",
+        "market_estimate": "COMET estimate, one line per reaction family",
+        "market_note": ("Each panel gathers the reaction families whose leading candidate carries that "
+                        "subheading's active substance, repriced at every month.\nA unit value mixes every grade, "
+                        "loading and order size cleared under one code, so it marks where the category trades, not "
+                        "what one formulation costs."),
         "unit_lb": "USD/lb",
-        "metals_base": "Base metals (USD per pound)",
-        "metals_precious": "Precious metals (USD per troy ounce)",
-        "metals_note": ("Monthly averages, 2019-01 to the reference month.\n"
-                        "Labels give the dearest month over the cheapest."),
-        "f3_first": "Ranked first at reference conditions", "f3_second": "Closest competitor",
-        "f3_other": "Other candidates", "f3_x": "Cases in which the candidate ranks first (%)",
-        "f3_tests": ["Majority of cases", "Any one candidate removed", "Scores moved ±2 points",
-                     "Scores moved ±5 points", "Scores moved ±10 points"],
-        "f3_b_x": "Families keeping the same leader (of 30)",
-        "f3_c_x": "Composite score", "f3_full": "Full candidate set", "f3_removed": "Ru candidate removed",
+        "metals_base": "Base metals, USD per pound",
+        "metals_precious": "Precious metals, USD per troy ounce",
+        "metals_note": ("Monthly averages from 2019-01 to the reference month.\n"
+                        "Each label divides the dearest month by the cheapest."),
+        "f3_first": "First at the reference conditions", "f3_second": "Runner-up",
+        "f3_other": "The rest", "f3_x": "How often the candidate ranks first (%)",
+        "f3_tests": ["Leads in most\ncases", "One candidate\nremoved", "Scores shifted\n2 points",
+                     "Scores shifted\n5 points", "Scores shifted\n10 points"],
+        "f3_b_x": "Families with the same leader (of 30)",
+        "f3_c_x": "Composite score", "f3_full": "All four candidates", "f3_removed": "Ruthenium candidate removed",
         "f3_first_tag": " (1st)", "usd_lb": "USD/lb",
     },
     "ko": {
         "font": "Malgun Gothic",
         "formulation": "조성", "formulation_sub": "성분, wt%",
         "route": "제조 경로", "route_sub": "공정, 주문 규모",
-        "basis": "가격 기준", "basis_sub": "현물 또는 기준월",
+        "basis": "가격 기준", "basis_sub": "현물 또는 월평균",
         "materials": "재료비", "materials_1": "단가 × 질량 분율",
-        "materials_2": "구매 원료",
+        "materials_2": "구매 전구체",
         "processing": "가공비 (Step Method)",
         "processing_1": r"$H=\sum_j H_j$, 선택한 공정들의 시간당 단가",
-        "processing_2": "맞춰진 규모 등급 기준",
-        "overhead": "간접비와 마진", "overhead_1": "일반관리비, 판매·연구개발, 주문 규모별 마진",
+        "processing_2": "맞춰진 생산 규모 기준",
+        "overhead": "간접비와 마진", "overhead_1": "일반관리비와 판매·연구개발 가산,\n주문 규모로 정해지는 마진",
         "breakdown": "원가 내역",
-        "breakdown_lines": ["파운드당 판매 단가", "가격, 출처, 일자", "등급, 가격 기준",
-                            "산정·대체·", "미산정 공정"],
+        "breakdown_lines": ["파운드당 판매 단가", "가격, 출처, 일자", "신뢰도 등급",
+                            "가격 기준", "공정별 산정·대체·", "미산정 표시"],
         "share_x": "판매 단가 대비 비율 (%)",
         "seg_materials": "재료비", "seg_processing": "가공비", "seg_overhead": "간접비와 마진",
         "total_head": "USD/lb",
-        "b_note": "각 열촉매 반응군의 최저 원가 후보, 기준월 2026-05",
+        "b_note": "기준월 2026-05에서 각 열촉매 반응군의 가장 싼 후보",
         "c_x": "판매 단가 (USD/lb, 로그 축)",
         "c_comet": "COMET", "c_published": "발표된 추정값", "c_market": "발표된 시장 가격",
-        "c_note": "Baddour 외 2018, 표 2\nFCC 사례는 그 각주의 일 67 short ton 처리량 기준",
-        "c_y": "시장 가격 대비 차이 (%)",
+        "c_note": "기준 사례는 Baddour 외 2018의 표 2\nFCC 사례는 각주의 하루 67 short ton 처리량을 쓴다",
+        "c_y": "발표된 시장 가격과의 차이 (%)",
         "market_y": "촉매 파운드당 USD",
-        "market_titles": {"nickel": "니켈", "precious": "귀금속", "other": "그 외 활성 물질"},
+        "market_titles": {"nickel": "니켈계 촉매", "precious": "귀금속계 촉매", "other": "그 밖의 활성 물질"},
         "market_count": "반응군 {n}개",
-        "market_traded": "미국 수입 거래 단가",
-        "market_estimate": "반응군 1위 후보의 COMET 추정값",
-        "market_note": ("각 패널에는 1위 후보의 활성 물질이 해당 HS 세부 코드에 해당하는 반응군을 모아 기록의 매 월에서 "
-                        "다시 산정한 값을 담았다.\n거래 단가는 한 코드로 통관된 모든 등급·담지량·주문 규모를 섞은 값이므로 "
-                        "범주의 시장 수준이지 특정 조성의 견적이 아니다."),
+        "market_traded": "미국 수입 단가",
+        "market_estimate": "COMET 추정값, 반응군마다 한 줄",
+        "market_note": ("각 패널에는 1위 후보의 활성 물질이 그 세부 코드에 해당하는 반응군을 모아 매 월 다시 산정한 "
+                        "값을 담았다.\n거래 단가는 한 코드로 통관된 모든 등급·담지량·주문 규모를 섞은 값이라, 범주가 "
+                        "거래되는 수준을 보일 뿐 한 조성의 값이 아니다."),
         "unit_lb": "USD/lb",
-        "metals_base": "일반 금속 (파운드당 USD)",
-        "metals_precious": "귀금속 (트로이온스당 USD)",
-        "metals_note": ("월평균, 2019-01부터 기준월까지.\n"
-                        "라벨의 배수는 가장 비싼 달 ÷ 가장 싼 달."),
-        "f3_first": "기준 조건 1위 후보", "f3_second": "가장 가까운 경쟁 후보",
-        "f3_other": "나머지 후보", "f3_x": "후보가 1위를 차지한 경우의 비율 (%)",
-        "f3_tests": ["과반 경우에서 유지", "후보 하나 제외", "점수 ±2점 이동",
-                     "점수 ±5점 이동", "점수 ±10점 이동"],
-        "f3_b_x": "1위가 유지되는 반응군 수 (30개 중)",
-        "f3_c_x": "종합 점수", "f3_full": "전체 후보 집합", "f3_removed": "Ru 후보 제외",
+        "metals_base": "일반 금속, 파운드당 USD",
+        "metals_precious": "귀금속, 트로이온스당 USD",
+        "metals_note": ("2019-01부터 기준월까지의 월평균.\n"
+                        "라벨의 배수는 가장 비싼 달을 가장 싼 달로 나눈 값."),
+        "f3_first": "기준 조건에서 1위", "f3_second": "바로 뒤 후보",
+        "f3_other": "나머지", "f3_x": "1위를 차지한 경우의 비율 (%)",
+        "f3_tests": ["과반에서\n1위 유지", "후보 하나를\n빼도", "점수를 2점\n흔들어도",
+                     "점수를 5점\n흔들어도", "점수를 10점\n흔들어도"],
+        "f3_b_x": "1위가 그대로인 반응군 (30개 중)",
+        "f3_c_x": "종합 점수", "f3_full": "네 후보 모두", "f3_removed": "루테늄 후보를 뺀 경우",
         "f3_first_tag": " (1위)", "usd_lb": "USD/lb",
     },
 }
@@ -238,7 +238,7 @@ def _cost_model_panel(fig):
     _box(ax, mx, 1.0, mw, 21, fill="white", edge=INK, lw=0.6)
     ax.text(mx + mw / 2, 18.7, L["processing"], ha="center", va="center", fontsize=8.5, fontweight="bold")
     ax.text(mx + mw / 2, 13.0, r"$C_\mathrm{p}=\dfrac{24\,T\,I\,H}{M}$", ha="center", va="center", fontsize=10.5)
-    ax.text(mx + mw / 2, 6.6, L["processing_1"], ha="center", va="center", fontsize=7.5)
+    ax.text(mx + mw / 2, 6.6, L["processing_1"], ha="center", va="center", fontsize=6.6)
     ax.text(mx + mw / 2, 3.2, L["processing_2"], ha="center", va="center", fontsize=7.0)
     _arrow(ax, 32.3, 40.3, mx - 0.3, 38.5)
     _arrow(ax, 32.3, 9.3, mx - 0.3, 11.5)
@@ -249,14 +249,14 @@ def _cost_model_panel(fig):
     ax.text(px + pw / 2, 31.7, L["overhead"], ha="center", va="center", fontsize=8.5, fontweight="bold")
     ax.text(px + pw / 2, 22.5, r"$P=\dfrac{(C_\mathrm{m}+C_\mathrm{p})(1+g)(1+s)}{1-m}$", ha="center", va="center",
             fontsize=10.8)
-    ax.text(px + pw / 2, 14.1, L["overhead_1"], ha="center", va="center", fontsize=7.0)
+    ax.text(px + pw / 2, 13.4, L["overhead_1"], ha="center", va="center", fontsize=6.6, linespacing=1.5)
     _arrow(ax, mx + mw + 0.3, 35.0, px - 0.3, 27.0, label=r"$C_\mathrm{m}$")
     _arrow(ax, mx + mw + 0.3, 11.5, px - 0.3, 19.0, label=r"$C_\mathrm{p}$", dy=-4.6)
     lx, lw_ = 147, 28
     _box(ax, lx, 11, lw_, 24, fill="#EAF1F2", edge=ACC, lw=0.6)
     ax.text(lx + lw_ / 2, 31.7, L["breakdown"], ha="center", va="center", fontsize=8.5, fontweight="bold")
     for k, line_text in enumerate(L["breakdown_lines"]):
-        ax.text(lx + 2.2, 27.3 - k * 3.6, line_text, ha="left", va="center", fontsize=6.9)
+        ax.text(lx + 2.2, 27.2 - k * 3.0, line_text, ha="left", va="center", fontsize=6.6)
     _arrow(ax, px + pw + 0.3, 23.0, lx - 0.3, 23.0, label=r"$P$")
 
 
