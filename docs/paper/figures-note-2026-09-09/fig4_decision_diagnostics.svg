@@ -813,7 +813,7 @@ L 0 2
      </g>
     </g>
     <g id="text_6">
-     <text style="font-size: 8px; font-family: 'Arial'; text-anchor: middle" x="200.565354" y="417.615805" transform="rotate(-0 200.565354 417.615805)">First-rank frequency (%)</text>
+     <text style="font-size: 8px; font-family: 'Arial'; text-anchor: middle" x="200.565354" y="417.615805" transform="rotate(-0 200.565354 417.615805)">Frequency of ranking first (%)</text>
     </g>
    </g>
    <g id="matplotlib.axis_2">
@@ -1185,37 +1185,37 @@ L 267.420472 29.76378
    </g>
    <g id="legend_1">
     <g id="patch_97">
-     <path d="M 136.510236 25.490498 
-L 143.510236 25.490498 
-L 143.510236 20.590498 
-L 136.510236 20.590498 
+     <path d="M 136.510236 25.57253 
+L 143.510236 25.57253 
+L 143.510236 20.67253 
+L 136.510236 20.67253 
 z
 " style="fill: #1b6f78"/>
     </g>
     <g id="text_37">
-     <text style="font-size: 7px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="147.010236" y="25.490498" transform="rotate(-0 147.010236 25.490498)">Top-ranked at baseline</text>
+     <text style="font-size: 7px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="147.010236" y="25.57253" transform="rotate(-0 147.010236 25.57253)">Top-ranked at baseline</text>
     </g>
     <g id="patch_98">
-     <path d="M 224.12508 25.490498 
-L 231.12508 25.490498 
-L 231.12508 20.590498 
-L 224.12508 20.590498 
+     <path d="M 224.12508 25.57253 
+L 231.12508 25.57253 
+L 231.12508 20.67253 
+L 224.12508 20.67253 
 z
 " style="fill: #b8702f"/>
     </g>
     <g id="text_38">
-     <text style="font-size: 7px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="234.62508" y="25.490498" transform="rotate(-0 234.62508 25.490498)">Leading alternative</text>
+     <text style="font-size: 7px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="234.62508" y="25.57253" transform="rotate(-0 234.62508 25.57253)">Alternative candidate</text>
     </g>
     <g id="patch_99">
-     <path d="M 300.07508 25.490498 
-L 307.07508 25.490498 
-L 307.07508 20.590498 
-L 300.07508 20.590498 
+     <path d="M 306.29633 25.57253 
+L 313.29633 25.57253 
+L 313.29633 20.67253 
+L 306.29633 20.67253 
 z
 " style="fill: #d9dee1"/>
     </g>
     <g id="text_39">
-     <text style="font-size: 7px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="310.57508" y="25.490498" transform="rotate(-0 310.57508 25.490498)">Other candidates</text>
+     <text style="font-size: 7px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="316.79633" y="25.57253" transform="rotate(-0 316.79633 25.57253)">Other candidates</text>
     </g>
    </g>
   </g>
@@ -1350,15 +1350,15 @@ z
      </g>
     </g>
     <g id="text_44">
-     <text style="font-size: 8px; font-family: 'Arial'; text-anchor: middle" x="445.280315" y="149.741789" transform="rotate(-0 445.280315 149.741789)">Top rank retained (families)</text>
+     <text style="font-size: 8px; font-family: 'Arial'; text-anchor: middle" x="445.280315" y="149.644289" transform="rotate(-0 445.280315 149.644289)">Number of reaction families</text>
     </g>
    </g>
    <g id="matplotlib.axis_4">
     <g id="ytick_31">
      <g id="line2d_42"/>
      <g id="text_45">
-      <text style="font-size: 7.5px; font-family: 'Arial'; fill: #1f2a30" transform="translate(358.423499 39.595072)">Joint share</text>
-      <text style="font-size: 7.5px; font-family: 'Arial'; fill: #1f2a30" transform="translate(375.98053 47.527728)">≥50%</text>
+      <text style="font-size: 7.5px; font-family: 'Arial'; fill: #1f2a30" transform="translate(363.425062 39.595072)">Rank 1 in</text>
+      <text style="font-size: 7.5px; font-family: 'Arial'; fill: #1f2a30" transform="translate(333.462562 47.527728)">≥50% of scenarios</text>
      </g>
     </g>
     <g id="ytick_32">
@@ -1371,21 +1371,21 @@ z
     <g id="ytick_33">
      <g id="line2d_44"/>
      <g id="text_47">
-      <text style="font-size: 7.5px; font-family: 'Arial'; fill: #1f2a30" transform="translate(348.829358 77.904972)">Score bounds</text>
+      <text style="font-size: 7.5px; font-family: 'Arial'; fill: #1f2a30" transform="translate(345.08639 77.904972)">Score variation</text>
       <text style="font-size: 7.5px; font-family: 'Arial'; fill: #1f2a30" transform="translate(364.724671 85.864347)">±2 points</text>
      </g>
     </g>
     <g id="ytick_34">
      <g id="line2d_45"/>
      <g id="text_48">
-      <text style="font-size: 7.5px; font-family: 'Arial'; fill: #1f2a30" transform="translate(348.829358 97.076621)">Score bounds</text>
+      <text style="font-size: 7.5px; font-family: 'Arial'; fill: #1f2a30" transform="translate(345.08639 97.076621)">Score variation</text>
       <text style="font-size: 7.5px; font-family: 'Arial'; fill: #1f2a30" transform="translate(364.724671 105.009277)">±5 points</text>
      </g>
     </g>
     <g id="ytick_35">
      <g id="line2d_46"/>
      <g id="text_49">
-      <text style="font-size: 7.5px; font-family: 'Arial'; fill: #1f2a30" transform="translate(348.829358 116.226005)">Score bounds</text>
+      <text style="font-size: 7.5px; font-family: 'Arial'; fill: #1f2a30" transform="translate(345.08639 116.226005)">Score variation</text>
       <text style="font-size: 7.5px; font-family: 'Arial'; fill: #1f2a30" transform="translate(360.553968 124.18538)">±10 points</text>
      </g>
     </g>

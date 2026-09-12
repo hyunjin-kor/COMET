@@ -29,7 +29,7 @@ def test_note_reuses_the_manuscript_numbers():
     assert "submission-2026-09-08/paper_summary_2026-09-08.json:table62[0].comet_usd_per_lb" in text
     assert "robustness-2026-09-08/decision_robustness.json:summary.candidate_removal_winner_changes" in text
     assert "methods-2026-09-09/methods_study.json:normalization.example.rows[0].total_after" in text
-    assert "mean absolute percentage error" in text and "unestimated" in text
+    assert "mean absolute percentage error was not calculated" in text
 
 
 def test_trade_plot_preserves_months_with_missing_observations():

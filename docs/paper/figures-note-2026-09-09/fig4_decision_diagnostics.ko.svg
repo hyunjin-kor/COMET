@@ -1141,18 +1141,18 @@ z
 " style="fill: #b8702f"/>
     </g>
     <g id="text_38">
-     <text style="font-size: 7px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="214.58758" y="25.308936" transform="rotate(-0 214.58758 25.308936)">주요 대안 후보</text>
+     <text style="font-size: 7px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="214.58758" y="25.308936" transform="rotate(-0 214.58758 25.308936)">대안 후보</text>
     </g>
     <g id="patch_99">
-     <path d="M 267.809455 25.308936 
-L 274.809455 25.308936 
-L 274.809455 20.408936 
-L 267.809455 20.408936 
+     <path d="M 251.348517 25.308936 
+L 258.348517 25.308936 
+L 258.348517 20.408936 
+L 251.348517 20.408936 
 z
 " style="fill: #d9dee1"/>
     </g>
     <g id="text_39">
-     <text style="font-size: 7px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="278.309455" y="25.308936" transform="rotate(-0 278.309455 25.308936)">그 밖의 후보</text>
+     <text style="font-size: 7px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="261.848517" y="25.308936" transform="rotate(-0 261.848517 25.308936)">그 밖의 후보</text>
     </g>
    </g>
   </g>
@@ -1287,15 +1287,15 @@ z
      </g>
     </g>
     <g id="text_44">
-     <text style="font-size: 8px; font-family: 'Malgun Gothic'; text-anchor: middle" x="445.280315" y="150.599993" transform="rotate(-0 445.280315 150.599993)">1위 유지 반응군 수</text>
+     <text style="font-size: 8px; font-family: 'Malgun Gothic'; text-anchor: middle" x="445.280315" y="150.599993" transform="rotate(-0 445.280315 150.599993)">반응군 수</text>
     </g>
    </g>
    <g id="matplotlib.axis_4">
     <g id="ytick_31">
      <g id="line2d_42"/>
      <g id="text_45">
-      <text style="font-size: 7.5px; font-family: 'Malgun Gothic'; fill: #1f2a30" transform="translate(347.471155 39.453861)">결합 시나리오</text>
-      <text style="font-size: 7.5px; font-family: 'Malgun Gothic'; fill: #1f2a30" transform="translate(357.677015 48.059877)">빈도 ≥50%</text>
+      <text style="font-size: 7.5px; font-family: 'Malgun Gothic'; fill: #1f2a30" transform="translate(327.677015 39.453861)">시나리오 ≥50%에서</text>
+      <text style="font-size: 7.5px; font-family: 'Malgun Gothic'; fill: #1f2a30" transform="translate(383.477015 48.059877)">1위</text>
      </g>
     </g>
     <g id="ytick_32">
@@ -1307,21 +1307,21 @@ z
     <g id="ytick_33">
      <g id="line2d_44"/>
      <g id="text_47">
-      <text style="font-size: 7.5px; font-family: 'Malgun Gothic'; fill: #1f2a30" transform="translate(362.471155 77.774894)">점수 범위</text>
+      <text style="font-size: 7.5px; font-family: 'Malgun Gothic'; fill: #1f2a30" transform="translate(362.471155 77.774894)">점수 변화</text>
       <text style="font-size: 7.5px; font-family: 'Malgun Gothic'; fill: #1f2a30" transform="translate(378.222327 86.38091)">±2점</text>
      </g>
     </g>
     <g id="ytick_34">
      <g id="line2d_45"/>
      <g id="text_48">
-      <text style="font-size: 7.5px; font-family: 'Malgun Gothic'; fill: #1f2a30" transform="translate(362.471155 96.93541)">점수 범위</text>
+      <text style="font-size: 7.5px; font-family: 'Malgun Gothic'; fill: #1f2a30" transform="translate(362.471155 96.93541)">점수 변화</text>
       <text style="font-size: 7.5px; font-family: 'Malgun Gothic'; fill: #1f2a30" transform="translate(378.222327 105.541426)">±5점</text>
      </g>
     </g>
     <g id="ytick_35">
      <g id="line2d_46"/>
      <g id="text_49">
-      <text style="font-size: 7.5px; font-family: 'Malgun Gothic'; fill: #1f2a30" transform="translate(362.471155 116.095927)">점수 범위</text>
+      <text style="font-size: 7.5px; font-family: 'Malgun Gothic'; fill: #1f2a30" transform="translate(362.471155 116.095927)">점수 변화</text>
       <text style="font-size: 7.5px; font-family: 'Malgun Gothic'; fill: #1f2a30" transform="translate(374.091468 124.701942)">±10점</text>
      </g>
     </g>

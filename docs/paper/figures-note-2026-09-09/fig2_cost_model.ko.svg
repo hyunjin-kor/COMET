@@ -1498,7 +1498,7 @@ z
 " style="fill: #9aa6ab"/>
     </g>
     <g id="text_87">
-     <text style="font-size: 6.8px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="391.269095" y="169.918107" transform="rotate(-0 391.269095 169.918107)">발표된 방법</text>
+     <text style="font-size: 6.8px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="391.269095" y="169.918107" transform="rotate(-0 391.269095 169.918107)">Baddour 등</text>
     </g>
    </g>
   </g>
@@ -1618,7 +1618,7 @@ L -2 0
      </g>
     </g>
     <g id="text_95">
-     <text style="font-size: 7.8px; font-family: 'Malgun Gothic'; text-anchor: middle" x="16.596207" y="538.58622" transform="rotate(-90 16.596207 538.58622)">추정값 ÷ 거래 단가</text>
+     <text style="font-size: 7.8px; font-family: 'Malgun Gothic'; text-anchor: middle" x="16.596207" y="538.58622" transform="rotate(-90 16.596207 538.58622)">추정 가격 / 수입 단가</text>
     </g>
    </g>
    <g id="patch_107">

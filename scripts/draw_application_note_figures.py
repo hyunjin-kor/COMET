@@ -1,13 +1,13 @@
-"""Draw Application Note Figures 2, 3 and 4 from repository assets and frozen runs.
+"""Draw the four Application Note figures from labels and frozen runs.
 
-Figure 1 is an AI-assisted illustration kept as a committed PNG with its raw file, provenance
-note and the connector-line script (scripts/straighten_note_fig1_leaders.py), so it is not
-drawn here. Figure 2 draws the cost model, the cost structure of the cheapest candidate in
+Figure 1 is a programmatic workflow diagram based on the layout of an earlier AI-assisted
+illustration; its generation history is retained in fig1_workflow_stack.provenance.md.
+Figure 2 draws the cost model, the cost structure of the cheapest candidate in
 every thermal reaction family, the three published CatCost validation cases against their
 published market prices, and the estimates against the traded unit value of the matching
 catalyst category. Figure 3 is the monthly price record of every metal the library prices, in
 one column. Figure 4 reads the frozen combined robustness study and the methods supplement.
-All three render in English or Korean. Run:
+All four render in English or Korean. Run:
 
     python scripts/draw_application_note_figures.py --out-dir docs/paper/figures-note-2026-09-09
     python scripts/draw_application_note_figures.py --lang ko
@@ -44,6 +44,10 @@ FILL, ACC, ACC_MID, WARN = "#F4F6F7", "#1B6F78", "#6FA8AE", "#B8702F"
 TEXT = {
     "en": {
         "font": "Arial",
+        "workflow_stages": ["Input data", "Price basis", "Cost estimation", "Cost breakdown", "Candidate ranking"],
+        "workflow_records_title": "Analysis records",
+        "workflow_records": ["Price source and date", "Source reliability", "Price basis", "System boundary",
+                             "Functional unit", "Inventory coverage", "File checksums", "Software version and random seed"],
         "formulation": "Formulation", "route": "Preparation route",
         "basis": "Price basis", "order_size": "Order size",
         "materials": "Materials",
@@ -53,25 +57,29 @@ TEXT = {
         "seg_materials": "Materials", "seg_processing": "Processing", "seg_overhead": "Overhead and margin",
         "total_head": "USD/lb",
         "c_x": "Selling price (USD per lb, log scale)",
-        "c_comet": "COMET", "c_published": "Published method", "c_market": "Published market price",
+        "c_comet": "COMET", "c_published": "Baddour et al.", "c_market": "Published market price",
         "c_y": "Deviation from market price (%)",
-        "market_ratio_y": "Estimate ÷ traded unit value",
+        "market_ratio_y": "Estimated price / import unit value",
         "market_titles": {"nickel": "Nickel catalysts", "precious": "Precious-metal catalysts", "other": "Other active substances"},
         "market_traded": "Import unit value (= 1)",
         "market_estimate": "Top-ranked candidates at baseline",
         "unit_lb": "USD/lb",
         "metals_base": "Base metals", "metals_precious": "Precious metals", "metal_price": "Price",
-        "f3_first": "Top-ranked at baseline", "f3_second": "Leading alternative",
-        "f3_other": "Other candidates", "f3_x": "First-rank frequency (%)",
-        "f3_tests": ["Joint share\n≥50%", "Candidate\nremoval", "Score bounds\n±2 points",
-                     "Score bounds\n±5 points", "Score bounds\n±10 points"],
-        "f3_b_x": "Top rank retained (families)",
+        "f3_first": "Top-ranked at baseline", "f3_second": "Alternative candidate",
+        "f3_other": "Other candidates", "f3_x": "Frequency of ranking first (%)",
+        "f3_tests": ["Rank 1 in\n≥50% of scenarios", "Candidate\nremoval", "Score variation\n±2 points",
+                     "Score variation\n±5 points", "Score variation\n±10 points"],
+        "f3_b_x": "Number of reaction families",
         "f3_c_x": "Cost (USD/lb)",
         "f3_before": "Top-ranked at baseline", "f3_after": "Top-ranked after removal",
         "usd_lb": "USD/lb",
     },
     "ko": {
         "font": "Malgun Gothic",
+        "workflow_stages": ["입력 데이터", "가격 기준", "원가 추정", "원가 구성", "후보 순위"],
+        "workflow_records_title": "분석 기록",
+        "workflow_records": ["가격 출처와 기준일", "출처 신뢰도", "가격 기준", "시스템 경계",
+                             "기능 단위", "환경 목록 반영률", "파일 체크섬", "소프트웨어 버전과 난수 시드"],
         "formulation": "조성", "route": "제조 경로",
         "basis": "가격 기준", "order_size": "주문량",
         "materials": "재료비",
@@ -81,19 +89,19 @@ TEXT = {
         "seg_materials": "재료비", "seg_processing": "가공비", "seg_overhead": "간접비와 마진",
         "total_head": "USD/lb",
         "c_x": "판매 단가 (USD/lb, 로그 축)",
-        "c_comet": "COMET", "c_published": "발표된 방법", "c_market": "발표된 시장 가격",
+        "c_comet": "COMET", "c_published": "Baddour 등", "c_market": "발표된 시장 가격",
         "c_y": "시장 가격 대비 편차 (%)",
-        "market_ratio_y": "추정값 ÷ 거래 단가",
+        "market_ratio_y": "추정 가격 / 수입 단가",
         "market_titles": {"nickel": "니켈계 촉매", "precious": "귀금속계 촉매", "other": "그 밖의 활성 물질"},
         "market_traded": "수입 단가 (= 1)",
         "market_estimate": "기준 조건의 1위 후보",
         "unit_lb": "USD/lb",
-        "metals_base": "일반 금속", "metals_precious": "귀금속", "metal_price": "가격",
-        "f3_first": "기준 조건의 1위", "f3_second": "주요 대안 후보",
+        "metals_base": "비귀금속", "metals_precious": "귀금속", "metal_price": "가격",
+        "f3_first": "기준 조건의 1위", "f3_second": "대안 후보",
         "f3_other": "그 밖의 후보", "f3_x": "1위 빈도 (%)",
-        "f3_tests": ["결합 시나리오\n빈도 ≥50%", "후보 제거", "점수 범위\n±2점",
-                     "점수 범위\n±5점", "점수 범위\n±10점"],
-        "f3_b_x": "1위 유지 반응군 수",
+        "f3_tests": ["시나리오 ≥50%에서\n1위", "후보 제거", "점수 변화\n±2점",
+                     "점수 변화\n±5점", "점수 변화\n±10점"],
+        "f3_b_x": "반응군 수",
         "f3_c_x": "원가 (USD/lb)",
         "f3_before": "기준 조건의 1위", "f3_after": "제거 후 1위",
         "usd_lb": "USD/lb",
@@ -181,6 +189,30 @@ def _box(ax, x, y, w, h, fill=FILL, edge=RULE, lw=0.5):
 def _arrow(ax, x1, y1, x2, y2, color=INK):
     ax.add_patch(FancyArrowPatch((x1, y1), (x2, y2), arrowstyle="-|>", mutation_scale=6, color=color, lw=0.7,
                                  shrinkA=0, shrinkB=0, zorder=4))
+
+
+def figure1_workflow():
+    """Five calculation stages with the associated analysis records."""
+    fig = plt.figure(figsize=(178 / 25.4, 100 / 25.4))
+    ax = fig.add_axes([0, 0, 1, 1])
+    ax.set_xlim(0, 178)
+    ax.set_ylim(0, 100)
+    ax.axis("off")
+    _box(ax, 116, 5, 57, 90, fill="#EAF1F2", edge=ACC, lw=0.7)
+    ax.text(144.5, 89.5, L["workflow_records_title"], ha="center", va="center",
+            fontsize=10, fontweight="bold", color=ACC)
+    for index, label in enumerate(L["workflow_records"]):
+        y = 76 - index * 9.4
+        _box(ax, 120, y, 49, 7.5, fill="white", edge=RULE, lw=0.5)
+        ax.text(144.5, y + 3.75, label, ha="center", va="center", fontsize=7.6)
+    for index, label in enumerate(L["workflow_stages"]):
+        y = 80 - index * 18
+        _box(ax, 5, y, 98, 13, fill=FILL, edge=RULE, lw=0.7)
+        ax.text(54, y + 6.5, label, ha="center", va="center", fontsize=11, fontweight="bold")
+        ax.plot([103.5, 115.5], [y + 6.5, y + 6.5], color=ACC, lw=0.7, ls=(0, (1.5, 2)))
+        if index < 4:
+            _arrow(ax, 54, y - 0.4, 54, y - 4.6, color=ACC)
+    return fig
 
 
 def _cost_model_panel(fig):
@@ -541,7 +573,8 @@ def main():
     set_language(args.lang)
     args.out_dir.mkdir(parents=True, exist_ok=True)
     suffix = "" if args.lang == "en" else f".{args.lang}"
-    for name, function in (("fig2_cost_model", figure2_cost_model),
+    for name, function in (("fig1_workflow_stack", figure1_workflow),
+                           ("fig2_cost_model", figure2_cost_model),
                            ("fig3_metal_prices", figure3_metal_prices),
                            ("fig4_decision_diagnostics", figure4_diagnostics)):
         figure = function()
