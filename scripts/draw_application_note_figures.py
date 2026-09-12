@@ -179,7 +179,8 @@ def set_language(lang):
         "font.family": L["font"], "font.size": 7.5, "text.color": INK, "svg.fonttype": "none",
         "svg.hashsalt": "comet-note-figures-2026-09-09", "axes.edgecolor": INK, "axes.linewidth": 0.6,
         "xtick.color": INK, "ytick.color": INK, "axes.unicode_minus": False,
-        "mathtext.fontset": "stixsans",
+        "mathtext.fontset": "custom", "mathtext.rm": "Arial", "mathtext.it": "Arial:italic",
+        "mathtext.bf": "Arial:bold", "mathtext.sf": "Arial", "mathtext.fallback": "stixsans",
     })
 
 
@@ -210,44 +211,53 @@ def _cost_model_panel(fig):
     for title, sub, y in ((L["formulation"], L["formulation_sub"], 35.5),
                           (L["route"], L["route_sub"], 20),
                           (L["basis"], L["basis_sub"], 4.5)):
-        _box(ax, 6, y, 26, 9.6)
-        ax.text(19, y + 6.4, title, ha="center", va="center", fontsize=8.2, fontweight="bold")
-        ax.text(19, y + 2.7, sub, ha="center", va="center", fontsize=7.0, color=MUTED)
-    mx, mw = 38, 57
+        _box(ax, 4, y, 26, 9.6)
+        ax.text(17, y + 6.4, title, ha="center", va="center", fontsize=8.2, fontweight="bold")
+        ax.text(17, y + 2.7, sub, ha="center", va="center", fontsize=7.0, color=MUTED)
+
+    mx, mw = 38, 52
     _box(ax, mx, 24.5, mw, 21, fill="white", edge=INK, lw=0.6)
     ax.text(mx + mw / 2, 42.2, L["materials"], ha="center", va="center", fontsize=8.5, fontweight="bold")
-    ax.text(mx + mw / 2, 36.2, r"$C_\mathrm{m}=\sum_i w_i\,c_i$", ha="center", va="center", fontsize=10.5)
-    ax.text(mx + mw / 2, 30.6, L["materials_1"], ha="center", va="center", fontsize=7.0)
-    ax.text(mx + mw / 2, 27.0, L["materials_2"] + r"    $a = w/(f\,p\,y)$", ha="center", va="center",
-            fontsize=8.2)
+    ax.text(mx + mw / 2, 36.4, r"$C_\mathrm{m}=\sum_i w_i\,c_i$", ha="center", va="center", fontsize=10.0)
+    ax.text(mx + mw / 2, 30.8, L["materials_1"], ha="center", va="center", fontsize=7.0)
+    ax.text(mx + mw / 2, 27.2, L["materials_2"] + r"    $a = w/(f\,p\,y)$", ha="center", va="center", fontsize=7.4)
     _box(ax, mx, 1.0, mw, 21, fill="white", edge=INK, lw=0.6)
     ax.text(mx + mw / 2, 18.7, L["processing"], ha="center", va="center", fontsize=8.5, fontweight="bold")
-    ax.text(mx + mw / 2, 13.0, r"$C_\mathrm{p}=\dfrac{24\,T\,I\,H}{M}$", ha="center", va="center", fontsize=10.5)
+    ax.text(mx + mw / 2, 13.0, r"$C_\mathrm{p}=\dfrac{24\,T\,I\,H}{M}$", ha="center", va="center", fontsize=10.0)
     ax.text(mx + mw / 2, 6.6, L["processing_1"], ha="center", va="center", fontsize=6.6)
     ax.text(mx + mw / 2, 3.2, L["processing_2"], ha="center", va="center", fontsize=7.0)
-    _arrow(ax, 32.3, 40.3, mx - 0.3, 40.3)
-    _arrow(ax, 32.3, 9.3, mx - 0.3, 9.3)
-    ax.plot([32.3, 35.0, 35.0], [24.8, 24.8, 31.5], color=INK, lw=0.7, solid_capstyle="round", zorder=3)
-    ax.plot([35.0, 35.0], [24.8, 15.5], color=INK, lw=0.7, solid_capstyle="round", zorder=3)
-    _arrow(ax, 35.0, 31.5, mx - 0.3, 31.5)
-    _arrow(ax, 35.0, 15.5, mx - 0.3, 15.5)
-    px, pw = 101, 40
+
+    # The three inputs meet one vertical trunk, so no line crosses another.
+    trunk = 34.0
+    _arrow(ax, 30.3, 40.3, mx - 0.4, 40.3)
+    _arrow(ax, 30.3, 9.3, mx - 0.4, 9.3)
+    ax.plot([30.3, trunk], [24.8, 24.8], color=INK, lw=0.7, solid_capstyle="round", zorder=3)
+    ax.plot([trunk, trunk], [15.5, 31.5], color=INK, lw=0.7, solid_capstyle="round", zorder=3)
+    _arrow(ax, trunk, 31.5, mx - 0.4, 31.5)
+    _arrow(ax, trunk, 15.5, mx - 0.4, 15.5)
+
+    px, pw = 96.5, 47
     _box(ax, px, 11, pw, 24, fill="white", edge=INK, lw=0.6)
     ax.text(px + pw / 2, 31.7, L["overhead"], ha="center", va="center", fontsize=8.5, fontweight="bold")
-    ax.text(px + pw / 2, 22.5, r"$P=\dfrac{(C_\mathrm{m}+C_\mathrm{p})(1+g)(1+s)}{1-m}$", ha="center", va="center",
-            fontsize=10.8)
+    ax.text(px + pw / 2, 22.6, r"$P=\dfrac{(C_\mathrm{m}+C_\mathrm{p})(1+g)(1+s)}{1-m}$", ha="center",
+            va="center", fontsize=9.4)
     ax.text(px + pw / 2, 13.4, L["overhead_1"], ha="center", va="center", fontsize=6.6, linespacing=1.5)
-    ax.plot([mx + mw + 0.3, 98.0, 98.0], [35.0, 35.0, 23.0], color=INK, lw=0.7, solid_capstyle="round", zorder=3)
-    ax.plot([mx + mw + 0.3, 98.0, 98.0], [11.5, 11.5, 23.0], color=INK, lw=0.7, solid_capstyle="round", zorder=3)
-    ax.text(96.5, 36.2, r"$C_\mathrm{m}$", ha="center", va="bottom", fontsize=8.0)
-    ax.text(96.5, 10.3, r"$C_\mathrm{p}$", ha="center", va="top", fontsize=8.0)
-    _arrow(ax, 98.0, 23.0, px - 0.3, 23.0)
-    lx, lw_ = 147, 28
+
+    # The two costs enter the price box at their own height rather than merging into one line.
+    bus = 93.0
+    ax.plot([mx + mw + 0.4, bus, bus], [35.0, 35.0, 28.0], color=INK, lw=0.7, solid_capstyle="round", zorder=3)
+    ax.plot([mx + mw + 0.4, bus, bus], [11.5, 11.5, 18.0], color=INK, lw=0.7, solid_capstyle="round", zorder=3)
+    _arrow(ax, bus, 28.0, px - 0.4, 28.0)
+    _arrow(ax, bus, 18.0, px - 0.4, 18.0)
+    ax.text((mx + mw + bus) / 2, 35.6, r"$C_\mathrm{m}$", ha="center", va="bottom", fontsize=7.6)
+    ax.text((mx + mw + bus) / 2, 10.9, r"$C_\mathrm{p}$", ha="center", va="top", fontsize=7.6)
+
+    lx, lw_ = 147, 29
     _box(ax, lx, 11, lw_, 24, fill="#EAF1F2", edge=ACC, lw=0.6)
     ax.text(lx + lw_ / 2, 31.7, L["breakdown"], ha="center", va="center", fontsize=8.5, fontweight="bold")
     for k, line_text in enumerate(L["breakdown_lines"]):
-        ax.text(lx + 2.2, 27.2 - k * 3.0, line_text, ha="left", va="center", fontsize=6.6)
-    _arrow(ax, px + pw + 0.3, 23.0, lx - 0.3, 23.0, label=r"$P$")
+        ax.text(lx + 2.4, 27.2 - k * 3.0, line_text, ha="left", va="center", fontsize=6.6)
+    _arrow(ax, px + pw + 0.4, 23.0, lx - 0.4, 23.0, label=r"$P$", dy=1.2)
 
 
 def _structure_panel(fig):
