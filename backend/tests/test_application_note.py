@@ -12,7 +12,7 @@ def test_note_renders_within_limits_and_matches_committed_files():
     record = note_builder.counts(text, run)
     assert record["total_word_equivalent"] <= note_builder.WORD_LIMIT
     assert record["software_named_in_title"]
-    assert record["figure_count"] == 3
+    assert record["figure_count"] == 4
     assert record["json_key_references"] > 40
     committed = (paper.PAPER / f"application-note-{note_builder.DATE}.md").read_text(encoding="utf-8")
     assert committed == text
