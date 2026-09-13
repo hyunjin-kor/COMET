@@ -1,7 +1,9 @@
 # Selected GPT paper diagrams
 
+The current H24 decks, with native bilingual labels over text-free generated artwork, are in ../diagram-sources-2026-09-13-h24/. The following describes the preceding image-based decks.
+
 The author selected both GPT v2 candidates on September 13, 2026. This folder
-is the current source for Figure 1 and Figure 2(a). The preceding editable
+preserves the H22–H23 sources for Figure 1 and Figure 2(a). The preceding editable
 diagrams remain in `../diagram-sources-2026-09-13/` as the v31 archive.
 
 Each PPTX embeds the selected English image on slide 1 and its Korean localization

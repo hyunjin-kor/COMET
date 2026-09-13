@@ -1,5 +1,7 @@
 # AI figure-generation prompts — September 13, 2026
 
+**Current update (H24):** Larger native bilingual labels over text-free GPT artwork are now sourced from diagram-sources-2026-09-13-h24/. That folder records the two letter-removal prompts and hashes. All numerical panels remain generated from frozen data. Captions have brief titles and the detailed interpretation is in the body. The current Word review copies are v34 and the manuscript is 4,974/5,000 word-equivalent. The H22 adoption note below is historical.
+
 **Adoption update (H22):** The author selected both GPT v2 images. They are now
 integrated through `diagram-sources-2026-09-13-gpt/`, with Korean localizations,
 updated captions and AI-use disclosure, and English/Korean Word v32 review copies.

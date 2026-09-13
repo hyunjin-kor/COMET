@@ -32,7 +32,7 @@ import matplotlib.pyplot as plt  # noqa: E402
 from matplotlib.ticker import FuncFormatter, LogLocator, NullFormatter  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
-DIAGRAMS = ROOT / "docs/paper/diagram-sources-2026-09-13-gpt"
+DIAGRAMS = ROOT / "docs/paper/diagram-sources-2026-09-13-h24"
 STUDY = ROOT / "docs/paper/robustness-2026-09-08/decision_robustness.json"
 METHODS = ROOT / "docs/paper/methods-2026-09-09/methods_study.json"
 EXAMPLE = ROOT / "docs/paper/figures-note-2026-09-09/screen_result_ni_al2o3.json"
@@ -49,7 +49,7 @@ TEXT = {
     "en": {
         "font": "Arial",
         "share_x": "Share of the selling price (%)",
-        "seg_materials": "Materials", "seg_processing": "Processing", "seg_overhead": "Overhead and margin",
+        "seg_materials": "Materials", "seg_processing": "Processing", "seg_overhead": "Overheads + margin",
         "total_head": "USD/lb",
         "c_x": "Selling price (USD per lb, log scale)",
         "c_comet": "COMET", "c_published": "Baddour et al.", "c_market": "Published market price",
@@ -60,11 +60,11 @@ TEXT = {
         "market_estimate": "Top-ranked candidates at baseline",
         "unit_lb": "USD/lb",
         "metals_base": "Base metals", "metals_precious": "Precious metals", "metal_price": "Price",
-        "f3_first": "Top-ranked at baseline", "f3_second": "Alternative candidate",
+        "f3_first": "Baseline candidate", "f3_second": "Alternative candidate",
         "f3_other": "Other candidates", "f3_x": "Frequency of ranking first (%)",
-        "f3_tests": ["Rank 1 in\n≥50% of scenarios", "Candidate\nremoval", "Score variation\n±2 points",
-                     "Score variation\n±5 points", "Score variation\n±10 points"],
-        "f3_b_x": "Number of reaction families",
+        "f3_tests": ["First in ≥50%\nof scenarios", "Candidate\nremoval", "Scores ±2",
+                     "Scores ±5", "Scores ±10"],
+        "f3_b_x": "Reaction families",
         "f3_c_x": "Cost difference (%)",
         "usd_lb": "USD/lb",
     },
@@ -84,8 +84,8 @@ TEXT = {
         "metals_base": "비귀금속", "metals_precious": "귀금속", "metal_price": "가격",
         "f3_first": "기준 조건의 1위", "f3_second": "대안 후보",
         "f3_other": "그 밖의 후보", "f3_x": "1위 빈도 (%)",
-        "f3_tests": ["시나리오 ≥50%에서\n1위", "후보 제거", "점수 변화\n±2점",
-                     "점수 변화\n±5점", "점수 변화\n±10점"],
+        "f3_tests": ["시나리오 ≥50%에서\n1위", "후보 제거", "점수 ±2",
+                     "점수 ±5", "점수 ±10"],
         "f3_b_x": "반응군 수",
         "f3_c_x": "원가 차이 (%)",
         "usd_lb": "USD/lb",
@@ -152,7 +152,7 @@ def set_language(lang):
     LANG = lang
     L, FAM, VAL = TEXT[lang], FAMILY_NAMES[lang], VALIDATION_NAMES[lang]
     plt.rcParams.update({
-        "font.family": L["font"], "font.size": 7.5, "text.color": INK, "svg.fonttype": "none",
+        "font.family": L["font"], "font.size": 8.5, "text.color": INK, "svg.fonttype": "none",
         "svg.hashsalt": "comet-note-figures-2026-09-09", "axes.edgecolor": INK, "axes.linewidth": 0.6,
         "xtick.color": INK, "ytick.color": INK, "axes.unicode_minus": False,
         "mathtext.fontset": "custom", "mathtext.rm": "Arial", "mathtext.it": "Arial:italic",
@@ -165,7 +165,7 @@ def _clean(ax, left=True):
     for side in ("top", "right", "bottom", "left"):
         ax.spines[side].set_visible(True)
         ax.spines[side].set_linewidth(0.5)
-    ax.tick_params(width=0.5, length=2, labelsize=7.5)
+    ax.tick_params(width=0.5, length=2, labelsize=8.5)
 
 
 def _diagram_asset(name, kind):
@@ -223,7 +223,7 @@ def _structure_panel(fig):
         rows.append((family["family"], total, 100 * materials / total, 100 * processing / total,
                      100 * (total - materials - processing) / total))
     rows.sort(key=lambda r: r[2])
-    ax = fig.add_axes([51 / 178, 52 / 207, 112 / 178, 79 / 207])
+    ax = fig.add_axes([59 / 178, 52 / 207, 104 / 178, 79 / 207])
     ys = range(len(rows))
     ax.barh(ys, [r[2] for r in rows], color=ACC, height=0.74, label=L["seg_materials"])
     ax.barh(ys, [r[3] for r in rows], left=[r[2] for r in rows], color=ACC_MID, height=0.74, edgecolor="white", lw=0.25,
@@ -232,21 +232,21 @@ def _structure_panel(fig):
             label=L["seg_overhead"])
     for i, row in enumerate(rows):
         ax.text(104, i, f"{row[1]:,.2f}" if row[1] < 100 else f"{row[1]:,.0f}", va="center", ha="left",
-                fontsize=7.0)
-    ax.text(104, len(rows) + 0.35, L["total_head"], va="bottom", ha="left", fontsize=7.0, color=MUTED)
+                fontsize=8.5)
+    ax.text(104, len(rows) + 0.35, L["total_head"], va="bottom", ha="left", fontsize=8.5, color=MUTED)
     ax.set_yticks(list(ys))
-    ax.set_yticklabels([FAM.get(r[0], r[0]) for r in rows], fontsize=7.5)
+    ax.set_yticklabels([FAM.get(r[0], r[0]) for r in rows], fontsize=8.5)
     ax.set_xlim(0, 100)
     ax.set_ylim(-0.7, len(rows) - 0.3)
     ax.set_xticks([0, 25, 50, 75, 100])
     ax.set_axisbelow(True)
     ax.grid(axis="x", color="#E6EAEC", lw=0.45)
-    ax.set_xlabel(L["share_x"], fontsize=7.8)
+    ax.set_xlabel(L["share_x"], fontsize=9)
     handles, labels = ax.get_legend_handles_labels()
-    fig.legend(handles, labels, fontsize=7.5, frameon=False, loc="upper left", bbox_to_anchor=(51 / 178, 139 / 207), ncol=3,
+    fig.legend(handles, labels, fontsize=8.5, frameon=False, loc="upper left", bbox_to_anchor=(59 / 178, 139 / 207), ncol=3,
               handlelength=1.0, columnspacing=0.8, handletextpad=0.4, borderaxespad=0.0)
     _clean(ax)
-    ax.tick_params(axis="y", length=0, labelsize=7.5)
+    ax.tick_params(axis="y", length=0, labelsize=8.5)
 
 
 def _validation_panel(fig):
@@ -261,20 +261,20 @@ def _validation_panel(fig):
         for y, value, color, label in zip((1, 0), values, (ACC, GREY),
                                           (L["c_comet"], L["c_published"]), strict=True):
             ax.barh(y, value, height=0.52, color=color, label=label)
-            ax.text(value - 0.65, y, f"{value:.1f}", ha="right", va="center", fontsize=7.5)
-        ax.set_xlim(-27, 0)
+            ax.text(value - 0.65, y, f"{value:.1f}", ha="right", va="center", fontsize=8.5)
+        ax.set_xlim(-30, 0)
         ax.set_ylim(-0.65, 1.65)
         ax.set_xticks([-20, -10, 0])
         ax.set_yticks([])
         title = VAL.get(case["name"], case["name"]).replace("\n", " ")
-        ax.set_title(title, fontsize=8, pad=5)
+        ax.set_title(title, fontsize=9, pad=5)
         _clean(ax)
         if index == 0:
             handles, labels = ax.get_legend_handles_labels()
-            fig.legend(handles, labels, frameon=False, fontsize=7.5, ncol=2,
+            fig.legend(handles, labels, frameon=False, fontsize=8.5, ncol=2,
                        loc="upper right", bbox_to_anchor=(0.97, 43 / 207), borderaxespad=0,
                        handlelength=1.0, handletextpad=0.5, columnspacing=1.4)
-    fig.text(0.5, 1.8 / 207, L["c_y"], fontsize=8, ha="center", va="bottom")
+    fig.text(0.5, 1.8 / 207, L["c_y"], fontsize=9, ha="center", va="bottom")
 
 
 PRECIOUS = ("Pt", "Pd", "Rh", "Ru", "Ir", "Au", "Ag", "Os")
@@ -372,7 +372,7 @@ METAL_COLOURS = (ACC, WARN, "#687C38", "#9B6686", "#69747D", "#408FB0", "#303D45
 METAL_STYLES = ("-", "--", "-", "--", "-", "-.", ":")
 
 
-def _label_ends(ax, ends, fontsize=7.5):
+def _label_ends(ax, ends, fontsize=8.5):
     """The element symbol at the end of each line, pushed apart where lines converge."""
     low, high = ax.get_ylim()
     height_pt = ax.get_position().height * ax.figure.get_size_inches()[1] * 72
@@ -387,7 +387,7 @@ def _label_ends(ax, ends, fontsize=7.5):
                     textcoords=ax.get_yaxis_transform(), annotation_clip=False,
                     arrowprops={"arrowstyle": "-", "color": colour, "lw": 0.5, "shrinkA": 0, "shrinkB": 0})
         ax.text(1.045, 10 ** position, symbol, transform=ax.get_yaxis_transform(),
-                ha="left", va="center", fontsize=fontsize, color=colour)
+                ha="left", va="center", fontsize=fontsize, color=INK)
 
 
 def figure2_cost_model():
@@ -396,7 +396,7 @@ def figure2_cost_model():
     _structure_panel(fig)
     _validation_panel(fig)
     for label, top in (("(b)", 67), ("(c)", 164)):
-        fig.text(0.012, 1 - top / 207, label, fontsize=9.5, fontweight="bold", va="top")
+        fig.text(0.012, 1 - top / 207, label, fontsize=10, fontweight="bold", va="top")
     return fig
 
 
@@ -409,14 +409,14 @@ def figure3_metal_prices():
     fig = plt.figure(figsize=(86 / 25.4, 122 / 25.4))
     for index, (symbols, title) in enumerate(((PRECIOUS_METALS, L["metals_precious"]),
                                               (BASE_METALS, L["metals_base"]))):
-        ax = fig.add_axes([0.20, 0.565 - index * 0.475, 0.62, 0.35])
+        ax = fig.add_axes([0.23, 0.565 - index * 0.475, 0.59, 0.35])
         ends = []
         for order, symbol in enumerate(symbols):
             points = series[symbol]["points"]
             prices = [point["price"] for point in points]
             colour = METAL_COLOURS[order]
             ax.plot([datetime.strptime(point["date"], "%Y-%m-%d") for point in points], prices,
-                    color=colour, lw=0.9, ls=METAL_STYLES[order], solid_capstyle="round")
+                    color=colour, lw=1.05, ls=METAL_STYLES[order], solid_capstyle="round")
             ends.append((prices[-1], symbol, colour, datetime.strptime(points[-1]["date"], "%Y-%m-%d")))
         ax.set_yscale("log")
         ax.set_xlim(datetime(2019, 1, 1), datetime(2026, 6, 1))
@@ -425,14 +425,14 @@ def figure3_metal_prices():
         ax.yaxis.set_major_locator(LogLocator(base=10.0, subs=(1.0, 3.0), numticks=10))
         ax.yaxis.set_major_formatter(FuncFormatter(lambda value, _p: f"{value:g}"))
         ax.yaxis.set_minor_formatter(NullFormatter())
-        ax.set_title(title, loc="left", fontsize=8, fontweight="bold", pad=6)
+        ax.set_title(title, loc="left", fontsize=9, fontweight="bold", pad=6)
         ax.set_axisbelow(True)
         ax.grid(axis="y", which="major", color="#E6EAEC", lw=0.45)
         unit = "USD/troy oz" if index == 0 else "USD/lb"
-        ax.set_ylabel(f"{L['metal_price']} ({unit})", fontsize=7.5)
+        ax.set_ylabel(f"{L['metal_price']} ({unit})", fontsize=8.5)
         _clean(ax)
         _label_ends(ax, ends)
-        fig.text(0.015, 0.935 - index * 0.475, f"({'ab'[index]})", fontsize=9.5, fontweight="bold")
+        fig.text(0.015, 0.935 - index * 0.475, f"({'ab'[index]})", fontsize=10, fontweight="bold")
     return fig
 
 
@@ -450,7 +450,7 @@ def figure4_diagnostics():
     rows.sort(key=lambda r: r[1])
     fig = plt.figure(figsize=(178 / 25.4, 203 / 25.4))
 
-    ax = fig.add_axes([51 / 178, 83 / 203, 120 / 178, 105 / 203])
+    ax = fig.add_axes([59 / 178, 83 / 203, 112 / 178, 105 / 203])
     ys = list(range(len(rows)))
     ax.barh(ys, [r[1] for r in rows], color=ACC, height=0.72, label=L["f3_first"])
     ax.barh(ys, [r[2] for r in rows], left=[r[1] for r in rows], color=WARN, height=0.72, edgecolor="white", lw=0.25, label=L["f3_second"])
@@ -459,16 +459,16 @@ def figure4_diagnostics():
     ax.axvline(50, color="white", lw=0.6)
     ax.axvline(50, color=GREY, lw=0.5, ls=(0, (1.5, 1.5)))
     ax.set_yticks(ys)
-    ax.set_yticklabels([FAM.get(r[0], r[0]) for r in rows], fontsize=7.0)
+    ax.set_yticklabels([FAM.get(r[0], r[0]) for r in rows], fontsize=8.5)
     ax.set_xlim(0, 100)
     ax.set_xticks([0, 25, 50, 75, 100])
     ax.set_ylim(-0.6, len(rows) - 0.4)
-    ax.set_xlabel(L["f3_x"], fontsize=8.0)
-    ax.legend(fontsize=7.5, frameon=False, loc="lower left", bbox_to_anchor=(0.0, 1.035), ncol=3, handlelength=1.0,
+    ax.set_xlabel(L["f3_x"], fontsize=9)
+    ax.legend(fontsize=8.5, frameon=False, loc="lower left", bbox_to_anchor=(0.0, 1.035), ncol=3, handlelength=1.0,
               columnspacing=0.9, handletextpad=0.5, borderaxespad=0.0)
     _clean(ax)
     ax.tick_params(axis="y", length=0)
-    fig.text(0.012, 0.985, "(a)", fontsize=9.5, fontweight="bold", va="top")
+    fig.text(0.012, 0.985, "(a)", fontsize=10, fontweight="bold", va="top")
 
     bx = fig.add_axes([37 / 178, 13 / 203, 38 / 178, 47 / 203])
     n = summary["families"]
@@ -479,16 +479,16 @@ def figure4_diagnostics():
     bx.barh(yb, [n] * len(counts), color="#EEF1F2", height=0.64)
     bx.barh(yb, counts, color=ACC, height=0.64)
     for i, count in enumerate(counts):
-        bx.text(count + 0.6, i, str(count), va="center", fontsize=7.5)
+        bx.text(count + 0.6, i, str(count), va="center", fontsize=8.5)
     bx.set_yticks(yb)
-    bx.set_yticklabels(L["f3_tests"], fontsize=7.5)
+    bx.set_yticklabels(L["f3_tests"], fontsize=8.5)
     bx.invert_yaxis()
     bx.set_xlim(0, n)
     bx.set_xticks([0, 10, 20, 30])
-    bx.set_xlabel(L["f3_b_x"], fontsize=8.0)
+    bx.set_xlabel(L["f3_b_x"], fontsize=9)
     _clean(bx, left=False)
     bx.tick_params(axis="y", length=0)
-    fig.text(0.012, 69 / 203, "(b)", fontsize=9.5, fontweight="bold", va="top")
+    fig.text(0.012, 69 / 203, "(b)", fontsize=10, fontweight="bold", va="top")
 
     flips = []
     for family in study["families"]:
@@ -505,16 +505,16 @@ def figure4_diagnostics():
     for index, (_family, before, after) in enumerate(flips):
         difference = 100 * (after - before) / before
         cx.barh(index, difference, height=0.58, color=ACC, edgecolor=ACC, lw=0.5)
-        cx.text(difference - 2, index, f"{difference:.1f}", ha="right", va="center", fontsize=7.5)
+        cx.text(difference - 2, index, f"{difference:.1f}", ha="right", va="center", fontsize=8.5)
     cx.set_yticks(range(len(flips)))
-    cx.set_yticklabels([FAM.get(family, family) for family, _b, _a in flips], fontsize=7.5)
+    cx.set_yticklabels([FAM.get(family, family) for family, _b, _a in flips], fontsize=8.5)
     cx.set_ylim(-0.7, len(flips) - 0.3)
-    cx.set_xlim(-120, 0)
+    cx.set_xlim(-130, 0)
     cx.set_xticks([-100, -50, 0])
-    cx.set_xlabel(L["f3_c_x"], fontsize=8.0)
+    cx.set_xlabel(L["f3_c_x"], fontsize=9)
     _clean(cx)
     cx.tick_params(axis="y", length=0)
-    fig.text(0.51, 69 / 203, "(c)", fontsize=9.5, fontweight="bold", va="top")
+    fig.text(0.51, 69 / 203, "(c)", fontsize=10, fontweight="bold", va="top")
     return fig
 
 
