@@ -518,13 +518,222 @@ def figure4_diagnostics():
     return fig
 
 
+def _crossover_axis(ax):
+    for spine in ax.spines.values():
+        spine.set_visible(True)
+        spine.set_linewidth(0.65)
+        spine.set_color(INK)
+    ax.tick_params(labelsize=9, direction="out", length=3, width=0.65)
+    ax.grid(axis="y", color="#E6EAEC", lw=0.45)
+    ax.set_axisbelow(True)
+
+
+def _crossover_dates(records):
+    return [datetime.fromisoformat(row["date"] + ("-15" if len(row["date"]) == 7 else "")) for row in records]
+
+
+def figure_price_crossovers(study, mechanisms, lang="en"):
+    """Three thermal cost histories and the conditional Ni–Co boundary."""
+    families = {f["family"]: f for f in study["families"]}
+    fig, axes = plt.subplots(2, 2, figsize=(178 / 25.4, 171 / 25.4))
+    fig.subplots_adjust(left=0.105, right=0.985, bottom=0.085, top=0.95, wspace=0.31, hspace=0.56)
+    colors = (ACC, WARN, "#7A6A8B")
+    cases = [
+        ("ammonia-cracking", [("co-mgo-la2o3", "Co/Mg–La"), ("ni-alumina-baseline", "Ni/Al$_2$O$_3$")]),
+        ("dry-reforming", [("ni-co-almgo", "Ni–Co/Al–Mg"), ("ni-zeolite-stable", "Ni/zeolite"),
+                           ("ni-single-atom-ceria", "Ni/CeO$_2$")]),
+        ("water-gas-shift", [("cu-zno-baseline", "Cu–ZnO"), ("fe-cr-hts", "Fe–Cr")]),
+    ]
+    for index, (family, series) in enumerate(cases):
+        ax = axes.flat[index]
+        records = families[family]["periods"]["monthly"]["records"]
+        values = []
+        for i, (slug, label) in enumerate(series):
+            costs = [r["costs"][slug] for r in records]
+            values.extend(costs)
+            ax.plot(_crossover_dates(records), costs, color=colors[i], lw=1.45,
+                    ls=("-", "--", "-.")[i], label=label)
+        low, high = min(values), max(values)
+        ax.set_ylim(low - (high - low) * 0.12, high + (high - low) * 0.4)
+        ax.set_xlim(datetime(2019, 1, 1), datetime(2026, 7, 1))
+        ax.xaxis.set_major_locator(mdates.YearLocator(2))
+        ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+        ax.set_ylabel("Cost (USD/lb)" if lang == "en" else "원가 (USD/lb)", fontsize=10)
+        ax.set_title(f"({chr(97 + index)}) {FAMILY_NAMES[lang][family]}", loc="left", fontsize=10.5, pad=10)
+        ax.legend(loc="upper left", frameon=False, fontsize=9, handlelength=1.6, labelspacing=0.28,
+                  borderpad=0.2)
+        _crossover_axis(ax)
+    ax = axes.flat[3]
+    boundary = mechanisms["ammonia_boundary"]
+    x = [p["Ni"] for p in boundary["points"]]
+    y = [p["Co_threshold"] for p in boundary["points"]]
+    ax.fill_between(x, 5, y, color=ACC, alpha=0.07)
+    ax.fill_between(x, y, 42, color=WARN, alpha=0.07)
+    ax.plot(x, y, color=INK, lw=1.1)
+    monthly = families["ammonia-cracking"]["periods"]["monthly"]["records"]
+    for point, row in zip(boundary["observations"], monthly, strict=True):
+        color = ACC if row["cost_winner"] == "co-mgo-la2o3" else WARN
+        ax.scatter(point["Ni"], point["Co"], s=12, c=color, alpha=0.65, linewidths=0.25, edgecolors="white")
+    selected = {p["date"]: p for p in boundary["observations"] if p["date"] in ("2025-09", "2025-10")}
+    for day, point in selected.items():
+        ax.scatter(point["Ni"], point["Co"], s=38, marker="D", facecolor="white", edgecolor=INK, lw=0.8, zorder=5)
+        ax.annotate(day, (point["Ni"], point["Co"]), xytext=(9, -17 if day == "2025-09" else 8),
+                    textcoords="offset points", fontsize=8.8, color=INK)
+    ax.annotate("", xy=(selected["2025-10"]["Ni"], selected["2025-10"]["Co"]),
+                xytext=(selected["2025-09"]["Ni"], selected["2025-09"]["Co"]),
+                arrowprops={"arrowstyle": "->", "lw": 0.9, "color": INK})
+    ax.text(0.04, 0.90, "Ni/Al$_2$O$_3$", color=WARN, fontsize=10, transform=ax.transAxes)
+    ax.text(0.55, 0.08, "Co/Mg–La", color=ACC, fontsize=10, transform=ax.transAxes)
+    ax.set_xlim(4, 16)
+    ax.set_ylim(5, 42)
+    ax.set_xlabel("Ni (USD/lb)", fontsize=10)
+    ax.set_ylabel("Co (USD/lb)", fontsize=10)
+    ax.set_title("(d) Ammonia cost boundary" if lang == "en" else "(d) 암모니아 분해 원가 경계",
+                 loc="left", fontsize=10.5, pad=10)
+    _crossover_axis(ax)
+    return fig
+
+
+def figure_daily_crossovers(study, lang="en"):
+    families = {f["family"]: f for f in study["families"]}
+    fig, axes = plt.subplots(2, 1, figsize=(178 / 25.4, 145 / 25.4))
+    fig.subplots_adjust(left=0.11, right=0.98, bottom=0.08, top=0.89, hspace=0.55)
+    cases = [("photocatalytic-water-splitting", "pt-tio2-cocatalyst", "tio2-anatase-baseline", "Pt/TiO$_2$ $-$ TiO$_2$"),
+             ("co-prox", "pt-fe-alumina", "cuo-ceo2", "Pt–Fe/Al$_2$O$_3$ $-$ CuO/CeO$_2$")]
+    for i, (family, a, b, label) in enumerate(cases):
+        ax = axes[i]
+        rows = families[family]["periods"]["daily"]["records"]
+        days = _crossover_dates(rows)
+        continuous = [r["continuous_scores"][a] - r["continuous_scores"][b] for r in rows]
+        app = [r["scores"][a]["total"] - r["scores"][b]["total"] for r in rows]
+        ax.plot(days, continuous, color=ACC, lw=1.7, label="Fixed nonprice scores" if lang == "en" else "비가격 점수 고정")
+        ax.plot(days, app, color=WARN, lw=1.1, ls="--", label="Application score" if lang == "en" else "앱 점수")
+        ax.axhline(0, color=INK, lw=0.8)
+        ax.fill_between(days, continuous, 0, where=[v < 0 for v in continuous], color=WARN, alpha=0.12)
+        ax.set_xlim(datetime(2026, 1, 1), datetime(2026, 9, 15))
+        ax.xaxis.set_major_locator(mdates.MonthLocator(bymonth=(1, 3, 5, 7, 9)))
+        ax.xaxis.set_major_formatter(mdates.DateFormatter("%b %Y"))
+        ax.set_ylabel("Score difference" if lang == "en" else "점수 차이", fontsize=10)
+        title = FAMILY_NAMES[lang][family].replace("\n", " ")
+        ax.set_title(f"({chr(97 + i)}) {title}", fontsize=10.5, loc="left", pad=10)
+        ax.text(1, 1.05, label, ha="right", transform=ax.transAxes, fontsize=9.5)
+        _crossover_axis(ax)
+    fig.legend(*axes[0].get_legend_handles_labels(), loc="upper center", ncol=2, frameon=False,
+               fontsize=10, bbox_to_anchor=(0.55, 0.985))
+    return fig
+
+
+def figure_crossover_atlas(study, lang="en"):
+    import numpy as np
+    from matplotlib.colors import ListedColormap
+
+    families = sorted(study["families"], key=lambda f: (f["domain"] != "thermal", f["family"]))
+    fig, axes = plt.subplots(1, 2, figsize=(178 / 25.4, 222 / 25.4), sharey=True)
+    fig.subplots_adjust(left=0.44, right=0.98, top=0.93, bottom=0.045, wspace=0.2)
+    keys = ("cost_winner", "app_winner", "continuous_winner")
+    for ax, period, letter in zip(axes, ("monthly", "daily"), ("a", "b"), strict=True):
+        values = np.array([[len(f["periods"][period]["summary"]["transitions"][key]) for key in keys] for f in families])
+        ax.imshow(values > 0, cmap=ListedColormap(["#F1F3F4", "#D1E3E5"]), aspect="auto", vmin=0, vmax=1)
+        for y in range(len(families)):
+            for x in range(3):
+                ax.text(x, y, str(values[y, x]), ha="center", va="center", fontsize=9.5,
+                        color=INK if values[y, x] else GREY, fontweight="bold" if values[y, x] else "normal")
+        ax.set_xticks(range(3), ["Cost", "App", "Fixed"] if lang == "en" else ["원가", "앱", "고정"])
+        ax.xaxis.tick_top()
+        ax.tick_params(axis="x", labelsize=10, length=0, pad=5)
+        ax.set_yticks(range(len(families)))
+        ax.tick_params(axis="y", length=0, pad=9)
+        ax.set_title(f"({letter}) " + ({"monthly": "Monthly", "daily": "Daily"}[period] if lang == "en"
+                                      else {"monthly": "월별", "daily": "일별"}[period]), fontsize=11, pad=28)
+        for y in range(1, len(families)):
+            ax.axhline(y - 0.5, color="white", lw=0.5)
+        ax.axhline(22.5, color=GREY, lw=1)
+        for spine in ax.spines.values():
+            spine.set_visible(False)
+    axes[0].set_yticklabels([FAMILY_NAMES[lang][f["family"]].replace("\n", " ") for f in families], fontsize=9)
+    return fig
+
+
+def draw_crossovers(directory, out, lang):
+    """New research figures; preserve the four currently embedded paper figures."""
+    from matplotlib.backends.backend_pdf import PdfPages
+
+    study = json.loads((directory / "price_crossovers.json").read_text(encoding="utf-8"))
+    mechanisms = json.loads((directory / "crossover_mechanisms.json").read_text(encoding="utf-8"))
+    if hashlib.sha256((directory / "price_crossovers.json").read_bytes()).hexdigest() != mechanisms["study_sha256"]:
+        raise ValueError("Crossover study and mechanism analysis do not match")
+    plt.rcParams.update({"font.size": 10, "svg.fonttype": "none", "svg.hashsalt": "COMET-price-crossovers"})
+    suffix = "" if lang == "en" else ".ko"
+    figures = [("fig_price_crossovers", figure_price_crossovers(study, mechanisms, lang)),
+               ("fig_daily_rank_changes", figure_daily_crossovers(study, lang)),
+               ("fig_crossover_atlas", figure_crossover_atlas(study, lang))]
+    layout_checks = []
+
+    def check_layout(fig, name):
+        fig.canvas.draw()
+        renderer = fig.canvas.get_renderer()
+        width, height = fig.canvas.get_width_height()
+        texts = list(fig.texts)
+        for ax in fig.axes:
+            texts.extend([ax.title, ax._left_title, ax.xaxis.label, ax.yaxis.label])
+        for legend in [*fig.legends, *[ax.get_legend() for ax in fig.axes if ax.get_legend()]]:
+            texts.extend(legend.get_texts())
+        for text in texts:
+            if not text.get_text():
+                continue
+            box = text.get_window_extent(renderer)
+            if box.x0 < -1 or box.y0 < -1 or box.x1 > width + 1 or box.y1 > height + 1:
+                raise ValueError(f"{name}: text outside figure: {text.get_text()}")
+        layout_checks.append({"figure": name, "checked_titles_labels_legend": len(texts), "within_canvas": True})
+
+    for name, fig in figures:
+        check_layout(fig, name)
+        for extension in ("png", "svg", "pdf"):
+            metadata = {"Software": "COMET"} if extension == "png" else ({"Date": None} if extension == "svg"
+                                                                                 else {"Creator": "COMET", "CreationDate": None, "ModDate": None})
+            fig.savefig(out / f"{name}{suffix}.{extension}", dpi=400, facecolor="white", metadata=metadata)
+            if extension == "svg":
+                path = out / f"{name}{suffix}.svg"
+                svg = path.read_text(encoding="utf-8")
+                path.write_text("\n".join(line.rstrip() for line in svg.splitlines()) + "\n", encoding="utf-8")
+        plt.close(fig)
+        print("wrote", out / f"{name}{suffix}")
+    with PdfPages(out / f"all_candidate_costs{suffix}.pdf", metadata={"Creator": "COMET", "CreationDate": None, "ModDate": None}) as pdf:
+        for family in study["families"]:
+            fig, axes = plt.subplots(1, 2, figsize=(178 / 25.4, 116 / 25.4))
+            fig.subplots_adjust(left=0.15, right=0.98, top=0.82, bottom=0.34, wspace=0.50)
+            fig.suptitle(FAMILY_NAMES[lang][family["family"]].replace("\n", " "), fontsize=12, y=0.98)
+            for ax, period in zip(axes, ("monthly", "daily"), strict=True):
+                rows = family["periods"][period]["records"]
+                for i, slug in enumerate(family["candidates"]):
+                    ax.plot(_crossover_dates(rows), [r["costs"][slug] for r in rows], lw=1.25,
+                            color=(ACC, WARN, "#7A6A8B", GREY)[i], ls=("-", "--", "-.", ":")[i],
+                            label=slug)
+                ax.set_yscale("log")
+                ax.set_ylabel(("Cost" if lang == "en" else "원가") + " (" + family["unit"].replace("$", "USD") + ")", fontsize=9.5)
+                ax.set_title(("Monthly" if period == "monthly" else "Daily") if lang == "en" else ("월별" if period == "monthly" else "일별"), fontsize=10)
+                ax.xaxis.set_major_locator(mdates.YearLocator(2) if period == "monthly" else mdates.MonthLocator(bymonth=(1, 5, 9)))
+                ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y" if period == "monthly" else "%b %Y"))
+                _crossover_axis(ax)
+            fig.legend(*axes[0].get_legend_handles_labels(), loc="lower left", bbox_to_anchor=(0.08, 0.015),
+                       frameon=False, fontsize=9.2, ncol=1, labelspacing=0.7)
+            check_layout(fig, family["family"])
+            pdf.savefig(fig, facecolor="white")
+            plt.close(fig)
+    (out / f"layout_checks{suffix}.json").write_text(json.dumps(layout_checks, indent=2) + "\n", encoding="utf-8")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out-dir", type=Path, default=ROOT / "docs/paper/figures-note-2026-09-09")
     parser.add_argument("--lang", choices=sorted(TEXT), default="en")
+    parser.add_argument("--crossovers", type=Path, help="Separate frozen price-crossover study directory")
     args = parser.parse_args()
     set_language(args.lang)
     args.out_dir.mkdir(parents=True, exist_ok=True)
+    if args.crossovers:
+        draw_crossovers(args.crossovers, args.out_dir, args.lang)
+        return
     suffix = "" if args.lang == "en" else f".{args.lang}"
     for kind in ("png", "svg"):
         shutil.copyfile(_diagram_asset("fig1_workflow", kind), args.out_dir / f"fig1_workflow_stack{suffix}.{kind}")

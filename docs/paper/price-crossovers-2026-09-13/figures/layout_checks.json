@@ -1,0 +1,167 @@
+[
+  {
+    "figure": "fig_price_crossovers",
+    "checked_titles_labels_legend": 23,
+    "within_canvas": true
+  },
+  {
+    "figure": "fig_daily_rank_changes",
+    "checked_titles_labels_legend": 10,
+    "within_canvas": true
+  },
+  {
+    "figure": "fig_crossover_atlas",
+    "checked_titles_labels_legend": 8,
+    "within_canvas": true
+  },
+  {
+    "figure": "aem-electrolyzer-oer",
+    "checked_titles_labels_legend": 13,
+    "within_canvas": true
+  },
+  {
+    "figure": "ammonia-cracking",
+    "checked_titles_labels_legend": 13,
+    "within_canvas": true
+  },
+  {
+    "figure": "ammonia-synthesis",
+    "checked_titles_labels_legend": 13,
+    "within_canvas": true
+  },
+  {
+    "figure": "co-prox",
+    "checked_titles_labels_legend": 12,
+    "within_canvas": true
+  },
+  {
+    "figure": "co2-electroreduction",
+    "checked_titles_labels_legend": 13,
+    "within_canvas": true
+  },
+  {
+    "figure": "co2-methanation",
+    "checked_titles_labels_legend": 13,
+    "within_canvas": true
+  },
+  {
+    "figure": "co2-methanol",
+    "checked_titles_labels_legend": 13,
+    "within_canvas": true
+  },
+  {
+    "figure": "co2-to-formate",
+    "checked_titles_labels_legend": 13,
+    "within_canvas": true
+  },
+  {
+    "figure": "dry-reforming",
+    "checked_titles_labels_legend": 13,
+    "within_canvas": true
+  },
+  {
+    "figure": "ethylene-epoxidation",
+    "checked_titles_labels_legend": 13,
+    "within_canvas": true
+  },
+  {
+    "figure": "fischer-tropsch-synthesis",
+    "checked_titles_labels_legend": 13,
+    "within_canvas": true
+  },
+  {
+    "figure": "formic-acid-dehydrogenation",
+    "checked_titles_labels_legend": 13,
+    "within_canvas": true
+  },
+  {
+    "figure": "fuel-cell-orr",
+    "checked_titles_labels_legend": 13,
+    "within_canvas": true
+  },
+  {
+    "figure": "glycerol-electrooxidation",
+    "checked_titles_labels_legend": 13,
+    "within_canvas": true
+  },
+  {
+    "figure": "hydrodeoxygenation",
+    "checked_titles_labels_legend": 13,
+    "within_canvas": true
+  },
+  {
+    "figure": "hydrogen-evolution-reaction",
+    "checked_titles_labels_legend": 13,
+    "within_canvas": true
+  },
+  {
+    "figure": "methane-pyrolysis",
+    "checked_titles_labels_legend": 13,
+    "within_canvas": true
+  },
+  {
+    "figure": "methanol-to-olefins",
+    "checked_titles_labels_legend": 13,
+    "within_canvas": true
+  },
+  {
+    "figure": "nh3-scr",
+    "checked_titles_labels_legend": 12,
+    "within_canvas": true
+  },
+  {
+    "figure": "nitrogen-reduction-reaction",
+    "checked_titles_labels_legend": 13,
+    "within_canvas": true
+  },
+  {
+    "figure": "olefin-metathesis",
+    "checked_titles_labels_legend": 13,
+    "within_canvas": true
+  },
+  {
+    "figure": "pem-electrolyzer-oer",
+    "checked_titles_labels_legend": 13,
+    "within_canvas": true
+  },
+  {
+    "figure": "photocatalytic-co2-reduction",
+    "checked_titles_labels_legend": 13,
+    "within_canvas": true
+  },
+  {
+    "figure": "photocatalytic-water-splitting",
+    "checked_titles_labels_legend": 13,
+    "within_canvas": true
+  },
+  {
+    "figure": "propane-dehydrogenation",
+    "checked_titles_labels_legend": 13,
+    "within_canvas": true
+  },
+  {
+    "figure": "rwgs",
+    "checked_titles_labels_legend": 13,
+    "within_canvas": true
+  },
+  {
+    "figure": "selective-acetylene-hydrogenation",
+    "checked_titles_labels_legend": 13,
+    "within_canvas": true
+  },
+  {
+    "figure": "steam-methane-reforming",
+    "checked_titles_labels_legend": 12,
+    "within_canvas": true
+  },
+  {
+    "figure": "syngas-methanol",
+    "checked_titles_labels_legend": 12,
+    "within_canvas": true
+  },
+  {
+    "figure": "water-gas-shift",
+    "checked_titles_labels_legend": 13,
+    "within_canvas": true
+  }
+]
