@@ -20,13 +20,13 @@ COMET addresses these requirements through an integrated workflow for price upda
 
 The five-stage workflow links data input and price-basis selection to cost estimation, cost contributions, and candidate ranking (Figure 1). A shared analysis record retains price sources, quotation dates, reliability assessments, calculation assumptions, and reproduction details. These include the system boundary, functional unit, inventory coverage, file checksums, software versions, and any random seed.
 
-![Figure 1. COMET workflow. The conceptual artwork was generated with OpenAI's image-generation tool; labels were added in PowerPoint.](figures-note-2026-09-09/fig1_workflow_stack.png)
+![Figure 1. COMET workflow.](figures-note-2026-09-09/fig1_workflow_stack.png)
 
 Calculations run locally, with prices, estimates, and supporting records stored in SQLite. A FastAPI backend requires Python 3.11 or later; the bilingual interface uses React 19 and TypeScript. Electron packages the Windows application with a PyInstaller-built backend. The browser interface runs from source with Node.js 22 or later. Backend tests and interface builds run on Linux; complete browser operation has been tested only on Windows. Stored or user-supplied prices permit offline calculation without application programming interface (API) keys.
 
 In a saved calculation using spot quotations, a 20 wt% Ni/Al₂O₃ catalyst prepared by incipient-wetness impregnation at an order size of 18,143.7<!-- figures-note-2026-09-09/screen_result_ni_al2o3.json:request.order_size_tons --> kg has an estimated selling price of 11.49<!-- figures-note-2026-09-09/screen_result_ni_al2o3.json:step_method.estimated_price_per_lb --> USD/kg. Nickel and processing account for 3.33<!-- figures-note-2026-09-09/screen_result_ni_al2o3.json:materials.components[0].cost_per_lb_cat --> and 3.69<!-- figures-note-2026-09-09/screen_result_ni_al2o3.json:step_method.processing_cost_per_lb --> USD/kg, respectively. Figure 2(b) compares the least expensive candidate in each of 23 thermal reaction families at May 2026 prices, separating materials, processing, and overheads plus margin as shares of selling price. Results can be exported as comma-separated values (CSV), including price-source information and optional Monte Carlo results.
 
-![Figure 2. Cost estimation. (a) Calculation scheme; artwork generated with OpenAI's image-generation tool and labeled in PowerPoint. (b) Cost shares and selling prices, converted to USD/kg. (c) Deviations from published market prices. SCR, selective catalytic reduction.](figures-note-2026-09-09/fig2_cost_model.png)
+![Figure 2. Cost estimation. (a) Calculation scheme. (b) Cost shares and selling prices, converted to USD/kg. (c) Deviations from published market prices. SCR, selective catalytic reduction.](figures-note-2026-09-09/fig2_cost_model.png)
 
 ## Cost estimation and environmental screening
 
@@ -83,8 +83,6 @@ COMET is distributed under the PolyForm Noncommercial License 1.0.0, which permi
 ## Acknowledgments
 
 Funding and other acknowledgments: [to be supplied by the authors].
-
-OpenAI Codex and Anthropic Claude assisted with software development, source review, and manuscript drafting and editing. OpenAI's image-generation tool was used on September 13, 2026 to produce the conceptual illustrations in Figures 1 and 2(a) from specifications supplied by the authors and subsequently to remove lettering. The four record illustrations in Figure 1 were generated separately with the same tool. English and Korean labels were added as editable PowerPoint text. The numerical panels and graphical abstract were not produced with image-generation tools. The authors are responsible for the final verification of the calculations, source material, text, and figure labels and for the submitted work.
 
 ## Competing interests
 
