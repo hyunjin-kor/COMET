@@ -235,9 +235,9 @@ def _structure_panel(fig):
     ax = fig.add_axes([59 / 178, 52 / 207, 104 / 178, 79 / 207])
     ys = range(len(rows))
     ax.barh(ys, [r[2] for r in rows], color=ACC, height=0.74, label=L["seg_materials"])
-    ax.barh(ys, [r[3] for r in rows], left=[r[2] for r in rows], color=ACC_MID, height=0.74, edgecolor="white", lw=0.25,
+    ax.barh(ys, [r[3] for r in rows], left=[r[2] for r in rows], color=ACC_MID, height=0.74, edgecolor="white", lw=0.5,
             label=L["seg_processing"])
-    ax.barh(ys, [r[4] for r in rows], left=[r[2] + r[3] for r in rows], color="#D9DEE1", height=0.74, edgecolor="white", lw=0.25,
+    ax.barh(ys, [r[4] for r in rows], left=[r[2] + r[3] for r in rows], color="#D9DEE1", height=0.74, edgecolor="white", lw=0.5,
             label=L["seg_overhead"])
     for i, row in enumerate(rows):
         cost = publication_cost(row[1], "$/lb")
@@ -250,7 +250,7 @@ def _structure_panel(fig):
     ax.set_ylim(-0.7, len(rows) - 0.3)
     ax.set_xticks([0, 25, 50, 75, 100])
     ax.set_axisbelow(True)
-    ax.grid(axis="x", color="#E6EAEC", lw=0.45)
+    ax.grid(axis="x", color="#E6EAEC", lw=0.5)
     ax.set_xlabel(L["share_x"], fontsize=9)
     handles, labels = ax.get_legend_handles_labels()
     fig.legend(handles, labels, fontsize=8.5, frameon=False, loc="upper left", bbox_to_anchor=(59 / 178, 139 / 207), ncol=3,
@@ -416,7 +416,7 @@ def figure3_metal_prices():
     Colours, line styles and endpoint labels distinguish the unsmoothed observations.
     """
     series = json.loads(HISTORY.read_text(encoding="utf-8"))["series"]
-    fig = plt.figure(figsize=(86 / 25.4, 122 / 25.4))
+    fig = plt.figure(figsize=(84 / 25.4, 122 / 25.4))
     for index, (symbols, title) in enumerate(((PRECIOUS_METALS, L["metals_precious"]),
                                               (BASE_METALS, L["metals_base"]))):
         ax = fig.add_axes([0.23, 0.565 - index * 0.475, 0.59, 0.35])
@@ -438,7 +438,7 @@ def figure3_metal_prices():
         ax.yaxis.set_minor_formatter(NullFormatter())
         ax.set_title(title, loc="left", fontsize=9, fontweight="bold", pad=6)
         ax.set_axisbelow(True)
-        ax.grid(axis="y", which="major", color="#E6EAEC", lw=0.45)
+        ax.grid(axis="y", which="major", color="#E6EAEC", lw=0.5)
         unit = "USD/kg"
         ax.set_ylabel(f"{L['metal_price']} ({unit})", fontsize=8.5)
         _clean(ax)
@@ -464,8 +464,8 @@ def figure4_diagnostics():
     ax = fig.add_axes([59 / 178, 83 / 203, 112 / 178, 105 / 203])
     ys = list(range(len(rows)))
     ax.barh(ys, [r[1] for r in rows], color=ACC, height=0.72, label=L["f3_first"])
-    ax.barh(ys, [r[2] for r in rows], left=[r[1] for r in rows], color=WARN, height=0.72, edgecolor="white", lw=0.25, label=L["f3_second"])
-    ax.barh(ys, [r[3] for r in rows], left=[r[1] + r[2] for r in rows], color="#D9DEE1", height=0.72, edgecolor="white", lw=0.25,
+    ax.barh(ys, [r[2] for r in rows], left=[r[1] for r in rows], color=WARN, height=0.72, edgecolor="white", lw=0.5, label=L["f3_second"])
+    ax.barh(ys, [r[3] for r in rows], left=[r[1] + r[2] for r in rows], color="#D9DEE1", height=0.72, edgecolor="white", lw=0.5,
             label=L["f3_other"])
     ax.axvline(50, color="white", lw=0.6)
     ax.axvline(50, color=GREY, lw=0.5, ls=(0, (1.5, 1.5)))

@@ -1,10 +1,9 @@
 """Draw the Table of Contents graphic for the Application Note.
 
 ACS asks for a graphic that fits 3.25 x 1.75 inches, so this is drawn at that size and saved
-as SVG and a 300 dpi LZW TIFF, matching scripts/build_submission_manuscript.py. Nothing here
-is AI-generated: ACS does not allow an AI image in a TOC graphic, and the numbers shown are
-read from the same frozen files as Figure 2. The pitted sphere is the software's own motif,
-a comet nucleus being the same irregular porous geometry as a catalyst pellet. Run:
+as SVG and a 300 dpi LZW TIFF. Shapes are drawn in code without generative image-model
+outputs. The equal cost bands illustrate categories, not numerical results; the TOC
+summarizes inputs, cost estimation, and ranking without a market-price comparison. Run:
 
     python scripts/draw_note_toc_graphic.py --out-dir docs/paper/figures-note-2026-09-09
     python scripts/draw_note_toc_graphic.py --lang ko
@@ -12,7 +11,6 @@ a comet nucleus being the same irregular porous geometry as a catalyst pellet. R
 
 import argparse
 import io
-import json
 import math
 import random
 from pathlib import Path
@@ -25,31 +23,28 @@ from matplotlib.patches import Circle, Ellipse, FancyArrowPatch, FancyBboxPatch 
 from PIL import Image  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
-FAMILIES = ROOT / "docs/paper/submission-2026-09-08/all_families_2026-09-08.json"
-MARKET = ROOT / "docs/paper/catalyst_market_2026-09-10.json"
 INK, MUTED, RULE = "#1F2A30", "#5B6870", "#C3CBCE"
 ACC, ACC_MID, ACC_PALE, WARN = "#1B6F78", "#6FA8AE", "#D9E5E7", "#B8702F"
-LB_PER_KG = 2.20462
 
 TEXT = {
     "en": {"font": "Arial",
-           "title": "Traceable catalyst manufacturing cost",
-           "left": "Composition\nroute, scale",
-           "mid": "Itemised cost",
-           "mid_unit": "USD/lb",
-           "seg": ["Materials", "Processing", "Overhead"],
-           "right": "Traded range",
-           "right_note": "US imports, HS 3815",
-           "foot": "Every price carries its source, date and basis"},
+           "title": "COMET",
+           "left": "Composition\nPrices, route",
+           "mid": "Cost",
+           "mid_unit": "USD/kg",
+           "seg": ["Materials", "Processing", "Overheads\n+ margin"],
+           "right": "Ranking",
+           "criteria": ["Cost", "Data quality", "Route", "Performance"],
+           "foot": "Sources · Assumptions · Reproducibility"},
     "ko": {"font": "Malgun Gothic",
-           "title": "출처를 추적하는 촉매 제조 원가",
-           "left": "조성\n경로, 규모",
-           "mid": "항목별 원가",
-           "mid_unit": "USD/lb",
-           "seg": ["재료비", "가공비", "간접비"],
-           "right": "거래 범위",
-           "right_note": "미국 수입, HS 3815",
-           "foot": "모든 가격에 출처·일자·기준이 붙는다"},
+           "title": "COMET",
+           "left": "조성\n가격, 경로",
+           "mid": "원가",
+           "mid_unit": "USD/kg",
+           "seg": ["재료비", "가공비", "간접비·마진"],
+           "right": "순위 산정",
+           "criteria": ["원가", "자료 신뢰도", "제조 경로", "성능"],
+           "foot": "출처 · 가정 · 재현 정보"},
 }
 
 
@@ -83,16 +78,7 @@ def graphic(lang):
     label = TEXT[lang]
     plt.rcParams.update({"font.family": label["font"], "text.color": INK, "svg.fonttype": "none",
                          "svg.hashsalt": "comet-note-toc-2026-09-10", "axes.unicode_minus": False})
-    families = json.loads(FAMILIES.read_text(encoding="utf-8"))["families"]
-    thermal = [f for f in families if f["catalyst_domain"] == "thermal"]
-    best = min((min(f["candidates"], key=lambda c: c["landed_cost_per_lb"]) for f in thermal),
-               key=lambda c: abs(c["landed_cost_per_lb"] - 5.0))
-    total = best["landed_cost_per_lb"]
-    shares = [best["materials_cost_per_lb"] / total, best["processing_cost_per_lb"] / total]
-    shares.append(max(0.0, 1 - sum(shares)))
-    traded = json.loads(MARKET.read_text(encoding="utf-8"))["series"]["HS381519"]["points"]
-    values = sorted(p["price"] / LB_PER_KG for p in traded)
-    low, high = values[len(values) // 10], values[-len(values) // 10]
+    shares = [1 / 3] * 3
 
     fig, ax = plt.subplots(figsize=(3.25, 1.75), dpi=300)
     fig.subplots_adjust(0, 0, 1, 1)
@@ -113,25 +99,20 @@ def graphic(lang):
         bottom += share * bh
     legend = list(zip(label["seg"], (ACC, ACC_MID, "#B9C2C6"), strict=True))[::-1]
     for i, (name, colour) in enumerate(legend):
-        y = by + bh - 0.11 - i * 0.155
+        y = by + bh - (i + 0.5) * bh / 3
         ax.add_patch(Circle((bx + bw + 0.115, y + 0.022), 0.028, fc=colour, ec="none"))
-        ax.text(bx + bw + 0.165, y + 0.022, name, ha="left", va="center", fontsize=5.6, color=INK)
+        ax.text(bx + bw + 0.165, y + 0.022, name, ha="left", va="center", fontsize=6.0, color=INK)
     ax.text(bx + bw / 2, by + bh + 0.11, label["mid"], ha="center", va="bottom", fontsize=6.6, fontweight="bold")
-    ax.text(bx + bw / 2, by - 0.135, label["mid_unit"], ha="center", va="center", fontsize=5.8, color=MUTED)
+    ax.text(bx + bw / 2, by - 0.135, label["mid_unit"], ha="center", va="center", fontsize=6.0, color=MUTED)
 
-    rx, rw, ry = 2.40, 0.76, 0.88
-    ax.add_patch(FancyBboxPatch((rx, ry - 0.135), rw, 0.27, boxstyle="round,pad=0,rounding_size=0.135",
+    rx, rw = 2.40, 0.76
+    ax.add_patch(FancyBboxPatch((rx, 0.49), rw, 0.72, boxstyle="round,pad=0,rounding_size=0.05",
                                 fc="#F7EFE6", ec=WARN, lw=0.8))
-    ax.text(rx + rw / 2, ry + 0.215, label["right"], ha="center", va="bottom", fontsize=6.6, fontweight="bold")
-    ax.text(rx, ry - 0.215, f"{low:.0f}", ha="left", va="center", fontsize=6.0, color=WARN)
-    ax.text(rx + rw, ry - 0.215, f"{high:.0f}", ha="right", va="center", fontsize=6.0, color=WARN)
-    position = rx + rw * min(max((total - low) / (high - low), 0.13), 0.55)
-    ax.add_patch(Circle((position, ry), 0.055, fc=ACC, ec="white", lw=0.9, zorder=5))
-    ax.text(position + 0.075, ry, f"{total:.2f}", ha="left", va="center", fontsize=6.2, color=ACC,
-            fontweight="bold")
-    ax.text(rx + rw / 2, ry - 0.365, label["right_note"], ha="center", va="center", fontsize=5.6, color=MUTED)
+    ax.text(rx + rw / 2, by + bh + 0.11, label["right"], ha="center", va="bottom", fontsize=6.6, fontweight="bold")
+    for i, criterion in enumerate(label["criteria"]):
+        ax.text(rx + rw / 2, 1.08 - i * 0.15, criterion, ha="center", va="center", fontsize=6.0)
 
-    for x0, x1 in ((0.75, 0.97), (2.03, 2.35)):
+    for x0, x1 in ((0.75, 0.97), (2.16, 2.35)):
         ax.add_patch(FancyArrowPatch((x0, 0.88), (x1, 0.88), arrowstyle="-|>", mutation_scale=7,
                                      color=MUTED, lw=0.9, shrinkA=0, shrinkB=0))
     ax.text(1.625, 0.135, label["foot"], ha="center", va="center", fontsize=6.0, color=MUTED)
@@ -148,6 +129,8 @@ def main():
     fig = graphic(args.lang)
     stem = str(args.out_dir / f"toc_graphic{suffix}")
     fig.savefig(stem + ".svg", format="svg", metadata={"Date": None}, facecolor="white")
+    svg_path = Path(stem + ".svg")
+    svg_path.write_text("\n".join(line.rstrip() for line in svg_path.read_text(encoding="utf-8").splitlines()) + "\n", encoding="utf-8")
     png = io.BytesIO()
     fig.savefig(png, format="png", dpi=300, facecolor="white")
     plt.close(fig)

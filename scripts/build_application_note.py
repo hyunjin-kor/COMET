@@ -89,7 +89,7 @@ Authors, affiliations and corresponding-author contact: [to be supplied by the a
 
 ## Abstract
 
-COMET (Catalyst Overall Manufacturing Estimation Tool) integrates catalyst manufacturing cost estimation, price-data management, and candidate ranking in a reproducible screening workflow. Current quotations and historical monthly averages are linked to their sources, dates, and reliability assessments. A library of {rb('summary.candidates')} candidate formulations spanning {rb('summary.families')} reaction families supports comparisons under consistent process boundaries and functional units. The software reports cost contributions and selected environmental impacts, while assessing how prices, production scale, criterion weights, assigned scores, and candidate availability affect rankings. Saved input datasets, software version records, and optional random seeds for Monte Carlo sampling support reproducibility. Three literature examples verify the implementation of established cost calculations without adjusting their reported inputs. Independent validation against industrial cost data remains necessary. Desktop and browser interfaces support preliminary catalyst selection and examination of the assumptions underlying each comparison.
+COMET (Catalyst Overall Manufacturing Estimation Tool) integrates catalyst manufacturing cost estimation, price-data management, and candidate ranking through desktop and browser interfaces. A library of {rb('summary.candidates')} formulations in {rb('summary.families')} reaction families supports comparisons of cost contributions and selected environmental impacts under consistent assumptions. Source-linked current and historical prices, saved inputs, and software records support reproducible sensitivity analyses of prices, production scale, weights, scores, and candidate availability. Three literature examples verify the cost calculations without adjusting reported inputs; independent validation against industrial cost data remains necessary.
 
 Keywords: catalyst manufacturing cost; cost estimation; sensitivity analysis; multicriteria decision analysis; software.
 
@@ -99,15 +99,15 @@ Catalyst selection requires evaluating manufacturing cost alongside performance 
 
 Applying cost estimates to candidate selection also requires consistent price dates, process boundaries, and functional units. A preferred candidate can change with market prices, criterion weights, assigned scores, or the alternatives included in a comparison.
 
-COMET addresses these requirements through an integrated workflow for price updates, historical recalculation, and multicriteria sensitivity analysis. It records price sources and calculation assumptions, identifies uncosted operations and environmental inventory gaps, and distinguishes catalyst mass-based costs from electrode area-based costs. Users can examine ranking changes under alternative prices, weights, scores, and candidate sets. We verify the cost calculations against published examples and examine candidate-set sensitivity using ammonia cracking.
+COMET links price updates and historical recalculation to multicriteria sensitivity analysis. Records identify price sources, calculation assumptions, uncosted operations, and environmental inventory gaps. Comparisons use catalyst mass or electrode area and vary prices, weights, scores, and candidate sets. Published examples verify the implementation; ammonia cracking illustrates candidate-set sensitivity.
 
 ## Software implementation
 
 The five-stage workflow links data input and price-basis selection to cost estimation, cost contributions, and candidate ranking (Figure 1). A shared analysis record retains price sources, quotation dates, reliability assessments, calculation assumptions, and reproduction details. These include the system boundary, functional unit, inventory coverage, file checksums, software versions, and any random seed.
 
-![Figure 1. COMET workflow.](figures-note-2026-09-09/fig1_workflow_stack.png)
+![Figure 1. COMET workflow. Inputs, price selection, cost estimation, and candidate ranking share a record of data sources, assumptions, and reproduction details.](figures-note-2026-09-09/fig1_workflow_stack.png)
 
-Calculations run locally, with prices, estimates, and supporting records stored in SQLite. A FastAPI backend requires Python 3.11 or later; the bilingual interface uses React 19 and TypeScript. Electron packages the Windows application with a PyInstaller-built backend. The browser interface runs from source with Node.js 22 or later. Backend tests and interface builds run on Linux; complete browser operation has been tested only on Windows. Stored or user-supplied prices permit offline calculation without application programming interface (API) keys.
+COMET stores prices, estimates, and supporting records locally in SQLite. The FastAPI backend requires Python 3.11 or later; the bilingual React 19/TypeScript interface requires Node.js 22 or later when run from source. Electron packages Windows builds with a PyInstaller backend. Linux testing covers backend tests and interface builds; complete browser operation has been tested only on Windows. Stored or user-supplied prices support offline calculation without API keys.
 
 In a saved calculation using spot quotations, a 20 wt% Ni/Al₂O₃ catalyst prepared by incipient-wetness impregnation at an order size of {kg(EXAMPLE, 'request.order_size_tons', ',.1f', KG_PER_SHORT_TON)} kg has an estimated selling price of {kg(EXAMPLE, 'step_method.estimated_price_per_lb', '.2f')} USD/kg. Nickel and processing account for {kg(EXAMPLE, 'materials.components[0].cost_per_lb_cat', '.2f')} and {kg(EXAMPLE, 'step_method.processing_cost_per_lb', '.2f')} USD/kg, respectively. Figure 2(b) compares the least expensive candidate in each of 23 thermal reaction families at May 2026 prices, separating materials, processing, and overheads plus margin as shares of selling price. Results can be exported as comma-separated values (CSV), including price-source information and optional Monte Carlo results.
 
@@ -119,7 +119,7 @@ In Figure 2(a), materials cost is Cₘ = Σ<sub>i</sub>w<sub>i</sub>c<sub>i</sub
 
 Processing cost follows the Step Method, Cₚ = 24TIH/M, with campaign duration T in days, price-index factor I, summed hourly operation costs H, and catalyst mass M in kg. The software provides {r('s', 'manufacturing.20.template_count')} editable preparation procedures from the published equipment table, including repeated operations. Order size determines equipment scale, production rate, and cleaning allowance; a documented effective rate can replace the nominal rate. Missing operations use a disclosed substitute cost or remain uncosted. Hourly rates are adjusted from 2017 using a chemical-manufacturing producer price index. Selling price is P = (Cₘ + Cₚ)(1 + g)(1 + s)/(1 − m), where g and s are the general and administrative (G&A) and sales, administrative, research, and distribution (SARD) fractions, respectively. Margin m is a fraction of selling price from the published order-size correlation. The illustrated operations in Figure 2(a) are examples, not a prescribed route. Electrode costs include catalyst loading, ionomer, membrane, and substrate per unit area; powder costs are reported separately. Optional metal recovery deducts the specified value of recoverable metal in the spent catalyst.
 
-Environmental screening estimates global warming potential and cumulative energy demand per kilogram of catalyst. Material contributions use published cradle-to-gate factors for metals.<sup>6</sup> Components without a verified factor, including some supports, are recorded as missing inventory data. Process contributions are estimated from fuel and electricity requirements for calcination, drying, and mechanical operations using public emission factors. Each result states the system boundary and inventory coverage, defined as the percentage of catalyst mass for which verified material factors are available. This percentage describes data coverage, not the proportion of total environmental impact represented.
+Environmental screening estimates global warming potential and cumulative energy demand per kilogram of catalyst using published cradle-to-gate metal factors.<sup>6</sup> Missing factors, including some supports, are recorded as inventory gaps. Process contributions use fuel and electricity requirements and public emission factors. Results state the system boundary and inventory coverage: the percentage of catalyst mass with verified material factors. Coverage measures data completeness, not the fraction of total environmental impact represented.
 
 ## Price data and sources
 
@@ -137,7 +137,7 @@ Sensitivity to criterion weights is evaluated using {r('s', 'weight_sensitivity.
 
 The combined sensitivity analysis evaluates {rb('summary.months')} monthly price datasets and {rb('summary.weight_points["0.05"]')} weight combinations at increments of 0.05, giving {rb('summary.joint_scenarios_all_families["0.05"]', ',')} scenarios across all reaction families (Figure 4(a,b)). For each candidate, it reports the frequency of ranking first and the mean and maximum difference from the highest composite score in each scenario. This difference, termed regret, is expressed in score points. Figure 4(a) separates the baseline candidate, the most frequently first-ranked alternative, and all others; the alternative need not rank second at baseline. Across families, the median frequency of retaining the baseline candidate at rank 1 is {rb('summary.reference_winner_joint_share_median_pct', '.2f')}%. Each candidate other than the one ranked first at baseline is then removed in turn; rankings are compared with and without recalculating the cost normalization range. Sensitivity to assigned scores is tested by decreasing the route and performance scores of the candidate ranked first at baseline and increasing those of all other candidates by 2, 5, or 10 points, subject to the 0–100 scale. Candidate removal changes the highest-ranked candidate in {rb('summary.candidate_removal_winner_changes')} of {rb('summary.candidate_removal_cases')} tests, and {rb('summary.rubric_robust_family_counts["5"]')} families retain the same candidate under the 5-point score variation. Figure 4(b) counts families retaining the baseline candidate in at least half the combined scenarios, after every single-candidate removal, or under each score variation. Scenario frequencies are not probabilities of future outcomes.
 
-Two to four saved estimates can be compared using their original results, a common set of prices, or common prices and manufacturing assumptions. Recalculation under common assumptions separates the effects of price changes from those of formulation, preparation procedure, and production scale.
+Two to four saved estimates can be compared as recorded, at common prices, or at common prices and manufacturing assumptions to distinguish price effects from formulation, preparation route, and production scale.
 
 ## Verification and reproducibility
 
@@ -147,7 +147,7 @@ The same study reports market prices for the three catalysts.<sup>1</sup> Using 
 
 Agreement with published calculations supports verification of the implementation. Comparisons with reported market prices and import unit values provide additional context, but cannot determine the error for a new formulation without industrial cost observations under comparable conditions.
 
-Automated tests cover the calculation engine, API, price retrieval, and candidate library; continuous integration also tests the packaged Windows application. The analysis scripts save input, code, and output checksums using SHA-256, together with software versions. These records support reproduction of the numerical results in the documented environment. Calculations reported here use the reference month {r('s', 'basis_month')} and, where random sampling is required, seed {r('m', 'seed')}. The exhaustive sensitivity analyses do not use random sampling.
+Automated tests cover the engine, API, price retrieval, and candidate library, including packaged Windows tests. SHA-256 checksums and software versions document analysis inputs, code, and outputs. Calculations use reference month {r('s', 'basis_month')} and sampling seed {r('m', 'seed')}; exhaustive sensitivity analyses require no sampling.
 
 ## Application to ammonia cracking
 
@@ -159,7 +159,7 @@ Removing Ru/MgO leaves the other cost estimates unchanged but reduces their rang
 
 ## Limitations
 
-COMET provides preliminary estimates based on an empirical costing method. Independent validation against industrial cost data has not been performed: the public observations identified did not match library formulations sufficiently in composition, grade, order size, date, and process boundary. Consequently, mean absolute percentage error was not calculated. Rankings also depend on assumed formulations and author-assigned route and performance scores. Environmental data cover a mean of {r('s', 'lca.coverage_mean_pct', '.2f')}% of catalyst mass, with coverage below 50% for {r('s', 'lca.candidates_coverage_below_50_pct')} candidates. Solvent supply, wastewater treatment, and equipment manufacture are excluded from the process inventory. Processing costs use the published 2017 equipment basis with index adjustment; substituted and uncosted operations are identified. Catalyst activity, deactivation, and impacts during use are outside the model's scope. Related studies address cost optimization of synthesis and the economic effects of catalyst lifetime.<sup>13,14</sup> The resulting rankings therefore support screening within the stated assumptions and do not establish overall catalyst performance.
+COMET estimates manufacturing costs empirically; industrial accuracy remains unvalidated because available observations did not match formulation, grade, order size, date, and process boundary. Consequently, mean absolute percentage error was not calculated. Rankings depend on assumed formulations and assigned route and performance scores. Environmental data cover a mean of {r('s', 'lca.coverage_mean_pct', '.2f')}% of catalyst mass, with coverage below 50% for {r('s', 'lca.candidates_coverage_below_50_pct')} candidates. Solvent supply, wastewater treatment, and equipment manufacture are excluded from the process inventory. Processing costs use the published 2017 equipment basis with index adjustment; substituted and uncosted operations are identified. Catalyst activity, deactivation, and impacts during use are outside the model's scope. Related studies address cost optimization of synthesis and the economic effects of catalyst lifetime.<sup>13,14</sup> The resulting rankings therefore support screening within the stated assumptions and do not establish overall catalyst performance.
 
 ## Data and Software Availability
 
@@ -203,8 +203,9 @@ def counts(text, run):
     abstract_words = paper.word_count(abstract)
     body_words = paper.word_count(body)
     total = abstract_words + body_words + graphics
-    if total > WORD_LIMIT:
-        raise ValueError(f"Word equivalents {total} exceed the {WORD_LIMIT} limit")
+    total_with_toc = total + 300
+    if total_with_toc > WORD_LIMIT:
+        raise ValueError(f"Word equivalents including the conservative TOC allowance {total_with_toc} exceed {WORD_LIMIT}")
     return {
         "target": "Journal of Chemical Information and Modeling, Application Note",
         "word_limit_abstract_text_graphics": WORD_LIMIT,
@@ -213,6 +214,9 @@ def counts(text, run):
         "graphics": GRAPHICS,
         "graphics_word_equivalent": graphics,
         "total_word_equivalent": total,
+        "toc_word_equivalent_allowance": 300,
+        "total_word_equivalent_with_toc": total_with_toc,
+        "toc_count_note": "A conservative 300-word allowance is tracked separately because the Application Note rule does not explicitly resolve TOC inclusion.",
         "figure_count": figures,
         "table_count": 0,
         "software_named_in_title": text.startswith("# COMET:"),
