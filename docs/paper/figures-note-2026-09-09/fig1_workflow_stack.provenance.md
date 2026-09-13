@@ -1,13 +1,13 @@
 # Figure 1 provenance (Application Note, 2026-09-09 draft)
 
-The current `fig1_workflow_stack.png` and SVG are PowerPoint exports copied by `scripts/draw_application_note_figures.py`. The editable source is `docs/paper/diagram-sources-2026-09-12/fig1_workflow.pptx`. The diagram reuses five stage icons from an earlier AI-assisted illustration, with native slide labels, boxes, and connectors. This note preserves its creation history so that the caption and AI-use statement can be checked.
+The current `fig1_workflow_stack.png` and SVG are PowerPoint exports copied by `scripts/draw_application_note_figures.py`. The editable source is `docs/paper/diagram-sources-2026-09-13/fig1_workflow.pptx`. The diagram reuses five stage icons from an earlier AI-assisted illustration, with native slide labels and connectors. This note preserves its creation history so that the caption and AI-use statement can be checked.
 
 ## Files
 
 | File | Role |
 |---|---|
 | `fig1_workflow_stack_raw_chatgpt.png` | Raw image as downloaded from ChatGPT (1672 x 941 px), unmodified |
-| `../diagram-sources-2026-09-12/fig1_workflow.pptx` | Current editable source, English and Korean slides |
+| `../diagram-sources-2026-09-13/fig1_workflow.pptx` | Current editable source, English and Korean slides |
 | `fig1_workflow_stack.png`, `fig1_workflow_stack.svg` | Checked English PowerPoint exports copied by the figure generator |
 | `fig1_workflow_stack.ko.png`, `fig1_workflow_stack.ko.svg` | Checked Korean PowerPoint exports copied with `--lang ko` |
 | `scripts/straighten_note_fig1_leaders.py` | Historical connector correction; reproduces the previous illustration from the raw image, not the current figure |
@@ -20,7 +20,20 @@ The author subsequently requested an icon for each stage in the v27 document rev
 
 The v29 version extracted five regions of the unchanged English raw image in `_workflow_icon()`: stacked price sheets, a calendar, a flask with a price tag, a cost ledger, and a balance scale. Only the pale background connected to each crop border was removed, then composited onto the stage fill before resampling to preserve the outlines. Icon proportions were preserved at a common height of 11.5 mm, with an aligned text column. The same icons were used in both languages.
 
-The author then requested editable PowerPoint sources for the non-data diagrams. The current deck embeds those same five icon images and retains the v29 layout with native slide text, boxes, and lines. Microsoft PowerPoint exports both slides to PNG and SVG. The SVG combines embedded raster icons with vector text, boxes, and connectors; it is not an entirely vector illustration. No new image-generation call was made. Explanatory prose remains in the caption and text.
+The author then requested editable PowerPoint sources for the non-data diagrams. The v30 deck embedded those same five icon images and retained the v29 layout with native slide text, boxes, and lines. Microsoft PowerPoint exports both slides to PNG and SVG. The SVG combines embedded raster icons with vector text and connectors; it is not an entirely vector illustration. No new image-generation call was made. Explanatory prose remains in the caption and text.
+
+## Horizontal workflow revision — September 13, 2026
+
+The v31 revision arranges the five original icons horizontally above one shared
+analysis-record band. The stage icons are 15 mm high; source, assumption, and
+reproduction details are given in the caption. The embedded image files are
+byte-identical to those in v30. A native PowerPoint
+[color-change effect](https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.drawing.colorchange)
+sets the previous flat stage-background color (#F4F6F7) to transparent, allowing
+the icons to sit on white without rectangular crop backgrounds. The original raw
+image and extracted image files are unchanged. This effect is part of the editable
+PPTX source and is rendered by PowerPoint, not applied to the exported figures.
+The previous source deck is retained in the September 12 folder for comparison.
 
 After editing the source deck, export it and regenerate the current figures with:
 

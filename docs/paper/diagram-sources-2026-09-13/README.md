@@ -1,20 +1,16 @@
 # Editable paper diagrams
 
-**Archived v30 layout.** The current editable sources and export instructions are
-in [diagram-sources-2026-09-13](../diagram-sources-2026-09-13/README.md). The files in
-this folder are retained for comparison; the export script now uses the new folder.
-
 These PowerPoint files are the editable sources for the non-data diagrams in the
 Application Note. Each deck contains English on slide 1 and Korean on slide 2.
 
 | Source | Paper use | Intended size |
 | --- | --- | --- |
-| `fig1_workflow.pptx` | Figure 1 | 178 × 100 mm |
-| `fig2a_cost_model.pptx` | Figure 2(a) | 178 × 76 mm |
+| `fig1_workflow.pptx` | Figure 1 | 178 × 64 mm |
+| `fig2a_cost_model.pptx` | Figure 2(a) | 178 × 36 mm |
 
-Edit labels, boxes, equations, and connectors in PowerPoint. Figure 1 retains the
-five original illustrated icons as embedded images. Equation symbols, subscripts,
-fraction bars, and connecting lines are editable slide objects; they are not
+Edit labels, cost symbols, and connectors in PowerPoint. Figure 1 retains the
+five original illustrated icons as embedded images. Cost symbols, subscripts,
+and connecting lines are editable slide objects; they are not
 screenshots or Office equation objects. Keep both language slides synchronized.
 Do not overwrite these decks by running an older slide builder.
 
@@ -44,9 +40,9 @@ exports and do not require PowerPoint.
 The figure generator copies Figure 1 exports directly and combines Figure 2(a)
 with the Python plots in Figure 2(b,c). It preserves native SVG text and paths in
 the combined SVG. The numerical panels, Figures 3 and 4, and all frozen JSON
-remain generated from the original analysis records. Figure 2 is now 178 × 194 mm;
-the numerical panels retain their previous physical size. Figure count and column
-widths are unchanged.
+remain bound to the original analysis records. Figure 2 is 178 × 183 mm, with a
+compact schematic, full-width cost composition, and three aligned market-price
+comparisons. Figure 4 is 178 × 203 mm. Figure count and column widths are unchanged.
 
 Figure 1's earlier ChatGPT image-generation history and icon attribution remain in
 [its provenance record](../figures-note-2026-09-09/fig1_workflow_stack.provenance.md)

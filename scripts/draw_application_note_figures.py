@@ -20,7 +20,6 @@ import json
 import math
 import re
 import shutil
-import textwrap
 import xml.etree.ElementTree as ET
 from datetime import datetime
 from pathlib import Path
@@ -33,7 +32,7 @@ import matplotlib.pyplot as plt  # noqa: E402
 from matplotlib.ticker import FuncFormatter, LogLocator, NullFormatter  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
-DIAGRAMS = ROOT / "docs/paper/diagram-sources-2026-09-12"
+DIAGRAMS = ROOT / "docs/paper/diagram-sources-2026-09-13"
 STUDY = ROOT / "docs/paper/robustness-2026-09-08/decision_robustness.json"
 METHODS = ROOT / "docs/paper/methods-2026-09-09/methods_study.json"
 EXAMPLE = ROOT / "docs/paper/figures-note-2026-09-09/screen_result_ni_al2o3.json"
@@ -183,7 +182,7 @@ def _diagram_asset(name, kind):
 
 
 def _cost_model_panel(fig):
-    ax = fig.add_axes([0, 0.968 - 76 / 194, 1, 76 / 194])
+    ax = fig.add_axes([0, 1 - 40 / 183, 1, 36 / 183])
     ax.imshow(plt.imread(_diagram_asset("fig2a_cost_model", "png")), aspect="auto")
     ax.axis("off")
 
@@ -224,59 +223,58 @@ def _structure_panel(fig):
         rows.append((family["family"], total, 100 * materials / total, 100 * processing / total,
                      100 * (total - materials - processing) / total))
     rows.sort(key=lambda r: r[2])
-    ax = fig.add_axes([0.24, 0.085 * 164 / 194, 0.30, 0.50 * 164 / 194])
+    ax = fig.add_axes([51 / 178, 52 / 183, 112 / 178, 79 / 183])
     ys = range(len(rows))
     ax.barh(ys, [r[2] for r in rows], color=ACC, height=0.74, label=L["seg_materials"])
-    ax.barh(ys, [r[3] for r in rows], left=[r[2] for r in rows], color=ACC_MID, height=0.74,
+    ax.barh(ys, [r[3] for r in rows], left=[r[2] for r in rows], color=ACC_MID, height=0.74, edgecolor="white", lw=0.25,
             label=L["seg_processing"])
-    ax.barh(ys, [r[4] for r in rows], left=[r[2] + r[3] for r in rows], color="#D9DEE1", height=0.74,
+    ax.barh(ys, [r[4] for r in rows], left=[r[2] + r[3] for r in rows], color="#D9DEE1", height=0.74, edgecolor="white", lw=0.25,
             label=L["seg_overhead"])
     for i, row in enumerate(rows):
         ax.text(104, i, f"{row[1]:,.2f}" if row[1] < 100 else f"{row[1]:,.0f}", va="center", ha="left",
-                fontsize=6.2)
-    ax.text(104, len(rows) - 0.1, L["total_head"], va="bottom", ha="left", fontsize=6.2, color=MUTED)
+                fontsize=7.0)
+    ax.text(104, len(rows) + 0.35, L["total_head"], va="bottom", ha="left", fontsize=7.0, color=MUTED)
     ax.set_yticks(list(ys))
-    ax.set_yticklabels([FAM.get(r[0], r[0]) for r in rows], fontsize=6.5)
+    ax.set_yticklabels([FAM.get(r[0], r[0]) for r in rows], fontsize=7.5)
     ax.set_xlim(0, 100)
     ax.set_ylim(-0.7, len(rows) - 0.3)
     ax.set_xticks([0, 25, 50, 75, 100])
+    ax.set_axisbelow(True)
+    ax.grid(axis="x", color="#E6EAEC", lw=0.45)
     ax.set_xlabel(L["share_x"], fontsize=7.8)
     handles, labels = ax.get_legend_handles_labels()
-    fig.legend(handles, labels, fontsize=6.8, frameon=False, loc="upper left", bbox_to_anchor=(0.07, 0.648 * 164 / 194), ncol=3,
+    fig.legend(handles, labels, fontsize=7.5, frameon=False, loc="upper left", bbox_to_anchor=(51 / 178, 139 / 183), ncol=3,
               handlelength=1.0, columnspacing=0.8, handletextpad=0.4, borderaxespad=0.0)
     _clean(ax)
-    ax.tick_params(axis="y", length=0, labelsize=6.5)
+    ax.tick_params(axis="y", length=0, labelsize=7.5)
 
 
 def _validation_panel(fig):
-    """The three published CatCost cases against the market prices printed beside them."""
+    """Three aligned paired comparisons on the same market-deviation scale."""
     cases = json.loads(VALIDATION.read_text(encoding="utf-8"))
-    ax = fig.add_axes([0.74, 0.17 * 164 / 194, 0.235, 0.415 * 164 / 194])
-    xs = range(len(cases))
-    comet, published, labels = [], [], []
-    for case in cases:
+    for index, case in enumerate(cases):
+        ax = fig.add_axes([(14 + index * 59) / 178, 13 / 183, 43 / 178, 21 / 183])
         market = case["market"]["market_price_per_lb"]
         estimate = next(r for r in case["rows"] if r["key"] == "estimated_price_per_lb")
         ours = case.get("with_published_rate", {}).get("estimated_price_per_lb", estimate["comet"])
-        comet.append(100 * (ours - market) / market)
-        published.append(100 * (estimate["published"] - market) / market)
-        labels.append(VAL.get(case["name"], case["name"]))
-    ax.bar([x - 0.2 for x in xs], comet, 0.38, color=ACC, label=L["c_comet"])
-    ax.bar([x + 0.2 for x in xs], published, 0.38, color=GREY, label=L["c_published"])
-    for x, (a, b) in enumerate(zip(comet, published, strict=True)):
-        ax.text(x - 0.2, a - 0.9, f"{a:.1f}", ha="center", va="top", fontsize=7.0, color=ACC)
-        offset = 3.0 if abs(a - b) < 2.0 else 0.9
-        ax.text(x + 0.2, b - offset, f"{b:.1f}", ha="center", va="top", fontsize=7.0, color=MUTED)
-    ax.axhline(0, color=INK, lw=0.6)
-    ax.set_xticks(list(xs))
-    ax.set_xticklabels(labels, fontsize=6.8)
-    ax.set_ylim(-26, 3)
-    ax.set_ylabel(L["c_y"], fontsize=7.8)
-    handles, labels = ax.get_legend_handles_labels()
-    fig.legend(handles, labels, fontsize=6.8, frameon=False, loc="upper left", bbox_to_anchor=(0.70, 0.648 * 164 / 194), ncol=2,
-              handlelength=1.0, columnspacing=0.8, handletextpad=0.4, borderaxespad=0.0)
-    _clean(ax)
-    ax.tick_params(axis="x", length=0)
+        values = [100 * (ours - market) / market, 100 * (estimate["published"] - market) / market]
+        for y, value, color, label in zip((1, 0), values, (ACC, GREY),
+                                          (L["c_comet"], L["c_published"]), strict=True):
+            ax.barh(y, value, height=0.52, color=color, label=label)
+            ax.text(value - 0.65, y, f"{value:.1f}", ha="right", va="center", fontsize=7.5)
+        ax.set_xlim(-27, 0)
+        ax.set_ylim(-0.65, 1.65)
+        ax.set_xticks([-20, -10, 0])
+        ax.set_yticks([])
+        title = VAL.get(case["name"], case["name"]).replace("\n", " ")
+        ax.set_title(title, fontsize=8, pad=5)
+        _clean(ax)
+        if index == 0:
+            handles, labels = ax.get_legend_handles_labels()
+            fig.legend(handles, labels, frameon=False, fontsize=7.5, ncol=2,
+                       loc="upper right", bbox_to_anchor=(0.97, 43 / 183), borderaxespad=0,
+                       handlelength=1.0, handletextpad=0.5, columnspacing=1.4)
+    fig.text(0.5, 1.8 / 183, L["c_y"], fontsize=8, ha="center", va="bottom")
 
 
 PRECIOUS = ("Pt", "Pd", "Rh", "Ru", "Ir", "Au", "Ag", "Os")
@@ -370,13 +368,15 @@ BASE_METALS = ("Ni", "Cu", "Co", "Mo", "Sn", "Al", "Zn")
 PRECIOUS_METALS = ("Rh", "Ir", "Au", "Pt", "Pd", "Ru", "Ag")
 
 
-METAL_COLOURS = ("#0072B2", "#D55E00", "#009E73", "#CC79A7", "#9C6B00", "#508DA8", "#555555")
+METAL_COLOURS = (ACC, WARN, "#687C38", "#9B6686", "#69747D", "#408FB0", "#303D45")
+METAL_STYLES = ("-", "--", "-", "--", "-", "-.", ":")
 
 
-def _label_ends(ax, ends, fontsize=6.4):
+def _label_ends(ax, ends, fontsize=7.5):
     """The element symbol at the end of each line, pushed apart where lines converge."""
     low, high = ax.get_ylim()
-    step = (math.log10(high) - math.log10(low)) / 13
+    height_pt = ax.get_position().height * ax.figure.get_size_inches()[1] * 72
+    step = (math.log10(high) - math.log10(low)) * fontsize * 1.3 / height_pt
     placed = None
     for value, symbol, colour, date in sorted(ends, key=lambda end: end[0], reverse=True):
         position = math.log10(value)
@@ -391,32 +391,32 @@ def _label_ends(ax, ends, fontsize=6.4):
 
 
 def figure2_cost_model():
-    fig = plt.figure(figsize=(178 / 25.4, 194 / 25.4))
+    fig = plt.figure(figsize=(178 / 25.4, 183 / 25.4))
     _cost_model_panel(fig)
     _structure_panel(fig)
     _validation_panel(fig)
-    for label, x, y in (("(a)", 0.012, 0.995), ("(b)", 0.012, 0.653 * 164 / 194), ("(c)", 0.64, 0.653 * 164 / 194)):
-        fig.text(x, y, label, fontsize=10.0, fontweight="bold", va="top")
+    for label, top in (("(a)", 1), ("(b)", 43), ("(c)", 140)):
+        fig.text(0.012, 1 - top / 183, label, fontsize=9.5, fontweight="bold", va="top")
     return fig
 
 
 def figure3_metal_prices():
     """The monthly price record of every metal the library prices, in one column.
 
-    Each metal uses a distinct colour; endpoint leaders connect displaced labels to the data.
+    Colours, line styles and endpoint labels distinguish the unsmoothed observations.
     """
     series = json.loads(HISTORY.read_text(encoding="utf-8"))["series"]
     fig = plt.figure(figsize=(86 / 25.4, 122 / 25.4))
     for index, (symbols, title) in enumerate(((PRECIOUS_METALS, L["metals_precious"]),
                                               (BASE_METALS, L["metals_base"]))):
-        ax = fig.add_axes([0.20, 0.575 - index * 0.47, 0.58, 0.345])
+        ax = fig.add_axes([0.20, 0.565 - index * 0.475, 0.62, 0.35])
         ends = []
         for order, symbol in enumerate(symbols):
             points = series[symbol]["points"]
             prices = [point["price"] for point in points]
             colour = METAL_COLOURS[order]
             ax.plot([datetime.strptime(point["date"], "%Y-%m-%d") for point in points], prices,
-                    color=colour, lw=1.0)
+                    color=colour, lw=0.9, ls=METAL_STYLES[order], solid_capstyle="round")
             ends.append((prices[-1], symbol, colour, datetime.strptime(points[-1]["date"], "%Y-%m-%d")))
         ax.set_yscale("log")
         ax.set_xlim(datetime(2019, 1, 1), datetime(2026, 6, 1))
@@ -425,12 +425,14 @@ def figure3_metal_prices():
         ax.yaxis.set_major_locator(LogLocator(base=10.0, subs=(1.0, 3.0), numticks=10))
         ax.yaxis.set_major_formatter(FuncFormatter(lambda value, _p: f"{value:g}"))
         ax.yaxis.set_minor_formatter(NullFormatter())
-        ax.set_title(title, fontsize=7.6, fontweight="bold", pad=4)
+        ax.set_title(title, loc="left", fontsize=8, fontweight="bold", pad=6)
+        ax.set_axisbelow(True)
+        ax.grid(axis="y", which="major", color="#E6EAEC", lw=0.45)
         unit = "USD/troy oz" if index == 0 else "USD/lb"
-        ax.set_ylabel(f"{L['metal_price']} ({unit})", fontsize=7.0)
+        ax.set_ylabel(f"{L['metal_price']} ({unit})", fontsize=7.5)
         _clean(ax)
         _label_ends(ax, ends)
-        fig.text(0.015, 0.955 - index * 0.47, f"({'ab'[index]})", fontsize=10.0, fontweight="bold")
+        fig.text(0.015, 0.935 - index * 0.475, f"({'ab'[index]})", fontsize=9.5, fontweight="bold")
     return fig
 
 
@@ -446,13 +448,13 @@ def figure4_diagnostics():
         second = others[0] if others else 0.0
         rows.append((family["family"], first, second, max(0.0, 100.0 - first - second)))
     rows.sort(key=lambda r: r[1])
-    fig = plt.figure(figsize=(178 / 25.4, 164 / 25.4))
+    fig = plt.figure(figsize=(178 / 25.4, 203 / 25.4))
 
-    ax = fig.add_axes([0.285, 0.078, 0.245, 0.800])
+    ax = fig.add_axes([51 / 178, 83 / 203, 120 / 178, 105 / 203])
     ys = list(range(len(rows)))
     ax.barh(ys, [r[1] for r in rows], color=ACC, height=0.72, label=L["f3_first"])
-    ax.barh(ys, [r[2] for r in rows], left=[r[1] for r in rows], color=WARN, height=0.72, label=L["f3_second"])
-    ax.barh(ys, [r[3] for r in rows], left=[r[1] + r[2] for r in rows], color="#D9DEE1", height=0.72,
+    ax.barh(ys, [r[2] for r in rows], left=[r[1] for r in rows], color=WARN, height=0.72, edgecolor="white", lw=0.25, label=L["f3_second"])
+    ax.barh(ys, [r[3] for r in rows], left=[r[1] + r[2] for r in rows], color="#D9DEE1", height=0.72, edgecolor="white", lw=0.25,
             label=L["f3_other"])
     ax.axvline(50, color="white", lw=0.6)
     ax.axvline(50, color=GREY, lw=0.5, ls=(0, (1.5, 1.5)))
@@ -462,13 +464,13 @@ def figure4_diagnostics():
     ax.set_xticks([0, 25, 50, 75, 100])
     ax.set_ylim(-0.6, len(rows) - 0.4)
     ax.set_xlabel(L["f3_x"], fontsize=8.0)
-    ax.legend(fontsize=7.0, frameon=False, loc="lower left", bbox_to_anchor=(0.0, 1.02), ncol=1, handlelength=1.0,
+    ax.legend(fontsize=7.5, frameon=False, loc="lower left", bbox_to_anchor=(0.0, 1.035), ncol=3, handlelength=1.0,
               columnspacing=0.9, handletextpad=0.5, borderaxespad=0.0)
     _clean(ax)
     ax.tick_params(axis="y", length=0)
-    fig.text(0.012, 0.985, "(a)", fontsize=10.0, fontweight="bold", va="top")
+    fig.text(0.012, 0.985, "(a)", fontsize=9.5, fontweight="bold", va="top")
 
-    bx = fig.add_axes([0.80, 0.66, 0.175, 0.218])
+    bx = fig.add_axes([37 / 178, 13 / 203, 38 / 178, 47 / 203])
     n = summary["families"]
     counts = [n - summary["families_reference_winner_below_half_joint"],
               n - summary["candidate_removal_families_changed"],
@@ -486,7 +488,7 @@ def figure4_diagnostics():
     bx.set_xlabel(L["f3_b_x"], fontsize=8.0)
     _clean(bx, left=False)
     bx.tick_params(axis="y", length=0)
-    fig.text(0.61, 0.985, "(b)", fontsize=10.0, fontweight="bold", va="top")
+    fig.text(0.012, 69 / 203, "(b)", fontsize=9.5, fontweight="bold", va="top")
 
     flips = []
     for family in study["families"]:
@@ -499,21 +501,20 @@ def figure4_diagnostics():
                 flips.append((family["family"], costs[before], costs[after]))
     flips.sort(key=lambda row: row[1] / row[2])
 
-    cx = fig.add_axes([0.80, 0.078, 0.175, 0.46])
+    cx = fig.add_axes([134 / 178, 13 / 203, 40 / 178, 47 / 203])
     for index, (_family, before, after) in enumerate(flips):
         difference = 100 * (after - before) / before
         cx.barh(index, difference, height=0.58, color=ACC, edgecolor=ACC, lw=0.5)
-        cx.text(difference - 2, index, f"{difference:.1f}", ha="right", va="center", fontsize=6.5)
+        cx.text(difference - 2, index, f"{difference:.1f}", ha="right", va="center", fontsize=7.5)
     cx.set_yticks(range(len(flips)))
-    cx.set_yticklabels([textwrap.fill(FAM.get(family, family), width=27, break_long_words=False)
-                       for family, _b, _a in flips], fontsize=6.8)
+    cx.set_yticklabels([FAM.get(family, family) for family, _b, _a in flips], fontsize=7.5)
     cx.set_ylim(-0.7, len(flips) - 0.3)
-    cx.set_xlim(-125, 0)
+    cx.set_xlim(-120, 0)
     cx.set_xticks([-100, -50, 0])
     cx.set_xlabel(L["f3_c_x"], fontsize=8.0)
     _clean(cx)
     cx.tick_params(axis="y", length=0)
-    fig.text(0.61, 0.575, "(c)", fontsize=10.0, fontweight="bold", va="top")
+    fig.text(0.51, 69 / 203, "(c)", fontsize=9.5, fontweight="bold", va="top")
     return fig
 
 
@@ -539,6 +540,8 @@ def main():
             _save_cost_model_svg(figure, svg_path)
         else:
             figure.savefig(svg_path, facecolor="white", metadata={"Date": None})
+            svg = svg_path.read_text(encoding="utf-8")
+            svg_path.write_text("\n".join(line.rstrip() for line in svg.splitlines()) + "\n", encoding="utf-8")
         plt.close(figure)
         print("wrote", args.out_dir / f"{name}{suffix}")
 
