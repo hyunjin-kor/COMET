@@ -32,7 +32,7 @@ import matplotlib.pyplot as plt  # noqa: E402
 from matplotlib.ticker import FuncFormatter, LogLocator, NullFormatter  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
-DIAGRAMS = ROOT / "docs/paper/diagram-sources-2026-09-13-h24"
+DIAGRAMS = ROOT / "docs/paper/diagram-sources-2026-09-13-h26"
 STUDY = ROOT / "docs/paper/robustness-2026-09-08/decision_robustness.json"
 METHODS = ROOT / "docs/paper/methods-2026-09-09/methods_study.json"
 EXAMPLE = ROOT / "docs/paper/figures-note-2026-09-09/screen_result_ni_al2o3.json"

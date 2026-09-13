@@ -9,7 +9,7 @@ param()
 
 $ErrorActionPreference = 'Stop'
 $repo = Split-Path -Parent $PSScriptRoot
-$sourceDir = Join-Path $repo 'docs/paper/diagram-sources-2026-09-13-h24'
+$sourceDir = Join-Path $repo 'docs/paper/diagram-sources-2026-09-13-h26'
 $outputDir = Join-Path $sourceDir 'exports'
 New-Item -ItemType Directory -Force -Path $outputDir | Out-Null
 $existingPowerPoint = @(Get-Process POWERPNT -ErrorAction SilentlyContinue)

@@ -1,0 +1,54 @@
+[
+  {
+    "file": "artwork/fig1_workflow.text-free.png",
+    "sha256": "4e1ad7e9fa5c6455296200c0e54ac394484752ae9d3914090d5e773ac7267896",
+    "pixels": [
+      2060,
+      763
+    ],
+    "input": "docs/paper/diagram-sources-2026-09-13-gpt/artwork/fig1_workflow.en.png",
+    "input_sha256": "ea9f08245e217834debd260757340bdafdb4d46b2603b8d78641b58a3f7f21ac",
+    "prompt": "artwork/fig1_workflow.prompt.md",
+    "tool": "OpenAI image generation",
+    "exact_model_version": "확인 못 함",
+    "date": "2026-09-13",
+    "purpose": "Remove lettering before native bilingual PowerPoint typography",
+    "generated_bytes_embedded_unchanged": true,
+    "non_text_pixels_identical_to_input": "not asserted"
+  },
+  {
+    "file": "artwork/fig2a_cost_model.text-free.png",
+    "sha256": "1939feaecac351163b0a41728c64e8e0a8e7d3a34f7bd3a88f60eac35a875ef4",
+    "pixels": [
+      2172,
+      724
+    ],
+    "input": "docs/paper/diagram-sources-2026-09-13-gpt/artwork/fig2a_cost_model.en.png",
+    "input_sha256": "42a92ae95966d37e91537f2389e2f8fd1a298e7338d63b13f14dac35fd90782f",
+    "prompt": "artwork/fig2a_cost_model.prompt.md",
+    "tool": "OpenAI image generation",
+    "exact_model_version": "확인 못 함",
+    "date": "2026-09-13",
+    "purpose": "Remove lettering before native bilingual PowerPoint typography",
+    "generated_bytes_embedded_unchanged": true,
+    "non_text_pixels_identical_to_input": "not asserted"
+  },
+  {
+    "file": "artwork/fig1_records.png",
+    "sha256": "c471ee6e20e7516b4b65f44f569ca57e1354d2a587ae516bad894125467cd661",
+    "pixels": [
+      2172,
+      724
+    ],
+    "input": "docs/paper/diagram-sources-2026-09-13-h24/artwork/fig1_workflow.text-free.png",
+    "input_sha256": "4e1ad7e9fa5c6455296200c0e54ac394484752ae9d3914090d5e773ac7267896",
+    "input_role": "style reference only",
+    "prompt": "artwork/fig1_records.prompt.md",
+    "tool": "OpenAI built-in image generation",
+    "exact_model_version": "확인 못 함",
+    "date": "2026-09-13",
+    "purpose": "Four substantial conceptual illustrations for the shared analysis record",
+    "generated_bytes_embedded_unchanged": true,
+    "composition": "Native PowerPoint picture crops remove only whitespace around the new icons; native labels and connector branches are added."
+  }
+]

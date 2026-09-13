@@ -155,7 +155,7 @@ COMET is distributed under the PolyForm Noncommercial License 1.0.0, which permi
 
 Funding and other acknowledgments: [to be supplied by the authors].
 
-OpenAI Codex and Anthropic Claude assisted with software development, source review, and manuscript drafting and editing. OpenAI's image-generation tool was used on September 13, 2026 to produce the conceptual illustrations in Figures 1 and 2(a) from specifications supplied by the authors and subsequently to remove lettering. English and Korean labels were added as editable PowerPoint text. The numerical panels and graphical abstract were not produced with image-generation tools. The authors are responsible for the final verification of the calculations, source material, text, and figure labels and for the submitted work.
+OpenAI Codex and Anthropic Claude assisted with software development, source review, and manuscript drafting and editing. OpenAI's image-generation tool was used on September 13, 2026 to produce the conceptual illustrations in Figures 1 and 2(a) from specifications supplied by the authors and subsequently to remove lettering. The four record illustrations in Figure 1 were generated separately with the same tool. English and Korean labels were added as editable PowerPoint text. The numerical panels and graphical abstract were not produced with image-generation tools. The authors are responsible for the final verification of the calculations, source material, text, and figure labels and for the submitted work.
 
 ## Competing interests
 
