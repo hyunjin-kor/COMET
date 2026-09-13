@@ -1,7 +1,7 @@
 """Draw the four Application Note figures from labels and frozen runs.
 
-Figure 1 and the Figure 2(a) schematic use checked exports of editable PowerPoint
-sources. Data panels remain bound to the frozen JSON. Run
+Figure 1 and the Figure 2(a) schematic use checked PowerPoint exports of the
+selected generated artwork. Data panels remain bound to the frozen JSON. Run
 scripts/export_note_diagram_slides.ps1 after editing the source decks.
 Figure 2 draws the cost model, the cost structure of the cheapest candidate in
 every thermal reaction family, and the three published CatCost validation cases against their
@@ -32,7 +32,7 @@ import matplotlib.pyplot as plt  # noqa: E402
 from matplotlib.ticker import FuncFormatter, LogLocator, NullFormatter  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
-DIAGRAMS = ROOT / "docs/paper/diagram-sources-2026-09-13"
+DIAGRAMS = ROOT / "docs/paper/diagram-sources-2026-09-13-gpt"
 STUDY = ROOT / "docs/paper/robustness-2026-09-08/decision_robustness.json"
 METHODS = ROOT / "docs/paper/methods-2026-09-09/methods_study.json"
 EXAMPLE = ROOT / "docs/paper/figures-note-2026-09-09/screen_result_ni_al2o3.json"
@@ -182,13 +182,13 @@ def _diagram_asset(name, kind):
 
 
 def _cost_model_panel(fig):
-    ax = fig.add_axes([0, 1 - 40 / 183, 1, 36 / 183])
+    ax = fig.add_axes([0, 1 - (4 + 178 / 3) / 207, 1, (178 / 3) / 207])
     ax.imshow(plt.imread(_diagram_asset("fig2a_cost_model", "png")), aspect="auto")
     ax.axis("off")
 
 
 def _save_cost_model_svg(fig, destination):
-    """Keep the PowerPoint schematic and the matplotlib data panels vector-based."""
+    """Preserve vector data panels and embed the image-based PowerPoint schematic."""
     panel = fig.axes[0]
     panel.images[0].set_visible(False)
     try:
@@ -223,7 +223,7 @@ def _structure_panel(fig):
         rows.append((family["family"], total, 100 * materials / total, 100 * processing / total,
                      100 * (total - materials - processing) / total))
     rows.sort(key=lambda r: r[2])
-    ax = fig.add_axes([51 / 178, 52 / 183, 112 / 178, 79 / 183])
+    ax = fig.add_axes([51 / 178, 52 / 207, 112 / 178, 79 / 207])
     ys = range(len(rows))
     ax.barh(ys, [r[2] for r in rows], color=ACC, height=0.74, label=L["seg_materials"])
     ax.barh(ys, [r[3] for r in rows], left=[r[2] for r in rows], color=ACC_MID, height=0.74, edgecolor="white", lw=0.25,
@@ -243,7 +243,7 @@ def _structure_panel(fig):
     ax.grid(axis="x", color="#E6EAEC", lw=0.45)
     ax.set_xlabel(L["share_x"], fontsize=7.8)
     handles, labels = ax.get_legend_handles_labels()
-    fig.legend(handles, labels, fontsize=7.5, frameon=False, loc="upper left", bbox_to_anchor=(51 / 178, 139 / 183), ncol=3,
+    fig.legend(handles, labels, fontsize=7.5, frameon=False, loc="upper left", bbox_to_anchor=(51 / 178, 139 / 207), ncol=3,
               handlelength=1.0, columnspacing=0.8, handletextpad=0.4, borderaxespad=0.0)
     _clean(ax)
     ax.tick_params(axis="y", length=0, labelsize=7.5)
@@ -253,7 +253,7 @@ def _validation_panel(fig):
     """Three aligned paired comparisons on the same market-deviation scale."""
     cases = json.loads(VALIDATION.read_text(encoding="utf-8"))
     for index, case in enumerate(cases):
-        ax = fig.add_axes([(14 + index * 59) / 178, 13 / 183, 43 / 178, 21 / 183])
+        ax = fig.add_axes([(14 + index * 59) / 178, 13 / 207, 43 / 178, 21 / 207])
         market = case["market"]["market_price_per_lb"]
         estimate = next(r for r in case["rows"] if r["key"] == "estimated_price_per_lb")
         ours = case.get("with_published_rate", {}).get("estimated_price_per_lb", estimate["comet"])
@@ -272,9 +272,9 @@ def _validation_panel(fig):
         if index == 0:
             handles, labels = ax.get_legend_handles_labels()
             fig.legend(handles, labels, frameon=False, fontsize=7.5, ncol=2,
-                       loc="upper right", bbox_to_anchor=(0.97, 43 / 183), borderaxespad=0,
+                       loc="upper right", bbox_to_anchor=(0.97, 43 / 207), borderaxespad=0,
                        handlelength=1.0, handletextpad=0.5, columnspacing=1.4)
-    fig.text(0.5, 1.8 / 183, L["c_y"], fontsize=8, ha="center", va="bottom")
+    fig.text(0.5, 1.8 / 207, L["c_y"], fontsize=8, ha="center", va="bottom")
 
 
 PRECIOUS = ("Pt", "Pd", "Rh", "Ru", "Ir", "Au", "Ag", "Os")
@@ -391,12 +391,12 @@ def _label_ends(ax, ends, fontsize=7.5):
 
 
 def figure2_cost_model():
-    fig = plt.figure(figsize=(178 / 25.4, 183 / 25.4))
+    fig = plt.figure(figsize=(178 / 25.4, 207 / 25.4))
     _cost_model_panel(fig)
     _structure_panel(fig)
     _validation_panel(fig)
-    for label, top in (("(a)", 1), ("(b)", 43), ("(c)", 140)):
-        fig.text(0.012, 1 - top / 183, label, fontsize=9.5, fontweight="bold", va="top")
+    for label, top in (("(b)", 67), ("(c)", 164)):
+        fig.text(0.012, 1 - top / 207, label, fontsize=9.5, fontweight="bold", va="top")
     return fig
 
 

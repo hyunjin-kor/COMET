@@ -1,0 +1,17 @@
+Generate an actual image, not a written explanation or code.
+
+Use case: infographic-diagram.
+Asset: Figure 2(a) for a chemistry software journal article. A sophisticated scientific schematic of catalyst manufacturing cost estimation. Landscape, approximately 3:1, crisp print-resolution artwork on pure white.
+
+Visual direction: restrained editorial illustration at the quality of a carefully art-directed Nature chemistry figure. Precise geometry and polished, small scientific pictograms, charcoal typography, deep teal #1B6F78, muted blue-teal #6FA8AE, cool grey and one restrained ochre accent. Generous white space. All text in a clean Helvetica/Arial-like sans serif. No poster title, no caption, no decorative border, no shadows, no glossy 3D, no clip-art calculator, no dollar-sign coins, no slogans.
+
+The visual argument must be understood in one glance: TWO independent cost contributions are calculated, then combined, then overhead and margin are applied to obtain the estimated selling price. Organize this as two neatly aligned parallel lanes on the left, a clear convergence near the middle, and one simple output on the right. Avoid a forest of boxes and long empty arrows.
+
+Upper lane: a beautifully drawn compact scientific vignette of a precursor bottle beside several catalyst/support granules and a small price-sheet motif. Label exactly "Formulation and prices". A short arrow leads to "Materials" with the mathematical symbol Cₘ.
+Lower lane: a compact orthographic line illustration of a preparation sequence, such as mixing vessel, drying tray, and furnace, with a small batch-stack motif. These are representative preparation operations, not a claim that every catalyst uses all three. Label exactly "Route and order size". A short arrow leads to "Processing" with symbol Cₚ.
+Both contributions feed the SAME small plus junction. From this junction, one short directed path passes through a restrained adjustment element labelled exactly "Overheads and margin" and ends at "Selling price" with symbol P. The result is an estimated selling price, not profit or revenue. The adjustment must NOT look like an independent raw-material input or a third additive cost measurement.
+
+Text whitelist: "(a)", "Formulation and prices", "Route and order size", "Materials", "Processing", "Overheads and margin", "Selling price", "Cₘ", "Cₚ", "P", "+".
+Spell every label exactly. Keep subscripts correct. Each label appears once. Use only these words and symbols; no equations, numbers, body text, footnotes or additional process labels. Put "(a)" at the upper left.
+Science context for you, NOT text to draw: the calculation is P=(Cm+Cp)(1+g)(1+s)/(1-m). The margin m is a fraction of selling price; order size also affects the margin. These details are explained in the manuscript caption and must not be contradicted by the schematic.
+Make the illustrations integral to a coherent, beautifully balanced diagram, not five unrelated large icons. Align lanes, text baselines and connector centers meticulously. Prioritize legibility at 178 mm total printed width.

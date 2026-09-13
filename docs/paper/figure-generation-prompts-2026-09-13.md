@@ -1,5 +1,11 @@
 # AI figure-generation prompts — September 13, 2026
 
+**Adoption update (H22):** The author selected both GPT v2 images. They are now
+integrated through `diagram-sources-2026-09-13-gpt/`, with Korean localizations,
+updated captions and AI-use disclosure, and English/Korean Word v32 review copies.
+The manuscript is 4,942/5,000 word-equivalent. The sections below preserve the
+H21 candidate-generation record; their pre-adoption status refers to that stage.
+
 The author requested actual figure alternatives from GPT and Gemini after reviewing v31. This pass generates the two non-numerical diagrams: Figure 1 and Figure 2(a). The previously requested exclusion of Python-generated numerical results is retained. Figures 2(b,c), 3 and 4 are not redrawn by an image model.
 
 ## Execution and source status

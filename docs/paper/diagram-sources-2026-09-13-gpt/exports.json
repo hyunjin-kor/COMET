@@ -1,0 +1,51 @@
+{
+  "renderer": "Microsoft PowerPoint",
+  "diagrams": [
+    {
+      "source": "fig1_workflow.pptx",
+      "source_sha256": "8ad466738f679fe94497bd16c330a14590450aacfd7070508790479ecbfe28f6",
+      "width_mm": 178.02,
+      "height_mm": 65.925,
+      "png_dpi_at_slide_size": 400,
+      "exports": [
+        {
+          "language": "en",
+          "png": "exports/fig1_workflow.en.png",
+          "png_sha256": "25fe46893db085a7d0ac5e9d35a5bff95a22055ddaf12adb9f9dd30f927a1e20",
+          "svg": "exports/fig1_workflow.en.svg",
+          "svg_sha256": "d28466907c0517fa33d35a3ca45687aa32b7c5f6fe3eb69c51dca0441d34402c"
+        },
+        {
+          "language": "ko",
+          "png": "exports/fig1_workflow.ko.png",
+          "png_sha256": "966d75bd671e88134212380caea3d651da047a311d64c63ae84c5afa6e308997",
+          "svg": "exports/fig1_workflow.ko.svg",
+          "svg_sha256": "7d031755328a114ac758b1348f28a98d35eed2cefa45cbc45bbfeb423a6ba9f1"
+        }
+      ]
+    },
+    {
+      "source": "fig2a_cost_model.pptx",
+      "source_sha256": "3e99f47925ba1e8614d36515aa1fa3e646a94183ce5640e40c34d144cfddabf7",
+      "width_mm": 178.02,
+      "height_mm": 59.355,
+      "png_dpi_at_slide_size": 400,
+      "exports": [
+        {
+          "language": "en",
+          "png": "exports/fig2a_cost_model.en.png",
+          "png_sha256": "08f0f4bc0d808244c075a49db623b89a71989f424ff264315b03641dc2dfd58a",
+          "svg": "exports/fig2a_cost_model.en.svg",
+          "svg_sha256": "640d5961f34cfa55af5e49254a02e1eb4451a2a7cd580541843c8c2bdf6ce56d"
+        },
+        {
+          "language": "ko",
+          "png": "exports/fig2a_cost_model.ko.png",
+          "png_sha256": "b714722bd11825a680b1b0ac36552a6cb51a6c8dce6f489aa2dd5c3ee0d6a3b7",
+          "svg": "exports/fig2a_cost_model.ko.svg",
+          "svg_sha256": "4450937162062eba353d85adb318e63a4935e294c018da0f68c197b914c0ddc0"
+        }
+      ]
+    }
+  ]
+}

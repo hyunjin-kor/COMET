@@ -1,5 +1,10 @@
 # Editable paper diagrams
 
+Archived v31 sources. The author subsequently selected GPT-generated Figure 1
+and Figure 2(a); the current source folder and regeneration instructions are in
+[`../diagram-sources-2026-09-13-gpt/README.md`](../diagram-sources-2026-09-13-gpt/README.md).
+The following describes this preserved earlier revision.
+
 These PowerPoint files are the editable sources for the non-data diagrams in the
 Application Note. Each deck contains English on slide 1 and Korean on slide 2.
 

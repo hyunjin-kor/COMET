@@ -1,13 +1,16 @@
 # Figure 1 provenance (Application Note, 2026-09-09 draft)
 
-The current `fig1_workflow_stack.png` and SVG are PowerPoint exports copied by `scripts/draw_application_note_figures.py`. The editable source is `docs/paper/diagram-sources-2026-09-13/fig1_workflow.pptx`. The diagram reuses five stage icons from an earlier AI-assisted illustration, with native slide labels and connectors. This note preserves its creation history so that the caption and AI-use statement can be checked.
+The current `fig1_workflow_stack.png` and SVG are PowerPoint exports copied by `scripts/draw_application_note_figures.py`. The source is `docs/paper/diagram-sources-2026-09-13-gpt/fig1_workflow.pptx`, containing the author-selected GPT v2 illustration and its Korean localization as embedded raster images. Labels and connectors are part of those images. This note preserves the earlier revisions as history so that the caption and AI-use statement can be checked.
 
 ## Files
 
 | File | Role |
 |---|---|
 | `fig1_workflow_stack_raw_chatgpt.png` | Raw image as downloaded from ChatGPT (1672 x 941 px), unmodified |
-| `../diagram-sources-2026-09-13/fig1_workflow.pptx` | Current editable source, English and Korean slides |
+| `../diagram-sources-2026-09-13/fig1_workflow.pptx` | Archived v31 source with native labels and connectors |
+| `../diagram-sources-2026-09-13-gpt/fig1_workflow.pptx` | Current source, English and Korean image-based slides |
+| `../diagram-sources-2026-09-13-gpt/artwork/fig1_workflow.en.png` | Selected GPT v2 output, 2060 × 763 pixels, unmodified |
+| `../diagram-sources-2026-09-13-gpt/artwork/fig1_workflow.ko.png` | Generated Korean localization, 2060 × 763 pixels, unmodified |
 | `fig1_workflow_stack.png`, `fig1_workflow_stack.svg` | Checked English PowerPoint exports copied by the figure generator |
 | `fig1_workflow_stack.ko.png`, `fig1_workflow_stack.ko.svg` | Checked Korean PowerPoint exports copied with `--lang ko` |
 | `scripts/straighten_note_fig1_leaders.py` | Historical connector correction; reproduces the previous illustration from the raw image, not the current figure |
@@ -43,7 +46,25 @@ python scripts/draw_application_note_figures.py
 python scripts/draw_application_note_figures.py --lang ko
 ```
 
-The caption and acknowledgments disclose that the current figure reuses icons from the earlier ChatGPT-generated illustration. The historical rights review below is retained; the redraw does not constitute a new legal determination.
+The v31 caption and acknowledgments disclosed reuse of icons from the earlier ChatGPT-generated illustration. The historical rights review below is retained; the redraw did not constitute a new legal determination.
+
+## Selected GPT illustration — September 13, 2026
+
+For v32, the author chose GPT v2 for both Figure 1 and Figure 2(a) after comparing
+actual OpenAI and Gemini outputs. The complete Figure 1 illustration was generated
+with the OpenAI built-in image-generation tool; it does not reuse the September 10
+icons. A further call localized the labels for the Korean review copy. The exact
+underlying model version was not exposed (확인 못 함).
+
+The English source is byte-identical to the selected candidate, and both language
+images are embedded in PowerPoint without manual image editing. Source hashes,
+actual pixel dimensions, prompt records, and export instructions are in
+[`../diagram-sources-2026-09-13-gpt/README.md`](../diagram-sources-2026-09-13-gpt/README.md).
+The raster source provides 293.96 dpi at 178 mm width; the 400 dpi Office export
+canvas and the SVG container do not establish additional image detail or vector
+editability. The illustrations are schematic, and the caption and acknowledgments
+now disclose generation of the full conceptual figure. The earlier rights review
+below remains unresolved; this adoption makes no new determination about rights.
 
 ## Original image generation — September 10, 2026
 

@@ -1,5 +1,5 @@
 <#
-Export the editable Figure 1 and Figure 2(a) PowerPoint sources for the paper.
+Export the Figure 1 and Figure 2(a) PowerPoint sources for the paper.
 Slides 1 and 2 contain English and Korean, respectively. The source decks are
 opened without a window and are never saved or overwritten by this script.
 Requires the installed Microsoft PowerPoint application.
@@ -9,7 +9,7 @@ param()
 
 $ErrorActionPreference = 'Stop'
 $repo = Split-Path -Parent $PSScriptRoot
-$sourceDir = Join-Path $repo 'docs/paper/diagram-sources-2026-09-13'
+$sourceDir = Join-Path $repo 'docs/paper/diagram-sources-2026-09-13-gpt'
 $outputDir = Join-Path $sourceDir 'exports'
 New-Item -ItemType Directory -Force -Path $outputDir | Out-Null
 $existingPowerPoint = @(Get-Process POWERPNT -ErrorAction SilentlyContinue)

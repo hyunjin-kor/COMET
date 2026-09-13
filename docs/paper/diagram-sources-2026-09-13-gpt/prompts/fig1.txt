@@ -1,0 +1,20 @@
+Generate an actual image, not a written explanation or code.
+
+Use case: infographic-diagram.
+Asset: Figure 1 of a chemistry software journal article, showing COMET's workflow for estimating catalyst manufacturing costs and comparing candidates. Wide landscape, approximately 2.7:1, pure white background, crisp print-resolution image.
+
+Create an exceptionally polished scientific editorial schematic, with the visual restraint and clarity of a Nature chemistry figure. Use precise, refined scientific illustrations with charcoal contours, deep teal #1B6F78, muted blue-teal #6FA8AE and cool greys. Very subtle tonal fills are acceptable within illustrations. No glossy 3D, cast shadows, gradients behind the diagram, banners, marketing graphics, oversized business icons, mascots, coins, rocket or comet imagery.
+
+Show a coherent left-to-right five-stage workflow:
+"Input data" → "Price basis" → "Cost estimation" → "Cost breakdown" → "Candidate ranking".
+Use concise exact labels below five related illustrative vignettes, aligned on one reading line. Do not put the entire diagram inside boxes. Use short fine arrows, clear separation, and carefully balanced visual weight. Allow the central scientific calculation vignette slightly more emphasis.
+1. Input data: neatly layered research data sheets and a small cluster of catalyst/support granules.
+2. Price basis: a refined compact calendar with a single highlighted cell and a price-record sheet. No invented dates or numbers.
+3. Cost estimation: a small preparation vessel and catalyst pellet accompanied by a precise cost-sheet motif; this represents calculation, not an experimental observation.
+4. Cost breakdown: a ledger with three simple coloured component strips, no numerical axis and no pseudo-data.
+5. Candidate ranking: three distinguishable catalyst specimens arranged for comparison beside an ordered list motif; no winning trophy and no invented scores.
+
+Below the five stages, one understated shared record rail connects the workflow to a slim analysis-record strip. This must read as retained information shared by all stages, not a second scientific processing route.
+Text on this strip, exactly: "Analysis record", "Data sources", "Model assumptions", "Reproducibility".
+Text whitelist is ONLY the five stage names and these four strip labels. No figure number, title, caption, sentences, software version, footnotes, logos, watermark, tiny illegible filler text, date, number, or currency amount. Data sheets should contain quiet non-text rules, not gibberish. Use clean Helvetica/Arial-like lettering, readable when printed at 178 mm width.
+The complete composition should feel drawn and art-directed as ONE scientific figure. Keep the icons refined and meaningful, with consistent viewpoint, line weight, scale and material treatment. Every label and arrow must be precisely aligned. Scientific clarity and controlled negative space take priority over decorative detail.
