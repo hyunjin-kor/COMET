@@ -69,7 +69,7 @@ def note(run):
     def mk(key, spec=None):
         return r(MARKET, key, spec)
 
-    return f"""# COMET: Software for Catalyst Manufacturing Cost Estimation and Sensitivity Analysis
+    return f"""# COMET: Catalyst Overall Manufacturing Estimation Tool
 
 Authors, affiliations and corresponding-author contact: [to be supplied by the authors].
 

@@ -1,4 +1,4 @@
-# COMET: Software for Catalyst Manufacturing Cost Estimation and Sensitivity Analysis
+# COMET: Catalyst Overall Manufacturing Estimation Tool
 
 Authors, affiliations and corresponding-author contact: [to be supplied by the authors].
 
