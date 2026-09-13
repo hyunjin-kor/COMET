@@ -2,7 +2,7 @@
   "target": "Journal of Chemical Information and Modeling, Application Note",
   "word_limit_abstract_text_graphics": 5000,
   "abstract_words": 134,
-  "text_words_excluding_references": 2730,
+  "text_words_excluding_references": 2731,
   "graphics": [
     {
       "figure": 1,
@@ -26,11 +26,150 @@
     }
   ],
   "graphics_word_equivalent": 2100,
-  "total_word_equivalent": 4964,
+  "total_word_equivalent": 4965,
   "figure_count": 4,
   "table_count": 0,
   "software_named_in_title": true,
   "json_key_references": 57,
+  "publication_mass_unit": "kg",
+  "publication_conversions": [
+    {
+      "source": "figures-note-2026-09-09/screen_result_ni_al2o3.json",
+      "key": "request.order_size_tons",
+      "source_value": 20,
+      "factor": 907.18474,
+      "converted_value": 18143.6948,
+      "display": "18,143.7"
+    },
+    {
+      "source": "figures-note-2026-09-09/screen_result_ni_al2o3.json",
+      "key": "step_method.estimated_price_per_lb",
+      "source_value": 5.213,
+      "factor": 2.2046226218487757,
+      "converted_value": 11.492697727697667,
+      "display": "11.49"
+    },
+    {
+      "source": "figures-note-2026-09-09/screen_result_ni_al2o3.json",
+      "key": "materials.components[0].cost_per_lb_cat",
+      "source_value": 1.51218,
+      "factor": 2.2046226218487757,
+      "converted_value": 3.3337862363072817,
+      "display": "3.33"
+    },
+    {
+      "source": "figures-note-2026-09-09/screen_result_ni_al2o3.json",
+      "key": "step_method.processing_cost_per_lb",
+      "source_value": 1.6758,
+      "factor": 2.2046226218487757,
+      "converted_value": 3.694506589694178,
+      "display": "3.69"
+    },
+    {
+      "source": "submission-2026-09-08/paper_summary_2026-09-08.json",
+      "key": "table62[0].comet_usd_per_lb",
+      "source_value": 27.3695,
+      "factor": 2.2046226218487757,
+      "converted_value": 60.339418848690066,
+      "display": "60.3394"
+    },
+    {
+      "source": "submission-2026-09-08/paper_summary_2026-09-08.json",
+      "key": "table62[0].published_usd_per_lb",
+      "source_value": 27.37,
+      "factor": 2.2046226218487757,
+      "converted_value": 60.34052116000099,
+      "display": "60.34"
+    },
+    {
+      "source": "submission-2026-09-08/paper_summary_2026-09-08.json",
+      "key": "table62[1].comet_usd_per_lb",
+      "source_value": 19.2206,
+      "factor": 2.2046226218487757,
+      "converted_value": 42.37416956550658,
+      "display": "42.3742"
+    },
+    {
+      "source": "submission-2026-09-08/paper_summary_2026-09-08.json",
+      "key": "table62[1].published_usd_per_lb",
+      "source_value": 20.59,
+      "factor": 2.2046226218487757,
+      "converted_value": 45.39317978386629,
+      "display": "45.39"
+    },
+    {
+      "source": "submission-2026-09-08/paper_summary_2026-09-08.json",
+      "key": "table62[2].comet_usd_per_lb",
+      "source_value": 2.438,
+      "factor": 2.2046226218487757,
+      "converted_value": 5.374869952067315,
+      "display": "5.3749"
+    },
+    {
+      "source": "submission-2026-09-08/paper_summary_2026-09-08.json",
+      "key": "table62[2].published_usd_per_lb",
+      "source_value": 2.41,
+      "factor": 2.2046226218487757,
+      "converted_value": 5.313140518655549,
+      "display": "5.31"
+    },
+    {
+      "source": "submission-2026-09-08/paper_summary_2026-09-08.json",
+      "key": "table62[2].effective_rate_ton_per_day",
+      "source_value": 67.0,
+      "factor": 907.18474,
+      "converted_value": 60781.37758,
+      "display": "60,781.4"
+    },
+    {
+      "source": "submission-2026-09-08/table62_reproduction_2026-09-08.json",
+      "key": "[2].with_published_rate.estimated_price_per_lb",
+      "source_value": 2.438,
+      "factor": 2.2046226218487757,
+      "converted_value": 5.374869952067315,
+      "display": "5.3749"
+    },
+    {
+      "source": "submission-2026-09-08/table62_reproduction_2026-09-08.json",
+      "key": "[2].market.market_price_per_lb",
+      "source_value": 2.73,
+      "factor": 2.2046226218487757,
+      "converted_value": 6.018619757647158,
+      "display": "6.02"
+    },
+    {
+      "source": "methods-2026-09-09/methods_study.json",
+      "key": "normalization.example.rows[0].cost",
+      "source_value": 4.7411,
+      "factor": 2.2046226218487757,
+      "converted_value": 10.452336312447231,
+      "display": "10.4523"
+    },
+    {
+      "source": "methods-2026-09-09/methods_study.json",
+      "key": "normalization.example.rows[1].cost",
+      "source_value": 5.8131,
+      "factor": 2.2046226218487757,
+      "converted_value": 12.815691763069118,
+      "display": "12.8157"
+    },
+    {
+      "source": "methods-2026-09-09/methods_study.json",
+      "key": "normalization.example.rows[2].cost",
+      "source_value": 4.3573,
+      "factor": 2.2046226218487757,
+      "converted_value": 9.606202150181671,
+      "display": "9.6062"
+    },
+    {
+      "source": "methods-2026-09-09/methods_study.json",
+      "key": "normalization.example.removed_cost",
+      "source_value": 1265.9574,
+      "factor": 2.2046226218487757,
+      "converted_value": 2790.958322336859,
+      "display": "2790.9583"
+    }
+  ],
   "primary_run": "submission-2026-09-08",
   "basis_month": "2026-05",
   "seed": 20260906,

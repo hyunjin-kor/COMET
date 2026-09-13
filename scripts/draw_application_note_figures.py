@@ -20,6 +20,7 @@ import json
 import math
 import re
 import shutil
+import sys
 import xml.etree.ElementTree as ET
 from datetime import datetime
 from pathlib import Path
@@ -29,9 +30,17 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.dates as mdates  # noqa: E402
 import matplotlib.pyplot as plt  # noqa: E402
-from matplotlib.ticker import FuncFormatter, LogLocator, NullFormatter  # noqa: E402
+from matplotlib.ticker import (  # noqa: E402
+    FuncFormatter,
+    LogFormatterMathtext,
+    LogLocator,
+    NullFormatter,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from scripts.paper_units import PER_LB_TO_PER_KG, publication_cost, publication_unit  # noqa: E402
+
 DIAGRAMS = ROOT / "docs/paper/diagram-sources-2026-09-13-h26"
 STUDY = ROOT / "docs/paper/robustness-2026-09-08/decision_robustness.json"
 METHODS = ROOT / "docs/paper/methods-2026-09-09/methods_study.json"
@@ -50,15 +59,15 @@ TEXT = {
         "font": "Arial",
         "share_x": "Share of the selling price (%)",
         "seg_materials": "Materials", "seg_processing": "Processing", "seg_overhead": "Overheads + margin",
-        "total_head": "USD/lb",
-        "c_x": "Selling price (USD per lb, log scale)",
+        "total_head": "USD/kg",
+        "c_x": "Selling price (USD per kg, log scale)",
         "c_comet": "COMET", "c_published": "Baddour et al.", "c_market": "Published market price",
         "c_y": "Deviation from market price (%)",
         "market_ratio_y": "Estimated price / import unit value",
         "market_titles": {"nickel": "Nickel catalysts", "precious": "Precious-metal catalysts", "other": "Other active substances"},
         "market_traded": "Import unit value (= 1)",
         "market_estimate": "Top-ranked candidates at baseline",
-        "unit_lb": "USD/lb",
+        "unit_lb": "USD/kg",
         "metals_base": "Base metals", "metals_precious": "Precious metals", "metal_price": "Price",
         "f3_first": "Baseline candidate", "f3_second": "Alternative candidate",
         "f3_other": "Other candidates", "f3_x": "Frequency of ranking first (%)",
@@ -66,21 +75,21 @@ TEXT = {
                      "Scores ±5", "Scores ±10"],
         "f3_b_x": "Reaction families",
         "f3_c_x": "Cost difference (%)",
-        "usd_lb": "USD/lb",
+        "usd_lb": "USD/kg",
     },
     "ko": {
         "font": "Malgun Gothic",
         "share_x": "판매 단가 대비 비율 (%)",
         "seg_materials": "재료비", "seg_processing": "가공비", "seg_overhead": "간접비와 마진",
-        "total_head": "USD/lb",
-        "c_x": "판매 단가 (USD/lb, 로그 축)",
+        "total_head": "USD/kg",
+        "c_x": "판매 단가 (USD/kg, 로그 축)",
         "c_comet": "COMET", "c_published": "Baddour 등", "c_market": "발표된 시장 가격",
         "c_y": "시장 가격 대비 편차 (%)",
         "market_ratio_y": "추정 가격 / 수입 단가",
         "market_titles": {"nickel": "니켈계 촉매", "precious": "귀금속계 촉매", "other": "그 밖의 활성 물질"},
         "market_traded": "수입 단가 (= 1)",
         "market_estimate": "기준 조건의 1위 후보",
-        "unit_lb": "USD/lb",
+        "unit_lb": "USD/kg",
         "metals_base": "비귀금속", "metals_precious": "귀금속", "metal_price": "가격",
         "f3_first": "기준 조건의 1위", "f3_second": "대안 후보",
         "f3_other": "그 밖의 후보", "f3_x": "1위 빈도 (%)",
@@ -88,7 +97,7 @@ TEXT = {
                      "점수 ±5", "점수 ±10"],
         "f3_b_x": "반응군 수",
         "f3_c_x": "원가 차이 (%)",
-        "usd_lb": "USD/lb",
+        "usd_lb": "USD/kg",
     },
 }
 
@@ -231,7 +240,8 @@ def _structure_panel(fig):
     ax.barh(ys, [r[4] for r in rows], left=[r[2] + r[3] for r in rows], color="#D9DEE1", height=0.74, edgecolor="white", lw=0.25,
             label=L["seg_overhead"])
     for i, row in enumerate(rows):
-        ax.text(104, i, f"{row[1]:,.2f}" if row[1] < 100 else f"{row[1]:,.0f}", va="center", ha="left",
+        cost = publication_cost(row[1], "$/lb")
+        ax.text(104, i, f"{cost:,.2f}" if cost < 100 else f"{cost:,.0f}", va="center", ha="left",
                 fontsize=8.5)
     ax.text(104, len(rows) + 0.35, L["total_head"], va="bottom", ha="left", fontsize=8.5, color=MUTED)
     ax.set_yticks(list(ys))
@@ -413,7 +423,7 @@ def figure3_metal_prices():
         ends = []
         for order, symbol in enumerate(symbols):
             points = series[symbol]["points"]
-            prices = [point["price"] for point in points]
+            prices = [publication_cost(point["price"], series[symbol]["unit"]) for point in points]
             colour = METAL_COLOURS[order]
             ax.plot([datetime.strptime(point["date"], "%Y-%m-%d") for point in points], prices,
                     color=colour, lw=1.05, ls=METAL_STYLES[order], solid_capstyle="round")
@@ -423,12 +433,13 @@ def figure3_metal_prices():
         ax.xaxis.set_major_locator(mdates.YearLocator(2))
         ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
         ax.yaxis.set_major_locator(LogLocator(base=10.0, subs=(1.0, 3.0), numticks=10))
-        ax.yaxis.set_major_formatter(FuncFormatter(lambda value, _p: f"{value:g}"))
+        ax.yaxis.set_major_formatter(LogFormatterMathtext(labelOnlyBase=True) if index == 0
+                                    else FuncFormatter(lambda value, _p: f"{value:g}"))
         ax.yaxis.set_minor_formatter(NullFormatter())
         ax.set_title(title, loc="left", fontsize=9, fontweight="bold", pad=6)
         ax.set_axisbelow(True)
         ax.grid(axis="y", which="major", color="#E6EAEC", lw=0.45)
-        unit = "USD/troy oz" if index == 0 else "USD/lb"
+        unit = "USD/kg"
         ax.set_ylabel(f"{L['metal_price']} ({unit})", fontsize=8.5)
         _clean(ax)
         _label_ends(ax, ends)
@@ -549,7 +560,7 @@ def figure_price_crossovers(study, mechanisms, lang="en"):
         records = families[family]["periods"]["monthly"]["records"]
         values = []
         for i, (slug, label) in enumerate(series):
-            costs = [r["costs"][slug] for r in records]
+            costs = [publication_cost(r["costs"][slug], families[family]["unit"]) for r in records]
             values.extend(costs)
             ax.plot(_crossover_dates(records), costs, color=colors[i], lw=1.45,
                     ls=("-", "--", "-.")[i], label=label)
@@ -558,23 +569,25 @@ def figure_price_crossovers(study, mechanisms, lang="en"):
         ax.set_xlim(datetime(2019, 1, 1), datetime(2026, 7, 1))
         ax.xaxis.set_major_locator(mdates.YearLocator(2))
         ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
-        ax.set_ylabel("Cost (USD/lb)" if lang == "en" else "원가 (USD/lb)", fontsize=10)
+        ax.set_ylabel("Cost (USD/kg)" if lang == "en" else "원가 (USD/kg)", fontsize=10)
         ax.set_title(f"({chr(97 + index)}) {FAMILY_NAMES[lang][family]}", loc="left", fontsize=10.5, pad=10)
         ax.legend(loc="upper left", frameon=False, fontsize=9, handlelength=1.6, labelspacing=0.28,
                   borderpad=0.2)
         _crossover_axis(ax)
     ax = axes.flat[3]
     boundary = mechanisms["ammonia_boundary"]
-    x = [p["Ni"] for p in boundary["points"]]
-    y = [p["Co_threshold"] for p in boundary["points"]]
-    ax.fill_between(x, 5, y, color=ACC, alpha=0.07)
-    ax.fill_between(x, y, 42, color=WARN, alpha=0.07)
+    factor = PER_LB_TO_PER_KG
+    x = [p["Ni"] * factor for p in boundary["points"]]
+    y = [p["Co_threshold"] * factor for p in boundary["points"]]
+    ax.fill_between(x, 5 * factor, y, color=ACC, alpha=0.07)
+    ax.fill_between(x, y, 42 * factor, color=WARN, alpha=0.07)
     ax.plot(x, y, color=INK, lw=1.1)
     monthly = families["ammonia-cracking"]["periods"]["monthly"]["records"]
     for point, row in zip(boundary["observations"], monthly, strict=True):
         color = ACC if row["cost_winner"] == "co-mgo-la2o3" else WARN
-        ax.scatter(point["Ni"], point["Co"], s=12, c=color, alpha=0.65, linewidths=0.25, edgecolors="white")
-    selected = {p["date"]: p for p in boundary["observations"] if p["date"] in ("2025-09", "2025-10")}
+        ax.scatter(point["Ni"] * factor, point["Co"] * factor, s=12, c=color, alpha=0.65, linewidths=0.25, edgecolors="white")
+    selected = {p["date"]: {"Ni": p["Ni"] * factor, "Co": p["Co"] * factor}
+                for p in boundary["observations"] if p["date"] in ("2025-09", "2025-10")}
     for day, point in selected.items():
         ax.scatter(point["Ni"], point["Co"], s=38, marker="D", facecolor="white", edgecolor=INK, lw=0.8, zorder=5)
         ax.annotate(day, (point["Ni"], point["Co"]), xytext=(9, -17 if day == "2025-09" else 8),
@@ -584,10 +597,10 @@ def figure_price_crossovers(study, mechanisms, lang="en"):
                 arrowprops={"arrowstyle": "->", "lw": 0.9, "color": INK})
     ax.text(0.04, 0.90, "Ni/Al$_2$O$_3$", color=WARN, fontsize=10, transform=ax.transAxes)
     ax.text(0.55, 0.08, "Co/Mg–La", color=ACC, fontsize=10, transform=ax.transAxes)
-    ax.set_xlim(4, 16)
-    ax.set_ylim(5, 42)
-    ax.set_xlabel("Ni (USD/lb)", fontsize=10)
-    ax.set_ylabel("Co (USD/lb)", fontsize=10)
+    ax.set_xlim(4 * factor, 16 * factor)
+    ax.set_ylim(5 * factor, 42 * factor)
+    ax.set_xlabel("Ni (USD/kg)", fontsize=10)
+    ax.set_ylabel("Co (USD/kg)", fontsize=10)
     ax.set_title("(d) Ammonia cost boundary" if lang == "en" else "(d) 암모니아 분해 원가 경계",
                  loc="left", fontsize=10.5, pad=10)
     _crossover_axis(ax)
@@ -706,11 +719,12 @@ def draw_crossovers(directory, out, lang):
             for ax, period in zip(axes, ("monthly", "daily"), strict=True):
                 rows = family["periods"][period]["records"]
                 for i, slug in enumerate(family["candidates"]):
-                    ax.plot(_crossover_dates(rows), [r["costs"][slug] for r in rows], lw=1.25,
+                    ax.plot(_crossover_dates(rows), [publication_cost(r["costs"][slug], family["unit"]) for r in rows], lw=1.25,
                             color=(ACC, WARN, "#7A6A8B", GREY)[i], ls=("-", "--", "-.", ":")[i],
                             label=slug)
                 ax.set_yscale("log")
-                ax.set_ylabel(("Cost" if lang == "en" else "원가") + " (" + family["unit"].replace("$", "USD") + ")", fontsize=9.5)
+                unit = publication_unit(family["unit"]).replace("$", "USD")
+                ax.set_ylabel(("Cost" if lang == "en" else "원가") + " (" + unit + ")", fontsize=9.5)
                 ax.set_title(("Monthly" if period == "monthly" else "Daily") if lang == "en" else ("월별" if period == "monthly" else "일별"), fontsize=10)
                 ax.xaxis.set_major_locator(mdates.YearLocator(2) if period == "monthly" else mdates.MonthLocator(bymonth=(1, 5, 9)))
                 ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y" if period == "monthly" else "%b %Y"))
