@@ -26,7 +26,7 @@ COMET stores prices, estimates, and supporting records locally in SQLite. The Fa
 
 In a saved calculation using spot quotations, a 20 wt% Ni/Al₂O₃ catalyst prepared by incipient-wetness impregnation at an order size of 18,143.7<!-- figures-note-2026-09-09/screen_result_ni_al2o3.json:request.order_size_tons --> kg has an estimated selling price of 11.49<!-- figures-note-2026-09-09/screen_result_ni_al2o3.json:step_method.estimated_price_per_lb --> USD/kg. Nickel and processing account for 3.33<!-- figures-note-2026-09-09/screen_result_ni_al2o3.json:materials.components[0].cost_per_lb_cat --> and 3.69<!-- figures-note-2026-09-09/screen_result_ni_al2o3.json:step_method.processing_cost_per_lb --> USD/kg, respectively. Figure 2(b) compares the least expensive candidate in each of 23 thermal reaction families at May 2026 prices, separating materials, processing, and overheads plus margin as shares of selling price. Results can be exported as comma-separated values (CSV), including price-source information and optional Monte Carlo results.
 
-![Figure 2. Cost estimation. (a) Calculation scheme. (b) Cost shares and selling prices, converted to USD/kg. (c) Deviations from published market prices. SCR, selective catalytic reduction.](figures-note-2026-09-09/fig2_cost_model.png)
+![Figure 2. Cost estimation. (a) Calculation scheme. (b) Cost shares and selling prices, converted to USD/kg. (c) COMET and literature estimates relative to market prices reported by Baddour et al.<sup>1</sup> Deviation = 100 × (estimated price − market price)/market price; negative values indicate estimates below market prices. SCR, selective catalytic reduction.](figures-note-2026-09-09/fig2_cost_model.png)
 
 ## Cost estimation and environmental screening
 

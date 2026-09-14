@@ -874,16 +874,16 @@
   </g>
   <g id="legend_2">
    <g id="patch_100">
-    <path d="M 365.016484 474.36603  L 373.516484 474.36603  L 373.516484 468.41603  L 365.016484 468.41603  z " style="fill: #7762a7" />
+    <path d="M 353.205468 474.391265  L 361.705468 474.391265  L 361.705468 468.441265  L 353.205468 468.441265  z " style="fill: #7762a7" />
    </g>
    <g id="text_78">
-    <text style="font-size: 8.5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="377.766484" y="474.36603" transform="rotate(-0 377.766484 474.36603)">COMET</text>
+    <text style="font-size: 8.5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="365.955468" y="474.391265" transform="rotate(-0 365.955468 474.391265)">COMET</text>
    </g>
    <g id="patch_101">
-    <path d="M 420.358124 474.36603  L 428.858124 474.36603  L 428.858124 468.41603  L 420.358124 468.41603  z " style="fill: #d99545" />
+    <path d="M 408.547109 474.391265  L 417.047109 474.391265  L 417.047109 468.441265  L 408.547109 468.441265  z " style="fill: #d99545" />
    </g>
    <g id="text_79">
-    <text style="font-size: 8.5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="433.108124" y="474.36603" transform="rotate(-0 433.108124 474.36603)">Baddour et al.</text>
+    <text style="font-size: 8.5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="421.297109" y="474.391265" transform="rotate(-0 421.297109 474.391265)">Baddour et al. [1]</text>
    </g>
   </g>
  </g>

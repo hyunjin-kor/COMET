@@ -840,16 +840,16 @@
   </g>
   <g id="legend_2">
    <g id="patch_100">
-    <path d="M 375.915078 474.735249  L 384.415078 474.735249  L 384.415078 468.785249  L 375.915078 468.785249  z " style="fill: #7762a7" />
+    <path d="M 363.065468 474.735249  L 371.565468 474.735249  L 371.565468 468.785249  L 363.065468 468.785249  z " style="fill: #7762a7" />
    </g>
    <g id="text_78">
-    <text style="font-size: 8.5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="388.665078" y="474.735249" transform="rotate(-0 388.665078 474.735249)">COMET</text>
+    <text style="font-size: 8.5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="375.815468" y="474.735249" transform="rotate(-0 375.815468 474.735249)">COMET</text>
    </g>
    <g id="patch_101">
-    <path d="M 429.166249 474.735249  L 437.666249 474.735249  L 437.666249 468.785249  L 429.166249 468.785249  z " style="fill: #d99545" />
+    <path d="M 416.31664 474.735249  L 424.81664 474.735249  L 424.81664 468.785249  L 416.31664 468.785249  z " style="fill: #d99545" />
    </g>
    <g id="text_79">
-    <text style="font-size: 8.5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="441.916249" y="474.735249" transform="rotate(-0 441.916249 474.735249)">Baddour 등</text>
+    <text style="font-size: 8.5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="429.06664" y="474.735249" transform="rotate(-0 429.06664 474.735249)">Baddour 등 [1]</text>
    </g>
   </g>
  </g>
