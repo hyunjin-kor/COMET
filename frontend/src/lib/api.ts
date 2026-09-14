@@ -1118,6 +1118,7 @@ export interface DecisionComponent {
 }
 
 export interface DecisionCandidate {
+  manufacturing_evidence: import('./manufacturing').ManufacturingEvidence;
   slug: string;
   title: string;
   archetype: string;
@@ -1199,6 +1200,12 @@ export interface DecisionBenchmark {
 }
 
 export const fetchBenchmarkFamilies = () => request<{ families: BenchmarkFamilySummary[] }>('/decision/benchmarks');
+
+export const fetchManufacturingLiterature = () => request<{
+  review_date: string;
+  profiles: import('./manufacturing').LiteratureProtocol[];
+  candidates: import('./manufacturing').ManufacturingEvidence[];
+}>('/decision/manufacturing-literature');
 
 export const fetchDecisionBenchmark = (
   family: string,

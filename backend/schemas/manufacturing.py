@@ -66,9 +66,17 @@ class ManufacturingOperation(ProtocolModel):
 
 class ManufacturingProtocol(ProtocolModel):
     mode: Literal["record_only", "batch_cost"] = "record_only"
+    product_basis: Literal["catalyst_powder", "electrode"] = "catalyst_powder"
+    source_record_id: str = Field(default="", max_length=150)
     finished_batch_mass_kg: float | None = Field(default=None, gt=0)
     electricity_usd_kwh: float | None = Field(default=None, ge=0)
     labor_usd_h: float | None = Field(default=None, ge=0)
     selling_margin_fraction: float = Field(default=0, ge=0, lt=1)
     source_note: str = Field(default="", max_length=4000)
     operations: list[ManufacturingOperation] = Field(min_length=1, max_length=100)
+
+    @model_validator(mode="after")
+    def powder_cost_basis(self):
+        if self.mode == "batch_cost" and self.product_basis != "catalyst_powder":
+            raise ValueError("Electrode preparation records cannot use dry-powder batch costing")
+        return self

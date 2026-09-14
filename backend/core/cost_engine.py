@@ -177,8 +177,8 @@ def estimate_catalyst_cost(
     batch_mode = False
     if manufacturing_protocol is not None:
         protocol = ManufacturingProtocol.model_validate(manufacturing_protocol)
-        if catalyst_domain != "thermal":
-            raise ValueError("Manufacturing protocols currently apply to thermal catalyst powder")
+        if catalyst_domain != "thermal" and protocol.mode == "batch_cost":
+            raise ValueError("Batch manufacturing costs currently apply to thermal catalyst powder")
         batch_mode = protocol.mode == "batch_cost"
         if batch_mode and production_rate_ton_per_day is not None:
             raise ValueError("Batch costing cannot also use the Step Method production-rate override")

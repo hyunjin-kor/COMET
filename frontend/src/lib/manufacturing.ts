@@ -41,12 +41,49 @@ export interface ManufacturingOperation {
 
 export interface ManufacturingProtocol {
   mode: 'record_only' | 'batch_cost';
+  product_basis?: 'catalyst_powder' | 'electrode';
+  source_record_id?: string;
   finished_batch_mass_kg?: number | null;
   electricity_usd_kwh?: number | null;
   labor_usd_h?: number | null;
   selling_margin_fraction?: number;
   source_note?: string;
   operations: ManufacturingOperation[];
+}
+
+export interface LiteratureProtocol {
+  id: string;
+  doi: string;
+  title: string;
+  url: string;
+  sample: string;
+  locator: string;
+  boundary: 'catalyst_powder' | 'electrode';
+  limitations: string[];
+  operations: ManufacturingOperation[];
+  review_date: string;
+  verification: string;
+}
+
+export interface ManufacturingEvidence {
+  family: string;
+  slug: string;
+  title: string;
+  status: 'screening_only' | 'source_mismatch' | 'variant_available';
+  notes: string[];
+  profile_ids: string[];
+  profiles: LiteratureProtocol[];
+  doi_count: number;
+  crossref_verified_count: number;
+  review_date: string;
+}
+
+export function adaptLiteratureProtocol(profile: LiteratureProtocol): ManufacturingProtocol {
+  return {
+    mode: 'record_only', product_basis: profile.boundary, source_record_id: profile.id,
+    source_note: `${profile.sample}; ${profile.url}; ${profile.locator}. User adaptation: review composition, precursors and process boundary before costing. ${profile.limitations.join(' ')}`,
+    operations: structuredClone(profile.operations).map((op) => ({ ...op, notes: `${op.notes ?? ''} [${profile.locator}; ${profile.doi}]` })),
+  };
 }
 
 export interface ManufacturingReport {

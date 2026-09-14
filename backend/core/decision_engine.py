@@ -10,6 +10,7 @@ from sqlmodel import Session, select
 
 from backend.core.constants import LB_PER_KG, TROY_OZ_PER_LB
 from backend.core.cost_engine import estimate_catalyst_cost
+from backend.core.manufacturing_library import candidate_manufacturing_evidence, reviewed_citation
 from backend.core.material_pricing import resolve_electrode_materials
 from backend.core.price_evidence import build_fixed_evidence, describe_price_evidence
 from backend.core.price_fetcher import get_reference_prices
@@ -321,7 +322,7 @@ def evaluate_benchmark_family(
 
     route_map = {item["id"]: item for item in catalog["route_templates"]}
     quote_map = {item["id"]: item for item in catalog["catalog_quotes"]}
-    citation_map = {item["id"]: item for item in catalog["citations"]}
+    citation_map = {item["id"]: reviewed_citation(item) for item in catalog["citations"]}
     latest_prices = prices if prices is not None else _latest_price_map(session, basis)
     family_domain = catalog.get("catalyst_domain", "thermal")
     family_application = catalog.get("application_family", "general")
@@ -398,6 +399,7 @@ def evaluate_benchmark_family(
             economics_basis_label = "Electrode layer"
 
         candidate_result = {
+            "manufacturing_evidence": candidate_manufacturing_evidence(family, candidate["slug"]),
             "slug": candidate["slug"],
             "title": candidate["title"],
             "archetype": candidate["archetype"],
@@ -487,5 +489,5 @@ def evaluate_benchmark_family(
         "price_basis_updated_at": latest_update,
         "winner": candidates[0] if candidates else None,
         "candidates": candidates,
-        "citations": catalog["citations"],
+        "citations": list(citation_map.values()),
     }

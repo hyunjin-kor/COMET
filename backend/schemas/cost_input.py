@@ -144,8 +144,8 @@ class CostCalculationRequest(BaseModel):
     @model_validator(mode="after")
     def validate_payload(self) -> CostCalculationRequest:
         if self.manufacturing_protocol is not None:
-            if self.catalyst_domain != "thermal":
-                raise ValueError("Manufacturing protocols currently apply to thermal catalyst powder")
+            if self.catalyst_domain != "thermal" and self.manufacturing_protocol.mode == "batch_cost":
+                raise ValueError("Batch manufacturing costs currently apply to thermal catalyst powder")
             if self.manufacturing_protocol.mode == "batch_cost" and self.production_rate_ton_per_day is not None:
                 raise ValueError("Batch costing cannot also use the Step Method production-rate override")
         if self.production_rate_ton_per_day is not None and not self.production_rate_note.strip():

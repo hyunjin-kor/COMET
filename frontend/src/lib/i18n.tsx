@@ -559,7 +559,7 @@ const KO: Record<string, string> = {
   'Choose family and ranking logic.': '반응군과 순위 기준을 선택하세요.',
   'Scan the current candidates.': '현재 후보들을 살펴보세요.',
   'Read the selected route deeply.': '선택한 경로를 자세히 봅니다.',
-  'Screen published routes before you edit the cost estimate.': '원가 계산을 편집하기 전에 발표된 제조 경로를 살펴보세요.',
+  'Review screening formulations and their preparation evidence before estimating cost.': '원가를 계산하기 전에 스크리닝 조성과 제조 근거를 검토하세요.',
   'Reaction family': '반응군',
   'Ranking profile': '순위 기준',
   'Balanced': '균형',
@@ -677,7 +677,8 @@ const KO: Record<string, string> = {
   'Pre-treatment': '전처리',
   'Synthesis / coating': '합성 / 코팅',
   'Post-treatment': '후처리',
-  'Loaded reference baseline': '불러온 참조 기준',
+  'Loaded screening assumptions': '불러온 스크리닝 가정',
+  'Selected supplier materials may differ from the screening catalyst. Check their composition and source before treating the estimate as a cost for that specimen.': '선택된 공급사 재료가 스크리닝 촉매와 다를 수 있습니다. 해당 시료의 원가로 해석하기 전에 조성과 출처를 확인하세요.',
 
   // Calculator - preparation method section
   'Templates add pretreatment, coating, drying, lamination, and break-in steps. Adjust them if the lab route differs.': '템플릿은 전처리, 코팅, 건조, 적층, 초기 활성화 단계를 추가합니다. 실험실 절차와 다르면 수정하세요.',
@@ -933,6 +934,7 @@ const KO: Record<string, string> = {
   'Current weighting logic for ranking.': '현재 순위 가중치 기준입니다.',
   'QA + activation + route overhead': '품질관리·활성화·경로 간접비',
   'Representative literature composition': '문헌 대표 조성',
+  'Composition assumed for screening': '스크리닝용 가정 조성',
   'Engineering estimate': '공학적 추정',
   'Market price plus vendor quote': '시장가 + 공급사 견적',
   'Vendor quotes': '공급사 견적',

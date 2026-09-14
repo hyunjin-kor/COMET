@@ -1,5 +1,6 @@
 import { ScientificText } from '../components/shared/ScientificText';
 import ManufacturingProtocolFields from '../components/ManufacturingProtocolFields';
+import ManufacturingLiterature from '../components/ManufacturingLiterature';
 import type { ManufacturingProtocol } from '../lib/manufacturing';
 import { useAuth } from '../lib/auth';
 import { formatScientificText } from '../lib/scientific-text';
@@ -902,6 +903,7 @@ export default function Calculator() {
   function handleCatalystDomainChange(nextDomain: 'thermal' | 'electrocatalyst') {
     if (nextDomain === catalystDomain) return;
     setCatalystDomain(nextDomain);
+    if (nextDomain === 'electrocatalyst') setManufacturingProtocol((previous) => previous ? { ...previous, mode: 'record_only' } : undefined);
     setError('');
 
     if (nextDomain === 'thermal') {
@@ -1072,6 +1074,7 @@ export default function Calculator() {
       const input = detail.input as unknown as CostInput;
       setProductionRate(input.production_rate_ton_per_day ?? '');
       setProductionRateNote(input.production_rate_note ?? '');
+      setManufacturingProtocol(input.manufacturing_protocol);
       setConsumables(input.consumables ?? []);
       setIncludeSpentValue(input.include_spent_value ?? false);
       setReactorType(input.reactor_type === 'slurry' ? 'slurry' : 'fixed');
@@ -1129,7 +1132,6 @@ export default function Calculator() {
         : undefined;
       setPreparation({ steps: input.steps ?? [], basis: savedCost?.steps_fitted ?? input.steps ?? [], substitutions: savedCost?.substitutions });
       setOrderSize(input.order_size_tons ?? 20);
-      setManufacturingProtocol(input.manufacturing_protocol);
       setLoadedSavedName(summary.name);
     } catch {
       setLoadedSavedName(null);
@@ -1173,6 +1175,7 @@ export default function Calculator() {
       if (catalystDomain === 'electrocatalyst') {
         input = {
           catalyst_domain: 'electrocatalyst',
+          manufacturing_protocol: manufacturingProtocol ? { ...manufacturingProtocol, mode: 'record_only' } : undefined,
           application_family: applicationFamily,
           template_id: electrocatalystConfig.templateId || undefined,
           order_size_tons: orderSize,
@@ -1340,6 +1343,9 @@ export default function Calculator() {
               <p className="mt-2 text-xs leading-6 text-slate-600">
                 {t('Defaults prefer higher-confidence literature or sourced vendor rows when they exist.')}
               </p>
+              {activeBenchmark && <p className="mt-2 text-sm leading-6 text-amber-800">
+                {t('Selected supplier materials may differ from the screening catalyst. Check their composition and source before treating the estimate as a cost for that specimen.')}
+              </p>}
             </div>
             <div className="rounded-[24px] border border-slate-900/8 bg-white/72 p-4">
               <div className="cp-subtle-label">{t('Application family')}</div>
@@ -1878,14 +1884,15 @@ export default function Calculator() {
           <p className="text-xs text-slate-500">{t('Set the production scale, choose a method and check its operations.')}</p>
         </div>
         <div className="mt-5 space-y-5">
-        {catalystDomain === 'thermal' && <ManufacturingProtocolFields value={manufacturingProtocol} onChange={setManufacturingProtocol} />}
+        {activeBenchmark?.manufacturing_evidence && <ManufacturingLiterature evidence={activeBenchmark.manufacturing_evidence} onSelect={setManufacturingProtocol} />}
+        <ManufacturingProtocolFields value={manufacturingProtocol} onChange={setManufacturingProtocol} allowBatchCost={catalystDomain === 'thermal'} />
         {batchCostMode && <label className="block text-sm">{lang === 'ko' ? '비용 합계의 주문량 (kg)' : 'Order mass for cost totals (kg)'}<input type="number" min="0.000001" step="any" className="input-base mt-2 w-full" value={Number((orderSize * 2000 / LB_PER_KG).toPrecision(12))}
           onChange={(e) => setOrderSize(Number(e.target.value) * LB_PER_KG / 2000)} /></label>}
         {batchCostMode && <button type="button" className="cp-button-secondary px-3 py-2 text-xs" disabled={!manufacturingProtocol?.finished_batch_mass_kg} onClick={() => setOrderSize(manufacturingProtocol!.finished_batch_mass_kg! * LB_PER_KG / 2000)}>{lang === 'ko' ? '주문량을 1배치 수득량으로 설정' : 'Set order mass to one batch'}</button>}
         {!batchCostMode && <>
         {activeBenchmark ? (
           <div className="rounded-[24px] border border-emerald-200 bg-emerald-50/80 px-4 py-4 text-sm text-emerald-900">
-            <div className="cp-subtle-label !text-emerald-700">{t('Loaded reference baseline')}</div>
+            <div className="cp-subtle-label !text-emerald-700">{t('Loaded screening assumptions')}</div>
             <div className="mt-2 font-semibold"><ScientificText text={activeBenchmark.route.name} /></div>
             <div className="mt-2 leading-6"><ScientificText text={activeBenchmark.screening_summary} /></div>
             <div className="mt-3 flex flex-wrap gap-2">

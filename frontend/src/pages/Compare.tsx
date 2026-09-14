@@ -1,4 +1,5 @@
 import { ScientificText } from '../components/shared/ScientificText';
+import ManufacturingLiterature from '../components/ManufacturingLiterature';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Skeleton } from '../components/shared/Skeleton';
@@ -58,7 +59,7 @@ function applicationFamilyLabel(value: string) {
 
 function screeningBasisLabel(value: string) {
   const labels: Record<string, string> = {
-    literature_architecture_proxy: 'Representative literature composition',
+    literature_architecture_proxy: 'Composition assumed for screening',
     engineering_proxy: 'Engineering estimate',
     market_plus_vendor_anchor: 'Market price plus vendor quote',
     vendor_stack_anchor: 'Vendor quotes',
@@ -80,6 +81,7 @@ function toBenchmarkPreset(candidate: DecisionCandidate): CalculatorBenchmarkPre
     route: candidate.route,
     scores: candidate.scores,
     decision_notes: candidate.decision_notes,
+    manufacturing_evidence: candidate.manufacturing_evidence,
   };
 }
 
@@ -259,7 +261,7 @@ export default function Compare() {
           <div className="grid gap-4">
             <div className="surface-ink overflow-hidden p-5 sm:p-6">
               <h1 className="font-display text-[clamp(1.4rem,2vw,1.8rem)] leading-[1.2] text-white">{t('Literature Benchmarks')}</h1>
-              <p className="mt-2 text-sm text-white/60">{t('Screen published routes before you edit the cost estimate.')}</p>
+              <p className="mt-2 text-sm text-white/60">{t('Review screening formulations and their preparation evidence before estimating cost.')}</p>
               <div className="mt-3 flex flex-wrap gap-2">
                 {activeFamily ? <span className="cp-chip-dark"><ScientificText text={activeFamily.title} /></span> : null}
                 {benchmark.reaction ? <span className="cp-chip-dark"><ScientificText text={benchmark.reaction} /></span> : null}
@@ -306,6 +308,7 @@ export default function Compare() {
                 </div>
                 <div className="mt-3 text-xs leading-6 text-slate-600">
                   {t('Profiles change weighting only. Candidate records and source links stay fixed.')}
+                  <p className="mt-2 text-amber-900">{lang === 'ko' ? '순위는 입력한 조성·제조 가정에 따른 스크리닝 결과입니다. 문헌 제조법과 시료의 일치 여부는 후보 상세에서 따로 확인하세요.' : 'Rankings use assumed formulations and processes. Check specimen agreement and preparation evidence separately in each candidate detail.'}</p>
                 </div>
               </div>
             </div>
@@ -345,18 +348,19 @@ export default function Compare() {
             <MetricTile label={t('Route extras')} value={formatPrice(toDisplay(activeCandidate.summary.route_extra_cost_per_lb))} detail={t('QA + activation + route overhead')} />
           </div>
           <div className="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-            <MetricTile label={t('Key evidence')} value={String(activeCandidate.literature_basis.length)} detail={t('Direct links supporting the selected route.')} />
+            <MetricTile label={t('Key evidence')} value={String(activeCandidate.literature_basis.length)} detail={lang === 'ko' ? '반응·성능·경로 관련 문헌 수이며, 제조법 검증 수가 아닙니다.' : 'References on reaction, performance or route; not a count of verified preparations.'} />
             <MetricTile label={t('Literature bank')} value={String(benchmark.citations.length)} detail={t('Higher-level references visible across the reaction family.')} />
             <MetricTile label={t('Composition basis')} value={t(screeningBasisLabel(activeCandidate.screening_basis))} detail={t('How this route is framed in the benchmark set.')} />
             <MetricTile label={t('Ranking profile')} value={t(benchmark.decision_profile.label)} detail={t('Current weighting logic for ranking.')} />
           </div>
+          <div className="mt-4"><ManufacturingLiterature evidence={activeCandidate.manufacturing_evidence} /></div>
           <div className="mt-4 grid gap-4 xl:grid-cols-[minmax(0,1.02fr)_minmax(320px,0.98fr)]">
             <div className="space-y-4">
               <div className="surface-ghost p-4">
-                <div className="cp-subtle-label">{t('Preparation method')}</div>
+                <div className="cp-subtle-label">{lang === 'ko' ? '스크리닝 제조 가정' : 'Manufacturing assumptions for screening'}</div>
                 <div className="mt-2 cp-heading-sm"><ScientificText text={activeCandidate.route.name} /></div>
                 <div className="mt-2 text-sm leading-7 text-slate-600"><ScientificText text={activeCandidate.route.route_note} /></div>
-                <div className="mt-3 flex flex-wrap gap-2"><span className="cp-chip"><ScientificText text={activeCandidate.route.manufacturing_mode} /></span><span className="cp-chip">{activeCandidate.summary.temperature_window_c[0]}-{activeCandidate.summary.temperature_window_c[1]} °C</span><span className="cp-chip"><ScientificText text={lang === 'ko' ? t(activeCandidate.summary.scale) : `${activeCandidate.summary.scale} scale`} /></span></div>
+                <div className="mt-3 flex flex-wrap gap-2"><span className="cp-chip"><ScientificText text={activeCandidate.route.manufacturing_mode} /></span><span className="cp-chip">{lang === 'ko' ? '반응 온도 범위' : 'Reaction temperature range'}: {activeCandidate.summary.temperature_window_c[0]}–{activeCandidate.summary.temperature_window_c[1]} °C</span><span className="cp-chip"><ScientificText text={lang === 'ko' ? t(activeCandidate.summary.scale) : `${activeCandidate.summary.scale} scale`} /></span></div>
                 <div className="mt-4 grid gap-3 md:grid-cols-3">{([['Preprocess', activeCandidate.route.preprocess], ['Synthesis', activeCandidate.route.synthesis], ['Postprocess', activeCandidate.route.postprocess]] as Array<[string, string[]]>).map(([label, items]) => <div key={label} className="rounded-[22px] border border-slate-900/8 bg-white/64 p-3"><div className="cp-subtle-label">{t(label)}</div><div className="mt-3 space-y-2">{items.map((item) => <div key={item} className="text-sm leading-6 text-slate-700"><ScientificText text={item} /></div>)}</div></div>)}</div>
               </div>
               <div className="surface-ghost p-4">

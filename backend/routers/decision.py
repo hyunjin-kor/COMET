@@ -6,9 +6,16 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import Session
 
 from backend.core.decision_engine import evaluate_benchmark_family, list_benchmark_families
+from backend.core.manufacturing_library import manufacturing_library
 from backend.database import get_session
 
 router = APIRouter(prefix="/api/decision", tags=["decision"])
+
+
+@router.get("/manufacturing-literature")
+def get_manufacturing_literature():
+    """Return reviewed preparation variants and unresolved catalogue mappings."""
+    return manufacturing_library()
 
 
 @router.get("/benchmarks")

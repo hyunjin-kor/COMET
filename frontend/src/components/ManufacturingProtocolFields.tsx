@@ -1,4 +1,5 @@
 import { useLang } from '../lib/i18n';
+import ManufacturingLiterature from './ManufacturingLiterature';
 import type { ManufacturingOperation, ManufacturingProtocol, TemperatureSegment } from '../lib/manufacturing';
 
 function NumberField({ label, value, onChange, min = 0 }: {
@@ -14,8 +15,9 @@ function TextField({ label, value, onChange }: { label: string; value?: string; 
     onChange={(e) => onChange(e.target.value)} /></label>;
 }
 
-export default function ManufacturingProtocolFields({ value, onChange }: {
+export default function ManufacturingProtocolFields({ value, onChange, allowBatchCost = true }: {
   value?: ManufacturingProtocol; onChange: (value: ManufacturingProtocol | undefined) => void;
+  allowBatchCost?: boolean;
 }) {
   const { lang } = useLang();
   const l = (en: string, ko: string) => lang === 'ko' ? ko : en;
@@ -35,17 +37,23 @@ export default function ManufacturingProtocolFields({ value, onChange }: {
       {l('Detailed manufacturing protocol', '상세 제조 조건')}</label>
     <p className="mt-2 text-sm leading-6 text-slate-600">{l('Record each operation in order, including repeated impregnation, drying, calcination and reduction. Blank values mean unknown, not zero.',
       '함침·건조·소성·환원을 반복하는 경우도 각 단계를 순서대로 기록합니다. 빈칸은 0이 아닌 미확인 값입니다.')}</p>
+    <details className="mt-3"><summary className="cursor-pointer text-sm font-medium text-teal-800">{l('Choose a literature preparation', '문헌 제조법에서 가져오기')}</summary>
+      <div className="mt-3"><ManufacturingLiterature onSelect={onChange} /></div></details>
     {value && <div className="mt-4 space-y-4">
       <label className="block text-sm font-medium">{l('Calculation basis', '계산 방식')}<select className="input-base mt-2 w-full" value={value.mode}
         onChange={(e) => patch({ mode: e.target.value as ManufacturingProtocol['mode'] })}>
-        <option value="record_only">{l('Record conditions; use Step Method cost', '조건 기록 · Step Method 원가 사용')}</option>
-        <option value="batch_cost">{l('Calculate cost from batch operating inputs', '배치 운전 조건으로 원가 계산')}</option>
+        <option value="record_only">{l('Record conditions; retain selected cost model', '조건 기록 · 선택한 원가 모델 유지')}</option>
+        <option value="batch_cost" disabled={!allowBatchCost || value.product_basis === 'electrode'}>{l('Calculate cost from batch operating inputs', '배치 운전 조건으로 원가 계산')}</option>
       </select></label>
+      <label className="block text-sm font-medium">{l('Product boundary', '제조 대상')}<select className="input-base mt-2 w-full" value={value.product_basis ?? 'catalyst_powder'} onChange={(e) => patch({ product_basis: e.target.value as ManufacturingProtocol['product_basis'], mode: 'record_only' })}>
+        <option value="catalyst_powder">{l('Catalyst powder', '촉매 분말')}</option><option value="electrode">{l('Electrode', '전극')}</option>
+      </select></label>
+      {(!allowBatchCost || value.product_basis === 'electrode') && <p className="text-sm text-amber-900">{l('Electrocatalyst records are stored alongside the area-based estimate. Powder synthesis costs are not added to purchased catalyst or electrode assembly costs.', '전기촉매 제조 기록은 면적 기준 견적과 함께 저장됩니다. 구매 촉매나 전극 제조비에 분말 합성비를 중복 가산하지 않습니다.')}</p>}
       <p className="text-xs leading-6 text-slate-600">{value.mode === 'batch_cost'
         ? l('Batch costs replace empirical processing rates. Enter actual finished dry mass and operating costs at this batch scale. Order totals repeat identical batch costs linearly; this is not an industrial scale-up prediction.',
             '배치 비용이 경험식 가공비를 대체합니다. 해당 배치의 최종 건조 수득량과 운전 비용을 입력하세요. 주문량 합계는 같은 배치 비용의 선형 반복이며 산업 규모 확대 예측은 아닙니다.')
-        : l('Conditions are saved, but do not change the Step Method headline price. Switch to batch costing once operating inputs are available.',
-            '조건은 저장되지만 Step Method 가격을 바꾸지는 않습니다. 운전 자료가 준비되면 배치 원가 계산으로 전환하세요.')}</p>
+        : l('Conditions are saved without changing the selected cost model. Powder batch costing requires complete operating inputs; electrode preparations remain records.',
+            '선택한 원가 모델을 유지하면서 조건을 저장합니다. 분말 배치 원가는 운전 자료를 모두 입력해야 하며, 전극 제조법은 기록만 지원합니다.')}</p>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <NumberField label={l('Finished dry batch mass (kg)', '최종 건조 수득량 (kg/배치)')} value={value.finished_batch_mass_kg} onChange={(v) => patch({ finished_batch_mass_kg: v })} />
         <NumberField label={l('Electricity tariff (USD/kWh)', '전력 단가 (USD/kWh)')} value={value.electricity_usd_kwh} onChange={(v) => patch({ electricity_usd_kwh: v })} />

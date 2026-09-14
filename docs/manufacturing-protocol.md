@@ -1,10 +1,42 @@
 # Detailed catalyst manufacturing protocols
 
-The thermal calculator's **Preparation Method → Detailed manufacturing protocol**
+The calculator's **Preparation Method → Detailed manufacturing protocol**
 records an ordered laboratory or production protocol. Operations can be repeated,
 duplicated, reordered and named independently, including successive impregnation,
 evaporation, drying, calcination, reduction and washing treatments. No synthesis
 conditions are inferred from a catalyst name or a literature-template label.
+
+## Literature preparations
+
+**Choose a literature preparation** opens the named-specimen library. Each record
+includes its primary source, verified DOI, section locator, ordered operations and
+unresolved inputs. Selecting it creates an editable `record_only` protocol; it does
+not replace composition, precursor purchases or headline costs. The source record ID
+and citation travel with saved inputs and CSV exports. Edits are user adaptations,
+not new source-verified conditions.
+
+The [preparation evidence supplement](paper/manufacturing-literature-2026-09-14.md)
+documents the audit of all 116 candidates and 34 generic templates. It separates
+source/formulation discrepancies, available source-specific variants, and unverified
+preparations. A DOI check establishes bibliographic identity; it does not verify a
+recipe or its manufacturing cost. Reaction-temperature windows in candidate cards
+are labeled as reaction conditions and must not be copied into synthesis fields.
+
+Unreported values remain blank. A reported range or “overnight” stays in source
+notes; nominal loading and precursor molar ratios do not become measured mass
+fractions. Supplied catalysts and characterization treatments do not disclose
+manufacturing. Powder manufacture, activation and electrode assembly must be
+reviewed separately before defining the delivered-product boundary.
+
+Both thermal and electrochemical cases can retain preparation records. Only thermal
+powder cases support the optional detailed batch-cost model. Electrode records cannot
+use a powder kg denominator, even when all numerical fields have been filled.
+The existing electrode area-cost model remains separate.
+
+Curated facts are maintained in `backend/data/manufacturing_literature.json`.
+After updating that source, run `python scripts/build_manufacturing_literature_review.py`
+to regenerate the supplement and its count/hash record; `--check` detects drift.
+Source article PDFs and private author attachments are not redistributed.
 
 Each operation can record equipment, atmosphere, absolute pressure, stirring speed,
 pH, solvent volume, addition details and source notes. A temperature program stores

@@ -12,6 +12,8 @@ from backend.schemas.manufacturing import ManufacturingProtocol
 
 def evaluate_protocol(protocol: ManufacturingProtocol) -> dict:
     missing: list[str] = []
+    if protocol.product_basis == "electrode":
+        missing.append("Electrode preparation is record-only; dry-powder batch costing is not applicable")
 
     def need(value, label):
         if value is None:

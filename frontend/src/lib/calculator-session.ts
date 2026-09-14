@@ -71,7 +71,7 @@ export interface CalculatorResultSnapshot {
 export type CalculatorBenchmarkPreset = Pick<
   DecisionCandidate,
   'slug' | 'title' | 'archetype' | 'screening_basis' | 'screening_summary' | 'catalyst_domain' | 'application_family' | 'route' | 'scores' | 'decision_notes'
->;
+> & Partial<Pick<DecisionCandidate, 'manufacturing_evidence'>>;
 
 const DRAFT_KEY = 'comet_calculator_draft';
 const RESULT_KEY = 'comet_calculator_result';
