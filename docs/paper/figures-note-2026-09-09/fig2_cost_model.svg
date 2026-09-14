@@ -854,22 +854,22 @@
   </g>
   <g id="legend_1">
    <g id="patch_97">
-    <path d="M 170.644094 202.348952  L 179.144094 202.348952  L 179.144094 196.398952  L 170.644094 196.398952  z " style="fill: #1b6f78" />
+    <path d="M 170.644094 202.240046  L 179.144094 202.240046  L 179.144094 196.290046  L 170.644094 196.290046  z " style="fill: #1b6f78" />
    </g>
    <g id="text_75">
-    <text style="font-size: 8.5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="182.544094" y="202.348952" transform="rotate(-0 182.544094 202.348952)">Materials</text>
+    <text style="font-size: 8.5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="182.544094" y="202.240046" transform="rotate(-0 182.544094 202.240046)">Materials</text>
    </g>
    <g id="patch_98">
-    <path d="M 223.823548 202.348952  L 232.323548 202.348952  L 232.323548 196.398952  L 223.823548 196.398952  z " style="fill: #6fa8ae; stroke: #ffffff; stroke-width: 0.5; stroke-linejoin: miter" />
+    <path d="M 223.823548 202.240046  L 232.323548 202.240046  L 232.323548 196.290046  L 223.823548 196.290046  z " style="fill: #6fa8ae; stroke: #ffffff; stroke-width: 0.5; stroke-linejoin: miter" />
    </g>
    <g id="text_76">
-    <text style="font-size: 8.5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="235.723548" y="202.348952" transform="rotate(-0 235.723548 202.348952)">Processing</text>
+    <text style="font-size: 8.5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="235.723548" y="202.240046" transform="rotate(-0 235.723548 202.240046)">Processing</text>
    </g>
    <g id="patch_99">
-    <path d="M 284.569329 202.348952  L 293.069329 202.348952  L 293.069329 196.398952  L 284.569329 196.398952  z " style="fill: #d9dee1; stroke: #ffffff; stroke-width: 0.5; stroke-linejoin: miter" />
+    <path d="M 284.569329 202.240046  L 293.069329 202.240046  L 293.069329 196.290046  L 284.569329 196.290046  z " style="fill: #d9dee1; stroke: #ffffff; stroke-width: 0.5; stroke-linejoin: miter" />
    </g>
    <g id="text_77">
-    <text style="font-size: 8.5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="296.469329" y="202.348952" transform="rotate(-0 296.469329 202.348952)">Overheads + margin</text>
+    <text style="font-size: 8.5px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="296.469329" y="202.240046" transform="rotate(-0 296.469329 202.240046)">Other costs</text>
    </g>
   </g>
   <g id="legend_2">

@@ -835,7 +835,7 @@
     <path d="M 259.044094 202.609265  L 267.544094 202.609265  L 267.544094 196.659265  L 259.044094 196.659265  z " style="fill: #d9dee1; stroke: #ffffff; stroke-width: 0.5; stroke-linejoin: miter" />
    </g>
    <g id="text_77">
-    <text style="font-size: 8.5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="270.944094" y="202.609265" transform="rotate(-0 270.944094 202.609265)">간접비와 마진</text>
+    <text style="font-size: 8.5px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="270.944094" y="202.609265" transform="rotate(-0 270.944094 202.609265)">기타 비용</text>
    </g>
   </g>
   <g id="legend_2">
