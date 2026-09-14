@@ -262,13 +262,14 @@ def _structure_panel(fig):
 def _validation_panel(fig):
     """Three aligned paired comparisons on the same market-deviation scale."""
     cases = json.loads(VALIDATION.read_text(encoding="utf-8"))
+    comparison_colors = ("#7762A7", "#D99545")
     for index, case in enumerate(cases):
         ax = fig.add_axes([(14 + index * 59) / 178, 13 / 207, 43 / 178, 21 / 207])
         market = case["market"]["market_price_per_lb"]
         estimate = next(r for r in case["rows"] if r["key"] == "estimated_price_per_lb")
         ours = case.get("with_published_rate", {}).get("estimated_price_per_lb", estimate["comet"])
         values = [100 * (ours - market) / market, 100 * (estimate["published"] - market) / market]
-        for y, value, color, label in zip((1, 0), values, (ACC, GREY),
+        for y, value, color, label in zip((1, 0), values, comparison_colors,
                                           (L["c_comet"], L["c_published"]), strict=True):
             ax.barh(y, value, height=0.52, color=color, label=label)
             ax.text(value - 0.65, y, f"{value:.1f}", ha="right", va="center", fontsize=8.5)
