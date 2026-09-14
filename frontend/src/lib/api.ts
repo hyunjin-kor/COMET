@@ -187,6 +187,7 @@ export interface ElectrodeCostInput {
 }
 
 export interface CostInput {
+  manufacturing_protocol?: import('./manufacturing').ManufacturingProtocol;
   components?: ComponentInput[];
   steps: string[];
   catalyst_domain?: Extract<CatalystDomain, 'thermal' | 'electrocatalyst'>;
@@ -220,6 +221,7 @@ export interface ComponentBreakdown {
 }
 
 export interface CostResult {
+  manufacturing?: import('./manufacturing').ManufacturingReport;
   purchase_evidence?: Array<{ name: string; role: string; price_per_lb: number; evidence: PurchaseEvidence; verification: string }>;
   warnings?: string[];
   input_summary: Record<string, unknown>;
@@ -1027,6 +1029,7 @@ export const refreshPrices = (source?: 'yahoo') => {
 
 export interface EstimateRangeResult {
   fixed_recipe_assumptions?: string;
+  fixed_manufacturing_assumptions?: string;
   mean: number;
   median: number;
   std: number;

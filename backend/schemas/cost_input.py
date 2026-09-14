@@ -9,6 +9,7 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 from backend.core.material_pricing import mass_price_to_per_lb
 from backend.core.price_escalation import latest_index_year
 from backend.schemas.cost_evidence import PurchaseEvidence
+from backend.schemas.manufacturing import ManufacturingProtocol
 from backend.schemas.recipe_input import ConsumableInput, PrecursorConsumption
 
 PriceUnit = Literal["$/lb", "$/kg", "$/troy_oz"]
@@ -123,6 +124,7 @@ class CostCalculationRequest(BaseModel):
     production_rate_ton_per_day: float | None = Field(default=None, gt=0, allow_inf_nan=False)
     production_rate_note: str = Field(default="", max_length=2000)
     consumables: list[ConsumableInput] = Field(default_factory=list, max_length=30)
+    manufacturing_protocol: ManufacturingProtocol | None = None
     ga_overhead_pct: float = Field(default=0.05, ge=0, le=1)
     sard_pct: float = Field(default=0.05, ge=0, le=1)
     basis_year: int = Field(default=2017)
@@ -141,6 +143,11 @@ class CostCalculationRequest(BaseModel):
 
     @model_validator(mode="after")
     def validate_payload(self) -> CostCalculationRequest:
+        if self.manufacturing_protocol is not None:
+            if self.catalyst_domain != "thermal":
+                raise ValueError("Manufacturing protocols currently apply to thermal catalyst powder")
+            if self.manufacturing_protocol.mode == "batch_cost" and self.production_rate_ton_per_day is not None:
+                raise ValueError("Batch costing cannot also use the Step Method production-rate override")
         if self.production_rate_ton_per_day is not None and not self.production_rate_note.strip():
             raise ValueError("An effective production rate requires a source or assumption note")
         if self.catalyst_domain == "electrocatalyst" and (

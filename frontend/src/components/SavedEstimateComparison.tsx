@@ -6,6 +6,7 @@ import { compareSavedEstimates, type EstimateComparisonResult } from '../lib/est
 import { formatPrice } from '../lib/format-price';
 import { useLang } from '../lib/i18n';
 import { useUnit } from '../lib/use-unit';
+import { LB_PER_KG } from '../lib/unit-conversion';
 
 interface Props {
   savedEstimates: SavedEstimateSummary[];
@@ -13,7 +14,7 @@ interface Props {
 }
 
 export function SavedEstimateComparison({ savedEstimates, priceBasis }: Props) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const { toDisplay, fmtLabel } = useUnit();
   const [selected, setSelected] = useState<number[]>([]);
   const [reference, setReference] = useState<SavedEstimateDetail | null>(null);
@@ -23,6 +24,7 @@ export function SavedEstimateComparison({ savedEstimates, priceBasis }: Props) {
   const [error, setError] = useState('');
   const available = selected.filter((id) => savedEstimates.some((item) => item.id === id));
   const hasReference = reference !== null && available.includes(reference.id);
+  const batchReference = hasReference && reference?.result.manufacturing?.mode === 'batch_cost';
   const canShowResult = result !== null
     && result.common_conditions.price_basis === priceBasis
     && result.estimates.every((row) => available.includes(row.estimate_id));
@@ -34,7 +36,8 @@ export function SavedEstimateComparison({ savedEstimates, priceBasis }: Props) {
     try {
       const detail = await fetchSavedEstimate(id);
       setReference(detail);
-      setOrderSize(String(detail.order_size_tons));
+      setOrderSize(String(detail.result.manufacturing?.mode === 'batch_cost'
+        ? Number((detail.order_size_tons * 2000 / LB_PER_KG).toPrecision(12)) : detail.order_size_tons));
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : String(cause));
     } finally {
@@ -52,7 +55,7 @@ export function SavedEstimateComparison({ savedEstimates, priceBasis }: Props) {
         estimate_ids: available,
         reference_estimate_id: reference.id,
         price_basis: priceBasis,
-        order_size_tons: Number(orderSize),
+        order_size_tons: batchReference ? Number(orderSize) * LB_PER_KG / 2000 : Number(orderSize),
       }));
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : String(cause));
@@ -101,8 +104,8 @@ export function SavedEstimateComparison({ savedEstimates, priceBasis }: Props) {
           </select>
         </label>
         <label className="text-xs font-semibold text-slate-600">
-          {t('Shared production quantity (short tons)')}
-          <input type="number" min="0.001" step="any" value={orderSize} disabled={busy}
+          {batchReference ? (lang === 'ko' ? '공통 생산량 (kg)' : 'Shared production quantity (kg)') : t('Shared production quantity (short tons)')}
+          <input type="number" min={batchReference ? '0.000001' : '0.001'} step="any" value={orderSize} disabled={busy}
             onChange={(event) => { setOrderSize(event.target.value); setResult(null); }}
             className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm" />
         </label>
@@ -111,10 +114,14 @@ export function SavedEstimateComparison({ savedEstimates, priceBasis }: Props) {
         <div className="mt-3 rounded-xl border border-slate-200 bg-white p-3 text-xs leading-6 text-slate-600">
           <p>{t('Shared price basis')}: <ScientificText text={priceBasis} /></p>
           <p>{t('Target year')}: <ScientificText text={String(reference.input.target_year ?? '')} /> · {t('G&A overhead')}: {Number(reference.input.ga_overhead_pct ?? 0) * 100}% · {t('SARD')}: {Number(reference.input.sard_pct ?? 0) * 100}%</p>
-          <p>{t('Price-index base year')}: <ScientificText text={String(reference.input.basis_year ?? '')} /> · {t('Reactor type')}: <ScientificText text={String(reference.input.reactor_type ?? '')} /> · {t('Catalyst bulk density')}: <ScientificText text={String(reference.input.catalyst_bulk_density ?? '')} /> lb/ft³</p>
-          <p>{t('Recovery value')}: {reference.input.include_spent_value ? t('Included') : t('Not included')} · {t('Effective production rate')}: <ScientificText text={reference.input.production_rate_ton_per_day == null ? t('Scale default') : `${reference.input.production_rate_ton_per_day} ${t('short ton/day')}`} /></p>
+          {batchReference ? <p>{lang === 'ko'
+            ? '전력 단가·인건비·판매 마진은 기준 사례의 값을 공유합니다. 제조 조건·배치 수득량·장비 단가·가스 단가는 각 사례의 값을 유지합니다.'
+            : 'Electricity tariff, labor rate and selling margin use the reference case. Protocol conditions, dry batch output, equipment rates and gas prices remain specific to each case.'}</p> : <>
+            <p>{t('Price-index base year')}: <ScientificText text={String(reference.input.basis_year ?? '')} /> · {t('Reactor type')}: <ScientificText text={String(reference.input.reactor_type ?? '')} /> · {t('Catalyst bulk density')}: <ScientificText text={String(reference.input.catalyst_bulk_density ?? '')} /> lb/ft³</p>
+            <p>{t('Recovery value')}: {reference.input.include_spent_value ? t('Included') : t('Not included')} · {t('Effective production rate')}: <ScientificText text={reference.input.production_rate_ton_per_day == null ? t('Scale default') : `${reference.input.production_rate_ton_per_day} ${t('short ton/day')}`} /></p>
+          </>}
           {electrodeConditions ? <p>{t('Active area')}: <ScientificText text={String(electrodeConditions.active_area_cm2)} /> {t('cm² ·')} {t('Catalyst loading')}: <ScientificText text={String(electrodeConditions.catalyst_loading_mg_cm2)} /> {t('mg/cm² ·')} {t('Ionomer / catalyst')}: <ScientificText text={String(electrodeConditions.ionomer_to_catalyst_ratio)} /> · {t('Manufacturing scenario')}: {String(electrodeConditions.manufacturing_scenario ?? t('Not included'))}</p> : null}
-          <p>{t('The reference also supplies the price-index base year, recovery assumptions and production-rate note. Composition, recipe amounts and manufacturing steps stay with each estimate.')}</p>
+          {!batchReference && <p>{t('The reference also supplies the price-index base year, recovery assumptions and production-rate note. Composition, recipe amounts and manufacturing steps stay with each estimate.')}</p>}
           <p>{t('For conflicting manual prices, the reference estimate takes priority; materials absent there use the lowest selected estimate ID. Precursor and consumable names must distinguish grades.')}</p>
         </div>
       ) : null}

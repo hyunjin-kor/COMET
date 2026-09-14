@@ -8,10 +8,12 @@ from backend.core.constants import LB_PER_KG, TROY_OZ_PER_LB
 from backend.core.costing_scope import summarize_costing_scope
 from backend.core.electrocatalyst import calculate_electrode_layer_cost
 from backend.core.lca import compute_catalyst_lca
+from backend.core.manufacturing import batch_cost_result, evaluate_protocol
 from backend.core.price_escalation import get_escalation_factor, latest_index_year
 from backend.core.recipe_costing import calculate_recipe_materials
 from backend.core.spent_catalyst import calculate_metal_recovery_value
 from backend.core.step_method import calculate_step_method
+from backend.schemas.manufacturing import ManufacturingProtocol
 
 logger = logging.getLogger(__name__)
 
@@ -43,6 +45,7 @@ def estimate_catalyst_cost(
     production_rate_ton_per_day: float | None = None,
     production_rate_note: str = "",
     consumables: list[dict] | None = None,
+    manufacturing_protocol: dict | None = None,
 ) -> dict:
     """Run a full catalyst cost estimation.
 
@@ -170,7 +173,30 @@ def estimate_catalyst_cost(
     if steps is None:
         steps = ["mixer_slurry", "incipient_wetness", "dryer_rotary_100_300C"]
 
-    step_result = calculate_step_method(
+    protocol_report = None
+    batch_mode = False
+    if manufacturing_protocol is not None:
+        protocol = ManufacturingProtocol.model_validate(manufacturing_protocol)
+        if catalyst_domain != "thermal":
+            raise ValueError("Manufacturing protocols currently apply to thermal catalyst powder")
+        batch_mode = protocol.mode == "batch_cost"
+        if batch_mode and production_rate_ton_per_day is not None:
+            raise ValueError("Batch costing cannot also use the Step Method production-rate override")
+        protocol_report = evaluate_protocol(protocol)
+        warnings.append(protocol_report["boundary"])
+        warnings.append(
+            "Protocol conditions are recorded; the headline still uses the empirical Step Method. "
+            "Select batch costing to use measured or explicitly assumed operating inputs."
+            if not batch_mode else
+            "Batch processing replaces Step Method processing. Equipment, labor, utilities and margin "
+            "use entered values without index escalation. Temperature, pressure, pH and stirring "
+            "do not predict catalyst performance or energy automatically; update the measured input power "
+            "or kWh for each operating condition. Empty gas lists exclude gas purchases."
+        )
+    step_result = batch_cost_result(
+        protocol_report, materials["total_materials_cost_per_lb"], order_size_tons,
+        ga_overhead_pct, sard_pct,
+    ) if batch_mode else calculate_step_method(
         materials_cost_per_lb=materials["total_materials_cost_per_lb"],
         steps=steps,
         order_size_tons=order_size_tons,
@@ -268,7 +294,15 @@ def estimate_catalyst_cost(
 
     estimated = step_result["estimated_price_per_lb"]
 
-    lca_result = compute_catalyst_lca(components, steps=steps)
+    lca_result = compute_catalyst_lca(components, steps=None if batch_mode else steps)
+    costing_scope = summarize_costing_scope(
+        route_summary, steps, step_result["scale"] if not batch_mode else "small", catalyst_domain, electrode_model,
+    )
+    if batch_mode:
+        costing_scope.update(status="partial", boundary=protocol_report["boundary"], actual_steps=[],
+                             costed_steps=[], declared_steps=[], substitutions=[], dropped_steps=[],
+                             omitted_template_steps=[], added_steps=[], uncosted_operations=[],
+                             template_name=None, route_modified=False)
 
     return {
         "input_summary": {
@@ -281,6 +315,7 @@ def estimate_catalyst_cost(
             "basis_year": basis_year,
             "target_year": target_year,
             "chemppi_escalation": round(chemppi_factor, 4),
+            **({"manufacturing_model": "user_batch", "chemppi_escalation": 1.0} if batch_mode else {}),
             **({"production_rate_ton_per_day": production_rate_ton_per_day,
                 "production_rate_note": production_rate_note}
                if production_rate_ton_per_day is not None else {}),
@@ -289,10 +324,9 @@ def estimate_catalyst_cost(
         "step_method": step_result,
         "spent_catalyst": spent_result,
         "electrode_model": electrode_model,
-        "route_summary": route_summary,
-        "costing_scope": summarize_costing_scope(
-            route_summary, steps, step_result["scale"], catalyst_domain, electrode_model,
-        ),
+        "route_summary": None if batch_mode else route_summary,
+        "costing_scope": costing_scope,
+        **({"manufacturing": protocol_report} if protocol_report is not None else {}),
         **({"purchase_evidence": [
             {"name": c["name"], "role": c["role"], "price_per_lb": c["price_per_lb"],
              "evidence": c["purchase_evidence"], "verification": "user_supplied_local"}

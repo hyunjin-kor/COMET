@@ -92,6 +92,10 @@ def _compare(req: EstimateComparisonRequest, session: Session) -> dict:
     domain = reference.catalyst_domain
     if any(item.catalyst_domain != domain for item in inputs.values()):
         raise ValueError("Compare estimates within the same catalyst domain")
+    batch_mode = bool(reference.manufacturing_protocol and reference.manufacturing_protocol.mode == "batch_cost")
+    if any(bool(item.manufacturing_protocol and item.manufacturing_protocol.mode == "batch_cost") != batch_mode
+           for item in inputs.values()):
+        raise ValueError("Compare batch costing with batch costing, or Step Method with Step Method")
     shared = {
         key: value for key, value in reference.model_dump().items() if key in _SHARED_FIELDS
     }
@@ -119,6 +123,12 @@ def _compare(req: EstimateComparisonRequest, session: Session) -> dict:
         "must have distinct names or purchase-evidence grades.",
     ]
     pool: dict[str, dict] = {}
+    if batch_mode:
+        warnings.append("Batch comparisons preserve each protocol, batch yield, equipment rates and gas prices. "
+                        "Shared conditions also use the reference electricity tariff, labor rate and selling margin. "
+                        "Order totals are linear batch equivalents, not an industrial scale-up model.")
+        shared["batch_cost_rates"] = {key: getattr(reference.manufacturing_protocol, key) for key in
+                                      ("electricity_usd_kwh", "labor_usd_h", "selling_margin_fraction", "source_note")}
     priority = [req.reference_estimate_id] + [
         key for key in sorted(records) if key != req.reference_estimate_id
     ]
@@ -222,7 +232,13 @@ def _compare(req: EstimateComparisonRequest, session: Session) -> dict:
                 else:
                     electrode.update(pool[_electrode_identity(slot, raw, electrode)]["values"])
         repriced = _estimate_from_context(repriced_request, context)
-        common_updates = {key: value for key, value in shared.items() if key != "electrode_input"}
+        common_updates = {key: value for key, value in shared.items() if key not in {"electrode_input", "batch_cost_rates"}}
+        if batch_mode:
+            common_updates["manufacturing_protocol"] = {
+                **repriced_request.manufacturing_protocol.model_dump(), **shared["batch_cost_rates"],
+                "source_note": repriced_request.manufacturing_protocol.source_note
+                + "\nShared electricity/labor/margin rates from reference: " + reference.manufacturing_protocol.source_note,
+            }
         common_request = CostCalculationRequest.model_validate({**repriced_request.model_dump(), **common_updates})
         common_context = deepcopy(context)
         fitted, substitutions, dropped = fit_steps_to_scale(
@@ -233,7 +249,7 @@ def _compare(req: EstimateComparisonRequest, session: Session) -> dict:
             common_context["electrode_payload"].update(shared_electrode)
         common = _estimate_from_context(common_request, common_context)
         scope = common.get("costing_scope")
-        if scope:
+        if scope and not batch_mode:
             # The engine can infer template substitutions, but a custom saved
             # operation list also needs its comparison-time substitutions kept.
             if not scope["declared_steps"]:
@@ -243,7 +259,7 @@ def _compare(req: EstimateComparisonRequest, session: Session) -> dict:
                 scope["status"] = "partial"
             elif substitutions and scope["status"] == "modeled_steps":
                 scope["status"] = "proxy"
-        if dropped:
+        if dropped and not batch_mode:
             common["warnings"].append(
                 "Comparison at the shared production scale leaves these unavailable steps "
                 "uncosted: " + ", ".join(dropped)

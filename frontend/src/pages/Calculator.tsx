@@ -1,4 +1,6 @@
 import { ScientificText } from '../components/shared/ScientificText';
+import ManufacturingProtocolFields from '../components/ManufacturingProtocolFields';
+import type { ManufacturingProtocol } from '../lib/manufacturing';
 import { useAuth } from '../lib/auth';
 import { formatScientificText } from '../lib/scientific-text';
 import { useEffect, useRef, useState } from 'react';
@@ -476,6 +478,8 @@ export default function Calculator() {
   const [productionRate, setProductionRate] = useState<number | ''>(() => storedDraft?.productionRate ?? '');
   const [productionRateNote, setProductionRateNote] = useState(() => storedDraft?.productionRateNote ?? '');
   const [consumables, setConsumables] = useState<ConsumableDraft[]>(() => storedDraft?.consumables ?? []);
+  const [manufacturingProtocol, setManufacturingProtocol] = useState<ManufacturingProtocol | undefined>(() => storedDraft?.manufacturingProtocol);
+  const batchCostMode = catalystDomain === 'thermal' && manufacturingProtocol?.mode === 'batch_cost';
   const [includeSpentValue, setIncludeSpentValue] = useState<boolean>(() => storedDraft?.includeSpentValue ?? false);
   const [reactorType, setReactorType] = useState<'fixed' | 'slurry'>(() => storedDraft?.reactorType ?? 'fixed');
   const [catalystBulkDensity, setCatalystBulkDensity] = useState<number>(() => storedDraft?.catalystBulkDensity ?? 50);
@@ -516,6 +520,7 @@ export default function Calculator() {
       productionRate,
       productionRateNote,
       consumables,
+      manufacturingProtocol,
       pricesUpdatedAt: pricesUpdatedAt ? pricesUpdatedAt.toISOString() : null,
       includeSpentValue,
       reactorType,
@@ -533,6 +538,7 @@ export default function Calculator() {
     productionRate,
     productionRateNote,
     consumables,
+    manufacturingProtocol,
     pricesUpdatedAt,
     reactorType,
     rows,
@@ -1010,9 +1016,9 @@ export default function Calculator() {
   const isRecipeValid = thermalRows.every((row) => validRecipe(row.recipe_consumption)) && validConsumables(consumables);
   const isRateValid = productionRate === '' || (Number.isFinite(productionRate) && productionRate > 0 && productionRateNote.trim().length > 0);
   const isCompositionSectionValid = catalystDomain === 'electrocatalyst' ? isElectroValid : isThermalValid && isRecipeValid;
-  const isManufacturingSectionValid = isCompositionSectionValid && steps.length > 0 && (catalystDomain === 'electrocatalyst' || isRateValid);
+  const isManufacturingSectionValid = isCompositionSectionValid && (batchCostMode || (steps.length > 0 && (catalystDomain === 'electrocatalyst' || isRateValid)));
   const isValid = catalystDomain === 'electrocatalyst' ? isElectroValid : isThermalValid;
-  const isRouteReady = catalystDomain !== 'thermal' || isThermalTemplateReady(
+  const isRouteReady = batchCostMode || catalystDomain !== 'thermal' || isThermalTemplateReady(
     selectedThermalTemplateId, templateCosts, steps, orderSize, templateCostsOrderSize,
     thermalStepsEdited,
   );
@@ -1123,6 +1129,7 @@ export default function Calculator() {
         : undefined;
       setPreparation({ steps: input.steps ?? [], basis: savedCost?.steps_fitted ?? input.steps ?? [], substitutions: savedCost?.substitutions });
       setOrderSize(input.order_size_tons ?? 20);
+      setManufacturingProtocol(input.manufacturing_protocol);
       setLoadedSavedName(summary.name);
     } catch {
       setLoadedSavedName(null);
@@ -1216,13 +1223,14 @@ export default function Calculator() {
         input = {
           components,
           steps,
-          template_id: thermalTemplateId,
+          template_id: batchCostMode ? undefined : thermalTemplateId,
           catalyst_domain: catalystDomain,
           application_family: applicationFamily,
           order_size_tons: orderSize,
-          include_spent_value: includeSpentValue,
-          production_rate_ton_per_day: productionRate === '' ? undefined : productionRate,
-          production_rate_note: productionRate === '' ? undefined : productionRateNote,
+          include_spent_value: batchCostMode ? false : includeSpentValue,
+          production_rate_ton_per_day: batchCostMode || productionRate === '' ? undefined : productionRate,
+          production_rate_note: batchCostMode || productionRate === '' ? undefined : productionRateNote,
+          manufacturing_protocol: manufacturingProtocol,
           consumables: consumables as ConsumableInput[],
           reactor_type: reactorType,
           catalyst_bulk_density: catalystBulkDensity,
@@ -1235,7 +1243,7 @@ export default function Calculator() {
         result,
         orderSize,
         steps,
-        stepLabels: steps.map(formatStepLabel),
+        stepLabels: batchCostMode ? manufacturingProtocol!.operations.map((op) => op.name) : steps.map(formatStepLabel),
         selectedSupportName: supportName ?? selectedSubstrateMaterial?.name ?? null,
         activeMetalCount,
         liveFeedCount,
@@ -1559,7 +1567,7 @@ export default function Calculator() {
         ? `활성 금속 ${activeMetalCount}종 / 담체 ${supportRows.length}행 / 담체 ${supportWtPct.toFixed(1)} wt%`
         : `${activeMetalCount} active metal${activeMetalCount === 1 ? '' : 's'} / ${supportRows.length} support row${supportRows.length === 1 ? '' : 's'} / ${supportWtPct.toFixed(1)} wt% support`;
     const preparationSummary =
-      catalystDomain === 'electrocatalyst'
+      batchCostMode ? (lang === 'ko' ? '배치 운전 조건' : 'Batch operating inputs') : catalystDomain === 'electrocatalyst'
         ? activeElectroTemplate?.name ?? t('Select a preparation template')
         : thermalRouteLabel;
     const recoverySummary = catalystDomain === 'thermal'
@@ -1647,15 +1655,15 @@ export default function Calculator() {
             <div className="cp-subtle-label">{t('Preparation basis')}</div>
             <div className="mt-2 text-base font-semibold text-[#191f28]"><ScientificText text={preparationSummary} /></div>
             <div className="mt-2 space-y-1">
-              {catalystDomain === 'thermal' ? <CompactValueRow label={t('Production scale')} value={lang === 'ko' ? `${orderSize}톤` : `${orderSize} tons`} detail={lang === 'ko' ? `${t(scale.label)} / ${scale.rate}` : `${scale.label} scale / ${scale.rate}`} /> : <CompactValueRow label={t('Active area')} value={`${electrocatalystConfig.activeAreaCm2} cm²`} detail={`${electrocatalystConfig.catalystLoadingMgCm2} mg/cm²`} />}
+              {batchCostMode ? <CompactValueRow label={lang === 'ko' ? '배치 수득량' : 'Batch output'} value={`${manufacturingProtocol?.finished_batch_mass_kg ?? '—'} kg`} /> : catalystDomain === 'thermal' ? <CompactValueRow label={t('Production scale')} value={lang === 'ko' ? `${orderSize}톤` : `${orderSize} tons`} detail={lang === 'ko' ? `${t(scale.label)} / ${scale.rate}` : `${scale.label} scale / ${scale.rate}`} /> : <CompactValueRow label={t('Active area')} value={`${electrocatalystConfig.activeAreaCm2} cm²`} detail={`${electrocatalystConfig.catalystLoadingMgCm2} mg/cm²`} />}
               <CompactValueRow
                 label={t('Steps')}
-                value={String(steps.length)}
-                detail={steps.length > 0 ? `${t(formatStepLabel(steps[0]!))}${steps.length > 1 ? ` +${steps.length - 1}` : ''}` : t('Choose at least one preparation step')}
+                value={String(batchCostMode ? manufacturingProtocol!.operations.length : steps.length)}
+                detail={batchCostMode ? manufacturingProtocol!.operations.map((op) => op.name).join(', ') : steps.length > 0 ? `${t(formatStepLabel(steps[0]!))}${steps.length > 1 ? ` +${steps.length - 1}` : ''}` : t('Choose at least one preparation step')}
               />
               <CompactValueRow
                 label={catalystDomain === 'thermal' ? t('Recovery') : t('Application')}
-                value={recoverySummary}
+                value={batchCostMode ? t('Recovery credit off') : recoverySummary}
                 detail={
                   catalystDomain === 'thermal'
                     ? t('Optional spent-catalyst recovery credit for recovery-sensitive screening.')
@@ -1870,6 +1878,11 @@ export default function Calculator() {
           <p className="text-xs text-slate-500">{t('Set the production scale, choose a method and check its operations.')}</p>
         </div>
         <div className="mt-5 space-y-5">
+        {catalystDomain === 'thermal' && <ManufacturingProtocolFields value={manufacturingProtocol} onChange={setManufacturingProtocol} />}
+        {batchCostMode && <label className="block text-sm">{lang === 'ko' ? '비용 합계의 주문량 (kg)' : 'Order mass for cost totals (kg)'}<input type="number" min="0.000001" step="any" className="input-base mt-2 w-full" value={Number((orderSize * 2000 / LB_PER_KG).toPrecision(12))}
+          onChange={(e) => setOrderSize(Number(e.target.value) * LB_PER_KG / 2000)} /></label>}
+        {batchCostMode && <button type="button" className="cp-button-secondary px-3 py-2 text-xs" disabled={!manufacturingProtocol?.finished_batch_mass_kg} onClick={() => setOrderSize(manufacturingProtocol!.finished_batch_mass_kg! * LB_PER_KG / 2000)}>{lang === 'ko' ? '주문량을 1배치 수득량으로 설정' : 'Set order mass to one batch'}</button>}
+        {!batchCostMode && <>
         {activeBenchmark ? (
           <div className="rounded-[24px] border border-emerald-200 bg-emerald-50/80 px-4 py-4 text-sm text-emerald-900">
             <div className="cp-subtle-label !text-emerald-700">{t('Loaded reference baseline')}</div>
@@ -2010,6 +2023,7 @@ export default function Calculator() {
             </div>
           </div>
         ) : null}
+        </>}
         </div>
       </section>
     );
@@ -2043,8 +2057,8 @@ export default function Calculator() {
             </div> : null}
             <div className="mt-4 grid gap-3 sm:grid-cols-3">
               <MetricTile label={t('Catalyst type')} value={t(catalystDomainLabel(catalystDomain))} detail={t('Current case basis')} />
-              <MetricTile label={t('Preparation steps')} value={String(steps.length)} detail={!isRouteReady ? t('Pending') : steps.length > 0 ? t('Ready to run') : t('Choose at least one preparation step')} />
-              {catalystDomain === 'thermal' ? <MetricTile label={t('Production scale')} value={lang === 'ko' ? `${orderSize}톤` : `${orderSize} tons`} detail={`${t(scale.label)} / ${scale.rate}`} /> : <MetricTile label={t('Active area')} value={`${electrocatalystConfig.activeAreaCm2} cm²`} detail={`${electrocatalystConfig.catalystLoadingMgCm2} mg/cm²`} />}
+              <MetricTile label={t('Preparation steps')} value={String(batchCostMode ? manufacturingProtocol!.operations.length : steps.length)} detail={!isRouteReady ? t('Pending') : batchCostMode || steps.length > 0 ? t('Ready to run') : t('Choose at least one preparation step')} />
+              {batchCostMode ? <MetricTile label={lang === 'ko' ? '배치 수득량' : 'Batch output'} value={`${manufacturingProtocol?.finished_batch_mass_kg ?? '—'} kg`} detail={lang === 'ko' ? '입력한 운전 조건 사용' : 'Entered operating inputs'} /> : catalystDomain === 'thermal' ? <MetricTile label={t('Production scale')} value={lang === 'ko' ? `${orderSize}톤` : `${orderSize} tons`} detail={`${t(scale.label)} / ${scale.rate}`} /> : <MetricTile label={t('Active area')} value={`${electrocatalystConfig.activeAreaCm2} cm²`} detail={`${electrocatalystConfig.catalystLoadingMgCm2} mg/cm²`} />}
             </div>
             <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
               <button onClick={handleCalculate} disabled={loading || !canCalculate} className="cp-button-primary min-w-[250px]">{loading ? <><span className="mr-2 inline-flex h-4 w-4 animate-spin rounded-full border-2 border-slate-950 border-t-transparent" />{t('Running estimate')}</> : t('Run estimate')}</button>
@@ -2079,7 +2093,7 @@ export default function Calculator() {
                           <div className="truncate text-sm font-semibold text-[#191f28]"><ScientificText text={saved.name} /></div>
                           <div className="mt-0.5 text-xs text-slate-600">
                             <ScientificText text={saved.metal_symbol ? `${saved.metal_loading_wt_pct}% ${saved.metal_symbol}` : saved.catalyst_domain} />
-                            <ScientificText text={saved.support_name ? ` / ${saved.support_name}` : ''} /> · {saved.catalyst_domain === 'thermal' ? <>{saved.order_size_tons} {t("tons ·")}{' '}{formatPrice(toDisplay(saved.estimated_price_per_lb))}{fmtLabel} · </> : null}<ScientificText text={saved.created_at.slice(0, 10)} />
+                            <ScientificText text={saved.support_name ? ` / ${saved.support_name}` : ''} /> · {saved.catalyst_domain === 'thermal' ? <>{saved.calculation_model === 'user_batch' ? <><ScientificText text={`${Number((saved.order_size_tons * 2000 / LB_PER_KG).toPrecision(6))} kg`} /> ·</> : `${saved.order_size_tons} ${t('tons ·')}`}{' '}{formatPrice(toDisplay(saved.estimated_price_per_lb))}{fmtLabel} · </> : null}<ScientificText text={saved.created_at.slice(0, 10)} />
                           </div>
                         </div>
                         <div className="flex items-center gap-2">

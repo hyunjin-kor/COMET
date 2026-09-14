@@ -14,6 +14,7 @@ import { saveEstimate, type CostResult } from '../lib/api';
 import { LB_PER_KG, TROY_OZ_PER_LB } from '../lib/unit-conversion';
 import { loadCalculatorResultSnapshot, saveCalculatorResultSnapshot } from '../lib/calculator-session';
 import { buildResultCsv, downloadCsv, resultCsvFilename } from '../lib/export-csv';
+import ManufacturingProtocolSummary from '../components/ManufacturingProtocolSummary';
 import { formatPrice } from '../lib/format-price';
 import { electrodeCostRows } from '../lib/electrode-result';
 import { useLang } from '../lib/i18n';
@@ -241,6 +242,7 @@ export default function CalculatorResult() {
     result.input_summary.catalyst_domain === 'electrocatalyst' ? 'Electrocatalyst' : 'Thermocatalyst';
   const routeSummary = result.route_summary ?? null;
   const costingScope = result.costing_scope ?? null;
+  const batchCostMode = result.manufacturing?.mode === 'batch_cost';
   const electrodeModel = result.electrode_model ?? null;
   const spentCatalyst = electrodeModel ? null : result.spent_catalyst ?? null;
   const resolvedMaterials = result.resolved_materials ?? [];
@@ -339,6 +341,7 @@ export default function CalculatorResult() {
   ];
 
   function renderCostingScope(detailed: boolean) {
+    if (result.manufacturing?.mode === 'batch_cost') return <ManufacturingProtocolSummary report={result.manufacturing} compact={!detailed} />;
     if (!costingScope) return null;
     const partial = costingScope.status === 'partial';
     const proxyCount = costingScope.costed_steps.filter((step) => step.status === 'proxy').length;
@@ -425,7 +428,7 @@ export default function CalculatorResult() {
             </div>
             <div className="mt-3 flex flex-wrap gap-2">
               <span className="cp-chip-dark">{t(domainDisplay(catalystDomain))}</span>
-              {!electrodeModel ? <span className="cp-chip-dark"><ScientificText text={lang === 'ko' ? t(result.step_method.scale) : `${result.step_method.scale} scale`} /></span> : null}
+              {!electrodeModel ? <span className="cp-chip-dark"><ScientificText text={batchCostMode ? (lang === 'ko' ? '배치 운전 입력값' : 'Batch operating inputs') : lang === 'ko' ? t(result.step_method.scale) : `${result.step_method.scale} scale`} /></span> : null}
               <span className="cp-chip-dark"><ScientificText text={generatedAt} /></span>
             </div>
           </div>
@@ -482,8 +485,8 @@ export default function CalculatorResult() {
                 detail={t('Per modeled layer')}
               /> : <RailRow
                 label={t('Production scale')}
-                value={lang === 'ko' ? `${snapshotState.orderSize}톤` : `${snapshotState.orderSize} tons`}
-                detail={lang === 'ko' ? `${t(result.step_method.scale)} / ${Number(result.step_method.campaign_days).toFixed(1)}일` : `${result.step_method.scale} scale / ${Number(result.step_method.campaign_days).toFixed(1)} days`}
+                value={batchCostMode ? `${result.manufacturing!.protocol.finished_batch_mass_kg} kg/batch` : lang === 'ko' ? `${snapshotState.orderSize}톤` : `${snapshotState.orderSize} tons`}
+                detail={batchCostMode ? (lang === 'ko' ? '배치 운전 입력값' : 'Batch operating inputs') : lang === 'ko' ? `${t(result.step_method.scale)} / ${Number(result.step_method.campaign_days).toFixed(1)}일` : `${result.step_method.scale} scale / ${Number(result.step_method.campaign_days).toFixed(1)} days`}
               />}
               <RailRow
                 label={t('Steps')}
@@ -546,7 +549,7 @@ export default function CalculatorResult() {
               </div>
               <div className="mt-4 flex flex-wrap gap-2">
                 <span className="cp-chip-dark">{t(domainDisplay(catalystDomain))}</span>
-                {!electrodeModel ? <span className="cp-chip-dark"><ScientificText text={lang === 'ko' ? t(result.step_method.scale) : `${result.step_method.scale} scale`} /></span> : null}
+                {!electrodeModel ? <span className="cp-chip-dark"><ScientificText text={batchCostMode ? (lang === 'ko' ? '배치 운전 입력값' : 'Batch operating inputs') : lang === 'ko' ? t(result.step_method.scale) : `${result.step_method.scale} scale`} /></span> : null}
                 <span className="cp-chip-dark"><ScientificText text={generatedAt} /></span>
                 {benchmarkCandidate ? <span className="cp-chip-dark">{t('Reference-loaded')}</span> : null}
               </div>
@@ -558,7 +561,7 @@ export default function CalculatorResult() {
               <MetricTile label={t('Active area')} value={`${electrodeModel.active_area_cm2.toFixed(1)} cm²`} detail={t('Per modeled layer')} />
               <MetricTile label={t('Electrode total')} value={formatPrice(electrodeModel.total_cost_usd)} detail={t('For selected active area')} />
             </> : <>
-              <MetricTile label={t('Production time')} value={`${Number(result.step_method.campaign_days).toFixed(1)} d`} detail={lang === 'ko' ? `${snapshotState.orderSize}톤 1회 생산` : `${snapshotState.orderSize} tons per run`} />
+              <MetricTile label={batchCostMode ? (lang === 'ko' ? '배치당 공정시간 합계' : 'Operation-hours per batch') : t('Production time')} value={batchCostMode ? `${Number(result.manufacturing!.serial_operation_hours).toFixed(2)} h` : `${Number(result.step_method.campaign_days).toFixed(1)} d`} detail={batchCostMode ? (lang === 'ko' ? '순차 합계, 병렬 일정 아님' : 'Serial sum; not a parallel schedule') : lang === 'ko' ? `${snapshotState.orderSize}톤 1회 생산` : `${snapshotState.orderSize} tons per run`} />
               <MetricTile label={t('Margin')} value={`${Number(result.step_method.margin_pct).toFixed(1)}%`} detail={t('Selling margin basis')} />
             </>}
             <MetricTile label={t('Price sources')} value={String(electrodeModel ? resolvedMaterials.length : snapshotState.liveFeedCount + snapshotState.indexedFeedCount)} detail={electrodeModel ? t('Electrode material sources') : lang === 'ko' ? `실시간 ${snapshotState.liveFeedCount}건 / 지수 보정 ${snapshotState.indexedFeedCount}건` : `${snapshotState.liveFeedCount} live / ${snapshotState.indexedFeedCount} indexed`} />
@@ -655,6 +658,7 @@ export default function CalculatorResult() {
   function renderManufacturingSection() {
     return (
       <section className="surface-card p-4">
+        {result.manufacturing?.mode === 'record_only' && <ManufacturingProtocolSummary report={result.manufacturing} />}
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <div className="cp-subtle-label">{t('Preparation Method')}</div>
@@ -728,8 +732,8 @@ export default function CalculatorResult() {
         <div className="mt-4 rounded-[24px] border border-slate-900/8 bg-white/58 p-4">
           <div className="cp-subtle-label">{t('Preparation Steps')}</div>
           <div className="mt-3 flex flex-wrap gap-2">
-            {snapshotState.stepLabels.map((label) => (
-              <span key={label} className="cp-chip">
+            {snapshotState.stepLabels.map((label, index) => (
+              <span key={index} className="cp-chip">
                 {t(label)}
               </span>
             ))}
@@ -1023,7 +1027,8 @@ export default function CalculatorResult() {
             {t('COMET traces material prices to the selected basis. Manufacturing costs and their assumptions are listed separately.')}
             <p>{electrodeModel
               ? t('These are catalyst powder material costs. The electrode assembly result uses cost per effective area.')
-              : t('Adopted thermal method: published Step Method; CatCost User Guide, Chapter 6.')}</p>
+              : batchCostMode ? (lang === 'ko' ? '제조법: 입력한 배치 운전 조건 및 단가.' : 'Manufacturing method: entered batch operating conditions and rates.')
+                : t('Adopted thermal method: published Step Method; CatCost User Guide, Chapter 6.')}</p>
           </div>
         </div>
 

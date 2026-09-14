@@ -21,6 +21,7 @@ export interface CalculatorRow {
 }
 
 export interface CalculatorDraft {
+  manufacturingProtocol?: import('./manufacturing').ManufacturingProtocol;
   rows: CalculatorRow[];
   steps: string[];
   preparationStepBasis?: string[];

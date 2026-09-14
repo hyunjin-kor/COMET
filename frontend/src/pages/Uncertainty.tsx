@@ -495,6 +495,7 @@ export default function Uncertainty() {
               </div> : null}
               <div className="surface-ink overflow-hidden p-5">
                 {result.fixed_recipe_assumptions ? <p className="mb-4 text-sm leading-6 text-amber-200"><strong>{t('Fixed recipe assumptions')}: </strong><ScientificText text={result.fixed_recipe_assumptions} /></p> : null}
+                {result.fixed_manufacturing_assumptions && <p className="mb-4 text-sm leading-6 text-amber-200">{lang === 'ko' ? '제조 온도·시간·전력·가스 유량·수득량·운전 단가는 고정했습니다. 이 구간은 제조 조건의 불확실성을 표본 추출하지 않습니다.' : result.fixed_manufacturing_assumptions}</p>}
                 <div className="grid gap-3 sm:grid-cols-4">
                   <StatTileDark label={t('Baseline')} value={`${formatPrice(toRangeDisplay(result.baseline))}${rangeLabel}`} detail={t('Current estimate')} />
                   <StatTileDark label={t('Mean')} value={`${formatPrice(toRangeDisplay(result.mean))}${rangeLabel}`} detail={t('Average outcome')} />

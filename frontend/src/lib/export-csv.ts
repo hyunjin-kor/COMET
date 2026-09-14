@@ -117,6 +117,22 @@ export function buildResultCsv(snapshot: CalculatorResultSnapshot): string {
   );
 
   const resolved = result.resolved_materials ?? [];
+  if (result.manufacturing) {
+    const manufacturing = result.manufacturing;
+    sections.push(rows(['Detailed manufacturing protocol'],
+      ['Mode', manufacturing.mode],
+      ['Finished dry batch mass (kg)', manufacturing.protocol.finished_batch_mass_kg],
+      ['Serial operation hours per batch', manufacturing.serial_operation_hours],
+      ['Processing cost (USD/kg)', manufacturing.processing_cost_usd_kg],
+      ['Materials plus processing (USD/kg)', manufacturing.manufacturing_cost_usd_kg],
+      ['Batch equivalents for order totals', manufacturing.batch_equivalents],
+      ['Boundary', manufacturing.boundary],
+      ['Source / assumptions', manufacturing.protocol.source_note],
+      ['Complete protocol JSON', JSON.stringify(manufacturing.protocol)],
+      ['Operation', 'Repetitions', 'Operation hours per batch', 'Electricity kWh per batch', 'Cost USD per batch'],
+      ...manufacturing.operations.map((op) => [op.name, op.repetitions, op.duration_h, op.electricity_kwh, op.cost_usd]),
+      ['Missing cost inputs', manufacturing.missing_inputs.join('; ')]));
+  }
   if (result.input_summary.production_rate_ton_per_day != null) {
     sections.push(rows(['Production-rate assumption'],
       ['Effective rate (short ton/day)', Number(result.input_summary.production_rate_ton_per_day)],
@@ -300,6 +316,7 @@ export function buildRangeCsv(result: EstimateRangeResult): string {
     ...Object.entries(result.failure_reasons),
   ));
   if (result.fixed_recipe_assumptions) sections.push(rows(['Fixed recipe assumptions', result.fixed_recipe_assumptions]));
+  if (result.fixed_manufacturing_assumptions) sections.push(rows(['Fixed manufacturing assumptions', result.fixed_manufacturing_assumptions]));
   if (applied.length) {
     sections.push(
       rows(

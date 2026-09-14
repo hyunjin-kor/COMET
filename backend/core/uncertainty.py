@@ -136,6 +136,7 @@ def run_cost_request_monte_carlo(
         production_rate_ton_per_day=req.production_rate_ton_per_day,
         production_rate_note=req.production_rate_note,
         consumables=[c.model_dump() for c in req.consumables],
+        manufacturing_protocol=req.manufacturing_protocol.model_dump() if req.manufacturing_protocol else None,
     )
 
     area_cost = baseline.get("electrode_model") is not None
@@ -215,6 +216,7 @@ def run_cost_request_monte_carlo(
                 production_rate_ton_per_day=req.production_rate_ton_per_day,
                 production_rate_note=req.production_rate_note,
                 consumables=[c.model_dump() for c in req.consumables],
+                manufacturing_protocol=req.manufacturing_protocol.model_dump() if req.manufacturing_protocol else None,
             )
             results.append(outcome(result))
         except (ValueError, KeyError) as exc:
@@ -253,6 +255,9 @@ def run_cost_request_monte_carlo(
         "application_family": context["application_family"],
         "uncertainties_applied": {key: value for key, value in uncertainties.items()
                                   if not area_cost or key in {"active_component_price", "electrode_adjunct_price"}},
+        **({"fixed_manufacturing_assumptions": "Manufacturing temperatures, durations, input powers, gas "
+            "flows, batch yield and operating rates remain fixed. This interval does not sample protocol uncertainty."}
+           if req.manufacturing_protocol else {}),
         **({"fixed_recipe_assumptions": "Precursor content, purity, retention yield, production rate and "
             "consumable quantities/prices are fixed; precursor purchase prices follow their component role."}
            if req.consumables or any(c.get("recipe_consumption") for c in context["resolved_components"]) else {}),

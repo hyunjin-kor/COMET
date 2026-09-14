@@ -65,6 +65,7 @@ so SmartScreen will warn you the first time. Pick "More info → Run anyway".
 - Exports the cost ledger, price evidence and Monte Carlo range to CSV
 - Shows which manufacturing operations are costed, proxies or omitted, including scale substitutions
 - Accepts documented effective production rates and optional precursor content, purity, retention yield and net solvent purchases
+- Records ordered synthesis conditions, including temperature ramps, holds and reduction gases, with optional [batch operating-cost calculations](docs/manufacturing-protocol.md) from explicit equipment, utility and labor inputs
 - Compares 2–4 saved formulations under shared prices and production conditions, alongside their historical results
 - Keeps purchase provenance and actual-cost observations locally; reports errors only for matching, documented thermal full-cost observations
 

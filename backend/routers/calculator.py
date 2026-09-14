@@ -171,6 +171,7 @@ def _estimate_from_context(
         production_rate_ton_per_day=req.production_rate_ton_per_day,
         production_rate_note=req.production_rate_note,
         consumables=[c.model_dump() for c in req.consumables],
+        manufacturing_protocol=req.manufacturing_protocol.model_dump() if req.manufacturing_protocol else None,
     )
 
 
@@ -254,6 +255,7 @@ def save_estimate(
         catalyst_domain=req.catalyst_domain,
         application_family=application_family,
         calculation_model=(
+            "user_batch" if result.get("manufacturing", {}).get("mode") == "batch_cost" else
             "catcost_step_plus_electrode"
             if result.get("electrode_model") is not None
             else "catcost_step"
