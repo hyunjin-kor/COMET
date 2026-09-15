@@ -51,6 +51,7 @@ export default function ManufacturingLiterature({ evidence, onSelect }: {
       <a className="block text-sm font-medium text-teal-800 underline" href={selected.url} target="_blank" rel="noreferrer"><ScientificText text={selected.title} /></a>
       <p className="text-xs leading-5 text-slate-500">{selected.doi} · {selected.locator}</p>
       <span className="cp-chip">{selected.boundary === 'electrode' ? l('Electrode preparation', '전극 제조') : l('Catalyst powder preparation', '촉매 분말 제조')}</span>
+      {selected.finished_batch_mass_kg != null && <p className="text-sm text-teal-800">{l('Reported dry output of this source specimen', '이 문헌 시료의 보고된 건조 수득량')}: {selected.finished_batch_mass_kg} kg</p>}
       {!!selected.intermediate_batches?.length && <div className="rounded-lg bg-slate-50 p-3 text-xs leading-6 text-slate-600">
         <p className="font-medium">{l('Intermediate transfers', '중간 생성물 분취')}</p>
         {selected.intermediate_batches.map((batch) => <p key={batch.id}>
@@ -76,8 +77,8 @@ export default function ManufacturingLiterature({ evidence, onSelect }: {
       </ol>
       {selected.limitations.map((note) => <p key={note} className="text-sm leading-6 text-amber-900"><ScientificText text={note} /></p>)}
       {onSelect && <button type="button" className="cp-button-secondary" onClick={() => onSelect(adaptLiteratureProtocol(selected))}>{l('Use as editable preparation record', '편집 가능한 제조 기록으로 가져오기')}</button>}
-      <p className="text-xs leading-5 text-slate-500">{l('Imports use record-only mode. They do not change cost estimates or supply measured equipment power, batch output or factory-scale costs.',
-        '기록 모드로 가져옵니다. 원가를 자동 변경하거나 장비 실측 전력·배치 수득량·공장 규모 비용을 채워 넣지 않습니다.')}</p>
+      <p className="text-xs leading-5 text-slate-500">{l('Imports use record-only mode. Reported output remains a source value, not a measurement of your batch. Unknown power, yield and prices stay blank.',
+        '기록 모드로 가져옵니다. 보고된 수득량은 문헌값이며 사용자의 배치를 측정한 값이 아닙니다. 미확인 전력·수득량·단가는 빈칸으로 남깁니다.')}</p>
     </div>}
   </section>;
 }

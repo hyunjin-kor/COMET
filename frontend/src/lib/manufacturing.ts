@@ -61,7 +61,7 @@ export interface BatchPurchase extends SourcedInputs {
   name: string;
   comparison_key?: string;
   quantity?: number | null;
-  unit: 'kg' | 'g' | 'L' | 'mL' | 'item';
+  unit: 'kg' | 'g' | 'L' | 'mL' | 'mol' | 'mmol' | 'item';
   quantity_basis?: 'entered' | 'solvent_volume';
   price_usd_per_unit?: number | null;
   notes?: string;
@@ -91,7 +91,7 @@ export interface IntermediateBatch extends SourcedInputs {
   notes?: string;
 }
 
-export interface LiteratureProtocol {
+export interface LiteratureProtocol extends SourcedInputs {
   id: string;
   doi: string;
   title: string;
@@ -102,6 +102,7 @@ export interface LiteratureProtocol {
   limitations: string[];
   operations: ManufacturingOperation[];
   intermediate_batches?: IntermediateBatch[];
+  finished_batch_mass_kg?: number | null;
   review_date: string;
   verification: string;
 }
@@ -145,6 +146,8 @@ export function adaptLiteratureProtocol(profile: LiteratureProtocol): Manufactur
   return {
     mode: 'record_only', product_basis: profile.boundary, source_record_id: profile.id,
     intermediate_batches: structuredClone(profile.intermediate_batches ?? []),
+    finished_batch_mass_kg: profile.finished_batch_mass_kg,
+    input_evidence: structuredClone(profile.input_evidence ?? {}),
     source_note: `${profile.sample}; ${profile.url}; ${profile.locator}. User adaptation: review composition, precursors and process boundary before costing. ${profile.limitations.join(' ')}`,
     operations: structuredClone(profile.operations).map((op) => ({ ...op, notes: `${op.notes ?? ''} [${profile.locator}; ${profile.doi}]` })),
   };

@@ -63,6 +63,46 @@ def test_curated_sources_are_registered_but_not_automatically_cost_complete():
             assert operation.equipment_usd_h is None
 
 
+def test_followup_decisions_are_in_the_public_catalog_not_only_a_private_search_cache():
+    library = manufacturing_library()
+    followup = library['follow_up_review']
+    assert len(followup['searches']) == 70
+    assert len({s['doi'] for s in followup['selected_sources']}) == len(followup['selected_sources'])
+    profiles = {p['id']: p for p in library['profiles']}
+    for source in followup['selected_sources']:
+        assert source['assessment'] and source['primary_url']
+        assert all(profiles[key]['doi'] == source['doi'] for key in source['profile_ids'])
+    rejected = next(s for s in followup['selected_sources'] if s['doi'] == '10.1039/c9ra08967e')
+    assert rejected['profile_ids'] == [] and 'inconsistent' in rejected['assessment']
+
+
+def test_reported_final_mass_and_precursor_recovery_do_not_fill_unknown_support_recovery():
+    p = next(p for p in manufacturing_library()['profiles'] if p['id'] == 'mo6-silica-2022')
+    protocol = ManufacturingProtocol(operations=p['operations'], intermediate_batches=p['intermediate_batches'],
+                                     finished_batch_mass_kg=p['finished_batch_mass_kg'], input_evidence=p['input_evidence'])
+    assert protocol.finished_batch_mass_kg == .00018
+    precursor, support = protocol.intermediate_batches
+    assert precursor.produced_mass_kg == .000296 and precursor.used_mass_kg == .0000788
+    assert support.produced_mass_kg is None
+    assert evaluate_protocol(protocol)['complete'] is False
+    assert protocol.input_evidence['finished_batch_mass_kg'].kind == 'literature'
+
+
+def test_second_pass_separates_nominal_cycles_characterization_and_molar_purchases():
+    profiles = {p['id']: p for p in manufacturing_library()['profiles']}
+    milling = profiles['fe-bn-milled-2024']['operations'][-1]
+    assert milling.get('duration_h') is None and milling.get('repetitions') is None
+    assert '30 s' in milling['notes'] and '10 min' in milling['notes']
+    carbide_wash = profiles['fe5c2-silica-l-2022']['operations'][5]
+    assert carbide_wash.get('repetitions') is None
+    assert carbide_wash['purchases'][0]['quantity'] is None
+    tungsten = profiles['wo3-h2n2-2h-electrode-2025']['operations'][0]['purchases'][0]
+    assert (tungsten['quantity'], tungsten['unit']) == (1.25, 'mmol')
+    assert tungsten['input_evidence']['quantity']['recorded_value'] == 1.25
+    titania = profiles['meso-tio2-25-2019']['operations']
+    assert [(o['atmosphere'], o['temperature_profile'][0]['hold_h']) for o in titania[-2:]] == [('N2', 3), ('air', 3)]
+
+
 @pytest.mark.parametrize("family,slug,needle", [
     ("ammonia-cracking", "ni-mgo-ceo2-interface", "CNT"),
     ("co2-methanation", "ni-alumina-baseline", "Y2O3"),

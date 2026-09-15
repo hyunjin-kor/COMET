@@ -4,9 +4,9 @@ COMET Application Note. Review date: 2026-09-15.
 
 ## Scope and source assessment
 
-The audit covers 116 screening candidates in 30 reaction families and 34 generic process templates. Crossref confirmed the bibliographic identity of 388 distinct DOIs. The curated library contains 70 named preparation records from 57 sources; 61 catalog candidates link to at least one record. A link may describe a different specimen and does not verify the catalog formulation.
+The audit covers 116 screening candidates in 30 reaction families and 34 generic process templates. Crossref confirmed the bibliographic identity of 401 distinct DOIs. The curated library contains 89 named preparation records from 70 sources; 74 catalog candidates link to at least one record. A link may describe a different specimen and does not verify the catalog formulation.
 
-Thirty reaction-family Europe PMC searches and individual candidate DOI checks were followed by 70 candidate-specific open-access searches for entries lacking preparation records. Eighteen selected primary full texts were retrieved and screened. Search hits are not automatically accepted; composition, specimen and preparation boundaries are checked against Methods.
+Thirty reaction-family Europe PMC searches and individual candidate DOI checks were followed by 70 candidate-specific open-access searches. Eighteen initial and fourteen second-pass primary articles were screened, with public supplements where available. Search hits, bibliography, specimen preparation and complete operating costs remain separate assessments.
 
 Read accessible primary Methods or supporting experimental sections for named specimens. Record numeric conditions only when explicit; separate synthesis from characterization, activation, performance tests and electrode fabrication.
 
@@ -18,7 +18,7 @@ Numeric values were transcribed from the stated primary sections. Kelvin values 
 
 Imports create editable records with the specimen, DOI and section locator. They retain the existing cost model. Powder batch costing is enabled only after the user supplies complete operating inputs, actual dry output and explicit costs. It replaces Step Method processing cost and does not add it twice. Electricity is measured kWh or input kW multiplied by time; gas volume and price require matching reference conditions. Temperature alone does not predict furnace consumption, yield or catalytic performance. Electrode preparations remain records and cannot use a dry-powder kg denominator. Published procedures are evidence records, not laboratory operating instructions.
 
-Batch purchases can replace the entire composition-based materials bill. For intermediate batches, all preparation charges are allocated by mass transferred divided by mass recovered on the same material basis; unused recoverable inventory retains its share of cost. Alternatively, explicit whole-batch charging assigns the full expenditure to the receiving batch before any further transfer. Internal transfers are not purchased twice. Unknown masses block proportional allocation. Successive transfers multiply their fractions; each intermediate has one destination, and circular paths are rejected. Branching transfers and co-products require a separately defined boundary. Incurred and allocated costs, input sources and equations are preserved in the calculation trace and exports.
+Batch purchases can replace the entire composition-based materials bill. Quantities use kg, g, L, mL, mol, mmol or items, with prices in the same unit; molecular weight and solution density are not inferred. For intermediate batches, all preparation charges are allocated by mass transferred divided by mass recovered on the same material basis; unused recoverable inventory retains its share of cost. Alternatively, explicit whole-batch charging assigns the full expenditure to the receiving batch before any further transfer. Internal transfers are not purchased twice. Unknown masses block proportional allocation. Successive transfers multiply their fractions; each intermediate has one destination, and circular paths are rejected. Branching transfers and co-products require a separately defined boundary. Incurred and allocated costs, input sources and equations are preserved in the calculation trace and exports.
 
 Manufacturing endpoint sensitivity changes one selected numeric cost input at a time. Monte Carlo uses independent uniform distributions within user-specified absolute bounds, with discrete integer draws for repetitions. Unselected inputs remain fixed. Linked gas durations follow the sampled operation time; temperature does not infer power or yield. Invalid combinations are counted and excluded without clamping, so statistics are conditional on successful draws. Bounds describe declared scenarios, not source-validated distributions or industrial confidence intervals. JSON exports retain the baseline request, resolved prices, protocol hash, input evidence, seed, bounds and failures.
 
@@ -28,7 +28,7 @@ The frozen May 2026 screening estimates and rankings use the original compositio
 
 ## Candidate coverage
 
-Source/formulation discrepancy flagged: 26; source-specific variant linked without that flag: 43; exact preparation unverified with no curated variant: 47. These are mutually exclusive catalog statuses, not reproducibility grades. No candidate has jointly verified formulation, complete preparation and operational cost inputs.
+Source/formulation discrepancy flagged: 26; source-specific variant linked without that flag: 56; exact preparation unverified with no curated variant: 34. These are mutually exclusive catalog statuses, not reproducibility grades. No candidate has jointly verified formulation, complete preparation and operational cost inputs.
 
 | Reaction family / candidate | Status | Preparation records | Assessment |
 |---|---|---|---|
@@ -61,18 +61,18 @@ Source/formulation discrepancy flagged: 26; source-specific variant linked witho
 | co2-to-formate / PdAg / N-doped carbon | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | co2-to-formate / Single-atom Ru on Mg-Al LDH | variant_available | ru-ldh-2017 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | co-prox / Fe-promoted Pt/Al2O3 (fuel-processor standard) | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
-| co-prox / Au/TiO2 nanogold (low-temperature) | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
+| co-prox / Au/TiO2 nanogold (low-temperature) | variant_available | au-t100-2020 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. Second-pass primary preparation review on 2026-09-15 adds named source specimens; their linkage does not validate exact screening composition or complete manufacturing cost. |
 | co-prox / CuO-CeO2 (base-metal option) | variant_available | cu-ceria-nc-2026 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. Additional primary preparation records were read on 2026-09-15; these named laboratory specimens do not jointly validate the original catalog formulation, complete preparation and operating costs. |
 | dry-reforming / Ni/CeO2 single-site route | source_mismatch | ni-ceria-r-2022, ni-ceria-c-2022, ni-ceria-s-2022 | The cited 2019 preparation uses Ce-substituted hydroxyapatite. Ce-containing HAP is not a CeO2 support. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. Additional primary preparation records were read on 2026-09-15; these named laboratory specimens do not jointly validate the original catalog formulation, complete preparation and operating costs. |
 | dry-reforming / Ni-zeolite stabilized route | variant_available | ni6-dbeta-d-2024 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | dry-reforming / Ir@CeO2-x premium | variant_available | ir-ceria-2024 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
-| dry-reforming / Ni-Co/Al-Mg-O bimetallic | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
+| dry-reforming / Ni-Co/Al-Mg-O bimetallic | variant_available | niht-co-2025 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. Second-pass primary preparation review on 2026-09-15 adds named source specimens; their linkage does not validate exact screening composition or complete manufacturing cost. |
 | ethylene-epoxidation / Ag / alpha-Al2O3 baseline | variant_available | ag15-alumina-2023 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | ethylene-epoxidation / Ag-Cs / Al2O3 (industrial standard) | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | ethylene-epoxidation / Ag-Cs-Re / Al2O3 (modern HSE) | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | ethylene-epoxidation / Cu-Ag/alpha-Al2O3 (DFT-designed alloy) | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | fischer-tropsch-synthesis / Co / Al2O3 FT (commercial baseline) | variant_available | co6-alumina-2018 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
-| fischer-tropsch-synthesis / Fe / SiO2 lower-olefin FT | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
+| fischer-tropsch-synthesis / Fe / SiO2 lower-olefin FT | variant_available | fe5c2-silica-l-2022 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. Second-pass primary preparation review on 2026-09-15 adds named source specimens; their linkage does not validate exact screening composition or complete manufacturing cost. |
 | fischer-tropsch-synthesis / Co / CNT structured FT | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | fischer-tropsch-synthesis / Precipitated Fe-Cu-K (Sasol-class) | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | formic-acid-dehydrogenation / Pd/C baseline | variant_available | pd-carbon-2024 | A nominal 5 wt% Pd/C method is available. Actual batch output and equipment consumption remain user inputs. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
@@ -84,12 +84,12 @@ Source/formulation discrepancy flagged: 26; source-specific variant linked witho
 | fuel-cell-orr / Fe-N-C PGM-free cathode | variant_available | fe-nc-cvm-2024, fe-nc-brcl-2024 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | fuel-cell-orr / PtNi octahedra (mass-activity ceiling) | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | glycerol-electrooxidation / Pt / C glycerol anode | variant_available | pt-carbon-polyol-2023, ptfe-carbon-polyol-2023 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. Additional primary preparation records were read on 2026-09-15; these named laboratory specimens do not jointly validate the original catalog formulation, complete preparation and operating costs. |
-| glycerol-electrooxidation / Au / C glycerol anode (selectivity) | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
+| glycerol-electrooxidation / Au / C glycerol anode (selectivity) | variant_available | auin-ni-foam-2025 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. Second-pass primary preparation review on 2026-09-15 adds named source specimens; their linkage does not validate exact screening composition or complete manufacturing cost. |
 | glycerol-electrooxidation / NiOOH non-noble glycerol anode | variant_available | nioh2-film-2022 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
-| glycerol-electrooxidation / Pt-Bi DHA-selective anode | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
+| glycerol-electrooxidation / Pt-Bi DHA-selective anode | variant_available | ptbi-carbon-gas-aggregation-2021 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. Second-pass primary preparation review on 2026-09-15 adds named source specimens; their linkage does not validate exact screening composition or complete manufacturing cost. |
 | hydrodeoxygenation / Pt / SiO2 HDO | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | hydrodeoxygenation / CoMoS / Al2O3 sulfide HDO | source_mismatch | Not verified / 확인 못 함 | The accessible supplement describes Co-doped MoS2 nanosulfides; it does not establish the catalog 84 wt% alumina-supported preparation. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
-| hydrodeoxygenation / NiMo / carbon (acid-free) | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
+| hydrodeoxygenation / NiMo / carbon (acid-free) | variant_available | nimos2-2-unsupported-2023, nimos2-2-alumina-2023, nimos2-3-unsupported-2023, nimos2-3-alumina-2023 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. Second-pass primary preparation review on 2026-09-15 adds named source specimens; their linkage does not validate exact screening composition or complete manufacturing cost. |
 | hydrodeoxygenation / Ru/C noble-metal route | variant_available | ru-nc-melamine-2023 | Commercial Ru/C performance is not disclosure of the supplier manufacturing recipe. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. Additional primary preparation records were read on 2026-09-15; these named laboratory specimens do not jointly validate the original catalog formulation, complete preparation and operating costs. |
 | hydrogen-evolution-reaction / Pt/C HER cathode (PEM) | variant_available | pt20-kb-200-2025 | The exchange-current trend source is a performance/theory reference, not an exact 20 wt% Pt/C synthesis. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | hydrogen-evolution-reaction / NiMo alkaline HER cathode | variant_available | nimo-powder-2013 | The public method reports precursor Ni:Mo ratio 6:4 molar and composition changes on reduction; catalog 70/30 mass fractions are not interchangeable. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
@@ -100,19 +100,19 @@ Source/formulation discrepancy flagged: 26; source-specific variant linked witho
 | methane-pyrolysis / Activated-carbon consumable catalyst | variant_available | coal-ac-1023-2020 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. Additional primary preparation records were read on 2026-09-15; these named laboratory specimens do not jointly validate the original catalog formulation, complete preparation and operating costs. |
 | methane-pyrolysis / Molten Ni-Bi alloy media | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | methanol-to-olefins / SAPO-34 chabazite (DMTO baseline) | variant_available | sapo34-sp-2025 | The additional 2021 primary study purchased SAPO-34; its 393 K degassing is characterization, not a disclosed catalyst manufacturing recipe. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. Additional primary preparation records were read on 2026-09-15; these named laboratory specimens do not jointly validate the original catalog formulation, complete preparation and operating costs. |
-| methanol-to-olefins / H-ZSM-5 (MTH baseline) | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
+| methanol-to-olefins / H-ZSM-5 (MTH baseline) | variant_available | bmp-30-zsm5-2017, tpa-30-zsm5-2017 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. Second-pass primary preparation review on 2026-09-15 adds named source specimens; their linkage does not validate exact screening composition or complete manufacturing cost. |
 | methanol-to-olefins / Zn / ZSM-5 (aromatics-leaning) | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | methanol-to-olefins / Nanosized SAPO-34 (lifetime play) | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | nh3-scr / V2O5-WO3/TiO2 monolith (stationary standard) | variant_available | v-wti-powder-2021 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | nh3-scr / Cu-SSZ-13 (diesel aftertreatment standard) | variant_available | cu-ssz13-exchange-2021 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | nh3-scr / Fe-ZSM-5 high-temperature variant | variant_available | fezsm5-dr-minerals-2015 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. Additional primary preparation records were read on 2026-09-15; these named laboratory specimens do not jointly validate the original catalog formulation, complete preparation and operating costs. |
 | nitrogen-reduction-reaction / Lithium-mediated NRR cathode | variant_available | porous-cu-nrr-2022 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
-| nitrogen-reduction-reaction / Plasma-NRR ammonia route | screening_only | Not verified / 확인 못 함 | A plasma nitrogen-fixation process is not a conventional catalyst-powder synthesis; the hardware boundary requires separate treatment. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
-| nitrogen-reduction-reaction / Aqueous NRR research anchor (Cu) | screening_only | Not verified / 확인 못 함 | Rigorous analytical controls and false-positive studies do not establish a verified productive Cu catalyst or manufacturing recipe. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
+| nitrogen-reduction-reaction / Plasma-NRR ammonia route | variant_available | wo3-h2n2-1h-electrode-2025, wo3-h2n2-2h-electrode-2025 | A plasma nitrogen-fixation process is not a conventional catalyst-powder synthesis; the hardware boundary requires separate treatment. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. Second-pass primary preparation review on 2026-09-15 adds named source specimens; their linkage does not validate exact screening composition or complete manufacturing cost. |
+| nitrogen-reduction-reaction / Aqueous NRR research anchor (Cu) | variant_available | cu-pi300-powder-2019 | Rigorous analytical controls and false-positive studies do not establish a verified productive Cu catalyst or manufacturing recipe. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. Second-pass primary preparation review on 2026-09-15 adds named source specimens; their linkage does not validate exact screening composition or complete manufacturing cost. |
 | nitrogen-reduction-reaction / Li-mediated flow cell with proton shuttle | variant_available | porous-cu-nrr-2022 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | olefin-metathesis / Re2O7 / Al2O3 mild-condition | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | olefin-metathesis / WO3 / SiO2 (Lummus OCT) | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
-| olefin-metathesis / MoO3 / SiO2-Al2O3 emerging | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
+| olefin-metathesis / MoO3 / SiO2-Al2O3 emerging | variant_available | mo6-silica-2022 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. Second-pass primary preparation review on 2026-09-15 adds named source specimens; their linkage does not validate exact screening composition or complete manufacturing cost. |
 | olefin-metathesis / W-H/Al2O3 single-site hydride | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | pem-electrolyzer-oer / IrO2 PEM anode baseline | variant_available | iro2-adams-2023 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | pem-electrolyzer-oer / Low-Ir interface-engineered PEM route | variant_available | iro2-adams-2023, ir-mnox-carbon-300-2024 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
@@ -122,13 +122,13 @@ Source/formulation discrepancy flagged: 26; source-specific variant linked witho
 | photocatalytic-co2-reduction / g-C3N4 / SnS2 Z-scheme | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | photocatalytic-co2-reduction / Cu2O / MOF heterojunction | source_mismatch | Not verified / 확인 못 함 | The linked primary title concerns nitrogen-doped In2O3; it does not establish a Cu2O/MOF preparation. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | photocatalytic-co2-reduction / Monoclinic BiVO4 (visible-light oxide) | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
-| photocatalytic-water-splitting / TiO2 (anatase) baseline | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
+| photocatalytic-water-splitting / TiO2 (anatase) baseline | variant_available | meso-tio2-25-2019 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. Second-pass primary preparation review on 2026-09-15 adds named source specimens; their linkage does not validate exact screening composition or complete manufacturing cost. |
 | photocatalytic-water-splitting / g-C3N4 metal-free photocatalyst | variant_available | gcn-urea-550-2016 | A urea-derived powder method is available. The source water-splitting experiments add cocatalysts, so preparation coverage does not establish activity of metal-free powder. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | photocatalytic-water-splitting / Pt / TiO2 cocatalyst | variant_available | pt2-p25-2018 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | photocatalytic-water-splitting / SrTiO3:Al with Rh/Cr2O3 + CoOOH | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | propane-dehydrogenation / Pt-Sn / Al2O3 (Oleflex-style) | source_mismatch | ptsn-alumina-base-2024, ptsn-alumina-04ca-2024, ptsn-alumina-08ca-2024, ptsn-alumina-12ca-2024 | The linked PtSn preparations include SBA-15 and silica; the catalog alumina/Oleflex-style formulation is not an exact reproduction. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. Additional primary preparation records were read on 2026-09-15; these named laboratory specimens do not jointly validate the original catalog formulation, complete preparation and operating costs. |
 | propane-dehydrogenation / PtZn intermetallic / zeolite | screening_only | Not verified / 확인 못 함 | The accessible supplement labels 1Pt1Zn and 4Pt4Zn samples; it does not provide the full preparation for catalog 0.5 Pt/1.0 Zn wt%. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
-| propane-dehydrogenation / h-BN ODHP route | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
+| propane-dehydrogenation / h-BN ODHP route | variant_available | fe-bn-milled-2024, fe-bn-iwi-2024 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. Second-pass primary preparation review on 2026-09-15 adds named source specimens; their linkage does not validate exact screening composition or complete manufacturing cost. |
 | propane-dehydrogenation / CrOx/Al2O3 (Catofin-type) | source_mismatch | cr20-alumina-commercialsupport-2017 | The reviewed primary comparator is 20 wt% Cr2O3 without the catalog K2O promoter; it is not an exact Catofin formulation. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | rwgs / Cu/CeO2 baseline | source_mismatch | cu-ceria-dp-2022 | The source 15CuCe label is Cu/CeO2 mass ratio 0.15, not 15 wt% Cu in the total catalyst. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | rwgs / Pt/TiO2 premium | source_mismatch | Not verified / 확인 못 함 | The 2022 source prepares Pt–MoO3/Mo2N, while the 2023 source studies multicomponent-promoted Pt/TiO2. These do not jointly establish the exact unpromoted catalog specimen. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
@@ -142,12 +142,54 @@ Source/formulation discrepancy flagged: 26; source-specific variant linked witho
 | steam-methane-reforming / Rh/Al2O3 compact-reformer route | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | steam-methane-reforming / Sn/Ni surface alloy (coking-resistant) | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | syngas-methanol / Cu/ZnO/Al2O3 (industrial workhorse) | variant_available | cza-coprecipitation-2020 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
-| syngas-methanol / Pd/ZnO intermetallic alternative | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
+| syngas-methanol / Pd/ZnO intermetallic alternative | variant_available | pd-zno-i-2021 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. Second-pass primary preparation review on 2026-09-15 adds named source specimens; their linkage does not validate exact screening composition or complete manufacturing cost. |
 | syngas-methanol / Ga-promoted Cu/ZnO (Zn-coverage engineering) | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | water-gas-shift / Cu/ZnO/Al2O3 baseline | variant_available | cza-coprecipitation-2020 | The primary study purchased its commercial Cu/ZnO/Al2O3 comparator; its Cu-nanocrystal synthesis is a different product. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | water-gas-shift / Co-CeO2 interface route | source_mismatch | ceco-spray-2023 | The reviewed source uses Ce:Co molar ratios 1:9 or 9:1; neither establishes the catalog 18 wt% Co formulation. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | water-gas-shift / Pt/CeO2 premium | source_mismatch | pt-ceria-2021 | The reviewed 2021 specimen is measured 1.85 wt% Pt/CeO2; another linked work uses Pt/MoC. Neither verifies the catalog 2.5 wt% formulation. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | water-gas-shift / Fe2O3-Cr2O3(-CuO) high-temperature shift | variant_available | cr-hm-wgs-2022 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. Additional primary preparation records were read on 2026-09-15; these named laboratory specimens do not jointly validate the original catalog formulation, complete preparation and operating costs. |
+
+## Additional primary-source assessment
+
+These targeted Europe PMC searches prioritize public full text and are not an exhaustive systematic review. Zero indexed hits are not evidence that no recipe exists. Selection decisions and unverified access are retained; the remaining candidates require further primary-source review.
+
+| Selected DOI | Preparation records | Assessment |
+|---|---|---|
+| [10.1021/acsami.2c05221](https://pmc.ncbi.nlm.nih.gov/articles/PMC9305712/) | ni-ceria-r-2022, ni-ceria-c-2022, ni-ceria-s-2022 | Named preparation variants were transcribed. This does not validate the original screening formulation or provide complete operating costs. |
+| [10.1021/acscatal.2c03871](https://pmc.ncbi.nlm.nih.gov/articles/PMC9679995/) | cr-hm-wgs-2022 | Named preparation variants were transcribed. This does not validate the original screening formulation or provide complete operating costs. |
+| [10.1021/acscatal.5c06552](https://pmc.ncbi.nlm.nih.gov/articles/PMC12724332/) | cu-ceria-nc-2026 | Named preparation variants were transcribed. This does not validate the original screening formulation or provide complete operating costs. |
+| [10.1021/acsomega.2c01016](https://pmc.ncbi.nlm.nih.gov/articles/PMC9089693/) | nicu-ms-500-2022, nicu-ms-600-2022, nicu-ms-700-2022, nicu-ms-800-2022 | Named preparation variants were transcribed. This does not validate the original screening formulation or provide complete operating costs. |
+| [10.1021/acsomega.9b04044](https://pmc.ncbi.nlm.nih.gov/articles/PMC7017400/) | coal-ac-1023-2020 | Named preparation variants were transcribed. This does not validate the original screening formulation or provide complete operating costs. |
+| [10.1038/ncomms10672](https://pmc.ncbi.nlm.nih.gov/articles/PMC4749985/) | mos2-m-2016, mos2-s-2016 | Named preparation variants were transcribed. This does not validate the original screening formulation or provide complete operating costs. |
+| [10.1038/ncomms8261](https://pmc.ncbi.nlm.nih.gov/articles/PMC4557299/) | Not curated | Not curated for this candidate: Ni-Fe oxide/carbon and Co oxide specimens differ from the catalog NiCo2O4 spinel. A title or related element does not establish formulation identity. |
+| [10.1038/s41467-022-30733-6](https://pmc.ncbi.nlm.nih.gov/articles/PMC9163090/) | ag-hollow-fiber-redox-2022 | Named preparation variants were transcribed. This does not validate the original screening formulation or provide complete operating costs. |
+| [10.1038/s41467-024-52518-9](https://pmc.ncbi.nlm.nih.gov/articles/PMC11408692/) | Not curated | Not curated: the main text was read, but gas-migration setup details require the supplement. The public supplement could not be retrieved (Europe PMC response HTTP 503); its contents are not verified. |
+| [10.1038/s41467-025-63061-6](https://pmc.ncbi.nlm.nih.gov/articles/PMC12370944/) | Not curated | Not curated: the available Methods describe reduction of analytical specimens and refer to earlier industrial fusion preparation. These conditions do not establish a complete catalyst manufacturing recipe. |
+| [10.1038/s41598-025-14220-8](https://pmc.ncbi.nlm.nih.gov/articles/PMC12343829/) | sapo34-sp-2025 | Named preparation variants were transcribed. This does not validate the original screening formulation or provide complete operating costs. |
+| [10.1038/srep09270](https://pmc.ncbi.nlm.nih.gov/articles/PMC4366855/) | fezsm5-dr-minerals-2015 | Named preparation variants were transcribed. This does not validate the original screening formulation or provide complete operating costs. |
+| [10.1039/c9ra03097b](https://pmc.ncbi.nlm.nih.gov/articles/PMC9066922/) | ba-ru-nmc-2019 | Named preparation variants were transcribed. This does not validate the original screening formulation or provide complete operating costs. |
+| [10.1039/d3ra01866k](https://pmc.ncbi.nlm.nih.gov/articles/PMC10336651/) | ru-nc-melamine-2023 | Named preparation variants were transcribed. This does not validate the original screening formulation or provide complete operating costs. |
+| [10.3390/ma15238309](https://pmc.ncbi.nlm.nih.gov/articles/PMC9739429/) | fused-wustite-w-12-2022, fused-wustite-w-22-2022 | Named preparation variants were transcribed. This does not validate the original screening formulation or provide complete operating costs. |
+| [10.3390/molecules29102392](https://pmc.ncbi.nlm.nih.gov/articles/PMC11124129/) | iro2-white-p25-photo-2024 | Named preparation variants were transcribed. This does not validate the original screening formulation or provide complete operating costs. |
+| [10.3390/molecules29132959](https://pmc.ncbi.nlm.nih.gov/articles/PMC11243666/) | ptsn-alumina-base-2024, ptsn-alumina-04ca-2024, ptsn-alumina-08ca-2024, ptsn-alumina-12ca-2024 | Named preparation variants were transcribed. This does not validate the original screening formulation or provide complete operating costs. |
+| [10.3390/nano13071173](https://pmc.ncbi.nlm.nih.gov/articles/PMC10096876/) | pt-carbon-polyol-2023, ptfe-carbon-polyol-2023 | Named preparation variants were transcribed. This does not validate the original screening formulation or provide complete operating costs. |
+| [10.1002/anie.202103087](https://pmc.ncbi.nlm.nih.gov/articles/PMC8361960/) | pd-zno-i-2021 | Primary preparation section read; explicit quantities and source-specific boundaries transcribed. Missing yields, operation inputs and prices remain unverified. |
+| [10.1002/cssc.202402378](https://pmc.ncbi.nlm.nih.gov/articles/PMC12175034/) | auin-ni-foam-2025 | Primary preparation section read; explicit quantities and source-specific boundaries transcribed. Missing yields, operation inputs and prices remain unverified. |
+| [10.1021/acsami.0c08258](https://pmc.ncbi.nlm.nih.gov/articles/PMC7458359/) | au-t100-2020 | Primary preparation section read; explicit quantities and source-specific boundaries transcribed. Missing yields, operation inputs and prices remain unverified. |
+| [10.1021/acsenergylett.5c01034](https://pmc.ncbi.nlm.nih.gov/articles/PMC12333582/) | wo3-h2n2-1h-electrode-2025, wo3-h2n2-2h-electrode-2025 | Primary preparation section read; explicit quantities and source-specific boundaries transcribed. Missing yields, operation inputs and prices remain unverified. |
+| [10.1021/acsomega.3c06188](https://pmc.ncbi.nlm.nih.gov/articles/PMC10620879/) | nimos2-2-unsupported-2023, nimos2-2-alumina-2023, nimos2-3-unsupported-2023, nimos2-3-alumina-2023 | Primary preparation section read; explicit quantities and source-specific boundaries transcribed. Missing yields, operation inputs and prices remain unverified. |
+| [10.1021/acsomega.5c08293](https://pmc.ncbi.nlm.nih.gov/articles/PMC12547782/) | niht-co-2025 | Primary preparation section read; explicit quantities and source-specific boundaries transcribed. Missing yields, operation inputs and prices remain unverified. |
+| [10.1038/s41467-019-12312-4](https://pmc.ncbi.nlm.nih.gov/articles/PMC6763479/) | cu-pi300-powder-2019 | Primary preparation section read; explicit quantities and source-specific boundaries transcribed. Missing yields, operation inputs and prices remain unverified. |
+| [10.1039/c7sc02858j](https://pmc.ncbi.nlm.nih.gov/articles/PMC5855293/) | bmp-30-zsm5-2017, tpa-30-zsm5-2017 | Primary preparation section read; explicit quantities and source-specific boundaries transcribed. Missing yields, operation inputs and prices remain unverified. |
+| [10.1039/c8sc04155e](https://pmc.ncbi.nlm.nih.gov/articles/PMC6368211/) | meso-tio2-25-2019 | Primary preparation section read; explicit quantities and source-specific boundaries transcribed. Missing yields, operation inputs and prices remain unverified. |
+| [10.1039/c9ra08967e](https://pmc.ncbi.nlm.nih.gov/articles/PMC9048714/) | Not curated | Not curated: the preparation paragraph reports a Ni(NO3)3 hydrate and mutually inconsistent nitrate masses/moles; it also changes CeO2 to ZrO2 in sample naming. These inconsistencies were not silently corrected or used to establish an exact Ni/CeO2 recipe. |
+| [10.1039/d0na01009j](https://pmc.ncbi.nlm.nih.gov/articles/PMC9418899/) | ptbi-carbon-gas-aggregation-2021 | Primary preparation section read; explicit quantities and source-specific boundaries transcribed. Missing yields, operation inputs and prices remain unverified. |
+| [10.1039/d2sc03321f](https://pmc.ncbi.nlm.nih.gov/articles/PMC9337747/) | mo6-silica-2022 | Primary preparation section read; explicit quantities and source-specific boundaries transcribed. Missing yields, operation inputs and prices remain unverified. |
+| [10.1039/d4ey00123k](https://pmc.ncbi.nlm.nih.gov/articles/PMC11320177/) | fe-bn-milled-2024, fe-bn-iwi-2024 | Primary preparation section read; explicit quantities and source-specific boundaries transcribed. Missing yields, operation inputs and prices remain unverified. |
+| [10.3390/nano12203704](https://pmc.ncbi.nlm.nih.gov/articles/PMC9610965/) | fe5c2-silica-l-2022 | Primary preparation section read; explicit quantities and source-specific boundaries transcribed. Missing yields, operation inputs and prices remain unverified. |
+
+The accompanying JSON retains each targeted query, database endpoint, search date and hit count. Search retrieval and the existence of a preparation record are separate outcomes.
+
 
 ## Source-specific preparations
 
@@ -1868,6 +1910,595 @@ Explicit purchases/inputs (unpriced; missing amounts remain unknown):
 
 This is an area-defined hollow-fiber electrode, not the generic Ag membrane-electrode assembly in the catalog. It cannot use powder batch costing. The 80 g silver synthesis is not the silver used in one 4 cm2 electrode. Whole fiber output and exact transfer mass remain unknown. Potentiostat potentials and geometric loading are retained as source conditions; electrical energy and manufacturing yield are not inferred. Recovered dry output, operating power, attended labor and prices are not established by these preparation sections; this is not a cost-complete protocol.
 
+### S71. NiHT-Co; Co-modified Ni hydrotalcite-derived catalyst
+
+Record: `niht-co-2025`. Boundary: catalyst_powder.
+
+Source: [Synergistic Effect of Group 9 Metals on the Performance of Hydrotalcite-Derived Ni Catalysts for Methane Dry Reforming](https://doi.org/10.1021/acsomega.5c08293). [DOI 10.1021/acsomega.5c08293](https://doi.org/10.1021/acsomega.5c08293). Locator: Methodology: Catalyst Preparation. Crossref checked: 2026-09-15.
+
+| Operation | Explicit conditions | Source details |
+|---|---|---|
+| Dissolve metal precursors | Not quantified | Mg/Al/Ni molar ratio 2.5:1:0.212. Source adds CoCl2 at 20% of the weight of Ni; no elemental loading or absolute salt masses inferred. |
+| Precipitate and stir | 2 h | Add a small aliquot of 1 M Na2CO3 preheated to 60 °C, then 2 M NaOH to pH 9.5. The 60 °C value describes the carbonate solution, not a verified vessel temperature. |
+| Hydrothermal aging | 80 °C; hold unreported h; ramp unreported °C/min | Overnight duration is unreported. |
+| Wash and separate | Not quantified | Centrifugal filtration until neutral pH; counts and times unreported. |
+| Dry precursor | 100 °C; hold 8 h; ramp unreported °C/min |  |
+| Calcine precursor | 800 °C; hold 6 h; ramp unreported °C/min |  |
+
+Explicit purchases/inputs (unpriced; missing amounts remain unknown):
+
+| Operation | Material | Amount | Note |
+|---|---|---|---|
+| Dissolve metal precursors | Mg nitrate | Not verified / 확인 못 함 |  |
+| Dissolve metal precursors | Al nitrate | Not verified / 확인 못 함 |  |
+| Dissolve metal precursors | Ni nitrate | Not verified / 확인 못 함 |  |
+| Dissolve metal precursors | CoCl2 | Not verified / 확인 못 함 |  |
+| Dissolve metal precursors | Deionized water | 75 mL |  |
+| Precipitate and stir | Na2CO3 solution, 1 M | Not verified / 확인 못 함 |  |
+| Precipitate and stir | NaOH solution, 2 M | Not verified / 확인 못 함 |  |
+| Wash and separate | Wash water | Not verified / 확인 못 함 |  |
+
+Selected boundary ends at calcined powder; reduction and catalytic evaluation are separate. This source specimen does not establish the catalog Ni/Co loadings. Unless explicitly reported, recovered dry output remains unknown. Mean electrical demand, attended labor and procurement prices are not established; this is not a cost-complete protocol.
+
+### S72. 0.2-NiMoS2 unsupported
+
+Record: `nimos2-2-unsupported-2023`. Boundary: catalyst_powder.
+
+Source: [Selective Deoxygenation of Waste Cooking Oil to Diesel-Like Hydrocarbons Using Supported and Unsupported NiMoS2 Catalysts](https://doi.org/10.1021/acsomega.3c06188). [DOI 10.1021/acsomega.3c06188](https://doi.org/10.1021/acsomega.3c06188). Locator: Experimental Section: Catalyst Synthesis. Crossref checked: 2026-09-15.
+
+| Operation | Explicit conditions | Source details |
+|---|---|---|
+| Prepare sulfide precursors | Not quantified | Nickel salt mass and additional dissolving water are not specified. |
+| Hydrothermal synthesis | 360 °C; hold 1 h; ramp unreported °C/min; H2 | Initial H2 pressure 28 bar; gauge/absolute basis is unstated. 250 mL is reactor capacity, not solution charge. |
+
+Explicit purchases/inputs (unpriced; missing amounts remain unknown):
+
+| Operation | Material | Amount | Note |
+|---|---|---|---|
+| Prepare sulfide precursors | Ammonium tetrathiomolybdate | 0.3 g |  |
+| Prepare sulfide precursors | Deionized water | 50 g |  |
+| Prepare sulfide precursors | Ni(NO3)2·6H2O | Not verified / 확인 못 함 |  |
+| Prepare sulfide precursors | Additional water | Not verified / 확인 못 함 |  |
+| Prepare sulfide precursors | Decalin | 5 g |  |
+
+Ni/(Ni + Mo) atomic ratio 0.2 is not a catalyst mass fraction. Recovery, rinsing and drying are not described in this selected synthesis paragraph. Waste-cooking-oil deoxygenation and this alumina/unsupported formulation do not establish a carbon-supported catalog formulation or a general bio-oil result. Unless explicitly reported, recovered dry output remains unknown. Mean electrical demand, attended labor and procurement prices are not established; this is not a cost-complete protocol.
+
+### S73. 0.2-NiMoS2/gamma-Al2O3
+
+Record: `nimos2-2-alumina-2023`. Boundary: catalyst_powder.
+
+Source: [Selective Deoxygenation of Waste Cooking Oil to Diesel-Like Hydrocarbons Using Supported and Unsupported NiMoS2 Catalysts](https://doi.org/10.1021/acsomega.3c06188). [DOI 10.1021/acsomega.3c06188](https://doi.org/10.1021/acsomega.3c06188). Locator: Experimental Section: Catalyst Synthesis. Crossref checked: 2026-09-15.
+
+| Operation | Explicit conditions | Source details |
+|---|---|---|
+| Prepare sulfide precursors | Not quantified | The supported route does not restate absolute precursor quantities; the unsupported quantities are not transferred automatically. |
+| Warm precursor solution | 80 °C; hold 0.5 h; ramp unreported °C/min |  |
+| Add support | Not quantified | The source states 20 wt% gamma-Al2O3 based on catalyst weight; actual support mass and recovered catalyst mass are unreported. |
+| Hydrothermal synthesis | 350 °C; hold unreported h; ramp unreported °C/min; H2 | Initial H2 pressure 28 bar; gauge/absolute basis and supported-route hold time are not stated. |
+
+Explicit purchases/inputs (unpriced; missing amounts remain unknown):
+
+| Operation | Material | Amount | Note |
+|---|---|---|---|
+| Prepare sulfide precursors | Ammonium tetrathiomolybdate | Not verified / 확인 못 함 |  |
+| Prepare sulfide precursors | Ni(NO3)2·6H2O | Not verified / 확인 못 함 |  |
+| Prepare sulfide precursors | Deionized water | Not verified / 확인 못 함 |  |
+| Prepare sulfide precursors | Decalin | Not verified / 확인 못 함 |  |
+| Add support | gamma-Al2O3 | Not verified / 확인 못 함 |  |
+
+Ni/(Ni + Mo) atomic ratio 0.2 is not a catalyst mass fraction. Recovery, rinsing and drying are not described in this selected synthesis paragraph. Waste-cooking-oil deoxygenation and this alumina/unsupported formulation do not establish a carbon-supported catalog formulation or a general bio-oil result. Unless explicitly reported, recovered dry output remains unknown. Mean electrical demand, attended labor and procurement prices are not established; this is not a cost-complete protocol.
+
+### S74. 0.3-NiMoS2 unsupported
+
+Record: `nimos2-3-unsupported-2023`. Boundary: catalyst_powder.
+
+Source: [Selective Deoxygenation of Waste Cooking Oil to Diesel-Like Hydrocarbons Using Supported and Unsupported NiMoS2 Catalysts](https://doi.org/10.1021/acsomega.3c06188). [DOI 10.1021/acsomega.3c06188](https://doi.org/10.1021/acsomega.3c06188). Locator: Experimental Section: Catalyst Synthesis. Crossref checked: 2026-09-15.
+
+| Operation | Explicit conditions | Source details |
+|---|---|---|
+| Prepare sulfide precursors | Not quantified | Nickel salt mass and additional dissolving water are not specified. |
+| Hydrothermal synthesis | 360 °C; hold 1 h; ramp unreported °C/min; H2 | Initial H2 pressure 28 bar; gauge/absolute basis is unstated. 250 mL is reactor capacity, not solution charge. |
+
+Explicit purchases/inputs (unpriced; missing amounts remain unknown):
+
+| Operation | Material | Amount | Note |
+|---|---|---|---|
+| Prepare sulfide precursors | Ammonium tetrathiomolybdate | 0.3 g |  |
+| Prepare sulfide precursors | Deionized water | 50 g |  |
+| Prepare sulfide precursors | Ni(NO3)2·6H2O | Not verified / 확인 못 함 |  |
+| Prepare sulfide precursors | Additional water | Not verified / 확인 못 함 |  |
+| Prepare sulfide precursors | Decalin | 5 g |  |
+
+Ni/(Ni + Mo) atomic ratio 0.3 is not a catalyst mass fraction. Recovery, rinsing and drying are not described in this selected synthesis paragraph. Waste-cooking-oil deoxygenation and this alumina/unsupported formulation do not establish a carbon-supported catalog formulation or a general bio-oil result. Unless explicitly reported, recovered dry output remains unknown. Mean electrical demand, attended labor and procurement prices are not established; this is not a cost-complete protocol.
+
+### S75. 0.3-NiMoS2/gamma-Al2O3
+
+Record: `nimos2-3-alumina-2023`. Boundary: catalyst_powder.
+
+Source: [Selective Deoxygenation of Waste Cooking Oil to Diesel-Like Hydrocarbons Using Supported and Unsupported NiMoS2 Catalysts](https://doi.org/10.1021/acsomega.3c06188). [DOI 10.1021/acsomega.3c06188](https://doi.org/10.1021/acsomega.3c06188). Locator: Experimental Section: Catalyst Synthesis. Crossref checked: 2026-09-15.
+
+| Operation | Explicit conditions | Source details |
+|---|---|---|
+| Prepare sulfide precursors | Not quantified | The supported route does not restate absolute precursor quantities; the unsupported quantities are not transferred automatically. |
+| Warm precursor solution | 80 °C; hold 0.5 h; ramp unreported °C/min |  |
+| Add support | Not quantified | The source states 20 wt% gamma-Al2O3 based on catalyst weight; actual support mass and recovered catalyst mass are unreported. |
+| Hydrothermal synthesis | 350 °C; hold unreported h; ramp unreported °C/min; H2 | Initial H2 pressure 28 bar; gauge/absolute basis and supported-route hold time are not stated. |
+
+Explicit purchases/inputs (unpriced; missing amounts remain unknown):
+
+| Operation | Material | Amount | Note |
+|---|---|---|---|
+| Prepare sulfide precursors | Ammonium tetrathiomolybdate | Not verified / 확인 못 함 |  |
+| Prepare sulfide precursors | Ni(NO3)2·6H2O | Not verified / 확인 못 함 |  |
+| Prepare sulfide precursors | Deionized water | Not verified / 확인 못 함 |  |
+| Prepare sulfide precursors | Decalin | Not verified / 확인 못 함 |  |
+| Add support | gamma-Al2O3 | Not verified / 확인 못 함 |  |
+
+Ni/(Ni + Mo) atomic ratio 0.3 is not a catalyst mass fraction. Recovery, rinsing and drying are not described in this selected synthesis paragraph. Waste-cooking-oil deoxygenation and this alumina/unsupported formulation do not establish a carbon-supported catalog formulation or a general bio-oil result. Unless explicitly reported, recovered dry output remains unknown. Mean electrical demand, attended labor and procurement prices are not established; this is not a cost-complete protocol.
+
+### S76. chi-Fe5C2@SiO2_L
+
+Record: `fe5c2-silica-l-2022`. Boundary: catalyst_powder.
+
+Source: [Effects of Silica Shell Encapsulated Nanocrystals on Active χ-Fe5C2 Phase and Fischer–Tropsch Synthesis](https://doi.org/10.3390/nano12203704). [DOI 10.3390/nano12203704](https://doi.org/10.3390/nano12203704). Locator: Sections 2.2.1 and 2.2.2; selected low-loading silica-shell specimen. Crossref checked: 2026-09-15.
+
+| Operation | Explicit conditions | Source details |
+|---|---|---|
+| Mix and degas | N2; Intermediate batch: carbide | Room-temperature N2 degassing; duration unreported. |
+| Heat amine mixture | 120 °C; hold unreported h; ramp unreported °C/min; N2; Intermediate batch: carbide | Mix fully before carbonyl addition; hold and ramp unreported. |
+| Introduce Fe carbonyl and react | 180 °C; hold 0.5 h; ramp unreported °C/min; N2; Intermediate batch: carbide |  |
+| Complete carbide synthesis | 350 °C; hold 0.08333333333333333 h; ramp unreported °C/min; N2; Intermediate batch: carbide |  |
+| Cool and passivate | 0.25 h; 5% O2/N2; Intermediate batch: carbide | Cooling to ambient is additional and unreported; passivation lasts 15 min. |
+| Magnetically separate and wash | Intermediate batch: carbide | Approximately 20 washes of about 1 min and about 250 mL total hexane. Approximate values are retained here, not set as exact repetition, duration or purchase quantity. |
+| Prepare solution A | Not quantified | Disperse 0.070 g recovered carbide with PVP in ethanol; sonication time unreported. |
+| Mix CTAB and water | 60 °C; hold 0.5 h; ramp unreported °C/min |  |
+| Prepare solution B | 60 °C; hold unreported h; ramp unreported °C/min | Add solution A and mix at 60 °C for at least 30 min. Exact elapsed time is unreported. |
+| Prepare solution C | 90 °C; hold 0.3333333333333333 h; ramp unreported °C/min |  |
+| Cool solutions | Not quantified | Cool B and C to room temperature before mixing; duration unreported. |
+| Encapsulate carbide | 48 h |  |
+| Wash encapsulated particles | Not quantified |  |
+| Dry silica-shell particles | 60 °C; hold unreported h; ramp unreported °C/min; vacuum | Drying duration is unreported. No additional calcination or pre-reaction reduction is added. |
+
+Intermediate transfers (recovery is not inferred from precursor inputs):
+
+| Intermediate / destination | Recovered kg | Used kg | Source details |
+|---|---|---|---|
+| Preformed chi-Fe5C2 nanoparticles / final batch | Not verified / 확인 못 함 | 7e-05 |  |
+
+Explicit purchases/inputs (unpriced; missing amounts remain unknown):
+
+| Operation | Material | Amount | Note |
+|---|---|---|---|
+| Mix and degas | Octadecylamine, 85% | 30 g |  |
+| Mix and degas | CTAB | 0.226 g |  |
+| Introduce Fe carbonyl and react | Fe(CO)5, 99.99% | 1 mL |  |
+| Magnetically separate and wash | Hexane | Not verified / 확인 못 함 |  |
+| Prepare solution A | PVP, average molecular weight 40000 | 3 g |  |
+| Prepare solution A | Ethanol | 50 mL |  |
+| Mix CTAB and water | CTAB | 8.4 g |  |
+| Mix CTAB and water | Deionized water | 72 g |  |
+| Prepare solution C | TEOS, 98% | 6 g |  |
+| Prepare solution C | Triethanolamine, 98% | 45 g |  |
+| Wash encapsulated particles | Wash water | Not verified / 확인 못 함 |  |
+| Wash encapsulated particles | Wash ethanol | Not verified / 확인 못 함 |  |
+
+The source reports 3.5 wt% Fe for the L specimen. The H variant changes aliquots and aqueous contact; its quantities are not inferred by copying L. Measured nanoparticle and final dry recovery remain unknown. Some formulation stages can occur concurrently; operation-hour sums are not a production schedule. Unless explicitly reported, recovered dry output remains unknown. Mean electrical demand, attended labor and procurement prices are not established; this is not a cost-complete protocol.
+
+### S77. BMP-30 calcined ZSM-5
+
+Record: `bmp-30-zsm5-2017`. Boundary: catalyst_powder.
+
+Source: [Simple organic structure directing agents for synthesizing nanocrystalline zeolites](https://doi.org/10.1039/c7sc02858j). [DOI 10.1039/c7sc02858j](https://doi.org/10.1039/c7sc02858j). Locator: Experimental: Synthesis of zeolites; Results: Synthesis and characterization of nanosized ZSM-5. Crossref checked: 2026-09-15.
+
+| Operation | Explicit conditions | Source details |
+|---|---|---|
+| Prepare zeolite gel | Not quantified | Nominal Si/Al = 30, OSDA/Si = 0.4, H2O/Si = 15. Boundary begins with prepared OSDA hydroxide solution; upstream OSDA synthesis is not included. |
+| Concentrate gel | Not quantified | Stir and evaporate excess water until desired gel composition; time and temperature unreported. |
+| Crystallize zeolite | 150 °C; hold 336 h; ramp unreported °C/min | 14 days converted to 336 h. |
+| Filter and wash | Not quantified |  |
+| Dry zeolite | 100 °C; hold unreported h; ramp unreported °C/min | Drying duration unreported. |
+| Remove organic template | 580 °C; hold 6 h; ramp unreported °C/min; air |  |
+
+Explicit purchases/inputs (unpriced; missing amounts remain unknown):
+
+| Operation | Material | Amount | Note |
+|---|---|---|---|
+| Prepare zeolite gel | N-butyl-N-methylpyrrolidinium hydroxide solution | Not verified / 확인 못 함 |  |
+| Prepare zeolite gel | Ludox AS-40, 40 wt% silica | Not verified / 확인 못 함 |  |
+| Prepare zeolite gel | Al(OH)3 source, source specification 58% | Not verified / 확인 못 함 |  |
+| Filter and wash | Wash water | Not verified / 확인 못 함 |  |
+
+Reported solid yields are inequalities (>90% for BMP-30 and <70% for TPA-30) on inorganic input basis; no exact recovered mass or uncertainty distribution is inferred. Boundary ends at calcined powder. Pelletization, sieving and 540 °C air activation of a 50 mg reactor specimen belong to subsequent testing, not to this whole-batch preparation. Unless explicitly reported, recovered dry output remains unknown. Mean electrical demand, attended labor and procurement prices are not established; this is not a cost-complete protocol.
+
+### S78. TPA-30 calcined ZSM-5
+
+Record: `tpa-30-zsm5-2017`. Boundary: catalyst_powder.
+
+Source: [Simple organic structure directing agents for synthesizing nanocrystalline zeolites](https://doi.org/10.1039/c7sc02858j). [DOI 10.1039/c7sc02858j](https://doi.org/10.1039/c7sc02858j). Locator: Experimental: Synthesis of zeolites; Results: Synthesis and characterization of nanosized ZSM-5. Crossref checked: 2026-09-15.
+
+| Operation | Explicit conditions | Source details |
+|---|---|---|
+| Prepare zeolite gel | Not quantified | Nominal Si/Al = 30, OSDA/Si = 0.4, H2O/Si = 15. Boundary begins with prepared OSDA hydroxide solution; upstream OSDA synthesis is not included. |
+| Concentrate gel | Not quantified | Stir and evaporate excess water until desired gel composition; time and temperature unreported. |
+| Crystallize zeolite | 150 °C; hold 336 h; ramp unreported °C/min | 14 days converted to 336 h. |
+| Filter and wash | Not quantified |  |
+| Dry zeolite | 100 °C; hold unreported h; ramp unreported °C/min | Drying duration unreported. |
+| Remove organic template | 580 °C; hold 6 h; ramp unreported °C/min; air |  |
+
+Explicit purchases/inputs (unpriced; missing amounts remain unknown):
+
+| Operation | Material | Amount | Note |
+|---|---|---|---|
+| Prepare zeolite gel | Tetrapropylammonium hydroxide solution | Not verified / 확인 못 함 |  |
+| Prepare zeolite gel | Ludox AS-40, 40 wt% silica | Not verified / 확인 못 함 |  |
+| Prepare zeolite gel | Al(OH)3 source, source specification 58% | Not verified / 확인 못 함 |  |
+| Filter and wash | Wash water | Not verified / 확인 못 함 |  |
+
+Reported solid yields are inequalities (>90% for BMP-30 and <70% for TPA-30) on inorganic input basis; no exact recovered mass or uncertainty distribution is inferred. Boundary ends at calcined powder. Pelletization, sieving and 540 °C air activation of a 50 mg reactor specimen belong to subsequent testing, not to this whole-batch preparation. Unless explicitly reported, recovered dry output remains unknown. Mean electrical demand, attended labor and procurement prices are not established; this is not a cost-complete protocol.
+
+### S79. Au-In electrodeposited on Ni foam
+
+Record: `auin-ni-foam-2025`. Boundary: electrode.
+
+Source: [Gold–Indium Electrocatalysts for the Selective Oxidation of Glycerol Coupled with CO 2 Reduction](https://doi.org/10.1002/cssc.202402378). [DOI 10.1002/cssc.202402378](https://doi.org/10.1002/cssc.202402378). Locator: Experimental Section: Electrode Synthesis. Crossref checked: 2026-09-15.
+
+| Operation | Explicit conditions | Source details |
+|---|---|---|
+| Prepare indium stock | Not quantified | 0.25 M In3+ stock adjusted to pH 2 with diluted H2SO4; quantities unreported. |
+| Prepare deposition bath | Not quantified | Final concentrations: KCN 1 M, glucose 0.1 M, In3+ 0.05 M, KOH 1.3 M, K[Au(CN)2] 0.025 M. 400 mL denotes cell capacity, not an established bath volume. |
+| Clean Ni foam | Not quantified | Ni-4753 foam, 16 cm2, 1.6 mm thick; acetone cleaning followed by water rinse. |
+| Deposit Au-In | 70 °C; hold 0.03333333333333333 h; ramp unreported °C/min | Apply -80 mA/cm2 for 120 s. Current density is not cell input power. Thermostat and cell preparation time are not included in the deposition hold. |
+
+Explicit purchases/inputs (unpriced; missing amounts remain unknown):
+
+| Operation | Material | Amount | Note |
+|---|---|---|---|
+| Prepare indium stock | Indium(III) sulfate, at least 98% | Not verified / 확인 못 함 |  |
+| Prepare indium stock | Diluted H2SO4 | Not verified / 확인 못 함 |  |
+| Prepare indium stock | Stock water | Not verified / 확인 못 함 |  |
+| Prepare deposition bath | KCN | Not verified / 확인 못 함 |  |
+| Prepare deposition bath | D-glucose | Not verified / 확인 못 함 |  |
+| Prepare deposition bath | KOH | Not verified / 확인 못 함 |  |
+| Prepare deposition bath | K[Au(CN)2] | Not verified / 확인 못 함 |  |
+| Prepare deposition bath | Bath water | Not verified / 확인 못 함 |  |
+| Clean Ni foam | Ni foam, 16 cm2 piece | 1 item |  |
+| Clean Ni foam | Acetone | Not verified / 확인 못 함 |  |
+| Clean Ni foam | Rinse water | Not verified / 확인 못 함 |  |
+
+Au-only comparator uses a different bath and -70 mA/cm2; it is not substituted for the Au-In specimen. This Ni-foam-supported alloy is a glycerol-oxidation preparation variant, not the catalog Au/carbon formulation. Deposited mass and bath reuse/lifetime are not established. Unless explicitly reported, recovered dry output remains unknown. Mean electrical demand, attended labor and procurement prices are not established; this is not a cost-complete protocol.
+
+### S80. PtBi/C from gas-aggregated clusters; powder before ink preparation
+
+Record: `ptbi-carbon-gas-aggregation-2021`. Boundary: catalyst_powder.
+
+Source: [Binary and ternary Pt-based clusters grown in a plasma multimagnetron-based gas aggregation source: electrocatalytic evaluation towards glycerol oxidation](https://doi.org/10.1039/d0na01009j). [DOI 10.1039/d0na01009j](https://doi.org/10.1039/d0na01009j). Locator: Experimental setup: cluster collection and carbon-supported electrode preparation. Crossref checked: 2026-09-15.
+
+| Operation | Explicit conditions | Source details |
+|---|---|---|
+| Condition sputtering targets | Not quantified | Pt and Bi targets 99.99%; presputtering at least 5 min until stable voltage. Exact duration and target consumption unreported. |
+| Collect bimetallic clusters | 0.166667 h | Collect in a glass vial for 10 min. Ar flow 80 sccm; reference temperature and pressure unstated. Target powers vary across experiments (Pt 20-30 W, Bi 8-13 W) and do not measure whole-system electricity. |
+| Disperse collected clusters | Not quantified | Weigh collected material by vial mass difference; no specimen-specific recovered mass reported here. Sonication time unreported. |
+| Treat carbon support | 400 °C; hold unreported h; ramp unreported °C/min; N2 | Vulcan XC72 at 400 °C under N2; treatment time and mass unreported. |
+| Mix and disperse on carbon | Not quantified | 40 wt% total metal target; at least 20 min sonication. Exact duration and ethanol quantity unreported. |
+| Filter and dry | Not quantified | Alumina membrane: 0.2 micrometre pores, 0.1 mm thickness, 13 mm diameter. Drying temperature/duration unreported. |
+
+Explicit purchases/inputs (unpriced; missing amounts remain unknown):
+
+| Operation | Material | Amount | Note |
+|---|---|---|---|
+| Condition sputtering targets | Pt sputtering target consumption | Not verified / 확인 못 함 |  |
+| Condition sputtering targets | Bi sputtering target consumption | Not verified / 확인 못 함 |  |
+| Disperse collected clusters | Ethanol | Not verified / 확인 못 함 |  |
+| Treat carbon support | Vulcan XC72 | Not verified / 확인 못 함 |  |
+| Mix and disperse on carbon | Mixing ethanol | Not verified / 확인 못 함 |  |
+| Filter and dry | Alumina filter membrane, 13 mm diameter | Not verified / 확인 못 함 |  |
+
+Selected boundary is supported powder before an ink aliquot is deposited on glassy carbon. Three-minute Si and three-second TEM-grid depositions are characterization specimens and are not powder collection times. The 40 wt% figure is a target for total metal; composition-specific Pt/Bi fractions and complete utility use remain unstated. No DHA selectivity or catalog exact composition is established by this import. Unless explicitly reported, recovered dry output remains unknown. Mean electrical demand, attended labor and procurement prices are not established; this is not a cost-complete protocol.
+
+### S81. Meso-TiO2-25; mixed anatase/rutile microspheres before Pt loading
+
+Record: `meso-tio2-25-2019`. Boundary: catalyst_powder.
+
+Source: [Synthesis of uniform ordered mesoporous TiO 2 microspheres with controllable phase junctions for efficient solar water splitting](https://doi.org/10.1039/c8sc04155e). [DOI 10.1039/c8sc04155e](https://doi.org/10.1039/c8sc04155e). Locator: Supporting Information p. 1: Synthesis of Meso-TiO2-25; p. 2 defines subsequent Pt-loaded tests. Crossref checked: 2026-09-15.
+
+| Operation | Explicit conditions | Source details |
+|---|---|---|
+| Prepare self-assembly solution | Not quantified |  |
+| First solvent evaporation | 40 °C; hold 20 h; ramp unreported °C/min |  |
+| Second solvent evaporation | 80 °C; hold 8 h; ramp unreported °C/min |  |
+| Nitrogen thermal treatment | 400 °C; hold 3 h; ramp unreported °C/min; N2 |  |
+| Air thermal treatment | 400 °C; hold 3 h; ramp unreported °C/min; air |  |
+
+Explicit purchases/inputs (unpriced; missing amounts remain unknown):
+
+| Operation | Material | Amount | Note |
+|---|---|---|---|
+| Prepare self-assembly solution | Pluronic F127 | 1.5 g |  |
+| Prepare self-assembly solution | Concentrated HCl | 2 g |  |
+| Prepare self-assembly solution | Acetic acid | 2 g |  |
+| Prepare self-assembly solution | Tetrabutyl titanate | 3.4 g |  |
+| Prepare self-assembly solution | Tetrahydrofuran | 30 mL |  |
+
+The source specifies separate 3 h nitrogen and air treatments. Gas flow, ramp and cooling durations remain unreported. This is a mixed-phase powder rather than the catalog pure-anatase baseline. The hydrogen-evolution tests use 1 wt% Pt and sacrificial methanol; Pt loading and reaction conditions are outside this unmodified powder boundary. Unless explicitly reported, recovered dry output remains unknown. Mean electrical demand, attended labor and procurement prices are not established; this is not a cost-complete protocol.
+
+### S82. 2Pd-ZnO-i; as-calcined impregnation precursor
+
+Record: `pd-zno-i-2021`. Boundary: catalyst_powder.
+
+Source: [Mechanistic Study of Carbon Dioxide Hydrogenation over Pd/ZnO‐Based Catalysts: The Role of Palladium–Zinc Alloy in Selective Methanol Synthesis](https://doi.org/10.1002/anie.202103087). [DOI 10.1002/anie.202103087](https://doi.org/10.1002/anie.202103087). Locator: Supporting Information pp. 1-2 (PDF pp. 2-3): ZnO support and Synthesis of 2Pd-ZnO-i. Crossref checked: 2026-09-15.
+
+| Operation | Explicit conditions | Source details |
+|---|---|---|
+| Supply ZnO support | Not quantified | Boundary starts with 300 mg of prepared ZnO. The upstream source paragraph gives 170 mL water and a 150 mL autoclave; loading/portioning is unresolved and is not entered as a cost-ready support recipe. |
+| Impregnate palladium | Not quantified | 2 mL aqueous solution containing 15.3 mg palladium nitrate hydrate (source spelling: dehydrate). Solution volume is not independently treated as 2 mL pure water. |
+| Dry impregnated support | Not quantified | Overnight at room temperature; duration and temperature unspecified. |
+| Calcine impregnated support | 350 °C; hold 4 h; ramp 2 °C/min; air |  |
+
+Explicit purchases/inputs (unpriced; missing amounts remain unknown):
+
+| Operation | Material | Amount | Note |
+|---|---|---|---|
+| Supply ZnO support | Prepared ZnO support | 0.3 g |  |
+| Impregnate palladium | Palladium nitrate hydrate, 99.9% | 0.0153 g |  |
+| Impregnate palladium | Water for 2 mL impregnation solution | Not verified / 확인 못 함 |  |
+
+Reported Pd content is 1.95 wt% by AAS; recovered final mass is not reported. The prepared-nanoparticle route is a different specimen. As-calcined precursor is not automatically the reduced Pd-Zn intermetallic phase. Subsequent reduction and reaction testing require their own boundary. Unresolved support synthesis charge/vessel discrepancy is preserved rather than silently corrected. Unless explicitly reported, recovered dry output remains unknown. Mean electrical demand, attended labor and procurement prices are not established; this is not a cost-complete protocol.
+
+### S83. Cu/PI-300 powder from prepared polyimide support
+
+Record: `cu-pi300-powder-2019`. Boundary: catalyst_powder.
+
+Source: [Boosting selective nitrogen reduction to ammonia on electron-deficient copper nanoparticles](https://doi.org/10.1038/s41467-019-12312-4). [DOI 10.1038/s41467-019-12312-4](https://doi.org/10.1038/s41467-019-12312-4). Locator: Methods: Preparation of PI nanoflower; Preparation of Cu/PI catalyst and Cu/C catalyst. Crossref checked: 2026-09-15.
+
+| Operation | Explicit conditions | Source details |
+|---|---|---|
+| Supply PI-300 support | Not quantified | Boundary starts with prepared PI-300. Upstream synthesis lists 1.08 g and 2.18 g monomers as 100 mmol each and takes a 30 mL solution aliquot; mass/mole consistency and recovered support yield are unresolved. |
+| Disperse copper salt and support | 2 h | Combined sonication and vigorous stirring interval 2 h; not counted twice. |
+| Add base and stir | 2 h |  |
+| Reduce copper | Not quantified | Add NaBH4 solution dropwise; addition and subsequent reaction duration unreported. |
+| Recover and wash | Not quantified | Centrifuge and wash thoroughly; times/counts unreported. |
+| Dry powder | 60 °C; hold unreported h; ramp unreported °C/min; vacuum | Overnight duration unreported. |
+
+Explicit purchases/inputs (unpriced; missing amounts remain unknown):
+
+| Operation | Material | Amount | Note |
+|---|---|---|---|
+| Supply PI-300 support | Prepared PI-300 support | 0.1 g |  |
+| Disperse copper salt and support | Cu(NO3)2·3H2O | 0.019 g |  |
+| Disperse copper salt and support | Water | 8 mL |  |
+| Add base and stir | NaOH solution, 1 M | 0.2 mL |  |
+| Reduce copper | NaBH4 solution, 1 M | 0.5 mL |  |
+| Recover and wash | Wash water | Not verified / 확인 못 함 |  |
+| Recover and wash | Wash ethanol | Not verified / 확인 못 함 |  |
+
+This is the powder before carbon-cloth ink deposition. PI-400, PI-600, Cu/C and CuOx/PI-300 are different specimens. The upstream support procedure has inconsistent mass/mole annotations and no total recovered mass; it is not silently interpreted as an exact manufacturing input. Unless explicitly reported, recovered dry output remains unknown. Mean electrical demand, attended labor and procurement prices are not established; this is not a cost-complete protocol.
+
+### S84. WO3-H2/N2-1h on carbon cloth
+
+Record: `wo3-h2n2-1h-electrode-2025`. Boundary: electrode.
+
+Source: [Plasma-Assisted Surface Nitridation of Proton Intercalatable WO3 for Efficient Electrocatalytic Ammonia Synthesis](https://doi.org/10.1021/acsenergylett.5c01034). [DOI 10.1021/acsenergylett.5c01034](https://doi.org/10.1021/acsenergylett.5c01034). Locator: Supporting Information S1-S2 (PDF pp. 2-3); main text paragraph defining plasma-treated specimen names. Crossref checked: 2026-09-15.
+
+| Operation | Explicit conditions | Source details |
+|---|---|---|
+| Dissolve tungsten precursor | 0.333333 h; Intermediate batch: stock | Source amount retained in mmol without an inferred molecular weight. |
+| Acidify and dilute stock | Intermediate batch: stock | Add 3 M HCl to pH 1.2 and 3.5 mmol oxalic acid, then dilute to 25 mL. This is final solution volume, not an additional 25 mL water charge. |
+| Prepare substrate | Not quantified | Carbon cloth with MPL, Hydro-LAT 1400, 0.75 by 0.75 cm. Sequential water and alcohol ultrasonic cleaning; exact times unreported. |
+| Charge growth solution | Not quantified | Use 4 mL of the preceding 25 mL stock and add Na2SO4; no density or dry-mass allocation inferred. |
+| Microwave hydrothermal growth | 180 °C; hold 0.25 h; ramp unreported °C/min |  |
+| Cool and wash electrode | Not quantified | Cool to ambient and rinse several times; elapsed time and water amount unreported. |
+| Dry electrode | 70 °C; hold unreported h; ramp unreported °C/min; ambient | Drying duration unreported. |
+| Plasma surface nitridation | 1 h; H2/N2 (1:4) | H2/N2 = 1:4; 1 h treatment. Source states 16 torr, 20 kHz and 13 kV AC. Frequency and voltage do not establish electrical energy; ambient temperature has no numeric value. |
+
+Intermediate transfers (recovery is not inferred from precursor inputs):
+
+| Intermediate / destination | Recovered kg | Used kg | Source details |
+|---|---|---|---|
+| Tungsten precursor stock solution / final batch | Not verified / 확인 못 함 | Not verified / 확인 못 함 | Diluted to 25 mL; 4 mL is used. These are solution volumes, not recovered or transferred dry masses. |
+
+Explicit purchases/inputs (unpriced; missing amounts remain unknown):
+
+| Operation | Material | Amount | Note |
+|---|---|---|---|
+| Dissolve tungsten precursor | Na2WO4·2H2O | 1.25 mmol |  |
+| Dissolve tungsten precursor | Deionized water | 10 mL |  |
+| Acidify and dilute stock | HCl solution, 3 M | Not verified / 확인 못 함 |  |
+| Acidify and dilute stock | Oxalic acid | 3.5 mmol |  |
+| Acidify and dilute stock | Dilution water | Not verified / 확인 못 함 |  |
+| Prepare substrate | Carbon cloth, 0.75 by 0.75 cm piece | 1 item |  |
+| Prepare substrate | Cleaning water | Not verified / 확인 못 함 |  |
+| Prepare substrate | Cleaning alcohol | Not verified / 확인 못 함 |  |
+| Charge growth solution | Na2SO4 | 0.1 g |  |
+| Cool and wash electrode | Rinse water | Not verified / 확인 못 함 |  |
+
+This is surface nitridation to prepare an electrocatalyst, not an ammonia-producing plasma reactor. The catalog plasma-NRR route remains a distinct boundary. The precursor stock transfer is 4/25 on a volume basis. It is retained explicitly; stock mass and final electrode active mass are not inferred. Unless explicitly reported, recovered dry output remains unknown. Mean electrical demand, attended labor and procurement prices are not established; this is not a cost-complete protocol.
+
+### S85. WO3-H2/N2-2h on carbon cloth
+
+Record: `wo3-h2n2-2h-electrode-2025`. Boundary: electrode.
+
+Source: [Plasma-Assisted Surface Nitridation of Proton Intercalatable WO3 for Efficient Electrocatalytic Ammonia Synthesis](https://doi.org/10.1021/acsenergylett.5c01034). [DOI 10.1021/acsenergylett.5c01034](https://doi.org/10.1021/acsenergylett.5c01034). Locator: Supporting Information S1-S2 (PDF pp. 2-3); main text paragraph defining plasma-treated specimen names. Crossref checked: 2026-09-15.
+
+| Operation | Explicit conditions | Source details |
+|---|---|---|
+| Dissolve tungsten precursor | 0.333333 h; Intermediate batch: stock | Source amount retained in mmol without an inferred molecular weight. |
+| Acidify and dilute stock | Intermediate batch: stock | Add 3 M HCl to pH 1.2 and 3.5 mmol oxalic acid, then dilute to 25 mL. This is final solution volume, not an additional 25 mL water charge. |
+| Prepare substrate | Not quantified | Carbon cloth with MPL, Hydro-LAT 1400, 0.75 by 0.75 cm. Sequential water and alcohol ultrasonic cleaning; exact times unreported. |
+| Charge growth solution | Not quantified | Use 4 mL of the preceding 25 mL stock and add Na2SO4; no density or dry-mass allocation inferred. |
+| Microwave hydrothermal growth | 180 °C; hold 0.25 h; ramp unreported °C/min |  |
+| Cool and wash electrode | Not quantified | Cool to ambient and rinse several times; elapsed time and water amount unreported. |
+| Dry electrode | 70 °C; hold unreported h; ramp unreported °C/min; ambient | Drying duration unreported. |
+| Plasma surface nitridation | 2 h; H2/N2 (1:4) | H2/N2 = 1:4; 2 h treatment. Source states 16 torr, 20 kHz and 13 kV AC. Frequency and voltage do not establish electrical energy; ambient temperature has no numeric value. |
+
+Intermediate transfers (recovery is not inferred from precursor inputs):
+
+| Intermediate / destination | Recovered kg | Used kg | Source details |
+|---|---|---|---|
+| Tungsten precursor stock solution / final batch | Not verified / 확인 못 함 | Not verified / 확인 못 함 | Diluted to 25 mL; 4 mL is used. These are solution volumes, not recovered or transferred dry masses. |
+
+Explicit purchases/inputs (unpriced; missing amounts remain unknown):
+
+| Operation | Material | Amount | Note |
+|---|---|---|---|
+| Dissolve tungsten precursor | Na2WO4·2H2O | 1.25 mmol |  |
+| Dissolve tungsten precursor | Deionized water | 10 mL |  |
+| Acidify and dilute stock | HCl solution, 3 M | Not verified / 확인 못 함 |  |
+| Acidify and dilute stock | Oxalic acid | 3.5 mmol |  |
+| Acidify and dilute stock | Dilution water | Not verified / 확인 못 함 |  |
+| Prepare substrate | Carbon cloth, 0.75 by 0.75 cm piece | 1 item |  |
+| Prepare substrate | Cleaning water | Not verified / 확인 못 함 |  |
+| Prepare substrate | Cleaning alcohol | Not verified / 확인 못 함 |  |
+| Charge growth solution | Na2SO4 | 0.1 g |  |
+| Cool and wash electrode | Rinse water | Not verified / 확인 못 함 |  |
+
+This is surface nitridation to prepare an electrocatalyst, not an ammonia-producing plasma reactor. The catalog plasma-NRR route remains a distinct boundary. The precursor stock transfer is 4/25 on a volume basis. It is retained explicitly; stock mass and final electrode active mass are not inferred. Unless explicitly reported, recovered dry output remains unknown. Mean electrical demand, attended labor and procurement prices are not established; this is not a cost-complete protocol.
+
+### S86. Mo-6@SiO2; cationic molybdenum oxo alkylidene NHC complex
+
+Record: `mo6-silica-2022`. Boundary: catalyst_powder.
+
+Source: [Cationic molybdenum oxo alkylidenes stabilized by N-heterocyclic carbenes: from molecular systems to efficient supported metathesis catalysts](https://doi.org/10.1039/d2sc03321f). [DOI 10.1039/d2sc03321f](https://doi.org/10.1039/d2sc03321f). Locator: Experimental: Silica; [MoO(CHCMe3)(OHMT)(IMes)][B(ArF)4] (Mo-6); Synthesis of silica-supported complex Mo-6@SiO2. Crossref checked: 2026-09-15.
+
+| Operation | Explicit conditions | Source details |
+|---|---|---|
+| Ligand substitution | 0.0833333 h; Intermediate batch: mo6 | Start from the named preformed Mo reagent and IMes; their prior syntheses are outside this boundary. |
+| Remove and exchange solvents | Intermediate batch: mo6 | Remove benzene under vacuum; co-evaporate with 2 x 1 mL ether and 2 x 1 mL pentane. Durations unreported. |
+| Prepare anion-exchange solutions | Intermediate batch: mo6 | Dissolve residue in 3 mL CH2Cl2 and add to NaB(ArF)4 suspended in 2 mL CH2Cl2. |
+| Anion exchange | 2 h; Intermediate batch: mo6 |  |
+| Isolate and wash molecular precursor | Intermediate batch: mo6 | Remove solvent, stir with 10 mL pentane, decant, wash with 4 mL pentane and dry under vacuum. Times unreported. |
+| Filter molecular precursor | Intermediate batch: mo6 | Dissolve in 2 mL CH2Cl2, filter through Celite and add pentane to filtrate. Celite and final pentane amounts unreported. |
+| Crystallize Mo-6 | -35 °C; hold unreported h; ramp unreported °C/min; Intermediate batch: mo6 | Storage time unreported; source yield 296.0 mg (80%). |
+| Compact and sieve silica | Intermediate batch: silica | Aerosil Degussa, 200 m2/g; compact with water and sieve. Initial mass and dimensions are unreported. |
+| Calcine silica | 500 °C; hold 12 h; ramp unreported °C/min; air; Intermediate batch: silica |  |
+| First vacuum treatment | 500 °C; hold 8 h; ramp unreported °C/min; Intermediate batch: silica | Vacuum 10^-5 mbar = 10^-8 bar. |
+| Second vacuum treatment | 700 °C; hold 14 h; ramp unreported °C/min; Intermediate batch: silica |  |
+| Graft Mo-6 | 25 °C; hold 3 h; ramp unreported °C/min; N2 glovebox | Use 78.8 mg Mo-6 and 160.1 mg SiO2-700; additional solvent of the separately mentioned yellow Mo-6 solution is unspecified. |
+| Decant and wash with dichlorobenzene | Not quantified | Three suspension/decantation cycles, 1 mL each; times unreported. |
+| Wash with toluene | Not quantified | Three suspension/decantation cycles, 1 mL each; times unreported. |
+| Wash with pentane | Not quantified | Three suspension/decantation cycles, 2 mL each; times unreported. |
+| Dry supported complex | 2 h; high vacuum | Room temperature is unspecified. Reported isolated supported product: 180 mg. |
+
+Reported dry output of this source specimen: 0.00018 kg. This is not a measurement of a new user batch.
+
+
+Intermediate transfers (recovery is not inferred from precursor inputs):
+
+| Intermediate / destination | Recovered kg | Used kg | Source details |
+|---|---|---|---|
+| Isolated Mo-6 molecular precursor / final batch | 0.000296 | 7.88e-05 | Source isolates 296.0 mg Mo-6 and uses 78.8 mg for grafting. |
+| Prepared SiO2-700 / final batch | Not verified / 확인 못 함 | 0.0001601 |  |
+
+Explicit purchases/inputs (unpriced; missing amounts remain unknown):
+
+| Operation | Material | Amount | Note |
+|---|---|---|---|
+| Ligand substitution | IMes | 0.0669 g |  |
+| Ligand substitution | [MoO(CHCMe3)(OHMT)(Cl)(3-BrPy)] | 0.155 g |  |
+| Ligand substitution | Benzene | 4 mL |  |
+| Remove and exchange solvents | Diethyl ether | 2 mL |  |
+| Remove and exchange solvents | n-Pentane | 2 mL |  |
+| Prepare anion-exchange solutions | NaB(ArF)4 | 0.1948 g |  |
+| Prepare anion-exchange solutions | Dichloromethane | 5 mL |  |
+| Isolate and wash molecular precursor | n-Pentane | 14 mL |  |
+| Filter molecular precursor | Dichloromethane | 2 mL |  |
+| Filter molecular precursor | Celite | Not verified / 확인 못 함 |  |
+| Filter molecular precursor | Crystallization n-pentane | Not verified / 확인 못 함 |  |
+| Compact and sieve silica | Aerosil silica, 200 m2/g | Not verified / 확인 못 함 |  |
+| Compact and sieve silica | Compaction water | Not verified / 확인 못 함 |  |
+| Graft Mo-6 | o-Dichlorobenzene for silica suspension | 5 mL |  |
+| Graft Mo-6 | Additional Mo-6 solution solvent | Not verified / 확인 못 함 |  |
+| Decant and wash with dichlorobenzene | o-Dichlorobenzene | 1 mL |  |
+| Wash with toluene | Toluene | 1 mL |  |
+| Wash with pentane | n-Pentane | 2 mL |  |
+
+This is a molecular supported metathesis catalyst, not the catalog MoO3/SiO2-Al2O3 oxide formulation. Its reported dry mass is source-specific, not a measured yield of a new user batch. The known Mo-6 aliquot is 78.8/296.0 on a mass basis. The separately prepared silica batch recovery is unreported and still blocks complete proportional allocation. Precursor synthesis starts with named prepared reagents. Unknown solvent additions, setup, washing times and silica quantities prevent a complete manufacturing-cost claim. Unless explicitly reported, recovered dry output remains unknown. Mean electrical demand, attended labor and procurement prices are not established; this is not a cost-complete protocol.
+
+### S87. 0.5Fe/BN1; nominal one-hour mechanochemical specimen
+
+Record: `fe-bn-milled-2024`. Boundary: catalyst_powder.
+
+Source: [Mechanochemically-derived iron atoms on defective boron nitride for stable propylene production](https://doi.org/10.1039/d4ey00123k). [DOI 10.1039/d4ey00123k](https://doi.org/10.1039/d4ey00123k). Locator: Supporting Information p. 1 (PDF p. 2), Catalyst Synthesis. Crossref checked: 2026-09-15.
+
+| Operation | Explicit conditions | Source details |
+|---|---|---|
+| Charge milling jar | Not quantified | Nominal Fe loading 0.5 wt%; actual precursor masses unreported. 50 cm3 zirconia jar and sixteen 10 mm zirconia balls. |
+| Programmed dry milling | Not quantified | Each programmed cycle begins with 30 s at 5 Hz then 10 min at 30 Hz. The specimen label denotes 1 h milling, but the cycle count and inclusion of initial phases in total elapsed time are not specified; no exact elapsed duration or count inferred. |
+
+Explicit purchases/inputs (unpriced; missing amounts remain unknown):
+
+| Operation | Material | Amount | Note |
+|---|---|---|---|
+| Charge milling jar | h-BN, 99.5% metal basis | Not verified / 확인 못 함 |  |
+| Charge milling jar | Fe(NO3)3·9H2O, >98% | Not verified / 확인 못 함 |  |
+
+No post-synthesis calcination is added to this dry-milled specimen. Frequency is not electrical power. The Fe-decorated material is a source-specific N2O-ODHP variant, not the catalog unmodified h-BN formulation. Cycle setup and nominal treatment labels do not establish measured production time. Unless explicitly reported, recovered dry output remains unknown. Mean electrical demand, attended labor and procurement prices are not established; this is not a cost-complete protocol.
+
+### S88. 0.5Fe/BN-IWI; impregnation comparator
+
+Record: `fe-bn-iwi-2024`. Boundary: catalyst_powder.
+
+Source: [Mechanochemically-derived iron atoms on defective boron nitride for stable propylene production](https://doi.org/10.1039/d4ey00123k). [DOI 10.1039/d4ey00123k](https://doi.org/10.1039/d4ey00123k). Locator: Supporting Information p. 1 (PDF p. 2), Catalyst Synthesis. Crossref checked: 2026-09-15.
+
+| Operation | Explicit conditions | Source details |
+|---|---|---|
+| Prepare impregnation solution | Not quantified | Nominal Fe loading 0.5 wt%; absolute nitrate and water quantities unreported. |
+| Impregnate h-BN | Not quantified | Add solution dropwise to unmodified h-BN. Premilled BN1-IWI is a different preparation. |
+| Dry impregnated powder | 79.85 °C; hold unreported h; ramp unreported °C/min; vacuum | 353 K converted to 79.85 °C. Overnight duration is unreported. |
+| Calcine impregnated powder | 599.85 °C; hold 5 h; ramp 5 °C/min; static air | 873 K converted to 599.85 °C; 5 K/min temperature increment equals 5 °C/min. |
+
+Explicit purchases/inputs (unpriced; missing amounts remain unknown):
+
+| Operation | Material | Amount | Note |
+|---|---|---|---|
+| Prepare impregnation solution | Fe(NO3)3·9H2O, >98% | Not verified / 확인 못 함 |  |
+| Prepare impregnation solution | Deionized water | Not verified / 확인 못 함 |  |
+| Impregnate h-BN | h-BN, 99.5% metal basis | Not verified / 확인 못 함 |  |
+
+This uses unmodified h-BN, not the separately milled BN1 support or the nitrogen-annealed comparator. Characterization digestion at 533 K and sorption pretreatment at 473 K are excluded from manufacture. Unless explicitly reported, recovered dry output remains unknown. Mean electrical demand, attended labor and procurement prices are not established; this is not a cost-complete protocol.
+
+### S89. AuT100; Au on pure TiO2
+
+Record: `au-t100-2020`. Boundary: catalyst_powder.
+
+Source: [Au-Decorated Ce–Ti Mixed Oxides for Efficient CO Preferential Photooxidation](https://doi.org/10.1021/acsami.0c08258). [DOI 10.1021/acsami.0c08258](https://doi.org/10.1021/acsami.0c08258). Locator: Supporting Information S2-S3: Synthesis of CeO2-TiO2 mixed oxides; Synthesis of Au-NPs/CeO2-TiO2 photocatalysts. Crossref checked: 2026-09-15.
+
+| Operation | Explicit conditions | Source details |
+|---|---|---|
+| Prepare titania precursor | Intermediate batch: titania | For pure titania, no ceria is added. Reported TTIP 1.9 mmol and acetic acid 19 mmol; no unverified mass conversion. Ice bath has no stated numeric temperature. |
+| Basify titania precursor | Intermediate batch: titania | Add 0.3 M K2CO3 at 0.4 mL/min until pH 8.2. Total volume/time unreported; pump flow is not a gas input. |
+| Age titania precursor | 20 h; Intermediate batch: titania |  |
+| Centrifuge and wash support | Intermediate batch: titania | Durations and wash amounts unreported. |
+| Dry titania support | 80 °C; hold unreported h; ramp unreported °C/min; Intermediate batch: titania | Overnight duration unreported. |
+| Calcine titania support | 450 °C; hold 5 h; ramp 3 °C/min; Intermediate batch: titania |  |
+| Pretreat support aliquot | 100 °C; hold unreported h; ramp unreported °C/min | Use 0.5 g prepared support, pretreated overnight at 100 °C. This duration is not assigned a numeric value. |
+| Prepare gold deposition solution | Not quantified | HAuCl4·3H2O amount selected for nominal 1 wt% Au; raise pH to 9 with 0.1 M NaOH at 1 mL/h. Exact salt amount, water and addition time are unreported. |
+| Deposit gold | 70 °C; hold 2 h; ramp unreported °C/min | Add pretreated support to alkaline solution under stirring; maintain approximately pH 9 during 2 h at 70 °C. |
+| Wash supported gold | Not quantified | Rinse until chloride disappearance by AgNO3 test; no fixed wash count. Test reagent is tracked separately with unknown amount. |
+| Dry Au/TiO2 | 100 °C; hold unreported h; ramp unreported °C/min | Overnight duration unreported. |
+| Calcine Au/TiO2 | 200 °C; hold 4 h; ramp 2 °C/min; flowing air |  |
+
+Intermediate transfers (recovery is not inferred from precursor inputs):
+
+| Intermediate / destination | Recovered kg | Used kg | Source details |
+|---|---|---|---|
+| Prepared pure titania support / final batch | Not verified / 확인 못 함 | 0.0005 |  |
+
+Explicit purchases/inputs (unpriced; missing amounts remain unknown):
+
+| Operation | Material | Amount | Note |
+|---|---|---|---|
+| Prepare titania precursor | Titanium isopropoxide, 97% | 1.9 mmol |  |
+| Prepare titania precursor | Glacial acetic acid | 19 mmol |  |
+| Basify titania precursor | K2CO3 solution, 0.3 M | Not verified / 확인 못 함 |  |
+| Centrifuge and wash support | Deionized wash water | Not verified / 확인 못 함 |  |
+| Prepare gold deposition solution | HAuCl4·3H2O, 99.9% | Not verified / 확인 못 함 |  |
+| Prepare gold deposition solution | Milli-Q water | Not verified / 확인 못 함 |  |
+| Prepare gold deposition solution | NaOH solution, 0.1 M | Not verified / 확인 못 함 |  |
+| Wash supported gold | Milli-Q wash water | Not verified / 확인 못 함 |  |
+| Wash supported gold | AgNO3 chloride test reagent | Not verified / 확인 못 함 |  |
+
+Selected T100 is explicitly pure titania. Mixed CT labels conflict with stated Ce/Ti loading descriptions, so no mixed-oxide composition or amount is inferred. The source does not establish how the initial support synthesis was scaled or repeated to supply the 0.5 g support aliquot. A single stated precursor charge is not assumed to produce that mass. 1 wt% Au is a nominal target. This photo-PROX specimen does not establish an industrial low-temperature PROX formulation or matched performance. Unless explicitly reported, recovered dry output remains unknown. Mean electrical demand, attended labor and procurement prices are not established; this is not a cost-complete protocol.
+
 ## Operating references
 
 These public references retain geography, period, quantity basis and source locator. Only electricity averages can be applied directly as explicit scenarios. Wage-only statistics and equipment connected loads remain reference information. No reference substitutes for measured batch electricity, actual gas conditions, staffing or a supplier quotation. The source texts and manuals are not redistributed.
@@ -1945,7 +2576,7 @@ Access flags indicate a retrieved public full text or PDF supplement; they do no
 | [Self‐organized Ruthenium–Barium Core–Shell Nanoparticles on a Mesoporous Calcium Amide Matrix for Efficient Low‐Temperature Ammonia Synthesis](https://doi.org/10.1002/anie.201712398) — 10.1002/anie.201712398 | Not verified | Not verified | Not verified |
 | [Selective Hydrogenation and Hydrodeoxygenation of Aromatic Ketones to Cyclohexane Derivatives Using a Rh@SILP Catalyst](https://doi.org/10.1002/anie.201916385) — 10.1002/anie.201916385 | Yes | Yes | Not verified |
 | [Why Boron Nitride is such a Selective Catalyst for the Oxidative Dehydrogenation of Propane](https://doi.org/10.1002/anie.202003695) — 10.1002/anie.202003695 | Not verified | Not verified | Not verified |
-| [Mechanistic Study of Carbon Dioxide Hydrogenation over Pd/ZnO‐Based Catalysts: The Role of Palladium–Zinc Alloy in Selective Methanol Synthesis](https://doi.org/10.1002/anie.202103087) — 10.1002/anie.202103087 | Yes | Yes | Not verified |
+| [Mechanistic Study of Carbon Dioxide Hydrogenation over Pd/ZnO‐Based Catalysts: The Role of Palladium–Zinc Alloy in Selective Methanol Synthesis](https://doi.org/10.1002/anie.202103087) — 10.1002/anie.202103087 | Yes | Yes | Yes |
 | [Shape‐Selective Conversion of Methanol to Hydrocarbons Over 10‐Ring Unidirectional‐Channel Acidic H‐ZSM‐22](https://doi.org/10.1002/cctc.200900057) — 10.1002/cctc.200900057 | Not verified | Not verified | Not verified |
 | [Shape‐ and Size‐Specific Chemistry of Ag Nanostructures in Catalytic Ethylene Epoxidation](https://doi.org/10.1002/cctc.200900231) — 10.1002/cctc.200900231 | Not verified | Not verified | Not verified |
 | [Ethylene Epoxidation Catalyzed by Silver Oxide](https://doi.org/10.1002/cctc.201000249) — 10.1002/cctc.201000249 | Not verified | Not verified | Not verified |
@@ -1954,6 +2585,7 @@ Access flags indicate a retrieved public full text or PDF supplement; they do no
 | [Ordered Mesoporous Materials as Supports for Stable Iron Catalysts in the Fischer–Tropsch Synthesis of Lower Olefins](https://doi.org/10.1002/cctc.201600492) — 10.1002/cctc.201600492 | Not verified | Not verified | Not verified |
 | [Tailoring Single‐Atom Platinum for Selective and Stable Catalysts in Propane Dehydrogenation](https://doi.org/10.1002/cplu.202100560) — 10.1002/cplu.202100560 | Not verified | Not verified | Not verified |
 | [An Overview of Glycerol Electrooxidation Mechanisms on Pt, Pd and Au](https://doi.org/10.1002/cssc.202002669) — 10.1002/cssc.202002669 | Not verified | Not verified | Not verified |
+| [Gold–Indium Electrocatalysts for the Selective Oxidation of Glycerol Coupled with CO 2 Reduction](https://doi.org/10.1002/cssc.202402378) — 10.1002/cssc.202402378 | Yes | Not verified | Yes |
 | [Sustainion Imidazolium‐Functionalized Polymers for Carbon Dioxide Electrolysis](https://doi.org/10.1002/ente.201600636) — 10.1002/ente.201600636 | Not verified | Not verified | Not verified |
 | [Influence of Support Type and Metal Loading in Methane Decomposition over Iron Catalyst for Hydrogen Production](https://doi.org/10.1002/jccs.201500052) — 10.1002/jccs.201500052 | Not verified | Not verified | Not verified |
 | [Hydrogen Production via Methane Decomposition over Alumina Doped with Titanium Oxide‐Supported Iron Catalyst for Various Calcination Temperatures](https://doi.org/10.1002/open.202300173) — 10.1002/open.202300173 | Yes | Yes | Yes |
@@ -2068,6 +2700,7 @@ Access flags indicate a retrieved public full text or PDF supplement; they do no
 | [Review of the Decomposition of Ammonia to Generate Hydrogen](https://doi.org/10.1021/acs.iecr.1c00843) — 10.1021/acs.iecr.1c00843 | Not verified | Not verified | Not verified |
 | [Methane Pyrolysis for Zero-Emission Hydrogen Production: A Potential Bridge Technology from Fossil Fuels to a Renewable and Sustainable Hydrogen Economy](https://doi.org/10.1021/acs.iecr.1c01679) — 10.1021/acs.iecr.1c01679 | Not verified | Not verified | Not verified |
 | [Carbon Nanofiber Growth Rates on NiCu Catalysts: Quantitative Coupling of Macroscopic and Nanoscale In Situ Studies](https://doi.org/10.1021/acs.jpcc.3c02657) — 10.1021/acs.jpcc.3c02657 | Yes | Yes | Not verified |
+| [Au-Decorated Ce–Ti Mixed Oxides for Efficient CO Preferential Photooxidation](https://doi.org/10.1021/acsami.0c08258) — 10.1021/acsami.0c08258 | Yes | Yes | Yes |
 | [CO <sub>2</sub> Activation over Nanoshaped CeO <sub>2</sub> Decorated with Nickel for Low-Temperature Methane Dry Reforming](https://doi.org/10.1021/acsami.2c05221) — 10.1021/acsami.2c05221 | Yes | Not verified | Yes |
 | [PtZn Intermetallic Compound Nanoparticles in Mesoporous Zeolite Exhibiting High Catalyst Durability for Propane Dehydrogenation](https://doi.org/10.1021/acscatal.1c01808) — 10.1021/acscatal.1c01808 | Not verified | Yes | Not verified |
 | [Substituting Chromium in Iron-Based Catalysts for the High-Temperature Water–Gas Shift Reaction](https://doi.org/10.1021/acscatal.2c03871) — 10.1021/acscatal.2c03871 | Yes | Not verified | Yes |
@@ -2084,8 +2717,11 @@ Access flags indicate a retrieved public full text or PDF supplement; they do no
 | [Low-Temperature CO                     2                     Methanation over CeO                     2                     -Supported Ru Single Atoms, Nanoclusters, and Nanoparticles Competitively Tuned by Strong Metal–Support Interactions and H-Spillover Effect](https://doi.org/10.1021/acscatal.7b04469) — 10.1021/acscatal.7b04469 | Not verified | Yes | Not verified |
 | [Surface Engineering of CoMoS Nanosulfide for Hydrodeoxygenation of Lignin-Derived Phenols to Arenes](https://doi.org/10.1021/acscatal.8b03402) — 10.1021/acscatal.8b03402 | Not verified | Yes | Not verified |
 | [Relationship between Atomic Scale Structure and Reactivity of Pt Catalysts: Hydrodeoxygenation of m-Cresol over Isolated Pt Cations and Clusters](https://doi.org/10.1021/acscatal.9b04330) — 10.1021/acscatal.9b04330 | Not verified | Yes | Not verified |
+| [Plasma-Assisted Surface Nitridation of Proton Intercalatable WO3 for Efficient Electrocatalytic Ammonia Synthesis](https://doi.org/10.1021/acsenergylett.5c01034) — 10.1021/acsenergylett.5c01034 | Yes | Yes | Yes |
 | [Alloyed PdCu Nanoparticles within Siliceous Zeolite Crystals for Catalytic Semihydrogenation](https://doi.org/10.1021/acsmaterialsau.1c00080) — 10.1021/acsmaterialsau.1c00080 | Yes | Yes | Yes |
 | [Effect of Calcination Temperature on Cu-Modified Ni Catalysts Supported on Mesocellular Silica for Methane Decomposition](https://doi.org/10.1021/acsomega.2c01016) — 10.1021/acsomega.2c01016 | Yes | Not verified | Yes |
+| [Selective Deoxygenation of Waste Cooking Oil to Diesel-Like Hydrocarbons Using Supported and Unsupported NiMoS2 Catalysts](https://doi.org/10.1021/acsomega.3c06188) — 10.1021/acsomega.3c06188 | Yes | Not verified | Yes |
+| [Synergistic Effect of Group 9 Metals on the Performance of Hydrotalcite-Derived Ni Catalysts for Methane Dry Reforming](https://doi.org/10.1021/acsomega.5c08293) — 10.1021/acsomega.5c08293 | Yes | Not verified | Yes |
 | [Compact Steam-Methane Reforming for the Production of Hydrogen in Continuous Flow Microreactor Systems](https://doi.org/10.1021/acsomega.9b02063) — 10.1021/acsomega.9b02063 | Yes | Not verified | Not verified |
 | [Effect of Thermal Extraction on Coal-Based Activated Carbon for Methane Decomposition to Hydrogen](https://doi.org/10.1021/acsomega.9b04044) — 10.1021/acsomega.9b04044 | Yes | Not verified | Yes |
 | [Nitrogen Fixation with Water Vapor by Nonequilibrium Plasma: toward Sustainable Ammonia Production](https://doi.org/10.1021/acssuschemeng.9b07849) — 10.1021/acssuschemeng.9b07849 | Not verified | Yes | Not verified |
@@ -2154,6 +2790,7 @@ Access flags indicate a retrieved public full text or PDF supplement; they do no
 | [Selective light absorber-assisted single nickel atom catalysts for ambient sunlight-driven CO2 methanation](https://doi.org/10.1038/s41467-019-10304-y) — 10.1038/s41467-019-10304-y | Yes | Not verified | Yes |
 | [Atomic-scale engineering of indium oxide promotion by palladium for methanol production via CO2 hydrogenation](https://doi.org/10.1038/s41467-019-11349-9) — 10.1038/s41467-019-11349-9 | Yes | Yes | Yes |
 | [Highly efficient decomposition of ammonia using high-entropy alloy catalysts](https://doi.org/10.1038/s41467-019-11848-9) — 10.1038/s41467-019-11848-9 | Yes | Yes | Not verified |
+| [Boosting selective nitrogen reduction to ammonia on electron-deficient copper nanoparticles](https://doi.org/10.1038/s41467-019-12312-4) — 10.1038/s41467-019-12312-4 | Yes | Not verified | Yes |
 | [Atomically dispersed nickel as coke-resistant active sites for methane dry reforming](https://doi.org/10.1038/s41467-019-12843-w) — 10.1038/s41467-019-12843-w | Yes | Yes | Not verified |
 | [Synergistic ultraviolet and visible light photo-activation enables intensified low-temperature methanol synthesis over copper/zinc oxide/alumina](https://doi.org/10.1038/s41467-020-15445-z) — 10.1038/s41467-020-15445-z | Yes | Yes | Yes |
 | [Solid solution for catalytic ammonia synthesis from nitrogen and hydrogen gases at 50 °C](https://doi.org/10.1038/s41467-020-15868-8) — 10.1038/s41467-020-15868-8 | Yes | Yes | Yes |
@@ -2260,12 +2897,18 @@ Access flags indicate a retrieved public full text or PDF supplement; they do no
 | [Hydrogen production by methane decomposition over Ni–Cu–SiO                     2                     catalysts: effect of temperature on catalyst deactivation](https://doi.org/10.1039/c6ra05782a) — 10.1039/c6ra05782a | Not verified | Not verified | Not verified |
 | [Well-defined silica supported bipodal molybdenum oxo alkyl complexes: a model of the active sites of industrial olefin metathesis catalysts](https://doi.org/10.1039/c7cc06041f) — 10.1039/c7cc06041f | Not verified | Not verified | Not verified |
 | [Palladium–gold single atom alloy catalysts for liquid phase selective hydrogenation of 1-hexyne](https://doi.org/10.1039/c7cy00794a) — 10.1039/c7cy00794a | Not verified | Not verified | Not verified |
+| [Simple organic structure directing agents for synthesizing nanocrystalline zeolites](https://doi.org/10.1039/c7sc02858j) — 10.1039/c7sc02858j | Yes | Not verified | Yes |
 | [Cu-CHA – a model system for applied selective redox catalysis](https://doi.org/10.1039/c8cs00373d) — 10.1039/c8cs00373d | Not verified | Not verified | Not verified |
+| [Synthesis of uniform ordered mesoporous TiO 2 microspheres with controllable phase junctions for efficient solar water splitting](https://doi.org/10.1039/c8sc04155e) — 10.1039/c8sc04155e | Yes | Yes | Yes |
 | [Effect of nitrogen co-doping with ruthenium on the catalytic performance of Ba/Ru–N-MC catalysts for ammonia synthesis](https://doi.org/10.1039/c9ra03097b) — 10.1039/c9ra03097b | Yes | Not verified | Yes |
+| [Ni nanocatalysts supported on mesoporous Al 2 O 3 –CeO 2 for CO 2 methanation at low temperature](https://doi.org/10.1039/c9ra08967e) — 10.1039/c9ra08967e | Yes | Not verified | Not verified |
 | [Current status and perspectives in oxidative, non-oxidative and CO                     2                     -mediated dehydrogenation of propane and isobutane over metal oxide catalysts](https://doi.org/10.1039/d0cs01140a) — 10.1039/d0cs01140a | Not verified | Not verified | Not verified |
+| [Binary and ternary Pt-based clusters grown in a plasma multimagnetron-based gas aggregation source: electrocatalytic evaluation towards glycerol oxidation](https://doi.org/10.1039/d0na01009j) — 10.1039/d0na01009j | Yes | Not verified | Yes |
 | [Anion-exchange membrane water electrolyzers and fuel cells](https://doi.org/10.1039/d2cs00038e) — 10.1039/d2cs00038e | Not verified | Not verified | Not verified |
+| [Cationic molybdenum oxo alkylidenes stabilized by N-heterocyclic carbenes: from molecular systems to efficient supported metathesis catalysts](https://doi.org/10.1039/d2sc03321f) — 10.1039/d2sc03321f | Yes | Yes | Yes |
 | [Preparation of Ru/N-doped carbon catalysts by induction of different nitrogen source precursors for the hydroprocessing of lignin oil](https://doi.org/10.1039/d3ra01866k) — 10.1039/d3ra01866k | Yes | Not verified | Yes |
 | [Insight into the influence of Re and Cl on Ag catalysts in ethylene epoxidation](https://doi.org/10.1039/d4cy00858h) — 10.1039/d4cy00858h | Yes | Yes | Not verified |
+| [Mechanochemically-derived iron atoms on defective boron nitride for stable propylene production](https://doi.org/10.1039/d4ey00123k) — 10.1039/d4ey00123k | Yes | Yes | Yes |
 | [Efficient hydrodeoxygenation of lignin-derived phenolic compounds under acid-free conditions over carbon-supported NiMo catalysts](https://doi.org/10.1039/d4gc02298j) — 10.1039/d4gc02298j | Not verified | Not verified | Not verified |
 | [Techno-economic and life cycle analyses of the synthesis of a platinum–strontium titanate catalyst](https://doi.org/10.1039/d5cy00189g) — 10.1039/d5cy00189g | Yes | Not verified | Yes |
 | [The State of the Art in Selective Catalytic Reduction of NOxby Ammonia Using Metal‐Exchanged Zeolite Catalysts](https://doi.org/10.1080/01614940802480122) — 10.1080/01614940802480122 | Not verified | Not verified | Not verified |
@@ -2314,6 +2957,7 @@ Access flags indicate a retrieved public full text or PDF supplement; they do no
 | [Cobalt-based Catalysts for Ammonia Decomposition](https://doi.org/10.3390/ma6062400) — 10.3390/ma6062400 | Yes | Not verified | Not verified |
 | [IrO2 Oxygen Evolution Catalysts Prepared by an Optimized Photodeposition Process on TiO2 Substrates](https://doi.org/10.3390/molecules29102392) — 10.3390/molecules29102392 | Yes | Not verified | Yes |
 | [The Acid Roles of PtSn@Al2O3 in the Synthesis and Performance of Propane Dehydrogenation](https://doi.org/10.3390/molecules29132959) — 10.3390/molecules29132959 | Yes | Not verified | Yes |
+| [Effects of Silica Shell Encapsulated Nanocrystals on Active χ-Fe5C2 Phase and Fischer–Tropsch Synthesis](https://doi.org/10.3390/nano12203704) — 10.3390/nano12203704 | Yes | Not verified | Yes |
 | [Glycerol Electro-Oxidation in Alkaline Medium with Pt-Fe/C Electrocatalysts Synthesized by the Polyol Method: Increased Selectivity and Activity Provided by Less Expensive Catalysts](https://doi.org/10.3390/nano13071173) — 10.3390/nano13071173 | Yes | Not verified | Yes |
 | [A Conceptual Approach for the Design of New Catalysts for Ammonia Synthesis: A Metal—Support Interactions Review](https://doi.org/10.3390/nano13222914) — 10.3390/nano13222914 | Yes | Not verified | Not verified |
 | [Catalytic Behavior of Chromium Oxide Supported on Nanocasting-Prepared Mesoporous Alumina in Dehydrogenation of Propane](https://doi.org/10.3390/nano7090249) — 10.3390/nano7090249 | Yes | Yes | Yes |

@@ -68,3 +68,17 @@ test('successive literature transfers survive import without assuming recovered 
   imported.intermediate_batches[0].destination_batch_id = '';
   assert.equal(profile.intermediate_batches[0].destination_batch_id, 'pellets');
 });
+
+test('reported final yield imports with its source without turning into a new measurement', () => {
+  const profile = library.profiles.find((p) => p.id === 'mo6-silica-2022');
+  const imported = adaptLiteratureProtocol(profile);
+  assert.equal(imported.finished_batch_mass_kg, .00018);
+  assert.equal(imported.mode, 'record_only');
+  assert.equal(imported.input_evidence.finished_batch_mass_kg.kind, 'literature');
+  imported.finished_batch_mass_kg = .0002;
+  assert.equal(imported.input_evidence.finished_batch_mass_kg.recorded_value, .00018);
+  imported.input_evidence.finished_batch_mass_kg.recorded_value = 1;
+  assert.equal(profile.input_evidence.finished_batch_mass_kg.recorded_value, .00018);
+  assert.equal(imported.intermediate_batches.find((b) => b.id === 'mo6').produced_mass_kg, .000296);
+  assert.equal(imported.intermediate_batches.find((b) => b.id === 'silica').produced_mass_kg, null);
+});

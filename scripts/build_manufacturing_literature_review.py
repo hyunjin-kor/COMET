@@ -39,7 +39,8 @@ def render(data):
              "It replaces Step Method processing cost and does not add it twice. Electricity is measured kWh or input kW multiplied by time; "
              "gas volume and price require matching reference conditions. Temperature alone does not predict furnace consumption, yield or catalytic performance. "
              "Electrode preparations remain records and cannot use a dry-powder kg denominator. Published procedures are evidence records, not laboratory operating instructions.", "",
-             "Batch purchases can replace the entire composition-based materials bill. For intermediate batches, "
+             "Batch purchases can replace the entire composition-based materials bill. Quantities use kg, g, L, mL, mol, mmol or items, "
+             "with prices in the same unit; molecular weight and solution density are not inferred. For intermediate batches, "
              "all preparation charges are allocated by mass transferred divided by mass recovered on the same material basis; "
              "unused recoverable inventory retains its share of cost. Alternatively, explicit whole-batch charging assigns the full expenditure "
              "to the receiving batch before any further transfer. Internal transfers are not purchased twice. Unknown masses block proportional "
@@ -94,6 +95,9 @@ def render(data):
             if op.get("intermediate_batch_id"):
                 conditions.append("Intermediate batch: " + op["intermediate_batch_id"])
             lines.append(f"| {cell(op['name'])} | {cell('; '.join(conditions) or 'Not quantified')} | {cell(op.get('notes', ''))} |")
+        if p.get("finished_batch_mass_kg") is not None:
+            lines += ["", f"Reported dry output of this source specimen: {p['finished_batch_mass_kg']} kg. "
+                      "This is not a measurement of a new user batch.", ""]
         if p.get("intermediate_batches"):
             lines += ["", "Intermediate transfers (recovery is not inferred from precursor inputs):", "",
                       "| Intermediate / destination | Recovered kg | Used kg | Source details |", "|---|---|---|---|"]

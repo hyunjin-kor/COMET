@@ -59,7 +59,7 @@ class BatchPurchase(SourcedProtocolModel):
     name: str = Field(min_length=1, max_length=200)
     comparison_key: str = Field(default="", max_length=200)
     quantity: float | None = Field(default=None, ge=0)
-    unit: Literal["kg", "g", "L", "mL", "item"] = "kg"
+    unit: Literal["kg", "g", "L", "mL", "mol", "mmol", "item"] = "kg"
     quantity_basis: Literal["entered", "solvent_volume"] = "entered"
     price_usd_per_unit: float | None = Field(default=None, ge=0)
     notes: str = Field(default="", max_length=2000)

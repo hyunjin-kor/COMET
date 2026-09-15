@@ -88,3 +88,17 @@ def test_conflicting_prices_for_one_key_within_a_saved_case_are_not_silently_sel
     second = save(client, p, 'Conflicting same-key price')
     response = compare(client, first, second)
     assert response.status_code == 422, response.text
+
+
+def test_molar_purchases_use_matching_price_basis_without_molecular_weight_inference(client):
+    p = keyed_protocol()
+    purchase = p['operations'][0]['purchases'][0]
+    purchase.update(quantity=10, unit='mmol', price_usd_per_unit=2)
+    first = save(client, p, 'Millimolar quantity and price')
+    purchase.update(quantity=.01, unit='mol', price_usd_per_unit=2000)
+    second = save(client, p, 'Molar quantity and price')
+    a = client.get(f'/api/estimates/{first}').json()['result']
+    b = client.get(f'/api/estimates/{second}').json()['result']
+    assert a['summary'] == b['summary']
+    # Equal expenditures do not establish equivalent declared purchase units.
+    assert compare(client, first, second).status_code == 422
