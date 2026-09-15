@@ -6,9 +6,10 @@ scripts/export_note_diagram_slides.ps1 after editing the source decks.
 Figure 2 draws the cost model, the cost structure of the cheapest candidate in
 every thermal reaction family, and the three published CatCost validation cases against their
 published market prices. The trade comparison helper is retained for the audit record.
-Figure 3 is the monthly price record of every metal the library prices, in
-one column. Figure 4 reads the frozen combined robustness study and the methods supplement.
-All four render in English or Korean. Run:
+The September 15 Figure 3 combines a manufacturing schematic with frozen cost
+and sensitivity results. The historical monthly-price panel is retained for SI.
+Figure 4 reads the frozen combined robustness study and the methods supplement.
+The default command renders the main figures and historical panel in either language. Run:
 
     python scripts/draw_application_note_figures.py --out-dir docs/paper/figures-note-2026-09-09
     python scripts/draw_application_note_figures.py --lang ko
@@ -177,17 +178,63 @@ def _clean(ax, left=True):
     ax.tick_params(width=0.5, length=2, labelsize=8.5)
 
 
-def _diagram_asset(name, kind):
+def _diagram_asset(name, kind, directory=None):
     """Refuse stale exports after a source slide or exported image has changed."""
-    manifest = json.loads((DIAGRAMS / "exports.json").read_text(encoding="utf-8"))
+    directory = directory or DIAGRAMS
+    manifest = json.loads((directory / "exports.json").read_text(encoding="utf-8"))
     record = next(row for row in manifest["diagrams"] if row["source"] == f"{name}.pptx")
     exported = next(row for row in record["exports"] if row["language"] == LANG)
     for relative, expected in ((record["source"], record["source_sha256"]),
                                (exported[kind], exported[f"{kind}_sha256"])):
-        asset = DIAGRAMS / relative
+        asset = directory / relative
         if hashlib.sha256(asset.read_bytes()).hexdigest() != expected:
             raise ValueError(f"Stale PowerPoint export: {relative}; run scripts/export_note_diagram_slides.ps1")
-    return DIAGRAMS / exported[kind]
+    return directory / exported[kind]
+
+
+def figure_manufacturing(directory):
+    """Illustrative batch operating costs and final-mass scenarios, in USD/kg."""
+    data = json.loads((directory / "manufacturing_study.json").read_text(encoding="utf-8"))
+    fig = plt.figure(figsize=(178 / 25.4, 142 / 25.4))
+    ax = fig.add_axes([0, .57, 1, 1 / 3 * 178 / 142])
+    diagram_dir = ROOT / "docs/paper/diagram-sources-2026-09-15"
+    ax.imshow(plt.imread(_diagram_asset("fig3a_manufacturing_v2", "png", diagram_dir)))
+    ax.axis("off")
+    fig.text(.005, .982, "(a)", fontsize=10, weight="bold")
+    b = fig.add_axes([.155, .12, .32, .365])
+    c = fig.add_axes([.63, .12, .31, .365])
+    fig.text(.005, .515, "(b)", fontsize=10, weight="bold")
+    fig.text(.525, .515, "(c)", fontsize=10, weight="bold")
+    labels = ["Impregnation", "Drying", "Calcination", "Reduction"] if LANG == "en" else ["함침", "건조", "소성", "환원"]
+    cost_labels = ["Electricity", "Equipment", "Labor", "Gas"] if LANG == "en" else ["전력", "장비", "인건비", "가스"]
+    colors = ["#C58B36", "#506589", "#A16B96", "#B9C0C6"]
+    mass = data["request"]["manufacturing_protocol"]["finished_batch_mass_kg"]
+    left = [0.0] * 4
+    for key, label, color in zip(["electricity", "equipment", "labor", "gas"], cost_labels, colors):
+        values = [row["costs_usd"][key] / mass for row in data["baseline"]["manufacturing"]["operations"]]
+        b.barh(range(4), values, left=left, height=.55, color=color, label=label)
+        left = [a + v for a, v in zip(left, values)]
+    b.set_yticks(range(4), labels)
+    b.invert_yaxis()
+    b.set_xlabel("Operating cost (USD/kg)" if LANG == "en" else "운전비 (USD/kg)", fontsize=9)
+    b.set_xlim(0, max(left) * 1.04)
+    b.legend(loc="lower left", bbox_to_anchor=(-.14, 1.015), ncol=2, frameon=False,
+             fontsize=8.2, handlelength=1.2, columnspacing=1, borderaxespad=0)
+    for output, style in zip([.015, .03, .045], [":", "-", "--"]):
+        rows = [row for row in data["sweep"] if row["mass_kg"] == output]
+        c.plot([row["hold_h"] for row in rows], [row["selling_price_usd_kg"] for row in rows],
+               color="#384A51", linestyle=style, linewidth=1.7 if output == .03 else 1.3)
+        c.text(6.1, rows[-1]["selling_price_usd_kg"], f"{output:g} kg", ha="left", va="center", fontsize=8)
+    c.scatter([3], [data["baseline"]["summary"]["estimated_price_per_kg"]], s=20, color=ACC, zorder=3)
+    c.set_xlabel("Calcination hold (h)" if LANG == "en" else "소성 유지 시간 (h)", fontsize=9)
+    c.set_ylabel("Selling price (USD/kg)" if LANG == "en" else "판매가 (USD/kg)", fontsize=9)
+    c.set_xlim(1, 7.5)
+    c.set_xticks([1, 2, 3, 4, 5, 6])
+    c.set_ylim(0, max(row["selling_price_usd_kg"] for row in data["sweep"]) * 1.1)
+    c.yaxis.set_major_formatter(FuncFormatter(lambda value, _: f"{value:,.0f}"))
+    for panel in (b, c):
+        _clean(panel)
+    return fig
 
 
 def _cost_model_panel(fig):
@@ -738,11 +785,26 @@ def draw_crossovers(directory, out, lang):
     (out / f"layout_checks{suffix}.json").write_text(json.dumps(layout_checks, indent=2) + "\n", encoding="utf-8")
 
 
+def save_manufacturing_figure(directory, destination, suffix):
+    figure = figure_manufacturing(directory)
+    destination.mkdir(parents=True, exist_ok=True)
+    for extension in ("png", "svg", "pdf"):
+        path = destination / f"fig_manufacturing{suffix}.{extension}"
+        metadata = {"Date": None} if extension == "svg" else (
+            {"Creator": "COMET", "CreationDate": None, "ModDate": None} if extension == "pdf" else None)
+        figure.savefig(path, dpi=400, facecolor="white", metadata=metadata)
+        if extension == "svg":
+            svg = path.read_text(encoding="utf-8")
+            path.write_text("\n".join(line.rstrip() for line in svg.splitlines()) + "\n", encoding="utf-8", newline="\n")
+    plt.close(figure)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out-dir", type=Path, default=ROOT / "docs/paper/figures-note-2026-09-09")
     parser.add_argument("--lang", choices=sorted(TEXT), default="en")
     parser.add_argument("--crossovers", type=Path, help="Separate frozen price-crossover study directory")
+    parser.add_argument("--manufacturing", type=Path, help="Separate frozen manufacturing scenario directory")
     args = parser.parse_args()
     set_language(args.lang)
     args.out_dir.mkdir(parents=True, exist_ok=True)
@@ -750,6 +812,9 @@ def main():
         draw_crossovers(args.crossovers, args.out_dir, args.lang)
         return
     suffix = "" if args.lang == "en" else f".{args.lang}"
+    if args.manufacturing:
+        save_manufacturing_figure(args.manufacturing, args.out_dir, suffix)
+        return
     for kind in ("png", "svg"):
         shutil.copyfile(_diagram_asset("fig1_workflow", kind), args.out_dir / f"fig1_workflow_stack{suffix}.{kind}")
     print("wrote", args.out_dir / f"fig1_workflow_stack{suffix}")
@@ -768,6 +833,10 @@ def main():
             svg_path.write_text("\n".join(line.rstrip() for line in svg.splitlines()) + "\n", encoding="utf-8")
         plt.close(figure)
         print("wrote", args.out_dir / f"{name}{suffix}")
+    # The manufacturing panel is Figure 3 in the current note; metal histories
+    # remain available for Supporting Information from their original snapshot.
+    manufacturing = ROOT / "docs/paper/manufacturing-study-2026-09-15"
+    save_manufacturing_figure(manufacturing, manufacturing / "figures", suffix)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,28 @@
+{
+  "renderer": "Microsoft PowerPoint",
+  "diagrams": [
+    {
+      "source": "fig3a_manufacturing_v2.pptx",
+      "source_sha256": "b168d80e250a1ccdf4cc10bc52d34b3217219fccfe65faeeb5bed4292627aa63",
+      "width_mm": 370.417,
+      "height_mm": 123.472,
+      "png_dpi_at_slide_size": 400,
+      "exports": [
+        {
+          "language": "en",
+          "png": "exports/fig3a_manufacturing_v2.en.png",
+          "png_sha256": "2c5f486454aa6da973a1674fbb7245443dc3b7c8ed79101d2a2f3dd9be336831",
+          "svg": "exports/fig3a_manufacturing_v2.en.svg",
+          "svg_sha256": "f45112a6290b9aaebcf4fa3e43d8a1d305c894b3dc7b9cb054f86d6e4408b54a"
+        },
+        {
+          "language": "ko",
+          "png": "exports/fig3a_manufacturing_v2.ko.png",
+          "png_sha256": "4690c79f9922fd7084ed12a5562a17a6aec224b00c8cf95652bac9bf2d89bc2c",
+          "svg": "exports/fig3a_manufacturing_v2.ko.svg",
+          "svg_sha256": "1582324b632030134579290d3a68d83c8893c192633db2a9b46155b32bfd7edd"
+        }
+      ]
+    }
+  ]
+}

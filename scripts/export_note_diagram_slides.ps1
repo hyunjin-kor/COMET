@@ -5,18 +5,21 @@ opened without a window and are never saved or overwritten by this script.
 Requires the installed Microsoft PowerPoint application.
 #>
 [CmdletBinding()]
-param()
+param(
+    [string]$SourceDirectory = '',
+    [string[]]$Names = @('fig1_workflow', 'fig2a_cost_model')
+)
 
 $ErrorActionPreference = 'Stop'
 $repo = Split-Path -Parent $PSScriptRoot
-$sourceDir = Join-Path $repo 'docs/paper/diagram-sources-2026-09-13-h26'
+$sourceDir = if ($SourceDirectory) { (Resolve-Path -LiteralPath $SourceDirectory).Path } else { Join-Path $repo 'docs/paper/diagram-sources-2026-09-13-h26' }
 $outputDir = Join-Path $sourceDir 'exports'
 New-Item -ItemType Directory -Force -Path $outputDir | Out-Null
 $existingPowerPoint = @(Get-Process POWERPNT -ErrorAction SilentlyContinue)
 $application = New-Object -ComObject PowerPoint.Application
 $records = @()
 try {
-    foreach ($name in @('fig1_workflow', 'fig2a_cost_model')) {
+    foreach ($name in $Names) {
         $source = Join-Path $sourceDir ($name + '.pptx')
         $presentation = $application.Presentations.Open($source, 0, -1, 0)
         try {
@@ -67,4 +70,4 @@ try {
     if ($existingPowerPoint.Count -eq 0 -and $application.Presentations.Count -eq 0) { $application.Quit() }
     [void][Runtime.InteropServices.Marshal]::FinalReleaseComObject($application)
 }
-Write-Output 'Exported English and Korean Figure 1 and Figure 2(a) from PowerPoint.'
+Write-Output ('Exported English and Korean diagrams from PowerPoint: ' + ($Names -join ', '))

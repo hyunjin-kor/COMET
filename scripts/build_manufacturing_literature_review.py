@@ -78,6 +78,14 @@ def render(data):
             lines.append(f"| [{source['doi']}]({source['primary_url']}) | {cell(', '.join(source['profile_ids']) or 'Not curated')} | {cell(source['assessment'])} |")
         lines += ["", "The accompanying JSON retains each targeted query, database endpoint, search date and hit count. "
                   "Search retrieval and the existence of a preparation record are separate outcomes.", ""]
+        remaining = follow_up.get("remaining_citation_review")
+        if remaining:
+            lines += ["### Remaining-citation review", "", remaining["method"], "",
+                      f"Reviewed {remaining['unique_doi_count']} distinct DOIs for {remaining['candidate_count']} then-unlinked candidates on {remaining['date']}.", "",
+                      "| DOI | Crossref | Public-copy lookup | Assessment |", "|---|---|---|---|"]
+            for source in remaining["sources"]:
+                lines.append(f"| [{source['doi']}](https://doi.org/{source['doi']}) | {source['crossref_status']} | "
+                             f"{source['public_copy_status']} | {cell(source['assessment'])} |")
     lines += ["", "## Source-specific preparations", ""]
     for n, p in enumerate(profiles, 1):
         lines += [f"### S{n}. {p['sample']}", "", f"Record: `{p['id']}`. Boundary: {p['boundary']}.", "",

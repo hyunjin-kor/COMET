@@ -314,3 +314,19 @@ def test_imported_preparation_keeps_original_quantity_after_save_and_edit(client
     assert row["source_status"] == "modified"
     assert row["value"] == 3 and row["evidence"]["recorded_value"] == 2
     assert result["result"]["manufacturing"]["processing_cost_usd_kg"] is None
+
+
+def test_unpromoted_indium_zirconia_retains_unknown_recovery_and_variable_pressure():
+    profiles = {p["id"]: p for p in manufacturing_library()["profiles"]}
+    supported = profiles["in2o3-tzro2-wi-2022"]
+    transfer = supported["intermediate_batches"][0]
+    assert transfer["used_mass_kg"] == .002 and transfer["produced_mass_kg"] is None
+    evaporation = next(op for op in supported["operations"] if op["name"] == "Remove solvent")
+    assert evaporation.get("pressure_bar_abs") is None
+    assert "180 to 40 mbar" in evaporation["notes"]
+    for key in ("in2o3-mzro2-wi-2022", "in2o3-tzro2-wi-2022", "in2o3-zro2-cp-2022"):
+        p = profiles[key]
+        assert p.get("finished_batch_mass_kg") is None
+        assert all("Pd" not in item["name"] for op in p["operations"] for item in op.get("purchases", []))
+        assert p["operations"][-1]["temperature_profile"][0]["target_c"] == 499.85
+        assert p["operations"][-1]["temperature_profile"][0]["hold_h"] == 3

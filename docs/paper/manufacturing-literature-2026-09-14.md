@@ -4,9 +4,9 @@ COMET Application Note. Review date: 2026-09-15.
 
 ## Scope and source assessment
 
-The audit covers 116 screening candidates in 30 reaction families and 34 generic process templates. Crossref confirmed the bibliographic identity of 401 distinct DOIs. The curated library contains 89 named preparation records from 70 sources; 74 catalog candidates link to at least one record. A link may describe a different specimen and does not verify the catalog formulation.
+The audit covers 116 screening candidates in 30 reaction families and 34 generic process templates. Crossref confirmed the bibliographic identity of 401 distinct DOIs. The curated library contains 92 named preparation records from 71 sources; 75 catalog candidates link to at least one record. A link may describe a different specimen and does not verify the catalog formulation.
 
-Thirty reaction-family Europe PMC searches and individual candidate DOI checks were followed by 70 candidate-specific open-access searches. Eighteen initial and fourteen second-pass primary articles were screened, with public supplements where available. Search hits, bibliography, specimen preparation and complete operating costs remain separate assessments.
+Thirty reaction-family Europe PMC searches and individual candidate DOI checks were followed by 70 candidate-specific open-access searches. Eighteen initial and fourteen second-pass primary articles were screened, with public supplements where available. Search hits, bibliography, specimen preparation and complete operating costs remain separate assessments. A final targeted review rechecked 101 cited DOIs for 42 remaining preparation gaps; nine accessible texts were assessed, including selected published SI. These searches do not establish exhaustive coverage of all publicly available methods.
 
 Read accessible primary Methods or supporting experimental sections for named specimens. Record numeric conditions only when explicit; separate synthesis from characterization, activation, performance tests and electrode fabrication.
 
@@ -54,7 +54,7 @@ Source/formulation discrepancy flagged: 26; source-specific variant linked witho
 | co2-methanation / Ni/CeO2 low-temperature route | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | co2-methanol / Cu/ZnO/Al2O3 baseline | source_mismatch | cza-coprecipitation-2020 | The linked studies use Cu-Zn-Zr, Cu/ZrOx/MgO or ZnO; none establishes the catalog Cu/ZnO/Al2O3 formulation. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | co2-methanol / Cu/ZrOx-MgO interface route | source_mismatch | Not verified / 확인 못 함 | The accessible 2019 method prepares Cu-Zn-Zr oxides, and the 2025 method prepares ZnO nanorods. Neither establishes the catalog Cu/ZrOx-MgO interface specimen. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
-| co2-methanol / In2O3-ZrO2 low-temperature route | source_mismatch | Not verified / 확인 못 함 | The linked methods involve Ni-promoted indium oxide, Pd-In2O3-ZrO2 or inverse In2O3/Ni, not the unpromoted catalog formulation. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
+| co2-methanol / In2O3-ZrO2 low-temperature route | source_mismatch | in2o3-mzro2-wi-2022, in2o3-tzro2-wi-2022, in2o3-zro2-cp-2022 | The linked methods involve Ni-promoted indium oxide, Pd-In2O3-ZrO2 or inverse In2O3/Ni, not the unpromoted catalog formulation. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. 2026-09-15: published SI supplies three unpromoted In2O3/ZrO2 variants. Earlier title-level concern about Pd promotion does not apply to these explicitly identified SI comparators. Exact catalog composition and full manufacturing costs remain unverified. |
 | co2-methanol / Pd/In2O3 promoted oxide | variant_available | pd-in2o3-cp-2019 | The nominal 0.75 wt% Pd variant is supported, but co-precipitation and dry impregnation are distinct preparations. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | co2-to-formate / Ir-pincer (Tanaka / Nozaki anchor) | screening_only | Not verified / 확인 못 함 | The retrieved crystallographic supplement alone does not establish a complete preparative recipe or 30 wt% Ir formulation. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | co2-to-formate / Ru-pincer (Sanford / Beller-style) | screening_only | Not verified / 확인 못 함 | The public supplement refers catalyst 3 synthesis to an earlier paper; the catalytic 120 °C/4 h experiment is not its synthesis. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
@@ -187,9 +187,127 @@ These targeted Europe PMC searches prioritize public full text and are not an ex
 | [10.1039/d2sc03321f](https://pmc.ncbi.nlm.nih.gov/articles/PMC9337747/) | mo6-silica-2022 | Primary preparation section read; explicit quantities and source-specific boundaries transcribed. Missing yields, operation inputs and prices remain unverified. |
 | [10.1039/d4ey00123k](https://pmc.ncbi.nlm.nih.gov/articles/PMC11320177/) | fe-bn-milled-2024, fe-bn-iwi-2024 | Primary preparation section read; explicit quantities and source-specific boundaries transcribed. Missing yields, operation inputs and prices remain unverified. |
 | [10.3390/nano12203704](https://pmc.ncbi.nlm.nih.gov/articles/PMC9610965/) | fe5c2-silica-l-2022 | Primary preparation section read; explicit quantities and source-specific boundaries transcribed. Missing yields, operation inputs and prices remain unverified. |
+| [10.1038/s41467-019-09072-6](https://pmc.ncbi.nlm.nih.gov/articles/PMC6411953/) | Not curated | Primary Methods read: Cu-Zn-Zr oxide, not the catalog Cu-Zr-Mg oxide. No matching recipe imported. |
+| [10.1038/s41467-021-22224-x](https://pmc.ncbi.nlm.nih.gov/articles/PMC8010022/) | Not curated | Primary article and published SI read: Ni-promoted In2O3, not the unpromoted In2O3/ZrO2 catalog specimen. No matching recipe imported. |
+| [10.1038/s41467-022-33308-7](https://pmc.ncbi.nlm.nih.gov/articles/PMC9530113/) | Not curated | Primary Methods read: Pt-MoOx/Mo2N, not Pt/TiO2. No matching recipe imported. |
+| [10.1038/s41467-022-33391-w](https://pmc.ncbi.nlm.nih.gov/articles/PMC9509363/) | in2o3-mzro2-wi-2022, in2o3-tzro2-wi-2022, in2o3-zro2-cp-2022 | Primary article and published SI pp. 2-3 and 7 visually checked. Three unpromoted In2O3/ZrO2 preparation variants transcribed. Unknown yields, utilities and prices retained; linkage does not verify an exact catalog composition. |
+| [10.1038/s41467-023-41341-3](https://pmc.ncbi.nlm.nih.gov/articles/PMC10514199/) | Not curated | Primary Methods read: multicomponent Pt/TiO2 preparation; an exact candidate-specific charge/formulation was not established in this review. No recipe imported. |
+| [10.1038/s41467-024-51704-z](https://pmc.ncbi.nlm.nih.gov/articles/PMC11358494/) | Not curated | Primary Methods read: activated Raney Ni/Ni-Mo foam, not the cited seeded NiFe formulation. No matching recipe imported. |
+| [10.1038/s41467-025-65929-z](https://pmc.ncbi.nlm.nih.gov/articles/PMC12686540/) | Not curated | Primary Methods read: Ni-In-Zr intermetallic/carbide specimens, not unpromoted In2O3/ZrO2. No matching recipe imported. |
+| [10.1038/s41467-025-67625-4](https://pmc.ncbi.nlm.nih.gov/articles/PMC12830988/) | Not curated | Primary Methods read: ZnO nanorods, not Cu/ZrOx-MgO. No matching recipe imported. |
+| [10.3389/fchem.2020.00709](https://pmc.ncbi.nlm.nih.gov/articles/PMC7489098/) | Not curated | Review article, not an original specimen-specific Methods source. No primary preparation imported. |
 
 The accompanying JSON retains each targeted query, database endpoint, search date and hit count. Search retrieval and the existence of a preparation record are separate outcomes.
 
+### Remaining-citation review
+
+Fresh Crossref metadata and Europe PMC public-full-text retrieval for every existing citation of the 42 preparation gaps; accessible Methods and selected public SI inspected. No paid access. A failed public-copy lookup does not establish that no free copy exists elsewhere.
+
+Reviewed 101 distinct DOIs for 42 then-unlinked candidates on 2026-09-15.
+
+| DOI | Crossref | Public-copy lookup | Assessment |
+|---|---|---|---|
+| [10.1002/aic.17295](https://doi.org/10.1002/aic.17295) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1002/aic.690350109](https://doi.org/10.1002/aic.690350109) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1002/anie.200701199](https://doi.org/10.1002/anie.200701199) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1002/anie.201600525](https://doi.org/10.1002/anie.201600525) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1002/cctc.201000249](https://doi.org/10.1002/cctc.201000249) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1002/cplu.202100560](https://doi.org/10.1002/cplu.202100560) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1006/jcat.1993.1205](https://doi.org/10.1006/jcat.1993.1205) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1006/jcat.1997.1781](https://doi.org/10.1006/jcat.1997.1781) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1007/s11244-013-0206-z](https://doi.org/10.1007/s11244-013-0206-z) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/0926-860x(95)00305-3](https://doi.org/10.1016/0926-860x(95)00305-3) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.apcata.2004.12.003](https://doi.org/10.1016/j.apcata.2004.12.003) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.apcata.2007.09.017](https://doi.org/10.1016/j.apcata.2007.09.017) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.apcata.2009.11.029](https://doi.org/10.1016/j.apcata.2009.11.029) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.apcatb.2020.119628](https://doi.org/10.1016/j.apcatb.2020.119628) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.apcatb.2021.120803](https://doi.org/10.1016/j.apcatb.2021.120803) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.catcom.2009.10.010](https://doi.org/10.1016/j.catcom.2009.10.010) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.catcom.2012.08.008](https://doi.org/10.1016/j.catcom.2012.08.008) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.cattod.2005.10.002](https://doi.org/10.1016/j.cattod.2005.10.002) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.cattod.2013.02.019](https://doi.org/10.1016/j.cattod.2013.02.019) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.ccr.2017.11.021](https://doi.org/10.1016/j.ccr.2017.11.021) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.cej.2016.02.084](https://doi.org/10.1016/j.cej.2016.02.084) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.chempr.2018.12.014](https://doi.org/10.1016/j.chempr.2018.12.014) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.ijhydene.2011.12.122](https://doi.org/10.1016/j.ijhydene.2011.12.122) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.ijhydene.2015.09.057](https://doi.org/10.1016/j.ijhydene.2015.09.057) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.jcat.2005.10.017](https://doi.org/10.1016/j.jcat.2005.10.017) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.jcat.2005.10.018](https://doi.org/10.1016/j.jcat.2005.10.018) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.jcat.2007.04.020](https://doi.org/10.1016/j.jcat.2007.04.020) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.jcat.2008.08.003](https://doi.org/10.1016/j.jcat.2008.08.003) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.jcat.2011.03.015](https://doi.org/10.1016/j.jcat.2011.03.015) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.jcat.2014.05.007](https://doi.org/10.1016/j.jcat.2014.05.007) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.jcat.2014.05.024](https://doi.org/10.1016/j.jcat.2014.05.024) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.jcat.2014.11.007](https://doi.org/10.1016/j.jcat.2014.11.007) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.jcat.2017.06.006](https://doi.org/10.1016/j.jcat.2017.06.006) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.jcou.2014.02.002](https://doi.org/10.1016/j.jcou.2014.02.002) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.jcou.2017.08.009](https://doi.org/10.1016/j.jcou.2017.08.009) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.jeurceramsoc.2017.04.011](https://doi.org/10.1016/j.jeurceramsoc.2017.04.011) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.jngse.2011.03.004](https://doi.org/10.1016/j.jngse.2011.03.004) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.joule.2017.12.009](https://doi.org/10.1016/j.joule.2017.12.009) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.matt.2022.07.033](https://doi.org/10.1016/j.matt.2022.07.033) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.mcat.2017.08.007](https://doi.org/10.1016/j.mcat.2017.08.007) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.mcat.2019.110461](https://doi.org/10.1016/j.mcat.2019.110461) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.molcata.2003.10.049](https://doi.org/10.1016/j.molcata.2003.10.049) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/j.nanoen.2022.107613](https://doi.org/10.1016/j.nanoen.2022.107613) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/s0360-0564(02)47006-x](https://doi.org/10.1016/s0360-0564(02)47006-x) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/s0920-5861(00)00426-0](https://doi.org/10.1016/s0920-5861(00)00426-0) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/s0920-5861(01)00453-9](https://doi.org/10.1016/s0920-5861(01)00453-9) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/s0926-3373(00)00205-8](https://doi.org/10.1016/s0926-3373(00)00205-8) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/s0926-860x(01)00529-4](https://doi.org/10.1016/s0926-860x(01)00529-4) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/s0926-860x(01)00626-3](https://doi.org/10.1016/s0926-860x(01)00626-3) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/s0926-860x(01)00915-2](https://doi.org/10.1016/s0926-860x(01)00915-2) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/s0926-860x(02)00221-1](https://doi.org/10.1016/s0926-860x(02)00221-1) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1016/s0926-860x(03)00359-4](https://doi.org/10.1016/s0926-860x(03)00359-4) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1021/acs.iecr.1c00843](https://doi.org/10.1021/acs.iecr.1c00843) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1021/acscatal.1c01808](https://doi.org/10.1021/acscatal.1c01808) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1021/acscatal.5b00007](https://doi.org/10.1021/acscatal.5b00007) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1021/acscatal.8b03402](https://doi.org/10.1021/acscatal.8b03402) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1021/cs200418w](https://doi.org/10.1021/cs200418w) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1021/cs400609u](https://doi.org/10.1021/cs400609u) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1021/cs500528h](https://doi.org/10.1021/cs500528h) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1021/ie00098a008](https://doi.org/10.1021/ie00098a008) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1021/ja010963d](https://doi.org/10.1021/ja010963d) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1021/ja048462q](https://doi.org/10.1021/ja048462q) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1021/ja200122f](https://doi.org/10.1021/ja200122f) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1021/ja903574e](https://doi.org/10.1021/ja903574e) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1021/ja992541y](https://doi.org/10.1021/ja992541y) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1021/jacs.6b11291](https://doi.org/10.1021/jacs.6b11291) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1021/jp312857p](https://doi.org/10.1021/jp312857p) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1021/jp904022e](https://doi.org/10.1021/jp904022e) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1021/nl401881z](https://doi.org/10.1021/nl401881z) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1023/b:catl.0000034280.35570.26](https://doi.org/10.1023/b:catl.0000034280.35570.26) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1038/nnano.2016.304](https://doi.org/10.1038/nnano.2016.304) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1038/s41467-019-09072-6](https://doi.org/10.1038/s41467-019-09072-6) | verified | retrieved | Primary Methods read: Cu-Zn-Zr oxide, not the catalog Cu-Zr-Mg oxide. No matching recipe imported. |
+| [10.1038/s41467-021-22224-x](https://doi.org/10.1038/s41467-021-22224-x) | verified | retrieved | Primary article and published SI read: Ni-promoted In2O3, not the unpromoted In2O3/ZrO2 catalog specimen. No matching recipe imported. |
+| [10.1038/s41467-022-33308-7](https://doi.org/10.1038/s41467-022-33308-7) | verified | retrieved | Primary Methods read: Pt-MoOx/Mo2N, not Pt/TiO2. No matching recipe imported. |
+| [10.1038/s41467-022-33391-w](https://doi.org/10.1038/s41467-022-33391-w) | verified | retrieved | Primary article and published SI pp. 2-3 and 7 visually checked. Three unpromoted In2O3/ZrO2 preparation variants transcribed. Unknown yields, utilities and prices retained; linkage does not verify an exact catalog composition. |
+| [10.1038/s41467-023-41341-3](https://doi.org/10.1038/s41467-023-41341-3) | verified | retrieved | Primary Methods read: multicomponent Pt/TiO2 preparation; an exact candidate-specific charge/formulation was not established in this review. No recipe imported. |
+| [10.1038/s41467-024-51704-z](https://doi.org/10.1038/s41467-024-51704-z) | verified | retrieved | Primary Methods read: activated Raney Ni/Ni-Mo foam, not the cited seeded NiFe formulation. No matching recipe imported. |
+| [10.1038/s41467-025-65929-z](https://doi.org/10.1038/s41467-025-65929-z) | verified | retrieved | Primary Methods read: Ni-In-Zr intermetallic/carbide specimens, not unpromoted In2O3/ZrO2. No matching recipe imported. |
+| [10.1038/s41467-025-67625-4](https://doi.org/10.1038/s41467-025-67625-4) | verified | retrieved | Primary Methods read: ZnO nanorods, not Cu/ZrOx-MgO. No matching recipe imported. |
+| [10.1038/s41586-020-2278-9](https://doi.org/10.1038/s41586-020-2278-9) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1038/s41929-024-01209-1](https://doi.org/10.1038/s41929-024-01209-1) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1038/s41929-024-01236-y](https://doi.org/10.1038/s41929-024-01236-y) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1039/b109896a](https://doi.org/10.1039/b109896a) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1039/b803661f](https://doi.org/10.1039/b803661f) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1039/b805427d](https://doi.org/10.1039/b805427d) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1039/c1cy00197c](https://doi.org/10.1039/c1cy00197c) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1039/c3cp52247d](https://doi.org/10.1039/c3cp52247d) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1039/c3sc51339d](https://doi.org/10.1039/c3sc51339d) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1039/c5ta04843e](https://doi.org/10.1039/c5ta04843e) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1126/science.1135941](https://doi.org/10.1126/science.1135941) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1126/science.1156660](https://doi.org/10.1126/science.1156660) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1126/science.1249061](https://doi.org/10.1126/science.1249061) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1126/science.279.5358.1913](https://doi.org/10.1126/science.279.5358.1913) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1126/science.aaf0718](https://doi.org/10.1126/science.aaf0718) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1126/science.aao5023](https://doi.org/10.1126/science.aao5023) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1126/science.abg7894](https://doi.org/10.1126/science.abg7894) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.1246/cl.2002.850](https://doi.org/10.1246/cl.2002.850) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.3389/fchem.2020.00709](https://doi.org/10.3389/fchem.2020.00709) | verified | retrieved | Review article, not an original specimen-specific Methods source. No primary preparation imported. |
+| [10.3390/catal10030352](https://doi.org/10.3390/catal10030352) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.3390/en13112792](https://doi.org/10.3390/en13112792) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
+| [10.3390/en14113107](https://doi.org/10.3390/en14113107) | verified | no_open_copy_found | No public full-text copy verified through this targeted lookup; preparation remains unverified. |
 
 ## Source-specific preparations
 
@@ -2499,6 +2617,98 @@ Explicit purchases/inputs (unpriced; missing amounts remain unknown):
 
 Selected T100 is explicitly pure titania. Mixed CT labels conflict with stated Ce/Ti loading descriptions, so no mixed-oxide composition or amount is inferred. The source does not establish how the initial support synthesis was scaled or repeated to supply the 0.5 g support aliquot. A single stated precursor charge is not assumed to produce that mass. 1 wt% Au is a nominal target. This photo-PROX specimen does not establish an industrial low-temperature PROX formulation or matched performance. Unless explicitly reported, recovered dry output remains unknown. Mean electrical demand, attended labor and procurement prices are not established; this is not a cost-complete protocol.
 
+### S90. 5In2O3/m-ZrO2,WI
+
+Record: `in2o3-mzro2-wi-2022`. Boundary: catalyst_powder.
+
+Source: [Flame-made ternary Pd-In2O3-ZrO2 catalyst with enhanced oxygen vacancy generation for CO2 hydrogenation to methanol](https://doi.org/10.1038/s41467-022-33391-w). [DOI 10.1038/s41467-022-33391-w](https://doi.org/10.1038/s41467-022-33391-w). Locator: Supplementary Information pp. 2-3, Additional Details on Catalyst Preparation; p. 7, Table 2. Crossref checked: 2026-09-15.
+
+| Operation | Explicit conditions | Source details |
+|---|---|---|
+| Impregnate zirconia | 12 h | Use 2 g zirconia; room temperature has no numeric value in the source. |
+| Remove solvent | 49.85 °C; hold unreported h; ramp unreported °C/min | Rotavap at 323 K with pressure progressively reduced from 180 to 40 mbar. No single constant pressure or evaporation duration is inferred. |
+| Vacuum dry impregnated solid | 49.85 °C; hold 12 h; ramp unreported °C/min | Source vacuum pressure 2 kPa = 0.02 bar. |
+| Calcine impregnated solid | 499.85 °C; hold 3 h; ramp 2 °C/min; static air | 773 K = 499.85 °C; ramp start and cooling time unreported. |
+
+Explicit purchases/inputs (unpriced; missing amounts remain unknown):
+
+| Operation | Material | Amount | Note |
+|---|---|---|---|
+| Impregnate zirconia | Monoclinic ZrO2, Saint-Gobain NorPro, 95% | 2 g |  |
+| Impregnate zirconia | Deionized water | 54 mL |  |
+| Impregnate zirconia | Ethanol, 99% | 70 mL |  |
+| Impregnate zirconia | In(NO3)3·6H2O, 99% | 0.2776 g |  |
+
+Unpromoted nominal 5 wt% In2O3 wet-impregnation specimen; this is not a Pd-containing sample. Nominal oxide loading is not elemental In loading or a verified screening-catalog composition. Scope ends at calcined powder, before catalytic activation/testing. No recovered dry mass or precursor-to-product yield is inferred. Unless explicitly reported, recovered dry output remains unknown. Mean electrical demand, attended labor and procurement prices are not established; this is not a cost-complete protocol.
+
+### S91. 5In2O3/t-ZrO2,WI (NH4OH support route)
+
+Record: `in2o3-tzro2-wi-2022`. Boundary: catalyst_powder.
+
+Source: [Flame-made ternary Pd-In2O3-ZrO2 catalyst with enhanced oxygen vacancy generation for CO2 hydrogenation to methanol](https://doi.org/10.1038/s41467-022-33391-w). [DOI 10.1038/s41467-022-33391-w](https://doi.org/10.1038/s41467-022-33391-w). Locator: Supplementary Information pp. 2-3, Additional Details on Catalyst Preparation; p. 7, Table 2. Crossref checked: 2026-09-15.
+
+| Operation | Explicit conditions | Source details |
+|---|---|---|
+| Dilute precursor solution | Intermediate batch: zirconia |  |
+| Add precipitant | Intermediate batch: zirconia | Approximately 3 mL/min to pH 9.2; exact quantity and addition time unreported. |
+| Stir precipitated slurry | 79.85 °C; hold 3 h; ramp unreported °C/min; Intermediate batch: zirconia | 353 K converted to 79.85 °C. |
+| Recover precipitate | Intermediate batch: zirconia | High-pressure filtration; duration and filtration pressure unreported. |
+| Wash precipitate | Intermediate batch: zirconia | Three washes, 1 dm3 each = 1000 mL per wash. |
+| Vacuum dry precipitate | 49.85 °C; hold 12 h; ramp unreported °C/min; Intermediate batch: zirconia | 323 K = 49.85 °C; source vacuum oven pressure 2 kPa = 0.02 bar. |
+| Calcine precipitate | 499.85 °C; hold 3 h; ramp 3 °C/min; static air; Intermediate batch: zirconia | 773 K converted to 499.85 °C. Ramp start and cooling time unreported. |
+| Impregnate zirconia | 12 h | Use 2 g zirconia; room temperature has no numeric value in the source. |
+| Remove solvent | 49.85 °C; hold unreported h; ramp unreported °C/min | Rotavap at 323 K with pressure progressively reduced from 180 to 40 mbar. No single constant pressure or evaporation duration is inferred. |
+| Vacuum dry impregnated solid | 49.85 °C; hold 12 h; ramp unreported °C/min | Source vacuum pressure 2 kPa = 0.02 bar. |
+| Calcine impregnated solid | 499.85 °C; hold 3 h; ramp 2 °C/min; static air | 773 K = 499.85 °C; ramp start and cooling time unreported. |
+
+Intermediate transfers (recovery is not inferred from precursor inputs):
+
+| Intermediate / destination | Prepared/recovered | Transferred | Source details |
+|---|---|---|---|
+| NH4OH-precipitated tetragonal zirconia / final batch | Not verified / 확인 못 함 | 0.002 kg |  |
+
+Explicit purchases/inputs (unpriced; missing amounts remain unknown):
+
+| Operation | Material | Amount | Note |
+|---|---|---|---|
+| Dilute precursor solution | ZrO(NO3)2 solution, 35 wt% in dilute HNO3 | 15 g |  |
+| Dilute precursor solution | Deionized water | 300 mL |  |
+| Add precipitant | NH4OH solution, 25 wt% | Not verified / 확인 못 함 |  |
+| Wash precipitate | Deionized wash water | 1000 mL |  |
+| Impregnate zirconia | Deionized water | 54 mL |  |
+| Impregnate zirconia | Ethanol, 99% | 70 mL |  |
+| Impregnate zirconia | In(NO3)3·6H2O, 99% | 0.2776 g |  |
+
+Unpromoted nominal 5 wt% In2O3 wet-impregnation specimen; this is not a Pd-containing sample. Nominal oxide loading is not elemental In loading or a verified screening-catalog composition. Scope ends at calcined powder, before catalytic activation/testing. No recovered dry mass or precursor-to-product yield is inferred. The selected support uses the explicitly reported NH4OH precipitation route. Its recovered batch mass is unknown; the downstream 2 g aliquot cannot establish the upstream allocation fraction. Unless explicitly reported, recovered dry output remains unknown. Mean electrical demand, attended labor and procurement prices are not established; this is not a cost-complete protocol.
+
+### S92. 5In2O3-ZrO2,CP (unpromoted)
+
+Record: `in2o3-zro2-cp-2022`. Boundary: catalyst_powder.
+
+Source: [Flame-made ternary Pd-In2O3-ZrO2 catalyst with enhanced oxygen vacancy generation for CO2 hydrogenation to methanol](https://doi.org/10.1038/s41467-022-33391-w). [DOI 10.1038/s41467-022-33391-w](https://doi.org/10.1038/s41467-022-33391-w). Locator: Supplementary Information pp. 2-3, Additional Details on Catalyst Preparation; p. 7, Table 2. Crossref checked: 2026-09-15.
+
+| Operation | Explicit conditions | Source details |
+|---|---|---|
+| Dilute precursor solution | Not quantified |  |
+| Add precipitant | Not quantified | Approximately 3 mL/min to pH 9.2; exact quantity and addition time unreported. |
+| Stir precipitated slurry | 79.85 °C; hold 3 h; ramp unreported °C/min | 353 K converted to 79.85 °C. |
+| Recover precipitate | Not quantified | High-pressure filtration; duration and filtration pressure unreported. |
+| Wash precipitate | Not quantified | Three washes, 1 dm3 each = 1000 mL per wash. |
+| Vacuum dry precipitate | 49.85 °C; hold 12 h; ramp unreported °C/min | 323 K = 49.85 °C; source vacuum oven pressure 2 kPa = 0.02 bar. |
+| Calcine precipitate | 499.85 °C; hold 3 h; ramp 2 °C/min; static air | 773 K converted to 499.85 °C. Ramp start and cooling time unreported. |
+
+Explicit purchases/inputs (unpriced; missing amounts remain unknown):
+
+| Operation | Material | Amount | Note |
+|---|---|---|---|
+| Dilute precursor solution | ZrO(NO3)2 solution, 35 wt% in dilute HNO3 | 15 g |  |
+| Dilute precursor solution | Deionized water | 300 mL |  |
+| Dilute precursor solution | In(NO3)3·6H2O, 99% | 0.4139 g |  |
+| Add precipitant | NH4OH solution, 25 wt% | Not verified / 확인 못 함 |  |
+| Wash precipitate | Deionized wash water | 1000 mL |  |
+
+Unpromoted co-precipitated nominal 5 wt% In2O3 specimen. Table 2 reports 4.78 wt% In2O3 by XRF; this oxide mass fraction is not elemental In loading or a recovered yield. Scope ends at calcined powder. The source does not report final dry mass, complete energy/labor consumption or purchase prices. Unless explicitly reported, recovered dry output remains unknown. Mean electrical demand, attended labor and procurement prices are not established; this is not a cost-complete protocol.
+
 ## Operating references
 
 These public references retain geography, period, quantity basis and source locator. Only electricity averages can be applied directly as explicit scenarios. Wage-only statistics and equipment connected loads remain reference information. No reference substitutes for measured batch electricity, actual gas conditions, staffing or a supplier quotation. The source texts and manuals are not redistributed.
@@ -2808,7 +3018,7 @@ Access flags indicate a retrieved public full text or PDF supplement; they do no
 | [Hierarchical micro/nanostructured silver hollow fiber boosts electroreduction of carbon dioxide](https://doi.org/10.1038/s41467-022-30733-6) — 10.1038/s41467-022-30733-6 | Yes | Yes | Yes |
 | [Subsurface oxygen defects electronically interacting with active sites on In2O3 for enhanced photothermocatalytic CO2 reduction](https://doi.org/10.1038/s41467-022-30958-5) — 10.1038/s41467-022-30958-5 | Yes | Yes | Not verified |
 | [Ptn–Ov synergistic sites on MoOx/γ-Mo2N heterostructure for low-temperature reverse water–gas shift reaction](https://doi.org/10.1038/s41467-022-33308-7) — 10.1038/s41467-022-33308-7 | Yes | Yes | Not verified |
-| [Flame-made ternary Pd-In2O3-ZrO2 catalyst with enhanced oxygen vacancy generation for CO2 hydrogenation to methanol](https://doi.org/10.1038/s41467-022-33391-w) — 10.1038/s41467-022-33391-w | Yes | Yes | Not verified |
+| [Flame-made ternary Pd-In2O3-ZrO2 catalyst with enhanced oxygen vacancy generation for CO2 hydrogenation to methanol](https://doi.org/10.1038/s41467-022-33391-w) — 10.1038/s41467-022-33391-w | Yes | Yes | Yes |
 | [Predictive control of selective secondary alcohol oxidation of glycerol on NiOOH](https://doi.org/10.1038/s41467-022-33637-7) — 10.1038/s41467-022-33637-7 | Yes | Yes | Yes |
 | [Fully-exposed Pt-Fe cluster for efficient preferential oxidation of CO towards hydrogen purification](https://doi.org/10.1038/s41467-022-34674-y) — 10.1038/s41467-022-34674-y | Yes | Yes | Not verified |
 | [Dispersed surface Ru ensembles on MgO(111) for catalytic ammonia decomposition](https://doi.org/10.1038/s41467-023-36339-w) — 10.1038/s41467-023-36339-w | Yes | Not verified | Yes |

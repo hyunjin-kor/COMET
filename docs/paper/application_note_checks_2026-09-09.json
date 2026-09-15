@@ -1,8 +1,8 @@
 {
   "target": "Journal of Chemical Information and Modeling, Application Note",
   "word_limit_abstract_text_graphics": 5000,
-  "abstract_words": 84,
-  "text_words_excluding_references": 2513,
+  "abstract_words": 97,
+  "text_words_excluding_references": 1733,
   "graphics": [
     {
       "figure": 1,
@@ -16,8 +16,8 @@
     },
     {
       "figure": 3,
-      "width": "single",
-      "word_equivalent": 300
+      "width": "double",
+      "word_equivalent": 600
     },
     {
       "figure": 4,
@@ -25,15 +25,15 @@
       "word_equivalent": 600
     }
   ],
-  "graphics_word_equivalent": 2100,
-  "total_word_equivalent": 4697,
+  "graphics_word_equivalent": 2400,
+  "total_word_equivalent": 4230,
   "toc_word_equivalent_allowance": 300,
-  "total_word_equivalent_with_toc": 4997,
+  "total_word_equivalent_with_toc": 4530,
   "toc_count_note": "A conservative 300-word allowance is tracked separately because the Application Note rule does not explicitly resolve TOC inclusion.",
   "figure_count": 4,
   "table_count": 0,
   "software_named_in_title": true,
-  "json_key_references": 62,
+  "json_key_references": 51,
   "publication_mass_unit": "kg",
   "publication_conversions": [
     {

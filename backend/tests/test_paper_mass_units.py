@@ -32,7 +32,7 @@ def test_note_converts_every_mass_value_and_preserves_source_references():
     assert sum("per_lb" in row["key"] for row in records) == 11
     for row in records:
         assert row["display"] + "<!-- " + row["source"] + ":" + row["key"] + " -->" in text
-    assert "0.85 USD/kg difference" in visible
+    assert re.search(r"0\.85 USD/kg (?:cost )?difference", visible)
 
 
 def test_all_metal_history_points_are_converted_without_smoothing():
