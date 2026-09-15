@@ -45,3 +45,15 @@ test('equipment ratings and historical wages cannot silently become operating in
     assert.equal(protocol.operations[0].average_power_kw, undefined);
   }
 });
+
+test('literature aliquots retain unknown recovery and source values independently', () => {
+  const profile = { ...library.profiles[0], intermediate_batches: [{ id: 'support', name: 'Synthetic support',
+    produced_mass_kg: null, used_mass_kg: .001, input_evidence: { used_mass_kg: { kind: 'assumption', citation: 'Synthetic import', recorded_value: .001 } } }],
+    operations: [{ name: 'Prepare support', intermediate_batch_id: 'support' }, { name: 'Use aliquot' }] };
+  const imported = adaptLiteratureProtocol(profile);
+  assert.equal(imported.intermediate_batches[0].produced_mass_kg, null);
+  assert.equal(imported.operations[0].intermediate_batch_id, 'support');
+  imported.intermediate_batches[0].used_mass_kg = .002;
+  assert.equal(imported.intermediate_batches[0].input_evidence.used_mass_kg.recorded_value, .001);
+  assert.equal(profile.intermediate_batches[0].used_mass_kg, .001);
+});

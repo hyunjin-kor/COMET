@@ -124,6 +124,8 @@ export function buildResultCsv(snapshot: CalculatorResultSnapshot): string {
       ['Materials basis', manufacturing.protocol.materials_basis ?? 'composition'],
       ['Finished dry batch mass (kg)', manufacturing.protocol.finished_batch_mass_kg],
       ['Serial operation hours per batch', manufacturing.serial_operation_hours],
+      ['Allocated operation hours per final batch', manufacturing.allocated_operation_hours],
+      ['Intermediate batch allocations JSON', JSON.stringify(manufacturing.intermediate_batches ?? [])],
       ['Processing cost (USD/kg)', manufacturing.processing_cost_usd_kg],
       ['Materials plus processing (USD/kg)', manufacturing.manufacturing_cost_usd_kg],
       ['Batch equivalents for order totals', manufacturing.batch_equivalents],
@@ -131,12 +133,12 @@ export function buildResultCsv(snapshot: CalculatorResultSnapshot): string {
       ['Source / assumptions', manufacturing.protocol.source_note],
       ['Complete protocol JSON', JSON.stringify(manufacturing.protocol)],
       ['Input sources and calculation trace JSON', JSON.stringify(manufacturing.trace ?? null)],
-      ['Operation', 'Repetitions', 'Operation hours per batch', 'Electricity kWh per batch', 'Cost USD per batch'],
-      ...manufacturing.operations.map((op) => [op.name, op.repetitions, op.duration_h, op.electricity_kwh, op.cost_usd]),
+      ['Operation', 'Repetitions', 'Whole operation hours', 'Whole operation electricity kWh', 'Allocated USD per final batch', 'Whole operation USD', 'Allocation fraction', 'Intermediate batch'],
+      ...manufacturing.operations.map((op) => [op.name, op.repetitions, op.duration_h, op.electricity_kwh, op.cost_usd, op.incurred_cost_usd, op.allocation_fraction, op.intermediate_batch_id]),
       ['Missing cost inputs', manufacturing.missing_inputs.join('; ')]));
     if (manufacturing.purchases?.length) sections.push(rows(['Operation purchase records'],
-      ['Operation', 'Name', 'Quantity per batch including repetitions', 'Unit', 'USD/unit', 'USD/batch', 'USD/kg', 'Quantity basis'],
-      ...manufacturing.purchases.map((p) => [p.operation, p.name, p.quantity, p.unit, p.price_usd_per_unit, p.cost_usd, p.cost_usd_kg, p.quantity_basis])));
+      ['Operation', 'Name', 'Whole purchased quantity including repetitions', 'Unit', 'USD/unit', 'Allocated USD/final batch', 'Allocated USD/kg', 'Quantity basis', 'Whole purchase USD', 'Allocation fraction', 'Intermediate batch'],
+      ...manufacturing.purchases.map((p) => [p.operation, p.name, p.quantity, p.unit, p.price_usd_per_unit, p.cost_usd, p.cost_usd_kg, p.quantity_basis, p.incurred_cost_usd, p.allocation_fraction, p.intermediate_batch_id])));
   }
   if (result.input_summary.production_rate_ton_per_day != null) {
     sections.push(rows(['Production-rate assumption'],

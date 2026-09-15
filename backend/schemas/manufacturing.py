@@ -26,7 +26,7 @@ class SourcedProtocolModel(ProtocolModel):
     @model_validator(mode="after")
     def valid_evidence_fields(self):
         for key in self.input_evidence:
-            if key not in type(self).model_fields or key in {"input_evidence", "operations", "gases", "temperature_profile", "purchases"}:
+            if key not in type(self).model_fields or key in {"input_evidence", "operations", "gases", "temperature_profile", "purchases", "intermediate_batches"}:
                 raise ValueError(f"input_evidence must refer to a scalar input on this record: {key}")
         return self
 
@@ -69,8 +69,24 @@ class BatchPurchase(SourcedProtocolModel):
         return self
 
 
+class IntermediateBatch(SourcedProtocolModel):
+    id: str = Field(min_length=1, max_length=150)
+    name: str = Field(min_length=1, max_length=200)
+    allocation_basis: Literal["mass_used", "whole_batch"] = "mass_used"
+    produced_mass_kg: float | None = Field(default=None, gt=0)
+    used_mass_kg: float | None = Field(default=None, gt=0)
+    notes: str = Field(default="", max_length=2000)
+
+    @model_validator(mode="after")
+    def usable_mass(self):
+        if self.produced_mass_kg is not None and self.used_mass_kg is not None and self.used_mass_kg > self.produced_mass_kg:
+            raise ValueError("Intermediate mass used cannot exceed recovered mass")
+        return self
+
+
 class ManufacturingOperation(SourcedProtocolModel):
     name: str = Field(min_length=1, max_length=200)
+    intermediate_batch_id: str = Field(default="", max_length=150)
     equipment: str = Field(default="", max_length=300)
     atmosphere: str = Field(default="", max_length=300)
     pressure_bar_abs: float | None = Field(default=None, gt=0)
@@ -119,10 +135,21 @@ class ManufacturingProtocol(SourcedProtocolModel):
     labor_usd_h: float | None = Field(default=None, ge=0)
     selling_margin_fraction: float = Field(default=0, ge=0, lt=1)
     source_note: str = Field(default="", max_length=4000)
+    intermediate_batches: list[IntermediateBatch] = Field(default_factory=list, max_length=30)
     operations: list[ManufacturingOperation] = Field(min_length=1, max_length=100)
 
     @model_validator(mode="after")
     def powder_cost_basis(self):
         if self.mode == "batch_cost" and self.product_basis != "catalyst_powder":
             raise ValueError("Electrode preparation records cannot use dry-powder batch costing")
+        ids = [batch.id for batch in self.intermediate_batches]
+        assigned = {op.intermediate_batch_id for op in self.operations if op.intermediate_batch_id}
+        if len(ids) != len(set(ids)):
+            raise ValueError("Intermediate batch identifiers must be unique")
+        if assigned - set(ids):
+            raise ValueError("Every operation must refer to a defined intermediate batch or the final batch")
+        if set(ids) - assigned:
+            raise ValueError("Every intermediate batch needs at least one assigned operation")
+        if ids and all(op.intermediate_batch_id for op in self.operations):
+            raise ValueError("At least one operation must belong to the final batch")
         return self

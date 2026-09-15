@@ -30,6 +30,7 @@ export interface ProcessGas extends SourcedInputs {
 
 export interface ManufacturingOperation extends SourcedInputs {
   name: string;
+  intermediate_batch_id?: string;
   equipment?: string;
   atmosphere?: string;
   pressure_bar_abs?: number | null;
@@ -73,7 +74,17 @@ export interface ManufacturingProtocol extends SourcedInputs {
   labor_usd_h?: number | null;
   selling_margin_fraction?: number;
   source_note?: string;
+  intermediate_batches?: IntermediateBatch[];
   operations: ManufacturingOperation[];
+}
+
+export interface IntermediateBatch extends SourcedInputs {
+  id: string;
+  name: string;
+  allocation_basis?: 'mass_used' | 'whole_batch';
+  produced_mass_kg?: number | null;
+  used_mass_kg?: number | null;
+  notes?: string;
 }
 
 export interface LiteratureProtocol {
@@ -86,6 +97,7 @@ export interface LiteratureProtocol {
   boundary: 'catalyst_powder' | 'electrode';
   limitations: string[];
   operations: ManufacturingOperation[];
+  intermediate_batches?: IntermediateBatch[];
   review_date: string;
   verification: string;
 }
@@ -128,6 +140,7 @@ export interface ManufacturingEvidence {
 export function adaptLiteratureProtocol(profile: LiteratureProtocol): ManufacturingProtocol {
   return {
     mode: 'record_only', product_basis: profile.boundary, source_record_id: profile.id,
+    intermediate_batches: structuredClone(profile.intermediate_batches ?? []),
     source_note: `${profile.sample}; ${profile.url}; ${profile.locator}. User adaptation: review composition, precursors and process boundary before costing. ${profile.limitations.join(' ')}`,
     operations: structuredClone(profile.operations).map((op) => ({ ...op, notes: `${op.notes ?? ''} [${profile.locator}; ${profile.doi}]` })),
   };
@@ -139,11 +152,13 @@ export interface ManufacturingReport {
   complete: boolean;
   missing_inputs: string[];
   serial_operation_hours: number | null;
+  allocated_operation_hours?: number | null;
+  intermediate_batches?: Array<IntermediateBatch & { allocation_fraction: number | null }>;
   batch_processing_cost_usd: number | null;
   processing_cost_usd_kg: number | null;
   manufacturing_cost_usd_kg?: number;
   batch_materials_cost_usd?: number | null;
-  purchases?: Array<{ operation: number; name: string; quantity: number | null; unit: string; price_usd_per_unit: number | null; cost_usd: number | null; cost_usd_kg: number | null; quantity_basis: string }>;
+  purchases?: Array<{ operation: number; name: string; quantity: number | null; unit: string; price_usd_per_unit: number | null; cost_usd: number | null; cost_usd_kg: number | null; quantity_basis: string; incurred_cost_usd?: number | null; allocation_fraction?: number | null; intermediate_batch_id?: string }>;
   electricity_kwh_per_kg: number | null;
   batch_equivalents?: number;
   boundary: string;
@@ -167,6 +182,10 @@ export interface ManufacturingReport {
     electricity_kwh: number | null;
     cost_usd: number | null;
     costs_usd: Record<string, number> | null;
+    incurred_cost_usd?: number | null;
+    incurred_costs_usd?: Record<string, number> | null;
+    allocation_fraction?: number | null;
+    intermediate_batch_id?: string;
     gases: Array<{ name: string; duration_h: number | null; duration_basis: string; volume_m3: number | null; cost_usd: number | null; volume_basis: string }>;
   }>;
 }

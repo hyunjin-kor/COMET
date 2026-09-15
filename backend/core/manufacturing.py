@@ -30,6 +30,19 @@ def evaluate_protocol(protocol: ManufacturingProtocol) -> dict:
     rows = []
     purchase_rows = []
     purchases_complete = True
+    allocation = {"": 1.0}
+    intermediate_rows = []
+    for batch in protocol.intermediate_batches:
+        if batch.allocation_basis == "whole_batch":
+            fraction = 1.0
+        else:
+            produced = need(batch.produced_mass_kg, batch.name + ": recovered intermediate mass (kg)")
+            used = need(batch.used_mass_kg, batch.name + ": intermediate mass used in the final batch (kg)")
+            fraction = used / produced if produced and used else None
+        allocation[batch.id] = fraction
+        intermediate_rows.append({"id": batch.id, "name": batch.name, "produced_mass_kg": batch.produced_mass_kg,
+                                  "used_mass_kg": batch.used_mass_kg, "allocation_fraction": fraction,
+                                  "allocation_basis": batch.allocation_basis})
     for index, op in enumerate(protocol.operations, 1):
         prefix = f"{index}. {op.name}: "
         before = len(missing)
@@ -91,25 +104,31 @@ def evaluate_protocol(protocol: ManufacturingProtocol) -> dict:
                              "duration_basis": gas.duration_basis,
                              "cost_usd": volume * price * op.repetitions, "volume_basis": gas.volume_basis})
         count = op.repetitions
+        fraction = allocation[op.intermediate_batch_id]
         for purchase in op.purchases:
             quantity = op.solvent_volume_ml if purchase.quantity_basis == "solvent_volume" else purchase.quantity
-            known = quantity is not None and purchase.price_usd_per_unit is not None
+            known = quantity is not None and purchase.price_usd_per_unit is not None and fraction is not None
             purchases_complete &= known
-            if not known and protocol.materials_basis == "purchases":
+            if (quantity is None or purchase.price_usd_per_unit is None) and protocol.materials_basis == "purchases":
                 missing.append(prefix + purchase.name + " purchase quantity and price")
-            cost = quantity * purchase.price_usd_per_unit * count if known else None
+            incurred_cost = quantity * purchase.price_usd_per_unit * count if quantity is not None and purchase.price_usd_per_unit is not None else None
+            cost = incurred_cost * fraction if known else None
             purchase_rows.append({"operation": index, "name": purchase.name,
                                   "quantity": quantity * count if quantity is not None else None,
                                   "unit": purchase.unit, "price_usd_per_unit": purchase.price_usd_per_unit,
                                   "cost_usd": cost, "cost_usd_kg": cost / mass if known and mass else None,
-                                  "quantity_basis": purchase.quantity_basis})
-        costs = {"electricity": energy * tariff * count, "equipment": equipment_rate * hours * count,
+                                  "quantity_basis": purchase.quantity_basis, "incurred_cost_usd": incurred_cost,
+                                  "allocation_fraction": fraction, "intermediate_batch_id": op.intermediate_batch_id})
+        incurred_costs = {"electricity": energy * tariff * count, "equipment": equipment_rate * hours * count,
                  "labor": labor_h * wage * count, "gas": gas_cost * count, "other": other * count}
+        costs = {key: value * (fraction if fraction is not None else 0) for key, value in incurred_costs.items()}
         rows.append({"index": index, "name": op.name, "repetitions": count,
                      "duration_h": hours * count if time_known else None,
                      "electricity_kwh": energy * count, "gases": gas_rows, "segments": segments if time_known else None,
                      "costs_usd": costs, "cost_usd": sum(costs.values()),
-                     "complete": len(missing) == before})
+                     "incurred_costs_usd": incurred_costs, "incurred_cost_usd": sum(incurred_costs.values()),
+                     "allocation_fraction": fraction, "intermediate_batch_id": op.intermediate_batch_id,
+                     "complete": len(missing) == before and fraction is not None})
     if protocol.materials_basis == "purchases" and not purchase_rows:
         missing.append("At least one batch purchase is required when replacing composition-based materials")
     complete = not missing
@@ -119,20 +138,29 @@ def evaluate_protocol(protocol: ManufacturingProtocol) -> dict:
     total = sum(r["cost_usd"] for r in rows) if complete else None
     report = {"mode": protocol.mode, "protocol": protocol.model_dump(), "complete": complete,
             "missing_inputs": missing, "operations": rows if complete else [
-                {**r, "electricity_kwh": None, "costs_usd": None, "cost_usd": None,
+                {**r, "electricity_kwh": None, "costs_usd": None, "cost_usd": None, "incurred_costs_usd": None, "incurred_cost_usd": None,
                  "gases": [{**g, "volume_m3": None, "cost_usd": None} for g in r["gases"]]} for r in rows],
             "serial_operation_hours": sum(r["duration_h"] for r in rows) if all(r["duration_h"] is not None for r in rows) else None,
+            "allocated_operation_hours": sum(r["duration_h"] * r["allocation_fraction"] for r in rows)
+                if all(r["duration_h"] is not None and r["allocation_fraction"] is not None for r in rows) else None,
+            "intermediate_batches": intermediate_rows,
             "batch_processing_cost_usd": total,
             "processing_cost_usd_kg": total / mass if complete else None,
             "purchases": purchase_rows,
             "batch_materials_cost_usd": sum(r["cost_usd"] for r in purchase_rows) if purchase_rows and purchases_complete else None,
-            "electricity_kwh_per_kg": sum(r["electricity_kwh"] for r in rows) / mass if complete else None,
+            "electricity_kwh_per_kg": sum(r["electricity_kwh"] * r["allocation_fraction"] for r in rows) / mass if complete else None,
             "boundary": "User-defined batch operations; no inferred industrial scale-up, catalyst activity, or process LCA. "
                         "Equipment rates exclude separately entered electricity, gas and labor. "
                         "Times are summed serial operation-hours, not a parallel production schedule."}
     report["boundary"] += (" Batch purchases replace the complete material bill when batch costing is selected; linked solvent volumes affect that bill."
                            if protocol.materials_basis == "purchases" else
                            " Solvent quantities are records; purchases are costed only through the materials/consumables inputs.")
+    if protocol.intermediate_batches:
+        report["boundary"] += (" Intermediate costs use mass used / mass recovered on the same material basis, or an explicitly selected whole-batch charge. "
+                               "Independent intermediate batches feed the final batch directly; nested transfers and co-product credits are not modeled. "
+                               "Mass allocation assumes unused recoverable material retains its cost; whole-batch charging assigns all expenditure to this final batch without inventory credit. "
+                               "Actual cash expenditure includes the whole intermediate batch. Allocated operation-hours are cost equivalents, not a schedule. "
+                               "Do not add an internally transferred intermediate as another purchase.")
     report["trace"] = build_manufacturing_trace(protocol, report)
     return report
 
@@ -145,7 +173,7 @@ def batch_materials_result(report: dict) -> dict:
             "batch_purchases": report["purchases"],
             "costing_basis": "Batch purchases replace all composition-based material prices, precursor markups and kg/kg consumables. "
                              "All quantities are net purchased inputs for the declared operations; repeated operations repeat purchases. "
-                             "Material cost = sum(quantity * price per matching unit * repetitions) / finished dry mass."}
+                             "Material cost = sum(quantity * price per matching unit * repetitions * allocation fraction) / finished dry mass."}
 
 
 def batch_cost_result(report: dict, materials_per_lb: float, order_tons: float,
@@ -170,7 +198,7 @@ def batch_cost_result(report: dict, materials_per_lb: float, order_tons: float,
                                           "source_status": "User-selected fractions; no external cost validation"}
     report["boundary"] += " Order totals repeat the same batch costs linearly, including fractional batch equivalents; no scale economy is assumed."
     return {"model": "user_batch", "scale": "user batch", "order_size_tons": order_tons,
-            "campaign_days": report["serial_operation_hours"] * batch_equivalents / 24,
+            "campaign_days": report["allocated_operation_hours"] * batch_equivalents / 24,
             "step_cost_per_hr": 0.0, "chemppi_escalation": 1.0,
             "campaign_cost": processing * order_tons * LB_PER_TON,
             "total_production_lb": order_tons * LB_PER_TON,

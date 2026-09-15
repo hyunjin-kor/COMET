@@ -66,18 +66,46 @@ The calculation uses:
 - Gas volume (m³) = flow (L/min) × use hours × 60 / 1,000.
 - Operation cost = electricity + equipment hours × equipment-only rate + attended
   person-hours × labor rate + gas purchases + other explicit charges.
-- Processing USD/kg = total repeated operation cost / finished dry batch mass.
+- Processing USD/kg = total allocated repeated operation cost / finished dry batch mass.
 
 Gas flow and price must refer to the same temperature and pressure. The model does
 not convert actual flow to standard flow automatically. Premixed gas is priced as
 the purchased mixture. Every operation's time, electricity, gas and cost are
 multiplied by its repetition count.
 
-The materials calculation retains its explicit precursor-content, purity, retention
-yield and purchased-consumable inputs. Solvent volumes in the protocol are records;
-they do not add another solvent charge. Final dry batch mass is a denominator, not
-an automatic reaction-yield or material-balance calculation. Intermediate-product
-transfers and losses require documented material inputs and notes.
+The composition basis retains explicit precursor-content, purity, retention-yield
+and kg/kg purchased-consumable inputs. Alternatively, batch purchases replace that
+entire materials bill: quantity × matching-unit price × repetitions × allocation
+fraction / final dry kg. A solvent purchase can follow the operation's mL volume.
+Prices, density, purity corrections and solvent recovery are not inferred. Flowing
+gas purchases remain processing charges. Final dry mass is a measured or explicitly
+assumed denominator, not an automatic reaction-yield calculation.
+
+### Intermediate batches and aliquots
+
+An independent support or intermediate batch can feed the final batch directly.
+Assign all operations preparing that intermediate to its named batch. Record the
+mass recovered from the entire declared batch (including repeated operations) and
+the mass transferred to the final batch on the same material and mass basis.
+Purchases, electricity, gas, equipment, labor and additional charges receive the
+same **used mass / recovered mass** allocation. Missing masses prevent proportional
+costing; the schema rejects mass used above recovered mass and undefined batches.
+
+This allocation assumes unused recoverable material retains its share of cost.
+It does not reduce cash expenditure for the complete intermediate batch. To charge
+all that expenditure to the final product (for example, a one-off preparation with
+no inventory credit), explicitly select **whole batch**. Unknown intermediate
+recovery remains a record in that mode and is not needed to invent a cost fraction.
+Final dry output is required in both modes. Internally transferred intermediates
+must not be entered again as purchased materials. Nested intermediate transfers,
+co-product allocation, inventory scheduling and automatic loss balances are not
+modeled. Record such boundaries separately before costing.
+
+The report preserves whole-batch purchase quantities, operation time, electricity,
+incurred charges, allocation fractions and allocated final-product costs. CSV/JSON
+exports retain both incurred and allocated charges. Input sources retain original
+values when recovery or transfer assumptions are edited. The trace links each
+allocation through materials and processing contributions to the selling price.
 
 The result separates **materials + processing** from the subsequent G&A/SARD
 adjustments and user-entered selling margin. Batch mode defaults to zero selling
@@ -106,7 +134,7 @@ Order totals repeat the reference batch costs linearly, including fractional bat
 equivalents. There is no economy of scale, integer-batch scheduling or automatic
 equipment resizing. Time is the sum of operation-hours; parallel work, equipment
 sharing and unattended overlap are not scheduled. The legacy `campaign_days`
-response field in batch mode is this serial sum × batch equivalents / 24, not
+response field in batch mode is allocated operation-hours × batch equivalents / 24, not
 observed plant lead time. Batch-mode environmental results cover materials only;
 the detailed utility inputs are not yet mapped to process LCA.
 

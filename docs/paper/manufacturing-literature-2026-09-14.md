@@ -18,6 +18,8 @@ Numeric values were transcribed from the stated primary sections. Kelvin values 
 
 Imports create editable records with the specimen, DOI and section locator. They retain the existing cost model. Powder batch costing is enabled only after the user supplies complete operating inputs, actual dry output and explicit costs. It replaces Step Method processing cost and does not add it twice. Electricity is measured kWh or input kW multiplied by time; gas volume and price require matching reference conditions. Temperature alone does not predict furnace consumption, yield or catalytic performance. Electrode preparations remain records and cannot use a dry-powder kg denominator. Published procedures are evidence records, not laboratory operating instructions.
 
+Batch purchases can replace the entire composition-based materials bill. For independent intermediate batches, all preparation charges are allocated by mass transferred divided by mass recovered on the same material basis; unused recoverable inventory retains its share of cost. Alternatively, explicit whole-batch charging assigns the full expenditure to the final batch without inventory credit. Internal transfers are not purchased twice. Unknown masses block proportional allocation, and nested transfers or co-products require a separately defined boundary. Incurred and allocated costs, input sources and equations are preserved in the calculation trace and exports.
+
 The frozen May 2026 screening estimates and rankings use the original composition and process assumptions. The preparation audit does not retrospectively validate these assumptions. No industrial utility use, batch yield or manufacturing cost was inferred from a paper's reaction temperature.
 
 ## Candidate coverage

@@ -16,10 +16,11 @@ UNITS = {
     "other_cost_usd": "USD/repetition", "flow_l_per_min": "L/min", "price_usd_per_m3": "USD/m3",
     "repetitions": "count", "pressure_bar_abs": "bar absolute", "stirring_rpm": "rpm",
     "ph": "pH", "solvent_volume_ml": "mL/batch",
+    "produced_mass_kg": "kg/intermediate batch", "used_mass_kg": "kg/final batch",
 }
 CONTEXT = {"name", "equipment", "atmosphere", "pressure_bar_abs", "stirring_rpm", "ph",
-           "solvent", "solvent_volume_ml", "notes", "source_note", "source_record_id", "volume_basis"}
-COLLECTIONS = {"input_evidence", "operations", "temperature_profile", "gases", "purchases"}
+           "solvent", "solvent_volume_ml", "notes", "source_note", "source_record_id", "volume_basis", "id"}
+COLLECTIONS = {"input_evidence", "operations", "temperature_profile", "gases", "purchases", "intermediate_batches"}
 
 
 def build_manufacturing_trace(protocol: ManufacturingProtocol, report: dict) -> dict:
@@ -31,6 +32,8 @@ def build_manufacturing_trace(protocol: ManufacturingProtocol, report: dict) -> 
             if key in COLLECTIONS:
                 continue
             effect = "record_only" if key in CONTEXT else "cost_input"
+            if key in {"produced_mass_kg", "used_mass_kg"} and getattr(record, "allocation_basis", "mass_used") == "whole_batch":
+                effect = "record_only"
             if key == "start_temperature_c" and not has_profile:
                 effect = "record_only"
             if key == "solvent_volume_ml" and linked_solvent:
@@ -72,8 +75,20 @@ def build_manufacturing_trace(protocol: ManufacturingProtocol, report: dict) -> 
         calculations.append({"id": identifier, "formula": formula, "input_paths": paths,
                              "value": value, "unit": unit, "operation": operation})
 
+    allocation_paths = {}
+    for index, batch in enumerate(protocol.intermediate_batches):
+        prefix = f"intermediate_batches.{index}."
+        collect(batch, prefix)
+        allocation_paths[batch.id] = prefix + "allocation_fraction"
+        whole = batch.allocation_basis == "whole_batch"
+        calculation(prefix + "allocation_fraction", "1 (whole batch charged; no inventory credit)" if whole else "used_mass_kg / produced_mass_kg",
+                    [prefix + "allocation_basis", *([] if whole else [prefix + "used_mass_kg", prefix + "produced_mass_kg"])],
+                    report["intermediate_batches"][index]["allocation_fraction"], "fraction")
     for index, (op, result) in enumerate(zip(protocol.operations, report["operations"], strict=True)):
         prefix = f"operations.{index}."
+        allocation_path = allocation_paths.get(op.intermediate_batch_id)
+        allocation_inputs = [allocation_path, prefix + "intermediate_batch_id"] if allocation_path else []
+        allocation_formula = " * allocation_fraction" if allocation_path else ""
         measured = op.energy_basis == "measured" or op.measured_energy_kwh is not None
         collect(op, prefix, measured, bool(op.temperature_profile),
                 protocol.materials_basis == "purchases" and any(p.quantity_basis == "solvent_volume" for p in op.purchases))
@@ -108,8 +123,8 @@ def build_manufacturing_trace(protocol: ManufacturingProtocol, report: dict) -> 
             path = prefix + f"purchases.{n}."
             collect(purchase, path)
             quantity_path = prefix + "solvent_volume_ml" if purchase.quantity_basis == "solvent_volume" else path + "quantity"
-            calculation(path + "cost", "selected_quantity * price_USD_per_matching_unit * repetitions",
-                        [quantity_path, path + "price_usd_per_unit", path + "unit", prefix + "repetitions"],
+            calculation(path + "cost", "selected_quantity * price_USD_per_matching_unit * repetitions" + allocation_formula,
+                        [quantity_path, path + "price_usd_per_unit", path + "unit", prefix + "repetitions", *allocation_inputs],
                         purchases[n]["cost_usd"], "USD", index)
         dependencies = {
             "electricity": ([prefix + "energy", "electricity_usd_kwh"], "energy_kWh * electricity_USD_kWh"),
@@ -119,7 +134,7 @@ def build_manufacturing_trace(protocol: ManufacturingProtocol, report: dict) -> 
             "other": ([prefix + "other_cost_usd", prefix + "repetitions"], "entered_charge * repetitions"),
         }
         for category, (paths, formula) in dependencies.items():
-            calculation(prefix + category, formula, paths,
+            calculation(prefix + category, "(" + formula + ")" + allocation_formula, [*paths, *allocation_inputs],
                         result["costs_usd"][category] if result["costs_usd"] is not None else None, "USD", index)
     counts = Counter(r["source_status"] for r in inputs if r["effect"] == "cost_input" and r["unit"])
     return {"protocol_sha256": hashlib.sha256(json.dumps(protocol.model_dump(), sort_keys=True, ensure_ascii=False,
@@ -132,14 +147,37 @@ def build_manufacturing_trace(protocol: ManufacturingProtocol, report: dict) -> 
 def append_selling_price_trace(report: dict, materials_usd_kg: float, ga: float, sard: float, margin: float):
     mass = report["protocol"]["finished_batch_mass_kg"]
     ledger = [{"category": "materials", "value": materials_usd_kg, "unit": "USD/kg", "basis":
-               "Sum of batch purchases / finished dry mass" if report["protocol"]["materials_basis"] == "purchases" else
+               "Sum of allocated batch purchases / finished dry mass" if report["protocol"]["materials_basis"] == "purchases" else
                "materials.total_materials_cost_per_lb converted to USD/kg"}]
     for category in ("electricity", "equipment", "labor", "gas", "other"):
         ledger.append({"category": category, "value": sum(op["costs_usd"][category] for op in report["operations"]) / mass,
-                       "unit": "USD/kg", "basis": "Sum of repeated operation charges / finished dry batch mass"})
+                       "unit": "USD/kg", "basis": "Sum of allocated repeated operation charges / finished dry batch mass"})
     for category, value, formula in (("ga", ga, "(materials + processing) * G&A fraction"),
                                      ("sard", sard, "(materials + processing + G&A) * SARD fraction"),
                                      ("margin", margin, "pre-margin price * margin fraction / (1 - margin fraction)")):
         ledger.append({"category": category, "value": value, "unit": "USD/kg", "basis": formula})
     report["trace"]["cost_ledger"] = ledger
+    calculations = report["trace"]["calculations"]
+    purchase_paths = [r["id"] for r in calculations if ".purchases." in r["id"] and r["id"].endswith(".cost")]
+    for row in ledger:
+        category = row["category"]
+        if category == "materials":
+            paths = [*purchase_paths, "finished_batch_mass_kg"] if report["protocol"]["materials_basis"] == "purchases" else ["materials.total_materials_cost_per_lb"]
+        elif category == "ga":
+            paths = ["total.materials", "total.processing", "overhead_inputs.ga_fraction"]
+        elif category == "sard":
+            paths = ["total.materials", "total.processing", "total.ga", "overhead_inputs.sard_fraction"]
+        elif category == "margin":
+            paths = ["total.materials", "total.processing", "total.ga", "total.sard", "selling_margin_fraction"]
+        else:
+            paths = [*[f"operations.{i}.{category}" for i in range(len(report["operations"]))], "finished_batch_mass_kg"]
+        calculations.append({"id": "total." + category, "formula": row["basis"], "input_paths": paths,
+                             "value": row["value"], "unit": "USD/kg", "operation": None})
+    processing_keys = ["electricity", "equipment", "labor", "gas", "other"]
+    calculations.append({"id": "total.processing", "formula": "electricity + equipment + labor + gas + additional charges (USD/kg)",
+                         "input_paths": ["total." + k for k in processing_keys], "value": report["processing_cost_usd_kg"],
+                         "unit": "USD/kg", "operation": None})
+    calculations.append({"id": "total.selling_price", "formula": "materials + processing + G&A + SARD + profit margin",
+                         "input_paths": ["total." + k for k in ("materials", "processing", "ga", "sard", "margin")],
+                         "value": sum(row["value"] for row in ledger), "unit": "USD/kg", "operation": None})
     report["trace"]["cost_ledger_basis"] = "Estimated selling price before spent-catalyst recovery credit; unrounded USD/kg contributions."

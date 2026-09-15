@@ -39,6 +39,12 @@ def render(data):
              "It replaces Step Method processing cost and does not add it twice. Electricity is measured kWh or input kW multiplied by time; "
              "gas volume and price require matching reference conditions. Temperature alone does not predict furnace consumption, yield or catalytic performance. "
              "Electrode preparations remain records and cannot use a dry-powder kg denominator. Published procedures are evidence records, not laboratory operating instructions.", "",
+             "Batch purchases can replace the entire composition-based materials bill. For independent intermediate batches, "
+             "all preparation charges are allocated by mass transferred divided by mass recovered on the same material basis; "
+             "unused recoverable inventory retains its share of cost. Alternatively, explicit whole-batch charging assigns the full expenditure "
+             "to the final batch without inventory credit. Internal transfers are not purchased twice. Unknown masses block proportional "
+             "allocation, and nested transfers or co-products require a separately defined boundary. Incurred and allocated costs, input sources "
+             "and equations are preserved in the calculation trace and exports.", "",
              "The frozen May 2026 screening estimates and rankings use the original composition and process assumptions. "
              "The preparation audit does not retrospectively validate these assumptions. No industrial utility use, batch yield or manufacturing cost was inferred from a paper's reaction temperature.", "",
              "## Candidate coverage", "",
@@ -64,7 +70,15 @@ def render(data):
                 conditions.append(f"{op['duration_h']:.6g} h")
             if op.get("atmosphere"):
                 conditions.append(op["atmosphere"])
+            if op.get("intermediate_batch_id"):
+                conditions.append("Intermediate batch: " + op["intermediate_batch_id"])
             lines.append(f"| {cell(op['name'])} | {cell('; '.join(conditions) or 'Not quantified')} | {cell(op.get('notes', ''))} |")
+        if p.get("intermediate_batches"):
+            lines += ["", "Intermediate transfers (recovery is not inferred from precursor inputs):", "",
+                      "| Intermediate | Recovered kg | Used kg | Source details |", "|---|---|---|---|"]
+            for batch in p["intermediate_batches"]:
+                values = [batch.get(key) if batch.get(key) is not None else "Not verified / 확인 못 함" for key in ("produced_mass_kg", "used_mass_kg")]
+                lines.append(f"| {cell(batch['name'])} | {values[0]} | {values[1]} | {cell(batch.get('notes', ''))} |")
         purchases = [(op, item) for op in p["operations"] for item in op.get("purchases", [])]
         if purchases:
             lines += ["", "Explicit purchases/inputs (unpriced; missing amounts remain unknown):", "",

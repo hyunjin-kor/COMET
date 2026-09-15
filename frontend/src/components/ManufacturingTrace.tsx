@@ -11,10 +11,11 @@ export default function ManufacturingTrace({ report }: { report: ManufacturingRe
   const pathLabel = (path: string) => {
     const parts = path.split('.');
     const op = parts[0] === 'operations' ? report.protocol.operations[Number(parts[1])] : null;
+    const batch = parts[0] === 'intermediate_batches' ? report.protocol.intermediate_batches?.[Number(parts[1])] : null;
     const segment = parts[2] === 'temperature_profile' ? `${l('segment', '구간')} ${Number(parts[3]) + 1}` : '';
     const gas = parts[2] === 'gases' ? op?.gases?.[Number(parts[3])]?.name : '';
     const purchase = parts[2] === 'purchases' ? op?.purchases?.[Number(parts[3])]?.name : '';
-    return [op?.name, segment || gas || purchase, manufacturingInputLabel(parts.at(-1)!, lang)].filter(Boolean).join(' / ');
+    return [batch?.name || op?.name, segment || gas || purchase, manufacturingInputLabel(parts.at(-1)!, lang)].filter(Boolean).join(' / ');
   };
   const statuses: Record<string, string> = {
     matches_record: l('Matches source snapshot', '출처 저장 당시 값과 일치'), modified: l('Changed from source snapshot', '출처 저장 당시 값과 다름'),
