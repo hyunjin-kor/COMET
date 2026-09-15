@@ -6,10 +6,32 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
 class ProtocolModel(BaseModel):
-    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False, validate_default=True, str_strip_whitespace=True)
 
 
-class TemperatureSegment(ProtocolModel):
+class InputEvidence(ProtocolModel):
+    kind: Literal["literature", "measured", "supplier", "assumption"]
+    citation: str = Field(min_length=1, max_length=1000)
+    locator: str = Field(default="", max_length=500)
+    url: str = Field(default="", max_length=1500)
+    doi: str = Field(default="", max_length=250)
+    accessed_on: str = Field(default="", max_length=30)
+    recorded_value: float | str | bool | None = None
+    note: str = Field(default="", max_length=2000)
+
+
+class SourcedProtocolModel(ProtocolModel):
+    input_evidence: dict[str, InputEvidence] = Field(default_factory=dict, max_length=100)
+
+    @model_validator(mode="after")
+    def valid_evidence_fields(self):
+        for key in self.input_evidence:
+            if key not in type(self).model_fields or key in {"input_evidence", "operations", "gases", "temperature_profile", "purchases"}:
+                raise ValueError(f"input_evidence must refer to a scalar input on this record: {key}")
+        return self
+
+
+class TemperatureSegment(SourcedProtocolModel):
     target_c: float | None = Field(default=None, gt=-273.15)
     ramp_c_per_min: float | None = Field(default=None, gt=0)
     hold_h: float | None = Field(default=None, ge=0)
@@ -17,15 +39,37 @@ class TemperatureSegment(ProtocolModel):
     hold_power_kw: float | None = Field(default=None, ge=0)
 
 
-class ProcessGas(ProtocolModel):
+class ProcessGas(SourcedProtocolModel):
     name: str = Field(min_length=1, max_length=200)
     flow_l_per_min: float | None = Field(default=None, ge=0)
     duration_h: float | None = Field(default=None, ge=0)
+    duration_basis: Literal["entered", "operation", "holds"] = "entered"
     price_usd_per_m3: float | None = Field(default=None, ge=0)
     volume_basis: str = Field(default="", max_length=500)
 
+    @model_validator(mode="after")
+    def one_duration_basis(self):
+        if self.duration_basis != "entered" and self.duration_h is not None:
+            raise ValueError("A linked gas duration cannot also specify an independent duration_h")
+        return self
 
-class ManufacturingOperation(ProtocolModel):
+
+class BatchPurchase(SourcedProtocolModel):
+    name: str = Field(min_length=1, max_length=200)
+    quantity: float | None = Field(default=None, ge=0)
+    unit: Literal["kg", "g", "L", "mL", "item"] = "kg"
+    quantity_basis: Literal["entered", "solvent_volume"] = "entered"
+    price_usd_per_unit: float | None = Field(default=None, ge=0)
+    notes: str = Field(default="", max_length=2000)
+
+    @model_validator(mode="after")
+    def linked_quantity(self):
+        if self.quantity_basis == "solvent_volume" and (self.quantity is not None or self.unit != "mL"):
+            raise ValueError("Solvent-volume purchases use the operation volume in mL, without an independent quantity")
+        return self
+
+
+class ManufacturingOperation(SourcedProtocolModel):
     name: str = Field(min_length=1, max_length=200)
     equipment: str = Field(default="", max_length=300)
     atmosphere: str = Field(default="", max_length=300)
@@ -47,6 +91,7 @@ class ManufacturingOperation(ProtocolModel):
     attended_labor_h: float | None = Field(default=None, ge=0)
     other_cost_usd: float | None = Field(default=None, ge=0)
     gases: list[ProcessGas] = Field(default_factory=list, max_length=10)
+    purchases: list[BatchPurchase] = Field(default_factory=list, max_length=30)
     notes: str = Field(default="", max_length=4000)
 
     @model_validator(mode="after")
@@ -64,9 +109,10 @@ class ManufacturingOperation(ProtocolModel):
         return self
 
 
-class ManufacturingProtocol(ProtocolModel):
+class ManufacturingProtocol(SourcedProtocolModel):
     mode: Literal["record_only", "batch_cost"] = "record_only"
     product_basis: Literal["catalyst_powder", "electrode"] = "catalyst_powder"
+    materials_basis: Literal["composition", "purchases"] = "composition"
     source_record_id: str = Field(default="", max_length=150)
     finished_batch_mass_kg: float | None = Field(default=None, gt=0)
     electricity_usd_kwh: float | None = Field(default=None, ge=0)

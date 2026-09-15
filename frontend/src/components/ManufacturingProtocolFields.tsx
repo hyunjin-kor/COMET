@@ -1,5 +1,7 @@
 import { useLang } from '../lib/i18n';
 import ManufacturingLiterature from './ManufacturingLiterature';
+import ManufacturingInputSources from './ManufacturingInputSources';
+import ManufacturingPurchases from './ManufacturingPurchases';
 import type { ManufacturingOperation, ManufacturingProtocol, TemperatureSegment } from '../lib/manufacturing';
 
 function NumberField({ label, value, onChange, min = 0 }: {
@@ -61,6 +63,13 @@ export default function ManufacturingProtocolFields({ value, onChange, allowBatc
         <NumberField label={l('Selling margin (%)', '판매 마진 (%)')} value={(value.selling_margin_fraction ?? 0) * 100} onChange={(v) => patch({ selling_margin_fraction: (v ?? 0) / 100 })} />
       </div>
       <TextField label={l('Protocol and operating-cost sources / assumptions', '제조 조건·운전비 출처 또는 가정')} value={value.source_note} onChange={(v) => patch({ source_note: v })} />
+      <ManufacturingInputSources record={value} fields={['finished_batch_mass_kg', 'electricity_usd_kwh', 'labor_usd_h', 'selling_margin_fraction']} onChange={(input_evidence) => patch({ input_evidence })} />
+      <label className="block text-sm font-medium">{l('Materials basis for batch costing', '배치 원가의 재료비 계산 방식')}<select className="input-base mt-2 w-full" value={value.materials_basis ?? 'composition'} onChange={(e) => patch({ materials_basis: e.target.value as ManufacturingProtocol['materials_basis'] })}>
+        <option value="composition">{l('Use composition and kg/kg purchased consumables', '조성·kg당 구매 소모량 사용')}</option><option value="purchases">{l('Replace with purchases for each batch operation', '각 제조 단계의 배치 구매량으로 대체')}</option>
+      </select></label>
+      <p className="text-xs leading-6 text-slate-600">{value.materials_basis === 'purchases'
+        ? l('In batch-cost mode, the purchase list below replaces all composition prices, precursor markups and kg/kg consumables. Include every precursor, support, solvent and consumable once. Enter net purchased quantities per repetition; the dry output determines USD/kg. Flowing gases remain in operating costs.', '배치 원가 모드에서 아래 구매 목록이 조성 가격·전구체 마크업·kg당 소모품을 모두 대체합니다. 전구체·담체·용매·소모품을 빠짐없이 한 번씩 입력하세요. 1회 운전의 순 구매량을 사용하며, 건조 수득량으로 kg당 비용을 계산합니다. 유량으로 계산한 가스는 운전비에 남습니다.')
+        : l('Operation purchase records do not change the materials bill on this basis.', '이 방식에서는 제조 단계의 구매 기록이 재료비를 변경하지 않습니다.')}</p>
       {value.operations.map((op, index) => {
         const profile = op.temperature_profile ?? [];
         const segment = (i: number, change: Partial<TemperatureSegment>) => update(index, { temperature_profile: profile.map((s, j) => i === j ? { ...s, ...change } : s) });
@@ -84,7 +93,7 @@ export default function ManufacturingProtocolFields({ value, onChange, allowBatc
             <TextField label={l('Solvent', '용매')} value={op.solvent} onChange={(v) => update(index, { solvent: v })} />
             <NumberField label={l('Solvent volume (mL/batch)', '용매량 (mL/배치)')} value={op.solvent_volume_ml} onChange={(v) => update(index, { solvent_volume_ml: v })} />
           </div>
-          <p className="mt-2 text-xs text-slate-500">{l('Solvent quantities here are protocol records. Enter purchased solvent in Composition consumables for costing.', '이 용매량은 제조 조건 기록입니다. 구매 비용은 조성 화면의 소모품 항목에 입력하세요.')}</p>
+          <p className="mt-2 text-xs text-slate-500">{l('To cost this solvent volume directly, select batch purchases and link a purchase below to the operation solvent volume.', '이 용매량을 비용에 직접 반영하려면 배치 구매량 방식을 선택하고 아래 구매 항목을 단계의 용매량에 연결하세요.')}</p>
           <div className="mt-4 grid gap-3 sm:grid-cols-3">
             <NumberField label={l(profile.length ? 'Starting temperature (°C)' : 'Operating temperature (°C)', profile.length ? '시작 온도 (°C)' : '운전 온도 (°C)')} min={-273.14} value={op.start_temperature_c} onChange={(v) => update(index, { start_temperature_c: v })} />
             {!profile.length && <NumberField label={l('Operating duration (h)', '운전 시간 (h)')} value={op.duration_h} onChange={(v) => update(index, { duration_h: v })} />}
@@ -99,6 +108,7 @@ export default function ManufacturingProtocolFields({ value, onChange, allowBatc
             {!measured && <><NumberField label={l('Mean ramp power (kW)', '승·강온 평균 입력전력 (kW)')} value={s.ramp_power_kw} onChange={(v) => segment(i, { ramp_power_kw: v })} />
               <NumberField label={l('Mean hold power (kW)', '유지 평균 입력전력 (kW)')} value={s.hold_power_kw} onChange={(v) => segment(i, { hold_power_kw: v })} /></>}
             <button type="button" className="self-end cp-button-secondary px-3 py-2 text-xs" onClick={() => update(index, { temperature_profile: profile.filter((_, j) => i !== j) })}>{l('Remove segment', '구간 삭제')}</button>
+            <div className="col-span-full"><ManufacturingInputSources record={s} fields={['target_c', 'ramp_c_per_min', 'hold_h', 'ramp_power_kw', 'hold_power_kw']} onChange={(input_evidence) => segment(i, { input_evidence })} /></div>
           </div>)}
           <details className="mt-4 border-t border-slate-200 pt-3" open={value.mode === 'batch_cost' || undefined}>
             <summary className="cursor-pointer text-sm font-medium">{l('Energy and operating costs per repetition', '1회 운전의 에너지·운전비')}</summary>
@@ -125,14 +135,20 @@ export default function ManufacturingProtocolFields({ value, onChange, allowBatc
             return <div key={i} className="mt-3 grid gap-3 bg-slate-50 p-3 sm:grid-cols-2 lg:grid-cols-3">
               <TextField label={l('Gas / mixture name', '가스·혼합가스 이름')} value={gas.name} onChange={(v) => change({ name: v })} />
               <NumberField label={l('Flow (L/min)', '유량 (L/min)')} value={gas.flow_l_per_min} onChange={(v) => change({ flow_l_per_min: v })} />
-              <NumberField label={l('Gas use time (h)', '가스 사용 시간 (h)')} value={gas.duration_h} onChange={(v) => change({ duration_h: v })} />
+              <label className="text-xs text-slate-600">{l('Gas duration basis', '가스 시간 기준')}<select className="input-base mt-1 w-full" value={gas.duration_basis ?? 'entered'} onChange={(e) => change({ duration_basis: e.target.value as typeof gas.duration_basis, duration_h: null })}>
+                <option value="entered">{l('Enter independent duration', '시간 직접 입력')}</option><option value="operation">{l('Follow entire operation (including extra time)', '추가 시간을 포함한 전체 공정')}</option><option value="holds" disabled={!profile.length}>{l('Follow holds only', '유지 시간에만 연결')}</option>
+              </select></label>
+              {(!gas.duration_basis || gas.duration_basis === 'entered') && <NumberField label={l('Gas use time (h)', '가스 사용 시간 (h)')} value={gas.duration_h} onChange={(v) => change({ duration_h: v })} />}
               <NumberField label={l('Gas price (USD/m³)', '가스 단가 (USD/m³)')} value={gas.price_usd_per_m3} onChange={(v) => change({ price_usd_per_m3: v })} />
               <TextField label={l('Shared flow / price reference T and P', '유량·단가의 공통 기준 온도·압력')} value={gas.volume_basis} onChange={(v) => change({ volume_basis: v })} />
               <button type="button" className="self-end cp-button-secondary px-3 py-2 text-xs" onClick={() => update(index, { gases: op.gases!.filter((_, j) => i !== j) })}>{l('Remove gas', '가스 삭제')}</button>
+              <div className="col-span-full"><ManufacturingInputSources record={gas} fields={['name', 'flow_l_per_min', 'duration_h', 'duration_basis', 'price_usd_per_m3', 'volume_basis']} onChange={(input_evidence) => change({ input_evidence })} /></div>
             </div>;
           })}
+          <ManufacturingPurchases purchases={op.purchases} onChange={(purchases) => update(index, { purchases })} />
           <label className="mt-4 block text-xs text-slate-600">{l('Procedure, addition order, feed rate, recovery / yield and source notes', '조작·투입 순서·투입 속도·회수·수율·출처 메모')}<textarea className="input-base mt-1 w-full" rows={3}
             value={op.notes ?? ''} onChange={(e) => update(index, { notes: e.target.value })} /></label>
+          <ManufacturingInputSources record={op} fields={['equipment', 'atmosphere', 'pressure_bar_abs', 'stirring_rpm', 'ph', 'solvent', 'solvent_volume_ml', 'repetitions', 'start_temperature_c', 'duration_h', 'additional_time_h', 'average_power_kw', 'additional_power_kw', 'measured_energy_kwh', 'equipment_usd_h', 'attended_labor_h', 'other_cost_usd', 'notes']} onChange={(input_evidence) => update(index, { input_evidence })} />
         </details>;
       })}
       <button type="button" className="cp-button-secondary px-3 py-2 text-xs" onClick={() => patch({ operations: [...value.operations, { name: '', repetitions: 1 }] })}>{l('Add operation', '제조 단계 추가')}</button>

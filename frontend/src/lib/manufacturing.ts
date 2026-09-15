@@ -1,4 +1,17 @@
-export interface TemperatureSegment {
+export interface InputEvidence {
+  kind: 'literature' | 'measured' | 'supplier' | 'assumption';
+  citation: string;
+  locator?: string;
+  url?: string;
+  doi?: string;
+  accessed_on?: string;
+  recorded_value: number | string | boolean | null;
+  note?: string;
+}
+
+export interface SourcedInputs { input_evidence?: Record<string, InputEvidence> }
+
+export interface TemperatureSegment extends SourcedInputs {
   target_c: number | null;
   ramp_c_per_min?: number | null;
   hold_h?: number | null;
@@ -6,15 +19,16 @@ export interface TemperatureSegment {
   hold_power_kw?: number | null;
 }
 
-export interface ProcessGas {
+export interface ProcessGas extends SourcedInputs {
   name: string;
   flow_l_per_min?: number | null;
   duration_h?: number | null;
+  duration_basis?: 'entered' | 'operation' | 'holds';
   price_usd_per_m3?: number | null;
   volume_basis: string;
 }
 
-export interface ManufacturingOperation {
+export interface ManufacturingOperation extends SourcedInputs {
   name: string;
   equipment?: string;
   atmosphere?: string;
@@ -36,12 +50,23 @@ export interface ManufacturingOperation {
   attended_labor_h?: number | null;
   other_cost_usd?: number | null;
   gases?: ProcessGas[];
+  purchases?: BatchPurchase[];
   notes?: string;
 }
 
-export interface ManufacturingProtocol {
+export interface BatchPurchase extends SourcedInputs {
+  name: string;
+  quantity?: number | null;
+  unit: 'kg' | 'g' | 'L' | 'mL' | 'item';
+  quantity_basis?: 'entered' | 'solvent_volume';
+  price_usd_per_unit?: number | null;
+  notes?: string;
+}
+
+export interface ManufacturingProtocol extends SourcedInputs {
   mode: 'record_only' | 'batch_cost';
   product_basis?: 'catalyst_powder' | 'electrode';
+  materials_basis?: 'composition' | 'purchases';
   source_record_id?: string;
   finished_batch_mass_kg?: number | null;
   electricity_usd_kwh?: number | null;
@@ -95,9 +120,23 @@ export interface ManufacturingReport {
   batch_processing_cost_usd: number | null;
   processing_cost_usd_kg: number | null;
   manufacturing_cost_usd_kg?: number;
+  batch_materials_cost_usd?: number | null;
+  purchases?: Array<{ operation: number; name: string; quantity: number | null; unit: string; price_usd_per_unit: number | null; cost_usd: number | null; cost_usd_kg: number | null; quantity_basis: string }>;
   electricity_kwh_per_kg: number | null;
   batch_equivalents?: number;
   boundary: string;
+  trace?: {
+    protocol_sha256: string;
+    inputs: Array<{ path: string; value: number | string | boolean | null; unit: string;
+      effect: 'cost_input' | 'record_only' | 'inactive'; source_status: string; evidence: InputEvidence | null }>;
+    calculations: Array<{ id: string; formula: string; input_paths: string[]; value: number | null; unit: string; operation: number | null }>;
+    coverage: Record<string, number>;
+    headline_uses_protocol: boolean;
+    cost_ledger: Array<{ category: string; value: number; unit: string; basis: string }>;
+    overhead_inputs?: { ga_fraction: number; sard_fraction: number; selling_margin_fraction: number; source_status: string };
+    recovery_adjustment?: { enabled: boolean; gross_selling_price_usd_kg: number; applied_credit_usd_kg: number; net_cost_usd_kg: number; basis: string };
+    note: string;
+  };
   operations: Array<{
     index: number;
     name: string;
@@ -106,5 +145,6 @@ export interface ManufacturingReport {
     electricity_kwh: number | null;
     cost_usd: number | null;
     costs_usd: Record<string, number> | null;
+    gases: Array<{ name: string; duration_h: number | null; duration_basis: string; volume_m3: number | null; cost_usd: number | null; volume_basis: string }>;
   }>;
 }

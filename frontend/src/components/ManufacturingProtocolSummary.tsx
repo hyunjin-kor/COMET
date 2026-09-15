@@ -1,5 +1,6 @@
 import { useLang } from '../lib/i18n';
 import type { ManufacturingReport } from '../lib/manufacturing';
+import ManufacturingTrace from './ManufacturingTrace';
 
 export default function ManufacturingProtocolSummary({ report, compact = false }: { report: ManufacturingReport; compact?: boolean }) {
   const { lang } = useLang();
@@ -17,12 +18,16 @@ export default function ManufacturingProtocolSummary({ report, compact = false }
       <div>{l('Processing cost', '가공비')}<div className="mt-1 font-semibold">{v(report.processing_cost_usd_kg, 'USD/kg')}</div></div>
       {report.manufacturing_cost_usd_kg != null && <div>{l('Materials + processing', '재료비 + 가공비')}<div className="mt-1 font-semibold">{v(report.manufacturing_cost_usd_kg, 'USD/kg')}</div></div>}
     </div>
-    <p className="mt-3 text-xs leading-6 text-slate-500">{l('Time is the sum of operation-hours, not a schedule with parallel work. Order totals use linear batch equivalents. Blank gas lists exclude gas purchases; solvent records need separate purchased-consumable entries. Environmental results cover materials only in batch-cost mode.',
-      '시간은 공정시간의 합계로, 병렬 작업을 고려한 일정이 아닙니다. 주문량 합계는 배치의 선형 반복입니다. 가스 목록이 비어 있으면 가스비를 제외하며, 용매는 구매 소모품을 별도 입력해야 합니다. 배치 원가 모드의 환경 결과는 재료만 반영합니다.')}</p>
+    <p className="mt-3 text-xs leading-6 text-slate-500">{l('Time is the sum of operation-hours, not a schedule with parallel work. Order totals use linear batch equivalents. Blank gas lists exclude gas purchases. Environmental results cover finished composition only in batch-cost mode.',
+      '시간은 공정시간의 합계로, 병렬 작업을 고려한 일정이 아닙니다. 주문량 합계는 배치의 선형 반복입니다. 가스 목록이 비어 있으면 가스비를 제외합니다. 배치 원가 모드의 환경 결과는 최종 조성만 반영합니다.')}</p>
+    <p className="mt-2 text-xs leading-6 text-slate-600">{report.protocol.materials_basis === 'purchases'
+      ? l('Materials basis: operation purchases divided by finished dry mass. In batch-cost mode this replaces composition prices, precursor markups and kg/kg consumables.', '재료비 기준: 단계별 구매비 ÷ 최종 건조 수득량. 배치 원가 모드에서는 조성 가격·전구체 마크업·kg당 소모품을 대체합니다.')
+      : l('Materials basis: composition and kg/kg consumables. Solvent volumes in the protocol are records only.', '재료비 기준: 조성·kg당 소모품. 제조 조건의 용매량은 기록만 합니다.')}</p>
     {!report.complete && <p className="mt-2 text-sm text-amber-800">{l('Operating-cost inputs are incomplete; no detailed cost is reported.', '운전비 입력이 불완전하여 상세 원가를 표시하지 않습니다.')}</p>}
     {!compact && <>
       <p className="mt-3 whitespace-pre-wrap text-xs text-slate-600">{report.protocol.source_note}</p>
       <div className="mt-2 text-xs text-slate-600">{l('Electricity / labor / selling margin', '전력 단가 / 인건비 / 판매 마진')}: {v(report.protocol.electricity_usd_kwh, 'USD/kWh')} / {v(report.protocol.labor_usd_h, 'USD/h')} / {v((report.protocol.selling_margin_fraction ?? 0) * 100, '%')}</div>
+      {!!report.purchases?.length && <div className="mt-4 overflow-x-auto"><p className="text-sm font-medium">{l('Batch purchase quantities and costs', '배치 구매량과 비용')}</p><table className="mt-2 w-full text-left text-xs"><thead><tr>{[l('Operation / purchase', '단계·구매 항목'), l('Repeated quantity', '반복을 반영한 구매량'), l('USD/unit', 'USD/단위'), 'USD/kg'].map((s) => <th className="p-2" key={s}>{s}</th>)}</tr></thead><tbody>{report.purchases.map((p, i) => <tr key={i} className="border-t border-slate-100"><td className="p-2">{p.operation}. {p.name}</td><td className="p-2">{v(p.quantity, p.unit)}</td><td className="p-2">{v(p.price_usd_per_unit)}</td><td className="p-2">{v(p.cost_usd_kg)}</td></tr>)}</tbody></table></div>}
       {report.protocol.operations.map((op, i) => {
         const result = report.operations[i];
         const conditions = [op.equipment, op.atmosphere,
@@ -38,7 +43,7 @@ export default function ManufacturingProtocolSummary({ report, compact = false }
           {!!op.temperature_profile?.length && <div className="mt-2 overflow-x-auto"><table className="w-full text-left text-xs"><thead><tr className="border-b border-slate-200">
             {[l('Target (°C)', '목표 (°C)'), l('Ramp (°C/min)', '승·강온 (°C/min)'), l('Hold (h)', '유지 (h)'), l('Ramp power (kW)', '승·강온 전력 (kW)'), l('Hold power (kW)', '유지 전력 (kW)')].map((label) => <th className="p-2" key={label}>{label}</th>)}</tr></thead>
             <tbody>{op.temperature_profile.map((s, j) => <tr key={j}>{[s.target_c, s.ramp_c_per_min, s.hold_h, s.ramp_power_kw, s.hold_power_kw].map((n, k) => <td className="p-2" key={k}>{v(n)}</td>)}</tr>)}</tbody></table></div>}
-          {op.gases?.map((gas, j) => <p key={j} className="mt-2 text-xs">{gas.name}: {v(gas.flow_l_per_min, 'L/min')} × {v(gas.duration_h, 'h')}; {v(gas.price_usd_per_m3, 'USD/m³')} ({gas.volume_basis})</p>)}
+          {op.gases?.map((gas, j) => <p key={j} className="mt-2 text-xs">{gas.name}: {v(gas.flow_l_per_min, 'L/min')} · {l('Total use time', '총 사용 시간')}: {v(result?.gases?.[j]?.duration_h, 'h')} · {gas.duration_basis === 'operation' ? l('Linked to entire operation', '전체 공정에 연결') : gas.duration_basis === 'holds' ? l('Linked to holds', '유지 시간에 연결') : l('Independent duration', '별도 시간')} · {v(gas.price_usd_per_m3, 'USD/m³')} ({gas.volume_basis})</p>)}
           {result?.costs_usd && <div className="mt-2 flex flex-wrap gap-3 text-xs">{[
             ['electricity', l('Electricity', '전기')], ['equipment', l('Equipment', '장비')], ['labor', l('Labor', '인건비')], ['gas', l('Gas', '가스')], ['other', l('Other', '기타')],
           ].map(([key, label]) => <span key={key}>{label}: {v(result.costs_usd![key!], 'USD')}</span>)}</div>}
@@ -46,6 +51,7 @@ export default function ManufacturingProtocolSummary({ report, compact = false }
         </details>;
       })}
       {!!report.missing_inputs.length && <details className="mt-3 text-xs text-amber-800"><summary className="cursor-pointer">{l('Missing inputs for batch costing', '배치 원가 계산에 필요한 미입력 항목')}</summary><ul className="mt-2 list-disc pl-5">{report.missing_inputs.map((s) => <li key={s}>{s}</li>)}</ul></details>}
+      <ManufacturingTrace report={report} />
     </>}
   </section>;
 }

@@ -7,6 +7,7 @@ must use the same stated reference conditions. Step Method rates are not added.
 from math import isfinite
 
 from backend.core.constants import LB_PER_KG, LB_PER_TON
+from backend.core.manufacturing_trace import append_selling_price_trace, build_manufacturing_trace
 from backend.schemas.manufacturing import ManufacturingProtocol
 
 
@@ -27,6 +28,8 @@ def evaluate_protocol(protocol: ManufacturingProtocol) -> dict:
     if not protocol.source_note.strip():
         missing.append("Source or assumption note")
     rows = []
+    purchase_rows = []
+    purchases_complete = True
     for index, op in enumerate(protocol.operations, 1):
         prefix = f"{index}. {op.name}: "
         before = len(missing)
@@ -70,15 +73,36 @@ def evaluate_protocol(protocol: ManufacturingProtocol) -> dict:
         gas_rows = []
         for gas in op.gases:
             flow = need(gas.flow_l_per_min, prefix + gas.name + " gas flow")
-            duration = need(gas.duration_h, prefix + gas.name + " gas duration")
+            if gas.duration_basis == "operation":
+                known_duration = hours if time_known else None
+            elif gas.duration_basis == "holds":
+                holds_known = bool(op.temperature_profile) and all(s.hold_h is not None for s in op.temperature_profile)
+                known_duration = sum(s.hold_h for s in op.temperature_profile) if holds_known else None
+            else:
+                known_duration = gas.duration_h
+            duration = need(known_duration, prefix + gas.name + " gas duration (" + gas.duration_basis + ")")
             price = need(gas.price_usd_per_m3, prefix + gas.name + " gas price")
             if not gas.name.strip() or not gas.volume_basis.strip():
                 missing.append(prefix + "gas name and shared flow/price volume basis")
             volume = flow * duration * 60 / 1000
             gas_cost += volume * price
             gas_rows.append({"name": gas.name, "volume_m3": volume * op.repetitions,
+                             "duration_h": known_duration * op.repetitions if known_duration is not None else None,
+                             "duration_basis": gas.duration_basis,
                              "cost_usd": volume * price * op.repetitions, "volume_basis": gas.volume_basis})
         count = op.repetitions
+        for purchase in op.purchases:
+            quantity = op.solvent_volume_ml if purchase.quantity_basis == "solvent_volume" else purchase.quantity
+            known = quantity is not None and purchase.price_usd_per_unit is not None
+            purchases_complete &= known
+            if not known and protocol.materials_basis == "purchases":
+                missing.append(prefix + purchase.name + " purchase quantity and price")
+            cost = quantity * purchase.price_usd_per_unit * count if known else None
+            purchase_rows.append({"operation": index, "name": purchase.name,
+                                  "quantity": quantity * count if quantity is not None else None,
+                                  "unit": purchase.unit, "price_usd_per_unit": purchase.price_usd_per_unit,
+                                  "cost_usd": cost, "cost_usd_kg": cost / mass if known and mass else None,
+                                  "quantity_basis": purchase.quantity_basis})
         costs = {"electricity": energy * tariff * count, "equipment": equipment_rate * hours * count,
                  "labor": labor_h * wage * count, "gas": gas_cost * count, "other": other * count}
         rows.append({"index": index, "name": op.name, "repetitions": count,
@@ -86,23 +110,42 @@ def evaluate_protocol(protocol: ManufacturingProtocol) -> dict:
                      "electricity_kwh": energy * count, "gases": gas_rows, "segments": segments if time_known else None,
                      "costs_usd": costs, "cost_usd": sum(costs.values()),
                      "complete": len(missing) == before})
+    if protocol.materials_basis == "purchases" and not purchase_rows:
+        missing.append("At least one batch purchase is required when replacing composition-based materials")
     complete = not missing
     if protocol.mode == "batch_cost" and not complete:
         raise ValueError("Complete batch costing inputs: " + "; ".join(missing))
     # Partial records never expose a spurious zero or subtotal as a completed cost.
     total = sum(r["cost_usd"] for r in rows) if complete else None
-    return {"mode": protocol.mode, "protocol": protocol.model_dump(), "complete": complete,
+    report = {"mode": protocol.mode, "protocol": protocol.model_dump(), "complete": complete,
             "missing_inputs": missing, "operations": rows if complete else [
                 {**r, "electricity_kwh": None, "costs_usd": None, "cost_usd": None,
                  "gases": [{**g, "volume_m3": None, "cost_usd": None} for g in r["gases"]]} for r in rows],
             "serial_operation_hours": sum(r["duration_h"] for r in rows) if all(r["duration_h"] is not None for r in rows) else None,
             "batch_processing_cost_usd": total,
             "processing_cost_usd_kg": total / mass if complete else None,
+            "purchases": purchase_rows,
+            "batch_materials_cost_usd": sum(r["cost_usd"] for r in purchase_rows) if purchase_rows and purchases_complete else None,
             "electricity_kwh_per_kg": sum(r["electricity_kwh"] for r in rows) / mass if complete else None,
             "boundary": "User-defined batch operations; no inferred industrial scale-up, catalyst activity, or process LCA. "
-                        "Solvent quantities are records; purchases are costed only through the materials/consumables inputs. "
                         "Equipment rates exclude separately entered electricity, gas and labor. "
                         "Times are summed serial operation-hours, not a parallel production schedule."}
+    report["boundary"] += (" Batch purchases replace the complete material bill when batch costing is selected; linked solvent volumes affect that bill."
+                           if protocol.materials_basis == "purchases" else
+                           " Solvent quantities are records; purchases are costed only through the materials/consumables inputs.")
+    report["trace"] = build_manufacturing_trace(protocol, report)
+    return report
+
+
+def batch_materials_result(report: dict) -> dict:
+    """Replace the complete materials bill; do not add legacy composition prices."""
+    mass = report["protocol"]["finished_batch_mass_kg"]
+    total_per_kg = report["batch_materials_cost_usd"] / mass
+    return {"components": [], "total_materials_cost_per_lb": total_per_kg / LB_PER_KG,
+            "batch_purchases": report["purchases"],
+            "costing_basis": "Batch purchases replace all composition-based material prices, precursor markups and kg/kg consumables. "
+                             "All quantities are net purchased inputs for the declared operations; repeated operations repeat purchases. "
+                             "Material cost = sum(quantity * price per matching unit * repetitions) / finished dry mass."}
 
 
 def batch_cost_result(report: dict, materials_per_lb: float, order_tons: float,
@@ -121,6 +164,10 @@ def batch_cost_result(report: dict, materials_per_lb: float, order_tons: float,
     batch_equivalents = order_tons * LB_PER_TON / LB_PER_KG / batch_kg
     report["batch_equivalents"] = batch_equivalents
     report["manufacturing_cost_usd_kg"] = subtotal * LB_PER_KG
+    append_selling_price_trace(report, materials_per_lb * LB_PER_KG, ga * LB_PER_KG, sard * LB_PER_KG, margin * LB_PER_KG)
+    report["trace"]["overhead_inputs"] = {"ga_fraction": ga_fraction, "sard_fraction": sard_fraction,
+                                          "selling_margin_fraction": fraction,
+                                          "source_status": "User-selected fractions; no external cost validation"}
     report["boundary"] += " Order totals repeat the same batch costs linearly, including fractional batch equivalents; no scale economy is assumed."
     return {"model": "user_batch", "scale": "user batch", "order_size_tons": order_tons,
             "campaign_days": report["serial_operation_hours"] * batch_equivalents / 24,

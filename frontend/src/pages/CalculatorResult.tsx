@@ -197,11 +197,6 @@ export default function CalculatorResult() {
   }, []);
 
   function goBackToCalculator() {
-    const historyIndex = typeof window !== 'undefined' ? window.history.state?.idx : 0;
-    if (typeof historyIndex === 'number' && historyIndex > 0) {
-      navigate(-1);
-      return;
-    }
     navigate('/');
   }
 
@@ -243,9 +238,15 @@ export default function CalculatorResult() {
   const routeSummary = result.route_summary ?? null;
   const costingScope = result.costing_scope ?? null;
   const batchCostMode = result.manufacturing?.mode === 'batch_cost';
+  const batchPurchases = batchCostMode && result.manufacturing?.protocol.materials_basis === 'purchases';
+  const purchasedRows = batchPurchases ? result.manufacturing?.purchases ?? [] : [];
+  const materialCount = batchPurchases ? purchasedRows.length : result.materials.components.length;
+  const batchPriceSources = (result.manufacturing?.trace?.inputs ?? []).filter((row) => row.path.endsWith('.price_usd_per_unit'));
+  const batchPriceSourceCount = batchPriceSources.filter((row) => row.evidence).length;
+  const batchPriceLinkCount = batchPriceSources.filter((row) => /^https?:\/\//i.test(row.evidence?.url ?? '')).length;
   const electrodeModel = result.electrode_model ?? null;
   const spentCatalyst = electrodeModel ? null : result.spent_catalyst ?? null;
-  const resolvedMaterials = result.resolved_materials ?? [];
+  const resolvedMaterials = batchPurchases ? [] : result.resolved_materials ?? [];
   const recipeReferenceKeys = new Set(snapshotState.costInput?.components
     ?.filter((component) => component.recipe_consumption && component.material_key)
     .map((component) => component.material_key) ?? []);
@@ -284,9 +285,9 @@ export default function CalculatorResult() {
       : null,
     typeof result.step_method.sard_per_lb === 'number'
       ? {
-          label: 'Sales, admin & R&D (S&ARD)',
+          label: 'Sales, administration, research and distribution (SARD)',
           value: `${formatPrice(toDisplay(Number(result.step_method.sard_per_lb)))}${fmtLabel}`,
-          detail: t('Selling, administrative, and R&D uplift'),
+          detail: t('Sales, administration, research and distribution overhead'),
         }
       : null,
     typeof result.step_method.margin_per_lb === 'number'
@@ -321,6 +322,7 @@ export default function CalculatorResult() {
   const sellingPriceShare = (costPerLb: number) => result.summary.estimated_price_per_lb > 0
     ? costPerLb / result.summary.estimated_price_per_lb * 100 : 0;
   const pieData = electrodeRows ? electrodeRows.map((item) => ({ name: item.label, value: item.share })) : [
+    ...purchasedRows.map((purchase) => ({ name: purchase.name, value: sellingPriceShare((purchase.cost_usd_kg ?? 0) / LB_PER_KG) })),
     ...result.materials.components.map((component) => ({
       name:
         component.role === 'support'
@@ -446,9 +448,9 @@ export default function CalculatorResult() {
             <div className="cp-subtle-label">{t('Evidence')}</div>
             <div className="mt-3 space-y-1">
               <RailRow
-                label={t('Public links')}
-                value={`${publicSourceCount}/${resolvedMaterials.length || 0}`}
-                detail={electrodeModel ? t('Electrode material sources') : lang === 'ko' ? `실시간 ${snapshotState.liveFeedCount}건 / 지수 보정 ${snapshotState.indexedFeedCount}건` : `${snapshotState.liveFeedCount} live / ${snapshotState.indexedFeedCount} indexed rows in the draft`}
+                label={batchPurchases ? (lang === 'ko' ? '배치 구매 항목' : 'Batch purchases') : t('Public links')}
+                value={batchPurchases ? String(purchasedRows.length) : `${publicSourceCount}/${resolvedMaterials.length || 0}`}
+                detail={batchPurchases ? (lang === 'ko' ? '입력한 구매량·단가 사용 · 항목별 근거에서 확인' : 'Entered quantities and prices; see individual input sources') : electrodeModel ? t('Electrode material sources') : lang === 'ko' ? `실시간 ${snapshotState.liveFeedCount}건 / 지수 보정 ${snapshotState.indexedFeedCount}건` : `${snapshotState.liveFeedCount} live / ${snapshotState.indexedFeedCount} indexed rows in the draft`}
               />
               <RailRow
                 label={t('Latest quote year')}
@@ -462,7 +464,7 @@ export default function CalculatorResult() {
               />
               {result.lca && result.lca.gwp_kg_co2eq_per_kg_catalyst != null ? (
                 <RailRow
-                  label={t("Cradle-to-gate GWP")}
+                  label={batchCostMode ? (lang === 'ko' ? '조성 기준 재료 GWP' : 'Composition-based materials GWP') : t("Cradle-to-gate GWP")}
                   value={`${formatLcaNumber(result.lca.gwp_kg_co2eq_per_kg_catalyst)} kg CO2-eq/kg`}
                   detail={`${result.lca.coverage_pct}% ${t('mass coverage / Nuss & Eckelman 2014')}`}
                 />
@@ -500,8 +502,8 @@ export default function CalculatorResult() {
               />
               <RailRow
                 label={t('Price basis')}
-                value={result.input_summary.price_basis === 'reference' ? t('Academic (monthly averages)') : t('Practical (live quotes)')}
-                detail={result.input_summary.price_basis === 'reference'
+                value={batchPurchases ? (lang === 'ko' ? '입력한 배치 구매 단가' : 'Entered batch purchase prices') : result.input_summary.price_basis === 'reference' ? t('Academic (monthly averages)') : t('Practical (live quotes)')}
+                detail={batchPurchases ? (lang === 'ko' ? '조성에 표시된 금속 시세는 제조 재료비에 사용하지 않습니다.' : 'Composition metal quotes do not price this manufacturing bill.') : result.input_summary.price_basis === 'reference'
                   ? t('IMF PCPS and Johnson Matthey monthly averages; the latest published month prices the estimate.')
                   : t('Live quotes at the time of the estimate.')}
               />
@@ -564,8 +566,8 @@ export default function CalculatorResult() {
               <MetricTile label={batchCostMode ? (lang === 'ko' ? '배치당 공정시간 합계' : 'Operation-hours per batch') : t('Production time')} value={batchCostMode ? `${Number(result.manufacturing!.serial_operation_hours).toFixed(2)} h` : `${Number(result.step_method.campaign_days).toFixed(1)} d`} detail={batchCostMode ? (lang === 'ko' ? '순차 합계, 병렬 일정 아님' : 'Serial sum; not a parallel schedule') : lang === 'ko' ? `${snapshotState.orderSize}톤 1회 생산` : `${snapshotState.orderSize} tons per run`} />
               <MetricTile label={t('Margin')} value={`${Number(result.step_method.margin_pct).toFixed(1)}%`} detail={t('Selling margin basis')} />
             </>}
-            <MetricTile label={t('Price sources')} value={String(electrodeModel ? resolvedMaterials.length : snapshotState.liveFeedCount + snapshotState.indexedFeedCount)} detail={electrodeModel ? t('Electrode material sources') : lang === 'ko' ? `실시간 ${snapshotState.liveFeedCount}건 / 지수 보정 ${snapshotState.indexedFeedCount}건` : `${snapshotState.liveFeedCount} live / ${snapshotState.indexedFeedCount} indexed`} />
-            <MetricTile label={t('Public links')} value={`${publicSourceCount}/${resolvedMaterials.length || 0}`} detail={t('Resolved rows with a public URL.')} />
+            <MetricTile label={t('Price sources')} value={batchPurchases ? `${batchPriceSourceCount}/${purchasedRows.length}` : String(electrodeModel ? resolvedMaterials.length : snapshotState.liveFeedCount + snapshotState.indexedFeedCount)} detail={batchPurchases ? (lang === 'ko' ? '출처 또는 가정이 연결된 구매 단가 · 독립 검증 아님' : 'Purchase prices with a source or assumption; not independent validation') : electrodeModel ? t('Electrode material sources') : lang === 'ko' ? `실시간 ${snapshotState.liveFeedCount}건 / 지수 보정 ${snapshotState.indexedFeedCount}건` : `${snapshotState.liveFeedCount} live / ${snapshotState.indexedFeedCount} indexed`} />
+            <MetricTile label={t('Public links')} value={batchPurchases ? `${batchPriceLinkCount}/${purchasedRows.length}` : `${publicSourceCount}/${resolvedMaterials.length || 0}`} detail={batchPurchases ? (lang === 'ko' ? '공개 URL이 연결된 구매 단가' : 'Purchase prices with a public source URL') : t('Resolved rows with a public URL.')} />
           </div>
         </div>
 
@@ -667,7 +669,7 @@ export default function CalculatorResult() {
               {t('This surface is for production scale, selected preparation steps, route metadata, and the main cost split.')}
             </div>
           </div>
-          <span className="cp-chip"><ScientificText text={lang === 'ko' ? `재료 ${result.materials.components.length}종` : `${result.materials.components.length} material${result.materials.components.length === 1 ? '' : 's'}`} /></span>
+          <span className="cp-chip"><ScientificText text={lang === 'ko' ? `재료 ${materialCount}종` : `${materialCount} material${materialCount === 1 ? '' : 's'}`} /></span>
         </div>
 
         <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
@@ -843,7 +845,7 @@ export default function CalculatorResult() {
         <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0">
             <div className="cp-subtle-label">{t('Environmental')}</div>
-            <div className="cp-heading-lg mt-2">{t('Cradle-to-gate impact per kg of catalyst')}</div>
+            <div className="cp-heading-lg mt-2">{batchCostMode ? (lang === 'ko' ? '최종 조성의 재료 환경 영향 · kg당' : 'Embodied impact of finished composition per kg') : t('Cradle-to-gate impact per kg of catalyst')}</div>
             <div className="mt-1 text-xs leading-6 text-slate-600">
               {t('Weighted-average over the wt% composition. Manufacturing-step emissions are not included in this version — only embodied material impact.')}
             </div>
@@ -949,6 +951,11 @@ export default function CalculatorResult() {
   }
 
   function renderSourcesSection() {
+    if (batchPurchases && result.manufacturing) return <section className="surface-card p-4">
+      <div className="cp-heading-lg">{lang === 'ko' ? '배치 입력 근거' : 'Batch input evidence'}</div>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{lang === 'ko' ? '각 구매량·단가·운전 조건의 근거와 원래 값을 아래에서 확인합니다. 조성 가격 자료는 이 제조 재료비에 사용하지 않습니다.' : 'Review sources and original values for purchases, prices and operating conditions below. Composition price records do not price this manufacturing bill.'}</p>
+      <ManufacturingProtocolSummary report={result.manufacturing} />
+    </section>;
     return (
       <section className="surface-card p-4">
         <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">

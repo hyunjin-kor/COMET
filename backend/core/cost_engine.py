@@ -8,7 +8,7 @@ from backend.core.constants import LB_PER_KG, TROY_OZ_PER_LB
 from backend.core.costing_scope import summarize_costing_scope
 from backend.core.electrocatalyst import calculate_electrode_layer_cost
 from backend.core.lca import compute_catalyst_lca
-from backend.core.manufacturing import batch_cost_result, evaluate_protocol
+from backend.core.manufacturing import batch_cost_result, batch_materials_result, evaluate_protocol
 from backend.core.price_escalation import get_escalation_factor, latest_index_year
 from backend.core.recipe_costing import calculate_recipe_materials
 from backend.core.spent_catalyst import calculate_metal_recovery_value
@@ -132,8 +132,10 @@ def estimate_catalyst_cost(
         if not isfinite(production_rate_ton_per_day) or production_rate_ton_per_day <= 0:
             raise ValueError("Effective production rate must be finite and positive")
     materials = calculate_recipe_materials(components, consumables)
+    batch_purchases_selected = bool(manufacturing_protocol and manufacturing_protocol.get("mode") == "batch_cost"
+                                    and manufacturing_protocol.get("materials_basis") == "purchases")
     warnings: list[str] = []
-    if "costing_basis" in materials:
+    if "costing_basis" in materials and not batch_purchases_selected:
         warnings.append(
             "Recipe costs use user-supplied precursor content, purity, retention yield and net purchased "
             "consumables. LCA remains based on finished composition and selected steps; precursor losses, "
@@ -153,7 +155,7 @@ def estimate_catalyst_cost(
             "price_per_kg", component.get("price_per_lb") or 0.0,
         )) <= 0
     ]
-    if unpriced_actives:
+    if unpriced_actives and not batch_purchases_selected:
         warnings.append(
             ("Active-phase component(s) with zero charged purchase price: "
              if any(c.get("recipe_consumption") for c in active_metals)
@@ -162,7 +164,7 @@ def estimate_catalyst_cost(
             + ". Their raw-material cost is missing from this estimate."
         )
     zero_consumables = [c["name"] for c in consumables or [] if float(c["price_per_kg"]) == 0]
-    if zero_consumables:
+    if zero_consumables and not batch_purchases_selected:
         warnings.append("Purchased consumables with zero entered price: " + ", ".join(zero_consumables))
 
     try:
@@ -183,6 +185,12 @@ def estimate_catalyst_cost(
         if batch_mode and production_rate_ton_per_day is not None:
             raise ValueError("Batch costing cannot also use the Step Method production-rate override")
         protocol_report = evaluate_protocol(protocol)
+        if batch_mode and protocol.materials_basis == "purchases":
+            materials = batch_materials_result(protocol_report)
+            warnings.append(materials["costing_basis"])
+            unpriced = [p["name"] for p in protocol_report["purchases"] if p["price_usd_per_unit"] == 0]
+            if unpriced:
+                warnings.append("Batch purchases with explicitly excluded prices: " + ", ".join(unpriced))
         warnings.append(protocol_report["boundary"])
         warnings.append(
             "Protocol conditions are recorded; the headline still uses the empirical Step Method. "
@@ -235,6 +243,17 @@ def estimate_catalyst_cost(
                 exc,
             )
             spent_result = None
+
+    if protocol_report is not None and batch_mode:
+        protocol_report["trace"]["materials"] = materials
+        protocol_report["trace"]["recovery_adjustment"] = {
+            "enabled": include_spent_value, "result": spent_result,
+            "gross_selling_price_usd_kg": step_result["estimated_price_per_lb"] * LB_PER_KG,
+            "applied_credit_usd_kg": (step_result["estimated_price_per_lb"] - net_cost_per_lb) * LB_PER_KG,
+            "net_cost_usd_kg": net_cost_per_lb * LB_PER_KG,
+            "basis": "max(0, rounded selling price per lb - recoverable value per lb), converted to USD/kg. "
+                     "Recovery is an optional post-use scenario; it does not reduce manufacturing expenditure.",
+        }
 
     if (
         catalyst_domain == "electrocatalyst"
