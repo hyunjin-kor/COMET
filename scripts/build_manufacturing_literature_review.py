@@ -41,9 +41,9 @@ def render(data):
              "Electrode preparations remain records and cannot use a dry-powder kg denominator. Published procedures are evidence records, not laboratory operating instructions.", "",
              "Batch purchases can replace the entire composition-based materials bill. Quantities use kg, g, L, mL, mol, mmol or items, "
              "with prices in the same unit; molecular weight and solution density are not inferred. For intermediate batches, "
-             "all preparation charges are allocated by mass transferred divided by mass recovered on the same material basis; "
+             "preparation charges are allocated by used/recovered mass, or used/prepared volume for a homogeneous stock solution at the same concentration; "
              "unused recoverable inventory retains its share of cost. Alternatively, explicit whole-batch charging assigns the full expenditure "
-             "to the receiving batch before any further transfer. Internal transfers are not purchased twice. Unknown masses block proportional "
+             "to the receiving batch before any further transfer. Internal transfers are not purchased twice. Unknown amounts block proportional "
              "allocation. Successive transfers multiply their fractions; each intermediate has one destination, and circular paths are rejected. "
              "Branching transfers and co-products require a separately defined boundary. Incurred and allocated costs, input sources "
              "and equations are preserved in the calculation trace and exports.", "",
@@ -100,9 +100,10 @@ def render(data):
                       "This is not a measurement of a new user batch.", ""]
         if p.get("intermediate_batches"):
             lines += ["", "Intermediate transfers (recovery is not inferred from precursor inputs):", "",
-                      "| Intermediate / destination | Recovered kg | Used kg | Source details |", "|---|---|---|---|"]
+                      "| Intermediate / destination | Prepared/recovered | Transferred | Source details |", "|---|---|---|---|"]
             for batch in p["intermediate_batches"]:
-                values = [batch.get(key) if batch.get(key) is not None else "Not verified / 확인 못 함" for key in ("produced_mass_kg", "used_mass_kg")]
+                quantity, unit = ("volume_ml", "mL") if batch.get("allocation_basis") == "volume_used" else ("mass_kg", "kg")
+                values = [f"{batch[key]} {unit}" if batch.get(key) is not None else "Not verified / 확인 못 함" for key in (f"produced_{quantity}", f"used_{quantity}")]
                 lines.append(f"| {cell(batch['name'])} / {cell(batch.get('destination_batch_id') or 'final batch')} | {values[0]} | {values[1]} | {cell(batch.get('notes', ''))} |")
         purchases = [(op, item) for op in p["operations"] for item in op.get("purchases", [])]
         if purchases:

@@ -74,16 +74,20 @@ class BatchPurchase(SourcedProtocolModel):
 class IntermediateBatch(SourcedProtocolModel):
     id: str = Field(min_length=1, max_length=150)
     name: str = Field(min_length=1, max_length=200)
-    allocation_basis: Literal["mass_used", "whole_batch"] = "mass_used"
+    allocation_basis: Literal["mass_used", "volume_used", "whole_batch"] = "mass_used"
     destination_batch_id: str = Field(default="", max_length=150)
     produced_mass_kg: float | None = Field(default=None, gt=0)
     used_mass_kg: float | None = Field(default=None, gt=0)
+    produced_volume_ml: float | None = Field(default=None, gt=0)
+    used_volume_ml: float | None = Field(default=None, gt=0)
     notes: str = Field(default="", max_length=2000)
 
     @model_validator(mode="after")
     def usable_mass(self):
         if self.produced_mass_kg is not None and self.used_mass_kg is not None and self.used_mass_kg > self.produced_mass_kg:
             raise ValueError("Intermediate mass used cannot exceed recovered mass")
+        if self.produced_volume_ml is not None and self.used_volume_ml is not None and self.used_volume_ml > self.produced_volume_ml:
+            raise ValueError("Intermediate volume used cannot exceed prepared volume")
         return self
 
 

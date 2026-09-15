@@ -89,6 +89,67 @@ def nested_protocol():
     return p
 
 
+def volume_protocol():
+    p = nested_protocol()
+    p["intermediate_batches"][0].update(allocation_basis="volume_used", produced_volume_ml=25,
+        used_volume_ml=4, input_evidence={"produced_volume_ml": dict(kind="assumption",
+            citation="Synthetic homogeneous stock solution", recorded_value=25)})
+    return p
+
+
+def test_volume_aliquot_then_mass_transfer_preserves_physical_expenditure():
+    p = volume_protocol()
+    result = estimate_catalyst_cost(**payload(), manufacturing_protocol=p)
+    report = result["manufacturing"]
+    # Four of 25 mL transferred, then half of the receiving solid batch used.
+    assert report["intermediate_batches"][0]["allocation_fraction"] == pytest.approx(.08)
+    assert report["batch_materials_cost_usd"] == pytest.approx(20 * .08 + 3)
+    assert report["batch_processing_cost_usd"] == pytest.approx(13.6 * .08 + 2 * .5 + 4.6)
+    assert report["operations"][0]["incurred_cost_usd"] == pytest.approx(13.6)
+    assert report["serial_operation_hours"] == 4
+    assert result["summary"]["estimated_price_per_kg"] == pytest.approx(6222.51, abs=.0001)
+    rows = {row["path"]: row for row in report["trace"]["inputs"]}
+    assert rows["intermediate_batches.0.produced_mass_kg"]["effect"] == "record_only"
+    assert rows["intermediate_batches.0.produced_volume_ml"]["effect"] == "cost_input"
+    calc = next(row for row in report["trace"]["calculations"] if row["id"] == "intermediate_batches.0.transfer_fraction")
+    assert calc["formula"] == "used_volume_ml / produced_volume_ml"
+    assert "intermediate_batches.0.used_volume_ml" in calc["input_paths"]
+
+
+def test_unknown_volume_cannot_fall_back_to_mass_or_complete_cost():
+    p = volume_protocol()
+    p["intermediate_batches"][0]["produced_volume_ml"] = None
+    with pytest.raises(ValueError, match="intermediate volume"):
+        estimate_catalyst_cost(**payload(), manufacturing_protocol=p)
+    p["intermediate_batches"][0]["allocation_basis"] = "whole_batch"
+    report = evaluate_protocol(ManufacturingProtocol.model_validate(p))
+    assert report["intermediate_batches"][0]["allocation_fraction"] == .5
+    row = next(row for row in report["trace"]["inputs"] if row["path"] == "intermediate_batches.0.used_volume_ml")
+    assert row["effect"] == "record_only"
+
+
+def test_volume_transfer_cannot_exceed_prepared_volume():
+    p = volume_protocol()
+    p["intermediate_batches"][0]["used_volume_ml"] = 26
+    with pytest.raises(ValueError, match="volume used cannot exceed"):
+        ManufacturingProtocol.model_validate(p)
+
+
+def test_api_volume_save_reload_and_active_analysis_inputs(client):
+    request = {**payload(), "manufacturing_protocol": volume_protocol()}
+    saved = client.post("/api/calculate/save?name=synthetic-volume-aliquot", json=request)
+    assert saved.status_code == 200, saved.text
+    loaded = client.get(f"/api/estimates/{saved.json()['id']}").json()
+    recalculated = client.post("/api/calculate", json=loaded["input"])
+    assert recalculated.status_code == 200, recalculated.text
+    assert recalculated.json()["manufacturing"] == loaded["result"]["manufacturing"]
+    listing = client.post("/api/uncertainty/manufacturing-inputs", json=request)
+    assert listing.status_code == 200, listing.text
+    paths = {row["path"] for row in listing.json()["variables"]}
+    assert "intermediate_batches.0.used_volume_ml" in paths
+    assert "intermediate_batches.0.used_mass_kg" not in paths
+
+
 def test_successive_aliquots_multiply_fractions_without_repeating_upstream_charges():
     p = nested_protocol()
     result = estimate_catalyst_cost(**payload(), manufacturing_protocol=p)

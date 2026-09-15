@@ -4,6 +4,8 @@ const labels: Record<string, [string, string]> = {
   finished_batch_mass_kg: ['Finished dry mass (kg)', '최종 건조 수득량 (kg)'],
   produced_mass_kg: ['Recovered intermediate mass (kg)', '중간 생성물 회수량 (kg)'],
   used_mass_kg: ['Intermediate mass used (kg)', '중간 생성물 사용량 (kg)'],
+  produced_volume_ml: ['Prepared intermediate volume (mL)', '중간 용액 제조 부피 (mL)'],
+  used_volume_ml: ['Intermediate volume used (mL)', '중간 용액 사용 부피 (mL)'],
   allocation_fraction: ['Allocated fraction', '비용 배분 비율'],
   transfer_fraction: ['Fraction transferred at this stage', '이 단계의 분취 비율'],
   destination_batch_id: ['Receiving batch', '투입 대상 배치'],

@@ -36,6 +36,10 @@ def evaluate_protocol(protocol: ManufacturingProtocol) -> dict:
     for batch in protocol.intermediate_batches:
         if batch.allocation_basis == "whole_batch":
             fraction = 1.0
+        elif batch.allocation_basis == "volume_used":
+            produced = need(batch.produced_volume_ml, batch.name + ": prepared intermediate volume (mL)")
+            used = need(batch.used_volume_ml, batch.name + ": intermediate volume used in the destination batch (mL)")
+            fraction = used / produced if produced and used else None
         else:
             produced = need(batch.produced_mass_kg, batch.name + ": recovered intermediate mass (kg)")
             used = need(batch.used_mass_kg, batch.name + ": intermediate mass used in the destination batch (kg)")
@@ -43,6 +47,7 @@ def evaluate_protocol(protocol: ManufacturingProtocol) -> dict:
         transfer[batch.id] = fraction
         intermediate_rows.append({"id": batch.id, "name": batch.name, "produced_mass_kg": batch.produced_mass_kg,
                                   "used_mass_kg": batch.used_mass_kg, "transfer_fraction": fraction,
+                                  "produced_volume_ml": batch.produced_volume_ml, "used_volume_ml": batch.used_volume_ml,
                                   "destination_batch_id": batch.destination_batch_id,
                                   "allocation_basis": batch.allocation_basis})
     destinations = {batch.id: batch.destination_batch_id for batch in protocol.intermediate_batches}
@@ -169,10 +174,10 @@ def evaluate_protocol(protocol: ManufacturingProtocol) -> dict:
                            if protocol.materials_basis == "purchases" else
                            " Solvent quantities are records; purchases are costed only through the materials/consumables inputs.")
     if protocol.intermediate_batches:
-        report["boundary"] += (" Intermediate costs use mass used / mass recovered on the same material basis, or an explicitly selected whole-batch charge. "
+        report["boundary"] += (" Intermediate costs use used/recovered mass on the same material basis, used/prepared volume for a homogeneous stock solution at the same concentration, or an explicitly selected whole-batch charge. "
                                "For successive transfers, allocation fractions are multiplied along the declared path to the final batch. "
                                "Each intermediate feeds one destination; splitting one intermediate across several branches and co-product credits are not modeled. "
-                               "Mass allocation assumes unused recoverable material retains its cost; whole-batch charging assigns all costs to the receiving batch before any further transfer. "
+                               "Proportional allocation assumes unused recoverable material retains its cost; whole-batch charging assigns all costs to the receiving batch before any further transfer. "
                                "Actual cash expenditure includes the whole intermediate batch. Allocated operation-hours are cost equivalents, not a schedule. "
                                "Do not add an internally transferred intermediate as another purchase.")
     report["trace"] = build_manufacturing_trace(protocol, report)

@@ -4,7 +4,7 @@ from copy import deepcopy
 
 import pytest
 
-from backend.tests.test_manufacturing_intermediates import nested_protocol
+from backend.tests.test_manufacturing_intermediates import nested_protocol, volume_protocol
 from backend.tests.test_manufacturing_protocol import payload
 
 
@@ -86,6 +86,18 @@ def test_infeasible_mass_samples_are_counted_instead_of_clamped(client):
     assert 0 < d["n_failed"] < 100
     assert sum(d["failure_reasons"].values()) == d["n_failed"]
     assert d["n_failed"] + d["n_successful"] == 100
+
+
+def test_infeasible_solution_aliquots_are_excluded_without_mass_conversion(client):
+    args = {"calculation_input": {**payload(), "manufacturing_protocol": volume_protocol()},
+            "uncertainties": {}, "n_simulations": 100, "seed": 15,
+            "manufacturing_ranges": [{"path": "intermediate_batches.0.used_volume_ml", "low": 10, "high": 40}]}
+    r = client.post("/api/uncertainty", json=args)
+    assert r.status_code == 200, r.text
+    d = r.json()
+    assert 0 < d["n_failed"] < 100
+    assert all("volume used cannot exceed" in reason for reason in d["failure_reasons"])
+    assert sum(bin["count"] for bin in d["histogram"]) == d["n_successful"]
 
 
 def test_sensitivity_reports_invalid_endpoint_without_losing_valid_endpoint(client):

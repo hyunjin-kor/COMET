@@ -18,7 +18,7 @@ Numeric values were transcribed from the stated primary sections. Kelvin values 
 
 Imports create editable records with the specimen, DOI and section locator. They retain the existing cost model. Powder batch costing is enabled only after the user supplies complete operating inputs, actual dry output and explicit costs. It replaces Step Method processing cost and does not add it twice. Electricity is measured kWh or input kW multiplied by time; gas volume and price require matching reference conditions. Temperature alone does not predict furnace consumption, yield or catalytic performance. Electrode preparations remain records and cannot use a dry-powder kg denominator. Published procedures are evidence records, not laboratory operating instructions.
 
-Batch purchases can replace the entire composition-based materials bill. Quantities use kg, g, L, mL, mol, mmol or items, with prices in the same unit; molecular weight and solution density are not inferred. For intermediate batches, all preparation charges are allocated by mass transferred divided by mass recovered on the same material basis; unused recoverable inventory retains its share of cost. Alternatively, explicit whole-batch charging assigns the full expenditure to the receiving batch before any further transfer. Internal transfers are not purchased twice. Unknown masses block proportional allocation. Successive transfers multiply their fractions; each intermediate has one destination, and circular paths are rejected. Branching transfers and co-products require a separately defined boundary. Incurred and allocated costs, input sources and equations are preserved in the calculation trace and exports.
+Batch purchases can replace the entire composition-based materials bill. Quantities use kg, g, L, mL, mol, mmol or items, with prices in the same unit; molecular weight and solution density are not inferred. For intermediate batches, preparation charges are allocated by used/recovered mass, or used/prepared volume for a homogeneous stock solution at the same concentration; unused recoverable inventory retains its share of cost. Alternatively, explicit whole-batch charging assigns the full expenditure to the receiving batch before any further transfer. Internal transfers are not purchased twice. Unknown amounts block proportional allocation. Successive transfers multiply their fractions; each intermediate has one destination, and circular paths are rejected. Branching transfers and co-products require a separately defined boundary. Incurred and allocated costs, input sources and equations are preserved in the calculation trace and exports.
 
 Manufacturing endpoint sensitivity changes one selected numeric cost input at a time. Monte Carlo uses independent uniform distributions within user-specified absolute bounds, with discrete integer draws for repetitions. Unselected inputs remain fixed. Linked gas durations follow the sampled operation time; temperature does not infer power or yield. Invalid combinations are counted and excluded without clamping, so statistics are conditional on successful draws. Bounds describe declared scenarios, not source-validated distributions or industrial confidence intervals. JSON exports retain the baseline request, resolved prices, protocol hash, input evidence, seed, bounds and failures.
 
@@ -1004,10 +1004,10 @@ Source: [The Acid Roles of PtSn@Al2O3 in the Synthesis and Performance of Propan
 
 Intermediate transfers (recovery is not inferred from precursor inputs):
 
-| Intermediate / destination | Recovered kg | Used kg | Source details |
+| Intermediate / destination | Prepared/recovered | Transferred | Source details |
 |---|---|---|---|
-| Sn-containing powder blend / pellets | Not verified / 확인 못 함 | 0.00375 | Source uses 3.750 g of a blend prepared from 20.000 g SB and 0.3297 g tin oxalate; recovered blend mass unreported. |
-| Sn/Al2O3 pellets / final batch | Not verified / 확인 못 함 | 0.003 | Source impregnates3.0000 g recovered pellets; total pellet recovery is unreported. |
+| Sn-containing powder blend / pellets | Not verified / 확인 못 함 | 0.00375 kg | Source uses 3.750 g of a blend prepared from 20.000 g SB and 0.3297 g tin oxalate; recovered blend mass unreported. |
+| Sn/Al2O3 pellets / final batch | Not verified / 확인 못 함 | 0.003 kg | Source impregnates3.0000 g recovered pellets; total pellet recovery is unreported. |
 
 Explicit purchases/inputs (unpriced; missing amounts remain unknown):
 
@@ -1046,10 +1046,10 @@ Source: [The Acid Roles of PtSn@Al2O3 in the Synthesis and Performance of Propan
 
 Intermediate transfers (recovery is not inferred from precursor inputs):
 
-| Intermediate / destination | Recovered kg | Used kg | Source details |
+| Intermediate / destination | Prepared/recovered | Transferred | Source details |
 |---|---|---|---|
-| Sn-containing powder blend / pellets | Not verified / 확인 못 함 | 0.00375 | Source uses 3.750 g of a blend prepared from 20.000 g SB and 0.3297 g tin oxalate; recovered blend mass unreported. |
-| Sn/Al2O3 pellets / final batch | Not verified / 확인 못 함 | 0.003 | Source impregnates3.0000 g recovered pellets; total pellet recovery is unreported. |
+| Sn-containing powder blend / pellets | Not verified / 확인 못 함 | 0.00375 kg | Source uses 3.750 g of a blend prepared from 20.000 g SB and 0.3297 g tin oxalate; recovered blend mass unreported. |
+| Sn/Al2O3 pellets / final batch | Not verified / 확인 못 함 | 0.003 kg | Source impregnates3.0000 g recovered pellets; total pellet recovery is unreported. |
 
 Explicit purchases/inputs (unpriced; missing amounts remain unknown):
 
@@ -1089,10 +1089,10 @@ Source: [The Acid Roles of PtSn@Al2O3 in the Synthesis and Performance of Propan
 
 Intermediate transfers (recovery is not inferred from precursor inputs):
 
-| Intermediate / destination | Recovered kg | Used kg | Source details |
+| Intermediate / destination | Prepared/recovered | Transferred | Source details |
 |---|---|---|---|
-| Sn-containing powder blend / pellets | Not verified / 확인 못 함 | 0.00375 | Source uses 3.750 g of a blend prepared from 20.000 g SB and 0.3297 g tin oxalate; recovered blend mass unreported. |
-| Sn/Al2O3 pellets / final batch | Not verified / 확인 못 함 | 0.003 | Source impregnates3.0000 g recovered pellets; total pellet recovery is unreported. |
+| Sn-containing powder blend / pellets | Not verified / 확인 못 함 | 0.00375 kg | Source uses 3.750 g of a blend prepared from 20.000 g SB and 0.3297 g tin oxalate; recovered blend mass unreported. |
+| Sn/Al2O3 pellets / final batch | Not verified / 확인 못 함 | 0.003 kg | Source impregnates3.0000 g recovered pellets; total pellet recovery is unreported. |
 
 Explicit purchases/inputs (unpriced; missing amounts remain unknown):
 
@@ -1132,10 +1132,10 @@ Source: [The Acid Roles of PtSn@Al2O3 in the Synthesis and Performance of Propan
 
 Intermediate transfers (recovery is not inferred from precursor inputs):
 
-| Intermediate / destination | Recovered kg | Used kg | Source details |
+| Intermediate / destination | Prepared/recovered | Transferred | Source details |
 |---|---|---|---|
-| Sn-containing powder blend / pellets | Not verified / 확인 못 함 | 0.00375 | Source uses 3.750 g of a blend prepared from 20.000 g SB and 0.3297 g tin oxalate; recovered blend mass unreported. |
-| Sn/Al2O3 pellets / final batch | Not verified / 확인 못 함 | 0.003 | Source impregnates3.0000 g recovered pellets; total pellet recovery is unreported. |
+| Sn-containing powder blend / pellets | Not verified / 확인 못 함 | 0.00375 kg | Source uses 3.750 g of a blend prepared from 20.000 g SB and 0.3297 g tin oxalate; recovered blend mass unreported. |
+| Sn/Al2O3 pellets / final batch | Not verified / 확인 못 함 | 0.003 kg | Source impregnates3.0000 g recovered pellets; total pellet recovery is unreported. |
 
 Explicit purchases/inputs (unpriced; missing amounts remain unknown):
 
@@ -1174,9 +1174,9 @@ Source: [Effect of nitrogen co-doping with ruthenium on the catalytic performanc
 
 Intermediate transfers (recovery is not inferred from precursor inputs):
 
-| Intermediate / destination | Recovered kg | Used kg | Source details |
+| Intermediate / destination | Prepared/recovered | Transferred | Source details |
 |---|---|---|---|
-| Ru-N-MC intermediate / final batch | Not verified / 확인 못 함 | 0.001 |  |
+| Ru-N-MC intermediate / final batch | Not verified / 확인 못 함 | 0.001 kg |  |
 
 Explicit purchases/inputs (unpriced; missing amounts remain unknown):
 
@@ -1267,9 +1267,9 @@ Source: [Glycerol Electro-Oxidation in Alkaline Medium with Pt-Fe/C Electrocatal
 
 Intermediate transfers (recovery is not inferred from precursor inputs):
 
-| Intermediate / destination | Recovered kg | Used kg | Source details |
+| Intermediate / destination | Prepared/recovered | Transferred | Source details |
 |---|---|---|---|
-| Activated Vulcan carbon / final batch | Not verified / 확인 못 함 | 0.00016 |  |
+| Activated Vulcan carbon / final batch | Not verified / 확인 못 함 | 0.00016 kg |  |
 
 Explicit purchases/inputs (unpriced; missing amounts remain unknown):
 
@@ -1306,9 +1306,9 @@ Source: [Glycerol Electro-Oxidation in Alkaline Medium with Pt-Fe/C Electrocatal
 
 Intermediate transfers (recovery is not inferred from precursor inputs):
 
-| Intermediate / destination | Recovered kg | Used kg | Source details |
+| Intermediate / destination | Prepared/recovered | Transferred | Source details |
 |---|---|---|---|
-| Activated Vulcan carbon / final batch | Not verified / 확인 못 함 | 0.00016 |  |
+| Activated Vulcan carbon / final batch | Not verified / 확인 못 함 | 0.00016 kg |  |
 
 Explicit purchases/inputs (unpriced; missing amounts remain unknown):
 
@@ -1398,7 +1398,7 @@ Source: [Effect of Calcination Temperature on Cu-Modified Ni Catalysts Supported
 
 Intermediate transfers (recovery is not inferred from precursor inputs):
 
-| Intermediate / destination | Recovered kg | Used kg | Source details |
+| Intermediate / destination | Prepared/recovered | Transferred | Source details |
 |---|---|---|---|
 | Mesocellular silica support / final batch | Not verified / 확인 못 함 | Not verified / 확인 못 함 |  |
 
@@ -1438,7 +1438,7 @@ Source: [Effect of Calcination Temperature on Cu-Modified Ni Catalysts Supported
 
 Intermediate transfers (recovery is not inferred from precursor inputs):
 
-| Intermediate / destination | Recovered kg | Used kg | Source details |
+| Intermediate / destination | Prepared/recovered | Transferred | Source details |
 |---|---|---|---|
 | Mesocellular silica support / final batch | Not verified / 확인 못 함 | Not verified / 확인 못 함 |  |
 
@@ -1478,7 +1478,7 @@ Source: [Effect of Calcination Temperature on Cu-Modified Ni Catalysts Supported
 
 Intermediate transfers (recovery is not inferred from precursor inputs):
 
-| Intermediate / destination | Recovered kg | Used kg | Source details |
+| Intermediate / destination | Prepared/recovered | Transferred | Source details |
 |---|---|---|---|
 | Mesocellular silica support / final batch | Not verified / 확인 못 함 | Not verified / 확인 못 함 |  |
 
@@ -1518,7 +1518,7 @@ Source: [Effect of Calcination Temperature on Cu-Modified Ni Catalysts Supported
 
 Intermediate transfers (recovery is not inferred from precursor inputs):
 
-| Intermediate / destination | Recovered kg | Used kg | Source details |
+| Intermediate / destination | Prepared/recovered | Transferred | Source details |
 |---|---|---|---|
 | Mesocellular silica support / final batch | Not verified / 확인 못 함 | Not verified / 확인 못 함 |  |
 
@@ -1590,7 +1590,7 @@ Source: [One-pot synthesis of hierarchical FeZSM-5 zeolites from natural alumino
 
 Intermediate transfers (recovery is not inferred from precursor inputs):
 
-| Intermediate / destination | Recovered kg | Used kg | Source details |
+| Intermediate / destination | Prepared/recovered | Transferred | Source details |
 |---|---|---|---|
 | Activated diatomite / final batch | Not verified / 확인 못 함 | Not verified / 확인 못 함 |  |
 | Depolymerized rectorite / final batch | Not verified / 확인 못 함 | Not verified / 확인 못 함 |  |
@@ -1685,9 +1685,9 @@ Source: [CO <sub>2</sub> Activation over Nanoshaped CeO <sub>2</sub> Decorated w
 
 Intermediate transfers (recovery is not inferred from precursor inputs):
 
-| Intermediate / destination | Recovered kg | Used kg | Source details |
+| Intermediate / destination | Prepared/recovered | Transferred | Source details |
 |---|---|---|---|
-| Prepared CeO2 support / final batch | Not verified / 확인 못 함 | 0.001 |  |
+| Prepared CeO2 support / final batch | Not verified / 확인 못 함 | 0.001 kg |  |
 
 Explicit purchases/inputs (unpriced; missing amounts remain unknown):
 
@@ -1728,9 +1728,9 @@ Source: [CO <sub>2</sub> Activation over Nanoshaped CeO <sub>2</sub> Decorated w
 
 Intermediate transfers (recovery is not inferred from precursor inputs):
 
-| Intermediate / destination | Recovered kg | Used kg | Source details |
+| Intermediate / destination | Prepared/recovered | Transferred | Source details |
 |---|---|---|---|
-| Prepared CeO2 support / final batch | Not verified / 확인 못 함 | 0.001 |  |
+| Prepared CeO2 support / final batch | Not verified / 확인 못 함 | 0.001 kg |  |
 
 Explicit purchases/inputs (unpriced; missing amounts remain unknown):
 
@@ -1771,9 +1771,9 @@ Source: [CO <sub>2</sub> Activation over Nanoshaped CeO <sub>2</sub> Decorated w
 
 Intermediate transfers (recovery is not inferred from precursor inputs):
 
-| Intermediate / destination | Recovered kg | Used kg | Source details |
+| Intermediate / destination | Prepared/recovered | Transferred | Source details |
 |---|---|---|---|
-| Prepared CeO2 support / final batch | Not verified / 확인 못 함 | 0.001 |  |
+| Prepared CeO2 support / final batch | Not verified / 확인 못 함 | 0.001 kg |  |
 
 Explicit purchases/inputs (unpriced; missing amounts remain unknown):
 
@@ -1890,7 +1890,7 @@ Source: [Hierarchical micro/nanostructured silver hollow fiber boosts electrored
 
 Intermediate transfers (recovery is not inferred from precursor inputs):
 
-| Intermediate / destination | Recovered kg | Used kg | Source details |
+| Intermediate / destination | Prepared/recovered | Transferred | Source details |
 |---|---|---|---|
 | Silver hollow fibers / final batch | Not verified / 확인 못 함 | Not verified / 확인 못 함 | Only ten selected tubes enter the final electrode; no exact total recovery or used mass reported. |
 
@@ -2061,9 +2061,9 @@ Source: [Effects of Silica Shell Encapsulated Nanocrystals on Active χ-Fe5C2 Ph
 
 Intermediate transfers (recovery is not inferred from precursor inputs):
 
-| Intermediate / destination | Recovered kg | Used kg | Source details |
+| Intermediate / destination | Prepared/recovered | Transferred | Source details |
 |---|---|---|---|
-| Preformed chi-Fe5C2 nanoparticles / final batch | Not verified / 확인 못 함 | 7e-05 |  |
+| Preformed chi-Fe5C2 nanoparticles / final batch | Not verified / 확인 못 함 | 7e-05 kg |  |
 
 Explicit purchases/inputs (unpriced; missing amounts remain unknown):
 
@@ -2292,9 +2292,9 @@ Source: [Plasma-Assisted Surface Nitridation of Proton Intercalatable WO3 for Ef
 
 Intermediate transfers (recovery is not inferred from precursor inputs):
 
-| Intermediate / destination | Recovered kg | Used kg | Source details |
+| Intermediate / destination | Prepared/recovered | Transferred | Source details |
 |---|---|---|---|
-| Tungsten precursor stock solution / final batch | Not verified / 확인 못 함 | Not verified / 확인 못 함 | Diluted to 25 mL; 4 mL is used. These are solution volumes, not recovered or transferred dry masses. |
+| Tungsten precursor stock solution / final batch | 25 mL | 4 mL | Diluted to 25 mL; 4 mL is used. These are solution volumes, not recovered or transferred dry masses. |
 
 Explicit purchases/inputs (unpriced; missing amounts remain unknown):
 
@@ -2332,9 +2332,9 @@ Source: [Plasma-Assisted Surface Nitridation of Proton Intercalatable WO3 for Ef
 
 Intermediate transfers (recovery is not inferred from precursor inputs):
 
-| Intermediate / destination | Recovered kg | Used kg | Source details |
+| Intermediate / destination | Prepared/recovered | Transferred | Source details |
 |---|---|---|---|
-| Tungsten precursor stock solution / final batch | Not verified / 확인 못 함 | Not verified / 확인 못 함 | Diluted to 25 mL; 4 mL is used. These are solution volumes, not recovered or transferred dry masses. |
+| Tungsten precursor stock solution / final batch | 25 mL | 4 mL | Diluted to 25 mL; 4 mL is used. These are solution volumes, not recovered or transferred dry masses. |
 
 Explicit purchases/inputs (unpriced; missing amounts remain unknown):
 
@@ -2383,10 +2383,10 @@ Reported dry output of this source specimen: 0.00018 kg. This is not a measureme
 
 Intermediate transfers (recovery is not inferred from precursor inputs):
 
-| Intermediate / destination | Recovered kg | Used kg | Source details |
+| Intermediate / destination | Prepared/recovered | Transferred | Source details |
 |---|---|---|---|
-| Isolated Mo-6 molecular precursor / final batch | 0.000296 | 7.88e-05 | Source isolates 296.0 mg Mo-6 and uses 78.8 mg for grafting. |
-| Prepared SiO2-700 / final batch | Not verified / 확인 못 함 | 0.0001601 |  |
+| Isolated Mo-6 molecular precursor / final batch | 0.000296 kg | 7.88e-05 kg | Source isolates 296.0 mg Mo-6 and uses 78.8 mg for grafting. |
+| Prepared SiO2-700 / final batch | Not verified / 확인 못 함 | 0.0001601 kg |  |
 
 Explicit purchases/inputs (unpriced; missing amounts remain unknown):
 
@@ -2479,9 +2479,9 @@ Source: [Au-Decorated Ce–Ti Mixed Oxides for Efficient CO Preferential Photoox
 
 Intermediate transfers (recovery is not inferred from precursor inputs):
 
-| Intermediate / destination | Recovered kg | Used kg | Source details |
+| Intermediate / destination | Prepared/recovered | Transferred | Source details |
 |---|---|---|---|
-| Prepared pure titania support / final batch | Not verified / 확인 못 함 | 0.0005 |  |
+| Prepared pure titania support / final batch | Not verified / 확인 못 함 | 0.0005 kg |  |
 
 Explicit purchases/inputs (unpriced; missing amounts remain unknown):
 

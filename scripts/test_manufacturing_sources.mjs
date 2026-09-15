@@ -82,3 +82,18 @@ test('reported final yield imports with its source without turning into a new me
   assert.equal(imported.intermediate_batches.find((b) => b.id === 'mo6').produced_mass_kg, .000296);
   assert.equal(imported.intermediate_batches.find((b) => b.id === 'silica').produced_mass_kg, null);
 });
+
+test('stock-solution import preserves source volumes without dry-mass inference', () => {
+  const profile = library.profiles.find((p) => p.id === 'wo3-h2n2-1h-electrode-2025');
+  const imported = adaptLiteratureProtocol(profile);
+  const stock = imported.intermediate_batches[0];
+  assert.equal(stock.allocation_basis, 'volume_used');
+  assert.equal(stock.produced_volume_ml, 25);
+  assert.equal(stock.used_volume_ml, 4);
+  assert.equal(stock.produced_mass_kg, null);
+  assert.equal(imported.mode, 'record_only');
+  assert.equal(imported.product_basis, 'electrode');
+  stock.used_volume_ml = 5;
+  assert.equal(stock.input_evidence.used_volume_ml.recorded_value, 4);
+  assert.equal(profile.intermediate_batches[0].used_volume_ml, 4);
+});

@@ -17,6 +17,7 @@ UNITS = {
     "repetitions": "count", "pressure_bar_abs": "bar absolute", "stirring_rpm": "rpm",
     "ph": "pH", "solvent_volume_ml": "mL/batch",
     "produced_mass_kg": "kg/intermediate batch", "used_mass_kg": "kg/destination batch",
+    "produced_volume_ml": "mL/intermediate batch", "used_volume_ml": "mL/destination batch",
 }
 CONTEXT = {"name", "equipment", "atmosphere", "pressure_bar_abs", "stirring_rpm", "ph",
            "solvent", "solvent_volume_ml", "notes", "source_note", "source_record_id", "volume_basis", "id",
@@ -33,7 +34,9 @@ def build_manufacturing_trace(protocol: ManufacturingProtocol, report: dict) -> 
             if key in COLLECTIONS:
                 continue
             effect = "record_only" if key in CONTEXT else "cost_input"
-            if key in {"produced_mass_kg", "used_mass_kg"} and getattr(record, "allocation_basis", "mass_used") == "whole_batch":
+            if key in {"produced_mass_kg", "used_mass_kg"} and getattr(record, "allocation_basis", "mass_used") != "mass_used":
+                effect = "record_only"
+            if key in {"produced_volume_ml", "used_volume_ml"} and getattr(record, "allocation_basis", "mass_used") != "volume_used":
                 effect = "record_only"
             if key == "start_temperature_c" and not has_profile:
                 effect = "record_only"
@@ -81,8 +84,9 @@ def build_manufacturing_trace(protocol: ManufacturingProtocol, report: dict) -> 
         prefix = f"intermediate_batches.{index}."
         collect(batch, prefix)
         whole = batch.allocation_basis == "whole_batch"
-        calculation(prefix + "transfer_fraction", "1 (whole batch charged; no inventory credit)" if whole else "used_mass_kg / produced_mass_kg",
-                    [prefix + "allocation_basis", *([] if whole else [prefix + "used_mass_kg", prefix + "produced_mass_kg"])],
+        quantity = "volume_ml" if batch.allocation_basis == "volume_used" else "mass_kg"
+        calculation(prefix + "transfer_fraction", "1 (whole batch charged; no inventory credit)" if whole else f"used_{quantity} / produced_{quantity}",
+                    [prefix + "allocation_basis", *([] if whole else [prefix + f"used_{quantity}", prefix + f"produced_{quantity}"])],
                     report["intermediate_batches"][index]["transfer_fraction"], "fraction")
         downstream = allocation_paths.get(batch.destination_batch_id)
         calculation(prefix + "allocation_fraction", "transfer_fraction * destination_allocation_fraction" if downstream else "transfer_fraction",

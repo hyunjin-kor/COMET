@@ -56,8 +56,8 @@ export default function ManufacturingLiterature({ evidence, onSelect }: {
         <p className="font-medium">{l('Intermediate transfers', '중간 생성물 분취')}</p>
         {selected.intermediate_batches.map((batch) => <p key={batch.id}>
           <ScientificText text={batch.name} /> → <ScientificText text={selected.intermediate_batches?.find((item) => item.id === batch.destination_batch_id)?.name ?? l('Final catalyst batch', '최종 촉매 배치')} />:
-          {' '}{batch.used_mass_kg ?? l('Not reported', '미확인')} kg
-          {' · '}{l('Recovered', '회수량')} {batch.produced_mass_kg ?? l('Not reported', '미확인')} kg
+          {' '}{(batch.allocation_basis === 'volume_used' ? batch.used_volume_ml : batch.used_mass_kg) ?? l('Not reported', '미확인')} {batch.allocation_basis === 'volume_used' ? 'mL' : 'kg'}
+          {' · '}{l('Prepared/recovered', '제조·회수량')} {(batch.allocation_basis === 'volume_used' ? batch.produced_volume_ml : batch.produced_mass_kg) ?? l('Not reported', '미확인')} {batch.allocation_basis === 'volume_used' ? 'mL' : 'kg'}
         </p>)}
       </div>}
       <ol className="space-y-2">

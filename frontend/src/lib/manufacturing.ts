@@ -84,10 +84,12 @@ export interface ManufacturingProtocol extends SourcedInputs {
 export interface IntermediateBatch extends SourcedInputs {
   id: string;
   name: string;
-  allocation_basis?: 'mass_used' | 'whole_batch';
+  allocation_basis?: 'mass_used' | 'volume_used' | 'whole_batch';
   destination_batch_id?: string;
   produced_mass_kg?: number | null;
   used_mass_kg?: number | null;
+  produced_volume_ml?: number | null;
+  used_volume_ml?: number | null;
   notes?: string;
 }
 

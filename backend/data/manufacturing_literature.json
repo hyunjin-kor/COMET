@@ -18344,7 +18344,32 @@
           "produced_mass_kg": null,
           "used_mass_kg": null,
           "destination_batch_id": "",
-          "notes": "Diluted to 25 mL; 4 mL is used. These are solution volumes, not recovered or transferred dry masses."
+          "notes": "Diluted to 25 mL; 4 mL is used. These are solution volumes, not recovered or transferred dry masses.",
+          "allocation_basis": "volume_used",
+          "produced_volume_ml": 25,
+          "used_volume_ml": 4,
+          "input_evidence": {
+            "produced_volume_ml": {
+              "kind": "literature",
+              "citation": "Plasma-Assisted Surface Nitridation of Proton Intercalatable WO3 for Efficient Electrocatalytic Ammonia Synthesis",
+              "doi": "10.1021/acsenergylett.5c01034",
+              "url": "https://doi.org/10.1021/acsenergylett.5c01034",
+              "locator": "Supporting Information S1-S2 (PDF pp. 2-3); main text paragraph defining plasma-treated specimen names",
+              "accessed_on": "2026-09-15",
+              "recorded_value": 25,
+              "note": "Reported solution volume; same precursor stock, with no inferred density or dry yield."
+            },
+            "used_volume_ml": {
+              "kind": "literature",
+              "citation": "Plasma-Assisted Surface Nitridation of Proton Intercalatable WO3 for Efficient Electrocatalytic Ammonia Synthesis",
+              "doi": "10.1021/acsenergylett.5c01034",
+              "url": "https://doi.org/10.1021/acsenergylett.5c01034",
+              "locator": "Supporting Information S1-S2 (PDF pp. 2-3); main text paragraph defining plasma-treated specimen names",
+              "accessed_on": "2026-09-15",
+              "recorded_value": 4,
+              "note": "Reported solution volume; same precursor stock, with no inferred density or dry yield."
+            }
+          }
         }
       ],
       "limitations": [
@@ -18634,7 +18659,32 @@
           "produced_mass_kg": null,
           "used_mass_kg": null,
           "destination_batch_id": "",
-          "notes": "Diluted to 25 mL; 4 mL is used. These are solution volumes, not recovered or transferred dry masses."
+          "notes": "Diluted to 25 mL; 4 mL is used. These are solution volumes, not recovered or transferred dry masses.",
+          "allocation_basis": "volume_used",
+          "produced_volume_ml": 25,
+          "used_volume_ml": 4,
+          "input_evidence": {
+            "produced_volume_ml": {
+              "kind": "literature",
+              "citation": "Plasma-Assisted Surface Nitridation of Proton Intercalatable WO3 for Efficient Electrocatalytic Ammonia Synthesis",
+              "doi": "10.1021/acsenergylett.5c01034",
+              "url": "https://doi.org/10.1021/acsenergylett.5c01034",
+              "locator": "Supporting Information S1-S2 (PDF pp. 2-3); main text paragraph defining plasma-treated specimen names",
+              "accessed_on": "2026-09-15",
+              "recorded_value": 25,
+              "note": "Reported solution volume; same precursor stock, with no inferred density or dry yield."
+            },
+            "used_volume_ml": {
+              "kind": "literature",
+              "citation": "Plasma-Assisted Surface Nitridation of Proton Intercalatable WO3 for Efficient Electrocatalytic Ammonia Synthesis",
+              "doi": "10.1021/acsenergylett.5c01034",
+              "url": "https://doi.org/10.1021/acsenergylett.5c01034",
+              "locator": "Supporting Information S1-S2 (PDF pp. 2-3); main text paragraph defining plasma-treated specimen names",
+              "accessed_on": "2026-09-15",
+              "recorded_value": 4,
+              "note": "Reported solution volume; same precursor stock, with no inferred density or dry yield."
+            }
+          }
         }
       ],
       "limitations": [
