@@ -45,6 +45,8 @@ def test_benchmark_equal_scores_and_costs_use_slug_not_catalog_order(session, mo
     monkeypatch.setattr(decision_engine, "_load_catalogs", lambda: {"ammonia-cracking": catalog})
     evaluated = decision_engine.evaluate_benchmark_family(session=session, family="ammonia-cracking")
     candidates = evaluated["candidates"]
+    assert all(c["manufacturing_evidence"]["profile_ids"] == [] for c in candidates)
+    assert all(c["manufacturing_evidence"]["review_date"] == "" for c in candidates)
     assert candidates[0]["scores"] == candidates[1]["scores"]
     assert [item["slug"] for item in candidates] == ["alpha", "zeta"]
     assert rank(list(reversed(candidates)), dict.fromkeys(DIMS, 0.25)) == ["alpha", "zeta"]

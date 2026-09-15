@@ -324,6 +324,15 @@ export function buildRangeCsv(result: EstimateRangeResult): string {
   ));
   if (result.fixed_recipe_assumptions) sections.push(rows(['Fixed recipe assumptions', result.fixed_recipe_assumptions]));
   if (result.fixed_manufacturing_assumptions) sections.push(rows(['Fixed manufacturing assumptions', result.fixed_manufacturing_assumptions]));
+  if (result.manufacturing_analysis) {
+    const analysis = result.manufacturing_analysis;
+    sections.push(rows(['Manufacturing assumptions', analysis.assumptions], ['Protocol SHA256', analysis.protocol_sha256],
+      ['Path', 'Baseline', 'Unit', 'Absolute lower bound', 'Absolute upper bound', 'Distribution', 'Bound rationale', 'Baseline source', 'Original source value'],
+      ...analysis.variables.map((v): CsvCell[] => [v.path, v.value, v.unit, v.low, v.high, v.distribution, v.rationale, v.evidence?.citation,
+        v.evidence?.recorded_value == null ? null : String(v.evidence.recorded_value)])));
+  }
+  if (result.histogram) sections.push(rows(['Equal-width histogram of successful samples'], ['Lower endpoint', 'Upper endpoint', 'Count', 'Percent'],
+    ...result.histogram.map((bin): CsvCell[] => [bin.low, bin.high, bin.count, bin.percent])));
   if (applied.length) {
     sections.push(
       rows(

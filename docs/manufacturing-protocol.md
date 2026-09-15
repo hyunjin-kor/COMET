@@ -150,7 +150,30 @@ rates and gas prices; the common-conditions column additionally shares the refer
 electricity tariff, labor rate and margin. This is not complete procurement-price
 harmonization across all operating inputs.
 
-Monte Carlo uses the chosen manufacturing model but keeps protocol conditions,
-batch yield and operating rates fixed. Its current intervals sample the existing
-material-price/order inputs, not temperature/time/utility uncertainty. Neither this
-extension nor its synthetic regression tests establish industrial cost accuracy.
+## Manufacturing sensitivity and uncertainty
+
+Estimate Range preserves the calculator's full protocol and batch cost model.
+Select an active numeric input and enter absolute lower and upper values in its
+displayed unit. For example, a 2–3 h duration is a time interval, not a percentage
+change to an unspecified process. Bounds start at the baseline value; the library
+does not invent uncertainty distributions. The rationale field records the user's
+assumption or supporting evidence for each bound.
+
+Endpoint sensitivity changes one input at a time while retaining other baseline
+inputs. Monte Carlo samples selected inputs independently and uniformly within
+their absolute bounds; repetition counts use a discrete uniform distribution.
+Unselected conditions remain fixed. Time-linked gas volumes follow sampled times.
+Temperature changes only the declared heating schedule, not input power, yield,
+activity or a new operating regime. Correlations require a separately specified
+joint scenario and are not inferred. Recovered mass and used mass must satisfy the
+same constraints on every draw; invalid draws are counted and excluded, never
+clamped. Result statistics are conditional on successful draws and are scenario
+ranges, not statistical confidence intervals for industrial costs.
+
+The reproducibility JSON includes the full baseline request, resolved pricing
+context, protocol hash, bounds, source snapshots, seed and failure reasons. CSV
+includes bounds, source values and the actual equal-width sample histogram.
+Composition price bands do not substitute for batch purchase prices; choose the
+individual purchase price fields instead. Batch order totals remain linear and
+are excluded from the interface's scale multiplier. Neither these analyses nor
+synthetic regression tests establish industrial cost accuracy.

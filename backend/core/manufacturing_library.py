@@ -26,6 +26,11 @@ def reviewed_citation(citation: dict) -> dict:
 
 def candidate_manufacturing_evidence(family: str, slug: str) -> dict:
     data = _library()
-    review = next(row for row in data["candidates"] if row["family"] == family and row["slug"] == slug)
+    review = next((row for row in data["candidates"] if row["family"] == family and row["slug"] == slug), None)
+    if review is None:
+        return {"family": family, "slug": slug, "title": slug, "status": "screening_only",
+                "profile_ids": [], "profiles": [], "source_dois": [], "doi_count": 0,
+                "crossref_verified_count": 0, "review_date": "",
+                "notes": ["No preparation assessment is registered for this candidate; exact preparation is not verified."]}
     profiles = [p for p in data["profiles"] if p["id"] in review["profile_ids"]]
     return deepcopy({**review, "profiles": profiles, "review_date": data["review_date"]})

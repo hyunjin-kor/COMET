@@ -1028,6 +1028,8 @@ export const refreshPrices = (source?: 'yahoo') => {
 };
 
 export interface EstimateRangeResult {
+  manufacturing_analysis?: ManufacturingAnalysis;
+  histogram?: Array<{ low: number; high: number; count: number; percent: number }>;
   fixed_recipe_assumptions?: string;
   fixed_manufacturing_assumptions?: string;
   mean: number;
@@ -1059,6 +1061,8 @@ export const runEstimateRange = (
   calculationInput: CostInput,
   nSimulations: number,
   uncertainties: Record<string, [number, number]>,
+  manufacturingRanges: ManufacturingRange[] = [],
+  seed?: number,
 ) =>
   request<EstimateRangeResult>('/uncertainty', {
     method: 'POST',
@@ -1066,8 +1070,31 @@ export const runEstimateRange = (
       calculation_input: calculationInput,
       n_simulations: nSimulations,
       uncertainties,
+      manufacturing_ranges: manufacturingRanges,
+      seed,
     }),
   });
+
+export interface ManufacturingRange { path: string; low: number; high: number; rationale?: string }
+export interface ManufacturingVariable {
+  path: string; value: number; unit: string; source_status: string;
+  evidence: import('./manufacturing').InputEvidence | null;
+}
+export interface ManufacturingAnalysis {
+  protocol_sha256: string;
+  variables: Array<ManufacturingVariable & ManufacturingRange & { distribution: string }>;
+  assumptions: string;
+  calculation_input: CostInput;
+  resolved_context: Record<string, unknown>;
+}
+export interface ManufacturingSensitivity extends ManufacturingAnalysis {
+  baseline_usd_kg: number; unit: 'USD/kg'; metric: string; method: string;
+  rows: Array<ManufacturingVariable & ManufacturingRange & {
+    low_usd_kg: number | null; high_usd_kg: number | null; low_error: string | null; high_error: string | null;
+  }>;
+}
+export const fetchManufacturingVariables = (input: CostInput) => request<{ variables: ManufacturingVariable[]; protocol_sha256: string }>('/uncertainty/manufacturing-inputs', { method: 'POST', body: JSON.stringify(input) });
+export const runManufacturingSensitivity = (input: CostInput, ranges: ManufacturingRange[]) => request<ManufacturingSensitivity>('/uncertainty/manufacturing-sensitivity', { method: 'POST', body: JSON.stringify({ calculation_input: input, manufacturing_ranges: ranges }) });
 
 export interface BenchmarkFamilySummary {
   family: string;

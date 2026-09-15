@@ -14,10 +14,10 @@ export default function EstimateRangeBarChart({ data }: { data: HistogramBar[] }
       <BarChart data={data} barSize={54}>
         <CartesianGrid stroke="rgba(78,89,104,0.18)" vertical={false} />
         <XAxis dataKey="range" tick={{ fill: '#8b95a1', fontSize: 10 }} axisLine={false} tickLine={false} />
-        <YAxis tick={{ fill: '#8b95a1', fontSize: 11 }} axisLine={false} tickLine={false} />
+        <YAxis tickFormatter={(value: number) => `${value}%`} tick={{ fill: '#8b95a1', fontSize: 11 }} axisLine={false} tickLine={false} />
         <Tooltip
           cursor={{ fill: 'rgba(13,148,136,0.06)' }}
-          formatter={(value) => [`${value}%`, t('Share of simulations')]}
+          formatter={(value) => [`${Number(value).toFixed(1)}%`, t('Share of simulations')]}
           contentStyle={{
             borderRadius: 14,
             border: '1px solid rgba(25,31,40,0.10)',

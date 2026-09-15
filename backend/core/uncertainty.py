@@ -12,8 +12,13 @@ import numpy as np
 
 from backend.core.constants import LB_PER_KG
 from backend.core.cost_engine import estimate_catalyst_cost
+from backend.core.manufacturing_analysis import (
+    prepare_manufacturing_ranges,
+    varied_manufacturing_protocol,
+)
 from backend.core.step_method import determine_scale, fit_steps_to_scale
 from backend.schemas.cost_input import CostCalculationRequest
+from backend.schemas.manufacturing_analysis import ManufacturingRange
 
 
 def _sample_steps(steps: list[str], original_size: float, sampled_size: float) -> list[str]:
@@ -103,6 +108,7 @@ def run_cost_request_monte_carlo(
     uncertainties: dict[str, tuple[float, float]] | None = None,
     n_simulations: int = 1000,
     seed: int | None = None,
+    manufacturing_ranges: list[ManufacturingRange] | None = None,
 ) -> dict:
     """Run Monte Carlo analysis from the full calculator request."""
 
@@ -139,6 +145,11 @@ def run_cost_request_monte_carlo(
         manufacturing_protocol=req.manufacturing_protocol.model_dump() if req.manufacturing_protocol else None,
     )
 
+    manufacturing_analysis = prepare_manufacturing_ranges(baseline.get("manufacturing"), manufacturing_ranges) if manufacturing_ranges else None
+    if manufacturing_analysis:
+        manufacturing_analysis["calculation_input"] = req.model_dump(mode="json")
+        manufacturing_analysis["resolved_context"] = context
+    batch_cost = bool(req.manufacturing_protocol and req.manufacturing_protocol.mode == "batch_cost")
     area_cost = baseline.get("electrode_model") is not None
     precision = 6 if area_cost else 4
 
@@ -197,9 +208,14 @@ def run_cost_request_monte_carlo(
             order_size *= order_factor
 
         try:
+            manufacturing = req.manufacturing_protocol
+            if manufacturing_analysis:
+                values = {v["path"]: int(rng.integers(int(v["low"]), int(v["high"]) + 1)) if v["distribution"] == "discrete_uniform"
+                          else float(rng.uniform(v["low"], v["high"])) for v in manufacturing_analysis["variables"]}
+                manufacturing = varied_manufacturing_protocol(manufacturing, values)
             result = estimate_catalyst_cost(
                 components=varied_components,
-                steps=_sample_steps(context["steps"], req.order_size_tons, order_size),
+                steps=context["steps"] if batch_cost else _sample_steps(context["steps"], req.order_size_tons, order_size),
                 catalyst_domain=req.catalyst_domain,
                 application_family=context["application_family"],
                 order_size_tons=order_size,
@@ -216,7 +232,7 @@ def run_cost_request_monte_carlo(
                 production_rate_ton_per_day=req.production_rate_ton_per_day,
                 production_rate_note=req.production_rate_note,
                 consumables=[c.model_dump() for c in req.consumables],
-                manufacturing_protocol=req.manufacturing_protocol.model_dump() if req.manufacturing_protocol else None,
+                manufacturing_protocol=manufacturing.model_dump() if manufacturing else None,
             )
             results.append(outcome(result))
         except (ValueError, KeyError) as exc:
@@ -227,12 +243,15 @@ def run_cost_request_monte_carlo(
         raise ValueError("All simulations failed")
 
     arr = np.array(results)
+    counts, edges = np.histogram(arr, bins=10) if np.ptp(arr) > 0 else ([len(arr)], [arr[0], arr[0]])
 
     return {
         "n_simulations": n_simulations,
         "n_successful": len(results),
         "n_failed": n_simulations - len(results),
         "failure_reasons": dict(failures),
+        "histogram": [{"low": float(edges[i]), "high": float(edges[i + 1]), "count": int(count),
+                       "percent": float(count / len(arr) * 100)} for i, count in enumerate(counts)],
         "seed": seed,
         "mean": round(float(np.mean(arr)), precision),
         "median": round(float(np.median(arr)), precision),
@@ -257,7 +276,8 @@ def run_cost_request_monte_carlo(
                                   if not area_cost or key in {"active_component_price", "electrode_adjunct_price"}},
         **({"fixed_manufacturing_assumptions": "Manufacturing temperatures, durations, input powers, gas "
             "flows, batch yield and operating rates remain fixed. This interval does not sample protocol uncertainty."}
-           if req.manufacturing_protocol else {}),
+           if req.manufacturing_protocol and not manufacturing_analysis else {}),
+        **({"manufacturing_analysis": manufacturing_analysis} if manufacturing_analysis else {}),
         **({"fixed_recipe_assumptions": "Precursor content, purity, retention yield, production rate and "
             "consumable quantities/prices are fixed; precursor purchase prices follow their component role."}
            if req.consumables or any(c.get("recipe_consumption") for c in context["resolved_components"]) else {}),

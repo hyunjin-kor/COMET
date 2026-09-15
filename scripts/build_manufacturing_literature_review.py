@@ -46,6 +46,12 @@ def render(data):
              "allocation. Successive transfers multiply their fractions; each intermediate has one destination, and circular paths are rejected. "
              "Branching transfers and co-products require a separately defined boundary. Incurred and allocated costs, input sources "
              "and equations are preserved in the calculation trace and exports.", "",
+             "Manufacturing endpoint sensitivity changes one selected numeric cost input at a time. "
+             "Monte Carlo uses independent uniform distributions within user-specified absolute bounds, with discrete integer draws for repetitions. "
+             "Unselected inputs remain fixed. Linked gas durations follow the sampled operation time; temperature does not infer power or yield. "
+             "Invalid combinations are counted and excluded without clamping, so statistics are conditional on successful draws. "
+             "Bounds describe declared scenarios, not source-validated distributions or industrial confidence intervals. "
+             "JSON exports retain the baseline request, resolved prices, protocol hash, input evidence, seed, bounds and failures.", "",
              "The frozen May 2026 screening estimates and rankings use the original composition and process assumptions. "
              "The preparation audit does not retrospectively validate these assumptions. No industrial utility use, batch yield or manufacturing cost was inferred from a paper's reaction temperature.", "",
              "## Candidate coverage", "",

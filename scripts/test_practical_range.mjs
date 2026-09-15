@@ -77,6 +77,20 @@ test('old thermal drafts retain nominal throughput, balanced support and legacy 
   assert.equal(buildRangeInputFromDraft({ ...draft(), applicationFamily: 'fuel_cell' }).application_family, 'general');
 });
 
+test('batch ranges preserve the actual protocol and do not revert to template processing', () => {
+  const protocol = { mode: 'batch_cost', materials_basis: 'purchases', finished_batch_mass_kg: .002,
+    operations: [{ name: 'Source preparation', duration_h: 2 }], intermediate_batches: [{ id: 'support', destination_batch_id: 'pellets' }] };
+  const value = { ...draft(), manufacturingProtocol: protocol, thermalTemplateId: 'old-template', productionRate: 2, productionRateNote: 'Unused rate', includeSpentValue: true };
+  const input = buildRangeInputFromDraft(value);
+  assert.deepEqual(input.manufacturing_protocol, protocol);
+  assert.equal(input.template_id, undefined);
+  assert.equal(input.production_rate_ton_per_day, undefined);
+  assert.equal(input.include_spent_value, false);
+  const recorded = buildRangeInputFromDraft({ ...value, manufacturingProtocol: { ...protocol, mode: 'record_only' } });
+  assert.equal(recorded.manufacturing_protocol.mode, 'record_only');
+  assert.equal(recorded.template_id, 'old-template');
+});
+
 test('split support retains each fraction and each optional recipe instead of auto-balancing one row', () => {
   const value = draft();
   value.rows[1].wt_pct = 50;
@@ -105,6 +119,7 @@ test('the real range handler passes the currently selected reference price basis
   const calls = [];
   const handleRun = loadFunction('handleRun', {
     calculationInput, draft: draft(), basis: 'reference', nSim: 1000,
+    purchaseBasis: false, batchCost: false, manufacturingRanges: [], seed: 20260915,
     activeBandPct: 30, promoterBandPct: 20, supportBandPct: 20, adjunctBandPct: 15, orderBandPct: 20,
     bandBounds: loadFunction('bandBounds'), setLoading() {}, setError(error) { assert.equal(error, ''); }, setResult() {}, setActiveSection() {},
     async runEstimateRange(...args) { calls.push(args); return {}; },
@@ -113,6 +128,22 @@ test('the real range handler passes the currently selected reference price basis
   assert.equal(calls.length, 1);
   assert.deepEqual(calls[0][0], { ...calculationInput, price_basis: 'reference' });
   assert.equal(calls[0][1], 1000);
+});
+
+test('batch purchase analysis sends absolute manufacturing bounds instead of inactive composition bands', async () => {
+  const manufacturingRanges = [{ path: 'finished_batch_mass_kg', low: .002, high: .004, rationale: 'Synthetic bound' }];
+  const calculationInput = buildRangeInputFromDraft({ ...draft(), manufacturingProtocol: { mode: 'batch_cost', materials_basis: 'purchases', operations: [{ name: 'Synthetic' }] } });
+  const calls = [];
+  await loadFunction('handleRun', {
+    calculationInput, draft: draft(), basis: 'reference', nSim: 100,
+    purchaseBasis: true, batchCost: true, manufacturingRanges, seed: 15,
+    setLoading() {}, setError(error) { assert.equal(error, ''); }, setResult() {}, setActiveSection() {},
+    async runEstimateRange(...args) { calls.push(args); return {}; },
+  })();
+  assert.deepEqual(calls[0][2], {});
+  assert.deepEqual(calls[0][3], manufacturingRanges);
+  assert.equal(calls[0][4], 15);
+  assert.equal(calls[0][0].manufacturing_protocol.mode, 'batch_cost');
 });
 
 test('electrode area prices never receive the kg/lb conversion used by thermal ranges', () => {
@@ -148,6 +179,15 @@ test('range CSV keeps area baseline, metric, seed and failed-run disclosure', ()
   const partial = buildRangeCsv({ ...rangeResult, n_successful: 58, n_failed: 42, failure_reasons: { 'Uncosted fixture': 42 } });
   assert.ok(partial.includes('Statistics exclude failed runs'));
   assert.ok(partial.includes('Uncosted fixture,42'));
+});
+
+test('manufacturing range CSV preserves absolute units, source values and actual histogram counts', () => {
+  const text = buildRangeCsv({ ...rangeResult, histogram: [{ low: 1, high: 2, count: 100, percent: 100 }],
+    manufacturing_analysis: { protocol_sha256: 'synthetic-hash', assumptions: 'Declared independent bounds',
+      variables: [{ path: 'operations.0.duration_h', value: 2, unit: 'h', low: 2, high: 3, distribution: 'uniform', rationale: 'Synthetic test', evidence: { citation: 'Synthetic source', recorded_value: 1 } }] } });
+  assert.ok(text.includes('operations.0.duration_h,2,h,2,3,uniform,Synthetic test,Synthetic source,1'));
+  assert.ok(text.includes('1,2,100,100'));
+  assert.ok(text.includes('Protocol SHA256,synthetic-hash'));
 });
 
 test('CSV treats formula-like user labels as quoted text without changing numeric values', () => {

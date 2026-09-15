@@ -1,6 +1,6 @@
 import { useLang } from '../lib/i18n';
 import type { ManufacturingReport } from '../lib/manufacturing';
-import { manufacturingInputLabel } from '../lib/manufacturing-labels';
+import { manufacturingPathLabel } from '../lib/manufacturing-labels';
 
 export default function ManufacturingTrace({ report }: { report: ManufacturingReport }) {
   const { lang } = useLang();
@@ -8,15 +8,7 @@ export default function ManufacturingTrace({ report }: { report: ManufacturingRe
   const trace = report.trace;
   if (!trace) return null;
   const show = (value: unknown) => value == null ? l('Unknown', '미확인') : typeof value === 'number' ? value.toLocaleString(undefined, { maximumFractionDigits: 6 }) : String(value);
-  const pathLabel = (path: string) => {
-    const parts = path.split('.');
-    const op = parts[0] === 'operations' ? report.protocol.operations[Number(parts[1])] : null;
-    const batch = parts[0] === 'intermediate_batches' ? report.protocol.intermediate_batches?.[Number(parts[1])] : null;
-    const segment = parts[2] === 'temperature_profile' ? `${l('segment', '구간')} ${Number(parts[3]) + 1}` : '';
-    const gas = parts[2] === 'gases' ? op?.gases?.[Number(parts[3])]?.name : '';
-    const purchase = parts[2] === 'purchases' ? op?.purchases?.[Number(parts[3])]?.name : '';
-    return [batch?.name || op?.name, segment || gas || purchase, manufacturingInputLabel(parts.at(-1)!, lang)].filter(Boolean).join(' / ');
-  };
+  const pathLabel = (path: string) => manufacturingPathLabel(report.protocol, path, lang);
   const statuses: Record<string, string> = {
     matches_record: l('Matches source snapshot', '출처 저장 당시 값과 일치'), modified: l('Changed from source snapshot', '출처 저장 당시 값과 다름'),
     missing: l('Unknown', '미확인'), default: l('Default value without source', '기본값 · 출처 없음'), unattributed: l('No input source', '항목 출처 없음'),

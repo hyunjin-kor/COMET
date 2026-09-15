@@ -1,3 +1,5 @@
+import type { ManufacturingProtocol } from './manufacturing';
+
 const labels: Record<string, [string, string]> = {
   finished_batch_mass_kg: ['Finished dry mass (kg)', '최종 건조 수득량 (kg)'],
   produced_mass_kg: ['Recovered intermediate mass (kg)', '중간 생성물 회수량 (kg)'],
@@ -35,4 +37,14 @@ const labels: Record<string, [string, string]> = {
 
 export function manufacturingInputLabel(field: string, lang: string) {
   return labels[field]?.[lang === 'ko' ? 1 : 0] ?? field;
+}
+
+export function manufacturingPathLabel(protocol: ManufacturingProtocol, path: string, lang: string): string {
+  const parts = path.split('.');
+  const op = parts[0] === 'operations' ? protocol.operations[Number(parts[1])] : null;
+  const batch = parts[0] === 'intermediate_batches' ? protocol.intermediate_batches?.[Number(parts[1])] : null;
+  const segment = parts[2] === 'temperature_profile' ? `${lang === 'ko' ? '구간' : 'segment'} ${Number(parts[3]) + 1}` : '';
+  const gas = parts[2] === 'gases' ? op?.gases?.[Number(parts[3])]?.name : '';
+  const purchase = parts[2] === 'purchases' ? op?.purchases?.[Number(parts[3])]?.name : '';
+  return [batch?.name || op?.name, segment || gas || purchase, manufacturingInputLabel(parts.at(-1)!, lang)].filter(Boolean).join(' / ');
 }
