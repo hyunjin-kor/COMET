@@ -92,6 +92,7 @@ export default function ManufacturingProtocolFields({ value, onChange, allowBatc
               <option value="">{l('Final catalyst batch', '최종 촉매 배치')}</option>{value.intermediate_batches.map((batch) => <option key={batch.id} value={batch.id}>{batch.name}</option>)}
             </select></label>}
             <TextField label={l('Equipment / model', '장비·모델')} value={op.equipment} onChange={(v) => update(index, { equipment: v })} />
+            <TextField label={l('Same equipment and cost boundary ID (optional)', '동일 장비·비용 범위 식별자 (선택)')} value={op.equipment_comparison_key} onChange={(v) => update(index, { equipment_comparison_key: v })} />
             <NumberField label={l('Repetitions', '반복 횟수')} value={op.repetitions ?? 1} min={1} onChange={(v) => update(index, { repetitions: v ?? 1 })} />
             <TextField label={l('Atmosphere / gas composition', '분위기·가스 조성')} value={op.atmosphere} onChange={(v) => update(index, { atmosphere: v })} />
             <NumberField label={l('Absolute pressure (bar)', '절대압 (bar)')} value={op.pressure_bar_abs} onChange={(v) => update(index, { pressure_bar_abs: v })} />
@@ -148,6 +149,7 @@ export default function ManufacturingProtocolFields({ value, onChange, allowBatc
               {(!gas.duration_basis || gas.duration_basis === 'entered') && <NumberField label={l('Gas use time (h)', '가스 사용 시간 (h)')} value={gas.duration_h} onChange={(v) => change({ duration_h: v })} />}
               <NumberField label={l('Gas price (USD/m³)', '가스 단가 (USD/m³)')} value={gas.price_usd_per_m3} onChange={(v) => change({ price_usd_per_m3: v })} />
               <TextField label={l('Shared flow / price reference T and P', '유량·단가의 공통 기준 온도·압력')} value={gas.volume_basis} onChange={(v) => change({ volume_basis: v })} />
+              <TextField label={l('Same gas grade and supply boundary ID (optional)', '동일 가스 등급·공급 범위 식별자 (선택)')} value={gas.comparison_key} onChange={(v) => change({ comparison_key: v })} />
               <button type="button" className="self-end cp-button-secondary px-3 py-2 text-xs" onClick={() => update(index, { gases: op.gases!.filter((_, j) => i !== j) })}>{l('Remove gas', '가스 삭제')}</button>
               <div className="col-span-full"><ManufacturingInputSources record={gas} fields={['name', 'flow_l_per_min', 'duration_h', 'duration_basis', 'price_usd_per_m3', 'volume_basis']} onChange={(input_evidence) => change({ input_evidence })} /></div>
             </div>;

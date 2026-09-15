@@ -2,7 +2,7 @@
   "target": "Journal of Chemical Information and Modeling, Application Note",
   "word_limit_abstract_text_graphics": 5000,
   "abstract_words": 84,
-  "text_words_excluding_references": 2513,
+  "text_words_excluding_references": 2512,
   "graphics": [
     {
       "figure": 1,
@@ -26,9 +26,9 @@
     }
   ],
   "graphics_word_equivalent": 2100,
-  "total_word_equivalent": 4697,
+  "total_word_equivalent": 4696,
   "toc_word_equivalent_allowance": 300,
-  "total_word_equivalent_with_toc": 4997,
+  "total_word_equivalent_with_toc": 4996,
   "toc_count_note": "A conservative 300-word allowance is tracked separately because the Application Note rule does not explicitly resolve TOC inclusion.",
   "figure_count": 4,
   "table_count": 0,

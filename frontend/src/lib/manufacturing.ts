@@ -21,6 +21,7 @@ export interface TemperatureSegment extends SourcedInputs {
 
 export interface ProcessGas extends SourcedInputs {
   name: string;
+  comparison_key?: string;
   flow_l_per_min?: number | null;
   duration_h?: number | null;
   duration_basis?: 'entered' | 'operation' | 'holds';
@@ -32,6 +33,7 @@ export interface ManufacturingOperation extends SourcedInputs {
   name: string;
   intermediate_batch_id?: string;
   equipment?: string;
+  equipment_comparison_key?: string;
   atmosphere?: string;
   pressure_bar_abs?: number | null;
   stirring_rpm?: number | null;
@@ -57,6 +59,7 @@ export interface ManufacturingOperation extends SourcedInputs {
 
 export interface BatchPurchase extends SourcedInputs {
   name: string;
+  comparison_key?: string;
   quantity?: number | null;
   unit: 'kg' | 'g' | 'L' | 'mL' | 'item';
   quantity_basis?: 'entered' | 'solvent_volume';

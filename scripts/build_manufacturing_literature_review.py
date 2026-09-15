@@ -52,6 +52,12 @@ def render(data):
              "Invalid combinations are counted and excluded without clamping, so statistics are conditional on successful draws. "
              "Bounds describe declared scenarios, not source-validated distributions or industrial confidence intervals. "
              "JSON exports retain the baseline request, resolved prices, protocol hash, input evidence, seed, bounds and failures.", "",
+             "Saved batch comparisons harmonize purchase, gas and equipment prices only for explicit specification identifiers. "
+             "These identifiers declare equivalent chemical forms, grades, concentrations and purchasing or cost boundaries; "
+             "names alone do not establish equivalence. Matching price units and gas reference conditions are required; no unit or density conversion is inferred. "
+             "The reference estimate supplies the shared price and its input evidence; absent items use the lowest selected estimate ID. "
+             "Unkeyed items retain their own prices. Common operating assumptions additionally use the reference electricity tariff, labor rate, overheads and margin. "
+             "Quantities, yields and sequences remain individual. Original saved cases are preserved, and comparison JSON retains recalculated protocols, evidence and price sources.", "",
              "The frozen May 2026 screening estimates and rankings use the original composition and process assumptions. "
              "The preparation audit does not retrospectively validate these assumptions. No industrial utility use, batch yield or manufacturing cost was inferred from a paper's reaction temperature.", "",
              "## Candidate coverage", "",

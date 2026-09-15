@@ -43,6 +43,28 @@ def _identity(component: dict) -> str:
     return f"manual:{name}:{grade}"
 
 
+def _batch_prices(protocol: dict):
+    """Keys declare equivalent specifications; names alone never establish them."""
+    def entry(kind, record, field, unit, key_field="comparison_key", basis=""):
+        key = " ".join(record.get(key_field, "").split()).casefold()
+        return (f"batch:{kind}:{key}" if key else None, record, field, unit, " ".join(basis.split()).casefold())
+    for op in protocol["operations"]:
+        yield entry("equipment", op, "equipment_usd_h", "USD/h", "equipment_comparison_key")
+        for gas in op.get("gases", []):
+            yield entry("gas", gas, "price_usd_per_m3", "USD/m3", basis=gas.get("volume_basis", ""))
+        if protocol.get("materials_basis") == "purchases":
+            for purchase in op.get("purchases", []):
+                yield entry("purchase", purchase, "price_usd_per_unit", "USD/" + purchase["unit"])
+
+
+def _replace_price_source(record: dict, field: str, evidence: dict | None):
+    sources = record.setdefault("input_evidence", {})
+    if evidence:
+        sources[field] = deepcopy(evidence)
+    else:
+        sources.pop(field, None)
+
+
 def _headline(result: dict, domain: str) -> float | None:
     if domain == "electrocatalyst":
         value = (result.get("electrode_model") or {}).get("cost_per_cm2_usd")
@@ -96,6 +118,14 @@ def _compare(req: EstimateComparisonRequest, session: Session) -> dict:
     if any(bool(item.manufacturing_protocol and item.manufacturing_protocol.mode == "batch_cost") != batch_mode
            for item in inputs.values()):
         raise ValueError("Compare batch costing with batch costing, or Step Method with Step Method")
+    purchase_basis = {
+        key: batch_mode and item.manufacturing_protocol.materials_basis == "purchases"
+        for key, item in inputs.items()
+    }
+    composition_prices_used = {
+        key: not purchase_basis[key] or item.include_spent_value or reference.include_spent_value
+        for key, item in inputs.items()
+    }
     shared = {
         key: value for key, value in reference.model_dump().items() if key in _SHARED_FIELDS
     }
@@ -119,16 +149,18 @@ def _compare(req: EstimateComparisonRequest, session: Session) -> dict:
         "differences are not a route-only effect.",
         "Saved results may use an older model. The saved-to-repriced difference is not proof "
         "of a pure market-price effect when the model has changed.",
-        "Manual materials with the same name and grade are assumed identical; distinct grades "
-        "must have distinct names or purchase-evidence grades.",
     ]
+    if any(composition_prices_used.values()):
+        warnings.append("Manual materials with the same name and grade are assumed identical; distinct grades "
+                        "must have distinct names or purchase-evidence grades.")
     pool: dict[str, dict] = {}
     if batch_mode:
-        warnings.append("Batch comparisons preserve each protocol, batch yield, equipment rates and gas prices. "
-                        "Shared conditions also use the reference electricity tariff, labor rate and selling margin. "
+        warnings.append("Batch purchase, gas and equipment prices share only explicit comparison keys with matching units and gas reference conditions. "
+                        "A key declares equivalent grades, concentrations and purchasing/cost boundaries; this equivalence is not independently verified. "
+                        "Items without a comparison key retain their own prices. Shared conditions also use the reference electricity tariff, labor rate and selling margin. "
                         "Order totals are linear batch equivalents, not an industrial scale-up model.")
         shared["batch_cost_rates"] = {key: getattr(reference.manufacturing_protocol, key) for key in
-                                      ("electricity_usd_kwh", "labor_usd_h", "selling_margin_fraction", "source_note")}
+                                      ("electricity_usd_kwh", "labor_usd_h", "selling_margin_fraction")}
     priority = [req.reference_estimate_id] + [
         key for key in sorted(records) if key != req.reference_estimate_id
     ]
@@ -146,7 +178,19 @@ def _compare(req: EstimateComparisonRequest, session: Session) -> dict:
 
     for estimate_id in priority:
         context = contexts[estimate_id]
-        for component in context["resolved_components"]:
+        if batch_mode:
+            local_prices = {}
+            for key, record, field, unit, volume_basis in _batch_prices(inputs[estimate_id].manufacturing_protocol.model_dump()):
+                if key is None:
+                    continue
+                values = {field: record[field], "unit": unit, "volume_basis": volume_basis}
+                if key in pool and (pool[key]["values"]["unit"] != unit or pool[key]["values"]["volume_basis"] != volume_basis):
+                    raise ValueError("Shared batch comparison key has incompatible units or gas reference conditions: " + key)
+                if key in local_prices and local_prices[key] != values:
+                    raise ValueError("Conflicting prices for a batch comparison key within one saved estimate: " + key)
+                local_prices[key] = values
+                record_price(key, values, estimate_id, record.get("input_evidence", {}).get(field))
+        for component in context["resolved_components"] if composition_prices_used[estimate_id] else []:
             evidence = next((entry for entry in context["resolved_materials"]
                              if entry.get("material_key") == component.get("material_key")
                              and entry.get("used_for", "").startswith("component:")), None)
@@ -157,7 +201,7 @@ def _compare(req: EstimateComparisonRequest, session: Session) -> dict:
                 key = "precursor:" + recipe["precursor_name"].strip().casefold()
                 record_price(key, {"price_per_kg": recipe["price_per_kg"],
                                    "source_note": recipe["source_note"]}, estimate_id)
-        for consumable in inputs[estimate_id].model_dump().get("consumables", []):
+        for consumable in inputs[estimate_id].model_dump().get("consumables", []) if not purchase_basis[estimate_id] else []:
             key = "consumable:" + consumable["name"].strip().casefold()
             record_price(key, {"price_per_kg": consumable["price_per_kg"],
                                "source_note": consumable["source_note"]}, estimate_id)
@@ -173,7 +217,9 @@ def _compare(req: EstimateComparisonRequest, session: Session) -> dict:
                 values = {field: electrode.get(field, 0.0) for field in fields}
                 record_price(identity, values, estimate_id)
     identity_names: dict[str, set[str]] = {}
-    for context in contexts.values():
+    for estimate_id, context in contexts.items():
+        if not composition_prices_used[estimate_id]:
+            continue
         for component in context["resolved_components"]:
             name = str(component.get("name", "")).strip().casefold()
             identity_names.setdefault(name, set()).add(_identity(component))
@@ -199,8 +245,9 @@ def _compare(req: EstimateComparisonRequest, session: Session) -> dict:
     for estimate_id in req.estimate_ids:
         original = inputs[estimate_id]
         context = deepcopy(contexts[estimate_id])
-        context["resolved_materials"] = []
-        for component in context["resolved_components"]:
+        if composition_prices_used[estimate_id]:
+            context["resolved_materials"] = []
+        for component in context["resolved_components"] if composition_prices_used[estimate_id] else []:
             price = pool[_identity(component)]
             component.update(price["values"])
             if not component.get("material_key"):
@@ -217,7 +264,13 @@ def _compare(req: EstimateComparisonRequest, session: Session) -> dict:
             if recipe:
                 recipe.update(pool["precursor:" + recipe["precursor_name"].strip().casefold()]["values"])
         repriced_payload = original.model_dump()
-        for consumable in repriced_payload.get("consumables", []):
+        if batch_mode:
+            for key, record, field, _, _ in _batch_prices(repriced_payload["manufacturing_protocol"]):
+                if key is not None:
+                    price = pool[key]
+                    record[field] = price["values"][field]
+                    _replace_price_source(record, field, price["evidence"])
+        for consumable in repriced_payload.get("consumables", []) if not purchase_basis[estimate_id] else []:
             consumable.update(pool["consumable:" + consumable["name"].strip().casefold()]["values"])
         repriced_request = CostCalculationRequest.model_validate(repriced_payload)
         electrode = context["electrode_payload"]
@@ -234,14 +287,16 @@ def _compare(req: EstimateComparisonRequest, session: Session) -> dict:
         repriced = _estimate_from_context(repriced_request, context)
         common_updates = {key: value for key, value in shared.items() if key not in {"electrode_input", "batch_cost_rates"}}
         if batch_mode:
-            common_updates["manufacturing_protocol"] = {
+            common_protocol = {
                 **repriced_request.manufacturing_protocol.model_dump(), **shared["batch_cost_rates"],
-                "source_note": repriced_request.manufacturing_protocol.source_note
-                + "\nShared electricity/labor/margin rates from reference: " + reference.manufacturing_protocol.source_note,
             }
+            reference_evidence = reference.manufacturing_protocol.model_dump()["input_evidence"]
+            for field in shared["batch_cost_rates"]:
+                _replace_price_source(common_protocol, field, reference_evidence.get(field))
+            common_updates["manufacturing_protocol"] = common_protocol
         common_request = CostCalculationRequest.model_validate({**repriced_request.model_dump(), **common_updates})
         common_context = deepcopy(context)
-        fitted, substitutions, dropped = fit_steps_to_scale(
+        fitted, substitutions, dropped = (context["steps"], [], []) if batch_mode else fit_steps_to_scale(
             context["steps"], determine_scale(req.order_size_tons),
         )
         common_context["steps"] = fitted

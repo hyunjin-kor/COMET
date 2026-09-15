@@ -7,6 +7,7 @@ export default function ManufacturingPurchases({ purchases = [], onChange }: { p
   const l = (en: string, ko: string) => lang === 'ko' ? ko : en;
   return <div className="mt-4">
     <div className="flex items-center justify-between gap-3"><span className="text-sm font-medium">{l('Purchased materials per repetition', '1회 운전의 재료 구매량')}</span><button type="button" className="cp-button-secondary px-3 py-2 text-xs" onClick={() => onChange([...purchases, { name: '', unit: 'kg' }])}>{l('Add purchase', '구매 항목 추가')}</button></div>
+    {!!purchases.length && <p className="mt-2 text-xs leading-6 text-slate-600">{l('Use the same comparison identifier only for equivalent chemical forms, purity, concentration and purchase boundaries. Shared-price comparisons require matching price units; blank identifiers keep each price separate.', '화학 형태·순도·농도·구매 범위가 같은 경우에만 동일 규격 식별자를 공유하세요. 단가의 단위도 같아야 공통 가격을 적용합니다. 식별자가 비어 있으면 각 가격을 유지합니다.')}</p>}
     {purchases.map((purchase, i) => {
       const change = (fields: Partial<BatchPurchase>) => onChange(purchases.map((p, j) => i === j ? { ...p, ...fields } : p));
       const priceUnit = `USD/${purchase.unit}`;
@@ -19,6 +20,7 @@ export default function ManufacturingPurchases({ purchases = [], onChange }: { p
         {purchase.quantity_basis !== 'solvent_volume' && <label className="text-xs text-slate-600">{l('Net purchased quantity', '순 구매량')} ({purchase.unit})<input type="number" min={0} step="any" className="input-base mt-1 w-full" value={purchase.quantity ?? ''} onChange={(e) => change({ quantity: e.target.value === '' ? null : Number(e.target.value) })} /></label>}
         <label className="text-xs text-slate-600">{l('Price', '단가')} ({priceUnit})<input type="number" min={0} step="any" className="input-base mt-1 w-full" value={purchase.price_usd_per_unit ?? ''} onChange={(e) => change({ price_usd_per_unit: e.target.value === '' ? null : Number(e.target.value) })} /></label>
         <label className="text-xs text-slate-600">{l('Purchase boundary and exclusions', '구매 범위·제외 항목')}<input className="input-base mt-1 w-full" value={purchase.notes ?? ''} onChange={(e) => change({ notes: e.target.value })} /></label>
+        <label className="text-xs text-slate-600">{l('Comparison specification ID (optional)', '가격 비교용 동일 규격 식별자 (선택)')}<input className="input-base mt-1 w-full" value={purchase.comparison_key ?? ''} onChange={(e) => change({ comparison_key: e.target.value })} /></label>
         <button type="button" className="self-end cp-button-secondary px-3 py-2 text-xs" onClick={() => onChange(purchases.filter((_, j) => i !== j))}>{l('Remove purchase', '구매 항목 삭제')}</button>
         <div className="col-span-full"><ManufacturingInputSources record={purchase} fields={['name', 'quantity', 'unit', 'quantity_basis', 'price_usd_per_unit', 'notes']} onChange={(input_evidence) => change({ input_evidence })} /></div>
       </div>;

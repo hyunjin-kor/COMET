@@ -113,16 +113,16 @@ export function SavedEstimateComparison({ savedEstimates, priceBasis }: Props) {
       {hasReference && reference ? (
         <div className="mt-3 rounded-xl border border-slate-200 bg-white p-3 text-xs leading-6 text-slate-600">
           <p>{t('Shared price basis')}: <ScientificText text={priceBasis} /></p>
-          <p>{t('Target year')}: <ScientificText text={String(reference.input.target_year ?? '')} /> · {t('G&A overhead')}: {Number(reference.input.ga_overhead_pct ?? 0) * 100}% · {t('SARD')}: {Number(reference.input.sard_pct ?? 0) * 100}%</p>
+          <p>{t('Target year')}: <ScientificText text={String(reference.input.target_year ?? '')} /> · {t('G&A overhead')}: {Number(reference.input.ga_overhead_pct ?? 0) * 100}% · {lang === 'ko' ? '판매·관리·연구·유통비' : t('SARD')}: {Number(reference.input.sard_pct ?? 0) * 100}%</p>
           {batchReference ? <p>{lang === 'ko'
-            ? '전력 단가·인건비·판매 마진은 기준 사례의 값을 공유합니다. 제조 조건·배치 수득량·장비 단가·가스 단가는 각 사례의 값을 유지합니다.'
-            : 'Electricity tariff, labor rate and selling margin use the reference case. Protocol conditions, dry batch output, equipment rates and gas prices remain specific to each case.'}</p> : <>
+            ? '전력 단가·인건비·판매 마진은 기준 사례의 값을 공유합니다. 구매품·장비·가스는 동일 규격 식별자와 가격 단위가 같은 항목만 단가를 공유하며, 가스의 체적 기준도 같아야 합니다. 제조 조건·구매량·배치 수득량은 각 사례의 값을 유지합니다.'
+            : 'Electricity tariff, labor rate and selling margin use the reference case. Purchases, equipment and gases share prices only for explicit matching specification IDs and price units; gas reference conditions must also match. Conditions, quantities and dry output remain specific to each case.'}</p> : <>
             <p>{t('Price-index base year')}: <ScientificText text={String(reference.input.basis_year ?? '')} /> · {t('Reactor type')}: <ScientificText text={String(reference.input.reactor_type ?? '')} /> · {t('Catalyst bulk density')}: <ScientificText text={String(reference.input.catalyst_bulk_density ?? '')} /> lb/ft³</p>
             <p>{t('Recovery value')}: {reference.input.include_spent_value ? t('Included') : t('Not included')} · {t('Effective production rate')}: <ScientificText text={reference.input.production_rate_ton_per_day == null ? t('Scale default') : `${reference.input.production_rate_ton_per_day} ${t('short ton/day')}`} /></p>
           </>}
           {electrodeConditions ? <p>{t('Active area')}: <ScientificText text={String(electrodeConditions.active_area_cm2)} /> {t('cm² ·')} {t('Catalyst loading')}: <ScientificText text={String(electrodeConditions.catalyst_loading_mg_cm2)} /> {t('mg/cm² ·')} {t('Ionomer / catalyst')}: <ScientificText text={String(electrodeConditions.ionomer_to_catalyst_ratio)} /> · {t('Manufacturing scenario')}: {String(electrodeConditions.manufacturing_scenario ?? t('Not included'))}</p> : null}
           {!batchReference && <p>{t('The reference also supplies the price-index base year, recovery assumptions and production-rate note. Composition, recipe amounts and manufacturing steps stay with each estimate.')}</p>}
-          <p>{t('For conflicting manual prices, the reference estimate takes priority; materials absent there use the lowest selected estimate ID. Precursor and consumable names must distinguish grades.')}</p>
+          <p>{batchReference ? (lang === 'ko' ? '공통 단가는 기준 사례를 우선하며, 기준에 없는 항목은 선택된 사례 중 가장 작은 저장 ID에서 가져옵니다.' : 'Shared prices use the reference case first; items absent there use the lowest selected estimate ID.') : t('For conflicting manual prices, the reference estimate takes priority; materials absent there use the lowest selected estimate ID. Precursor and consumable names must distinguish grades.')}</p>
         </div>
       ) : null}
       <button type="button" onClick={() => void runComparison()}
@@ -174,6 +174,10 @@ export function SavedEstimateComparison({ savedEstimates, priceBasis }: Props) {
               <p>{t('Price source estimate')}: <ScientificText text={price.source_estimate_name} /> (#{price.source_estimate_id})<ScientificText text={price.overridden_estimate_ids.length ? ` · ${t('Replaced saved prices')}: ${price.overridden_estimate_ids.join(', ')}` : ''} /></p>
             </div>)}
           </details>
+          <button type="button" className="cp-button-secondary" onClick={() => {
+            const url = URL.createObjectURL(new Blob([JSON.stringify(result, null, 2)], { type: 'application/json' }));
+            const link = document.createElement('a'); link.href = url; link.download = 'COMET-saved-estimate-comparison.json'; link.click(); URL.revokeObjectURL(url);
+          }}>{lang === 'ko' ? '비교 입력·근거·결과 JSON' : 'Comparison inputs, evidence and results JSON'}</button>
         </div>
       ) : null}
     </section>

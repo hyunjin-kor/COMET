@@ -19,7 +19,8 @@ UNITS = {
     "produced_mass_kg": "kg/intermediate batch", "used_mass_kg": "kg/destination batch",
 }
 CONTEXT = {"name", "equipment", "atmosphere", "pressure_bar_abs", "stirring_rpm", "ph",
-           "solvent", "solvent_volume_ml", "notes", "source_note", "source_record_id", "volume_basis", "id"}
+           "solvent", "solvent_volume_ml", "notes", "source_note", "source_record_id", "volume_basis", "id",
+           "comparison_key", "equipment_comparison_key"}
 COLLECTIONS = {"input_evidence", "operations", "temperature_profile", "gases", "purchases", "intermediate_batches"}
 
 

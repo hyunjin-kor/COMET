@@ -17,6 +17,8 @@ const labels: Record<string, [string, string]> = {
   labor_usd_h: ['Labor rate (USD/person-hour)', '인건비 (USD/인·시간)'],
   selling_margin_fraction: ['Selling margin (fraction)', '판매 마진 (비율)'],
   name: ['Name', '이름'], equipment: ['Equipment', '장비'], atmosphere: ['Atmosphere', '분위기'],
+  comparison_key: ['Price-comparison specification', '가격 비교용 동일 규격 식별자'],
+  equipment_comparison_key: ['Equipment comparison specification', '가격 비교용 장비 규격 식별자'],
   pressure_bar_abs: ['Absolute pressure (bar)', '절대압 (bar)'], stirring_rpm: ['Stirring (rpm)', '교반 (rpm)'],
   ph: ['pH', 'pH'], solvent: ['Solvent', '용매'], solvent_volume_ml: ['Solvent volume (mL)', '용매량 (mL)'],
   repetitions: ['Repetitions', '반복 횟수'], start_temperature_c: ['Starting temperature (°C)', '시작 온도 (°C)'],

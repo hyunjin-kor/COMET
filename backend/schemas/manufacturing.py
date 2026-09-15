@@ -41,6 +41,7 @@ class TemperatureSegment(SourcedProtocolModel):
 
 class ProcessGas(SourcedProtocolModel):
     name: str = Field(min_length=1, max_length=200)
+    comparison_key: str = Field(default="", max_length=200)
     flow_l_per_min: float | None = Field(default=None, ge=0)
     duration_h: float | None = Field(default=None, ge=0)
     duration_basis: Literal["entered", "operation", "holds"] = "entered"
@@ -56,6 +57,7 @@ class ProcessGas(SourcedProtocolModel):
 
 class BatchPurchase(SourcedProtocolModel):
     name: str = Field(min_length=1, max_length=200)
+    comparison_key: str = Field(default="", max_length=200)
     quantity: float | None = Field(default=None, ge=0)
     unit: Literal["kg", "g", "L", "mL", "item"] = "kg"
     quantity_basis: Literal["entered", "solvent_volume"] = "entered"
@@ -89,6 +91,7 @@ class ManufacturingOperation(SourcedProtocolModel):
     name: str = Field(min_length=1, max_length=200)
     intermediate_batch_id: str = Field(default="", max_length=150)
     equipment: str = Field(default="", max_length=300)
+    equipment_comparison_key: str = Field(default="", max_length=200)
     atmosphere: str = Field(default="", max_length=300)
     pressure_bar_abs: float | None = Field(default=None, gt=0)
     stirring_rpm: float | None = Field(default=None, ge=0)
