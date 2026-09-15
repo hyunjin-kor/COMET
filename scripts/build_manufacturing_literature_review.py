@@ -8,6 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "backend/data/manufacturing_literature.json"
+OPERATING = ROOT / "backend/data/manufacturing_operating_references.json"
 OUTPUT = ROOT / "docs/paper/manufacturing-literature-2026-09-14.md"
 SUMMARY = ROOT / "docs/paper/manufacturing-2026-09-14/review_summary.json"
 
@@ -64,7 +65,31 @@ def render(data):
             if op.get("atmosphere"):
                 conditions.append(op["atmosphere"])
             lines.append(f"| {cell(op['name'])} | {cell('; '.join(conditions) or 'Not quantified')} | {cell(op.get('notes', ''))} |")
+        purchases = [(op, item) for op in p["operations"] for item in op.get("purchases", [])]
+        if purchases:
+            lines += ["", "Explicit purchases/inputs (unpriced; missing amounts remain unknown):", "",
+                      "| Operation | Material | Amount | Note |", "|---|---|---|---|"]
+            for op, item in purchases:
+                quantity = item.get("quantity")
+                amount = f"{quantity} {item['unit']}" if quantity is not None else "Not verified / 확인 못 함"
+                lines.append(f"| {cell(op['name'])} | {cell(item['name'])} | {amount} | {cell(item.get('notes', ''))} |")
         lines += ["", " ".join(p["limitations"]), ""]
+    lines += ["## Operating references", "",
+              "These public references retain geography, period, quantity basis and source locator. "
+              "Only electricity averages can be applied directly as explicit scenarios. Wage-only statistics and equipment connected loads remain reference information. "
+              "No reference substitutes for measured batch electricity, actual gas conditions, staffing or a supplier quotation. "
+              "The source texts and manuals are not redistributed.", "",
+              "| Reference | Value | Scope | Source |", "|---|---|---|---|"]
+    for reference in data.get("operating_references", []):
+        evidence = reference["evidence"]
+        lines.append(f"| {cell(reference['label'])} | {reference['value']} {cell(reference['unit'])} | "
+                     f"{cell(reference['scope'])} | [{cell(evidence['citation'])}]({evidence['url']}); {cell(evidence['locator'])}; accessed {evidence['accessed_on']} |")
+    lines += ["", "## Input provenance", "",
+              "Explicit numeric preparation values carry per-field source snapshots in the JSON library. "
+              "The stored value, DOI, locator and review date survive import, editing, saving and export. "
+              "An edit preserves the source value and is flagged as modified; it does not become a published value. "
+              "Publication metadata verification, source transcription and actual operating measurements are separate evidence levels. "
+              "Library imports do not populate unknown prices or dry output mass.", ""]
     lines += ["## Generic templates", "", "All templates remain generic cost sequences, not source-verified experimental preparations.", ""]
     lines += [f"- `{t['id']}`: {t['name']}" for t in data["templates"]]
     lines += ["", "## Bibliographic and access inventory", "",
@@ -82,13 +107,17 @@ def main():
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
     data = json.loads(SOURCE.read_text(encoding="utf-8"))
+    data["operating_references"] = json.loads(OPERATING.read_text(encoding="utf-8"))["references"]
     summary = {"review_date": data["review_date"], "candidates": len(data["candidates"]),
                "families": len({c["family"] for c in data["candidates"]}),
                "profiles": len(data["profiles"]), "primary_sources": len({p["doi"] for p in data["profiles"]}),
                "candidates_with_profile": sum(bool(c["profile_ids"]) for c in data["candidates"]),
                "source_mismatches": sum(c["status"] == "source_mismatch" for c in data["candidates"]),
                "crossref_dois": len(data["sources"]), "source": SOURCE.relative_to(ROOT).as_posix(),
-               "source_sha256": hashlib.sha256(SOURCE.read_bytes()).hexdigest()}
+               "source_sha256": hashlib.sha256(SOURCE.read_bytes()).hexdigest(),
+               "operating_references": len(data["operating_references"]),
+               "operating_source": OPERATING.relative_to(ROOT).as_posix(),
+               "operating_source_sha256": hashlib.sha256(OPERATING.read_bytes()).hexdigest()}
     for path, content in ((OUTPUT, render(data)), (SUMMARY, json.dumps(summary, indent=2) + "\n")):
         if args.check:
             if path.read_text(encoding="utf-8") != content:

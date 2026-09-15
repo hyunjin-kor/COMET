@@ -90,6 +90,28 @@ export interface LiteratureProtocol {
   verification: string;
 }
 
+export interface ManufacturingOperatingReference {
+  id: string;
+  label: string;
+  label_ko: string;
+  category: 'electricity' | 'labor' | 'equipment';
+  value: number;
+  unit: string;
+  import_field: 'electricity_usd_kwh' | null;
+  period: string;
+  geography: string;
+  scope: string;
+  scope_ko: string;
+  evidence: InputEvidence;
+  supporting_urls?: string[];
+}
+
+export function applyOperatingReference(protocol: ManufacturingProtocol, reference: ManufacturingOperatingReference): ManufacturingProtocol {
+  if (reference.import_field !== 'electricity_usd_kwh') return protocol;
+  return { ...protocol, electricity_usd_kwh: reference.value,
+    input_evidence: { ...protocol.input_evidence, electricity_usd_kwh: structuredClone(reference.evidence) } };
+}
+
 export interface ManufacturingEvidence {
   family: string;
   slug: string;

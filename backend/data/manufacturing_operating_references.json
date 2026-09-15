@@ -1,0 +1,117 @@
+{
+  "review_date": "2026-09-15",
+  "scope": "Public operating benchmarks. These are optional references, not measured operating inputs for a catalyst preparation.",
+  "references": [
+    {
+      "id": "eia-us-industrial-2025-preliminary",
+      "label": "US industrial electricity, 2025 (preliminary)",
+      "label_ko": "미국 산업용 전력, 2025년 잠정치",
+      "category": "electricity",
+      "value": 0.0862,
+      "unit": "USD/kWh",
+      "import_field": "electricity_usd_kwh",
+      "period": "2025 annual average; February 2026 preliminary publication",
+      "geography": "United States",
+      "scope": "National retail average, not a facility tariff or live quote. Source 8.62 US cents/kWh divided by 100. Review demand charges, customer class and location against the actual bill.",
+      "scope_ko": "전국 평균 판매단가이며 개별 시설의 요금이나 실시간 견적이 아닙니다. 원문의 8.62센트/kWh를 100으로 나눴습니다. 실제 청구서의 수요요금·계약종별·지역을 확인해야 합니다.",
+      "evidence": {
+        "kind": "literature",
+        "citation": "U.S. EIA, Electricity explained: Prices and factors affecting prices",
+        "locator": "2025 annual average retail prices by customer type; footnote 1, Electric Power Monthly Table 5.3, February 2026 (preliminary)",
+        "url": "https://www.eia.gov/energyexplained/electricity/prices-and-factors-affecting-prices.php",
+        "accessed_on": "2026-09-15",
+        "recorded_value": 0.0862,
+        "note": "Public US industrial annual average used as a scenario tariff; not the user's facility measurement. 8.62 cents/kWh / 100 = 0.0862 USD/kWh."
+      }
+    },
+    {
+      "id": "eia-us-commercial-2025-preliminary",
+      "label": "US commercial electricity, 2025 (preliminary)",
+      "label_ko": "미국 상업용 전력, 2025년 잠정치",
+      "category": "electricity",
+      "value": 0.1341,
+      "unit": "USD/kWh",
+      "import_field": "electricity_usd_kwh",
+      "period": "2025 annual average; February 2026 preliminary publication",
+      "geography": "United States",
+      "scope": "National commercial retail average. Laboratory electricity contracts may use different customer classes and charges. Source 13.41 US cents/kWh divided by 100.",
+      "scope_ko": "미국 상업용 전력의 전국 평균 판매단가입니다. 연구실 계약은 다른 계약종별·요금을 적용할 수 있습니다. 원문의 13.41센트/kWh를 100으로 나눴습니다.",
+      "evidence": {
+        "kind": "literature",
+        "citation": "U.S. EIA, Electricity explained: Prices and factors affecting prices",
+        "locator": "2025 annual average retail prices by customer type; footnote 1, Electric Power Monthly Table 5.3, February 2026 (preliminary)",
+        "url": "https://www.eia.gov/energyexplained/electricity/prices-and-factors-affecting-prices.php",
+        "accessed_on": "2026-09-15",
+        "recorded_value": 0.1341,
+        "note": "Public US commercial annual average used as a scenario tariff; not the user's facility measurement. 13.41 cents/kWh / 100 = 0.1341 USD/kWh."
+      }
+    },
+    {
+      "id": "bls-chemical-technicians-2023-wage",
+      "label": "US chemical technicians, May 2023 mean wage",
+      "label_ko": "미국 화학 실험 기술직, 2023년 5월 평균 임금",
+      "category": "labor",
+      "value": 29.29,
+      "unit": "USD/person-hour",
+      "import_field": null,
+      "period": "May 2023; historical nominal USD",
+      "geography": "United States",
+      "scope": "Occupation 19-4031, national mean wage. This is a historical wage, not a current fully loaded labor rate. Employer nonwage benefits are excluded by OEWS; staffing, benefits and price-year adjustments require a separate basis.",
+      "scope_ko": "직종 19-4031의 미국 평균 임금입니다. 과거 임금이며 현재의 총 고용비용이 아닙니다. OEWS는 고용주 부담 비임금 복리후생비를 제외하므로 인력·복리후생·가격연도 조정에는 별도 근거가 필요합니다.",
+      "supporting_urls": ["https://www.bls.gov/oes/oes_ques.htm"],
+      "evidence": {
+        "kind": "literature",
+        "citation": "U.S. BLS, Occupational Employment and Wages, May 2023: 19-4031 Chemical Technicians",
+        "locator": "National estimates, mean hourly wage; OEWS FAQ, wage definitions",
+        "url": "https://www.bls.gov/oes/2023/may/oes194031.htm",
+        "accessed_on": "2026-09-15",
+        "recorded_value": 29.29,
+        "note": "Reference only. Historical wage excludes employer nonwage benefits; no automatic conversion to a fully loaded operating labor rate."
+      }
+    },
+    {
+      "id": "nabertherm-l9-11-skm-web-2026",
+      "label": "Nabertherm L 9/11/SKM, connected load (web specification)",
+      "label_ko": "Nabertherm L 9/11/SKM 연결 부하 · 웹 사양",
+      "category": "equipment",
+      "value": 3.7,
+      "unit": "kW rated connected load",
+      "import_field": null,
+      "period": "Web specification accessed 2026-09-15",
+      "geography": "Model-specific manufacturer specification",
+      "scope": "9 L, Tmax 1100 °C; recommended long holds up to 1000 °C. Connected load is not measured average input power. Options and supply voltage affect the rating. The 2024 operating manual lists 3.4 kW for the same model name; confirm the actual unit's version and nameplate.",
+      "scope_ko": "9 L, 최고 1100 °C이며 장시간 유지는 1000 °C까지 권장됩니다. 연결 부하는 실측 평균 소비전력이 아닙니다. 옵션·전압에 따라 달라지며 2024년 설명서는 같은 모델명에 3.4 kW를 제시하므로 실제 장비의 버전·명판을 확인해야 합니다.",
+      "evidence": {
+        "kind": "supplier",
+        "citation": "Nabertherm, muffle furnaces with embedded heating elements in the ceramic muffle up to 1100 °C",
+        "locator": "Especificaciones técnicas, L 9/11/SKM row and footnotes 1, 5",
+        "url": "https://nabertherm.com/es/productos/labor/hornos-de-mufla/hornos-de-mufla-con-elementos-calefactores-integrados-en-la-mufla",
+        "accessed_on": "2026-09-15",
+        "recorded_value": 3.7,
+        "note": "Rated connected load only; cannot be imported as measured or average operating power."
+      }
+    },
+    {
+      "id": "nabertherm-l9-11-skm-manual-2024",
+      "label": "Nabertherm L 9/11/SKM, connected load (2024 manual)",
+      "label_ko": "Nabertherm L 9/11/SKM 연결 부하 · 2024년 설명서",
+      "category": "equipment",
+      "value": 3.4,
+      "unit": "kW rated connected load",
+      "import_field": null,
+      "period": "Operating instructions M01.1060 English, 2024-07",
+      "geography": "Model-specific manufacturer specification",
+      "scope": "Manual p. 25, L 9/11/SKM: 9 L, Tmax 1100 °C, connected load 3.4 kW. This differs from the current web table's 3.7 kW. Neither value is measured average consumption for a catalyst recipe.",
+      "scope_ko": "설명서 25쪽의 L 9/11/SKM은 9 L, 최고 1100 °C, 연결 부하 3.4 kW입니다. 현재 웹 표의 3.7 kW와 다르며 어느 값도 특정 촉매 제조법의 실측 평균 소비전력은 아닙니다.",
+      "evidence": {
+        "kind": "supplier",
+        "citation": "Nabertherm Operating Instructions, M01.1060 English, 2024-07",
+        "locator": "p. 25, muffle furnace L 9/11/SKM technical table",
+        "url": "https://nabertherm.com/sites/default/files/noindex/2025-03/M01.1060_English_2024-07.pdf",
+        "accessed_on": "2026-09-15",
+        "recorded_value": 3.4,
+        "note": "Rated connected load only; document-version difference retained rather than averaged or silently resolved."
+      }
+    }
+  ]
+}

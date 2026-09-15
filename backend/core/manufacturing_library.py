@@ -9,7 +9,9 @@ from pathlib import Path
 @lru_cache(maxsize=1)
 def _library() -> dict:
     path = Path(__file__).resolve().parents[1] / "data" / "manufacturing_literature.json"
-    return json.loads(path.read_text(encoding="utf-8"))
+    data = json.loads(path.read_text(encoding="utf-8"))
+    operating = json.loads(path.with_name("manufacturing_operating_references.json").read_text(encoding="utf-8"))
+    return {**data, "operating_references": operating["references"]}
 
 
 def manufacturing_library() -> dict:

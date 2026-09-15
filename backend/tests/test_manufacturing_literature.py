@@ -147,3 +147,80 @@ def test_electrode_source_record_survives_save_reload(client):
     assert loaded["input"]["manufacturing_protocol"]["product_basis"] == "electrode"
     assert loaded["result"]["summary"] == baseline["summary"]
     assert loaded["result"]["manufacturing"]["processing_cost_usd_kg"] is None
+
+
+def test_explicit_preparation_numbers_retain_source_value_and_locator():
+    def check(record, preparation):
+        for field, value in record.items():
+            if field == "input_evidence":
+                continue
+            if isinstance(value, (int, float)) and not isinstance(value, bool):
+                evidence = record["input_evidence"][field]
+                assert evidence["recorded_value"] == value
+                assert evidence["doi"] == preparation["doi"]
+                assert evidence["locator"] and evidence["accessed_on"]
+            if field in {"temperature_profile", "purchases", "gases"}:
+                for child in value:
+                    check(child, preparation)
+    for preparation in manufacturing_library()["profiles"]:
+        for operation in preparation["operations"]:
+            check(operation, preparation)
+
+
+def test_nickel_cases_separate_precursor_changes_from_time_and_unknown_output():
+    profiles = {p["id"]: p for p in manufacturing_library()["profiles"]}
+    a, b = (profiles[f"ni-silica-gen{generation}-2024"] for generation in (1, 4))
+    assert a["operations"][6]["temperature_profile"][0]["hold_h"] == 2
+    assert b["operations"][6]["temperature_profile"][0]["hold_h"] == 1
+    assert a["operations"][0]["purchases"][0]["quantity"] == 2
+    assert b["operations"][0]["purchases"][0]["quantity"] == .97
+    assert b["operations"][8]["purchases"][0]["quantity"] is None  # approximately 5 mL
+    assert "conflicts" in " ".join(a["limitations"])
+    for preparation in (a, b):
+        protocol = ManufacturingProtocol(operations=preparation["operations"])
+        assert protocol.finished_batch_mass_kg is None
+        assert evaluate_protocol(protocol)["batch_processing_cost_usd"] is None
+        assert all(item.price_usd_per_unit is None for op in protocol.operations for item in op.purchases)
+
+
+def test_pt_sto_ramp_is_not_misread_as_an_additional_two_hour_hold():
+    preparation = next(p for p in manufacturing_library()["profiles"] if p["id"] == "pt-sto-somc-2025")
+    hydrothermal = preparation["operations"][5]
+    assert hydrothermal["temperature_profile"][0]["ramp_c_per_min"] == 2
+    assert hydrothermal["temperature_profile"][0]["hold_h"] is None
+    assert hydrothermal["stirring_rpm"] == 400
+    ozone = preparation["operations"][10]["gases"][0]
+    assert ozone["flow_l_per_min"] == .4
+    assert ozone["volume_basis"] == ""  # sccm without stated reference T/p
+    assert preparation["operations"][-2]["temperature_profile"][0]["hold_h"] is None
+
+
+def test_operating_references_preserve_scope_and_do_not_supply_false_measurements(client):
+    data = client.get("/api/decision/manufacturing-literature").json()
+    refs = {r["id"]: r for r in data["operating_references"]}
+    tariff = refs["eia-us-industrial-2025-preliminary"]
+    assert tariff["value"] == pytest.approx(8.62 / 100)
+    assert tariff["import_field"] == "electricity_usd_kwh"
+    assert tariff["evidence"]["recorded_value"] == tariff["value"]
+    for reference in refs.values():
+        if reference["category"] in {"labor", "equipment"}:
+            assert reference["import_field"] is None
+            assert reference["evidence"]["kind"] != "measured"
+    assert refs["nabertherm-l9-11-skm-manual-2024"]["value"] == 3.4
+    assert refs["nabertherm-l9-11-skm-web-2026"]["value"] == 3.7
+
+
+def test_imported_preparation_keeps_original_quantity_after_save_and_edit(client):
+    from backend.tests.test_manufacturing_protocol import payload as base_payload
+
+    preparation = next(p for p in manufacturing_library()["profiles"] if p["id"] == "ni-silica-gen1-2024")
+    protocol = {"mode": "record_only", "operations": preparation["operations"], "source_record_id": preparation["id"]}
+    protocol["operations"][0]["purchases"][0]["quantity"] = 3
+    payload = {**base_payload(), "manufacturing_protocol": protocol}
+    saved = client.post("/api/calculate/save?name=source-import-test", json=payload)
+    assert saved.status_code == 200, saved.text
+    result = client.get(f"/api/estimates/{saved.json()['id']}").json()
+    row = next(r for r in result["result"]["manufacturing"]["trace"]["inputs"] if r["path"] == "operations.0.purchases.0.quantity")
+    assert row["source_status"] == "modified"
+    assert row["value"] == 3 and row["evidence"]["recorded_value"] == 2
+    assert result["result"]["manufacturing"]["processing_cost_usd_kg"] is None

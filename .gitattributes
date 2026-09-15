@@ -31,4 +31,5 @@ docs/paper/methods-2026-09-09/*.json -text
 docs/sources/paper-methods-evidence-2026-09-09.json -text
 docs/sources/paper-methods-access-2026-09-09.json -text
 backend/data/manufacturing_literature.json -text
+backend/data/manufacturing_operating_references.json -text
 docs/paper/manufacturing-2026-09-14/*.json -text

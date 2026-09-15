@@ -27,7 +27,7 @@ export default function ManufacturingLiterature({ evidence, onSelect }: {
   return <section className="rounded-2xl border border-slate-200 bg-white p-4" aria-label={l('Literature preparation records', '문헌 제조법')}>
     <div className="flex flex-wrap items-center justify-between gap-2">
       <h3 className="font-semibold text-slate-900">{l('Literature preparation records', '문헌 제조법')}</h3>
-      <span className="text-xs text-slate-500">{l('Reviewed', '검토일')} 2026-09-14</span>
+      <span className="text-xs text-slate-500">{l('Reviewed', '검토일')} {evidence?.review_date ?? selected?.review_date ?? ''}</span>
     </div>
     {evidence && <div className="mt-3 rounded-lg bg-amber-50 p-3 text-sm leading-6 text-amber-950">
       <strong>{evidence.status === 'source_mismatch'
@@ -60,6 +60,9 @@ export default function ManufacturingLiterature({ evidence, onSelect }: {
             {op.atmosphere && <span>{op.atmosphere}</span>}
           </div>
           <p className="text-slate-600"><ScientificText text={op.notes ?? ''} /></p>
+          {!!op.purchases?.length && <ul className="mt-2 space-y-1 border-t border-slate-100 pt-2 text-xs text-slate-600">
+            {op.purchases.map((purchase, j) => <li key={j}><ScientificText text={purchase.name} />: {purchase.quantity ?? l('Not reported', '미확인')} {purchase.unit}</li>)}
+          </ul>}
         </li>)}
       </ol>
       {selected.limitations.map((note) => <p key={note} className="text-sm leading-6 text-amber-900"><ScientificText text={note} /></p>)}

@@ -1,10 +1,10 @@
 # Supporting information: catalyst preparation evidence
 
-COMET Application Note. Review date: 2026-09-14.
+COMET Application Note. Review date: 2026-09-15.
 
 ## Scope and source assessment
 
-The audit covers 116 screening candidates in 30 reaction families and 34 generic process templates. Crossref confirmed the bibliographic identity of 368 distinct DOIs. The curated library contains 41 named preparation records from 40 sources; 46 catalog candidates link to at least one record. A link may describe a different specimen and does not verify the catalog formulation.
+The audit covers 116 screening candidates in 30 reaction families and 34 generic process templates. Crossref confirmed the bibliographic identity of 370 distinct DOIs. The curated library contains 44 named preparation records from 42 sources; 46 catalog candidates link to at least one record. A link may describe a different specimen and does not verify the catalog formulation.
 
 Thirty reaction-family searches of Europe PMC TITLE_AB, restricted to open access; candidate-linked DOIs additionally checked individually through Crossref. Search hits are not automatically accepted as manufacturing evidence.
 
@@ -22,12 +22,12 @@ The frozen May 2026 screening estimates and rankings use the original compositio
 
 ## Candidate coverage
 
-Source/formulation discrepancy flagged: 24; source-specific variant linked without that flag: 30; exact preparation unverified with no curated variant: 62. These are mutually exclusive catalog statuses, not reproducibility grades. No candidate has jointly verified formulation, complete preparation and operational cost inputs.
+Source/formulation discrepancy flagged: 26; source-specific variant linked without that flag: 30; exact preparation unverified with no curated variant: 60. These are mutually exclusive catalog statuses, not reproducibility grades. No candidate has jointly verified formulation, complete preparation and operational cost inputs.
 
 | Reaction family / candidate | Status | Preparation records | Assessment |
 |---|---|---|---|
 | aem-electrolyzer-oer / NiFe-LDH scalable anode | variant_available | nife-ldh-rt-2025 | Use the NiFe-LDH source for powder manufacture. The separate flow-engineered electrode paper prepares activated Raney Ni, not NiFe-LDH. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
-| aem-electrolyzer-oer / Seed-assisted NiFe anode | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
+| aem-electrolyzer-oer / Seed-assisted NiFe anode | source_mismatch | Not verified / 확인 못 함 | The accessible 2024 electrode Methods describe Raney Ni coating and alkaline leaching, not seed-assisted NiFe preparation. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | aem-electrolyzer-oer / Cr-doped amorphous NiFe route | source_mismatch | cocr-amorphous-2024 | The cited method prepares binary CoCrOx, NiCrOx and FeCrOx, not ternary Cr-doped NiFe. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | aem-electrolyzer-oer / NiCo2O4 spinel anode | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | ammonia-cracking / Ni/gamma-Al2O3 baseline | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
@@ -47,7 +47,7 @@ Source/formulation discrepancy flagged: 24; source-specific variant linked witho
 | co2-methanation / Ru/layered titanate route | source_mismatch | ru-titanate-powder-2025 | Ion exchange produces RuxTiyOz/RuO2; 5 wt% Ru on unchanged Na2Ti3O7 is not established. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | co2-methanation / Ni/CeO2 low-temperature route | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | co2-methanol / Cu/ZnO/Al2O3 baseline | source_mismatch | cza-coprecipitation-2020 | The linked studies use Cu-Zn-Zr, Cu/ZrOx/MgO or ZnO; none establishes the catalog Cu/ZnO/Al2O3 formulation. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
-| co2-methanol / Cu/ZrOx-MgO interface route | screening_only | Not verified / 확인 못 함 | Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
+| co2-methanol / Cu/ZrOx-MgO interface route | source_mismatch | Not verified / 확인 못 함 | The accessible 2019 method prepares Cu-Zn-Zr oxides, and the 2025 method prepares ZnO nanorods. Neither establishes the catalog Cu/ZrOx-MgO interface specimen. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | co2-methanol / In2O3-ZrO2 low-temperature route | source_mismatch | Not verified / 확인 못 함 | The linked methods involve Ni-promoted indium oxide, Pd-In2O3-ZrO2 or inverse In2O3/Ni, not the unpromoted catalog formulation. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | co2-methanol / Pd/In2O3 promoted oxide | variant_available | pd-in2o3-cp-2019 | The nominal 0.75 wt% Pd variant is supported, but co-precipitation and dry impregnation are distinct preparations. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
 | co2-to-formate / Ir-pincer (Tanaka / Nozaki anchor) | screening_only | Not verified / 확인 못 함 | The retrieved crystallographic supplement alone does not establish a complete preparative recipe or 30 wt% Ir formulation. Exact formulation, complete preparation and operational cost inputs are not jointly verified. Generic route steps and reaction-temperature windows must not be used as synthesis conditions. |
@@ -814,6 +814,143 @@ Source: [Alloyed PdCu Nanoparticles within Siliceous Zeolite Crystals for Cataly
 
 Encapsulated PdCu/zeolite is not the catalog single-atom-alloy composition or alumina support. Recovery, washing, yield and precursor conversion are not fully specified by this subsection.
 
+### S42. Ni/SiO2, Gen 1, nominal 5 wt% Ni
+
+Record: `ni-silica-gen1-2024`. Boundary: catalyst_powder.
+
+Source: [Cost‐Responsive Optimization of Nickel Nanoparticle Synthesis](https://doi.org/10.1002/adsu.202300030). [DOI 10.1002/adsu.202300030](https://doi.org/10.1002/adsu.202300030). Locator: Experimental Section: solution-phase synthesis Gen 1; synthesis of silica-supported Ni NPs (published PDF p. 6). Crossref checked: 2026-09-15.
+
+| Operation | Explicit conditions | Source details |
+|---|---|---|
+| Charge nickel precursor and solvents | Not quantified | Three-neck flask with condenser; nitrogen handling. |
+| Evacuate and backfill | N2/vacuum | Three cycles; cycle duration and gas flow not reported. |
+| Degas | 100 °C; hold 1 h; ramp unreported °C/min; vacuum | Rapid heating; ramp rate not reported. |
+| Cool | Not quantified | Natural cooling to ambient temperature; duration not reported. |
+| Add phosphine | N2 | At room temperature under nitrogen. |
+| Evacuate and backfill | N2/vacuum | Three cycles; cycle duration and gas flow not reported. |
+| Nanoparticle synthesis | 220 °C; hold 2 h; ramp unreported °C/min; N2 | Rapid heating; ramp rate not reported. |
+| Cool | Not quantified | Natural cooling to ambient temperature; duration not reported. |
+| Precipitate and centrifuge | 0.166667 h | Centrifugation for 10 min at 8000 rpm. Precipitation and transfer time are additional and unreported. |
+| Deposit on silica | Not quantified | Redisperse recovered nanoparticles in 10 mL chloroform; add to a 1 g/mL silica suspension targeting 5 wt% Ni. Silica and suspension quantities require recovered Ni amount. |
+| Sonicate | 0.0833333 h |  |
+| Stir | Not quantified | Overnight; duration not quantified. |
+| Separate | Not quantified | Centrifugation; speed and duration of this second separation not reported. |
+| Dry | vacuum | Vacuum drying; temperature and time not reported. Store dried catalyst under nitrogen. |
+
+Explicit purchases/inputs (unpriced; missing amounts remain unknown):
+
+| Operation | Material | Amount | Note |
+|---|---|---|---|
+| Charge nickel precursor and solvents | Ni(acac)2 | 2 g |  |
+| Charge nickel precursor and solvents | Oleylamine, 70% | 25.6 mL |  |
+| Charge nickel precursor and solvents | 1-Octadecene, 90% | 2 mL |  |
+| Add phosphine | Trioctylphosphine | 1.74 mL | The source volume is explicit; its stated equivalents conflict with its mmol values. |
+| Precipitate and centrifuge | Acetone | 40 mL |  |
+| Deposit on silica | Chloroform for redispersion | 10 mL |  |
+| Deposit on silica | Silica support | Not verified / 확인 못 함 |  |
+| Deposit on silica | Chloroform for silica suspension | Not verified / 확인 못 함 |  |
+
+The supported product is nominally 5 wt% Ni/SiO2; nanoparticle yield is not the recovered dry mass of this supported batch. No complete purchasing bill, supplier prices, mean equipment power, gas flow, attended labor or dry batch output is established by these Methods. The published material-cost comparison excludes complete capital and operating costs. Its published 2016-dollar prices are not live quotes and are not imported. Precipitation/transfer and cooling times remain additional unknowns. Ambient temperature and overnight duration have not been assigned numeric values. Gen 1 reports TOP as 1.74 mL, 3.9 mmol and 2 equivalents against 7.8 mmol Ni; the equivalence statement conflicts with the stated amounts. Only the explicit volume is transcribed.
+
+### S43. Ni/SiO2, Gen 4, nominal 5 wt% Ni
+
+Record: `ni-silica-gen4-2024`. Boundary: catalyst_powder.
+
+Source: [Cost‐Responsive Optimization of Nickel Nanoparticle Synthesis](https://doi.org/10.1002/adsu.202300030). [DOI 10.1002/adsu.202300030](https://doi.org/10.1002/adsu.202300030). Locator: Experimental Section: solution-phase synthesis Gen 4; synthesis of silica-supported Ni NPs (published PDF p. 6). Crossref checked: 2026-09-15.
+
+| Operation | Explicit conditions | Source details |
+|---|---|---|
+| Charge nickel precursor and solvents | Not quantified | Three-neck flask with condenser; nitrogen handling. |
+| Evacuate and backfill | N2/vacuum | Three cycles; cycle duration and gas flow not reported. |
+| Degas | 100 °C; hold 1 h; ramp unreported °C/min; vacuum | Rapid heating; ramp rate not reported. |
+| Cool | Not quantified | Natural cooling to ambient temperature; duration not reported. |
+| Add phosphine | N2 | At room temperature under nitrogen. |
+| Evacuate and backfill | N2/vacuum | Three cycles; cycle duration and gas flow not reported. |
+| Nanoparticle synthesis | 220 °C; hold 1 h; ramp unreported °C/min; N2 | Rapid heating; ramp rate not reported. |
+| Cool | Not quantified | Natural cooling to ambient temperature; duration not reported. |
+| Precipitate and centrifuge | 0.166667 h | Centrifugation for 10 min at 8000 rpm. Precipitation and transfer time are additional and unreported. |
+| Deposit on silica | Not quantified | Redisperse recovered nanoparticles in 10 mL chloroform; add to a 1 g/mL silica suspension targeting 5 wt% Ni. Silica and suspension quantities require recovered Ni amount. |
+| Sonicate | 0.0833333 h |  |
+| Stir | Not quantified | Overnight; duration not quantified. |
+| Separate | Not quantified | Centrifugation; speed and duration of this second separation not reported. |
+| Dry | vacuum | Vacuum drying; temperature and time not reported. Store dried catalyst under nitrogen. |
+
+Explicit purchases/inputs (unpriced; missing amounts remain unknown):
+
+| Operation | Material | Amount | Note |
+|---|---|---|---|
+| Charge nickel precursor and solvents | Ni(OAc)2·4H2O | 0.97 g |  |
+| Charge nickel precursor and solvents | Oleylamine, 70% | 12.8 mL |  |
+| Add phosphine | Triphenylphosphine | 4.08 g |  |
+| Precipitate and centrifuge | Chloroform | Not verified / 확인 못 함 | Approximately 5 mL in the source; not entered as an exact quantity. |
+| Precipitate and centrifuge | Isopropanol | 20 mL |  |
+| Deposit on silica | Chloroform for redispersion | 10 mL |  |
+| Deposit on silica | Silica support | Not verified / 확인 못 함 |  |
+| Deposit on silica | Chloroform for silica suspension | Not verified / 확인 못 함 |  |
+
+The supported product is nominally 5 wt% Ni/SiO2; nanoparticle yield is not the recovered dry mass of this supported batch. No complete purchasing bill, supplier prices, mean equipment power, gas flow, attended labor or dry batch output is established by these Methods. The published material-cost comparison excludes complete capital and operating costs. Its published 2016-dollar prices are not live quotes and are not imported. Precipitation/transfer and cooling times remain additional unknowns. Ambient temperature and overnight duration have not been assigned numeric values.
+
+### S44. Pt/SrTiO3 by solution-phase metalation, nominal 1 wt% Pt
+
+Record: `pt-sto-somc-2025`. Boundary: catalyst_powder.
+
+Source: [Techno-economic and life cycle analyses of the synthesis of a platinum–strontium titanate catalyst](https://doi.org/10.1039/d5cy00189g). [DOI 10.1039/d5cy00189g](https://doi.org/10.1039/d5cy00189g). Locator: Materials and methods: Synthesis of Pt/STO at laboratory scale (published PDF pp. 2–3). Crossref checked: 2026-09-15.
+
+| Operation | Explicit conditions | Source details |
+|---|---|---|
+| Prepare strontium solution | 2 h |  |
+| Prepare titanium solution | 0.166667 h |  |
+| Mix solutions | 0.166667 h |  |
+| Add base | 0.466667 h | 10 M solution; source reports 276.9 g and 10 mL/min for 28 min. No density is inferred to reconcile these quantities. |
+| Settle | 0.166667 h |  |
+| Hydrothermal treatment | 240 °C; hold unreported h; ramp 2 °C/min | Source says heated to 240 °C at 2 °C/min over the next 2 h. The division between ramp and hold is ambiguous; hold time is not assigned. |
+| Cool and wash | Not quantified | Cooling rate 2 °C/min; end temperature and washing quantities unspecified. Final solution pH 13.2. Vacuum filtration. |
+| Dry support | 110 °C; hold 12 h; ramp unreported °C/min; air |  |
+| Calcine support | 550 °C; hold 4 h; ramp unreported °C/min |  |
+| Vacuum pretreatment | 200 °C; hold unreported h; ramp unreported °C/min; vacuum | Duration not specified for this initial treatment. |
+| Ozone treatment | 200 °C; hold 2 h; ramp unreported °C/min; 8% O3 in O2 | 400 sccm; standard reference temperature and pressure not specified. |
+| Hydroxylation | 200 °C; hold 2 h; ramp unreported °C/min; humidified N2 | N2 bubbled through water at ambient temperature; powder remains at 200 °C. Flow not reported. |
+| Support pretreatment before metalation | 200 °C; hold 12 h; ramp unreported °C/min | The source specifies 200 °C, 12 h for the support added to the precursor solution. |
+| Metalation | 120 °C; hold 72 h; ramp unreported °C/min; N2 | N2 glovebox; precursor solution targets 1 wt% Pt. Solution and support quantities unspecified. |
+| Cool | Not quantified | Room temperature; time unspecified. |
+| Wash with toluene | Not quantified | Wash/filter three times; volume and time per wash unreported. |
+| Exchange solvent | Not quantified | One final wash with pentane; volume and time unreported. |
+| Vacuum dry | 60 °C; hold unreported h; ramp unreported °C/min; vacuum | Overnight; duration not quantified. |
+| Reduce | 300 °C; hold 4 h; ramp unreported °C/min; 10% H2 | 10% H2; carrier identity and flow not specified in this Methods paragraph. |
+
+Explicit purchases/inputs (unpriced; missing amounts remain unknown):
+
+| Operation | Material | Amount | Note |
+|---|---|---|---|
+| Prepare strontium solution | Sr(OH)2·8H2O | 38.7 g |  |
+| Prepare strontium solution | Acetic acid | 48 g |  |
+| Prepare strontium solution | Water | 640 g |  |
+| Prepare titanium solution | TiCl4 | 27.6 g |  |
+| Prepare titanium solution | Ethanol | 505 g |  |
+| Add base | NaOH solution, 10 M | 276.9 g |  |
+| Metalation | MeCpPtMe3, 98% | Not verified / 확인 못 함 |  |
+| Metalation | Dodecane | Not verified / 확인 못 함 |  |
+| Wash with toluene | Toluene | Not verified / 확인 못 함 |  |
+| Exchange solvent | Pentane | Not verified / 확인 못 함 |  |
+
+The laboratory procedure is summarized in the TEA paper from earlier experimental studies; the original experimental references remain necessary for full replication. The 240 °C hydrothermal ramp/hold wording is unresolved. The 2 °C/min heating rate is transcribed; no separate 2 h hold is assumed. The published 285 kg batch and industrial utility estimates belong to a scale-up model, not measurements of this laboratory batch. Actual recovered dry mass, mean equipment powers, gas-reference conditions and complete precursor/solvent quantities remain unknown.
+
+## Operating references
+
+These public references retain geography, period, quantity basis and source locator. Only electricity averages can be applied directly as explicit scenarios. Wage-only statistics and equipment connected loads remain reference information. No reference substitutes for measured batch electricity, actual gas conditions, staffing or a supplier quotation. The source texts and manuals are not redistributed.
+
+| Reference | Value | Scope | Source |
+|---|---|---|---|
+| US industrial electricity, 2025 (preliminary) | 0.0862 USD/kWh | National retail average, not a facility tariff or live quote. Source 8.62 US cents/kWh divided by 100. Review demand charges, customer class and location against the actual bill. | [U.S. EIA, Electricity explained: Prices and factors affecting prices](https://www.eia.gov/energyexplained/electricity/prices-and-factors-affecting-prices.php); 2025 annual average retail prices by customer type; footnote 1, Electric Power Monthly Table 5.3, February 2026 (preliminary); accessed 2026-09-15 |
+| US commercial electricity, 2025 (preliminary) | 0.1341 USD/kWh | National commercial retail average. Laboratory electricity contracts may use different customer classes and charges. Source 13.41 US cents/kWh divided by 100. | [U.S. EIA, Electricity explained: Prices and factors affecting prices](https://www.eia.gov/energyexplained/electricity/prices-and-factors-affecting-prices.php); 2025 annual average retail prices by customer type; footnote 1, Electric Power Monthly Table 5.3, February 2026 (preliminary); accessed 2026-09-15 |
+| US chemical technicians, May 2023 mean wage | 29.29 USD/person-hour | Occupation 19-4031, national mean wage. This is a historical wage, not a current fully loaded labor rate. Employer nonwage benefits are excluded by OEWS; staffing, benefits and price-year adjustments require a separate basis. | [U.S. BLS, Occupational Employment and Wages, May 2023: 19-4031 Chemical Technicians](https://www.bls.gov/oes/2023/may/oes194031.htm); National estimates, mean hourly wage; OEWS FAQ, wage definitions; accessed 2026-09-15 |
+| Nabertherm L 9/11/SKM, connected load (web specification) | 3.7 kW rated connected load | 9 L, Tmax 1100 °C; recommended long holds up to 1000 °C. Connected load is not measured average input power. Options and supply voltage affect the rating. The 2024 operating manual lists 3.4 kW for the same model name; confirm the actual unit's version and nameplate. | [Nabertherm, muffle furnaces with embedded heating elements in the ceramic muffle up to 1100 °C](https://nabertherm.com/es/productos/labor/hornos-de-mufla/hornos-de-mufla-con-elementos-calefactores-integrados-en-la-mufla); Especificaciones técnicas, L 9/11/SKM row and footnotes 1, 5; accessed 2026-09-15 |
+| Nabertherm L 9/11/SKM, connected load (2024 manual) | 3.4 kW rated connected load | Manual p. 25, L 9/11/SKM: 9 L, Tmax 1100 °C, connected load 3.4 kW. This differs from the current web table's 3.7 kW. Neither value is measured average consumption for a catalyst recipe. | [Nabertherm Operating Instructions, M01.1060 English, 2024-07](https://nabertherm.com/sites/default/files/noindex/2025-03/M01.1060_English_2024-07.pdf); p. 25, muffle furnace L 9/11/SKM technical table; accessed 2026-09-15 |
+
+## Input provenance
+
+Explicit numeric preparation values carry per-field source snapshots in the JSON library. The stored value, DOI, locator and review date survive import, editing, saving and export. An edit preserves the source value and is flagged as modified; it does not become a published value. Publication metadata verification, source transcription and actual operating measurements are separate evidence levels. Library imports do not populate unknown prices or dry output mass.
+
 ## Generic templates
 
 All templates remain generic cost sequences, not source-verified experimental preparations.
@@ -862,6 +999,7 @@ Access flags indicate a retrieved public full text or PDF supplement; they do no
 | [Ammonia, 2. Production Processes](https://doi.org/10.1002/14356007.o02_o11) — 10.1002/14356007.o02_o11 | Not verified | Not verified | Not verified |
 | [Methanol Synthesis](https://doi.org/10.1002/9783527610044.hetcat0148) — 10.1002/9783527610044.hetcat0148 | Not verified | Not verified | Not verified |
 | [Silica‐Alumina‐Supported, Tungsten‐Based Heterogeneous Alkane Metathesis Catalyst: Is it Closer to a Silica‐ or an Alumina‐Supported System?](https://doi.org/10.1002/adsc.200600436) — 10.1002/adsc.200600436 | Not verified | Not verified | Not verified |
+| [Cost‐Responsive Optimization of Nickel Nanoparticle Synthesis](https://doi.org/10.1002/adsu.202300030) — 10.1002/adsu.202300030 | Yes | Not verified | Yes |
 | [Development and Recent Progress on Ammonia Synthesis Catalysts for Haber–Bosch Process](https://doi.org/10.1002/aesr.202000043) — 10.1002/aesr.202000043 | Not verified | Not verified | Not verified |
 | [PtZn intermetallic nanoalloy encapsulated in silicalite‐1 for propane dehydrogenation](https://doi.org/10.1002/aic.17295) — 10.1002/aic.17295 | Not verified | Not verified | Not verified |
 | [Methane steam reforming, methanation and water‐gas shift: I. Intrinsic kinetics](https://doi.org/10.1002/aic.690350109) — 10.1002/aic.690350109 | Not verified | Not verified | Not verified |
@@ -1182,6 +1320,7 @@ Access flags indicate a retrieved public full text or PDF supplement; they do no
 | [Anion-exchange membrane water electrolyzers and fuel cells](https://doi.org/10.1039/d2cs00038e) — 10.1039/d2cs00038e | Not verified | Not verified | Not verified |
 | [Insight into the influence of Re and Cl on Ag catalysts in ethylene epoxidation](https://doi.org/10.1039/d4cy00858h) — 10.1039/d4cy00858h | Yes | Yes | Not verified |
 | [Efficient hydrodeoxygenation of lignin-derived phenolic compounds under acid-free conditions over carbon-supported NiMo catalysts](https://doi.org/10.1039/d4gc02298j) — 10.1039/d4gc02298j | Not verified | Not verified | Not verified |
+| [Techno-economic and life cycle analyses of the synthesis of a platinum–strontium titanate catalyst](https://doi.org/10.1039/d5cy00189g) — 10.1039/d5cy00189g | Yes | Not verified | Yes |
 | [The State of the Art in Selective Catalytic Reduction of NOxby Ammonia Using Metal‐Exchanged Zeolite Catalysts](https://doi.org/10.1080/01614940802480122) — 10.1080/01614940802480122 | Not verified | Not verified | Not verified |
 | [Water Gas Shift Catalysis](https://doi.org/10.1080/01614940903048661) — 10.1080/01614940903048661 | Not verified | Not verified | Not verified |
 | [Overview: State-of-the Art Commercial Membranes for Anion Exchange Membrane Water Electrolysis](https://doi.org/10.1115/1.4047963) — 10.1115/1.4047963 | Not verified | Not verified | Not verified |

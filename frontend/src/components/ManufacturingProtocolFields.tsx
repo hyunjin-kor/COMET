@@ -2,6 +2,7 @@ import { useLang } from '../lib/i18n';
 import ManufacturingLiterature from './ManufacturingLiterature';
 import ManufacturingInputSources from './ManufacturingInputSources';
 import ManufacturingPurchases from './ManufacturingPurchases';
+import ManufacturingOperatingReferences from './ManufacturingOperatingReferences';
 import type { ManufacturingOperation, ManufacturingProtocol, TemperatureSegment } from '../lib/manufacturing';
 
 function NumberField({ label, value, onChange, min = 0 }: {
@@ -64,6 +65,7 @@ export default function ManufacturingProtocolFields({ value, onChange, allowBatc
       </div>
       <TextField label={l('Protocol and operating-cost sources / assumptions', '제조 조건·운전비 출처 또는 가정')} value={value.source_note} onChange={(v) => patch({ source_note: v })} />
       <ManufacturingInputSources record={value} fields={['finished_batch_mass_kg', 'electricity_usd_kwh', 'labor_usd_h', 'selling_margin_fraction']} onChange={(input_evidence) => patch({ input_evidence })} />
+      <ManufacturingOperatingReferences value={value} onChange={onChange} />
       <label className="block text-sm font-medium">{l('Materials basis for batch costing', '배치 원가의 재료비 계산 방식')}<select className="input-base mt-2 w-full" value={value.materials_basis ?? 'composition'} onChange={(e) => patch({ materials_basis: e.target.value as ManufacturingProtocol['materials_basis'] })}>
         <option value="composition">{l('Use composition and kg/kg purchased consumables', '조성·kg당 구매 소모량 사용')}</option><option value="purchases">{l('Replace with purchases for each batch operation', '각 제조 단계의 배치 구매량으로 대체')}</option>
       </select></label>

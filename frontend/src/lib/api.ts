@@ -1205,6 +1205,7 @@ export const fetchManufacturingLiterature = () => request<{
   review_date: string;
   profiles: import('./manufacturing').LiteratureProtocol[];
   candidates: import('./manufacturing').ManufacturingEvidence[];
+  operating_references: import('./manufacturing').ManufacturingOperatingReference[];
 }>('/decision/manufacturing-literature');
 
 export const fetchDecisionBenchmark = (
