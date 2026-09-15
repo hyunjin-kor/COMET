@@ -10,6 +10,44 @@ from scripts import build_application_note as note_builder
 from scripts import build_submission_manuscript as paper
 
 
+def test_si_publication_labels_preserve_every_frozen_screening_value():
+    from scripts import build_note_si as si
+    from scripts.paper_labels import CANDIDATE_LABELS, FAMILY_LABELS
+    from scripts.paper_units import PER_LB_TO_PER_KG
+
+    text = si.render()
+    assert text == si.OUTPUT.read_text(encoding="utf-8")
+    section = text.split("Table S6. ", 1)[1].split("Names identify", 1)[0]
+    rows = [line.strip("|").split("|") for line in section.splitlines()
+            if line.startswith("| ")][1:]
+    source = si.load("docs/paper/submission-2026-09-08/all_families_2026-09-08.json")
+    expected = [(f["family"], c) for f in source["families"] for c in f["candidates"]]
+    assert len(rows) == len(expected) == 116
+    for row, (family, candidate) in zip(rows, expected, strict=True):
+        assert row[0].strip() == FAMILY_LABELS[family]
+        assert row[1].strip() == CANDIDATE_LABELS[family][candidate["slug"]]
+        assert float(row[2]) == pytest.approx(candidate["landed_cost_per_lb"] * PER_LB_TO_PER_KG, abs=0.000051)
+        assert float(row[3]) == pytest.approx(candidate["lca"]["coverage_pct"], abs=0.0051)
+    assert "RWGS (reverse water–gas shift)" in section
+    assert "| rwgs |" not in text
+    assert "premium" not in section and "workhorse" not in section and "lifetime play" not in section
+
+
+def test_preparation_tables_cover_the_same_candidates_with_readable_names():
+    from scripts import build_manufacturing_literature_review as evidence
+    from scripts import build_note_si as si
+    from scripts.paper_labels import CANDIDATE_LABELS, FAMILY_LABELS, STATUS_LABELS
+
+    library = si.load("backend/data/manufacturing_literature.json")
+    rendered = evidence.render(library)
+    for candidate in library["candidates"]:
+        family, slug = candidate["family"], candidate["slug"]
+        assert f"{FAMILY_LABELS[family]} / {CANDIDATE_LABELS[family][slug]}" in rendered
+        assert STATUS_LABELS[candidate["status"]] in rendered
+    assert "| rwgs /" not in rendered
+    assert "| source_mismatch |" not in rendered
+
+
 def test_note_renders_within_limits_and_matches_committed_files():
     run = note_builder.load_run()
     text = note_builder.note(run)

@@ -55,7 +55,7 @@ python -m ruff check scripts/
 ```
 
 The main article has four figures, no tables and 14 references. Its conservative
-count is 4,530 word equivalents, including a 300-word TOC allowance. The build
+count is 4,566 word equivalents, including a 300-word TOC allowance. The build
 script enforces the 5,000-word limit. Edit generators before rebuilding; do not
 edit the generated article or numerical plots. Native PowerPoint exports are
 already included; Windows PowerPoint is needed only to revise and re-export
@@ -89,3 +89,23 @@ remain applicable. Primary article files, third-party SI, private author files,
 credentials and the CatCost source workbook are excluded from the reproduction
 archive. A local package is not evidence of public deposition or redistribution
 clearance, and no new release DOI is asserted.
+
+## Supporting Information and nomenclature
+
+The scientific SI contains methods, numbered equations and tables, numerical
+verification, uncertainty assumptions and references. Installation commands and
+file checksums belong to this reproduction guide and its package manifest.
+The manufacturing random stream consumes five price/order multiplier columns
+before the manufacturing draws; the checked reproduction script preserves this
+order with seed 20260915 and 1,000 trials.
+
+Generate the SI with `python -m scripts.build_note_si`; use `--check` to verify it.
+Publication labels expand reaction abbreviations (for example, RWGS, reverse
+water–gas shift) and identify candidate composition or structure. The original
+JSON family and candidate identifiers remain unchanged for reproducibility.
+The labels identify screening models, not source-verified formulations.
+
+A local source archive includes development records and is not the proposed
+SI for Publication. Select the scientific input/output records separately;
+author confirmation of software access and final data distribution remains
+outstanding. No local file or archive has been uploaded by this workflow.

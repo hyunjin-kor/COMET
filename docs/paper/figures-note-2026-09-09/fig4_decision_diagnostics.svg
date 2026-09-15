@@ -838,13 +838,13 @@ L 0 2
     <g id="ytick_4">
      <g id="line2d_9"/>
      <g id="text_10">
-      <text style="font-size: 8.5px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="163.744094" y="307.771345" transform="rotate(-0 163.744094 307.771345)">Reverse water-gas shift</text>
+      <text style="font-size: 8.5px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="163.744094" y="307.771345" transform="rotate(-0 163.744094 307.771345)">RWGS (reverse water–gas shift)</text>
      </g>
     </g>
     <g id="ytick_5">
      <g id="line2d_10"/>
      <g id="text_11">
-      <text style="font-size: 8.5px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="163.744094" y="297.915789" transform="rotate(-0 163.744094 297.915789)">Water-gas shift</text>
+      <text style="font-size: 8.5px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="163.744094" y="297.915789" transform="rotate(-0 163.744094 297.915789)">Water–gas shift</text>
      </g>
     </g>
     <g id="ytick_6">
@@ -1593,7 +1593,7 @@ z
     <g id="ytick_39">
      <g id="line2d_53"/>
      <g id="text_62">
-      <text style="font-size: 8.5px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="376.34252" y="489.235599" transform="rotate(-0 376.34252 489.235599)">Water-gas shift</text>
+      <text style="font-size: 8.5px; font-family: 'Arial'; text-anchor: end; fill: #1f2a30" x="376.34252" y="489.235599" transform="rotate(-0 376.34252 489.235599)">Water–gas shift</text>
      </g>
     </g>
     <g id="ytick_40">

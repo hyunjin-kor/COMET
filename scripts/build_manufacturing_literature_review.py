@@ -3,10 +3,15 @@
 import argparse
 import hashlib
 import json
+import sys
 from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+from scripts.paper_labels import CANDIDATE_LABELS, FAMILY_LABELS, STATUS_LABELS  # noqa: E402
+
 SOURCE = ROOT / "backend/data/manufacturing_literature.json"
 OPERATING = ROOT / "backend/data/manufacturing_operating_references.json"
 OUTPUT = ROOT / "docs/paper/manufacturing-literature-2026-09-14.md"
@@ -22,11 +27,11 @@ def render(data):
     counts = Counter(c["status"] for c in candidates)
     with_profile = sum(bool(c["profile_ids"]) for c in candidates)
     methods = data["review_methods"]
-    lines = ["# Supporting information: catalyst preparation evidence", "",
+    lines = ["# Catalyst preparation evidence", "",
              "COMET Application Note. Review date: " + data["review_date"] + ".", "",
              "## Scope and source assessment", "",
              f"The audit covers {len(candidates)} screening candidates in {len({c['family'] for c in candidates})} reaction families and {len(data['templates'])} generic process templates. "
-             f"Crossref confirmed the bibliographic identity of {len(data['sources'])} distinct DOIs. "
+             f"Crossref confirmed the bibliographic identity of {len(data['sources'])} distinct digital object identifiers (DOIs). "
              f"The curated library contains {len(profiles)} named preparation records from {len({p['doi'] for p in profiles})} sources; {with_profile} catalog candidates link to at least one record. "
              "A link may describe a different specimen and does not verify the catalog formulation.", "",
              methods["discovery"], "", methods["selection"], "", methods["limitations"], "",
@@ -52,7 +57,7 @@ def render(data):
              "Unselected inputs remain fixed. Linked gas durations follow the sampled operation time; temperature does not infer power or yield. "
              "Invalid combinations are counted and excluded without clamping, so statistics are conditional on successful draws. "
              "Bounds describe declared scenarios, not source-validated distributions or industrial confidence intervals. "
-             "JSON exports retain the baseline request, resolved prices, protocol hash, input evidence, seed, bounds and failures.", "",
+             "JavaScript Object Notation (JSON) exports retain the baseline request, resolved prices, protocol hash, input evidence, seed, bounds and failures.", "",
              "Saved batch comparisons harmonize purchase, gas and equipment prices only for explicit specification identifiers. "
              "These identifiers declare equivalent chemical forms, grades, concentrations and purchasing or cost boundaries; "
              "names alone do not establish equivalence. Matching price units and gas reference conditions are required; no unit or density conversion is inferred. "
@@ -68,8 +73,8 @@ def render(data):
              "| Reaction family / candidate | Status | Preparation records | Assessment |",
              "|---|---|---|---|"]
     for c in candidates:
-        refs = ", ".join(c["profile_ids"]) or "Not verified / 확인 못 함"
-        lines.append(f"| {cell(c['family'] + ' / ' + c['title'])} | {c['status']} | {refs} | {cell(' '.join(c['notes']))} |")
+        refs = ", ".join(c["profile_ids"]) or "Not verified"
+        lines.append(f"| {cell(FAMILY_LABELS[c['family']] + ' / ' + CANDIDATE_LABELS[c['family']][c['slug']])} | {STATUS_LABELS[c['status']]} | {refs} | {cell(' '.join(c['notes']))} |")
     follow_up = data.get("follow_up_review")
     if follow_up:
         lines += ["", "## Additional primary-source assessment", "", follow_up["limitations"], "",
@@ -84,8 +89,8 @@ def render(data):
                       f"Reviewed {remaining['unique_doi_count']} distinct DOIs for {remaining['candidate_count']} then-unlinked candidates on {remaining['date']}.", "",
                       "| DOI | Crossref | Public-copy lookup | Assessment |", "|---|---|---|---|"]
             for source in remaining["sources"]:
-                lines.append(f"| [{source['doi']}](https://doi.org/{source['doi']}) | {source['crossref_status']} | "
-                             f"{source['public_copy_status']} | {cell(source['assessment'])} |")
+                lines.append(f"| [{source['doi']}](https://doi.org/{source['doi']}) | {source['crossref_status'].replace('_', ' ').capitalize()} | "
+                             f"{source['public_copy_status'].replace('_', ' ').capitalize()} | {cell(source['assessment'])} |")
     lines += ["", "## Source-specific preparations", ""]
     for n, p in enumerate(profiles, 1):
         lines += [f"### S{n}. {p['sample']}", "", f"Record: `{p['id']}`. Boundary: {p['boundary']}.", "",
@@ -111,7 +116,7 @@ def render(data):
                       "| Intermediate / destination | Prepared/recovered | Transferred | Source details |", "|---|---|---|---|"]
             for batch in p["intermediate_batches"]:
                 quantity, unit = ("volume_ml", "mL") if batch.get("allocation_basis") == "volume_used" else ("mass_kg", "kg")
-                values = [f"{batch[key]} {unit}" if batch.get(key) is not None else "Not verified / 확인 못 함" for key in (f"produced_{quantity}", f"used_{quantity}")]
+                values = [f"{batch[key]} {unit}" if batch.get(key) is not None else "Not verified" for key in (f"produced_{quantity}", f"used_{quantity}")]
                 lines.append(f"| {cell(batch['name'])} / {cell(batch.get('destination_batch_id') or 'final batch')} | {values[0]} | {values[1]} | {cell(batch.get('notes', ''))} |")
         purchases = [(op, item) for op in p["operations"] for item in op.get("purchases", [])]
         if purchases:
@@ -119,7 +124,7 @@ def render(data):
                       "| Operation | Material | Amount | Note |", "|---|---|---|---|"]
             for op, item in purchases:
                 quantity = item.get("quantity")
-                amount = f"{quantity} {item['unit']}" if quantity is not None else "Not verified / 확인 못 함"
+                amount = f"{quantity} {item['unit']}" if quantity is not None else "Not verified"
                 lines.append(f"| {cell(op['name'])} | {cell(item['name'])} | {amount} | {cell(item.get('notes', ''))} |")
         lines += ["", " ".join(p["limitations"]), ""]
     lines += ["## Operating references", "",
