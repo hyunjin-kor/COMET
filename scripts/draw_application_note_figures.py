@@ -58,7 +58,7 @@ TEXT = {
     "en": {
         "font": "Arial",
         "share_x": "Share of the selling price (%)",
-        "seg_materials": "Materials", "seg_processing": "Processing", "seg_overhead": "Other costs",
+        "seg_materials": "Materials", "seg_processing": "Processing", "seg_overhead": "Overheads + profit margin + route allowances",
         "total_head": "USD/kg",
         "c_x": "Selling price (USD per kg, log scale)",
         "c_comet": "COMET", "c_published": "Baddour et al. [1]", "c_market": "Published market price",
@@ -80,7 +80,7 @@ TEXT = {
     "ko": {
         "font": "Malgun Gothic",
         "share_x": "판매 단가 대비 비율 (%)",
-        "seg_materials": "재료비", "seg_processing": "가공비", "seg_overhead": "기타 비용",
+        "seg_materials": "재료비", "seg_processing": "가공비", "seg_overhead": "간접비·판매 마진·경로별 추가 비용",
         "total_head": "USD/kg",
         "c_x": "판매 단가 (USD/kg, 로그 축)",
         "c_comet": "COMET", "c_published": "Baddour 등 [1]", "c_market": "발표된 시장 가격",
