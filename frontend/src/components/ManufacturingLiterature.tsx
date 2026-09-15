@@ -51,9 +51,18 @@ export default function ManufacturingLiterature({ evidence, onSelect }: {
       <a className="block text-sm font-medium text-teal-800 underline" href={selected.url} target="_blank" rel="noreferrer"><ScientificText text={selected.title} /></a>
       <p className="text-xs leading-5 text-slate-500">{selected.doi} · {selected.locator}</p>
       <span className="cp-chip">{selected.boundary === 'electrode' ? l('Electrode preparation', '전극 제조') : l('Catalyst powder preparation', '촉매 분말 제조')}</span>
+      {!!selected.intermediate_batches?.length && <div className="rounded-lg bg-slate-50 p-3 text-xs leading-6 text-slate-600">
+        <p className="font-medium">{l('Intermediate transfers', '중간 생성물 분취')}</p>
+        {selected.intermediate_batches.map((batch) => <p key={batch.id}>
+          <ScientificText text={batch.name} /> → <ScientificText text={selected.intermediate_batches?.find((item) => item.id === batch.destination_batch_id)?.name ?? l('Final catalyst batch', '최종 촉매 배치')} />:
+          {' '}{batch.used_mass_kg ?? l('Not reported', '미확인')} kg
+          {' · '}{l('Recovered', '회수량')} {batch.produced_mass_kg ?? l('Not reported', '미확인')} kg
+        </p>)}
+      </div>}
       <ol className="space-y-2">
         {selected.operations.map((op, i) => <li key={i} className="rounded-lg border border-slate-100 p-3 text-sm leading-6">
           <div className="font-medium text-slate-900">{i + 1}. <ScientificText text={op.name} /></div>
+          {op.intermediate_batch_id && <p className="text-xs text-slate-500"><ScientificText text={selected.intermediate_batches?.find((batch) => batch.id === op.intermediate_batch_id)?.name ?? op.intermediate_batch_id} /></p>}
           <div className="mt-1 flex flex-wrap gap-x-3 text-teal-800">
             {(op.temperature_profile ?? []).map((s, j) => <span key={j}>{s.target_c ?? '?'} °C · {s.hold_h ?? '?'} h · {s.ramp_c_per_min ?? '?'} °C/min</span>)}
             {op.duration_h != null && <span>{Number(op.duration_h.toFixed(4))} h</span>}

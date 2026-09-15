@@ -80,6 +80,54 @@ def test_whole_batch_charge_does_not_assume_reusable_inventory_or_an_unknown_yie
     assert row["value"] is None and row["effect"] == "record_only"
 
 
+def nested_protocol():
+    p = intermediate_protocol()
+    p["intermediate_batches"][0]["destination_batch_id"] = "pellets"
+    p["intermediate_batches"].append(dict(id="pellets", name="Pellets", produced_mass_kg=.02, used_mass_kg=.01))
+    p["operations"].insert(1, dict(name="Pellet forming", intermediate_batch_id="pellets", duration_h=1,
+        additional_time_h=0, average_power_kw=0, equipment_usd_h=0, attended_labor_h=0, other_cost_usd=2))
+    return p
+
+
+def test_successive_aliquots_multiply_fractions_without_repeating_upstream_charges():
+    p = nested_protocol()
+    result = estimate_catalyst_cost(**payload(), manufacturing_protocol=p)
+    r = result["manufacturing"]
+    assert r["intermediate_batches"][0]["transfer_fraction"] == .1
+    assert r["intermediate_batches"][0]["allocation_fraction"] == .05
+    assert r["batch_materials_cost_usd"] == 4  # 20*.1*.5 + 3
+    assert r["batch_processing_cost_usd"] == pytest.approx(13.6*.1*.5 + 2*.5 + 4.6)
+    assert result["summary"]["estimated_price_per_kg"] == pytest.approx(5666.85, abs=.0001)
+    assert r["serial_operation_hours"] == 4
+    assert r["allocated_operation_hours"] == pytest.approx(2*.05 + 1*.5 + 1)
+    calc = {row["id"]: row for row in r["trace"]["calculations"]}
+    assert "intermediate_batches.1.allocation_fraction" in calc["intermediate_batches.0.allocation_fraction"]["input_paths"]
+    p["intermediate_batches"].reverse()
+    reversed_order = evaluate_protocol(ManufacturingProtocol.model_validate(p))
+    assert reversed_order["batch_processing_cost_usd"] == r["batch_processing_cost_usd"]
+
+
+@pytest.mark.parametrize("destination", ["support", "missing", "cycle"])
+def test_invalid_transfer_destinations_and_cycles_are_rejected(destination):
+    p = nested_protocol()
+    if destination == "cycle":
+        p["intermediate_batches"][1]["destination_batch_id"] = "support"
+    else:
+        p["intermediate_batches"][0]["destination_batch_id"] = destination
+    with pytest.raises(ValueError):
+        ManufacturingProtocol.model_validate(p)
+
+
+def test_unknown_downstream_recovery_cannot_leave_an_upstream_cost_looking_complete():
+    p = nested_protocol()
+    p["mode"] = "record_only"
+    p["intermediate_batches"][1]["produced_mass_kg"] = None
+    r = evaluate_protocol(ManufacturingProtocol.model_validate(p))
+    assert all(row["allocation_fraction"] is None for row in r["intermediate_batches"])
+    assert r["operations"][0]["cost_usd"] is None
+    assert r["batch_materials_cost_usd"] is None
+
+
 @pytest.mark.parametrize("field", ["produced_mass_kg", "used_mass_kg"])
 def test_unknown_intermediate_mass_blocks_cost_and_remains_unknown_in_record_mode(field):
     p = intermediate_protocol()
@@ -114,8 +162,9 @@ def test_ambiguous_batch_boundaries_are_rejected(error):
         ManufacturingProtocol.model_validate(p)
 
 
-def test_api_save_reload_retains_allocation_source_and_modified_recovery(client):
-    p = intermediate_protocol()
+@pytest.mark.parametrize("make_protocol", [intermediate_protocol, nested_protocol])
+def test_api_save_reload_retains_allocation_source_and_modified_recovery(client, make_protocol):
+    p = make_protocol()
     p["intermediate_batches"][0]["produced_mass_kg"] = .02
     saved = client.post("/api/calculate/save?name=synthetic-aliquot", json={**payload(), "manufacturing_protocol": p})
     assert saved.status_code == 200, saved.text

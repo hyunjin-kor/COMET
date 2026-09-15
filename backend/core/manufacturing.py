@@ -31,18 +31,31 @@ def evaluate_protocol(protocol: ManufacturingProtocol) -> dict:
     purchase_rows = []
     purchases_complete = True
     allocation = {"": 1.0}
+    transfer = {}
     intermediate_rows = []
     for batch in protocol.intermediate_batches:
         if batch.allocation_basis == "whole_batch":
             fraction = 1.0
         else:
             produced = need(batch.produced_mass_kg, batch.name + ": recovered intermediate mass (kg)")
-            used = need(batch.used_mass_kg, batch.name + ": intermediate mass used in the final batch (kg)")
+            used = need(batch.used_mass_kg, batch.name + ": intermediate mass used in the destination batch (kg)")
             fraction = used / produced if produced and used else None
-        allocation[batch.id] = fraction
+        transfer[batch.id] = fraction
         intermediate_rows.append({"id": batch.id, "name": batch.name, "produced_mass_kg": batch.produced_mass_kg,
-                                  "used_mass_kg": batch.used_mass_kg, "allocation_fraction": fraction,
+                                  "used_mass_kg": batch.used_mass_kg, "transfer_fraction": fraction,
+                                  "destination_batch_id": batch.destination_batch_id,
                                   "allocation_basis": batch.allocation_basis})
+    destinations = {batch.id: batch.destination_batch_id for batch in protocol.intermediate_batches}
+
+    def final_fraction(identifier):
+        if identifier not in allocation:
+            downstream = final_fraction(destinations[identifier])
+            local = transfer[identifier]
+            allocation[identifier] = local * downstream if local is not None and downstream is not None else None
+        return allocation[identifier]
+
+    for row in intermediate_rows:
+        row["allocation_fraction"] = final_fraction(row["id"])
     for index, op in enumerate(protocol.operations, 1):
         prefix = f"{index}. {op.name}: "
         before = len(missing)
@@ -157,8 +170,9 @@ def evaluate_protocol(protocol: ManufacturingProtocol) -> dict:
                            " Solvent quantities are records; purchases are costed only through the materials/consumables inputs.")
     if protocol.intermediate_batches:
         report["boundary"] += (" Intermediate costs use mass used / mass recovered on the same material basis, or an explicitly selected whole-batch charge. "
-                               "Independent intermediate batches feed the final batch directly; nested transfers and co-product credits are not modeled. "
-                               "Mass allocation assumes unused recoverable material retains its cost; whole-batch charging assigns all expenditure to this final batch without inventory credit. "
+                               "For successive transfers, allocation fractions are multiplied along the declared path to the final batch. "
+                               "Each intermediate feeds one destination; splitting one intermediate across several branches and co-product credits are not modeled. "
+                               "Mass allocation assumes unused recoverable material retains its cost; whole-batch charging assigns all costs to the receiving batch before any further transfer. "
                                "Actual cash expenditure includes the whole intermediate batch. Allocated operation-hours are cost equivalents, not a schedule. "
                                "Do not add an internally transferred intermediate as another purchase.")
     report["trace"] = build_manufacturing_trace(protocol, report)

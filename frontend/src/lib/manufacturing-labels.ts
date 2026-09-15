@@ -3,6 +3,8 @@ const labels: Record<string, [string, string]> = {
   produced_mass_kg: ['Recovered intermediate mass (kg)', '중간 생성물 회수량 (kg)'],
   used_mass_kg: ['Intermediate mass used (kg)', '중간 생성물 사용량 (kg)'],
   allocation_fraction: ['Allocated fraction', '비용 배분 비율'],
+  transfer_fraction: ['Fraction transferred at this stage', '이 단계의 분취 비율'],
+  destination_batch_id: ['Receiving batch', '투입 대상 배치'],
   allocation_basis: ['Cost allocation basis', '비용 배분 기준'],
   intermediate_batch_id: ['Intermediate batch', '중간 배치'],
   selling_price: ['Estimated selling price', '추정 판매 단가'], processing: ['Processing cost', '가공비'],

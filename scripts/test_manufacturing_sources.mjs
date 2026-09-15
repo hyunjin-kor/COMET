@@ -57,3 +57,14 @@ test('literature aliquots retain unknown recovery and source values independentl
   assert.equal(imported.intermediate_batches[0].input_evidence.used_mass_kg.recorded_value, .001);
   assert.equal(profile.intermediate_batches[0].used_mass_kg, .001);
 });
+
+test('successive literature transfers survive import without assuming recovered mass', () => {
+  const profile = library.profiles.find((p) => p.id === 'ptsn-alumina-04ca-2024');
+  const imported = adaptLiteratureProtocol(profile);
+  assert.equal(imported.intermediate_batches[0].destination_batch_id, 'pellets');
+  assert.equal(imported.intermediate_batches[0].used_mass_kg, .00375);
+  assert.equal(imported.intermediate_batches[1].used_mass_kg, .003);
+  assert.equal(imported.intermediate_batches[1].produced_mass_kg, null);
+  imported.intermediate_batches[0].destination_batch_id = '';
+  assert.equal(profile.intermediate_batches[0].destination_batch_id, 'pellets');
+});

@@ -16,7 +16,7 @@ UNITS = {
     "other_cost_usd": "USD/repetition", "flow_l_per_min": "L/min", "price_usd_per_m3": "USD/m3",
     "repetitions": "count", "pressure_bar_abs": "bar absolute", "stirring_rpm": "rpm",
     "ph": "pH", "solvent_volume_ml": "mL/batch",
-    "produced_mass_kg": "kg/intermediate batch", "used_mass_kg": "kg/final batch",
+    "produced_mass_kg": "kg/intermediate batch", "used_mass_kg": "kg/destination batch",
 }
 CONTEXT = {"name", "equipment", "atmosphere", "pressure_bar_abs", "stirring_rpm", "ph",
            "solvent", "solvent_volume_ml", "notes", "source_note", "source_record_id", "volume_basis", "id"}
@@ -75,14 +75,17 @@ def build_manufacturing_trace(protocol: ManufacturingProtocol, report: dict) -> 
         calculations.append({"id": identifier, "formula": formula, "input_paths": paths,
                              "value": value, "unit": unit, "operation": operation})
 
-    allocation_paths = {}
+    allocation_paths = {batch.id: f"intermediate_batches.{i}.allocation_fraction" for i, batch in enumerate(protocol.intermediate_batches)}
     for index, batch in enumerate(protocol.intermediate_batches):
         prefix = f"intermediate_batches.{index}."
         collect(batch, prefix)
-        allocation_paths[batch.id] = prefix + "allocation_fraction"
         whole = batch.allocation_basis == "whole_batch"
-        calculation(prefix + "allocation_fraction", "1 (whole batch charged; no inventory credit)" if whole else "used_mass_kg / produced_mass_kg",
+        calculation(prefix + "transfer_fraction", "1 (whole batch charged; no inventory credit)" if whole else "used_mass_kg / produced_mass_kg",
                     [prefix + "allocation_basis", *([] if whole else [prefix + "used_mass_kg", prefix + "produced_mass_kg"])],
+                    report["intermediate_batches"][index]["transfer_fraction"], "fraction")
+        downstream = allocation_paths.get(batch.destination_batch_id)
+        calculation(prefix + "allocation_fraction", "transfer_fraction * destination_allocation_fraction" if downstream else "transfer_fraction",
+                    [prefix + "transfer_fraction", prefix + "destination_batch_id", *([downstream] if downstream else [])],
                     report["intermediate_batches"][index]["allocation_fraction"], "fraction")
     for index, (op, result) in enumerate(zip(protocol.operations, report["operations"], strict=True)):
         prefix = f"operations.{index}."

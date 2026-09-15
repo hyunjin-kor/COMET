@@ -73,6 +73,7 @@ class IntermediateBatch(SourcedProtocolModel):
     id: str = Field(min_length=1, max_length=150)
     name: str = Field(min_length=1, max_length=200)
     allocation_basis: Literal["mass_used", "whole_batch"] = "mass_used"
+    destination_batch_id: str = Field(default="", max_length=150)
     produced_mass_kg: float | None = Field(default=None, gt=0)
     used_mass_kg: float | None = Field(default=None, gt=0)
     notes: str = Field(default="", max_length=2000)
@@ -150,6 +151,16 @@ class ManufacturingProtocol(SourcedProtocolModel):
             raise ValueError("Every operation must refer to a defined intermediate batch or the final batch")
         if set(ids) - assigned:
             raise ValueError("Every intermediate batch needs at least one assigned operation")
+        destinations = {batch.id: batch.destination_batch_id for batch in self.intermediate_batches}
+        if set(destinations.values()) - set(ids) - {""}:
+            raise ValueError("Intermediate transfers must feed a defined batch or the final batch")
+        for identifier in ids:
+            visited = set()
+            while identifier:
+                if identifier in visited:
+                    raise ValueError("Intermediate batch transfers must not contain a cycle")
+                visited.add(identifier)
+                identifier = destinations[identifier]
         if ids and all(op.intermediate_batch_id for op in self.operations):
             raise ValueError("At least one operation must belong to the final batch")
         return self

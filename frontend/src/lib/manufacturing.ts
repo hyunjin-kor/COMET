@@ -82,6 +82,7 @@ export interface IntermediateBatch extends SourcedInputs {
   id: string;
   name: string;
   allocation_basis?: 'mass_used' | 'whole_batch';
+  destination_batch_id?: string;
   produced_mass_kg?: number | null;
   used_mass_kg?: number | null;
   notes?: string;
@@ -153,7 +154,7 @@ export interface ManufacturingReport {
   missing_inputs: string[];
   serial_operation_hours: number | null;
   allocated_operation_hours?: number | null;
-  intermediate_batches?: Array<IntermediateBatch & { allocation_fraction: number | null }>;
+  intermediate_batches?: Array<IntermediateBatch & { allocation_fraction: number | null; transfer_fraction: number | null }>;
   batch_processing_cost_usd: number | null;
   processing_cost_usd_kg: number | null;
   manufacturing_cost_usd_kg?: number;

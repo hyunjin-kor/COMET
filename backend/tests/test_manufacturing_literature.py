@@ -51,6 +51,7 @@ def test_curated_sources_are_registered_but_not_automatically_cost_complete():
         assert profile["locator"] and profile["sample"] and profile["limitations"]
         protocol = ManufacturingProtocol(
             operations=profile["operations"], product_basis=profile["boundary"],
+            intermediate_batches=profile.get("intermediate_batches", []),
             source_record_id=profile["id"], source_note=profile["url"],
         )
         result = evaluate_protocol(protocol)
@@ -163,8 +164,57 @@ def test_explicit_preparation_numbers_retain_source_value_and_locator():
                 for child in value:
                     check(child, preparation)
     for preparation in manufacturing_library()["profiles"]:
-        for operation in preparation["operations"]:
+        for operation in [*preparation["operations"], *preparation.get("intermediate_batches", [])]:
             check(operation, preparation)
+
+
+def test_ptsn_pellets_preserve_successive_aliquots_without_inventing_recovery():
+    profiles = {p["id"]: p for p in manufacturing_library()["profiles"]}
+    p = profiles["ptsn-alumina-04ca-2024"]
+    blend, pellets = p["intermediate_batches"]
+    assert blend["used_mass_kg"] == .00375 and blend["destination_batch_id"] == "pellets"
+    assert pellets["used_mass_kg"] == .003 and pellets["destination_batch_id"] == ""
+    assert blend["produced_mass_kg"] is None and pellets["produced_mass_kg"] is None
+    assert p["operations"][0]["purchases"][0]["quantity"] == 20
+    assert p["operations"][7]["purchases"][1]["quantity"] == .168
+    assert p["operations"][8]["temperature_profile"][0]["hold_h"] is None
+    assert p["operations"][6]["temperature_profile"][0].get("ramp_c_per_min") is None
+
+
+def test_equipment_settings_do_not_become_measured_operating_power():
+    profiles = {p["id"]: p for p in manufacturing_library()["profiles"]}
+    cases = [("nicu-ms-600-2022", "Microwave dry", 1/60, "800 W"),
+             ("iro2-white-p25-photo-2024", "Photodeposit iridium", 8, "9 W"),
+             ("fused-wustite-w-12-2022", "Fuse precursor", 50/60, "2000 A")]
+    for identifier, name, hours, rating in cases:
+        operation = next(op for op in profiles[identifier]["operations"] if op["name"] == name)
+        assert operation["duration_h"] == hours
+        assert rating in operation["notes"]
+        assert operation.get("average_power_kw") is None
+        assert operation.get("measured_energy_kwh") is None
+
+
+def test_her_suspension_and_silver_electrode_do_not_supply_powder_yields():
+    profiles = {p["id"]: p for p in manufacturing_library()["profiles"]}
+    for phase, temperature in [("m", 200), ("s", 240)]:
+        p = profiles[f"mos2-{phase}-2016"]
+        assert p["operations"][1]["temperature_profile"][0] == {
+            **p["operations"][1]["temperature_profile"][0], "target_c": temperature, "hold_h": 12}
+        assert "water suspension" in p["limitations"][0]
+        assert all("dry" not in op["name"].lower() for op in p["operations"])
+    silver = profiles["ag-hollow-fiber-redox-2022"]
+    assert silver["boundary"] == "electrode"
+    assert silver["operations"][-2]["duration_h"] == 240/3600
+    assert silver["operations"][-1]["duration_h"] == 600/3600
+    assert silver["intermediate_batches"][0]["used_mass_kg"] is None
+
+
+def test_ceria_vessel_capacity_is_not_imported_as_a_charge_volume():
+    p = next(p for p in manufacturing_library()["profiles"] if p["id"] == "ni-ceria-r-2022")
+    hydrothermal = p["operations"][1]
+    assert hydrothermal.get("solvent_volume_ml") is None
+    assert "capacity" in hydrothermal["notes"]
+    assert p["intermediate_batches"][0]["used_mass_kg"] == .001
 
 
 def test_nickel_cases_separate_precursor_changes_from_time_and_unknown_output():

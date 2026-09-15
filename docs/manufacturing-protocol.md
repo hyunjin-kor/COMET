@@ -83,12 +83,13 @@ assumed denominator, not an automatic reaction-yield calculation.
 
 ### Intermediate batches and aliquots
 
-An independent support or intermediate batch can feed the final batch directly.
+An intermediate batch can feed another intermediate or the final batch.
 Assign all operations preparing that intermediate to its named batch. Record the
 mass recovered from the entire declared batch (including repeated operations) and
-the mass transferred to the final batch on the same material and mass basis.
+the mass transferred to its receiving batch on the same material and mass basis.
 Purchases, electricity, gas, equipment, labor and additional charges receive the
-same **used mass / recovered mass** allocation. Missing masses prevent proportional
+same **used mass / recovered mass** allocation. Successive transfers multiply the
+fractions along the path to the final batch. Missing masses prevent proportional
 costing; the schema rejects mass used above recovered mass and undefined batches.
 
 This allocation assumes unused recoverable material retains its share of cost.
@@ -97,9 +98,10 @@ all that expenditure to the final product (for example, a one-off preparation wi
 no inventory credit), explicitly select **whole batch**. Unknown intermediate
 recovery remains a record in that mode and is not needed to invent a cost fraction.
 Final dry output is required in both modes. Internally transferred intermediates
-must not be entered again as purchased materials. Nested intermediate transfers,
-co-product allocation, inventory scheduling and automatic loss balances are not
-modeled. Record such boundaries separately before costing.
+must not be entered again as purchased materials. Each intermediate has one receiving
+batch, and circular transfers are rejected. Branching one intermediate into multiple
+destinations, co-product allocation, inventory scheduling and automatic loss balances
+are not modeled. Record such boundaries separately before costing.
 
 The report preserves whole-batch purchase quantities, operation time, electricity,
 incurred charges, allocation fractions and allocated final-product costs. CSV/JSON

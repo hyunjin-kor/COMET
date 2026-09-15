@@ -39,11 +39,12 @@ def render(data):
              "It replaces Step Method processing cost and does not add it twice. Electricity is measured kWh or input kW multiplied by time; "
              "gas volume and price require matching reference conditions. Temperature alone does not predict furnace consumption, yield or catalytic performance. "
              "Electrode preparations remain records and cannot use a dry-powder kg denominator. Published procedures are evidence records, not laboratory operating instructions.", "",
-             "Batch purchases can replace the entire composition-based materials bill. For independent intermediate batches, "
+             "Batch purchases can replace the entire composition-based materials bill. For intermediate batches, "
              "all preparation charges are allocated by mass transferred divided by mass recovered on the same material basis; "
              "unused recoverable inventory retains its share of cost. Alternatively, explicit whole-batch charging assigns the full expenditure "
-             "to the final batch without inventory credit. Internal transfers are not purchased twice. Unknown masses block proportional "
-             "allocation, and nested transfers or co-products require a separately defined boundary. Incurred and allocated costs, input sources "
+             "to the receiving batch before any further transfer. Internal transfers are not purchased twice. Unknown masses block proportional "
+             "allocation. Successive transfers multiply their fractions; each intermediate has one destination, and circular paths are rejected. "
+             "Branching transfers and co-products require a separately defined boundary. Incurred and allocated costs, input sources "
              "and equations are preserved in the calculation trace and exports.", "",
              "The frozen May 2026 screening estimates and rankings use the original composition and process assumptions. "
              "The preparation audit does not retrospectively validate these assumptions. No industrial utility use, batch yield or manufacturing cost was inferred from a paper's reaction temperature.", "",
@@ -56,6 +57,14 @@ def render(data):
     for c in candidates:
         refs = ", ".join(c["profile_ids"]) or "Not verified / 확인 못 함"
         lines.append(f"| {cell(c['family'] + ' / ' + c['title'])} | {c['status']} | {refs} | {cell(' '.join(c['notes']))} |")
+    follow_up = data.get("follow_up_review")
+    if follow_up:
+        lines += ["", "## Additional primary-source assessment", "", follow_up["limitations"], "",
+                  "| Selected DOI | Preparation records | Assessment |", "|---|---|---|"]
+        for source in follow_up["selected_sources"]:
+            lines.append(f"| [{source['doi']}]({source['primary_url']}) | {cell(', '.join(source['profile_ids']) or 'Not curated')} | {cell(source['assessment'])} |")
+        lines += ["", "The accompanying JSON retains each targeted query, database endpoint, search date and hit count. "
+                  "Search retrieval and the existence of a preparation record are separate outcomes.", ""]
     lines += ["", "## Source-specific preparations", ""]
     for n, p in enumerate(profiles, 1):
         lines += [f"### S{n}. {p['sample']}", "", f"Record: `{p['id']}`. Boundary: {p['boundary']}.", "",
@@ -75,10 +84,10 @@ def render(data):
             lines.append(f"| {cell(op['name'])} | {cell('; '.join(conditions) or 'Not quantified')} | {cell(op.get('notes', ''))} |")
         if p.get("intermediate_batches"):
             lines += ["", "Intermediate transfers (recovery is not inferred from precursor inputs):", "",
-                      "| Intermediate | Recovered kg | Used kg | Source details |", "|---|---|---|---|"]
+                      "| Intermediate / destination | Recovered kg | Used kg | Source details |", "|---|---|---|---|"]
             for batch in p["intermediate_batches"]:
                 values = [batch.get(key) if batch.get(key) is not None else "Not verified / 확인 못 함" for key in ("produced_mass_kg", "used_mass_kg")]
-                lines.append(f"| {cell(batch['name'])} | {values[0]} | {values[1]} | {cell(batch.get('notes', ''))} |")
+                lines.append(f"| {cell(batch['name'])} / {cell(batch.get('destination_batch_id') or 'final batch')} | {values[0]} | {values[1]} | {cell(batch.get('notes', ''))} |")
         purchases = [(op, item) for op in p["operations"] for item in op.get("purchases", [])]
         if purchases:
             lines += ["", "Explicit purchases/inputs (unpriced; missing amounts remain unknown):", "",
