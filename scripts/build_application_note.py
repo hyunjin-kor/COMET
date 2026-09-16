@@ -135,7 +135,7 @@ Current quotations include Johnson Matthey platinum and palladium prices<sup>7</
 
 The screening library includes {r('s', 'screening_basis_counts.literature_architecture_proxy')} literature-architecture and {r('s', 'screening_basis_counts.engineering_proxy')} engineering proxies. Rankings combine cost, price-data reliability, route, and performance. Within each family, cost scores span 100 for the least expensive candidate to 0 for the most expensive; equal costs receive 100. Route and performance scores are author-assigned screening judgments. Baseline rankings use May 2026 prices, balanced weights, and the full candidate set; lower cost resolves ties. Incomplete electrode cases use powder costs.
 
-The combined analysis evaluates {rb('summary.months')} monthly price datasets and {rb('summary.weight_points["0.05"]')} weight combinations, giving {rb('summary.joint_scenarios_all_families["0.05"]', ',')} scenarios across families. Figure 4(a) separates first-rank frequencies of the baseline candidate, its most frequent alternative, and others. The median baseline frequency is {rb('summary.reference_winner_joint_share_median_pct', '.2f')}%. These frequencies measure scenario stability, not future probabilities. Candidate removal changes the leader in {rb('summary.candidate_removal_winner_changes')} of {rb('summary.candidate_removal_cases')} tests; {rb('summary.rubric_robust_family_counts["5"]')} families retain their leader under 5-point route/performance-score changes. Figure 4(b) compares these distinct tests; passing one does not establish robustness to the others.
+The combined analysis evaluates {rb('summary.months')} monthly price datasets and {rb('summary.weight_points["0.05"]', ',')} weight combinations, giving {rb('summary.joint_scenarios_all_families["0.05"]', ',')} scenarios across families. Figure 4(a) separates first-rank frequencies of the baseline candidate, its most frequent alternative, and others. The median baseline frequency is {rb('summary.reference_winner_joint_share_median_pct', '.2f')}%. These frequencies measure scenario stability, not future probabilities. Candidate removal changes the leader in {rb('summary.candidate_removal_winner_changes')} of {rb('summary.candidate_removal_cases')} tests; {rb('summary.rubric_robust_family_counts["5"]')} families retain their leader under 5-point route/performance-score changes. Figure 4(b) compares these distinct tests; passing one does not establish robustness to the others.
 
 Saved batch comparisons share prices only through explicit specification identifiers with matching units and gas reference conditions. Common operating assumptions include electricity, labor, overheads, and margin. Quantities, sequences, and yields remain case-specific; original records are preserved.
 
@@ -155,7 +155,7 @@ Industrial accuracy remains unvalidated because observations did not jointly mat
 
 ## Supporting Information
 
-Calculation methods and equations, assumed manufacturing inputs, arithmetic verification, sensitivity and uncertainty analyses, historical metal prices, candidate selling prices, and preparation-evidence coverage (PDF). Preparation evidence, operating references, frozen calculation inputs and results, screening and ranking records, and reproduction instructions (ZIP).
+Calculation methods and equations, transfer allocation, assumed manufacturing inputs, arithmetic verification, sensitivity and uncertainty analyses, historical metal prices and observed-price cost crossovers, candidate selling prices, preparation-evidence coverage, and application views (PDF). Preparation evidence, operating references, frozen calculation inputs and results, screening and ranking records, and reproduction instructions (ZIP).
 
 ## Data and Software Availability
 
@@ -163,7 +163,7 @@ COMET version {r('m', 'project_version')} uses the PolyForm Noncommercial Licens
 
 ## Acknowledgments
 
-OpenAI GPT tools assisted manuscript editing and conceptual artwork in Figures 1–3 in September 2026. Numerical plots were generated from the reported calculations. The authors are responsible for the final content. Funding: [author statement required].
+OpenAI GPT tools assisted manuscript editing and conceptual artwork in Figures 1–3, and Google Gemini generated conceptual artwork in Supporting Information Figures S1 and S7, in September 2026. Numerical plots were generated from the reported calculations. The authors are responsible for the final content. Funding: [author statement required].
 
 ## Competing interests
 

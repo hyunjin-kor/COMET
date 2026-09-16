@@ -1,0 +1,64 @@
+[
+  {
+    "file": "artwork/fig2a_cost_model.text-free.png",
+    "sha256": "1939feaecac351163b0a41728c64e8e0a8e7d3a34f7bd3a88f60eac35a875ef4",
+    "pixels": [
+      2172,
+      724
+    ],
+    "tool": "OpenAI image generation",
+    "exact_model_version": "not confirmed",
+    "date": "2026-09-13",
+    "prompt": "artwork/fig2a_cost_model.prompt.md",
+    "purpose": "Figure 2(a) schematic; identical bytes to diagram-sources-2026-09-13-h26/artwork/fig2a_cost_model.text-free.png",
+    "generated_bytes_embedded_unchanged": true,
+    "toc_use": false,
+    "input": "docs/paper/diagram-sources-2026-09-13-h26/artwork/fig2a_cost_model.text-free.png"
+  },
+  {
+    "file": "artwork/fig3a_manufacturing.text-free.png",
+    "sha256": "5f41378d1ad5eb56ad1112b545d78393ee44b04fd8ca93d5e091927a4a3c94e6",
+    "pixels": [
+      2172,
+      724
+    ],
+    "tool": "OpenAI image generation tool",
+    "exact_model_version": "not confirmed",
+    "date": "2026-09-15",
+    "prompt": "artwork/fig3a_manufacturing.prompt.md",
+    "purpose": "Figure 3(a) conceptual preparation sequence; identical bytes to diagram-sources-2026-09-15/artwork/manufacturing.text-free.png",
+    "generated_bytes_embedded_unchanged": true,
+    "toc_use": false,
+    "input": "docs/paper/diagram-sources-2026-09-15/artwork/manufacturing.text-free.png"
+  },
+  {
+    "file": "artwork/figS1_allocation.text-free.png",
+    "sha256": "6710c5f572592693dd3bf9e38de20d17bf42bdb5ebd4ccd17b4bba726fbc861d",
+    "pixels": [
+      1792,
+      592
+    ],
+    "tool": "Google Gemini web image generation (thinking model)",
+    "exact_model_version": "not confirmed",
+    "date": "2026-09-16",
+    "prompt": "artwork/figS1_allocation.prompt.md",
+    "purpose": "Figure S7 concept: solution aliquot, intermediate transfer and final batch; no numerical content",
+    "generated_bytes_embedded_unchanged": true,
+    "toc_use": false
+  },
+  {
+    "file": "artwork/figS7_provenance.text-free.png",
+    "sha256": "5478f75206a06c21a36021465f929493cba77a3da4308dc11b43fe2c104ce754",
+    "pixels": [
+      1792,
+      592
+    ],
+    "tool": "Google Gemini web image generation (thinking model)",
+    "exact_model_version": "not confirmed",
+    "date": "2026-09-16",
+    "prompt": "artwork/figS7_provenance.prompt.md",
+    "purpose": "Figure S8 concept: source passage, structured record with an edit mark, cost breakdown and checksum seal; documents show abstract lines only",
+    "generated_bytes_embedded_unchanged": true,
+    "toc_use": false
+  }
+]

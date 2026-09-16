@@ -23,8 +23,10 @@ its prices, dry output and operating inputs are not experimental measurements.
   independent cost balance, sensitivity results and frozen screening tables.
 - `docs/paper/manufacturing-study-2026-09-15/`: frozen numerical study and
   generated manufacturing figures.
-- `docs/paper/diagram-sources-2026-09-15/`: conceptual artwork, editable bilingual
-  PowerPoint labels, prompt, provenance and export manifest.
+- `docs/paper/diagram-sources-2026-09-16/`: editable bilingual PowerPoint decks for
+  Figures 2–4 and S1–S8, their rendered numeric panels, conceptual artwork, prompts,
+  provenance and export manifest (Figure 1 remains in `diagram-sources-2026-09-13-h26/`).
+- `docs/paper/figures-si-2026-09-16/`: published Supporting Information figures.
 - `docs/paper/application-note-2026-09-09.md`: generated main manuscript.
 
 ## Reproduce the stored analysis
@@ -44,7 +46,8 @@ python -m scripts.build_note_si --check
 python -m pytest backend/tests/test_manufacturing_study.py backend/tests/test_manufacturing_literature.py backend/tests/test_paper_mass_units.py -q
 ```
 
-Then run the manuscript checks in this order:
+Then run the manuscript checks in this order (the first two commands re-render the
+numeric panels and refuse a deck or export that no longer matches them):
 
 ```text
 python scripts/draw_application_note_figures.py

@@ -1,18 +1,24 @@
-"""Draw the four Application Note figures from labels and frozen runs.
+"""Render the numeric panels of the Application Note figures and publish the checked deck exports.
 
-Figure 1 and the Figure 2(a) schematic use checked PowerPoint exports of the
-selected generated artwork. Data panels remain bound to the frozen JSON. Run
-scripts/export_note_diagram_slides.ps1 after editing the source decks.
-Figure 2 draws the cost model, the cost structure of the cheapest candidate in
-every thermal reaction family, and the three published CatCost validation cases against their
-published market prices. The trade comparison helper is retained for the audit record.
-The September 15 Figure 3 combines a manufacturing schematic with frozen cost
-and sensitivity results. The historical monthly-price panel is retained for SI.
-Figure 4 reads the frozen combined robustness study and the methods supplement.
-The default command renders the main figures and historical panel in either language. Run:
+Every figure is an editable PowerPoint deck in docs/paper/diagram-sources-2026-09-16
+(Figure 1 stays in the 2026-09-13-h26 folder). Numeric panels are drawn here
+from the frozen JSON and embedded in the decks as images; conceptual artwork
+and all labels are native slide objects. The default command re-renders the
+panels, refuses stale panels or decks, and copies the PowerPoint exports to the
+manuscript and Supporting Information figure folders. Run, in this order:
 
-    python scripts/draw_application_note_figures.py --out-dir docs/paper/figures-note-2026-09-09
+    python scripts/draw_application_note_figures.py --panels
+    python scripts/draw_application_note_figures.py --panels --lang ko
+    (rebuild or edit the decks, then scripts/export_note_diagram_slides.ps1)
+    python scripts/draw_application_note_figures.py
     python scripts/draw_application_note_figures.py --lang ko
+
+Figure 2 draws the cost structure of the cheapest candidate in every thermal
+reaction family and the three published validation cases against their market
+prices; Figure 3 the illustrative manufacturing batch; Figure 4 the frozen
+robustness study. Figures S1-S5 draw the metal-price record, manufacturing
+sensitivity, Monte Carlo samples, preparation-evidence status and observed-price
+crossovers. The trade comparison helper is retained for the audit record.
 """
 
 import argparse
@@ -22,7 +28,8 @@ import math
 import re
 import shutil
 import sys
-import xml.etree.ElementTree as ET
+import tempfile
+import zipfile
 from datetime import datetime
 from pathlib import Path
 
@@ -37,9 +44,11 @@ from matplotlib.ticker import (  # noqa: E402
     LogLocator,
     NullFormatter,
 )
+from matplotlib.transforms import Bbox  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+from scripts.paper_labels import STATUS_LABELS  # noqa: E402
 from scripts.paper_units import PER_LB_TO_PER_KG, publication_cost, publication_unit  # noqa: E402
 
 DIAGRAMS = ROOT / "docs/paper/diagram-sources-2026-09-13-h26"
@@ -50,6 +59,13 @@ MARKET = ROOT / "docs/paper/catalyst_market_2026-09-10.json"
 FAMILIES = ROOT / "docs/paper/submission-2026-09-08/all_families_2026-09-08.json"
 VALIDATION = ROOT / "docs/paper/submission-2026-09-08/table62_reproduction_2026-09-08.json"
 HISTORY = ROOT / "docs/paper/submission-2026-09-08/monthly_history_2026-09-08.json"
+DECKS = ROOT / "docs/paper/diagram-sources-2026-09-16"
+PANELS = DECKS / "panels"
+SI_FIGURES = ROOT / "docs/paper/figures-si-2026-09-16"
+MANUFACTURING = ROOT / "docs/paper/manufacturing-study-2026-09-15"
+LITERATURE = ROOT / "backend/data/manufacturing_literature.json"
+CROSSOVERS = ROOT / "docs/paper/price-crossovers-2026-09-13"
+LETTERS = True
 REFERENCE_MONTH = "2026-05"
 INK, MUTED, GREY = "#1F2A30", "#5B6870", "#9AA6AB"
 ACC, ACC_MID, WARN = "#1B6F78", "#6FA8AE", "#B8702F"
@@ -77,6 +93,14 @@ TEXT = {
         "f3_b_x": "Reaction families",
         "f3_c_x": "Cost difference (%)",
         "usd_lb": "USD/kg",
+        "s2_x": "Selling price (USD/kg)", "s2_low": "Low input value", "s2_high": "High input value",
+        "s2_labels": {},
+        "s3_x": "Selling price (USD/kg)", "s3_y": "Trials", "s3_mean": "Mean",
+        "s3_p": "5th and 95th percentiles", "s3_b_x": "Sampled dry output (kg)",
+        "s4_x": "Screening candidates",
+        "s4_status": {"variant_available": STATUS_LABELS["variant_available"],
+                      "source_mismatch": STATUS_LABELS["source_mismatch"],
+                      "screening_only": STATUS_LABELS["screening_only"]},
     },
     "ko": {
         "font": "Malgun Gothic",
@@ -99,6 +123,17 @@ TEXT = {
         "f3_b_x": "반응군 수",
         "f3_c_x": "원가 차이 (%)",
         "usd_lb": "USD/kg",
+        "s2_x": "판매 단가 (USD/kg)", "s2_low": "낮은 입력값", "s2_high": "높은 입력값",
+        "s2_labels": {"Dry output": "건조 수득량", "Precursor price": "전구체 가격",
+                      "Impregnation time": "함침 시간", "Drying hold": "건조 유지 시간",
+                      "Calcination hold": "소성 유지 시간", "Calcination power": "소성 유지 전력",
+                      "Reduction hold": "환원 유지 시간", "Electricity tariff": "전력 단가"},
+        "s3_x": "판매 단가 (USD/kg)", "s3_y": "시행 횟수", "s3_mean": "평균",
+        "s3_p": "5·95 백분위수", "s3_b_x": "표본 건조 수득량 (kg)",
+        "s4_x": "스크리닝 후보 수",
+        "s4_status": {"variant_available": "출처별 시료 기록 있음",
+                      "source_mismatch": "출처/조성 불일치 표시",
+                      "screening_only": "정리된 제조 기록 없음"},
     },
 }
 
@@ -170,6 +205,15 @@ def set_language(lang):
     })
 
 
+def _letter(index):
+    """Panel letters belong to the decks; the composites keep them only for previews."""
+    return f"({chr(97 + index)}) " if LETTERS else ""
+
+
+def _sha256(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
 def _clean(ax, left=True):
     """A closed box on all four sides, which is what the author asked for in review."""
     for side in ("top", "right", "bottom", "left"):
@@ -197,8 +241,7 @@ def figure_manufacturing(directory):
     data = json.loads((directory / "manufacturing_study.json").read_text(encoding="utf-8"))
     fig = plt.figure(figsize=(178 / 25.4, 142 / 25.4))
     ax = fig.add_axes([0, .57, 1, 1 / 3 * 178 / 142])
-    diagram_dir = ROOT / "docs/paper/diagram-sources-2026-09-15"
-    ax.imshow(plt.imread(_diagram_asset("fig3a_manufacturing_v2", "png", diagram_dir)))
+    ax.imshow(plt.imread(DECKS / "artwork/fig3a_manufacturing.text-free.png"))
     ax.axis("off")
     fig.text(.005, .982, "(a)", fontsize=10, weight="bold")
     b = fig.add_axes([.155, .12, .32, .365])
@@ -238,32 +281,10 @@ def figure_manufacturing(directory):
 
 
 def _cost_model_panel(fig):
-    ax = fig.add_axes([0, 1 - (4 + 178 / 3) / 207, 1, (178 / 3) / 207])
-    ax.imshow(plt.imread(_diagram_asset("fig2a_cost_model", "png")), aspect="auto")
+    """Preview of the text-free schematic; its labels are native objects in the Figure 2 deck."""
+    ax = fig.add_axes([0, 1 - (4 + 178 / 3) / 212, 1, (178 / 3) / 212])
+    ax.imshow(plt.imread(DECKS / "artwork/fig2a_cost_model.text-free.png"), aspect="auto")
     ax.axis("off")
-
-
-def _save_cost_model_svg(fig, destination):
-    """Preserve vector data panels and embed the image-based PowerPoint schematic."""
-    panel = fig.axes[0]
-    panel.images[0].set_visible(False)
-    try:
-        fig.savefig(destination, facecolor="white", metadata={"Date": None})
-    finally:
-        panel.images[0].set_visible(True)
-    tree = ET.parse(destination)
-    diagram = ET.parse(_diagram_asset("fig2a_cost_model", "svg")).getroot()
-    diagram.set("viewBox", f"0 0 {diagram.attrib['width']} {diagram.attrib['height']}")
-    position = panel.get_position()
-    width, height = fig.get_size_inches() * 72
-    for key, value in (("x", position.x0 * width), ("y", (1 - position.y1) * height),
-                       ("width", position.width * width), ("height", position.height * height)):
-        diagram.set(key, str(value))
-    tree.getroot().append(diagram)
-    ET.register_namespace("", "http://www.w3.org/2000/svg")
-    ET.register_namespace("xlink", "http://www.w3.org/1999/xlink")
-    svg = ET.tostring(tree.getroot(), encoding="utf-8", xml_declaration=True).decode("utf-8")
-    destination.write_text("\n".join(line.rstrip() for line in svg.splitlines()) + "\n", encoding="utf-8")
 
 
 def _structure_panel(fig):
@@ -279,7 +300,7 @@ def _structure_panel(fig):
         rows.append((family["family"], total, 100 * materials / total, 100 * processing / total,
                      100 * (total - materials - processing) / total))
     rows.sort(key=lambda r: r[2])
-    ax = fig.add_axes([59 / 178, 52 / 207, 104 / 178, 79 / 207])
+    ax = fig.add_axes([59 / 178, 57 / 212, 104 / 178, 79 / 212])
     ys = range(len(rows))
     ax.barh(ys, [r[2] for r in rows], color=ACC, height=0.74, label=L["seg_materials"])
     ax.barh(ys, [r[3] for r in rows], left=[r[2] for r in rows], color=ACC_MID, height=0.74, edgecolor="white", lw=0.5,
@@ -300,7 +321,7 @@ def _structure_panel(fig):
     ax.grid(axis="x", color="#E6EAEC", lw=0.5)
     ax.set_xlabel(L["share_x"], fontsize=9)
     handles, labels = ax.get_legend_handles_labels()
-    fig.legend(handles, labels, fontsize=8.5, frameon=False, loc="upper left", bbox_to_anchor=(59 / 178, 139 / 207), ncol=3,
+    fig.legend(handles, labels, fontsize=8.5, frameon=False, loc="upper left", bbox_to_anchor=(59 / 178, 144 / 212), ncol=3,
               handlelength=1.0, columnspacing=0.8, handletextpad=0.4, borderaxespad=0.0)
     _clean(ax)
     ax.tick_params(axis="y", length=0, labelsize=8.5)
@@ -311,7 +332,7 @@ def _validation_panel(fig):
     cases = json.loads(VALIDATION.read_text(encoding="utf-8"))
     comparison_colors = ("#7762A7", "#D99545")
     for index, case in enumerate(cases):
-        ax = fig.add_axes([(14 + index * 59) / 178, 13 / 207, 43 / 178, 21 / 207])
+        ax = fig.add_axes([(14 + index * 59) / 178, 13 / 212, 43 / 178, 21 / 212])
         market = case["market"]["market_price_per_lb"]
         estimate = next(r for r in case["rows"] if r["key"] == "estimated_price_per_lb")
         ours = case.get("with_published_rate", {}).get("estimated_price_per_lb", estimate["comet"])
@@ -330,9 +351,9 @@ def _validation_panel(fig):
         if index == 0:
             handles, labels = ax.get_legend_handles_labels()
             fig.legend(handles, labels, frameon=False, fontsize=8.5, ncol=2,
-                       loc="upper right", bbox_to_anchor=(0.97, 43 / 207), borderaxespad=0,
+                       loc="upper right", bbox_to_anchor=(0.97, 44 / 212), borderaxespad=0,
                        handlelength=1.0, handletextpad=0.5, columnspacing=1.4)
-    fig.text(0.5, 1.8 / 207, L["c_y"], fontsize=9, ha="center", va="bottom")
+    fig.text(0.5, 1.8 / 212, L["c_y"], fontsize=9, ha="center", va="bottom")
 
 
 PRECIOUS = ("Pt", "Pd", "Rh", "Ru", "Ir", "Au", "Ag", "Os")
@@ -449,12 +470,12 @@ def _label_ends(ax, ends, fontsize=8.5):
 
 
 def figure2_cost_model():
-    fig = plt.figure(figsize=(178 / 25.4, 207 / 25.4))
+    fig = plt.figure(figsize=(178 / 25.4, 212 / 25.4))
     _cost_model_panel(fig)
     _structure_panel(fig)
     _validation_panel(fig)
-    for label, top in (("(b)", 67), ("(c)", 164)):
-        fig.text(0.012, 1 - top / 207, label, fontsize=10, fontweight="bold", va="top")
+    for label, top in (("(b)", 67), ("(c)", 169)):
+        fig.text(0.012, 1 - top / 212, label, fontsize=10, fontweight="bold", va="top")
     return fig
 
 
@@ -618,7 +639,7 @@ def figure_price_crossovers(study, mechanisms, lang="en"):
         ax.xaxis.set_major_locator(mdates.YearLocator(2))
         ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
         ax.set_ylabel("Cost (USD/kg)" if lang == "en" else "원가 (USD/kg)", fontsize=10)
-        ax.set_title(f"({chr(97 + index)}) {FAMILY_NAMES[lang][family]}", loc="left", fontsize=10.5, pad=10)
+        ax.set_title(f"{_letter(index)}{FAMILY_NAMES[lang][family]}", loc="left", fontsize=10.5, pad=10)
         ax.legend(loc="upper left", frameon=False, fontsize=9, handlelength=1.6, labelspacing=0.28,
                   borderpad=0.2)
         _crossover_axis(ax)
@@ -649,7 +670,7 @@ def figure_price_crossovers(study, mechanisms, lang="en"):
     ax.set_ylim(5 * factor, 42 * factor)
     ax.set_xlabel("Ni (USD/kg)", fontsize=10)
     ax.set_ylabel("Co (USD/kg)", fontsize=10)
-    ax.set_title("(d) Ammonia cost boundary" if lang == "en" else "(d) 암모니아 분해 원가 경계",
+    ax.set_title(_letter(3) + ("Ammonia cost boundary" if lang == "en" else "암모니아 분해 원가 경계"),
                  loc="left", fontsize=10.5, pad=10)
     _crossover_axis(ax)
     return fig
@@ -785,18 +806,198 @@ def draw_crossovers(directory, out, lang):
     (out / f"layout_checks{suffix}.json").write_text(json.dumps(layout_checks, indent=2) + "\n", encoding="utf-8")
 
 
-def save_manufacturing_figure(directory, destination, suffix):
-    figure = figure_manufacturing(directory)
-    destination.mkdir(parents=True, exist_ok=True)
-    for extension in ("png", "svg", "pdf"):
-        path = destination / f"fig_manufacturing{suffix}.{extension}"
-        metadata = {"Date": None} if extension == "svg" else (
-            {"Creator": "COMET", "CreationDate": None, "ModDate": None} if extension == "pdf" else None)
-        figure.savefig(path, dpi=400, facecolor="white", metadata=metadata)
-        if extension == "svg":
-            svg = path.read_text(encoding="utf-8")
-            path.write_text("\n".join(line.rstrip() for line in svg.splitlines()) + "\n", encoding="utf-8", newline="\n")
-    plt.close(figure)
+def _crossover_figure():
+    study = json.loads((CROSSOVERS / "price_crossovers.json").read_text(encoding="utf-8"))
+    mechanisms = json.loads((CROSSOVERS / "crossover_mechanisms.json").read_text(encoding="utf-8"))
+    return figure_price_crossovers(study, mechanisms, LANG)
+
+
+def _sensitivity_label(row):
+    label = L["s2_labels"].get(row["label"], row["label"])
+    return f"{label} ({row['low']:g}\u2013{row['high']:g} {row['unit']})"
+
+
+def figure_s2_sensitivity():
+    """One-at-a-time endpoints of the illustrative batch, ordered by their price range."""
+    study = json.loads((MANUFACTURING / "manufacturing_study.json").read_text(encoding="utf-8"))
+    baseline = study["baseline"]["summary"]["estimated_price_per_kg"]
+    rows = sorted(study["sensitivity"], key=lambda row: abs(row["high_usd_kg"] - row["low_usd_kg"]))
+    fig = plt.figure(figsize=(150 / 25.4, 82 / 25.4))
+    ax = fig.add_axes([0.435, 0.16, 0.54, 0.72])
+    for index, row in enumerate(rows):
+        for value, color, label in ((row["low_usd_kg"], WARN, L["s2_low"]), (row["high_usd_kg"], ACC, L["s2_high"])):
+            ax.barh(index, value - baseline, left=baseline, height=0.6, color=color, label=label if index == 0 else None)
+    ax.axvline(baseline, color=INK, lw=0.7)
+    ax.set_yticks(range(len(rows)))
+    ax.set_yticklabels([_sensitivity_label(row) for row in rows], fontsize=8.5)
+    ax.set_ylim(-0.7, len(rows) - 0.3)
+    ax.set_xlabel(L["s2_x"], fontsize=9)
+    ax.xaxis.set_major_formatter(FuncFormatter(lambda value, _: f"{value:,.0f}"))
+    ax.legend(fontsize=8.5, frameon=False, loc="lower left", bbox_to_anchor=(0.0, 1.01), ncol=2,
+              handlelength=1.0, columnspacing=1.2, handletextpad=0.5, borderaxespad=0.0)
+    _clean(ax)
+    ax.tick_params(axis="y", length=0)
+    return fig
+
+
+def figure_s3_monte_carlo():
+    """Seeded scenario samples of the illustrative batch: price distribution and dry-output dependence."""
+    study = json.loads((MANUFACTURING / "manufacturing_study.json").read_text(encoding="utf-8"))
+    carlo = study["monte_carlo"]
+    fig = plt.figure(figsize=(178 / 25.4, 72 / 25.4))
+    a = fig.add_axes([0.085, 0.2, 0.37, 0.7])
+    b = fig.add_axes([0.6, 0.2, 0.37, 0.7])
+    bins = carlo["histogram"]
+    a.bar([row["low"] for row in bins], [row["count"] for row in bins], width=[row["high"] - row["low"] for row in bins],
+          align="edge", color=ACC_MID, edgecolor="white", lw=0.5)
+    a.axvline(carlo["mean_usd_kg"], color=INK, lw=0.9, label=L["s3_mean"])
+    a.axvline(carlo["p5_usd_kg"], color=WARN, lw=0.8, ls="--", label=L["s3_p"])
+    a.axvline(carlo["p95_usd_kg"], color=WARN, lw=0.8, ls="--")
+    a.set_ylim(0, max(row["count"] for row in bins) * 1.42)
+    a.set_xlabel(L["s3_x"], fontsize=9)
+    a.set_ylabel(L["s3_y"], fontsize=9)
+    a.legend(fontsize=8.5, frameon=False, loc="upper right", handlelength=1.4)
+    samples = carlo["samples"]
+    b.scatter([row["inputs"]["finished_batch_mass_kg"] for row in samples],
+              [row["selling_price_usd_kg"] for row in samples], s=5, color=ACC, alpha=0.4, linewidths=0)
+    b.set_xlabel(L["s3_b_x"], fontsize=9)
+    b.set_ylabel(L["s3_x"], fontsize=9)
+    for ax in (a, b):
+        _clean(ax)
+    a.xaxis.set_major_formatter(FuncFormatter(lambda value, _: f"{value:,.0f}"))
+    b.xaxis.set_major_formatter(FuncFormatter(lambda value, _: f"{value:g}"))
+    b.yaxis.set_major_formatter(FuncFormatter(lambda value, _: f"{value:,.0f}"))
+    return fig
+
+
+def figure_s4_evidence():
+    """Curated preparation status of the 116 screening candidates by reaction family."""
+    library = json.loads(LITERATURE.read_text(encoding="utf-8"))
+    statuses = ("variant_available", "source_mismatch", "screening_only")
+    counts = {}
+    for candidate in library["candidates"]:
+        counts.setdefault(candidate["family"], dict.fromkeys(statuses, 0))[candidate["status"]] += 1
+    rows = sorted(counts.items(), key=lambda item: (item[1]["variant_available"], -item[1]["screening_only"], item[0]))
+    fig = plt.figure(figsize=(178 / 25.4, 118 / 25.4))
+    ax = fig.add_axes([59 / 178, 0.085, 0.63, 0.775])
+    ys = list(range(len(rows)))
+    left = [0] * len(rows)
+    for status, color in zip(statuses, (ACC, WARN, "#D9DEE1"), strict=True):
+        values = [row[status] for _family, row in rows]
+        ax.barh(ys, values, left=left, color=color, height=0.72, edgecolor="white", lw=0.5, label=L["s4_status"][status])
+        left = [a + b for a, b in zip(left, values, strict=True)]
+    ax.set_yticks(ys)
+    ax.set_yticklabels([FAM.get(family, family) for family, _row in rows], fontsize=8.5)
+    ax.set_ylim(-0.6, len(rows) - 0.4)
+    ax.set_xlim(0, 4)
+    ax.set_xticks([0, 1, 2, 3, 4])
+    ax.set_xlabel(L["s4_x"], fontsize=9)
+    ax.legend(fontsize=8.5, frameon=False, loc="lower left", bbox_to_anchor=(0.0, 1.01), ncol=1,
+              handlelength=1.0, handletextpad=0.5, borderaxespad=0.0, labelspacing=0.3)
+    _clean(ax)
+    ax.tick_params(axis="y", length=0)
+    return fig
+
+
+# Panel boxes in mm from the top-left corner of each composite (x, y, width, height).
+PANEL_LAYOUTS = {
+    "fig2_cost_model": (figure2_cost_model, {"b": (0, 64, 178, 102), "c": (0, 166, 178, 46)}),
+    "fig3_manufacturing": (lambda: figure_manufacturing(MANUFACTURING),
+                           {"b": (0, 62, 89, 80), "c": (89, 62, 89, 80)}),
+    "fig4_ranking": (figure4_diagnostics, {"a": (0, 0, 178, 131), "b": (0, 132, 89, 71), "c": (89, 132, 89, 71)}),
+    "figS4_metal_prices": (figure3_metal_prices, {"a": (0, 0, 84, 60), "b": (0, 60, 84, 62)}),
+    "figS2_sensitivity": (figure_s2_sensitivity, {"a": (0, 0, 150, 82)}),
+    "figS3_monte_carlo": (figure_s3_monte_carlo, {"a": (0, 0, 89, 72), "b": (89, 0, 89, 72)}),
+    "figS6_evidence": (figure_s4_evidence, {"a": (0, 0, 178, 118)}),
+    "figS5_crossovers": (_crossover_figure, {"a": (0, 0, 95, 82.5), "b": (95, 0, 83, 82.5),
+                                             "c": (0, 82.5, 95, 88.5), "d": (95, 82.5, 83, 88.5)}),
+}
+# Deck name -> (destination folder under docs/paper, published stem).
+DECK_OUTPUTS = {
+    "fig2_cost_model": ("figures-note-2026-09-09", "fig2_cost_model"),
+    "fig3_manufacturing": ("manufacturing-study-2026-09-15/figures", "fig_manufacturing"),
+    "fig4_ranking": ("figures-note-2026-09-09", "fig4_decision_diagnostics"),
+    "figS1_allocation": ("figures-si-2026-09-16", "figS1_allocation"),
+    "figS2_sensitivity": ("figures-si-2026-09-16", "figS2_sensitivity"),
+    "figS3_monte_carlo": ("figures-si-2026-09-16", "figS3_monte_carlo"),
+    "figS4_metal_prices": ("figures-si-2026-09-16", "figS4_metal_prices"),
+    "figS5_crossovers": ("figures-si-2026-09-16", "figS5_crossovers"),
+    "figS6_evidence": ("figures-si-2026-09-16", "figS6_evidence"),
+    "figS7_provenance": ("figures-si-2026-09-16", "figS7_provenance"),
+    "figS8_interface": ("figures-si-2026-09-16", "figS8_interface"),
+}
+
+
+def render_panels(directory):
+    """Write every numeric panel as a 400 dpi image without panel letters and return its records."""
+    global LETTERS
+    directory = Path(directory)
+    directory.mkdir(parents=True, exist_ok=True)
+    suffix = "" if LANG == "en" else f".{LANG}"
+    records = []
+    LETTERS = False
+    try:
+        for name, (function, boxes) in PANEL_LAYOUTS.items():
+            figure = function()
+            for text in figure.texts:
+                if re.fullmatch(r"\([a-d]\)", text.get_text()):
+                    text.set_visible(False)
+            height_mm = figure.get_size_inches()[1] * 25.4
+            for panel, (x, y, width, height) in boxes.items():
+                path = directory / f"{name}.{panel}{suffix}.png"
+                box = Bbox.from_bounds(x / 25.4, (height_mm - y - height) / 25.4, width / 25.4, height / 25.4)
+                figure.savefig(path, dpi=400, facecolor="white", bbox_inches=box, pad_inches=0,
+                               metadata={"Software": "COMET"})
+                records.append({"figure": name, "panel": panel, "language": LANG, "file": path.name,
+                                "width_mm": width, "height_mm": height, "sha256": _sha256(path)})
+            plt.close(figure)
+    finally:
+        LETTERS = True
+    return records
+
+
+def export_panels():
+    records = render_panels(PANELS)
+    manifest_path = PANELS / "panels.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.exists() else {}
+    kept = [row for row in manifest.get("panels", []) if row["language"] != LANG]
+    manifest = {"renderer": "matplotlib", "dpi": 400,
+                "panels": sorted(kept + records, key=lambda row: (row["figure"], row["panel"], row["language"]))}
+    manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    print("wrote", len(records), "panels to", PANELS)
+
+
+def check_panels_current():
+    """Refuse tracked panels that no longer match the frozen inputs or the manifest."""
+    manifest = json.loads((PANELS / "panels.json").read_text(encoding="utf-8"))
+    tracked = {row["file"]: row["sha256"] for row in manifest["panels"] if row["language"] == LANG}
+    with tempfile.TemporaryDirectory() as scratch:
+        for record in render_panels(scratch):
+            if tracked.get(record["file"]) != record["sha256"] or _sha256(PANELS / record["file"]) != record["sha256"]:
+                raise ValueError(f"Stale panel: {record['file']}; run draw_application_note_figures.py --panels")
+
+
+def verify_decks():
+    """Every deck must embed the current panel images; a rebuilt deck needs a new export."""
+    manifest = json.loads((PANELS / "panels.json").read_text(encoding="utf-8"))
+    for name in DECK_OUTPUTS:
+        deck = DECKS / f"{name}.pptx"
+        with zipfile.ZipFile(deck) as archive:
+            media = {hashlib.sha256(archive.read(item)).hexdigest()
+                     for item in archive.namelist() if item.startswith("ppt/media/")}
+        for record in manifest["panels"]:
+            if record["figure"] == name and record["sha256"] not in media:
+                raise ValueError(f"{deck.name} does not embed the current {record['file']}; "
+                                 "rebuild it with scripts/build_note_figure_decks.py and re-export")
+
+
+def publish_exports(out_dir, suffix):
+    for name, (folder, stem) in DECK_OUTPUTS.items():
+        destination = out_dir if folder == "figures-note-2026-09-09" else ROOT / "docs/paper" / folder
+        destination.mkdir(parents=True, exist_ok=True)
+        for kind in ("png", "svg"):
+            shutil.copyfile(_diagram_asset(name, kind, DECKS), destination / f"{stem}{suffix}.{kind}")
+        print("wrote", destination / f"{stem}{suffix}")
 
 
 def main():
@@ -804,39 +1005,23 @@ def main():
     parser.add_argument("--out-dir", type=Path, default=ROOT / "docs/paper/figures-note-2026-09-09")
     parser.add_argument("--lang", choices=sorted(TEXT), default="en")
     parser.add_argument("--crossovers", type=Path, help="Separate frozen price-crossover study directory")
-    parser.add_argument("--manufacturing", type=Path, help="Separate frozen manufacturing scenario directory")
+    parser.add_argument("--panels", action="store_true", help="Render the numeric panels embedded in the figure decks")
     args = parser.parse_args()
     set_language(args.lang)
     args.out_dir.mkdir(parents=True, exist_ok=True)
     if args.crossovers:
         draw_crossovers(args.crossovers, args.out_dir, args.lang)
         return
-    suffix = "" if args.lang == "en" else f".{args.lang}"
-    if args.manufacturing:
-        save_manufacturing_figure(args.manufacturing, args.out_dir, suffix)
+    if args.panels:
+        export_panels()
         return
+    suffix = "" if args.lang == "en" else f".{args.lang}"
+    check_panels_current()
+    verify_decks()
     for kind in ("png", "svg"):
         shutil.copyfile(_diagram_asset("fig1_workflow", kind), args.out_dir / f"fig1_workflow_stack{suffix}.{kind}")
     print("wrote", args.out_dir / f"fig1_workflow_stack{suffix}")
-    for name, function in (("fig2_cost_model", figure2_cost_model),
-                           ("fig3_metal_prices", figure3_metal_prices),
-                           ("fig4_decision_diagnostics", figure4_diagnostics)):
-        figure = function()
-        figure.savefig(args.out_dir / f"{name}{suffix}.png", dpi=400, facecolor="white",
-                       metadata={"Software": "COMET"})
-        svg_path = args.out_dir / f"{name}{suffix}.svg"
-        if name == "fig2_cost_model":
-            _save_cost_model_svg(figure, svg_path)
-        else:
-            figure.savefig(svg_path, facecolor="white", metadata={"Date": None})
-            svg = svg_path.read_text(encoding="utf-8")
-            svg_path.write_text("\n".join(line.rstrip() for line in svg.splitlines()) + "\n", encoding="utf-8")
-        plt.close(figure)
-        print("wrote", args.out_dir / f"{name}{suffix}")
-    # The manufacturing panel is Figure 3 in the current note; metal histories
-    # remain available for Supporting Information from their original snapshot.
-    manufacturing = ROOT / "docs/paper/manufacturing-study-2026-09-15"
-    save_manufacturing_figure(manufacturing, manufacturing / "figures", suffix)
+    publish_exports(args.out_dir, suffix)
 
 
 if __name__ == "__main__":

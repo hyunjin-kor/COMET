@@ -38,6 +38,9 @@ Exact generation prompts, dates, input hashes and original output hashes are
 in artwork-provenance.json and artwork/*.prompt.md. The exact image model
 version was not exposed by the tool: **확인 못 함**.
 
+Figure 1 remains authored here. Since 16 September 2026 the Figure 2(a) labels
+of fig2a_cost_model.pptx live in ../diagram-sources-2026-09-16/fig2_cost_model.pptx,
+which holds the complete Figure 2; this fig2a deck is retained as their source.
 Edit the source decks, then run scripts/export_note_diagram_slides.ps1.
 Run scripts/draw_application_note_figures.py and its --lang ko variant to
 regenerate the canonical figures. exports.json binds sources and exports by

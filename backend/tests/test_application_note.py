@@ -118,18 +118,32 @@ def test_rank_reversal_cost_difference_matches_independent_ammonia_example():
         figures.plt.close(fig)
 
 
-@pytest.mark.parametrize("changed_file", ["fig2a_cost_model.pptx", "exports/fig2a_cost_model.en.png"])
-def test_changed_diagram_source_or_image_requires_a_new_powerpoint_export(tmp_path, monkeypatch, changed_file):
+@pytest.mark.parametrize("changed_file", ["fig2_cost_model.pptx", "exports/fig2_cost_model.en.png"])
+def test_changed_deck_or_export_requires_a_new_powerpoint_export(tmp_path, monkeypatch, changed_file):
     pytest.importorskip("matplotlib")
     from scripts import draw_application_note_figures as figures
 
-    diagrams = tmp_path / "diagrams"
-    shutil.copytree(figures.DIAGRAMS, diagrams)
-    monkeypatch.setattr(figures, "DIAGRAMS", diagrams)
+    decks = tmp_path / "decks"
+    (decks / "exports").mkdir(parents=True)
+    for relative in ("exports.json", "fig2_cost_model.pptx", "exports/fig2_cost_model.en.png", "exports/fig2_cost_model.en.svg"):
+        shutil.copyfile(figures.DECKS / relative, decks / relative)
     figures.set_language("en")
-    assert figures._diagram_asset("fig2a_cost_model", "png").is_file()
-    modified = diagrams / changed_file
+    assert figures._diagram_asset("fig2_cost_model", "png", decks).is_file()
+    modified = decks / changed_file
     modified.write_bytes(modified.read_bytes() + b"changed after export")
     with pytest.raises(ValueError, match="run scripts/export_note_diagram_slides.ps1"):
-        figures.figure2_cost_model()
-    figures.plt.close("all")
+        figures._diagram_asset("fig2_cost_model", "png", decks)
+
+
+def test_figure_decks_embed_the_current_numeric_panels():
+    """A changed frozen input or an unrebuilt deck must fail before any figure is published."""
+    pytest.importorskip("matplotlib")
+    from scripts import draw_application_note_figures as figures
+
+    for lang in ("en", "ko"):
+        figures.set_language(lang)
+        figures.check_panels_current()
+    figures.verify_decks()
+    manifest = json.loads((figures.PANELS / "panels.json").read_text(encoding="utf-8"))
+    assert {row["figure"] for row in manifest["panels"]} == set(figures.PANEL_LAYOUTS)
+    assert len(manifest["panels"]) == 2 * sum(len(boxes) for _f, boxes in figures.PANEL_LAYOUTS.values())

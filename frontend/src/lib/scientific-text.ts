@@ -66,6 +66,10 @@ export function formatScientificText(value: string | null | undefined): string {
   return value.split(protectedText).map((part, index) => {
     if (index % 2) return part;
     return part
+      // Registered article titles can carry HTML markup such as "CO <sub>2</sub>".
+      .replace(/\s*<sub>([^<]*)<\/sub>/g, (_, inner: string) => subscript(inner))
+      .replace(/\s*<sup>([^<]*)<\/sup>/g, (_, inner: string) => superscript(inner))
+      .replace(/<\/?(?:i|b|em|strong|span)[^>]*>/g, '')
       .replace(/\beg(?= occupancy\b)/g, 'e_g')
       .replace(/\b(mm|cm|km|m|ft|in|mol|kg|mg|g|ms|s|min|hr|h|mL|L|K|kPa|Pa|bar)(?:\^\{?([+−-]?\d+(?:\.\d+)?)\}?|([23]|-[1-3]))(?![\w])/g, (_, unit: string, power: string, compact: string) => unit + superscript(power ?? compact))
       .replace(/\^(?:\{([+−-]?\d+(?:\.\d+)?)\}|([+−-]?\d+(?:\.\d+)?))(?![\w+−-])/g, (_, braced: string, plain: string) => superscript(braced ?? plain))

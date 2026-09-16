@@ -1,6 +1,7 @@
 """Render submission SI from the frozen screening and manufacturing records."""
 
 import argparse
+import csv
 import json
 from collections import Counter
 from pathlib import Path
@@ -32,12 +33,19 @@ def render():
     }
     data = {key: load(path) for key, path in sources.items()}
     study, library = data["study"], data["library"]
+    crossover = load("docs/paper/price-crossovers-2026-09-13/crossover_mechanisms.json")
+    with (PAPER / "price-crossovers-2026-09-13/family_summary.csv").open(encoding="utf-8-sig", newline="") as handle:
+        census = {(row["family"], row["period"]): row for row in csv.DictReader(handle)}
+    states = {row["date"]: row for row in crossover["ammonia_boundary"]["observations"]}
+    changes = {family: int(census[(family, "monthly")]["cost_changes"]) for family in ("ammonia-cracking", "dry-reforming", "water-gas-shift")}
+    if any(int(census[(family, "monthly")]["app_changes"]) for family in changes):
+        raise ValueError("The SI text states that the balanced recommendation does not change in these families")
     request, hand = study["request"], study["independent_balance"]
     protocol = request["manufacturing_protocol"]
     mc = study["monte_carlo"]
     lines = ["# Supporting Information", "", "COMET: Catalyst Overall Manufacturing Estimation Tool", "",
              "## S1. Calculation methods and boundaries", "",
-             "This Supporting Information describes the manufacturing calculation, declared inputs, numerical verification, screening results and preparation-evidence coverage. "
+             "This Supporting Information describes the manufacturing calculation, declared inputs, numerical verification, screening results, observed-price cost crossovers, preparation-evidence coverage and application views. "
              "The May 2026 screening results retain their original formulations and assumptions. "
              "The later preparation review does not retrospectively validate those formulations. The new manufacturing example is a hypothetical software demonstration, "
              "not an experimental catalyst cost or a comparison of matched catalytic performance.", "",
@@ -50,7 +58,9 @@ def render():
              "Intermediate charges are allocated by used/recovered mass or used/prepared volume of a homogeneous solution, with successive fractions multiplied along a chain. "
              "An explicit whole-batch option assigns the full incurred expenditure to its destination before subsequent transfers. "
              "Actual operation times and incurred expenditures remain distinct from their allocated shares. Unknown recovery prevents proportional allocation. "
-             "Branching transfers, co-products and density-based conversions are not inferred.", "",
+             "Branching transfers, co-products and density-based conversions are not inferred. Figure S1 illustrates the allocation chain: a solution aliquot charged by volume fraction, "
+             "an intermediate solid transferred by mass fraction, and the final dry batch that carries the allocated shares.", "",
+             "![Figure S1. Intermediate transfers. Conceptual sequence of a solution aliquot (volume fraction), an intermediate solid transfer (mass fraction) and the final dry batch used in eq S5. The drawing is conceptual and contains no numerical result. Artwork used Google Gemini's image-generation tool; labels are native.](figures-si-2026-09-16/figS1_allocation.png)", "",
              "Equations S1–S6 define the calculation. General and administrative (G&A) and sales, administrative, research and distribution (SARD) overheads "
              "are applied sequentially before the selling margin. The example excludes disposal, analytical testing, "
              "waste credits, catalyst use, tax, freight and any equipment cost not represented in the stated occupancy rate. "
@@ -121,7 +131,10 @@ def render():
               "| Varied input | Low | High | Selling price at low (USD/kg) | Selling price at high (USD/kg) |", "|---|---:|---:|---:|---:|"]
     for row in study["sensitivity"]:
         lines.append(f"| {row['label']} | {row['low']} {row['unit']} | {row['high']} {row['unit']} | {row['low_usd_kg']:.4f} | {row['high_usd_kg']:.4f} |")
-    lines += ["", "Figure 3(c) evaluates 21 calcination-hold values from 1 to 6 h at each of three dry masses (0.015, 0.030 and 0.045 kg), giving 63 scenarios. "
+    lines += ["", "Figure S2 plots the same endpoints as departures from the baseline selling price. Dry output dominates because the fixed batch expenditure is divided by the recovered mass; "
+              "calcination power changes the price little because electricity is a small part of the assumed operating cost compared with equipment occupancy (Table S4).", "",
+              f"![Figure S2. Sensitivity endpoints. Selling price at the low and high value of each input in Table S5; the vertical line marks the baseline of {hand['selling_price_usd_kg']:.2f} USD/kg. Each bar changes one input while all other batch inputs remain fixed.](figures-si-2026-09-16/figS2_sensitivity.png)", "",
+              "Figure 3(c) evaluates 21 calcination-hold values from 1 to 6 h at each of three dry masses (0.015, 0.030 and 0.045 kg), giving 63 scenarios. "
               "The machine-readable manufacturing data retain all 63 input–output pairs.", "",
               f"Monte Carlo uses seed {mc['seed']} and {mc['n_simulations']} trials. Independent uniform bounds are 0.024–0.036 kg dry output, "
               "2–4 h calcination hold, 0.9–1.5 kW hold power and 0.06–0.12 USD/kWh. All other inputs are fixed. "
@@ -129,15 +142,17 @@ def render():
               f"the 5th and 95th percentiles are {mc['p5_usd_kg']:.4f} and {mc['p95_usd_kg']:.4f} USD/kg. "
               "These are scenario percentiles, not statistical confidence bounds. Individual sampled inputs and results are retained in the JavaScript Object Notation (JSON) data. "
               "The application ordinarily excludes and counts invalid combinations without clamping; this example has none. "
-              "The accompanying reproduction instructions specify the random-number implementation and call sequence.", "",
+              "The accompanying reproduction instructions specify the random-number implementation and call sequence. "
+              "Figure S3 shows the distribution of the trial results and the sampled dry output against the resulting selling price; the sampled dry output accounts for most of the spread.", "",
+              f"![Figure S3. Monte Carlo samples. (a) Selling-price histogram of the {mc['n_simulations']} seeded trials with the mean (solid line) and the 5th and 95th percentiles (dashed lines). (b) Sampled dry output against selling price for the same trials. Bounds are scenario assumptions, not measured variability.](figures-si-2026-09-16/figS3_monte_carlo.png)", "",
               "## S5. Frozen price and screening basis", "",
               "The following May 2026 costs use the original screening formulations and route assumptions, not the subsequently curated preparation records. "
               "Table S6 reports estimated selling prices for 116 screening candidates; it does not report measured manufacturing costs. "
               "Powder values are converted from the stored legacy USD/lb fields using 1 lb = 0.45359237 kg. "
               "An electrode candidate's powder price is distinct from assembly cost per area. These observations do not establish equivalent activity or commercial quotation validity.", "",
-              "Figure S1 summarizes historical metal-price inputs from Johnson Matthey and the International Monetary Fund (IMF).<sup>3,5</sup> Westmetall supplies additional current metal quotations.<sup>4</sup> "
+              "Figure S4 summarizes historical metal-price inputs from Johnson Matthey and the International Monetary Fund (IMF).<sup>3,5</sup> Westmetall supplies additional current metal quotations.<sup>4</sup> "
               "Environmental mass coverage is the fraction assigned a screening inventory factor, including compound proxies; it is not a measure of inventory accuracy.<sup>6</sup>", "",
-              "![Figure S1. Metal price history. Monthly averages from January 2019 to May 2026: (a) precious metals; (b) base metals. Prices are USD/kg; both price axes use logarithmic scales. Histories are unsmoothed observations, not forecasts.](figures-note-2026-09-09/fig3_metal_prices.png)", "",
+              "![Figure S4. Metal price history. Monthly averages from January 2019 to May 2026: (a) precious metals; (b) base metals. Prices are USD/kg; both price axes use logarithmic scales. Histories are unsmoothed observations, not forecasts.](figures-si-2026-09-16/figS4_metal_prices.png)", "",
               "Table S6. Estimated powder selling prices and environmental mass coverage at May 2026 prices.", "",
               "| Reaction family | Candidate model | Selling price (USD/kg) | Mass coverage (%) |", "|---|---|---:|---:|"]
     for family in data["screening"]["families"]:
@@ -152,6 +167,13 @@ def render():
               "Support prices remain at baseline in monthly metal-price tests. Candidate removal is tested both with recomputed and retained cost normalization ranges. "
               "Score tests lower the baseline candidate and raise alternatives by 2, 5 or 10 points, bounded by 0 and 100. "
               "Frequencies are conditional on these enumerated scenarios. No probability distribution for future market prices or catalyst performance is inferred.", "",
+              "Figure S5 replays the frozen screening calculation under the 89 monthly metal-price states with formulations, order sizes, route assumptions and support prices fixed.<sup>3,5</sup> "
+              f"Across these states the lowest-cost candidate changes {changes['ammonia-cracking']} times for ammonia cracking, {changes['dry-reforming']} times for methane dry reforming "
+              f"and {changes['water-gas-shift']} times for water–gas shift, while the balanced-weight recommendation of these families does not change. "
+              f"The September–October 2025 cobalt price increase from {states['2025-09']['Co'] * PER_LB_TO_PER_KG:.2f} to {states['2025-10']['Co'] * PER_LB_TO_PER_KG:.2f} USD/kg "
+              "reverses the lowest-cost candidate in ammonia cracking and methane dry reforming while nickel is nearly unchanged. "
+              "These are conditional model comparisons between screening candidates, not contemporaneous supplier quotations or performance comparisons.", "",
+              "![Figure S5. Observed-price cost crossovers. Modeled selling prices under the 89 monthly price states for the candidates that attain the lowest cost at any state in (a) ammonia cracking, (b) methane dry reforming and (c) water–gas shift; lines connect observed states and do not locate a crossover date. (d) Conditional equal-cost boundary between the Co/MgO–La₂O₃ and Ni/γ-Al₂O₃ ammonia-cracking candidates as a function of nickel and cobalt prices; points are monthly price states, diamonds mark September and October 2025, and shading identifies the cheaper candidate. Co/Mg–La denotes Co/MgO–La₂O₃; Ni–Co/Al–Mg, Ni–Co/Al–Mg–O; Ni/CeO₂, Ni/CeO₂ single sites; Cu–ZnO, Cu/ZnO/Al₂O₃; Fe–Cr, Fe₂O₃–Cr₂O₃(–CuO) (Table S6). Other prices and engineering assumptions remain at reference values.](figures-si-2026-09-16/figS5_crossovers.png)", "",
               "## S6. Preparation evidence and unresolved inputs", "",
               f"The library has {len(library['profiles'])} source-specific preparations from {len({p['doi'] for p in library['profiles']})} primary sources. "
               f"Of {len(library['candidates'])} screening candidates, {sum(bool(c['profile_ids']) for c in library['candidates'])} link to at least one preparation; "
@@ -164,7 +186,9 @@ def render():
         rows = [c for c in library["candidates"] if c["family"] == family]
         lines.append(f"| {FAMILY_LABELS[family]} | {len(rows)} | {sum(bool(c['profile_ids']) for c in rows)} | {sum(c['status']=='source_mismatch' for c in rows)} |")
     statuses = Counter(c["status"] for c in library["candidates"])
-    lines += ["", "Mutually exclusive catalog assessment counts: " + "; ".join(f"{STATUS_LABELS[key]}: {value}" for key, value in sorted(statuses.items())) + ".", "",
+    lines += ["", "Mutually exclusive catalog assessment counts: " + "; ".join(f"{STATUS_LABELS[key]}: {value}" for key, value in sorted(statuses.items())) + ". "
+              "Figure S6 shows these assessments by reaction family.", "",
+              "![Figure S6. Preparation-evidence status. Number of screening candidates in each reaction family with a source-specific preparation variant, with a flagged source/formulation discrepancy, or without a curated preparation. Families are ordered by the number of candidates with a variant.](figures-si-2026-09-16/figS6_evidence.png)", "",
               "The companion preparation-evidence document and JSON contain all candidate assessments, source titles and DOIs, section locators, "
               "reported operation inputs, per-field evidence, transfer boundaries and unresolved values. The final targeted lookup rechecked 101 existing citations "
               "for 42 then-unlinked candidates; nine accessible texts were assessed. A failed public-copy lookup does not establish that no free source exists elsewhere. "
@@ -173,13 +197,23 @@ def render():
               "Operating references preserve geography, period and basis. U.S. Energy Information Administration (EIA) electricity averages can be selected as explicit scenarios; "
               "U.S. Bureau of Labor Statistics (BLS) wage statistics and manufacturer connected-load ratings remain references, not measured batch costs or average operating power. "
               "Actual staffing, utility consumption and supplier prices require separate evidence.", "",
-              "## S7. References", "",
+              "Figure S7 illustrates the record structure preserved for each imported preparation: the located source passage, the structured record in which reported values "
+              "and later user modifications are distinguished, and the resulting cost contribution with its checksum.", "",
+              "![Figure S7. Source-linked record. Conceptual sequence from a located passage in a source, through a structured record that distinguishes reported values from user modifications, to the cost contribution and its checksum. The drawing is conceptual. Artwork used Google Gemini's image-generation tool; labels are native.](figures-si-2026-09-16/figS7_provenance.png)", "",
+              "## S7. Application interface", "",
+              "Figure S8 shows two views of COMET 1.4.0 recorded with an isolated database and no external price service. Panel (a) shows the source attached to one imported input: "
+              "the purchased quantity of a reagent in the first operation of the PtSn/Al₂O₃ pellet preparation record imported from its Methods section,<sup>7</sup> "
+              "with the citation, locator, DOI, access date and recorded value. Unreported conditions of imported records remain blank. "
+              "Panel (b) shows the evidence section of the result page for the illustrative batch of Tables S1–S4, with the time, electricity and the electricity, equipment, labor and gas costs of each operation.", "",
+              "![Figure S8. Application views. (a) Source record of one imported input in the preparation editor. (b) Operation-level time, electricity and cost contributions of the illustrative batch on the result page. Interface text is English; the Korean interface presents the same content.](figures-si-2026-09-16/figS8_interface.png)", "",
+              "## S8. References", "",
               "[1] Baddour, F. G.; Snowden-Swan, L.; Super, J. D.; Van Allsburg, K. M. Estimating Precommercial Heterogeneous Catalyst Price: A Simple Step-Based Method. *Organic Process Research & Development* **2018**, *22* (12), 1599–1605. https://doi.org/10.1021/acs.oprd.8b00245.", "",
               "[2] Van Allsburg, K. M.; Tan, E. C. D.; Super, J. D.; Schaidle, J. A.; Baddour, F. G. Early-stage evaluation of catalyst manufacturing cost and environmental impact using CatCost. *Nature Catalysis* **2022**, *5* (4), 342–353. https://doi.org/10.1038/s41929-022-00759-6.", "",
               "[3] Johnson Matthey. PGM Prices and Trading. https://matthey.com/products-and-markets/pgms-and-circularity/pgm-management (accessed September 11, 2026).", "",
               "[4] Westmetall. Market Data: Prices and LME Stocks. https://www.westmetall.com/en/markdaten.php (accessed September 11, 2026).", "",
               "[5] International Monetary Fund. Primary Commodity Price System (PCPS), SDMX 2.1 data service. https://api.imf.org/external/sdmx/2.1/dataflow/IMF.RES/PCPS (accessed September 11, 2026).", "",
-              "[6] Nuss, P.; Eckelman, M. J. Life Cycle Assessment of Metals: A Scientific Synthesis. *PLoS ONE* **2014**, *9* (7), e101298. https://doi.org/10.1371/journal.pone.0101298.", ""]
+              "[6] Nuss, P.; Eckelman, M. J. Life Cycle Assessment of Metals: A Scientific Synthesis. *PLoS ONE* **2014**, *9* (7), e101298. https://doi.org/10.1371/journal.pone.0101298.", "",
+              "[7] Niu, H.; Ma, J.; Gan, L.; Li, K. The Acid Roles of PtSn@Al₂O₃ in the Synthesis and Performance of Propane Dehydrogenation. *Molecules* **2024**, *29* (13), 2959. https://doi.org/10.3390/molecules29132959.", ""]
     return "\n".join(lines)
 
 

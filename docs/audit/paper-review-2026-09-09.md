@@ -1605,3 +1605,41 @@ ACS 파일 형식 목록은 검색 색인에서 ZIP 허용을 확인했으며, �
   원고 회귀 검사 8개, scripts/ ruff. 본문 4266 및 보수적 TOC 포함 4566/5000 유지.
   수치·계산 엔진·버전 변경은 없으며, 선별 과학 자료 ZIP은 v46과 같은 파일이다.
   저자 정보와 Word 생성·검토 파일은 로컬에만 둔다. 외부 업로드·푸시·태그·릴리스 없음.
+
+### H48 — 2026-09-16: 전체 도판의 편집 가능한 PowerPoint 덱 전환과 SI 그림 S1–S8 추가
+
+- 사용자 지시에 따라 소프트웨어·논문 전체 검증을 다시 수행했다. backend 전체 pytest 1032 passed
+  (H45 이후 첫 완주), frontend build/lint/check:i18n 통과, 제조 `--check` 3종과 회귀 32건 통과,
+  지정 5개 검사 순서대로 통과. 본문·SI DOI 10건을 Crossref에서 재확인했고(HTTP 200·제목 일치),
+  EN/KO 본문 수치를 대조해 `1771`의 천 단위 구분만 통일했다.
+- 검증 중 발견한 소프트웨어 결함 1건을 수정했다. Crossref 등록 제목에 포함된 `<sub>` HTML이 문헌 제조법
+  패널에 그대로 표시되어 `frontend/src/lib/scientific-text.ts`에서 sub/sup 마크업을 첨자로 변환한다.
+  저장된 제목 문자열(등록 제목)은 바꾸지 않았다.
+- Figure 2·3·4와 SI 그림 8개를 각각 편집 가능한 덱으로 만들었다(`docs/paper/diagram-sources-2026-09-16/`,
+  EN/KO 슬라이드). 수치 패널은 `draw_application_note_figures.py --panels`가 동결 JSON에서 400 dpi PNG로
+  그려 이미지로 임베드하고(`panels/panels.json` 해시), 패널 문자·라벨은 네이티브 객체다. Figure 2(a)·3(a)의
+  승인된 개념 아트와 라벨은 h26·09-15 덱에서 이식했다. 기본 생성기 명령은 패널을 다시 그려 추적 파일과
+  대조하고, 덱이 현재 패널을 임베드하지 않거나 내보내기 해시가 어긋나면 중단한 뒤 PowerPoint 내보내기를
+  `figures-note-2026-09-09/`, `manufacturing-study-2026-09-15/figures/`, `figures-si-2026-09-16/`에 복사한다.
+  덱 최초 작성 도구는 `scripts/build_note_figure_decks.py`(python-pptx)이며 라벨 편집 후에는 다시 실행하지 않는다.
+  Figure 2 컴포지트는 (b) x축 제목과 (c) 범례가 붙던 문제를 없애기 위해 212 mm 높이로 조정했다.
+- SI 그림은 인용 순서로 번호를 붙였다. S1 중간체 분취·이전 배분 개념도, S2 민감도 양 끝값, S3 Monte Carlo
+  표본, S4 금속 시세(기존 Figure S1), S5 관측 가격 원가 역전(H27 연구, 역전 횟수·Co 가격은 JSON/CSV에서 바인딩),
+  S6 반응군별 제조 근거 상태, S7 출처 연결 기록 개념도, S8 응용 프로그램 화면. S1·S7 개념 이미지는 Google
+  Gemini 웹 이미지 생성으로 만들었고(글자 없음, 정확한 모델 버전 확인 못 함) 캡션과 감사문에 고지했다.
+  ChatGPT 이미지 생성은 이 세션의 Chrome 창에서 로그아웃 상태라 시도하지 못했다. S8은 격리된 review DB와
+  빈 API 키의 서버에서 Playwright(`scripts/capture_note_interface_views.py`)로 캡처했다: PtSn/Al₂O₃ 펠릿
+  제조 기록(10.3390/molecules29132959, Crossref 확인)의 구매량 출처 화면과 예시 배치의 조작별 비용 화면.
+  SI에 S7절(응용 프로그램 화면)과 참고문헌 [7]을 추가했다. 본문에는 그림을 추가하지 않았다(4개 유지).
+- 분량은 본문 4,288 + 보수적 TOC 300 = 4,588/5,000, 그림 4·표 0·참고문헌 14. SI는 Tables S1–S7, eqs S1–S6,
+  Figures S1–S8, 참고문헌 7. `test_application_note.py`의 stale export 검사는 새 덱 기준으로 바꾸고
+  덱-패널 임베드 검사를 추가했다(9 passed). SI·문헌·제조 연구 `--check`와 관련 회귀도 통과했다.
+- Word v48(`_local/docx/rebuild_v48.py`, v47 서식 유지)은 EN 15쪽·KO 18쪽·SI 20쪽이며 Word가 필드와 목차
+  페이지 참조 23개를 갱신·저장했다. 비검정 텍스트 색·병합 셀·표 채움·세로선 0, 임베드 그림이 발행 파일과
+  해시 일치, SI 표 7개가 생성 SI와 일치, 그림 캡션 8개와 목차 항목 일치. **PDF는 만들지 못했다**: Word의
+  ExportAsFixedFormat과 SaveAs2(PDF)가 v47 대조본과 1쪽짜리 시험 문서에서도 반환하지 않았고(숨김/표시 창,
+  추가 기능 해제, 로컬 프린터 지정 시도), 원인은 확인 못 함. 페이지 단위 시각 검토도 따라서 하지 못했다.
+  시험 중 Word 인스턴스를 강제 종료하면서 시스템 기본 프린터가 잠시 바뀌었고 즉시 MF645C로 복원했다.
+- 검토용 자료 ZIP은 v48로 다시 만들었다(역전 데이터 추가). 격리 검토 서버는 시작 시 scheduler가 무료 공개 시세를
+  review.db에 1회 수집했으며 작업 후 종료했다. 외부 업로드·푸시·태그·릴리스·유료 API 사용은 없다.
+  버전 1.4.0과 저자 결정(`AUTHOR_DECISIONS.md`)은 그대로다.
