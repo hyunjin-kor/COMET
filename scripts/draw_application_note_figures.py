@@ -16,9 +16,11 @@ manuscript and Supporting Information figure folders. Run, in this order:
 Figure 2 draws the cost structure of the cheapest candidate in every thermal
 reaction family and the three published validation cases against their market
 prices; Figure 3 the illustrative manufacturing batch; Figure 4 the frozen
-robustness study. Figures S1-S5 draw the metal-price record, manufacturing
-sensitivity, Monte Carlo samples, preparation-evidence status and observed-price
-crossovers. The trade comparison helper is retained for the audit record.
+robustness study beside the observed-price crossover of ammonia cracking.
+Figures S2-S7 draw the manufacturing sensitivity, Monte Carlo samples,
+metal-price record, the remaining observed-price crossovers, the ranking tests
+and the preparation-evidence status. The trade comparison helper is retained for
+the audit record.
 """
 
 import argparse
@@ -101,6 +103,8 @@ TEXT = {
         "s4_status": {"variant_available": STATUS_LABELS["variant_available"],
                       "source_mismatch": STATUS_LABELS["source_mismatch"],
                       "screening_only": STATUS_LABELS["screening_only"]},
+        "f4_co": "Co/MgO–La$_2$O$_3$", "f4_ni": "Ni/γ-Al$_2$O$_3$", "f4_cost_y": "Cost (USD/kg)",
+        "f4_ni_x": "Ni price (USD/kg)", "f4_co_y": "Co price (USD/kg)",
     },
     "ko": {
         "font": "Malgun Gothic",
@@ -134,6 +138,8 @@ TEXT = {
         "s4_status": {"variant_available": "출처별 시료 기록 있음",
                       "source_mismatch": "출처/조성 불일치 표시",
                       "screening_only": "정리된 제조 기록 없음"},
+        "f4_co": "Co/MgO–La$_2$O$_3$", "f4_ni": "Ni/γ-Al$_2$O$_3$", "f4_cost_y": "원가 (USD/kg)",
+        "f4_ni_x": "Ni 가격 (USD/kg)", "f4_co_y": "Co 가격 (USD/kg)",
     },
 }
 
@@ -899,18 +905,126 @@ def figure_s4_evidence():
     return fig
 
 
+def figure4_price_ranking():
+    """Observed-price crossover of the ammonia-cracking candidates beside the frozen ranking sensitivity."""
+    study = json.loads(STUDY.read_text(encoding="utf-8"))
+    crossovers = json.loads((CROSSOVERS / "price_crossovers.json").read_text(encoding="utf-8"))
+    mechanisms = json.loads((CROSSOVERS / "crossover_mechanisms.json").read_text(encoding="utf-8"))
+    height = 181
+    fig = plt.figure(figsize=(178 / 25.4, height / 25.4))
+    family = next(row for row in crossovers["families"] if row["family"] == "ammonia-cracking")
+    records = family["periods"]["monthly"]["records"]
+    a = fig.add_axes([15 / 178, 1 - 50 / height, 70 / 178, 42 / height])
+    for slug, label, colour, style in (("co-mgo-la2o3", L["f4_co"], ACC, "-"), ("ni-alumina-baseline", L["f4_ni"], WARN, "--")):
+        a.plot(_crossover_dates(records), [publication_cost(row["costs"][slug], family["unit"]) for row in records],
+               color=colour, lw=1.3, ls=style, label=label)
+    values = [publication_cost(row["costs"][slug], family["unit"]) for row in records
+              for slug in ("co-mgo-la2o3", "ni-alumina-baseline")]
+    low, high = min(values), max(values)
+    a.set_ylim(low - (high - low) * 0.08, high + (high - low) * 0.42)
+    a.set_xlim(datetime(2019, 1, 1), datetime(2026, 7, 1))
+    a.xaxis.set_major_locator(mdates.YearLocator(2))
+    a.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+    a.set_ylabel(L["f4_cost_y"], fontsize=9)
+    a.legend(loc="upper left", frameon=False, fontsize=8.5, handlelength=1.6, labelspacing=0.3)
+    _clean(a)
+    boundary = mechanisms["ammonia_boundary"]
+    factor = PER_LB_TO_PER_KG
+    b = fig.add_axes([106 / 178, 1 - 50 / height, 66 / 178, 42 / height])
+    x = [point["Ni"] * factor for point in boundary["points"]]
+    y = [point["Co_threshold"] * factor for point in boundary["points"]]
+    b.fill_between(x, 5 * factor, y, color=ACC, alpha=0.07)
+    b.fill_between(x, y, 42 * factor, color=WARN, alpha=0.07)
+    b.plot(x, y, color=INK, lw=1.0)
+    for point, row in zip(boundary["observations"], records, strict=True):
+        colour = ACC if row["cost_winner"] == "co-mgo-la2o3" else WARN
+        b.scatter(point["Ni"] * factor, point["Co"] * factor, s=10, c=colour, alpha=0.65, linewidths=0.25, edgecolors="white")
+    selected = {point["date"]: (point["Ni"] * factor, point["Co"] * factor)
+                for point in boundary["observations"] if point["date"] in ("2025-09", "2025-10")}
+    for day, (nickel, cobalt) in selected.items():
+        b.scatter(nickel, cobalt, s=30, marker="D", facecolor="white", edgecolor=INK, lw=0.8, zorder=5)
+        b.annotate(day, (nickel, cobalt), xytext=(7, -14 if day == "2025-09" else 6),
+                   textcoords="offset points", fontsize=8, color=INK)
+    b.annotate("", xy=selected["2025-10"], xytext=selected["2025-09"],
+               arrowprops={"arrowstyle": "->", "lw": 0.8, "color": INK})
+    b.text(0.04, 0.9, L["f4_ni"], color=WARN, fontsize=8.5, transform=b.transAxes)
+    b.text(0.5, 0.07, L["f4_co"], color=ACC, fontsize=8.5, transform=b.transAxes)
+    b.set_xlim(4 * factor, 16 * factor)
+    b.set_ylim(5 * factor, 42 * factor)
+    b.set_xlabel(L["f4_ni_x"], fontsize=9)
+    b.set_ylabel(L["f4_co_y"], fontsize=9)
+    _clean(b)
+    rows = []
+    for row in study["families"]:
+        candidates = row["joint_grids"]["0.05"]["candidates"]
+        winner = row["reference_winner"]
+        first = candidates[winner]["first_rank_share_pct"]
+        others = sorted((v["first_rank_share_pct"] for k, v in candidates.items() if k != winner), reverse=True)
+        second = others[0] if others else 0.0
+        rows.append((row["family"], first, second, max(0.0, 100.0 - first - second)))
+    rows.sort(key=lambda item: item[1], reverse=True)
+    handles = labels = None
+    for column, subset in enumerate((rows[:15], rows[15:])):
+        ax = fig.add_axes([(47 + column * 89) / 178, 1 - 121 / height, 39 / 178, 53 / height])
+        ys = list(range(len(subset)))
+        ax.barh(ys, [r[1] for r in subset], color=ACC, height=0.72, label=L["f3_first"])
+        ax.barh(ys, [r[2] for r in subset], left=[r[1] for r in subset], color=WARN, height=0.72,
+                edgecolor="white", lw=0.5, label=L["f3_second"])
+        ax.barh(ys, [r[3] for r in subset], left=[r[1] + r[2] for r in subset], color="#D9DEE1", height=0.72,
+                edgecolor="white", lw=0.5, label=L["f3_other"])
+        ax.axvline(50, color="white", lw=0.6)
+        ax.axvline(50, color=GREY, lw=0.5, ls=(0, (1.5, 1.5)))
+        ax.set_yticks(ys)
+        ax.set_yticklabels([FAM.get(r[0], r[0]) for r in subset], fontsize=8)
+        ax.set_ylim(len(subset) - 0.4, -0.6)
+        ax.set_xlim(0, 100)
+        ax.set_xticks([0, 50, 100])
+        ax.set_xlabel(L["f3_x"], fontsize=8.5)
+        _clean(ax)
+        ax.tick_params(axis="y", length=0)
+        if column == 0:
+            handles, labels = ax.get_legend_handles_labels()
+    fig.legend(handles, labels, fontsize=8.5, frameon=False, loc="lower left", bbox_to_anchor=(47 / 178, 1 - 66 / height),
+               ncol=3, handlelength=1.0, columnspacing=0.9, handletextpad=0.5, borderaxespad=0.0)
+    flips = []
+    for row in study["families"]:
+        for removal in row.get("candidate_removal", []):
+            if not removal.get("winner_changed"):
+                continue
+            costs = {item["slug"]: item["summary"]["landed_cost_per_lb"] for item in removal["before"]}
+            before, after = row["reference_winner"], removal["renormalized_winner"]
+            if before in costs and after in costs:
+                flips.append((row["family"], costs[before], costs[after]))
+    flips.sort(key=lambda item: item[1] / item[2])
+    d = fig.add_axes([47 / 178, 1 - 172 / height, 124 / 178, 38 / height])
+    for index, (_family, before, after) in enumerate(flips):
+        difference = 100 * (after - before) / before
+        d.barh(index, difference, height=0.6, color=ACC, edgecolor=ACC, lw=0.5)
+        d.text(difference - 1.5, index, f"{difference:.1f}", ha="right", va="center", fontsize=8)
+    d.set_yticks(range(len(flips)))
+    d.set_yticklabels([FAM.get(family, family) for family, _b, _a in flips], fontsize=8)
+    d.set_ylim(-0.7, len(flips) - 0.3)
+    d.set_xlim(-130, 0)
+    d.set_xticks([-100, -50, 0])
+    d.set_xlabel(L["f3_c_x"], fontsize=8.5)
+    _clean(d)
+    d.tick_params(axis="y", length=0)
+    return fig
+
+
 # Panel boxes in mm from the top-left corner of each composite (x, y, width, height).
 PANEL_LAYOUTS = {
     "fig2_cost_model": (figure2_cost_model, {"b": (0, 64, 178, 102), "c": (0, 166, 178, 46)}),
     "fig3_manufacturing": (lambda: figure_manufacturing(MANUFACTURING),
                            {"b": (0, 62, 89, 80), "c": (89, 62, 89, 80)}),
-    "fig4_ranking": (figure4_diagnostics, {"a": (0, 0, 178, 131), "b": (0, 132, 89, 71), "c": (89, 132, 89, 71)}),
+    "fig4_ranking": (figure4_price_ranking, {"a": (0, 0, 89, 60), "b": (89, 0, 89, 60),
+                                            "c": (0, 60, 178, 71), "d": (0, 131, 178, 50)}),
     "figS4_metal_prices": (figure3_metal_prices, {"a": (0, 0, 84, 60), "b": (0, 60, 84, 62)}),
     "figS2_sensitivity": (figure_s2_sensitivity, {"a": (0, 0, 150, 82)}),
     "figS3_monte_carlo": (figure_s3_monte_carlo, {"a": (0, 0, 89, 72), "b": (89, 0, 89, 72)}),
-    "figS6_evidence": (figure_s4_evidence, {"a": (0, 0, 178, 118)}),
-    "figS5_crossovers": (_crossover_figure, {"a": (0, 0, 95, 82.5), "b": (95, 0, 83, 82.5),
-                                             "c": (0, 82.5, 95, 88.5), "d": (95, 82.5, 83, 88.5)}),
+    "figS7_evidence": (figure_s4_evidence, {"a": (0, 0, 178, 118)}),
+    "figS5_crossovers": (_crossover_figure, {"a": (95, 0, 83, 82.5), "b": (0, 82.5, 89, 88.5)}),
+    "figS6_ranking_tests": (figure4_diagnostics, {"a": (0, 132, 89, 71)}),
 }
 # Deck name -> (destination folder under docs/paper, published stem).
 DECK_OUTPUTS = {
@@ -922,9 +1036,10 @@ DECK_OUTPUTS = {
     "figS3_monte_carlo": ("figures-si-2026-09-16", "figS3_monte_carlo"),
     "figS4_metal_prices": ("figures-si-2026-09-16", "figS4_metal_prices"),
     "figS5_crossovers": ("figures-si-2026-09-16", "figS5_crossovers"),
-    "figS6_evidence": ("figures-si-2026-09-16", "figS6_evidence"),
-    "figS7_provenance": ("figures-si-2026-09-16", "figS7_provenance"),
-    "figS8_interface": ("figures-si-2026-09-16", "figS8_interface"),
+    "figS6_ranking_tests": ("figures-si-2026-09-16", "figS6_ranking_tests"),
+    "figS7_evidence": ("figures-si-2026-09-16", "figS7_evidence"),
+    "figS8_provenance": ("figures-si-2026-09-16", "figS8_provenance"),
+    "figS9_interface": ("figures-si-2026-09-16", "figS9_interface"),
 }
 
 

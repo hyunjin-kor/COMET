@@ -47,7 +47,7 @@
     "toc_use": false
   },
   {
-    "file": "artwork/figS7_provenance.text-free.png",
+    "file": "artwork/figS8_provenance.text-free.png",
     "sha256": "5478f75206a06c21a36021465f929493cba77a3da4308dc11b43fe2c104ce754",
     "pixels": [
       1792,
@@ -56,7 +56,7 @@
     "tool": "Google Gemini web image generation (thinking model)",
     "exact_model_version": "not confirmed",
     "date": "2026-09-16",
-    "prompt": "artwork/figS7_provenance.prompt.md",
+    "prompt": "artwork/figS8_provenance.prompt.md",
     "purpose": "Figure S8 concept: source passage, structured record with an edit mark, cost breakdown and checksum seal; documents show abstract lines only",
     "generated_bytes_embedded_unchanged": true,
     "toc_use": false

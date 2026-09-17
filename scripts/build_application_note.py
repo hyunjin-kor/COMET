@@ -26,6 +26,8 @@ EXAMPLE = "figures-note-2026-09-09/screen_result_ni_al2o3.json"
 MARKET = "submission-2026-09-08/table62_reproduction_2026-09-08.json"
 PREPARATION = "manufacturing-2026-09-14/review_summary.json"
 MANUFACTURING = "manufacturing-study-2026-09-15/manufacturing_study.json"
+CROSSOVER_STUDY = "price-crossovers-2026-09-13/price_crossovers.json"
+CROSSOVER_MECHANISMS = "price-crossovers-2026-09-13/crossover_mechanisms.json"
 WORD_LIMIT = 5000
 GRAPHICS = [
     {"figure": 1, "width": "double", "word_equivalent": 600},
@@ -47,7 +49,7 @@ def load_run():
     finally:
         for name, value in saved.items():
             setattr(paper, name, value)
-    for name in (ROBUSTNESS, METHODS, EXAMPLE, MARKET, PREPARATION, MANUFACTURING):
+    for name in (ROBUSTNESS, METHODS, EXAMPLE, MARKET, PREPARATION, MANUFACTURING, CROSSOVER_STUDY, CROSSOVER_MECHANISMS):
         run.data[name] = paper.load(paper.PAPER / name)
     if run.data[ROBUSTNESS]["seed"] != run.manifest["seed"] or run.data[METHODS]["seed"] != run.manifest["seed"]:
         raise ValueError("Robustness study, methods supplement and primary run must share one seed")
@@ -69,6 +71,12 @@ def note(run):
     def rb(key, spec=None):
         return r(ROBUSTNESS, key, spec)
 
+    def cs(key, spec=None):
+        return r(CROSSOVER_STUDY, key, spec)
+
+    ammonia = next(index for index, family in enumerate(run.data[CROSSOVER_STUDY]["families"]) if family["family"] == "ammonia-cracking")
+    monthly = f"families[{ammonia}].periods.monthly.summary"
+
     def ms(key, spec=None):
         return r(METHODS, key, spec)
 
@@ -87,7 +95,7 @@ Authors, affiliations and corresponding-author contact: [to be supplied by the a
 
 ## Abstract
 
-COMET (Catalyst Overall Manufacturing Estimation Tool) integrates manufacturing cost estimation, preparation records, price management, and ranking for {rb('summary.candidates')} catalyst formulations in {rb('summary.families')} reaction families. Source-linked records distinguish published conditions from user modifications, while batch calculations trace purchases, utilities, labor, equipment occupancy, and intermediate transfers to cost per kilogram of dry product. Saved inputs support sensitivity analysis and reproducible price updates; published examples verify the Step Method implementation, and an illustrative batch demonstrates the effects of treatment duration and recovered mass. Comparisons depend on declared assumptions, and independent industrial validation remains necessary.
+COMET (Catalyst Overall Manufacturing Estimation Tool) integrates manufacturing cost estimation, preparation records, price management, and ranking for {rb('summary.candidates')} catalyst formulations in {rb('summary.families')} reaction families. Source-linked records distinguish published conditions from user modifications, while batch calculations trace purchases, utilities, labor, equipment occupancy, and intermediate transfers to cost per kilogram of dry product. Saved inputs support sensitivity analysis and reproducible price updates; published examples verify the Step Method implementation, an illustrative batch demonstrates the effects of treatment duration and recovered mass, and observed metal-price changes are shown to reverse cost ordering without changing a balanced recommendation. Comparisons depend on declared assumptions, and independent industrial validation remains necessary.
 
 Keywords: catalyst manufacturing cost; preparation provenance; sensitivity analysis; multicriteria decision analysis; software.
 
@@ -135,7 +143,9 @@ Current quotations include Johnson Matthey platinum and palladium prices<sup>7</
 
 The screening library includes {r('s', 'screening_basis_counts.literature_architecture_proxy')} literature-architecture and {r('s', 'screening_basis_counts.engineering_proxy')} engineering proxies. Rankings combine cost, price-data reliability, route, and performance. Within each family, cost scores span 100 for the least expensive candidate to 0 for the most expensive; equal costs receive 100. Route and performance scores are author-assigned screening judgments. Baseline rankings use May 2026 prices, balanced weights, and the full candidate set; lower cost resolves ties. Incomplete electrode cases use powder costs.
 
-The combined analysis evaluates {rb('summary.months')} monthly price datasets and {rb('summary.weight_points["0.05"]', ',')} weight combinations, giving {rb('summary.joint_scenarios_all_families["0.05"]', ',')} scenarios across families. Figure 4(a) separates first-rank frequencies of the baseline candidate, its most frequent alternative, and others. The median baseline frequency is {rb('summary.reference_winner_joint_share_median_pct', '.2f')}%. These frequencies measure scenario stability, not future probabilities. Candidate removal changes the leader in {rb('summary.candidate_removal_winner_changes')} of {rb('summary.candidate_removal_cases')} tests; {rb('summary.rubric_robust_family_counts["5"]')} families retain their leader under 5-point route/performance-score changes. Figure 4(b) compares these distinct tests; passing one does not establish robustness to the others.
+Observed prices can reverse cost ordering. Figure 4(a) recalculates the ammonia-cracking candidates under {cs(monthly + '.observations')} monthly metal-price states with formulations, order sizes, route assumptions, and support prices fixed: Co/MgO-La₂O₃ is least expensive in {cs(monthly + '.winner_counts.cost_winner.co-mgo-la2o3')} states and Ni/Al₂O₃ in {cs(monthly + '.winner_counts.cost_winner.ni-alumina-baseline')}, while the balanced-weight recommendation does not change. Across all {cs('summary.monthly.families')} families, the lowest-cost candidate changes in {cs('summary.monthly.cost_winner')} within this window. Between September and October 2025, cobalt rose from {kg(CROSSOVER_MECHANISMS, 'cases[0].metal_effects.Co.price_before', '.2f')} to {kg(CROSSOVER_MECHANISMS, 'cases[0].metal_effects.Co.price_after', '.2f')} USD/kg with nickel nearly unchanged, and the Ni/Al₂O₃ cost of {kg(CROSSOVER_MECHANISMS, 'cases[0].costs_after.ni-alumina-baseline', '.2f')} USD/kg fell below the Co/MgO-La₂O₃ cost of {kg(CROSSOVER_MECHANISMS, 'cases[0].costs_after.co-mgo-la2o3', '.2f')} USD/kg. Figure 4(b) shows the conditional equal-cost boundary in the nickel–cobalt price plane; monthly states cluster near it, so modest cobalt movements change the cost leader. These are model comparisons under fixed formulations, not performance comparisons, and a cost crossover is distinct from a change in the composite recommendation.
+
+The combined analysis evaluates {rb('summary.months')} monthly price datasets and {rb('summary.weight_points["0.05"]', ',')} weight combinations, giving {rb('summary.joint_scenarios_all_families["0.05"]', ',')} scenarios across families. Figure 4(c) separates first-rank frequencies of the baseline candidate, its most frequent alternative, and others. The median baseline frequency is {rb('summary.reference_winner_joint_share_median_pct', '.2f')}%. These frequencies measure scenario stability, not future probabilities. Candidate removal changes the leader in {rb('summary.candidate_removal_winner_changes')} of {rb('summary.candidate_removal_cases')} tests; {rb('summary.rubric_robust_family_counts["5"]')} families retain their leader under 5-point route/performance-score changes.
 
 Saved batch comparisons share prices only through explicit specification identifiers with matching units and gas reference conditions. Common operating assumptions include electricity, labor, overheads, and margin. Quantities, sequences, and yields remain case-specific; original records are preserved.
 
@@ -145,9 +155,9 @@ Three published examples verify Step Method calculations without adjusting mater
 
 Figure 2(c) compares estimates with the same source's market prices using 100 × (estimate − market price)/market price.<sup>1</sup> COMET deviations are {mk('[0].market.comet_vs_market_pct', '.1f')}% for Pt/C and {mk('[1].market.comet_vs_market_pct', '.1f')}% for Ni/Al₂O₃. The FCC estimate is {kg(MARKET, '[2].with_published_rate.estimated_price_per_lb', '.4f')} USD/kg versus {kg(MARKET, '[2].market.market_price_per_lb', '.2f')} USD/kg reported. All are below the reported prices and within the original study's ±20% range; this does not validate other formulations. Automated checks additionally cover manufacturing arithmetic, incomplete records, transfers, API persistence, and sensitivity calculations.
 
-Ammonia cracking illustrates candidate-set sensitivity. Baseline costs are {kg(METHODS, 'normalization.example.rows[0].cost', '.4f')} USD/kg for Co/MgO-La₂O₃, {kg(METHODS, 'normalization.example.rows[1].cost', '.4f')} for Ni-MgO/CeO₂, {kg(METHODS, 'normalization.example.rows[2].cost', '.4f')} for Ni/Al₂O₃, and {kg(METHODS, 'normalization.example.removed_cost', '.4f')} for Ru/MgO. Co/MgO-La₂O₃ initially leads, with score {ms('normalization.example.rows[0].total_before', '.1f')} versus {ms('normalization.example.rows[2].total_before', '.1f')} for Ni/Al₂O₃. Removing Ru/MgO leaves remaining costs unchanged but contracts their range from approximately {full_range:,.0f} to {retained_range:.1f} USD/kg. Renormalization magnifies the {pair_gap:.2f} USD/kg cost difference, changing the scores to {ms('normalization.example.rows[0].total_after', '.1f')} and {ms('normalization.example.rows[2].total_after', '.1f')}, respectively, and reversing the ranking. Retaining the original range prevents this reversal.<sup>11,12</sup> Figure 4(c) reports 100 × (C₁ − C₀)/C₀ for nine affected families, where C₀ and C₁ are costs of the leaders before and after removal under unchanged manufacturing assumptions.
+Ammonia cracking illustrates candidate-set sensitivity. Baseline costs are {kg(METHODS, 'normalization.example.rows[0].cost', '.4f')} USD/kg for Co/MgO-La₂O₃, {kg(METHODS, 'normalization.example.rows[1].cost', '.4f')} for Ni-MgO/CeO₂, {kg(METHODS, 'normalization.example.rows[2].cost', '.4f')} for Ni/Al₂O₃, and {kg(METHODS, 'normalization.example.removed_cost', '.4f')} for Ru/MgO. Co/MgO-La₂O₃ initially leads, with score {ms('normalization.example.rows[0].total_before', '.1f')} versus {ms('normalization.example.rows[2].total_before', '.1f')} for Ni/Al₂O₃. Removing Ru/MgO leaves remaining costs unchanged but contracts their range from approximately {full_range:,.0f} to {retained_range:.1f} USD/kg. Renormalization magnifies the {pair_gap:.2f} USD/kg cost difference, changing the scores to {ms('normalization.example.rows[0].total_after', '.1f')} and {ms('normalization.example.rows[2].total_after', '.1f')}, respectively, and reversing the ranking. Retaining the original range prevents this reversal.<sup>11,12</sup> Figure 4(d) reports 100 × (C₁ − C₀)/C₀ for nine affected families, where C₀ and C₁ are costs of the leaders before and after removal under unchanged manufacturing assumptions.
 
-![Figure 4. Ranking sensitivity. (a) First-rank frequencies; dashed line, 50%. (b) Families retaining the baseline candidate under each test. (c) Cost differences between leaders before and after candidate removal; negative values indicate less expensive replacements. PEM, proton exchange membrane; AEM, anion exchange membrane; OER, oxygen evolution reaction; ORR, oxygen reduction reaction; SCR, selective catalytic reduction.](figures-note-2026-09-09/fig4_decision_diagnostics.png)
+![Figure 4. Observed-price crossovers and ranking sensitivity. (a) Costs of the ammonia-cracking candidates that attain the lowest cost under 89 monthly price states; lines connect observed states. (b) Conditional equal-cost boundary between Co/MgO-La₂O₃ and Ni/Al₂O₃ in the nickel–cobalt price plane; points are monthly states, diamonds mark September and October 2025, and shading identifies the cheaper candidate. (c) First-rank frequencies; dashed line, 50%. (d) Cost differences between leaders before and after candidate removal; negative values indicate less expensive replacements. PEM, proton exchange membrane; AEM, anion exchange membrane; OER, oxygen evolution reaction; ORR, oxygen reduction reaction; SCR, selective catalytic reduction.](figures-note-2026-09-09/fig4_decision_diagnostics.png)
 
 ## Limitations
 

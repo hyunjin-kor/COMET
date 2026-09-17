@@ -28,7 +28,8 @@ def test_note_converts_every_mass_value_and_preserves_source_references():
     assert not re.search(r"USD/lb|USD/troy|per lb|in lb|short ton", visible)
     assert "60.3394" in visible and "60,781.4" in visible and "18,143.7" in visible
     records = run.publication_conversions
-    assert len(records) == 17
+    # 17 original conversions plus the four cobalt-price and October-2025 cost values of the crossover paragraph.
+    assert len(records) == 21
     assert sum("per_lb" in row["key"] for row in records) == 11
     for row in records:
         assert row["display"] + "<!-- " + row["source"] + ":" + row["key"] + " -->" in text

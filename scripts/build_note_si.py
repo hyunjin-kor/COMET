@@ -167,13 +167,15 @@ def render():
               "Support prices remain at baseline in monthly metal-price tests. Candidate removal is tested both with recomputed and retained cost normalization ranges. "
               "Score tests lower the baseline candidate and raise alternatives by 2, 5 or 10 points, bounded by 0 and 100. "
               "Frequencies are conditional on these enumerated scenarios. No probability distribution for future market prices or catalyst performance is inferred.", "",
-              "Figure S5 replays the frozen screening calculation under the 89 monthly metal-price states with formulations, order sizes, route assumptions and support prices fixed.<sup>3,5</sup> "
-              f"Across these states the lowest-cost candidate changes {changes['ammonia-cracking']} times for ammonia cracking, {changes['dry-reforming']} times for methane dry reforming "
-              f"and {changes['water-gas-shift']} times for water–gas shift, while the balanced-weight recommendation of these families does not change. "
+              "Figure 4 of the main article replays the frozen screening calculation for ammonia cracking under the 89 monthly metal-price states with formulations, order sizes, route assumptions and support prices fixed.<sup>3,5</sup> "
+              f"Figure S5 shows the same replay for methane dry reforming and water–gas shift, where the lowest-cost candidate changes {changes['dry-reforming']} and {changes['water-gas-shift']} times "
+              f"({changes['ammonia-cracking']} times for ammonia cracking) while the balanced-weight recommendation of these families does not change. "
               f"The September–October 2025 cobalt price increase from {states['2025-09']['Co'] * PER_LB_TO_PER_KG:.2f} to {states['2025-10']['Co'] * PER_LB_TO_PER_KG:.2f} USD/kg "
-              "reverses the lowest-cost candidate in ammonia cracking and methane dry reforming while nickel is nearly unchanged. "
+              "also reverses the lowest-cost candidate in methane dry reforming while nickel is nearly unchanged. "
               "These are conditional model comparisons between screening candidates, not contemporaneous supplier quotations or performance comparisons.", "",
-              "![Figure S5. Observed-price cost crossovers. Modeled selling prices under the 89 monthly price states for the candidates that attain the lowest cost at any state in (a) ammonia cracking, (b) methane dry reforming and (c) water–gas shift; lines connect observed states and do not locate a crossover date. (d) Conditional equal-cost boundary between the Co/MgO–La₂O₃ and Ni/γ-Al₂O₃ ammonia-cracking candidates as a function of nickel and cobalt prices; points are monthly price states, diamonds mark September and October 2025, and shading identifies the cheaper candidate. Co/Mg–La denotes Co/MgO–La₂O₃; Ni–Co/Al–Mg, Ni–Co/Al–Mg–O; Ni/CeO₂, Ni/CeO₂ single sites; Cu–ZnO, Cu/ZnO/Al₂O₃; Fe–Cr, Fe₂O₃–Cr₂O₃(–CuO) (Table S6). Other prices and engineering assumptions remain at reference values.](figures-si-2026-09-16/figS5_crossovers.png)", "",
+              "![Figure S5. Observed-price cost crossovers. Modeled selling prices under the 89 monthly price states for the candidates that attain the lowest cost at any state in (a) methane dry reforming and (b) water–gas shift; lines connect observed states and do not locate a crossover date. Ni–Co/Al–Mg denotes Ni–Co/Al–Mg–O; Ni/CeO₂, Ni/CeO₂ single sites; Cu–ZnO, Cu/ZnO/Al₂O₃; Fe–Cr, Fe₂O₃–Cr₂O₃(–CuO) (Table S6). Other prices and engineering assumptions remain at reference values.](figures-si-2026-09-16/figS5_crossovers.png)", "",
+              "Figure S6 counts, for each sensitivity test of the main article, the families whose baseline candidate ranks first in at least half of the joint scenarios or is retained under candidate removal and under route/performance-score changes of 2, 5 and 10 points. Passing one test does not establish robustness to the others.", "",
+              "![Figure S6. Ranking sensitivity tests. Number of the 30 reaction families retaining the baseline candidate under each test.](figures-si-2026-09-16/figS6_ranking_tests.png)", "",
               "## S6. Preparation evidence and unresolved inputs", "",
               f"The library has {len(library['profiles'])} source-specific preparations from {len({p['doi'] for p in library['profiles']})} primary sources. "
               f"Of {len(library['candidates'])} screening candidates, {sum(bool(c['profile_ids']) for c in library['candidates'])} link to at least one preparation; "
@@ -187,8 +189,8 @@ def render():
         lines.append(f"| {FAMILY_LABELS[family]} | {len(rows)} | {sum(bool(c['profile_ids']) for c in rows)} | {sum(c['status']=='source_mismatch' for c in rows)} |")
     statuses = Counter(c["status"] for c in library["candidates"])
     lines += ["", "Mutually exclusive catalog assessment counts: " + "; ".join(f"{STATUS_LABELS[key]}: {value}" for key, value in sorted(statuses.items())) + ". "
-              "Figure S6 shows these assessments by reaction family.", "",
-              "![Figure S6. Preparation-evidence status. Number of screening candidates in each reaction family with a source-specific preparation variant, with a flagged source/formulation discrepancy, or without a curated preparation. Families are ordered by the number of candidates with a variant.](figures-si-2026-09-16/figS6_evidence.png)", "",
+              "Figure S7 shows these assessments by reaction family.", "",
+              "![Figure S7. Preparation-evidence status. Number of screening candidates in each reaction family with a source-specific preparation variant, with a flagged source/formulation discrepancy, or without a curated preparation. Families are ordered by the number of candidates with a variant.](figures-si-2026-09-16/figS7_evidence.png)", "",
               "The companion preparation-evidence document and JSON contain all candidate assessments, source titles and DOIs, section locators, "
               "reported operation inputs, per-field evidence, transfer boundaries and unresolved values. The final targeted lookup rechecked 101 existing citations "
               "for 42 then-unlinked candidates; nine accessible texts were assessed. A failed public-copy lookup does not establish that no free source exists elsewhere. "
@@ -197,15 +199,15 @@ def render():
               "Operating references preserve geography, period and basis. U.S. Energy Information Administration (EIA) electricity averages can be selected as explicit scenarios; "
               "U.S. Bureau of Labor Statistics (BLS) wage statistics and manufacturer connected-load ratings remain references, not measured batch costs or average operating power. "
               "Actual staffing, utility consumption and supplier prices require separate evidence.", "",
-              "Figure S7 illustrates the record structure preserved for each imported preparation: the located source passage, the structured record in which reported values "
+              "Figure S8 illustrates the record structure preserved for each imported preparation: the located source passage, the structured record in which reported values "
               "and later user modifications are distinguished, and the resulting cost contribution with its checksum.", "",
-              "![Figure S7. Source-linked record. Conceptual sequence from a located passage in a source, through a structured record that distinguishes reported values from user modifications, to the cost contribution and its checksum. The drawing is conceptual. Artwork used Google Gemini's image-generation tool; labels are native.](figures-si-2026-09-16/figS7_provenance.png)", "",
+              "![Figure S8. Source-linked record. Conceptual sequence from a located passage in a source, through a structured record that distinguishes reported values from user modifications, to the cost contribution and its checksum. The drawing is conceptual. Artwork used Google Gemini's image-generation tool; labels are native.](figures-si-2026-09-16/figS8_provenance.png)", "",
               "## S7. Application interface", "",
-              "Figure S8 shows two views of COMET 1.4.0 recorded with an isolated database and no external price service. Panel (a) shows the source attached to one imported input: "
+              "Figure S9 shows two views of COMET 1.4.0 recorded with an isolated database and no external price service. Panel (a) shows the source attached to one imported input: "
               "the purchased quantity of a reagent in the first operation of the PtSn/Al₂O₃ pellet preparation record imported from its Methods section,<sup>7</sup> "
               "with the citation, locator, DOI, access date and recorded value. Unreported conditions of imported records remain blank. "
               "Panel (b) shows the evidence section of the result page for the illustrative batch of Tables S1–S4, with the time, electricity and the electricity, equipment, labor and gas costs of each operation.", "",
-              "![Figure S8. Application views. (a) Source record of one imported input in the preparation editor. (b) Operation-level time, electricity and cost contributions of the illustrative batch on the result page. Interface text is English; the Korean interface presents the same content.](figures-si-2026-09-16/figS8_interface.png)", "",
+              "![Figure S9. Application views. (a) Source record of one imported input in the preparation editor. (b) Operation-level time, electricity and cost contributions of the illustrative batch on the result page. Interface text is English; the Korean interface presents the same content.](figures-si-2026-09-16/figS9_interface.png)", "",
               "## S8. References", "",
               "[1] Baddour, F. G.; Snowden-Swan, L.; Super, J. D.; Van Allsburg, K. M. Estimating Precommercial Heterogeneous Catalyst Price: A Simple Step-Based Method. *Organic Process Research & Development* **2018**, *22* (12), 1599–1605. https://doi.org/10.1021/acs.oprd.8b00245.", "",
               "[2] Van Allsburg, K. M.; Tan, E. C. D.; Super, J. D.; Schaidle, J. A.; Baddour, F. G. Early-stage evaluation of catalyst manufacturing cost and environmental impact using CatCost. *Nature Catalysis* **2022**, *5* (4), 342–353. https://doi.org/10.1038/s41929-022-00759-6.", "",

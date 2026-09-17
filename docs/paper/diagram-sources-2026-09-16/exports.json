@@ -49,24 +49,24 @@
                      },
                      {
                          "source":  "fig4_ranking.pptx",
-                         "source_sha256":  "5f8b8e85bce7e649dd8d1d307663d2d685aa6766f42a79ac8211287d196cdedb",
+                         "source_sha256":  "6cb0b56d8fdfabd3c53e24105d3737ecb5203db779e41492717378442af02547",
                          "width_mm":  178.02,
-                         "height_mm":  202.98,
+                         "height_mm":  181.019,
                          "png_dpi_at_slide_size":  400,
                          "exports":  [
                                          {
                                              "language":  "en",
                                              "png":  "exports/fig4_ranking.en.png",
-                                             "png_sha256":  "1d57ec0e67f9ad86d7be128359c4edde38025656dc70eea3d976393346ef4d90",
+                                             "png_sha256":  "3da2802276b044500016b6bcd529839f7cba660a5c6f45037e5c38b74457996c",
                                              "svg":  "exports/fig4_ranking.en.svg",
-                                             "svg_sha256":  "3676e8f3dd5b76bad53ffc003eb22f3f0f3d1985d7effb223ed6a869d2b64886"
+                                             "svg_sha256":  "a3d892448b86d5c6512f4d4f01c1ee6286b5d8e1f67915408d4288657c952f89"
                                          },
                                          {
                                              "language":  "ko",
                                              "png":  "exports/fig4_ranking.ko.png",
-                                             "png_sha256":  "3d70da8ddf077846a001d8243e0e8341c3d950b4105a2a115250bc4a31625d65",
+                                             "png_sha256":  "dd273d175d99eaa62619d9a57eb47ca8b11e0481f6eff268a0e8296ae2539c5e",
                                              "svg":  "exports/fig4_ranking.ko.svg",
-                                             "svg_sha256":  "99c6b9028799838ffb96e86747289d5ea9f956482fb87aa998c3a589f68a1c83"
+                                             "svg_sha256":  "afdbda6bdacdcc31c0ce548aa6ade2c169f6c0bf1d1126ce6323694c9ac7e6fe"
                                          }
                                      ]
                      },
@@ -164,29 +164,52 @@
                      },
                      {
                          "source":  "figS5_crossovers.pptx",
-                         "source_sha256":  "3fe1632ff47c43f3f640fdcf3030a34534dfe2d3afb70e52dd9f1eb3217d4909",
+                         "source_sha256":  "4819256a91c52ed6fe447b6428f24dfdac51ef9dca8c9f8f90cc8e4ab6a43f02",
                          "width_mm":  178.02,
-                         "height_mm":  171.009,
+                         "height_mm":  88.503,
                          "png_dpi_at_slide_size":  400,
                          "exports":  [
                                          {
                                              "language":  "en",
                                              "png":  "exports/figS5_crossovers.en.png",
-                                             "png_sha256":  "4753bc113ea43892cba484f83a8c8228d10c06b7b3779717e0b43c801c6748ea",
+                                             "png_sha256":  "d12c8fc3d83148642e158630d24aaf8d704f026cbcdf1ef8912f061ab0c5a581",
                                              "svg":  "exports/figS5_crossovers.en.svg",
-                                             "svg_sha256":  "586523cfd7ad97bede08caa03ac81b9c600d4eb9770e064322c94f366a3612fc"
+                                             "svg_sha256":  "6ac58f998f8cc0c05158cd0cc3d23b5c0fde0cd4871bafeb38fe5b2a31279050"
                                          },
                                          {
                                              "language":  "ko",
                                              "png":  "exports/figS5_crossovers.ko.png",
-                                             "png_sha256":  "379eec95a3bc9e1284eade784291223c3e2a728413b473569b069578039bce70",
+                                             "png_sha256":  "a59d97da196e8ff8dd396987aaddd8c5ac2d225d8590652569f354e6578cfab5",
                                              "svg":  "exports/figS5_crossovers.ko.svg",
-                                             "svg_sha256":  "ec669414b502c4943263b8e09d2f44c52cf861c23c9771c9c8424ad754b4dbb1"
+                                             "svg_sha256":  "e3348f06c1a3976f96b5d2c31188e33cf6d64ccfa2e17b108f76c3c51da59cf6"
                                          }
                                      ]
                      },
                      {
-                         "source":  "figS6_evidence.pptx",
+                         "source":  "figS6_ranking_tests.pptx",
+                         "source_sha256":  "8e1ca1a411938081781359dc01d3734a9099a078842a412a851f3e90a9953f74",
+                         "width_mm":  88.988,
+                         "height_mm":  70.997,
+                         "png_dpi_at_slide_size":  400,
+                         "exports":  [
+                                         {
+                                             "language":  "en",
+                                             "png":  "exports/figS6_ranking_tests.en.png",
+                                             "png_sha256":  "ea0270af2d6d98a10e414e14afac4f09603dd132eb939f7a82dce2966eb588b9",
+                                             "svg":  "exports/figS6_ranking_tests.en.svg",
+                                             "svg_sha256":  "72662b74eb7476652607d9c454f52db6ef0bafac5628779d33830fa80cc788c7"
+                                         },
+                                         {
+                                             "language":  "ko",
+                                             "png":  "exports/figS6_ranking_tests.ko.png",
+                                             "png_sha256":  "a78a910183dc58bbebabf52ae7fe6f68e2ba561035b71ca3d5f89f92d977a06d",
+                                             "svg":  "exports/figS6_ranking_tests.ko.svg",
+                                             "svg_sha256":  "8d36010fa834946a81bd7e82564d9504ad69e2551877e6be059997e533064347"
+                                         }
+                                     ]
+                     },
+                     {
+                         "source":  "figS7_evidence.pptx",
                          "source_sha256":  "6b65aa1dd06e96517e4aca45835da58da2de94e2c0bdb2fce48200e513b19dc4",
                          "width_mm":  178.02,
                          "height_mm":  118.004,
@@ -194,22 +217,22 @@
                          "exports":  [
                                          {
                                              "language":  "en",
-                                             "png":  "exports/figS6_evidence.en.png",
+                                             "png":  "exports/figS7_evidence.en.png",
                                              "png_sha256":  "72358028029c1525ad5e2ab6b7333790c3bfd8a67bb317515ff246af2d2c4fa5",
-                                             "svg":  "exports/figS6_evidence.en.svg",
+                                             "svg":  "exports/figS7_evidence.en.svg",
                                              "svg_sha256":  "913c5f11cd1d553bb1999a31f817900c83cbcf38aee4908c600f201f5dcd5682"
                                          },
                                          {
                                              "language":  "ko",
-                                             "png":  "exports/figS6_evidence.ko.png",
+                                             "png":  "exports/figS7_evidence.ko.png",
                                              "png_sha256":  "5f40a913d340ee4fb07bd19d7cb6dd1877cb24cd6fb387f8e565fa93e0ac084a",
-                                             "svg":  "exports/figS6_evidence.ko.svg",
+                                             "svg":  "exports/figS7_evidence.ko.svg",
                                              "svg_sha256":  "1f3647164183af00b435a4a12cd00f00bb07868e1e77a5d87c4fe0ab456252f5"
                                          }
                                      ]
                      },
                      {
-                         "source":  "figS7_provenance.pptx",
+                         "source":  "figS8_provenance.pptx",
                          "source_sha256":  "8c3c2099ac553abe8c333d2f87c314d68ded63ac9abd5174a0d903ad222c93c7",
                          "width_mm":  178.02,
                          "height_mm":  69.982,
@@ -217,22 +240,22 @@
                          "exports":  [
                                          {
                                              "language":  "en",
-                                             "png":  "exports/figS7_provenance.en.png",
+                                             "png":  "exports/figS8_provenance.en.png",
                                              "png_sha256":  "654594998265852416c915a8fca408eef88e02742618fe0ec4eac86d20a29c03",
-                                             "svg":  "exports/figS7_provenance.en.svg",
+                                             "svg":  "exports/figS8_provenance.en.svg",
                                              "svg_sha256":  "2c4f56f8160b26915d99122e787fff113df4235bb4fdc1209424a8488cbb5a32"
                                          },
                                          {
                                              "language":  "ko",
-                                             "png":  "exports/figS7_provenance.ko.png",
+                                             "png":  "exports/figS8_provenance.ko.png",
                                              "png_sha256":  "2cc8b9677bd0975413c124b4ce73856b8e7920110529f40eb485d6539a8d4b8b",
-                                             "svg":  "exports/figS7_provenance.ko.svg",
+                                             "svg":  "exports/figS8_provenance.ko.svg",
                                              "svg_sha256":  "54991b3c707a4072bec68d03a1a268bb251d6d5d53f1535f552bbfdb548a8178"
                                          }
                                      ]
                      },
                      {
-                         "source":  "figS8_interface.pptx",
+                         "source":  "figS9_interface.pptx",
                          "source_sha256":  "75ad7e309f451fd01a1921f2b7eaf720840b6963cf326069f960f6d85b4e4aff",
                          "width_mm":  178.02,
                          "height_mm":  98.998,
@@ -240,16 +263,16 @@
                          "exports":  [
                                          {
                                              "language":  "en",
-                                             "png":  "exports/figS8_interface.en.png",
+                                             "png":  "exports/figS9_interface.en.png",
                                              "png_sha256":  "13ab0921e59bbe682aa1c3a172d1e8a2d686099e35d629954b9f2980b645afde",
-                                             "svg":  "exports/figS8_interface.en.svg",
+                                             "svg":  "exports/figS9_interface.en.svg",
                                              "svg_sha256":  "6f22e33833b6897b47c3139a5a0ded4c60f408c6ba6df6306d473b5c71d4f1de"
                                          },
                                          {
                                              "language":  "ko",
-                                             "png":  "exports/figS8_interface.ko.png",
+                                             "png":  "exports/figS9_interface.ko.png",
                                              "png_sha256":  "3ea52038738b14b126941feef29731c8e50ca10d7ac08ac86662902a86658026",
-                                             "svg":  "exports/figS8_interface.ko.svg",
+                                             "svg":  "exports/figS9_interface.ko.svg",
                                              "svg_sha256":  "658d2d1ec677ab4859d33d331ff69c1f6994ee915946f2379cc3a8ab9fc4dc9c"
                                          }
                                      ]

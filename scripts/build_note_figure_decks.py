@@ -38,12 +38,12 @@ LABELS = {
         "ko": ["용액 분취\n(부피 분율)", "중간체 이전\n(질량 분율)", "최종 배치\n(건조 질량)"],
         "centers": (30, 89, 153),
     },
-    "figS7_provenance": {
+    "figS8_provenance": {
         "en": ["Source\n(DOI and locator)", "Record\n(reported value, user edit)", "Cost contribution\n(checksum)"],
         "ko": ["출처\n(DOI·원문 위치)", "기록\n(보고값·수정값)", "비용 기여분\n(체크섬)"],
         "centers": (37, 93, 150),
     },
-    "figS8_interface": {
+    "figS9_interface": {
         "en": ["Preparation record with source-linked inputs", "Batch cost contributions by operation"],
         "ko": ["출처가 연결된 입력을 담은 제조 기록", "조작별 배치 비용 기여분"],
     },
@@ -173,16 +173,18 @@ def build_fig3(records):
 
 
 def build_fig4(records):
-    deck = new_deck(178, 203)
+    deck = new_deck(178, 181)
     for lang in LANGS:
         slide = blank_slide(deck)
         rows = records[("fig4_ranking", lang)]
         place(slide, rows, "a", 0, 0)
-        place(slide, rows, "b", 0, 132)
-        place(slide, rows, "c", 89, 132)
+        place(slide, rows, "b", 89, 0)
+        place(slide, rows, "c", 0, 60)
+        place(slide, rows, "d", 0, 131)
         letter(slide, "a", 2, 0.5)
-        letter(slide, "b", 2, 132.5)
-        letter(slide, "c", 91, 132.5)
+        letter(slide, "b", 91, 0.5)
+        letter(slide, "c", 2, 60.5)
+        letter(slide, "d", 2, 131.5)
     return deck
 
 
@@ -219,18 +221,14 @@ def build_s3(records):
 
 
 def build_s5(records):
-    deck = new_deck(178, 171)
+    deck = new_deck(178, 88.5)
     for lang in LANGS:
         slide = blank_slide(deck)
         rows = records[("figS5_crossovers", lang)]
         place(slide, rows, "a", 0, 0)
-        place(slide, rows, "b", 95, 0)
-        place(slide, rows, "c", 0, 82.5)
-        place(slide, rows, "d", 95, 82.5)
+        place(slide, rows, "b", 87, 0)
         letter(slide, "a", 2, 0.5)
-        letter(slide, "b", 97, 0.5)
-        letter(slide, "c", 2, 83)
-        letter(slide, "d", 97, 83)
+        letter(slide, "b", 89, 0.5)
     return deck
 
 
@@ -246,17 +244,17 @@ def build_concept(name):
 
 
 def build_s6():
-    """Two interface views side by side with native captions; screenshots are listed in figS8_interface.capture.json."""
+    """Two interface views side by side with native captions; screenshots are listed in figS9_interface.capture.json."""
     from PIL import Image
 
-    views = ["figS8_interface.record", "figS8_interface.costs"]
+    views = ["figS9_interface.record", "figS9_interface.costs"]
     width = 87
     heights = []
     for view in views:
         with Image.open(ARTWORK / f"{view}.en.png") as image:
             heights.append(width * image.height / image.width)
     deck = new_deck(178, max(heights) + 12)
-    spec = LABELS["figS8_interface"]
+    spec = LABELS["figS9_interface"]
     for lang in LANGS:
         slide = blank_slide(deck)
         for index, (view, height) in enumerate(zip(views, heights, strict=True)):
@@ -279,11 +277,12 @@ def main():
         "figS4_metal_prices": lambda: build_s1(records),
         "figS2_sensitivity": lambda: build_single("figS2_sensitivity", 150, 82, records),
         "figS3_monte_carlo": lambda: build_s3(records),
-        "figS6_evidence": lambda: build_single("figS6_evidence", 178, 118, records),
+        "figS7_evidence": lambda: build_single("figS7_evidence", 178, 118, records),
         "figS5_crossovers": lambda: build_s5(records),
-        "figS8_interface": build_s6,
+        "figS6_ranking_tests": lambda: build_single("figS6_ranking_tests", 89, 71, records),
+        "figS9_interface": build_s6,
         "figS1_allocation": lambda: build_concept("figS1_allocation"),
-        "figS7_provenance": lambda: build_concept("figS7_provenance"),
+        "figS8_provenance": lambda: build_concept("figS8_provenance"),
     }
     names = args.names or list(builders)
     unknown = [name for name in names if name not in builders]

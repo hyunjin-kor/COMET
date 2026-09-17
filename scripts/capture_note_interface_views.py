@@ -11,7 +11,7 @@ API keys (for example _local/software-review-2026-09-14/serve_review.py 8877) an
 Playwright with Chrome. The screenshots are Figure S6 artwork; rebuild the deck afterwards:
 
     python scripts/capture_note_interface_views.py --base http://127.0.0.1:8877
-    python scripts/build_note_figure_decks.py figS8_interface
+    python scripts/build_note_figure_decks.py figS9_interface
 """
 
 import argparse
@@ -144,8 +144,8 @@ def main():
         profile = next(row for row in profiles if row["id"] == args.profile)
         outputs = []
         for lang in ("en", "ko"):
-            record = ARTWORK / f"figS8_interface.record.{lang}.png"
-            costs = ARTWORK / f"figS8_interface.costs.{lang}.png"
+            record = ARTWORK / f"figS9_interface.record.{lang}.png"
+            costs = ARTWORK / f"figS9_interface.costs.{lang}.png"
             capture_record_view(page, args.base, lang, profile["sample"], record)
             capture_costs_view(page, args.base, lang, study["request"], costs)
             outputs.extend([record, costs])
@@ -156,7 +156,7 @@ def main():
                 "database": "isolated review database; no user data", "files": {}}
     for path in outputs:
         manifest["files"][path.name] = hashlib.sha256(path.read_bytes()).hexdigest()
-    (ARTWORK / "figS8_interface.capture.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    (ARTWORK / "figS9_interface.capture.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(json.dumps(manifest["files"], indent=2))
 
 
