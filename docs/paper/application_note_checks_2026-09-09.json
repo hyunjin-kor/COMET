@@ -1,8 +1,8 @@
 {
   "target": "Journal of Chemical Information and Modeling, Application Note",
   "word_limit_abstract_text_graphics": 5000,
-  "abstract_words": 123,
-  "text_words_excluding_references": 2146,
+  "abstract_words": 115,
+  "text_words_excluding_references": 2182,
   "graphics": [
     {
       "figure": 1,
@@ -26,88 +26,16 @@
     }
   ],
   "graphics_word_equivalent": 2400,
-  "total_word_equivalent": 4669,
+  "total_word_equivalent": 4697,
   "toc_word_equivalent_allowance": 300,
-  "total_word_equivalent_with_toc": 4969,
+  "total_word_equivalent_with_toc": 4997,
   "toc_count_note": "A conservative 300-word allowance is tracked separately because the Application Note rule does not explicitly resolve TOC inclusion.",
   "figure_count": 4,
   "table_count": 0,
   "software_named_in_title": true,
-  "json_key_references": 69,
+  "json_key_references": 88,
   "publication_mass_unit": "kg",
   "publication_conversions": [
-    {
-      "source": "figures-note-2026-09-09/reference_example_ni_al2o3.json",
-      "key": "request.order_size_tons",
-      "source_value": 20,
-      "factor": 907.18474,
-      "converted_value": 18143.6948,
-      "display": "18,143.7"
-    },
-    {
-      "source": "figures-note-2026-09-09/reference_example_ni_al2o3.json",
-      "key": "step_method.estimated_price_per_lb",
-      "source_value": 4.9382,
-      "factor": 2.2046226218487757,
-      "converted_value": 10.886867431213624,
-      "display": "10.89"
-    },
-    {
-      "source": "figures-note-2026-09-09/reference_example_ni_al2o3.json",
-      "key": "materials.components[0].cost_per_lb_cat",
-      "source_value": 1.70486,
-      "factor": 2.2046226218487757,
-      "converted_value": 3.758572923085104,
-      "display": "3.76"
-    },
-    {
-      "source": "figures-note-2026-09-09/reference_example_ni_al2o3.json",
-      "key": "materials.components[1].cost_per_lb_cat",
-      "source_value": 0.22656,
-      "factor": 2.2046226218487757,
-      "converted_value": 0.49947930120605866,
-      "display": "0.50"
-    },
-    {
-      "source": "figures-note-2026-09-09/reference_example_ni_al2o3.json",
-      "key": "step_method.processing_cost_per_lb",
-      "source_value": 1.6758,
-      "factor": 2.2046226218487757,
-      "converted_value": 3.694506589694178,
-      "display": "3.69"
-    },
-    {
-      "source": "price-crossovers-2026-09-13/crossover_mechanisms.json",
-      "key": "cases[0].metal_effects.Co.price_before",
-      "source_value": 15.1872,
-      "factor": 2.2046226218487757,
-      "converted_value": 33.482044682541726,
-      "display": "33.48"
-    },
-    {
-      "source": "price-crossovers-2026-09-13/crossover_mechanisms.json",
-      "key": "cases[0].metal_effects.Co.price_after",
-      "source_value": 19.5706,
-      "factor": 2.2046226218487757,
-      "converted_value": 43.14578748315365,
-      "display": "43.15"
-    },
-    {
-      "source": "price-crossovers-2026-09-13/crossover_mechanisms.json",
-      "key": "cases[0].costs_after.ni-alumina-baseline",
-      "source_value": 4.0319,
-      "factor": 2.2046226218487757,
-      "converted_value": 8.88881794903208,
-      "display": "8.89"
-    },
-    {
-      "source": "price-crossovers-2026-09-13/crossover_mechanisms.json",
-      "key": "cases[0].costs_after.co-mgo-la2o3",
-      "source_value": 4.307,
-      "factor": 2.2046226218487757,
-      "converted_value": 9.495309632302678,
-      "display": "9.50"
-    },
     {
       "source": "submission-2026-09-08/paper_summary_2026-09-08.json",
       "key": "table62[0].comet_usd_per_lb",
@@ -181,6 +109,78 @@
       "display": "6.02"
     },
     {
+      "source": "figures-note-2026-09-09/reference_example_ni_al2o3.json",
+      "key": "request.order_size_tons",
+      "source_value": 20,
+      "factor": 907.18474,
+      "converted_value": 18143.6948,
+      "display": "18,143.7"
+    },
+    {
+      "source": "figures-note-2026-09-09/reference_example_ni_al2o3.json",
+      "key": "step_method.estimated_price_per_lb",
+      "source_value": 4.9382,
+      "factor": 2.2046226218487757,
+      "converted_value": 10.886867431213624,
+      "display": "10.89"
+    },
+    {
+      "source": "figures-note-2026-09-09/reference_example_ni_al2o3.json",
+      "key": "materials.components[0].cost_per_lb_cat",
+      "source_value": 1.70486,
+      "factor": 2.2046226218487757,
+      "converted_value": 3.758572923085104,
+      "display": "3.76"
+    },
+    {
+      "source": "figures-note-2026-09-09/reference_example_ni_al2o3.json",
+      "key": "materials.components[1].cost_per_lb_cat",
+      "source_value": 0.22656,
+      "factor": 2.2046226218487757,
+      "converted_value": 0.49947930120605866,
+      "display": "0.50"
+    },
+    {
+      "source": "figures-note-2026-09-09/reference_example_ni_al2o3.json",
+      "key": "step_method.processing_cost_per_lb",
+      "source_value": 1.6758,
+      "factor": 2.2046226218487757,
+      "converted_value": 3.694506589694178,
+      "display": "3.69"
+    },
+    {
+      "source": "price-crossovers-2026-09-13/crossover_mechanisms.json",
+      "key": "cases[0].metal_effects.Co.price_before",
+      "source_value": 15.1872,
+      "factor": 2.2046226218487757,
+      "converted_value": 33.482044682541726,
+      "display": "33.48"
+    },
+    {
+      "source": "price-crossovers-2026-09-13/crossover_mechanisms.json",
+      "key": "cases[0].metal_effects.Co.price_after",
+      "source_value": 19.5706,
+      "factor": 2.2046226218487757,
+      "converted_value": 43.14578748315365,
+      "display": "43.15"
+    },
+    {
+      "source": "price-crossovers-2026-09-13/crossover_mechanisms.json",
+      "key": "cases[0].costs_after.ni-alumina-baseline",
+      "source_value": 4.0319,
+      "factor": 2.2046226218487757,
+      "converted_value": 8.88881794903208,
+      "display": "8.89"
+    },
+    {
+      "source": "price-crossovers-2026-09-13/crossover_mechanisms.json",
+      "key": "cases[0].costs_after.co-mgo-la2o3",
+      "source_value": 4.307,
+      "factor": 2.2046226218487757,
+      "converted_value": 9.495309632302678,
+      "display": "9.50"
+    },
+    {
       "source": "methods-2026-09-09/methods_study.json",
       "key": "normalization.example.rows[0].cost",
       "source_value": 4.7411,
@@ -211,6 +211,83 @@
       "factor": 2.2046226218487757,
       "converted_value": 2790.958322336859,
       "display": "2,790.96"
+    }
+  ],
+  "derived_values": [
+    {
+      "display": "2,781",
+      "source": "methods-2026-09-09/methods_study.json",
+      "rule": "normalization.example: (max of retained and removed cost - min retained cost) converted to USD/kg"
+    },
+    {
+      "display": "3.2",
+      "source": "methods-2026-09-09/methods_study.json",
+      "rule": "normalization.example: max - min of retained costs converted to USD/kg"
+    },
+    {
+      "display": "0.85",
+      "source": "methods-2026-09-09/methods_study.json",
+      "rule": "normalization.example: |rows[0].cost - rows[2].cost| converted to USD/kg"
+    },
+    {
+      "display": "4",
+      "source": "submission-2026-09-08/paper_summary_2026-09-08.json",
+      "rule": "screening_basis_counts: sum of bases other than literature-architecture and engineering proxies"
+    },
+    {
+      "display": "-10.7",
+      "source": "submission-2026-09-08/table62_reproduction_2026-09-08.json",
+      "rule": "[2]: 100 * (with_published_rate.estimated_price_per_lb / market.market_price_per_lb - 1)"
+    },
+    {
+      "display": "23",
+      "source": "submission-2026-09-08/all_families_2026-09-08.json",
+      "rule": "families with catalyst_domain thermal"
+    },
+    {
+      "display": "3",
+      "source": "submission-2026-09-08/all_families_2026-09-08.json",
+      "rule": "thermal lowest-cost candidates with materials_cost_per_lb above 50% of landed_cost_per_lb"
+    },
+    {
+      "display": "10",
+      "source": "submission-2026-09-08/all_families_2026-09-08.json",
+      "rule": "thermal lowest-cost candidates with processing_cost_per_lb above materials_cost_per_lb"
+    },
+    {
+      "display": "24",
+      "source": "submission-2026-09-08/all_families_2026-09-08.json",
+      "rule": "minimum share of landed cost outside materials and processing among thermal lowest-cost candidates"
+    },
+    {
+      "display": "42",
+      "source": "submission-2026-09-08/all_families_2026-09-08.json",
+      "rule": "maximum share of landed cost outside materials and processing among thermal lowest-cost candidates"
+    },
+    {
+      "display": "272",
+      "source": "backend/data/manufacturing_literature.json",
+      "rule": "temperature_profile segments across all profiles"
+    },
+    {
+      "display": "208",
+      "source": "backend/data/manufacturing_literature.json",
+      "rule": "segments with hold_h"
+    },
+    {
+      "display": "52",
+      "source": "backend/data/manufacturing_literature.json",
+      "rule": "segments with ramp_c_per_min"
+    },
+    {
+      "display": "1",
+      "source": "backend/data/manufacturing_literature.json",
+      "rule": "profiles with finished_batch_mass_kg"
+    },
+    {
+      "display": "99.7",
+      "source": "price-crossovers-2026-09-13/price_crossovers.json",
+      "rule": "ammonia-cracking monthly records: minimum economics score of co-mgo-la2o3 and ni-alumina-baseline"
     }
   ],
   "primary_run": "submission-2026-09-08",
