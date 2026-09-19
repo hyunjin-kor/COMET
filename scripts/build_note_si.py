@@ -28,6 +28,9 @@ def render():
         "library": "backend/data/manufacturing_literature.json",
         "operating": "backend/data/manufacturing_operating_references.json",
         "screening": "docs/paper/submission-2026-09-08/all_families_2026-09-08.json",
+        "live": "docs/paper/submission-2026-09-08/all_families_live_2026-09-08.json",
+        "summary": "docs/paper/submission-2026-09-08/paper_summary_2026-09-08.json",
+        "live_basis": "docs/paper/submission-2026-09-08/live_basis_2026-09-08.json",
         "robustness": "docs/paper/robustness-2026-09-08/decision_robustness.json",
         "methods": "docs/paper/methods-2026-09-09/methods_study.json",
     }
@@ -40,12 +43,33 @@ def render():
     changes = {family: int(census[(family, "monthly")]["cost_changes"]) for family in ("ammonia-cracking", "dry-reforming", "water-gas-shift")}
     if any(int(census[(family, "monthly")]["app_changes"]) for family in changes):
         raise ValueError("The SI text states that the balanced recommendation does not change in these families")
+    comparison = data["summary"]["live_reference_comparison"]
+    reference_families = {row["family"]: row for row in data["screening"]["families"]}
+    live_families = {row["family"]: row for row in data["live"]["families"]}
+
+    def scores(families, family, slug):
+        return next(c["scores"] for c in families[family]["candidates"] if c["slug"] == slug)
+
+    live_changes = []
+    for row in comparison["rows"]:
+        if row["profile"] != "balanced" or not row["changed"]:
+            continue
+        before = scores(reference_families, row["family"], row["reference_winner"])
+        after = scores(live_families, row["family"], row["reference_winner"])
+        live_changes.append((row["family"], row["reference_winner"], row["live_winner"], before, after))
+    if len(live_changes) != comparison["changed_by_profile"]["balanced"]:
+        raise ValueError("Live-quotation leader changes do not match the stored summary")
+    observed = data["live_basis"]["observation_started_at_utc"][:10]
+    linked = Counter(c["status"] for c in library["candidates"] if c["profile_ids"])
+    unlinked = Counter(c["status"] for c in library["candidates"] if not c["profile_ids"])
+    if set(linked) != {"variant_available", "source_mismatch"} or set(unlinked) != {"screening_only", "source_mismatch"}:
+        raise ValueError("The preparation-link reconciliation sentence no longer describes the library")
     request, hand = study["request"], study["independent_balance"]
     protocol = request["manufacturing_protocol"]
     mc = study["monte_carlo"]
     lines = ["# Supporting Information", "", "COMET: Catalyst Overall Manufacturing Estimation Tool", "",
              "## S1. Calculation methods and boundaries", "",
-             "This Supporting Information describes the manufacturing calculation, declared inputs, numerical verification, screening results, observed-price cost crossovers, preparation-evidence coverage and application views. "
+             "This Supporting Information describes the manufacturing calculation, declared inputs, numerical verification, screening results, observed-price cost crossovers, leaders under stored live quotations, preparation-evidence coverage and application views. "
              "The May 2026 screening results retain their original formulations and assumptions. "
              "The later preparation review does not retrospectively validate those formulations. The new manufacturing example is a hypothetical software demonstration, "
              "not an experimental catalyst cost or a comparison of matched catalytic performance.", "",
@@ -69,7 +93,7 @@ def render():
              "tᵣ = |T₁ − T₀|/(60r)    (S1)", "",
              "Eᵢ = Σⱼ Pᵢⱼtᵢⱼ    (S2)", "",
              "Vᵢ = 60Fᵢtᵍᵢ/1000    (S3)", "",
-             "Bᵢ = Bᵖᵢ + pₑEᵢ + qᵢtᵢ + wℓᵢ + pᵍᵢVᵢ + Aᵢ    (S4)", "",
+             "Bᵢ = Bᵖᵢ + pₑEᵢ + qᵢtᵢ + pₗℓᵢ + pᵍᵢVᵢ + Aᵢ    (S4)", "",
              "C = (Σᵢ aᵢBᵢ)/M    (S5)", "",
              "P = C(1 + g)(1 + s)/(1 − m)    (S6)", "",
              "In eq S1, T₀ and T₁ are the initial and target temperatures and r is the ramp rate. In eq S2, Eᵢ is operation electricity (kWh), "
@@ -77,7 +101,7 @@ def render():
              "Measured electricity can replace eq S2. In eq S3, Fᵢ is gas flow (L/min), tᵍᵢ is its selected duration (h), and Vᵢ is volume (m³); "
              "flow and price must refer to the same temperature and pressure.", "",
              "In eq S4, Bᵢ is incurred expenditure (USD), Bᵖᵢ is purchases assigned to the operation (USD), pₑ is electricity price (USD/kWh), "
-             "qᵢ is equipment occupancy rate (USD/h), tᵢ is full occupancy (h), w is labor rate (USD/person-hour), ℓᵢ is attendance (person-hour), "
+             "qᵢ is equipment occupancy rate (USD/h), tᵢ is full occupancy (h), pₗ is labor rate (USD/person-hour), ℓᵢ is attendance (person-hour), "
              "pᵍᵢ is gas price (USD/m³), and Aᵢ is an explicit additional charge (USD). Sums over multiple gases or purchases are implicit. "
              "Repeated operations contribute their incurred expenditure for each repetition. In eq S5, aᵢ is the dimensionless share allocated to the final batch "
              "and M is its recovered dry mass (kg); direct final-batch operations have aᵢ = 1. For proportional transfers, aᵢ is the product of used/recovered "
@@ -150,7 +174,7 @@ def render():
               "Table S6 reports estimated selling prices for 116 screening candidates; it does not report measured manufacturing costs. "
               "Powder values are converted from the stored legacy USD/lb fields using 1 lb = 0.45359237 kg. "
               "An electrode candidate's powder price is distinct from assembly cost per area. These observations do not establish equivalent activity or commercial quotation validity.", "",
-              "Figure S4 summarizes historical metal-price inputs from Johnson Matthey and the International Monetary Fund (IMF).<sup>3,5</sup> Westmetall supplies additional current metal quotations.<sup>4</sup> "
+              "Johnson Matthey<sup>3</sup> and Westmetall<sup>4</sup> supply current metal quotations. Figure S4 summarizes the monthly historical inputs from Johnson Matthey and the International Monetary Fund (IMF).<sup>5</sup> "
               "Environmental mass coverage is the fraction assigned a screening inventory factor, including compound proxies; it is not a measure of inventory accuracy.<sup>6</sup>", "",
               "![Figure S4. Metal price history. Monthly averages from January 2019 to May 2026: (a) precious metals; (b) base metals. Prices are USD/kg; both price axes use logarithmic scales. Histories are unsmoothed observations, not forecasts.](figures-si-2026-09-16/figS4_metal_prices.png)", "",
               "Table S6. Estimated powder selling prices and environmental mass coverage at May 2026 prices.", "",
@@ -167,28 +191,45 @@ def render():
               "Support prices remain at baseline in monthly metal-price tests. Candidate removal is tested both with recomputed and retained cost normalization ranges. "
               "Score tests lower the baseline candidate and raise alternatives by 2, 5 or 10 points, bounded by 0 and 100. "
               "Frequencies are conditional on these enumerated scenarios. No probability distribution for future market prices or catalyst performance is inferred.", "",
-              "Figure 4 of the main article replays the frozen screening calculation for ammonia cracking under the 89 monthly metal-price states with formulations, order sizes, route assumptions and support prices fixed.<sup>3,5</sup> "
+              "Figure 4 of the main article replays the frozen screening calculation for ammonia cracking under the 89 monthly metal-price states with formulations, order sizes, route assumptions, support prices, price-source grades and route and performance scores fixed.<sup>3,5</sup> "
               f"Figure S5 shows the same replay for methane dry reforming and water–gas shift, where the lowest-cost candidate changes {changes['dry-reforming']} and {changes['water-gas-shift']} times "
               f"({changes['ammonia-cracking']} times for ammonia cracking) while the balanced-weight recommendation of these families does not change. "
               f"The September–October 2025 cobalt price increase from {states['2025-09']['Co'] * PER_LB_TO_PER_KG:.2f} to {states['2025-10']['Co'] * PER_LB_TO_PER_KG:.2f} USD/kg "
               "also reverses the lowest-cost candidate in methane dry reforming while nickel is nearly unchanged. "
               "These are conditional model comparisons between screening candidates, not contemporaneous supplier quotations or performance comparisons.", "",
-              "![Figure S5. Observed-price cost crossovers. Modeled selling prices under the 89 monthly price states for the candidates that attain the lowest cost at any state in (a) methane dry reforming and (b) water–gas shift; lines connect observed states and do not locate a crossover date. Ni–Co/Al–Mg denotes Ni–Co/Al–Mg–O; Ni/CeO₂, Ni/CeO₂ single sites; Cu–ZnO, Cu/ZnO/Al₂O₃; Fe–Cr, Fe₂O₃–Cr₂O₃(–CuO) (Table S6). Other prices and engineering assumptions remain at reference values.](figures-si-2026-09-16/figS5_crossovers.png)", "",
+              "![Figure S5. Observed-price cost crossovers. Costs (modeled selling prices) under the 89 monthly price states for the candidates that attain the lowest cost at any state in (a) methane dry reforming and (b) water–gas shift; lines connect observed states and do not locate a crossover date. Ni–Co/Al–Mg denotes Ni–Co/Al–Mg–O; Ni/CeO₂, Ni/CeO₂ single sites; Cu–ZnO, Cu/ZnO/Al₂O₃; Fe–Cr, Fe₂O₃–Cr₂O₃(–CuO) (Table S6). Other prices and engineering assumptions remain at reference values.](figures-si-2026-09-16/figS5_crossovers.png)", "",
               "Figure S6 counts, for each sensitivity test of the main article, the families whose baseline candidate ranks first in at least half of the joint scenarios or is retained under candidate removal and under route/performance-score changes of 2, 5 and 10 points. Passing one test does not establish robustness to the others.", "",
               "![Figure S6. Ranking sensitivity tests. Number of the 30 reaction families retaining the baseline candidate under each test.](figures-si-2026-09-16/figS6_ranking_tests.png)", "",
+              f"The monthly replays hold price-source grades fixed. Replacing the May 2026 reference with the stored live quotations collected on {observed} "
+              "also changes these grades: a metal without a stored live quotation falls back to a stored reference price, and each candidate's price-reliability score "
+              "weights its sources by materials-cost share. With all other inputs unchanged, the leader changes in "
+              f"{comparison['changed_by_profile']['balanced']} families with balanced weights, {comparison['changed_by_profile']['cost-first']} with cost-first weights, "
+              f"{comparison['changed_by_profile']['evidence-first']} with evidence-first weights and {comparison['changed_by_profile']['performance_zero']} with the performance weight set to zero. "
+              "Table S7 lists the balanced-weight changes with the price-reliability and cost scores of the former leader. "
+              "The live quotations are a single stored snapshot, not a replay of current prices at another date.", "",
+              "Table S7. Balanced-weight leaders under the May 2026 reference and the stored live quotations.", "",
+              "| Reaction family | May 2026 leader | Live-quotation leader | Former leader: price reliability | Former leader: cost score |",
+              "|---|---|---|---:|---:|"]
+    for family, before, after, reference_scores, live_scores in live_changes:
+        lines.append(f"| {FAMILY_LABELS[family]} | {CANDIDATE_LABELS[family][before]} | {CANDIDATE_LABELS[family][after]} | "
+                     f"{reference_scores['evidence']:.1f} → {live_scores['evidence']:.1f} | {reference_scores['economics']:.1f} → {live_scores['economics']:.1f} |")
+    lines += ["", "Scores are on a 0–100 scale; route and performance scores are unchanged between the two bases.", "",
               "## S6. Preparation evidence and unresolved inputs", "",
               f"The library has {len(library['profiles'])} source-specific preparations from {len({p['doi'] for p in library['profiles']})} primary sources. "
               f"Of {len(library['candidates'])} screening candidates, {sum(bool(c['profile_ids']) for c in library['candidates'])} link to at least one preparation; "
               f"{sum(not c['profile_ids'] for c in library['candidates'])} have no curated preparation. Bibliographic verification covers {len(library['sources'])} digital object identifiers (DOIs). "
               "Links may describe variants. No candidate has jointly verified catalog composition, complete preparation, utilities, recovered output and prices. "
-              "Table S7 counts source/formulation discrepancies even where a related preparation is available.", "",
-              "Table S7. Preparation-evidence coverage and unresolved source/formulation discrepancies.", "",
+              "Table S8 counts source/formulation discrepancies even where a related preparation is available.", "",
+              "Table S8. Preparation-evidence coverage and unresolved source/formulation discrepancies.", "",
               "| Reaction family | Candidates | With preparation | Source mismatch flagged |", "|---|---:|---:|---:|"]
     for family in sorted({c["family"] for c in library["candidates"]}):
         rows = [c for c in library["candidates"] if c["family"] == family]
         lines.append(f"| {FAMILY_LABELS[family]} | {len(rows)} | {sum(bool(c['profile_ids']) for c in rows)} | {sum(c['status']=='source_mismatch' for c in rows)} |")
     statuses = Counter(c["status"] for c in library["candidates"])
     lines += ["", "Mutually exclusive catalog assessment counts: " + "; ".join(f"{STATUS_LABELS[key]}: {value}" for key, value in sorted(statuses.items())) + ". "
+              f"The {sum(linked.values())} candidates linked to a preparation comprise the {linked['variant_available']} with a source-specific variant "
+              f"and {linked['source_mismatch']} of the flagged discrepancies; the {sum(unlinked.values())} without a curated preparation comprise the "
+              f"{unlinked['screening_only']} unverified candidates and the remaining {unlinked['source_mismatch']} flagged discrepancies. "
               "Figure S7 shows these assessments by reaction family.", "",
               "![Figure S7. Preparation-evidence status. Number of screening candidates in each reaction family with a source-specific preparation variant, with a flagged source/formulation discrepancy, or without a curated preparation. Families are ordered by the number of candidates with a variant.](figures-si-2026-09-16/figS7_evidence.png)", "",
               "The companion preparation-evidence document and JSON contain all candidate assessments, source titles and DOIs, section locators, "

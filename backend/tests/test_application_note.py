@@ -62,6 +62,54 @@ def test_note_renders_within_limits_and_matches_committed_files():
     assert saved == record
 
 
+def _figure_numbers(captions, tool):
+    """Figure labels whose caption discloses artwork from the named tool."""
+    import re
+
+    return {match.group(1) for match in re.finditer(r"!\[Figure (S?\d+)\.([^\]]*)\]", captions) if tool in match.group(2)}
+
+
+def test_ai_artwork_acknowledgment_matches_the_disclosing_captions():
+    """Renumbered figures must not leave the Acknowledgments pointing at the wrong artwork."""
+    import re
+
+    from scripts import build_note_si as si
+
+    note_text = note_builder.note(note_builder.load_run())
+    si_text = si.render()
+    acknowledgment = note_text.split("## Acknowledgments", 1)[1].split("## Competing interests", 1)[0]
+    gemini = {"S" + n for n in re.findall(r"Supporting Information Figures? S(\d+)(?: and S(\d+))?", acknowledgment)[0] if n}
+    assert gemini == _figure_numbers(si_text, "Gemini")
+    openai = _figure_numbers(note_text, "OpenAI")
+    assert openai == {"1", "2", "3"} and "Figures 1–3" in acknowledgment
+    assert "Anthropic Claude" in acknowledgment
+
+
+def test_si_tables_are_numbered_and_cited_in_order():
+    import re
+
+    from scripts import build_note_si as si
+
+    text = si.render()
+    captions = [int(n) for n in re.findall(r"^Table S(\d+)\. ", text, flags=re.M)]
+    assert captions == list(range(1, len(captions) + 1))
+    first_citation = []
+    for match in re.finditer(r"Tables? S(\d+)(?:(?:–| and |, )S?(\d+))?", text):
+        for number in (match.group(1), match.group(2)):
+            if number and int(number) not in first_citation:
+                first_citation.append(int(number))
+    assert first_citation == captions
+
+
+def test_reference_example_matches_a_fresh_calculation():
+    from scripts import record_note_reference_example as example
+
+    stored = json.loads(example.OUTPUT.read_text(encoding="utf-8"))
+    assert stored == json.loads(json.dumps(example.record()))
+    assert stored["nickel_quote"]["source"].startswith("IMF")
+    assert stored["alumina_row"]["material_key"] == example.ALUMINA_KEY
+
+
 def test_note_reuses_the_manuscript_numbers():
     run = note_builder.load_run()
     text = note_builder.note(run)

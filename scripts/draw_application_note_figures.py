@@ -943,8 +943,10 @@ def figure4_price_ranking():
                 for point in boundary["observations"] if point["date"] in ("2025-09", "2025-10")}
     for day, (nickel, cobalt) in selected.items():
         b.scatter(nickel, cobalt, s=30, marker="D", facecolor="white", edgecolor=INK, lw=0.8, zorder=5)
-        b.annotate(day, (nickel, cobalt), xytext=(7, -14 if day == "2025-09" else 6),
-                   textcoords="offset points", fontsize=8, color=INK)
+        # A white backing keeps the month labels legible where they cross the boundary line and nearby states.
+        b.annotate(day, (nickel, cobalt), xytext=(-7, -12 if day == "2025-09" else 5), ha="right",
+                   textcoords="offset points", fontsize=8, color=INK, zorder=6,
+                   bbox={"boxstyle": "round,pad=0.15", "facecolor": "white", "edgecolor": "none", "alpha": 0.9})
     b.annotate("", xy=selected["2025-10"], xytext=selected["2025-09"],
                arrowprops={"arrowstyle": "->", "lw": 0.8, "color": INK})
     b.text(0.04, 0.9, L["f4_ni"], color=WARN, fontsize=8.5, transform=b.transAxes)

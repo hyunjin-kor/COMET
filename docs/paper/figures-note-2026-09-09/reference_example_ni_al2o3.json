@@ -1,0 +1,138 @@
+{
+  "basis": "May 2026 reference prices",
+  "inputs": {
+    "reference_basis": "docs/paper/submission-2026-09-08/reference_basis_2026-09-08.json",
+    "reference_basis_sha256": "f3eeac99ff67bc6e3152ede19195f8438aa2a8c9e0a781e7645897cff681882a",
+    "materials_library_sha256": "391502d24d75c16509c33bd2c7f4240225efb9f1a46e4dd8708a2d6769fe2e0d"
+  },
+  "request": {
+    "catalyst_domain": "thermal",
+    "application_family": "general",
+    "template_id": "wet_impregnation_metal_oxide",
+    "order_size_tons": 20,
+    "steps": [
+      "mixer_slurry",
+      "incipient_wetness",
+      "dryer_rotary_100_300C",
+      "kiln_continuous_indirect",
+      "mill",
+      "scrubber_nox"
+    ],
+    "components": [
+      {
+        "role": "active_metal",
+        "name": "Ni",
+        "wt_pct": 20,
+        "price_per_lb": 8.5243
+      },
+      {
+        "role": "support",
+        "name": "Al2O3",
+        "wt_pct": 80,
+        "material_key": "lit:comtrade-calcined-alumina-2024"
+      }
+    ]
+  },
+  "nickel_quote": {
+    "symbol": "Ni",
+    "name": "Nickel",
+    "price": 8.5243,
+    "unit": "$/lb",
+    "source": "IMF PCPS (monthly average)",
+    "fetched_at": "2026-05-31"
+  },
+  "alumina_row": {
+    "material_key": "lit:comtrade-calcined-alumina-2024",
+    "name": "Calcined alumina (non-corundum), import unit value (UN Comtrade 2024)",
+    "display_name": "Al2O3",
+    "price_per_lb": 0.27016,
+    "price_unit": "$/kg",
+    "quote_source": "UN Comtrade (U.S. imports)",
+    "quote_year": 2024,
+    "source_type": "indexed",
+    "reference_url": "https://comtradeapi.un.org/public/v1/preview/C/A/HS?reporterCode=842&period=2024&cmdCode=281820&flowCode=M"
+  },
+  "template_name": "Incipient Wetness Impregnation - Metal on Oxide Support",
+  "summary": {
+    "estimated_price_per_lb": 4.9382,
+    "estimated_price_per_kg": 10.8869,
+    "net_cost_per_lb": 4.9382,
+    "net_cost_per_kg": 10.8869,
+    "materials_pct": 39.1,
+    "processing_pct": 33.9,
+    "gwp_kg_co2eq_per_kg_catalyst": 8.1029,
+    "ced_mj_per_kg_catalyst": 132.3522,
+    "lca_coverage_pct": 100.0
+  },
+  "materials": {
+    "components": [
+      {
+        "role": "active_metal",
+        "name": "Ni",
+        "wt_pct": 20.0,
+        "wt_frac": 0.2,
+        "price_per_lb": 8.5243,
+        "precursor_markup": 1.0,
+        "cost_per_lb_cat": 1.70486,
+        "cost_pct": 88.3
+      },
+      {
+        "role": "support",
+        "name": "Al2O3",
+        "wt_pct": 80.0,
+        "wt_frac": 0.8,
+        "price_per_lb": 0.2832,
+        "precursor_markup": 1.0,
+        "cost_per_lb_cat": 0.22656,
+        "cost_pct": 11.7
+      }
+    ],
+    "total_materials_cost_per_lb": 1.93142
+  },
+  "step_method": {
+    "scale": "medium",
+    "order_size_tons": 20.0,
+    "production_rate_ton_per_day": 10,
+    "campaign_days": 3.0,
+    "step_cost_per_hr": 930.98,
+    "chemppi_escalation": 1.3299711815561959,
+    "campaign_cost": 67030.55,
+    "total_production_lb": 40000.0,
+    "materials_cost_per_lb": 1.9314,
+    "processing_cost_per_lb": 1.6758,
+    "subtotal_per_lb": 3.6072,
+    "ga_per_lb": 0.1804,
+    "sard_per_lb": 0.1894,
+    "pre_margin_per_lb": 3.9769,
+    "margin_pct": 19.47,
+    "margin_per_lb": 0.9613,
+    "estimated_price_per_lb": 4.9382,
+    "estimated_price_per_kg": 10.8868,
+    "step_details": [
+      {
+        "step": "mixer_slurry",
+        "hourly_cost": 100
+      },
+      {
+        "step": "incipient_wetness",
+        "hourly_cost": 100
+      },
+      {
+        "step": "dryer_rotary_100_300C",
+        "hourly_cost": 150
+      },
+      {
+        "step": "kiln_continuous_indirect",
+        "hourly_cost": 175
+      },
+      {
+        "step": "mill",
+        "hourly_cost": 100
+      },
+      {
+        "step": "scrubber_nox",
+        "hourly_cost": 75
+      }
+    ]
+  }
+}

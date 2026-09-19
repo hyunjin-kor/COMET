@@ -1,8 +1,8 @@
 {
   "target": "Journal of Chemical Information and Modeling, Application Note",
   "word_limit_abstract_text_graphics": 5000,
-  "abstract_words": 105,
-  "text_words_excluding_references": 1931,
+  "abstract_words": 123,
+  "text_words_excluding_references": 2146,
   "graphics": [
     {
       "figure": 1,
@@ -26,18 +26,18 @@
     }
   ],
   "graphics_word_equivalent": 2400,
-  "total_word_equivalent": 4436,
+  "total_word_equivalent": 4669,
   "toc_word_equivalent_allowance": 300,
-  "total_word_equivalent_with_toc": 4736,
+  "total_word_equivalent_with_toc": 4969,
   "toc_count_note": "A conservative 300-word allowance is tracked separately because the Application Note rule does not explicitly resolve TOC inclusion.",
   "figure_count": 4,
   "table_count": 0,
   "software_named_in_title": true,
-  "json_key_references": 60,
+  "json_key_references": 69,
   "publication_mass_unit": "kg",
   "publication_conversions": [
     {
-      "source": "figures-note-2026-09-09/screen_result_ni_al2o3.json",
+      "source": "figures-note-2026-09-09/reference_example_ni_al2o3.json",
       "key": "request.order_size_tons",
       "source_value": 20,
       "factor": 907.18474,
@@ -45,23 +45,31 @@
       "display": "18,143.7"
     },
     {
-      "source": "figures-note-2026-09-09/screen_result_ni_al2o3.json",
+      "source": "figures-note-2026-09-09/reference_example_ni_al2o3.json",
       "key": "step_method.estimated_price_per_lb",
-      "source_value": 5.213,
+      "source_value": 4.9382,
       "factor": 2.2046226218487757,
-      "converted_value": 11.492697727697667,
-      "display": "11.49"
+      "converted_value": 10.886867431213624,
+      "display": "10.89"
     },
     {
-      "source": "figures-note-2026-09-09/screen_result_ni_al2o3.json",
+      "source": "figures-note-2026-09-09/reference_example_ni_al2o3.json",
       "key": "materials.components[0].cost_per_lb_cat",
-      "source_value": 1.51218,
+      "source_value": 1.70486,
       "factor": 2.2046226218487757,
-      "converted_value": 3.3337862363072817,
-      "display": "3.33"
+      "converted_value": 3.758572923085104,
+      "display": "3.76"
     },
     {
-      "source": "figures-note-2026-09-09/screen_result_ni_al2o3.json",
+      "source": "figures-note-2026-09-09/reference_example_ni_al2o3.json",
+      "key": "materials.components[1].cost_per_lb_cat",
+      "source_value": 0.22656,
+      "factor": 2.2046226218487757,
+      "converted_value": 0.49947930120605866,
+      "display": "0.50"
+    },
+    {
+      "source": "figures-note-2026-09-09/reference_example_ni_al2o3.json",
       "key": "step_method.processing_cost_per_lb",
       "source_value": 1.6758,
       "factor": 2.2046226218487757,
@@ -114,7 +122,7 @@
       "source_value": 27.37,
       "factor": 2.2046226218487757,
       "converted_value": 60.34052116000099,
-      "display": "60.34"
+      "display": "60.341"
     },
     {
       "source": "submission-2026-09-08/paper_summary_2026-09-08.json",
@@ -130,7 +138,7 @@
       "source_value": 20.59,
       "factor": 2.2046226218487757,
       "converted_value": 45.39317978386629,
-      "display": "45.39"
+      "display": "45.393"
     },
     {
       "source": "submission-2026-09-08/paper_summary_2026-09-08.json",
@@ -146,7 +154,7 @@
       "source_value": 2.41,
       "factor": 2.2046226218487757,
       "converted_value": 5.313140518655549,
-      "display": "5.31"
+      "display": "5.313"
     },
     {
       "source": "submission-2026-09-08/paper_summary_2026-09-08.json",
@@ -178,7 +186,7 @@
       "source_value": 4.7411,
       "factor": 2.2046226218487757,
       "converted_value": 10.452336312447231,
-      "display": "10.4523"
+      "display": "10.45"
     },
     {
       "source": "methods-2026-09-09/methods_study.json",
@@ -186,7 +194,7 @@
       "source_value": 5.8131,
       "factor": 2.2046226218487757,
       "converted_value": 12.815691763069118,
-      "display": "12.8157"
+      "display": "12.82"
     },
     {
       "source": "methods-2026-09-09/methods_study.json",
@@ -194,7 +202,7 @@
       "source_value": 4.3573,
       "factor": 2.2046226218487757,
       "converted_value": 9.606202150181671,
-      "display": "9.6062"
+      "display": "9.61"
     },
     {
       "source": "methods-2026-09-09/methods_study.json",
@@ -202,7 +210,7 @@
       "source_value": 1265.9574,
       "factor": 2.2046226218487757,
       "converted_value": 2790.958322336859,
-      "display": "2790.9583"
+      "display": "2,790.96"
     }
   ],
   "primary_run": "submission-2026-09-08",

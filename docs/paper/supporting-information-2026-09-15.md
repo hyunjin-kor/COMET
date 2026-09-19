@@ -4,7 +4,7 @@ COMET: Catalyst Overall Manufacturing Estimation Tool
 
 ## S1. Calculation methods and boundaries
 
-This Supporting Information describes the manufacturing calculation, declared inputs, numerical verification, screening results, observed-price cost crossovers, preparation-evidence coverage and application views. The May 2026 screening results retain their original formulations and assumptions. The later preparation review does not retrospectively validate those formulations. The new manufacturing example is a hypothetical software demonstration, not an experimental catalyst cost or a comparison of matched catalytic performance.
+This Supporting Information describes the manufacturing calculation, declared inputs, numerical verification, screening results, observed-price cost crossovers, leaders under stored live quotations, preparation-evidence coverage and application views. The May 2026 screening results retain their original formulations and assumptions. The later preparation review does not retrospectively validate those formulations. The new manufacturing example is a hypothetical software demonstration, not an experimental catalyst cost or a comparison of matched catalytic performance.
 
 The screening calculations use the published Step Method and its cost-accounting framework.<sup>1,2</sup> In the batch calculation, purchases replace composition-based materials costs and operation costs replace Step Method processing costs. For each operation, electricity is measured kWh or the sum of mean power multiplied by ramp, hold and additional durations. For temperatures in °C and a ramp rate in °C/min, eq S1 gives the ramp duration in hours. Equipment occupancy is charged for the full entered operation duration; attended labor is a separate input. Gas volume is flow multiplied by its selected duration, using matching reference conditions for flow and price. Temperature, stirring speed and pressure are retained as preparation conditions; they do not infer equipment power, staffing, chemical yield or performance.
 
@@ -20,7 +20,7 @@ Eᵢ = Σⱼ Pᵢⱼtᵢⱼ    (S2)
 
 Vᵢ = 60Fᵢtᵍᵢ/1000    (S3)
 
-Bᵢ = Bᵖᵢ + pₑEᵢ + qᵢtᵢ + wℓᵢ + pᵍᵢVᵢ + Aᵢ    (S4)
+Bᵢ = Bᵖᵢ + pₑEᵢ + qᵢtᵢ + pₗℓᵢ + pᵍᵢVᵢ + Aᵢ    (S4)
 
 C = (Σᵢ aᵢBᵢ)/M    (S5)
 
@@ -28,7 +28,7 @@ P = C(1 + g)(1 + s)/(1 − m)    (S6)
 
 In eq S1, T₀ and T₁ are the initial and target temperatures and r is the ramp rate. In eq S2, Eᵢ is operation electricity (kWh), Pᵢⱼ is mean power (kW), and tᵢⱼ is the duration (h) of phase j, including any explicitly powered additional period. Measured electricity can replace eq S2. In eq S3, Fᵢ is gas flow (L/min), tᵍᵢ is its selected duration (h), and Vᵢ is volume (m³); flow and price must refer to the same temperature and pressure.
 
-In eq S4, Bᵢ is incurred expenditure (USD), Bᵖᵢ is purchases assigned to the operation (USD), pₑ is electricity price (USD/kWh), qᵢ is equipment occupancy rate (USD/h), tᵢ is full occupancy (h), w is labor rate (USD/person-hour), ℓᵢ is attendance (person-hour), pᵍᵢ is gas price (USD/m³), and Aᵢ is an explicit additional charge (USD). Sums over multiple gases or purchases are implicit. Repeated operations contribute their incurred expenditure for each repetition. In eq S5, aᵢ is the dimensionless share allocated to the final batch and M is its recovered dry mass (kg); direct final-batch operations have aᵢ = 1. For proportional transfers, aᵢ is the product of used/recovered mass fractions or used/prepared solution-volume fractions along the transfer chain. Whole-batch charging contributes a factor of one at that transfer. In eq S6, C is manufacturing cost (USD/kg), P is selling price (USD/kg), and g, s and m are dimensionless G&A, SARD and selling-margin fractions.
+In eq S4, Bᵢ is incurred expenditure (USD), Bᵖᵢ is purchases assigned to the operation (USD), pₑ is electricity price (USD/kWh), qᵢ is equipment occupancy rate (USD/h), tᵢ is full occupancy (h), pₗ is labor rate (USD/person-hour), ℓᵢ is attendance (person-hour), pᵍᵢ is gas price (USD/m³), and Aᵢ is an explicit additional charge (USD). Sums over multiple gases or purchases are implicit. Repeated operations contribute their incurred expenditure for each repetition. In eq S5, aᵢ is the dimensionless share allocated to the final batch and M is its recovered dry mass (kg); direct final-batch operations have aᵢ = 1. For proportional transfers, aᵢ is the product of used/recovered mass fractions or used/prepared solution-volume fractions along the transfer chain. Whole-batch charging contributes a factor of one at that transfer. In eq S6, C is manufacturing cost (USD/kg), P is selling price (USD/kg), and g, s and m are dimensionless G&A, SARD and selling-margin fractions.
 
 ## S2. Declared manufacturing inputs
 
@@ -116,7 +116,7 @@ Monte Carlo uses seed 20260915 and 1000 trials. Independent uniform bounds are 0
 
 The following May 2026 costs use the original screening formulations and route assumptions, not the subsequently curated preparation records. Table S6 reports estimated selling prices for 116 screening candidates; it does not report measured manufacturing costs. Powder values are converted from the stored legacy USD/lb fields using 1 lb = 0.45359237 kg. An electrode candidate's powder price is distinct from assembly cost per area. These observations do not establish equivalent activity or commercial quotation validity.
 
-Figure S4 summarizes historical metal-price inputs from Johnson Matthey and the International Monetary Fund (IMF).<sup>3,5</sup> Westmetall supplies additional current metal quotations.<sup>4</sup> Environmental mass coverage is the fraction assigned a screening inventory factor, including compound proxies; it is not a measure of inventory accuracy.<sup>6</sup>
+Johnson Matthey<sup>3</sup> and Westmetall<sup>4</sup> supply current metal quotations. Figure S4 summarizes the monthly historical inputs from Johnson Matthey and the International Monetary Fund (IMF).<sup>5</sup> Environmental mass coverage is the fraction assigned a screening inventory factor, including compound proxies; it is not a measure of inventory accuracy.<sup>6</sup>
 
 ![Figure S4. Metal price history. Monthly averages from January 2019 to May 2026: (a) precious metals; (b) base metals. Prices are USD/kg; both price axes use logarithmic scales. Histories are unsmoothed observations, not forecasts.](figures-si-2026-09-16/figS4_metal_prices.png)
 
@@ -245,19 +245,33 @@ Names identify the original screening models, not experimentally verified compos
 
 Ranking calculations use the original four criterion weights and assigned route/performance scores retained in the frozen methods and robustness files. The complete 0.05 weight grid contains 1,771 nonnegative combinations summing to one. With 89 months and 30 families, it defines 4,728,570 scenarios. Support prices remain at baseline in monthly metal-price tests. Candidate removal is tested both with recomputed and retained cost normalization ranges. Score tests lower the baseline candidate and raise alternatives by 2, 5 or 10 points, bounded by 0 and 100. Frequencies are conditional on these enumerated scenarios. No probability distribution for future market prices or catalyst performance is inferred.
 
-Figure 4 of the main article replays the frozen screening calculation for ammonia cracking under the 89 monthly metal-price states with formulations, order sizes, route assumptions and support prices fixed.<sup>3,5</sup> Figure S5 shows the same replay for methane dry reforming and water–gas shift, where the lowest-cost candidate changes 9 and 11 times (8 times for ammonia cracking) while the balanced-weight recommendation of these families does not change. The September–October 2025 cobalt price increase from 33.48 to 43.15 USD/kg also reverses the lowest-cost candidate in methane dry reforming while nickel is nearly unchanged. These are conditional model comparisons between screening candidates, not contemporaneous supplier quotations or performance comparisons.
+Figure 4 of the main article replays the frozen screening calculation for ammonia cracking under the 89 monthly metal-price states with formulations, order sizes, route assumptions, support prices, price-source grades and route and performance scores fixed.<sup>3,5</sup> Figure S5 shows the same replay for methane dry reforming and water–gas shift, where the lowest-cost candidate changes 9 and 11 times (8 times for ammonia cracking) while the balanced-weight recommendation of these families does not change. The September–October 2025 cobalt price increase from 33.48 to 43.15 USD/kg also reverses the lowest-cost candidate in methane dry reforming while nickel is nearly unchanged. These are conditional model comparisons between screening candidates, not contemporaneous supplier quotations or performance comparisons.
 
-![Figure S5. Observed-price cost crossovers. Modeled selling prices under the 89 monthly price states for the candidates that attain the lowest cost at any state in (a) methane dry reforming and (b) water–gas shift; lines connect observed states and do not locate a crossover date. Ni–Co/Al–Mg denotes Ni–Co/Al–Mg–O; Ni/CeO₂, Ni/CeO₂ single sites; Cu–ZnO, Cu/ZnO/Al₂O₃; Fe–Cr, Fe₂O₃–Cr₂O₃(–CuO) (Table S6). Other prices and engineering assumptions remain at reference values.](figures-si-2026-09-16/figS5_crossovers.png)
+![Figure S5. Observed-price cost crossovers. Costs (modeled selling prices) under the 89 monthly price states for the candidates that attain the lowest cost at any state in (a) methane dry reforming and (b) water–gas shift; lines connect observed states and do not locate a crossover date. Ni–Co/Al–Mg denotes Ni–Co/Al–Mg–O; Ni/CeO₂, Ni/CeO₂ single sites; Cu–ZnO, Cu/ZnO/Al₂O₃; Fe–Cr, Fe₂O₃–Cr₂O₃(–CuO) (Table S6). Other prices and engineering assumptions remain at reference values.](figures-si-2026-09-16/figS5_crossovers.png)
 
 Figure S6 counts, for each sensitivity test of the main article, the families whose baseline candidate ranks first in at least half of the joint scenarios or is retained under candidate removal and under route/performance-score changes of 2, 5 and 10 points. Passing one test does not establish robustness to the others.
 
 ![Figure S6. Ranking sensitivity tests. Number of the 30 reaction families retaining the baseline candidate under each test.](figures-si-2026-09-16/figS6_ranking_tests.png)
 
+The monthly replays hold price-source grades fixed. Replacing the May 2026 reference with the stored live quotations collected on 2026-09-06 also changes these grades: a metal without a stored live quotation falls back to a stored reference price, and each candidate's price-reliability score weights its sources by materials-cost share. With all other inputs unchanged, the leader changes in 5 families with balanced weights, 3 with cost-first weights, 10 with evidence-first weights and 4 with the performance weight set to zero. Table S7 lists the balanced-weight changes with the price-reliability and cost scores of the former leader. The live quotations are a single stored snapshot, not a replay of current prices at another date.
+
+Table S7. Balanced-weight leaders under the May 2026 reference and the stored live quotations.
+
+| Reaction family | May 2026 leader | Live-quotation leader | Former leader: price reliability | Former leader: cost score |
+|---|---|---|---:|---:|
+| Ammonia cracking | Co/MgO–La₂O₃ | Ni–MgO/CeO₂ interface | 84.7 → 56.7 | 100.0 → 100.0 |
+| Ammonia synthesis | Cs-promoted Co₃Mo₃N | Promoted fused iron (magnetite/wüstite) | 83.3 → 56.8 | 99.0 → 99.2 |
+| CO-PROX (preferential CO oxidation) | CuO–CeO₂ | Fe-promoted Pt/Al₂O₃ | 78.8 → 78.3 | 100.0 → 100.0 |
+| DRM (dry reforming of methane) | Ni–Co/Al–Mg–O | Ni/CeO₂ single sites | 84.5 → 59.6 | 99.9 → 100.0 |
+| NRR (nitrogen reduction reaction) | Li-mediated cathode | Plasma-assisted ammonia synthesis | 88.0 → 86.0 | 96.4 → 87.2 |
+
+Scores are on a 0–100 scale; route and performance scores are unchanged between the two bases.
+
 ## S6. Preparation evidence and unresolved inputs
 
-The library has 92 source-specific preparations from 71 primary sources. Of 116 screening candidates, 75 link to at least one preparation; 41 have no curated preparation. Bibliographic verification covers 401 digital object identifiers (DOIs). Links may describe variants. No candidate has jointly verified catalog composition, complete preparation, utilities, recovered output and prices. Table S7 counts source/formulation discrepancies even where a related preparation is available.
+The library has 92 source-specific preparations from 71 primary sources. Of 116 screening candidates, 75 link to at least one preparation; 41 have no curated preparation. Bibliographic verification covers 401 digital object identifiers (DOIs). Links may describe variants. No candidate has jointly verified catalog composition, complete preparation, utilities, recovered output and prices. Table S8 counts source/formulation discrepancies even where a related preparation is available.
 
-Table S7. Preparation-evidence coverage and unresolved source/formulation discrepancies.
+Table S8. Preparation-evidence coverage and unresolved source/formulation discrepancies.
 
 | Reaction family | Candidates | With preparation | Source mismatch flagged |
 |---|---:|---:|---:|
@@ -292,7 +306,7 @@ Table S7. Preparation-evidence coverage and unresolved source/formulation discre
 | Methanol synthesis from syngas | 3 | 2 | 0 |
 | WGS (water–gas shift) | 4 | 4 | 2 |
 
-Mutually exclusive catalog assessment counts: Preparation unverified; no curated variant: 34; Source/formulation discrepancy flagged: 26; Source-specific variant available: 56. Figure S7 shows these assessments by reaction family.
+Mutually exclusive catalog assessment counts: Preparation unverified; no curated variant: 34; Source/formulation discrepancy flagged: 26; Source-specific variant available: 56. The 75 candidates linked to a preparation comprise the 56 with a source-specific variant and 19 of the flagged discrepancies; the 41 without a curated preparation comprise the 34 unverified candidates and the remaining 7 flagged discrepancies. Figure S7 shows these assessments by reaction family.
 
 ![Figure S7. Preparation-evidence status. Number of screening candidates in each reaction family with a source-specific preparation variant, with a flagged source/formulation discrepancy, or without a curated preparation. Families are ordered by the number of candidates with a variant.](figures-si-2026-09-16/figS7_evidence.png)
 
