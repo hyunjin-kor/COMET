@@ -44,7 +44,8 @@ TEMPLATES = ["wet_impregnation_metal_oxide", "excess_solution_impregnation_metal
 
 
 def sha256(path):
-    return hashlib.sha256((ROOT / path).read_bytes()).hexdigest()
+    """Checksum of a text input with LF line endings, so Windows and Linux checkouts agree."""
+    return hashlib.sha256((ROOT / path).read_bytes().replace(b"\r\n", b"\n")).hexdigest()
 
 
 def study():

@@ -2,8 +2,8 @@
   "basis": "2026-08 reference prices",
   "inputs": {
     "reference_basis": "docs/paper/submission-2026-09-21/reference_basis_2026-09-21.json",
-    "reference_basis_sha256": "40d01ac747d195bc009926d5a56722fad660d66f770baf69e8866f0f29549131",
-    "materials_library_sha256": "391502d24d75c16509c33bd2c7f4240225efb9f1a46e4dd8708a2d6769fe2e0d"
+    "reference_basis_sha256": "a037399e25863f31523db89ad7ad26ad2e9c6c55eaadf542c8171ef64af08ca3",
+    "materials_library_sha256": "4f456822f68155a83d0d33aa80d77d3944465d9bba341df11e3d6f73cdccf33f"
   },
   "request": {
     "catalyst_domain": "thermal",

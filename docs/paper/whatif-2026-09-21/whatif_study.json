@@ -2,10 +2,10 @@
   "basis_month": "2026-08",
   "inputs": {
     "reference_basis": "docs/paper/submission-2026-09-21/reference_basis_2026-09-21.json",
-    "reference_basis_sha256": "40d01ac747d195bc009926d5a56722fad660d66f770baf69e8866f0f29549131",
+    "reference_basis_sha256": "a037399e25863f31523db89ad7ad26ad2e9c6c55eaadf542c8171ef64af08ca3",
     "monthly_history": "docs/paper/submission-2026-09-21/monthly_history_2026-09-21.json",
-    "monthly_history_sha256": "aedb814426ddcda731e076f133a218284af1f6eb36e5ce86a29a3df08de399ae",
-    "materials_library_sha256": "391502d24d75c16509c33bd2c7f4240225efb9f1a46e4dd8708a2d6769fe2e0d"
+    "monthly_history_sha256": "d86b1773a87f4c58173d6546f6e64f6077823f88d806e1761d64197e4e65e09e",
+    "materials_library_sha256": "4f456822f68155a83d0d33aa80d77d3944465d9bba341df11e3d6f73cdccf33f"
   },
   "scope": "Calculator requests on the reference basis; one input varied at a time. Precious-metal value is part of the materials cost and carries overheads and margin; no spent-catalyst credit is applied. Catalytic performance is not evaluated.",
   "catalysts": {
