@@ -621,8 +621,9 @@ let aboutCopy;
 ipcMain.handle('about:set-copy', (event, copy) => {
   if (event.sender !== mainWindow?.webContents) return;
   const keys = ['title', 'description', 'workflow', 'priorWork', 'button'];
-  if (!copy || !keys.every((key) => typeof copy[key] === 'string' && copy[key].length > 0 && copy[key].length <= 500)) return;
-  aboutCopy = Object.fromEntries(keys.map((key) => [key, copy[key]]));
+  const valid = (key) => typeof copy[key] === 'string' && copy[key].length > 0 && copy[key].length <= 500;
+  if (!copy || !keys.every(valid) || (copy.scope !== undefined && !valid('scope'))) return;
+  aboutCopy = Object.fromEntries([...keys, 'scope'].map((key) => [key, copy[key]]));
 });
 
 function showAbout() {
@@ -635,6 +636,8 @@ function showAbout() {
       '',
       aboutCopy?.description ?? 'Independently developed catalyst manufacturing cost, environmental screening and decision analysis software.',
       aboutCopy?.workflow ?? 'Traceable prices, explicit manufacturing boundaries and reproducible comparisons.',
+      '',
+      aboutCopy?.scope ?? 'COMET estimates what a catalyst costs to manufacture. It does not evaluate activity, selectivity or lifetime, so a more expensive catalyst can still be the more economical choice per unit of product. Combine these costs with measured or predicted performance before selecting a catalyst.',
       '',
       aboutCopy?.priorWork ?? 'Prior work for adopted thermal costing: Baddour et al. (2018); Van Allsburg et al. (2022), CatCost.',
       '',

@@ -309,6 +309,7 @@ export default function Compare() {
                 <div className="mt-3 text-xs leading-6 text-slate-600">
                   {t('Profiles change weighting only. Candidate records and source links stay fixed.')}
                   <p className="mt-2 text-amber-900">{lang === 'ko' ? '순위는 입력한 조성·제조 가정에 따른 스크리닝 결과입니다. 문헌 제조법과 시료의 일치 여부는 후보 상세에서 따로 확인하세요.' : 'Rankings use assumed formulations and processes. Check specimen agreement and preparation evidence separately in each candidate detail.'}</p>
+                  <p className="mt-2 text-amber-900">{t('Route and performance scores are screening judgements assigned from the literature, not measured or predicted activity. Rankings compare modeled manufacturing cost and documentation quality, not catalytic performance.')}</p>
                 </div>
               </div>
             </div>
@@ -319,6 +320,7 @@ export default function Compare() {
       {sectionState.activeSection.id === 'routes' ? (
         <section className="surface-card p-4">
           <div className="flex items-start justify-between gap-3"><div><div className="cp-subtle-label">{t('Published routes')}</div><div className="cp-heading-lg mt-2">{t('How do these routes compare right now?')}</div></div><span className="cp-chip"><ScientificText text={lang === 'ko' ? `${candidates.length}개 후보` : `${candidates.length} candidates`} /></span></div>
+          <p className="mt-3 text-xs leading-6 text-amber-900">{t('Route and performance scores are screening judgements assigned from the literature, not measured or predicted activity. Rankings compare modeled manufacturing cost and documentation quality, not catalytic performance.')}</p>
           <div className="mt-4 space-y-3">
             {candidates.map((candidate, index) => (
               <button type="button" key={candidate.slug} onClick={() => { setActiveSlug(candidate.slug); sectionState.setActiveSection('detail'); }} className={`w-full rounded-[24px] border px-4 py-4 text-left transition ${activeCandidate.slug === candidate.slug ? 'border-emerald-200 bg-emerald-50/80' : 'border-slate-900/8 bg-white/64 hover:bg-white/88'}`}>

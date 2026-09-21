@@ -32,10 +32,11 @@ export default function AppFrame() {
   const aboutDescription = t('Independently developed catalyst manufacturing cost, environmental screening and decision analysis software.');
   const aboutWorkflow = t('Traceable prices, explicit manufacturing boundaries and reproducible comparisons.');
   const aboutPriorWork = t('Prior work for adopted thermal costing: Baddour et al. (2018); Van Allsburg et al. (2022), CatCost.');
+  const aboutScope = t('COMET estimates what a catalyst costs to manufacture. It does not evaluate activity, selectivity or lifetime, so a more expensive catalyst can still be the more economical choice per unit of product. Combine these costs with measured or predicted performance before selecting a catalyst.');
   const aboutButton = t('OK');
   useEffect(() => {
-    void window.cometDesktop?.setAboutCopy?.({ title: aboutTitle, description: aboutDescription, workflow: aboutWorkflow, priorWork: aboutPriorWork, button: aboutButton });
-  }, [aboutTitle, aboutDescription, aboutWorkflow, aboutPriorWork, aboutButton]);
+    void window.cometDesktop?.setAboutCopy?.({ title: aboutTitle, description: aboutDescription, workflow: aboutWorkflow, priorWork: aboutPriorWork, scope: aboutScope, button: aboutButton });
+  }, [aboutTitle, aboutDescription, aboutWorkflow, aboutPriorWork, aboutScope, aboutButton]);
   const location = useLocation();
   const inactive = session.account && !session.account.subscription.can_start_work;
   const { hintsVisible, closeHints } = useKeyboardShortcuts();

@@ -60,6 +60,7 @@ export function buildResultCsv(snapshot: CalculatorResultSnapshot): string {
   sections.push(
     rows(
       ['COMET result export'],
+      ['Scope: manufacturing cost only', 'Manufacturing cost only; activity, selectivity and lifetime are not evaluated.'],
       ['Composition', composition],
       ['Catalyst domain', String(result.input_summary.catalyst_domain ?? 'thermal')],
       ['Generated at', snapshot.generatedAt],
@@ -289,6 +290,7 @@ export function buildRangeCsv(result: EstimateRangeResult): string {
   sections.push(
     rows(
       ['COMET estimate range export'],
+      ['Scope: manufacturing cost only', 'Manufacturing cost only; activity, selectivity and lifetime are not evaluated.'],
       ['Composition', result.composition],
       ['Catalyst domain', result.catalyst_domain],
       ['Application family', result.application_family],

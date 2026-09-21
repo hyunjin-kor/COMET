@@ -69,6 +69,14 @@ so SmartScreen will warn you the first time. Pick "More info → Run anyway".
 - Compares 2–4 saved formulations under shared prices and production conditions, alongside their historical results
 - Keeps purchase provenance and actual-cost observations locally; reports errors only for matching, documented thermal full-cost observations
 
+## Scope and limitations
+
+COMET estimates what a catalyst costs to manufacture. It does not evaluate
+activity, selectivity or lifetime, so a more expensive catalyst can still be the
+more economical choice per unit of product, and a selection needs measured or
+predicted performance alongside these costs. Coupling COMET with catalyst
+performance-prediction models is planned as future work.
+
 ## How a session goes
 
 Pick thermocatalyst or electrocatalyst, define the composition, choose a

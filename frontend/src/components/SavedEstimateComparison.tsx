@@ -153,7 +153,10 @@ export function SavedEstimateComparison({ savedEstimates, priceBasis }: Props) {
             </table>
           </div>
           <div className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs leading-6 text-amber-900">
-            <p className="font-semibold">{t('Comparison limitations')}</p>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <p className="font-semibold">{t('Comparison limitations')}</p>
+              <span className="cp-chip">{t('Scope: manufacturing cost only')}</span>
+            </div>
             {result.warnings.map((warning) => <p key={warning}><ScientificText text={warning} /></p>)}
             {result.estimates.map((row) => <details key={row.estimate_id} className="mt-2">
               <summary><ScientificText text={row.name} /> · {t('Costing scope and warnings')}</summary>

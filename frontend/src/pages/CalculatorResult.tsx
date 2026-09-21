@@ -511,6 +511,10 @@ export default function CalculatorResult() {
           </div>
         </div>
         {renderCostingScope(false)}
+        <div className="mt-4 rounded-[20px] border border-slate-200 bg-slate-50/80 p-4 text-slate-700">
+          <span className="cp-chip">{t('Scope: manufacturing cost only')}</span>
+          <p className="mt-2 text-sm leading-6">{t('COMET estimates what a catalyst costs to manufacture. It does not evaluate activity, selectivity or lifetime, so a more expensive catalyst can still be the more economical choice per unit of product. Combine these costs with measured or predicted performance before selecting a catalyst.')}</p>
+        </div>
       </section>
     );
   }
