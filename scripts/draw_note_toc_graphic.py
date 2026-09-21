@@ -97,7 +97,7 @@ def graphic(lang):
     cursor = 0.07
     pieces = [("COMET:", 9.0, "bold", INK)]
     for word in NAME.split():
-        pieces += [(" ", 6.9, "normal", INK), (word[0], 6.9, "bold", ACC), (word[1:], 6.9, "normal", INK)]
+        pieces += [(" ", 6.9, "normal", INK), (word[0], 6.9, "bold", INK), (word[1:], 6.9, "normal", MUTED)]
     for string, size, weight, colour in pieces:
         if string == " ":
             cursor += 0.035
