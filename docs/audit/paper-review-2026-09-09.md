@@ -1919,3 +1919,13 @@ ACS 파일 형식 목록은 검색 색인에서 ZIP 허용을 확인했으며, �
 - **한글 원고.** 주문량 → 생산 규모, 제조 절차 → 제조법, 기준일이 있는 가격 이력 → 금속 가격 이력. 숫자는 영문과 모두 일치한다.
 - 검사: 노트·SI `--check`, ruff, 노트·질량 단위 테스트(18 passed). 계산 코드와 동결 자료는 바꾸지 않았다(내부 키 `order_size_tons`는 그대로).
 - Word v57(`_local/docx/rebuild_v57.py`): EN 15쪽, KO 20쪽, SI 22쪽, 서식 검사 통과. 패키지는 `_local/submission-2026-09-21-v57/`다. 외부 업로드·푸시 없음.
+
+### H58 — 2026-09-21: TOC 그래픽 제목·화살표·소제목 정리
+
+- 저자 지적: 화살표를 바꿀 것, 소제목 가운데 오른쪽 칸의 문장형 제목을 다른 칸과 맞출 것, 제목을 "COMET: Catalyst Overall Manufacturing Estimation Tool" 풀네임으로 대문자를 살려 쓸 것.
+  - 제목: "COMET:" 뒤에 풀네임을 쓰고, 약어를 이루는 머리글자 C·O·M·E·T를 강조색 굵은 글자로 표시했다. 폭(3.25 in)을 넘으면 그림 생성이 실패한다.
+  - 화살표: 가는 선 화살표를 채운 블록 화살표(연한 청록)로 바꿨다.
+  - 소제목: 세 칸 모두 명사형으로 맞췄다(Inputs / Estimated price / What moves the price). 오른쪽 칸의 문장형 제목 두 개는 없애고, 각 그래프 위에 짧은 라벨(Production scale, Metal prices)과 대상(Ni/Al₂O₃, NH₃ cracking)을 한 줄로 적었다. 한글판은 입력 / 추정 판매 단가 / 단가를 움직이는 요인, 생산 규모 / 금속 가격이다.
+  - 그래프의 값 표기(0.9 t 46 USD/kg → 907 t 5 USD/kg, 2019–2026, Co·Ni)와 가운데 항목별 막대는 그대로다.
+- 본문·수치·분량은 H57과 같다(4,997/5,000, Word 통계 일치). 검사: 노트·SI `--check`, ruff, 노트·질량 단위 테스트(18 passed).
+- Word v58(`_local/docx/rebuild_v58.py`): EN 15쪽, KO 20쪽, SI 22쪽, 서식 검사 통과. 패키지는 `_local/submission-2026-09-21-v58/`다. 외부 업로드·푸시 없음.

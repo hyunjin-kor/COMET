@@ -19,7 +19,7 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
-from matplotlib.patches import FancyArrowPatch, FancyBboxPatch, Rectangle, Wedge  # noqa: E402
+from matplotlib.patches import FancyBboxPatch, Polygon, Rectangle, Wedge  # noqa: E402
 from PIL import Image  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -30,17 +30,19 @@ ACC, ACC_MID, GREY, TILE, WARN = "#1B6F78", "#6FA8AE", "#9AA6AB", "#E4EEEF", "#B
 KG_PER_SHORT_TON = 907.18474
 PER_LB_TO_PER_KG = 1 / 0.45359237
 
+NAME = "Catalyst Overall Manufacturing Estimation Tool"
+
 TEXT = {
-    "en": {"font": "Arial", "title": "COMET", "subtitle": "catalyst manufacturing cost",
+    "en": {"font": "Arial",
            "inputs_head": "Inputs", "inputs": ["Composition", "Preparation\nmethod", "Production\nscale", "Material\nprices"],
            "price": "Estimated price", "items": ["Materials", "Processing", "G&A, SARD", "Margin"],
-           "order_head": "Larger scale, lower price", "order": "Production scale",
-           "switch_head": "Metal prices switch\nthe cheaper catalyst", "reaction": "NH$_3$ cracking", "co": "Co", "ni": "Ni"},
-    "ko": {"font": "Malgun Gothic", "title": "COMET", "subtitle": "촉매 제조 원가 추정",
+           "drivers_head": "What moves the price", "scale": "Production scale", "metals": "Metal prices",
+           "reaction": "NH$_3$ cracking", "co": "Co", "ni": "Ni"},
+    "ko": {"font": "Malgun Gothic",
            "inputs_head": "입력", "inputs": ["조성", "제조법", "생산 규모", "원료 가격"],
            "price": "추정 판매 단가", "items": ["재료비", "가공비", "G&A, SARD", "마진"],
-           "order_head": "생산 규모가 클수록 낮은 단가", "order": "생산 규모",
-           "switch_head": "금속 가격에 따라 바뀌는\n더 저렴한 촉매", "reaction": "NH$_3$ 분해", "co": "Co", "ni": "Ni"},
+           "drivers_head": "단가를 움직이는 요인", "scale": "생산 규모", "metals": "금속 가격",
+           "reaction": "NH$_3$ 분해", "co": "Co", "ni": "Ni"},
 }
 
 
@@ -91,8 +93,19 @@ def graphic(lang):
     ax = fig.add_axes([0, 0, 1, 1])
     ax.set(xlim=(0, 3.25), ylim=(0, 1.75))
     ax.axis("off")
-    ax.text(0.07, 1.62, label["title"], ha="left", va="center", fontsize=9.0, fontweight="bold")
-    ax.text(0.61, 1.613, label["subtitle"], ha="left", va="center", fontsize=6.2, color=MUTED)
+    renderer = fig.canvas.get_renderer()
+    cursor = 0.07
+    pieces = [("COMET:", 9.0, "bold", INK)]
+    for word in NAME.split():
+        pieces += [(" ", 6.9, "normal", INK), (word[0], 6.9, "bold", ACC), (word[1:], 6.9, "normal", INK)]
+    for string, size, weight, colour in pieces:
+        if string == " ":
+            cursor += 0.035
+            continue
+        piece = ax.text(cursor, 1.585, string, ha="left", va="baseline", fontsize=size, fontweight=weight, color=colour)
+        cursor = piece.get_window_extent(renderer).transformed(ax.transData.inverted()).x1
+    if cursor > 3.18:
+        raise ValueError("The software name does not fit the width of the graphic")
 
     # inputs
     ax.text(0.07, 1.41, label["inputs_head"], ha="left", va="center", fontsize=6.4, fontweight="bold")
@@ -114,43 +127,45 @@ def graphic(lang):
         bottom += share * height
     ax.text(x0, 1.41, label["price"], ha="left", va="center", fontsize=6.4, fontweight="bold")
     ax.text(x0 + width / 2, 0.165, "USD/kg", ha="center", va="center", fontsize=6.0, color=MUTED)
-    for start, stop in ((0.90, 1.02), (1.84, 1.96)):
-        ax.add_patch(FancyArrowPatch((start, 0.78), (stop, 0.78), arrowstyle="-|>", mutation_scale=7, color=MUTED, lw=0.9,
-                                     shrinkA=0, shrinkB=0))
+    for start in (0.885, 1.83):
+        y, shaft, head, neck, tip = 0.78, 0.028, 0.075, start + 0.075, start + 0.15
+        ax.add_patch(Polygon([(start, y - shaft), (neck, y - shaft), (neck, y - head), (tip, y), (neck, y + head), (neck, y + shaft),
+                              (start, y + shaft)], closed=True, fc=ACC_MID, ec="none"))
 
     # selling price of the base case against production scale, with both ends written out
     left, right = 2.04, 3.18
     rows = whatif["order_size"]["ni"]
     tonnes = [row["order_size_tons"] * KG_PER_SHORT_TON / 1000 for row in rows]
     prices = [row["selling_price_per_lb"] * PER_LB_TO_PER_KG for row in rows]
-    ax.text(left, 1.41, label["order_head"], ha="left", va="center", fontsize=6.4, fontweight="bold")
-    curve = _mini_axes(fig, (left + 0.03, 0.99, right - left - 0.03, 0.32))
+    ax.text(left, 1.41, label["drivers_head"], ha="left", va="center", fontsize=6.4, fontweight="bold")
+    ax.text(left, 1.265, label["scale"], ha="left", va="center", fontsize=6.2)
+    curve = _mini_axes(fig, (left + 0.03, 0.915, right - left - 0.03, 0.27))
     curve.plot(tonnes, prices, color=WARN, lw=1.2)
     curve.plot([tonnes[0], tonnes[-1]], [prices[0], prices[-1]], ls="none", marker="o", ms=2.6, color=WARN)
     curve.set_xscale("log")
     curve.set_yscale("log")
     curve.set_xlim(tonnes[0] * 0.75, tonnes[-1] * 1.3)
-    curve.set_ylim(prices[-1] * 0.7, prices[0] * 2.6)
+    curve.set_ylim(prices[-1] * 0.65, prices[0] * 5)
     curve.minorticks_off()
     curve.set_xticks([])
     curve.set_yticks([])
-    curve.annotate(f"{prices[0]:.0f} USD/kg", (tonnes[0], prices[0]), xytext=(-2, 3.5), textcoords="offset points", ha="left", va="bottom",
+    curve.annotate(f"{prices[0]:.0f} USD/kg", (tonnes[0], prices[0]), xytext=(5, 1.5), textcoords="offset points", ha="left", va="bottom",
                    fontsize=6.0, color=WARN)
     curve.annotate(f"{prices[-1]:.0f} USD/kg", (tonnes[-1], prices[-1]), xytext=(0, 4), textcoords="offset points", ha="right", va="bottom",
                    fontsize=6.0, color=WARN)
-    curve.text(0.99, 0.97, "Ni/Al$_2$O$_3$", transform=curve.transAxes, ha="right", va="top", fontsize=6.0, color=MUTED)
-    ax.text(left + 0.03, 0.925, f"{tonnes[0]:.1f} t", ha="left", va="center", fontsize=6.0, color=MUTED)
-    ax.text(right, 0.925, f"{tonnes[-1]:,.0f} t", ha="right", va="center", fontsize=6.0, color=MUTED)
-    ax.text((left + 0.03 + right) / 2, 0.925, label["order"], ha="center", va="center", fontsize=6.0)
+    ax.text(right, 1.265, "Ni/Al$_2$O$_3$", ha="right", va="center", fontsize=6.0, color=MUTED)
+    ax.text(left + 0.03, 0.85, f"{tonnes[0]:.1f} t", ha="left", va="center", fontsize=6.0, color=MUTED)
+    ax.text(right, 0.85, f"{tonnes[-1]:,.0f} t", ha="right", va="center", fontsize=6.0, color=MUTED)
 
     # monthly costs of the two ammonia-cracking candidates; the gap between them takes the color of the cheaper one
     family = next(row for row in crossovers["families"] if row["family"] == "ammonia-cracking")
     records = family["periods"]["monthly"]["records"]
     if {row["cost_winner"] for row in records} != {"co-mgo-la2o3", "ni-alumina-baseline"}:
         raise ValueError("The graphic names a cobalt and a nickel catalyst")
-    ax.text(left, 0.72, label["switch_head"], ha="left", va="center", fontsize=6.4, fontweight="bold", linespacing=1.1)
+    ax.text(left, 0.71, label["metals"], ha="left", va="center", fontsize=6.2)
+    ax.text(right, 0.71, label["reaction"], ha="right", va="center", fontsize=6.0, color=MUTED)
     plot_left, plot_right = left + 0.03, right - 0.16
-    lines = _mini_axes(fig, (plot_left, 0.19, plot_right - plot_left, 0.37))
+    lines = _mini_axes(fig, (plot_left, 0.19, plot_right - plot_left, 0.44))
     months = list(range(len(records)))
     cobalt = [row["costs"]["co-mgo-la2o3"] for row in records]
     nickel = [row["costs"]["ni-alumina-baseline"] for row in records]
@@ -168,7 +183,6 @@ def graphic(lang):
     first, last = (records[i]["date"][:4] for i in (0, -1))
     ax.text(plot_left, 0.125, first, ha="left", va="center", fontsize=6.0, color=MUTED)
     ax.text(plot_right, 0.125, last, ha="right", va="center", fontsize=6.0, color=MUTED)
-    ax.text((plot_left + plot_right) / 2, 0.125, label["reaction"], ha="center", va="center", fontsize=6.0)
     return fig
 
 
