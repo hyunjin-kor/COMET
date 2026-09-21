@@ -1,0 +1,263 @@
+{
+ "generated_at": "2026-09-21T04:46:50.240131+00:00",
+ "history_file": "C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06\\docs\\paper\\submission-2026-09-21\\monthly_history_2026-09-21.json",
+ "basis_month": "2026-08",
+ "from_series": [
+  "Ag",
+  "Al",
+  "Au",
+  "Co",
+  "Cu",
+  "HS251990",
+  "HS281122",
+  "HS281810",
+  "HS281820",
+  "HS281990",
+  "HS282010",
+  "HS282300",
+  "HS284210",
+  "HS284610",
+  "HS380210",
+  "Ir",
+  "Mo",
+  "Ni",
+  "Pd",
+  "Pt",
+  "Rh",
+  "Ru",
+  "Sn",
+  "Zn"
+ ],
+ "from_anchors": [
+  "Fe",
+  "Re",
+  "V",
+  "W"
+ ],
+ "price_basis": {
+  "Ag": {
+   "symbol": "Ag",
+   "name": "Silver",
+   "price": 65.1562,
+   "unit": "$/troy_oz",
+   "source": "IMF PCPS (monthly average)",
+   "fetched_at": "2026-08-31"
+  },
+  "Al": {
+   "symbol": "Al",
+   "name": "Aluminum",
+   "price": 1.4746,
+   "unit": "$/lb",
+   "source": "IMF PCPS (monthly average)",
+   "fetched_at": "2026-08-31"
+  },
+  "Au": {
+   "symbol": "Au",
+   "name": "Gold",
+   "price": 4418.5445,
+   "unit": "$/troy_oz",
+   "source": "IMF PCPS (monthly average)",
+   "fetched_at": "2026-08-31"
+  },
+  "Co": {
+   "symbol": "Co",
+   "name": "Cobalt",
+   "price": 25.3349,
+   "unit": "$/lb",
+   "source": "IMF PCPS (monthly average)",
+   "fetched_at": "2026-08-31"
+  },
+  "Cu": {
+   "symbol": "Cu",
+   "name": "Copper",
+   "price": 6.5006,
+   "unit": "$/lb",
+   "source": "IMF PCPS (monthly average)",
+   "fetched_at": "2026-08-31"
+  },
+  "HS251990": {
+   "symbol": "HS251990",
+   "name": "HS251990",
+   "price": 0.6434,
+   "unit": "$/kg",
+   "source": "UN Comtrade (monthly unit value)",
+   "fetched_at": "2026-06-30"
+  },
+  "HS281122": {
+   "symbol": "HS281122",
+   "name": "HS281122",
+   "price": 2.1895,
+   "unit": "$/kg",
+   "source": "UN Comtrade (monthly unit value)",
+   "fetched_at": "2026-06-30"
+  },
+  "HS281810": {
+   "symbol": "HS281810",
+   "name": "HS281810",
+   "price": 1.0214,
+   "unit": "$/kg",
+   "source": "UN Comtrade (monthly unit value)",
+   "fetched_at": "2026-05-31"
+  },
+  "HS281820": {
+   "symbol": "HS281820",
+   "name": "HS281820",
+   "price": 0.5558,
+   "unit": "$/kg",
+   "source": "UN Comtrade (monthly unit value)",
+   "fetched_at": "2026-06-30"
+  },
+  "HS281990": {
+   "symbol": "HS281990",
+   "name": "HS281990",
+   "price": 4.5274,
+   "unit": "$/kg",
+   "source": "UN Comtrade (monthly unit value)",
+   "fetched_at": "2026-06-30"
+  },
+  "HS282010": {
+   "symbol": "HS282010",
+   "name": "HS282010",
+   "price": 2.7147,
+   "unit": "$/kg",
+   "source": "UN Comtrade (monthly unit value)",
+   "fetched_at": "2026-06-30"
+  },
+  "HS282300": {
+   "symbol": "HS282300",
+   "name": "HS282300",
+   "price": 3.3905,
+   "unit": "$/kg",
+   "source": "UN Comtrade (monthly unit value)",
+   "fetched_at": "2026-06-30"
+  },
+  "HS284210": {
+   "symbol": "HS284210",
+   "name": "HS284210",
+   "price": 4.2408,
+   "unit": "$/kg",
+   "source": "UN Comtrade (monthly unit value)",
+   "fetched_at": "2026-07-31"
+  },
+  "HS284610": {
+   "symbol": "HS284610",
+   "name": "HS284610",
+   "price": 17.633,
+   "unit": "$/kg",
+   "source": "UN Comtrade (monthly unit value)",
+   "fetched_at": "2026-06-30"
+  },
+  "HS380210": {
+   "symbol": "HS380210",
+   "name": "HS380210",
+   "price": 3.7154,
+   "unit": "$/kg",
+   "source": "UN Comtrade (monthly unit value)",
+   "fetched_at": "2026-06-30"
+  },
+  "Ir": {
+   "symbol": "Ir",
+   "name": "Iridium",
+   "price": 7850.0,
+   "unit": "$/troy_oz",
+   "source": "Johnson Matthey (monthly average)",
+   "fetched_at": "2026-08-31"
+  },
+  "Mo": {
+   "symbol": "Mo",
+   "name": "Molybdenum",
+   "price": 32.4167,
+   "unit": "$/lb",
+   "source": "IMF PCPS (monthly average)",
+   "fetched_at": "2026-08-31"
+  },
+  "Ni": {
+   "symbol": "Ni",
+   "name": "Nickel",
+   "price": 7.5979,
+   "unit": "$/lb",
+   "source": "IMF PCPS (monthly average)",
+   "fetched_at": "2026-08-31"
+  },
+  "Pd": {
+   "symbol": "Pd",
+   "name": "Palladium",
+   "price": 1362.381,
+   "unit": "$/troy_oz",
+   "source": "Johnson Matthey (monthly average)",
+   "fetched_at": "2026-08-31"
+  },
+  "Pt": {
+   "symbol": "Pt",
+   "name": "Platinum",
+   "price": 1796.0,
+   "unit": "$/troy_oz",
+   "source": "Johnson Matthey (monthly average)",
+   "fetched_at": "2026-08-31"
+  },
+  "Rh": {
+   "symbol": "Rh",
+   "name": "Rhodium",
+   "price": 8694.0476,
+   "unit": "$/troy_oz",
+   "source": "Johnson Matthey (monthly average)",
+   "fetched_at": "2026-08-31"
+  },
+  "Ru": {
+   "symbol": "Ru",
+   "name": "Ruthenium",
+   "price": 1675.0,
+   "unit": "$/troy_oz",
+   "source": "Johnson Matthey (monthly average)",
+   "fetched_at": "2026-08-31"
+  },
+  "Sn": {
+   "symbol": "Sn",
+   "name": "Tin",
+   "price": 25.1223,
+   "unit": "$/lb",
+   "source": "IMF PCPS (monthly average)",
+   "fetched_at": "2026-08-31"
+  },
+  "Zn": {
+   "symbol": "Zn",
+   "name": "Zinc",
+   "price": 1.7575,
+   "unit": "$/lb",
+   "source": "IMF PCPS (monthly average)",
+   "fetched_at": "2026-08-31"
+  },
+  "Fe": {
+   "symbol": "Fe",
+   "name": "Iron",
+   "price": 0.0604,
+   "unit": "$/lb",
+   "source": "CatCost 2018 + ChemPPI escalation",
+   "fetched_at": null
+  },
+  "W": {
+   "symbol": "W",
+   "name": "Tungsten",
+   "price": 21.74,
+   "unit": "$/lb",
+   "source": "USGS MCS 2026 (2025 avg)",
+   "fetched_at": null
+  },
+  "V": {
+   "symbol": "V",
+   "name": "Vanadium",
+   "price": 8.96,
+   "unit": "$/lb",
+   "source": "USGS MCS 2026 (2025 avg)",
+   "fetched_at": null
+  },
+  "Re": {
+   "symbol": "Re",
+   "name": "Rhenium",
+   "price": 1179.4,
+   "unit": "$/lb",
+   "source": "USGS MCS 2026 (2025 avg)",
+   "fetched_at": null
+  }
+ }
+}

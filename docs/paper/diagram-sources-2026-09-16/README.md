@@ -11,13 +11,13 @@ frozen COMET analysis files, embedded as images and listed with their checksums 
 |---|---|---|---|
 | `fig2_cost_model.pptx` | Figure 2 | (b) selling-price shares, (c) market deviations | (a) OpenAI schematic, labels from the h26 deck |
 | `fig3_manufacturing.pptx` | Figure 3 | (b) operating contributions, (c) calcination sweep | (a) OpenAI preparation sequence, labels from the 2026-09-15 deck |
-| `fig4_ranking.pptx` | Figure 4 | (a) ammonia-cracking cost history, (b) Ni–Co equal-cost boundary, (c) first-rank frequencies, (d) leader cost differences | – |
+| `fig4_ranking.pptx` | Figure 4 | calculator what-if analyses: (a) metal loading, (b) order size, (c) preparation procedure; (d) ammonia-cracking cost history, (e) Ni–Co equal-cost boundary | – |
 | `figS4_metal_prices.pptx` | Figure S4 | (a) precious metals, (b) base metals | – |
 | `figS2_sensitivity.pptx` | Figure S2 | one-at-a-time endpoints | – |
 | `figS3_monte_carlo.pptx` | Figure S3 | (a) price histogram, (b) samples versus dry output | – |
 | `figS7_evidence.pptx` | Figure S7 | preparation-evidence status by family | – |
 | `figS5_crossovers.pptx` | Figure S5 | (a) methane dry reforming and (b) water–gas shift cost histories | – |
-| `figS6_ranking_tests.pptx` | Figure S6 | families retaining the baseline candidate under each test | – |
+| `figS6_ranking_tests.pptx` | Figure S6 | (a) first-rank frequencies, (b) families retaining the baseline candidate under each test, (c) leader cost differences after candidate removal | – |
 | `figS9_interface.pptx` | Figure S9 | – | application screenshots (isolated review database) |
 | `figS1_allocation.pptx` | Figure S1 | – | Gemini concept of aliquot and transfer allocation |
 | `figS8_provenance.pptx` | Figure S8 | – | Gemini concept of a source-linked record |

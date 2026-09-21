@@ -37,10 +37,20 @@ def monthly_average(points: list[dict], *, exclude_month: str | None = None) -> 
     return out
 
 
+UNIT_VALUE = "monthly_unit_value"
+
+
 def latest_common_month(series: dict[str, dict[str, Any]]) -> str:
-    """Latest YYYY-MM that every series has an observation in."""
+    """Latest YYYY-MM that every price series has an observation in.
+
+    Customs unit values (support materials) are published months after metal
+    prices, so they do not limit the month; build_price_basis takes their
+    latest observation at or before it.
+    """
     months: set[str] | None = None
     for entry in series.values():
+        if entry.get("cadence") == UNIT_VALUE:
+            continue
         have = {str(p["date"])[:7] for p in entry["points"]}
         months = have if months is None else months & have
     if not months:
@@ -72,11 +82,16 @@ def build_price_basis(
 
     ``anchors`` is get_reference_prices(): USGS annual averages and escalated
     CatCost values for metals with no published series. A series with no
-    observation in ``month`` raises rather than falling back silently.
+    observation in ``month`` raises rather than falling back silently. Customs
+    unit values use their latest observation at or before ``month``;
+    ``fetched_at`` keeps that observation's date.
     """
     basis: dict[str, dict[str, Any]] = {}
     for symbol, entry in series.items():
-        point = next((p for p in entry["points"] if str(p["date"])[:7] == month), None)
+        if entry.get("cadence") == UNIT_VALUE:
+            point = next((p for p in reversed(entry["points"]) if str(p["date"])[:7] <= month), None)
+        else:
+            point = next((p for p in entry["points"] if str(p["date"])[:7] == month), None)
         if point is None:
             raise ValueError(f"{symbol}: no observation in {month}")
         basis[symbol] = {

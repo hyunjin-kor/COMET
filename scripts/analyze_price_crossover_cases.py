@@ -40,11 +40,12 @@ def bisect_bracket(function, low, high):
     return {"low": low, "high": high, "gap_low": f_low, "gap_high": f_high}
 
 
-def analyze(study_path, daily_path):
+def analyze(study_path, daily_path, frozen=FROZEN):
     study = read(study_path)
     families = {f["family"]: f for f in study["families"]}
-    baseline = read(FROZEN / "reference_basis_2026-09-08.json")["price_basis"]
-    monthly, _ = historical_states(read(FROZEN / "monthly_history_2026-09-08.json"), baseline)
+    run_date = frozen.name.removeprefix("submission-")
+    baseline = read(frozen / f"reference_basis_{run_date}.json")["price_basis"]
+    monthly, _ = historical_states(read(frozen / f"monthly_history_{run_date}.json"), baseline)
     daily, _ = daily_states(read(daily_path), baseline)
     states = {"monthly": dict(monthly), "daily": dict(daily)}
     db = create_engine("sqlite://")
@@ -133,10 +134,11 @@ def main():
     parser.add_argument("--study", type=Path, required=True)
     parser.add_argument("--daily", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument("--frozen-dir", type=Path, default=FROZEN, help="submission-<date> run directory")
     args = parser.parse_args()
     if args.out.exists():
         parser.error("Preserve the previous analysis: use a new output path")
-    result = analyze(args.study, args.daily)
+    result = analyze(args.study, args.daily, args.frozen_dir.resolve())
     args.out.write_text(json.dumps(result, indent=2, ensure_ascii=False, allow_nan=False) + "\n", encoding="utf-8")
     print(json.dumps({"cases": result["cases"], "photo": {k: v for k, v in result["photo_daily"].items() if k != "daily_prices"}}, indent=2))
 

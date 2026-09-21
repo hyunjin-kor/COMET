@@ -15,8 +15,8 @@ manuscript and Supporting Information figure folders. Run, in this order:
 
 Figure 2 draws the cost structure of the cheapest candidate in every thermal
 reaction family and the three published validation cases against their market
-prices; Figure 3 the illustrative manufacturing batch; Figure 4 the frozen
-robustness study beside the observed-price crossover of ammonia cracking.
+prices; Figure 3 the illustrative manufacturing batch; Figure 4 the calculator
+what-if analyses beside the observed-price crossover of ammonia cracking.
 Figures S2-S7 draw the manufacturing sensitivity, Monte Carlo samples,
 metal-price record, the remaining observed-price crossovers, the ranking tests
 and the preparation-evidence status. The trade comparison helper is retained for
@@ -51,24 +51,30 @@ from matplotlib.transforms import Bbox  # noqa: E402
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from scripts.paper_labels import STATUS_LABELS  # noqa: E402
-from scripts.paper_units import PER_LB_TO_PER_KG, publication_cost, publication_unit  # noqa: E402
+from scripts.paper_units import (  # noqa: E402
+    KG_PER_SHORT_TON,
+    PER_LB_TO_PER_KG,
+    publication_cost,
+    publication_unit,
+)
 
 DIAGRAMS = ROOT / "docs/paper/diagram-sources-2026-09-13-h26"
-STUDY = ROOT / "docs/paper/robustness-2026-09-08/decision_robustness.json"
-METHODS = ROOT / "docs/paper/methods-2026-09-09/methods_study.json"
+STUDY = ROOT / "docs/paper/robustness-2026-09-21/decision_robustness.json"
+METHODS = ROOT / "docs/paper/methods-2026-09-21/methods_study.json"
 EXAMPLE = ROOT / "docs/paper/figures-note-2026-09-09/screen_result_ni_al2o3.json"
 MARKET = ROOT / "docs/paper/catalyst_market_2026-09-10.json"
-FAMILIES = ROOT / "docs/paper/submission-2026-09-08/all_families_2026-09-08.json"
-VALIDATION = ROOT / "docs/paper/submission-2026-09-08/table62_reproduction_2026-09-08.json"
-HISTORY = ROOT / "docs/paper/submission-2026-09-08/monthly_history_2026-09-08.json"
+FAMILIES = ROOT / "docs/paper/submission-2026-09-21/all_families_2026-09-21.json"
+VALIDATION = ROOT / "docs/paper/submission-2026-09-21/table62_reproduction_2026-09-21.json"
+HISTORY = ROOT / "docs/paper/submission-2026-09-21/monthly_history_2026-09-21.json"
 DECKS = ROOT / "docs/paper/diagram-sources-2026-09-16"
 PANELS = DECKS / "panels"
 SI_FIGURES = ROOT / "docs/paper/figures-si-2026-09-16"
 MANUFACTURING = ROOT / "docs/paper/manufacturing-study-2026-09-15"
 LITERATURE = ROOT / "backend/data/manufacturing_literature.json"
-CROSSOVERS = ROOT / "docs/paper/price-crossovers-2026-09-13"
+CROSSOVERS = ROOT / "docs/paper/price-crossovers-2026-09-21"
+WHATIF = ROOT / "docs/paper/whatif-2026-09-21/whatif_study.json"
 LETTERS = True
-REFERENCE_MONTH = "2026-05"
+REFERENCE_MONTH = "2026-08"
 INK, MUTED, GREY = "#1F2A30", "#5B6870", "#9AA6AB"
 ACC, ACC_MID, WARN = "#1B6F78", "#6FA8AE", "#B8702F"
 
@@ -105,6 +111,13 @@ TEXT = {
                       "screening_only": STATUS_LABELS["screening_only"]},
         "f4_co": "Co/MgO–La$_2$O$_3$", "f4_ni": "Ni/γ-Al$_2$O$_3$", "f4_cost_y": "Cost (USD/kg)",
         "f4_ni_x": "Ni price (USD/kg)", "f4_co_y": "Co price (USD/kg)",
+        "w_ni": "Ni/Al$_2$O$_3$", "w_ru": "Ru/Al$_2$O$_3$", "w_price_y": "Selling price (USD/kg)",
+        "w_loading_x": "Metal loading (wt%)", "w_order_x": "Order size (t)", "w_per_wt": " per wt%",
+        "w_scales": ["small", "medium", "large"], "w_processing": "Processing", "w_rest": "Other costs",
+        "w_templates": {"wet_impregnation_metal_oxide": "Incipient wetness",
+                        "excess_solution_impregnation_metal_oxide": "Wet impregnation",
+                        "deposition_precipitation_metal_oxide": "Deposition–\nprecipitation",
+                        "coprecipitation_metal_oxide": "Co-precipitation", "sol_gel_metal_oxide": "Sol–gel"},
     },
     "ko": {
         "font": "Malgun Gothic",
@@ -140,6 +153,13 @@ TEXT = {
                       "screening_only": "정리된 제조 기록 없음"},
         "f4_co": "Co/MgO–La$_2$O$_3$", "f4_ni": "Ni/γ-Al$_2$O$_3$", "f4_cost_y": "원가 (USD/kg)",
         "f4_ni_x": "Ni 가격 (USD/kg)", "f4_co_y": "Co 가격 (USD/kg)",
+        "w_ni": "Ni/Al$_2$O$_3$", "w_ru": "Ru/Al$_2$O$_3$", "w_price_y": "판매 단가 (USD/kg)",
+        "w_loading_x": "금속 담지량 (wt%)", "w_order_x": "주문량 (t)", "w_per_wt": " (wt%당)",
+        "w_scales": ["소규모", "중규모", "대규모"], "w_processing": "가공비", "w_rest": "그 밖의 비용",
+        "w_templates": {"wet_impregnation_metal_oxide": "초기습윤 함침",
+                        "excess_solution_impregnation_metal_oxide": "습식 함침",
+                        "deposition_precipitation_metal_oxide": "침착–침전",
+                        "coprecipitation_metal_oxide": "공침", "sol_gel_metal_oxide": "졸–겔"},
     },
 }
 
@@ -432,7 +452,7 @@ def _market_panel(fig):
                 ax.plot([d for d, _ in ratios], [r for _, r in ratios], color=ACC, lw=0.8, alpha=0.85, zorder=3)
         ax.axhline(1.0, color=WARN, lw=1.4, zorder=4)
         ax.set_yscale("log")
-        ax.set_xlim(datetime(2019, 1, 1), datetime(2026, 6, 1))
+        ax.set_xlim(datetime(2019, 1, 1), datetime(2026, 9, 1))
         ax.xaxis.set_major_locator(mdates.YearLocator(2))
         ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
         ax.yaxis.set_major_locator(LogLocator(base=10.0, subs=(1.0, 2.0, 5.0), numticks=12))
@@ -504,7 +524,7 @@ def figure3_metal_prices():
                     color=colour, lw=1.05, ls=METAL_STYLES[order], solid_capstyle="round")
             ends.append((prices[-1], symbol, colour, datetime.strptime(points[-1]["date"], "%Y-%m-%d")))
         ax.set_yscale("log")
-        ax.set_xlim(datetime(2019, 1, 1), datetime(2026, 6, 1))
+        ax.set_xlim(datetime(2019, 1, 1), datetime(2026, 9, 1))
         ax.xaxis.set_major_locator(mdates.YearLocator(2))
         ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
         ax.yaxis.set_major_locator(LogLocator(base=10.0, subs=(1.0, 3.0), numticks=10))
@@ -641,7 +661,7 @@ def figure_price_crossovers(study, mechanisms, lang="en"):
                     ls=("-", "--", "-.")[i], label=label)
         low, high = min(values), max(values)
         ax.set_ylim(low - (high - low) * 0.12, high + (high - low) * 0.4)
-        ax.set_xlim(datetime(2019, 1, 1), datetime(2026, 7, 1))
+        ax.set_xlim(datetime(2019, 1, 1), datetime(2026, 10, 1))
         ax.xaxis.set_major_locator(mdates.YearLocator(2))
         ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
         ax.set_ylabel("Cost (USD/kg)" if lang == "en" else "원가 (USD/kg)", fontsize=10)
@@ -905,112 +925,132 @@ def figure_s4_evidence():
     return fig
 
 
-def figure4_price_ranking():
-    """Observed-price crossover of the ammonia-cracking candidates beside the frozen ranking sensitivity."""
-    study = json.loads(STUDY.read_text(encoding="utf-8"))
+RU_COLOUR = "#7762A7"
+
+
+def figure4_whatif():
+    """What-if analyses of the calculator beside the observed-price crossover of the ammonia-cracking candidates."""
+    whatif = json.loads(WHATIF.read_text(encoding="utf-8"))
     crossovers = json.loads((CROSSOVERS / "price_crossovers.json").read_text(encoding="utf-8"))
     mechanisms = json.loads((CROSSOVERS / "crossover_mechanisms.json").read_text(encoding="utf-8"))
-    height = 181
+    height = 128
     fig = plt.figure(figsize=(178 / 25.4, height / 25.4))
+    factor = PER_LB_TO_PER_KG
+    series = (("ni", L["w_ni"], WARN, "--"), ("ru", L["w_ru"], RU_COLOUR, "-"))
+
+    # (a) metal loading
+    a = fig.add_axes([19 / 178, 1 - 50 / height, 36 / 178, 41 / height])
+    for key, label, colour, style in series:
+        rows = whatif["loading"][key]
+        x = [row["loading_wt_pct"] for row in rows]
+        y = [row["selling_price_per_lb"] * factor for row in rows]
+        a.plot(x, y, color=colour, lw=1.3, ls=style, marker="o", ms=2.6, label=label)
+        slope = (y[-1] - y[0]) / (x[-1] - x[0])
+        a.annotate((f"+{slope:,.2f}" if slope < 10 else f"+{slope:,.0f}") + L["w_per_wt"], (x[-1], y[-1]),
+                   xytext=(4, -2) if key == "ru" else (0, 5), textcoords="offset points",
+                   ha="left" if key == "ru" else "right", fontsize=8, color=colour)
+    a.set_yscale("log")
+    a.set_xlim(0, 32)
+    a.set_ylim(3, 30000)
+    a.set_xticks([0, 10, 20, 30])
+    a.yaxis.set_major_formatter(FuncFormatter(lambda value, _p: f"{value:,.0f}"))
+    a.yaxis.set_minor_formatter(NullFormatter())
+    a.set_xlabel(L["w_loading_x"], fontsize=9)
+    a.set_ylabel(L["w_price_y"], fontsize=9)
+    a.legend(loc="center right", frameon=False, fontsize=8.5, handlelength=1.6, labelspacing=0.3, borderaxespad=0.2)
+    _clean(a)
+
+    # (b) order size; the application's short tons are shown as metric tonnes
+    b = fig.add_axes([77 / 178, 1 - 50 / height, 37 / 178, 41 / height])
+    tonne = KG_PER_SHORT_TON / 1000
+    for key, label, colour, style in series:
+        rows = whatif["order_size"][key]
+        b.plot([row["order_size_tons"] * tonne for row in rows], [row["selling_price_per_lb"] * factor for row in rows],
+               color=colour, lw=1.3, ls=style, marker="o", ms=2.6, label=label)
+    b.set_xscale("log")
+    b.set_yscale("log")
+    b.set_xlim(0.7, 1300)
+    b.set_ylim(3, 30000)
+    for boundary in (5, 70):
+        b.axvline(boundary * tonne, color=GREY, lw=0.5, ls=(0, (1.5, 1.5)))
+    for position, text in zip((1.9, 17, 260), L["w_scales"], strict=True):
+        b.text(position, 17000, text, ha="center", va="center", fontsize=7.5, color=MUTED)
+    b.xaxis.set_major_formatter(FuncFormatter(lambda value, _p: f"{value:g}"))
+    b.yaxis.set_major_formatter(FuncFormatter(lambda value, _p: f"{value:,.0f}"))
+    b.xaxis.set_minor_formatter(NullFormatter())
+    b.yaxis.set_minor_formatter(NullFormatter())
+    b.set_xlabel(L["w_order_x"], fontsize=9)
+    _clean(b)
+
+    # (c) preparation template of the same Ni/Al2O3 composition
+    c = fig.add_axes([147 / 178, 1 - 50 / height, 25 / 178, 41 / height])
+    rows = whatif["preparation"]
+    ys = list(range(len(rows)))
+    processing = [row["processing_per_lb"] * factor for row in rows]
+    total = [row["selling_price_per_lb"] * factor for row in rows]
+    c.barh(ys, processing, color=ACC_MID, height=0.62, label=L["w_processing"])
+    c.barh(ys, [t - q for t, q in zip(total, processing, strict=True)], left=processing, color="#D9DEE1", height=0.62,
+           edgecolor="white", lw=0.5, label=L["w_rest"])
+    for y, value in zip(ys, total, strict=True):
+        c.text(value + 0.3, y, f"{value:.2f}", va="center", fontsize=8)
+    c.set_yticks(ys)
+    c.set_yticklabels([L["w_templates"][row["template_id"]] for row in rows], fontsize=8)
+    c.invert_yaxis()
+    c.set_xlim(0, 17)
+    c.set_xticks([0, 5, 10])
+    c.set_xlabel(L["w_price_y"], fontsize=9)
+    handles, labels = c.get_legend_handles_labels()
+    fig.legend(handles, labels, fontsize=8, frameon=False, loc="lower right", bbox_to_anchor=(174 / 178, 1 - 8.5 / height),
+               ncol=2, handlelength=1.0, columnspacing=0.8, handletextpad=0.4, borderaxespad=0.0)
+    _clean(c)
+    c.tick_params(axis="y", length=0)
+
+    # (d) monthly costs of the two candidates that attain the lowest cost
     family = next(row for row in crossovers["families"] if row["family"] == "ammonia-cracking")
     records = family["periods"]["monthly"]["records"]
-    a = fig.add_axes([15 / 178, 1 - 50 / height, 70 / 178, 42 / height])
+    d = fig.add_axes([15 / 178, 1 - 114 / height, 70 / 178, 42 / height])
     for slug, label, colour, style in (("co-mgo-la2o3", L["f4_co"], ACC, "-"), ("ni-alumina-baseline", L["f4_ni"], WARN, "--")):
-        a.plot(_crossover_dates(records), [publication_cost(row["costs"][slug], family["unit"]) for row in records],
+        d.plot(_crossover_dates(records), [publication_cost(row["costs"][slug], family["unit"]) for row in records],
                color=colour, lw=1.3, ls=style, label=label)
     values = [publication_cost(row["costs"][slug], family["unit"]) for row in records
               for slug in ("co-mgo-la2o3", "ni-alumina-baseline")]
     low, high = min(values), max(values)
-    a.set_ylim(low - (high - low) * 0.08, high + (high - low) * 0.42)
-    a.set_xlim(datetime(2019, 1, 1), datetime(2026, 7, 1))
-    a.xaxis.set_major_locator(mdates.YearLocator(2))
-    a.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
-    a.set_ylabel(L["f4_cost_y"], fontsize=9)
-    a.legend(loc="upper left", frameon=False, fontsize=8.5, handlelength=1.6, labelspacing=0.3)
-    _clean(a)
+    d.set_ylim(low - (high - low) * 0.08, high + (high - low) * 0.42)
+    d.set_xlim(datetime(2019, 1, 1), datetime(2026, 10, 1))
+    d.xaxis.set_major_locator(mdates.YearLocator(2))
+    d.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+    d.set_ylabel(L["f4_cost_y"], fontsize=9)
+    d.legend(loc="upper left", frameon=False, fontsize=8.5, handlelength=1.6, labelspacing=0.3)
+    _clean(d)
+
+    # (e) conditional equal-cost boundary in the nickel-cobalt price plane
     boundary = mechanisms["ammonia_boundary"]
-    factor = PER_LB_TO_PER_KG
-    b = fig.add_axes([106 / 178, 1 - 50 / height, 66 / 178, 42 / height])
+    e = fig.add_axes([106 / 178, 1 - 114 / height, 66 / 178, 42 / height])
     x = [point["Ni"] * factor for point in boundary["points"]]
     y = [point["Co_threshold"] * factor for point in boundary["points"]]
-    b.fill_between(x, 5 * factor, y, color=ACC, alpha=0.07)
-    b.fill_between(x, y, 42 * factor, color=WARN, alpha=0.07)
-    b.plot(x, y, color=INK, lw=1.0)
+    e.fill_between(x, 5 * factor, y, color=ACC, alpha=0.07)
+    e.fill_between(x, y, 42 * factor, color=WARN, alpha=0.07)
+    e.plot(x, y, color=INK, lw=1.0)
     for point, row in zip(boundary["observations"], records, strict=True):
         colour = ACC if row["cost_winner"] == "co-mgo-la2o3" else WARN
-        b.scatter(point["Ni"] * factor, point["Co"] * factor, s=10, c=colour, alpha=0.65, linewidths=0.25, edgecolors="white")
+        e.scatter(point["Ni"] * factor, point["Co"] * factor, s=10, c=colour, alpha=0.65, linewidths=0.25, edgecolors="white")
     selected = {point["date"]: (point["Ni"] * factor, point["Co"] * factor)
                 for point in boundary["observations"] if point["date"] in ("2025-09", "2025-10")}
     for day, (nickel, cobalt) in selected.items():
-        b.scatter(nickel, cobalt, s=30, marker="D", facecolor="white", edgecolor=INK, lw=0.8, zorder=5)
+        e.scatter(nickel, cobalt, s=30, marker="D", facecolor="white", edgecolor=INK, lw=0.8, zorder=5)
         # A white backing keeps the month labels legible where they cross the boundary line and nearby states.
-        b.annotate(day, (nickel, cobalt), xytext=(-7, -12 if day == "2025-09" else 5), ha="right",
+        e.annotate(day, (nickel, cobalt), xytext=(-7, -12 if day == "2025-09" else 5), ha="right",
                    textcoords="offset points", fontsize=8, color=INK, zorder=6,
                    bbox={"boxstyle": "round,pad=0.15", "facecolor": "white", "edgecolor": "none", "alpha": 0.9})
-    b.annotate("", xy=selected["2025-10"], xytext=selected["2025-09"],
+    e.annotate("", xy=selected["2025-10"], xytext=selected["2025-09"],
                arrowprops={"arrowstyle": "->", "lw": 0.8, "color": INK})
-    b.text(0.04, 0.9, L["f4_ni"], color=WARN, fontsize=8.5, transform=b.transAxes)
-    b.text(0.5, 0.07, L["f4_co"], color=ACC, fontsize=8.5, transform=b.transAxes)
-    b.set_xlim(4 * factor, 16 * factor)
-    b.set_ylim(5 * factor, 42 * factor)
-    b.set_xlabel(L["f4_ni_x"], fontsize=9)
-    b.set_ylabel(L["f4_co_y"], fontsize=9)
-    _clean(b)
-    rows = []
-    for row in study["families"]:
-        candidates = row["joint_grids"]["0.05"]["candidates"]
-        winner = row["reference_winner"]
-        first = candidates[winner]["first_rank_share_pct"]
-        others = sorted((v["first_rank_share_pct"] for k, v in candidates.items() if k != winner), reverse=True)
-        second = others[0] if others else 0.0
-        rows.append((row["family"], first, second, max(0.0, 100.0 - first - second)))
-    rows.sort(key=lambda item: item[1], reverse=True)
-    handles = labels = None
-    for column, subset in enumerate((rows[:15], rows[15:])):
-        ax = fig.add_axes([(47 + column * 89) / 178, 1 - 121 / height, 39 / 178, 53 / height])
-        ys = list(range(len(subset)))
-        ax.barh(ys, [r[1] for r in subset], color=ACC, height=0.72, label=L["f3_first"])
-        ax.barh(ys, [r[2] for r in subset], left=[r[1] for r in subset], color=WARN, height=0.72,
-                edgecolor="white", lw=0.5, label=L["f3_second"])
-        ax.barh(ys, [r[3] for r in subset], left=[r[1] + r[2] for r in subset], color="#D9DEE1", height=0.72,
-                edgecolor="white", lw=0.5, label=L["f3_other"])
-        ax.axvline(50, color="white", lw=0.6)
-        ax.axvline(50, color=GREY, lw=0.5, ls=(0, (1.5, 1.5)))
-        ax.set_yticks(ys)
-        ax.set_yticklabels([FAM.get(r[0], r[0]) for r in subset], fontsize=8)
-        ax.set_ylim(len(subset) - 0.4, -0.6)
-        ax.set_xlim(0, 100)
-        ax.set_xticks([0, 50, 100])
-        ax.set_xlabel(L["f3_x"], fontsize=8.5)
-        _clean(ax)
-        ax.tick_params(axis="y", length=0)
-        if column == 0:
-            handles, labels = ax.get_legend_handles_labels()
-    fig.legend(handles, labels, fontsize=8.5, frameon=False, loc="lower left", bbox_to_anchor=(47 / 178, 1 - 66 / height),
-               ncol=3, handlelength=1.0, columnspacing=0.9, handletextpad=0.5, borderaxespad=0.0)
-    flips = []
-    for row in study["families"]:
-        for removal in row.get("candidate_removal", []):
-            if not removal.get("winner_changed"):
-                continue
-            costs = {item["slug"]: item["summary"]["landed_cost_per_lb"] for item in removal["before"]}
-            before, after = row["reference_winner"], removal["renormalized_winner"]
-            if before in costs and after in costs:
-                flips.append((row["family"], costs[before], costs[after]))
-    flips.sort(key=lambda item: item[1] / item[2])
-    d = fig.add_axes([47 / 178, 1 - 172 / height, 124 / 178, 38 / height])
-    for index, (_family, before, after) in enumerate(flips):
-        difference = 100 * (after - before) / before
-        d.barh(index, difference, height=0.6, color=ACC, edgecolor=ACC, lw=0.5)
-        d.text(difference - 1.5, index, f"{difference:.1f}", ha="right", va="center", fontsize=8)
-    d.set_yticks(range(len(flips)))
-    d.set_yticklabels([FAM.get(family, family) for family, _b, _a in flips], fontsize=8)
-    d.set_ylim(-0.7, len(flips) - 0.3)
-    d.set_xlim(-130, 0)
-    d.set_xticks([-100, -50, 0])
-    d.set_xlabel(L["f3_c_x"], fontsize=8.5)
-    _clean(d)
-    d.tick_params(axis="y", length=0)
+    e.text(0.04, 0.9, L["f4_ni"], color=WARN, fontsize=8.5, transform=e.transAxes)
+    e.text(0.5, 0.07, L["f4_co"], color=ACC, fontsize=8.5, transform=e.transAxes)
+    e.set_xlim(4 * factor, 16 * factor)
+    e.set_ylim(5 * factor, 42 * factor)
+    e.set_xlabel(L["f4_ni_x"], fontsize=9)
+    e.set_ylabel(L["f4_co_y"], fontsize=9)
+    _clean(e)
     return fig
 
 
@@ -1019,14 +1059,14 @@ PANEL_LAYOUTS = {
     "fig2_cost_model": (figure2_cost_model, {"b": (0, 64, 178, 102), "c": (0, 166, 178, 46)}),
     "fig3_manufacturing": (lambda: figure_manufacturing(MANUFACTURING),
                            {"b": (0, 62, 89, 80), "c": (89, 62, 89, 80)}),
-    "fig4_ranking": (figure4_price_ranking, {"a": (0, 0, 89, 60), "b": (89, 0, 89, 60),
-                                            "c": (0, 60, 178, 71), "d": (0, 131, 178, 50)}),
+    "fig4_ranking": (figure4_whatif, {"a": (0, 0, 59, 64), "b": (59, 0, 59, 64), "c": (118, 0, 60, 64),
+                                     "d": (0, 64, 89, 64), "e": (89, 64, 89, 64)}),
     "figS4_metal_prices": (figure3_metal_prices, {"a": (0, 0, 84, 60), "b": (0, 60, 84, 62)}),
     "figS2_sensitivity": (figure_s2_sensitivity, {"a": (0, 0, 150, 82)}),
     "figS3_monte_carlo": (figure_s3_monte_carlo, {"a": (0, 0, 89, 72), "b": (89, 0, 89, 72)}),
     "figS7_evidence": (figure_s4_evidence, {"a": (0, 0, 178, 118)}),
     "figS5_crossovers": (_crossover_figure, {"a": (95, 0, 83, 82.5), "b": (0, 82.5, 89, 88.5)}),
-    "figS6_ranking_tests": (figure4_diagnostics, {"a": (0, 132, 89, 71)}),
+    "figS6_ranking_tests": (figure4_diagnostics, {"a": (0, 0, 178, 132), "b": (0, 132, 89, 71), "c": (89, 132, 89, 71)}),
 }
 # Deck name -> (destination folder under docs/paper, published stem).
 DECK_OUTPUTS = {
@@ -1057,7 +1097,7 @@ def render_panels(directory):
         for name, (function, boxes) in PANEL_LAYOUTS.items():
             figure = function()
             for text in figure.texts:
-                if re.fullmatch(r"\([a-d]\)", text.get_text()):
+                if re.fullmatch(r"\([a-e]\)", text.get_text()):
                     text.set_visible(False)
             height_mm = figure.get_size_inches()[1] * 25.4
             for panel, (x, y, width, height) in boxes.items():

@@ -133,8 +133,8 @@ def uncertainty_examples(recipe):
     return rows
 
 
-def build_study():
-    source = json.loads(STUDY.read_text(encoding="utf-8"))
+def build_study(study=STUDY):
+    source = json.loads(study.read_text(encoding="utf-8"))
     evidence = json.loads(EVIDENCE.read_text(encoding="utf-8"))
     recipe = recipe_example()
     reported = evidence["nickel_case"]["rows"]
@@ -146,7 +146,7 @@ def build_study():
                   for row in reported]
     return {"schema_version": 1, "seed": SEED,
             "classification": "Additional method verification; not new industrial accuracy or a changed recommendation model",
-            "inputs": {p.relative_to(ROOT).as_posix(): sha(p) for p in (STUDY, EVIDENCE)},
+            "inputs": {p.resolve().relative_to(ROOT).as_posix(): sha(p) for p in (study, EVIDENCE)},
             "normalization": normalization_examples(source), "recipe": recipe,
             "uncertainty": uncertainty_examples(recipe), "published_yield_case": yield_case,
             "yield_case_note": "Published yields are experimental, reported costs are modeled with CatCost. Inverse-yield arithmetic holds all other inputs fixed and does not reproduce their changed-reagent estimates or measure prediction error."}
@@ -176,11 +176,12 @@ def figure(study, target):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out-dir", type=Path, required=True)
+    parser.add_argument("--study", type=Path, default=STUDY, help="decision_robustness.json of the run to replay")
     args = parser.parse_args()
     if args.out_dir.exists() and any(args.out_dir.iterdir()):
         parser.error("Output directory must be new or empty")
     args.out_dir.mkdir(parents=True, exist_ok=True)
-    result = build_study()
+    result = build_study(args.study)
     output = args.out_dir / "methods_study.json"
     output.write_text(json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     figure(result, args.out_dir / "normalization_example.png")

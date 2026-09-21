@@ -1,0 +1,30 @@
+{
+  "code_sha256": {
+    "backend/core/cost_engine.py": "d160c4faa00c0d19ae881cbfd56dd2e7d3c28991ea620f205fe2809271f44202",
+    "backend/core/decision_engine.py": "ee14ff3c80b6ed3d060c567645d7ced660df64222f2615ca515719030df8b856",
+    "backend/core/recipe_costing.py": "8ec89fd419231e07c3d817b2531f1c7f5e9ef9bd49557088e2d32cb37c776b2c",
+    "backend/core/uncertainty.py": "f771272fd3615554964a8b8b4ac48eb186b3008d88f13387d7f4e2615b8d49bd",
+    "backend/routers/calculator.py": "669523b9cebd87e2d520c4717648e1ff8b2be3034626df5f4b03b9449f6e5d40",
+    "backend/schemas/cost_input.py": "ac62a2fcf1c71919cf565913159395eeaba4787862016a8a4c67a67eff74e9de",
+    "scripts/reproduce_paper_methods.py": "feb93b0e9011bc3795364b5077cbc8566094b80b8d8f8d088e191c11bca3258c"
+  },
+  "command": "python scripts/reproduce_paper_methods.py --out-dir <new-empty-directory>",
+  "environment": {
+    "packages": {
+      "matplotlib": "3.10.8",
+      "numpy": "2.3.5",
+      "pydantic": "2.12.5",
+      "sqlmodel": "0.0.37"
+    },
+    "python": "3.14.0"
+  },
+  "input_sha256": {
+    "docs/paper/robustness-2026-09-21/decision_robustness.json": "24ebba5d482c5e1281f73fbae5a58bc9acf0e460dba03a6838fd33d928bc2b55",
+    "docs/sources/paper-methods-evidence-2026-09-09.json": "266434b73858e383cf8826af4fef98ec613cb4862b497939d44af4d945f1cf60"
+  },
+  "output_sha256": {
+    "methods_study.json": "f1fd8aae8b05ba5b0dd2c4d822097f791fdab843135e3ad5df7bc00524ec1155",
+    "normalization_example.png": "f5121e3a57cf8423c6e4c6e18bb4c33b90f25efe758bfc8ed8ad105080f4e0ee"
+  },
+  "status": "complete"
+}

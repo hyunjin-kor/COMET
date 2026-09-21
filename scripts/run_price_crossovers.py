@@ -171,13 +171,15 @@ def period_summary(records, slugs, unit):
             "pair_crossings": pair_crossings(records, slugs, 2e-4 if unit == "$/lb" else 2e-6)}
 
 
-def run(daily_path):
+def run(daily_path, frozen=FROZEN, old_study=OLD_STUDY):
     if data_dir().resolve() != (ROOT / "backend/data").resolve():
         raise ValueError("Refusing a data directory outside this checkout")
-    baseline_path = FROZEN / "reference_basis_2026-09-08.json"
-    monthly_path = FROZEN / "monthly_history_2026-09-08.json"
+    run_date = frozen.name.removeprefix("submission-")
+    baseline_path = frozen / f"reference_basis_{run_date}.json"
+    monthly_path = frozen / f"monthly_history_{run_date}.json"
+    basis_month = read(baseline_path)["basis_month"]
     baseline = read(baseline_path)["price_basis"]
-    old = {f["family"]: f for f in read(OLD_STUDY)["families"]}
+    old = {f["family"]: f for f in read(old_study)["families"]}
     periods = {"monthly": historical_states(read(monthly_path), baseline),
                "daily": daily_states(read(daily_path), baseline)}
     db = create_engine("sqlite://")
@@ -220,8 +222,8 @@ def run(daily_path):
     finally:
         db.dispose()
     result = {"schema_version": 1, "kind": "conditional_observed_price_replay",
-              "method": "All candidates and balanced weights retained; formulations, supports, route costs, order size, price annotations and rubric scores fixed. Monthly: 14 observed metal prices. Daily: 10 observed metal prices; all remaining prices at the May 2026 reference. Exact date intersection; no interpolation. Prices vary, but not output, activity, durability or process revenue. Historical replay of the current model, not a historical recommendation backtest or observed industrial catalyst prices.",
-              "score_controls": "Application: rounded score and cost tie-break; frozen rounded: nonprice scores fixed; continuous: additionally remove economics and total score rounding; fixed scale: additionally use the May reference min/max without clipping. Evidence scores in the application depend on material cost shares. Reference-scale scores are diagnostic and can leave 0–100.",
+              "method": "All candidates and balanced weights retained; formulations, supports, route costs, order size, price annotations and rubric scores fixed. Monthly: 14 observed metal prices. Daily: 10 observed metal prices; all remaining prices at the " + basis_month + " reference. Exact date intersection; no interpolation. Prices vary, but not output, activity, durability or process revenue. Historical replay of the current model, not a historical recommendation backtest or observed industrial catalyst prices.",
+              "score_controls": "Application: rounded score and cost tie-break; frozen rounded: nonprice scores fixed; continuous: additionally remove economics and total score rounding; fixed scale: additionally use the reference-month min/max without clipping. Evidence scores in the application depend on material cost shares. Reference-scale scores are diagnostic and can leave 0–100.",
               "tolerances": {"cost_usd_lb": 0.0002, "cost_usd_cm2": 0.000002,
                              "materiality": "1% of the cheaper modeled cost is a descriptive screen, not an uncertainty bound"},
               "baseline_verified_candidates": sum(len(f["candidates"]) for f in families),
@@ -280,10 +282,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--daily", type=Path, required=True)
     parser.add_argument("--out-dir", type=Path, required=True)
+    parser.add_argument("--frozen-dir", type=Path, default=FROZEN, help="submission-<date> run directory")
+    parser.add_argument("--robustness", type=Path, default=OLD_STUDY, help="decision_robustness.json of the same run")
     args = parser.parse_args()
     if (args.out_dir / "price_crossovers.json").exists():
         parser.error("Use a new output directory to preserve the previous replay")
-    result = run(args.daily)
+    result = run(args.daily, args.frozen_dir.resolve(), args.robustness)
     export(result, args.out_dir)
     print(json.dumps(result["summary"], indent=2))
 

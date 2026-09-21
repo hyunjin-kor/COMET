@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pytest
 
+from backend.core.reference_basis import build_price_basis
 from scripts.reproduce_paper import normalize_history, run_command, sha256
 
 
@@ -31,16 +32,24 @@ def test_reference_history_uses_latest_common_completed_month():
         normalize_history(payload, "2026-09", date(2026, 9, 6))
 
 
-def test_support_publication_month_limits_combined_basis_without_interpolation():
+def test_support_unit_values_do_not_limit_the_basis_month_and_are_not_interpolated():
     payload = {"cadence": "monthly_average", "series": {
         "Cu": {"source": "IMF", "unit": "$/lb", "points": [{"date": "2026-06-30", "price": 4}, {"date": "2026-07-31", "price": 5}]},
-        "HS281820": {"source": "UN Comtrade (monthly unit value)", "cadence": "monthly_unit_value", "unit": "$/kg", "points": [{"date": "2026-06-30", "price": 0.55}]},
+        "HS281820": {"source": "UN Comtrade (monthly unit value)", "cadence": "monthly_unit_value", "unit": "$/kg", "points": [{"date": "2026-05-31", "price": 0.67}, {"date": "2026-06-30", "price": 0.55}]},
     }}
     result, month = normalize_history(payload, None, date(2026, 9, 6))
-    assert month == "2026-06"
-    assert result["series"]["HS281820"]["cadence"] == "monthly_unit_value"
-    assert result["series"]["HS281820"]["source"] == "UN Comtrade (monthly unit value)"
-    with pytest.raises(ValueError, match="latest_common_month"):
+    assert month == "2026-07"
+    support = result["series"]["HS281820"]
+    assert support["cadence"] == "monthly_unit_value"
+    assert support["source"] == "UN Comtrade (monthly unit value)"
+    assert support["last"] == "2026-06-30" and support["n"] == 2
+    basis = build_price_basis(result["series"], month, {})
+    assert basis["HS281820"]["price"] == 0.55 and basis["HS281820"]["fetched_at"] == "2026-06-30"
+    assert basis["Cu"]["fetched_at"] == "2026-07-31"
+    earlier, _ = normalize_history(payload, "2026-06", date(2026, 9, 6))
+    assert build_price_basis(earlier["series"], "2026-06", {})["HS281820"]["price"] == 0.55
+    payload["series"]["HS281820"]["points"] = [{"date": "2026-08-31", "price": 0.6}]
+    with pytest.raises(ValueError, match="HS281820: no observation"):
         normalize_history(payload, "2026-07", date(2026, 9, 6))
 
 

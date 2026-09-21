@@ -76,13 +76,14 @@ def normalize_history(payload: dict, month: str | None, today: date) -> tuple[di
     if selected > latest:
         raise ValueError(f"{selected}: later than latest_common_month {latest}")
     for symbol, entry in series.items():
-        if not any(p["date"][:7] == selected for p in entry["points"]):
+        unit_value = entry["cadence"] == "monthly_unit_value"
+        if not any(p["date"][:7] <= selected if unit_value else p["date"][:7] == selected for p in entry["points"]):
             raise ValueError(f"{symbol}: no observation in {selected}")
     return {
         "cadence": "monthly_average",
         "basis_month": selected,
         "latest_common_month": latest,
-        "normalization_note": "Current/future months excluded. Legacy daily histories use available-observation means, not an assertion of IMF publication.",
+        "normalization_note": "Current/future months excluded. Legacy daily histories use available-observation means, not an assertion of IMF publication. Customs unit values do not limit the month; each uses its latest verified observation at or before it, without interpolation.",
         "series": truncate_series(series, selected),
     }, selected
 
@@ -255,7 +256,7 @@ def main() -> None:
                 if overlap:
                     raise ValueError(f"duplicate series in metal and support histories: {sorted(overlap)}")
                 history_payload["series"].update(supports)
-                manifest["support_history"] = {"file": support_path.name, "sha256": sha256(support_path), "series": sorted(supports), "note": "Exact monthly all-grade import unit values; missing months are not interpolated. Included in latest_common_month."}
+                manifest["support_history"] = {"file": support_path.name, "sha256": sha256(support_path), "series": sorted(supports), "note": "Exact monthly all-grade import unit values; missing months are not interpolated. The basis uses each series' latest verified observation at or before the metal basis month."}
                 paths["support_history"] = support_path
             normalized, month = normalize_history(history_payload, args.month, date.today())
             manifest["basis_month"] = month

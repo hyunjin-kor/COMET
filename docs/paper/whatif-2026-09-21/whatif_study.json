@@ -1,0 +1,535 @@
+{
+  "basis_month": "2026-08",
+  "inputs": {
+    "reference_basis": "docs/paper/submission-2026-09-21/reference_basis_2026-09-21.json",
+    "reference_basis_sha256": "40d01ac747d195bc009926d5a56722fad660d66f770baf69e8866f0f29549131",
+    "monthly_history": "docs/paper/submission-2026-09-21/monthly_history_2026-09-21.json",
+    "monthly_history_sha256": "aedb814426ddcda731e076f133a218284af1f6eb36e5ce86a29a3df08de399ae",
+    "materials_library_sha256": "391502d24d75c16509c33bd2c7f4240225efb9f1a46e4dd8708a2d6769fe2e0d"
+  },
+  "scope": "Calculator requests on the reference basis; one input varied at a time. Precious-metal value is part of the materials cost and carries overheads and margin; no spent-catalyst credit is applied. Catalytic performance is not evaluated.",
+  "catalysts": {
+    "ni": {
+      "label": "Ni/Al2O3",
+      "metal": "Ni",
+      "loading_wt_pct": 20,
+      "sweep_wt_pct": [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30
+      ],
+      "support": "Al2O3",
+      "support_material_key": "lit:comtrade-calcined-alumina-2024",
+      "template_id": "wet_impregnation_metal_oxide",
+      "order_size_tons": 20,
+      "metal_quote": {
+        "symbol": "Ni",
+        "name": "Nickel",
+        "price": 7.5979,
+        "unit": "$/lb",
+        "source": "IMF PCPS (monthly average)",
+        "fetched_at": "2026-08-31"
+      },
+      "metal_price_per_lb": 7.5979,
+      "baseline": {
+        "selling_price_per_lb": 4.6845,
+        "materials_per_lb": 1.7461,
+        "processing_per_lb": 1.6758,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      }
+    },
+    "ru": {
+      "label": "Ru/Al2O3",
+      "metal": "Ru",
+      "loading_wt_pct": 2,
+      "sweep_wt_pct": [
+        0.5,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "support": "Al2O3",
+      "support_material_key": "lit:comtrade-calcined-alumina-2024",
+      "template_id": "wet_impregnation_metal_oxide",
+      "order_size_tons": 20,
+      "metal_quote": {
+        "symbol": "Ru",
+        "name": "Ruthenium",
+        "price": 1675.0,
+        "unit": "$/troy_oz",
+        "source": "Johnson Matthey (monthly average)",
+        "fetched_at": "2026-08-31"
+      },
+      "metal_price_per_lb": 24427.0275,
+      "baseline": {
+        "selling_price_per_lb": 671.4797,
+        "materials_per_lb": 488.8181,
+        "processing_per_lb": 1.6758,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      }
+    }
+  },
+  "loading": {
+    "ni": [
+      {
+        "loading_wt_pct": 5,
+        "selling_price_per_lb": 3.1825,
+        "materials_per_lb": 0.6489,
+        "processing_per_lb": 1.6758,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      },
+      {
+        "loading_wt_pct": 10,
+        "selling_price_per_lb": 3.6832,
+        "materials_per_lb": 1.0147,
+        "processing_per_lb": 1.6758,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      },
+      {
+        "loading_wt_pct": 15,
+        "selling_price_per_lb": 4.1839,
+        "materials_per_lb": 1.3804,
+        "processing_per_lb": 1.6758,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      },
+      {
+        "loading_wt_pct": 20,
+        "selling_price_per_lb": 4.6845,
+        "materials_per_lb": 1.7461,
+        "processing_per_lb": 1.6758,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      },
+      {
+        "loading_wt_pct": 25,
+        "selling_price_per_lb": 5.1852,
+        "materials_per_lb": 2.1119,
+        "processing_per_lb": 1.6758,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      },
+      {
+        "loading_wt_pct": 30,
+        "selling_price_per_lb": 5.6859,
+        "materials_per_lb": 2.4776,
+        "processing_per_lb": 1.6758,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      }
+    ],
+    "ru": [
+      {
+        "loading_wt_pct": 0.5,
+        "selling_price_per_lb": 169.8813,
+        "materials_per_lb": 122.4169,
+        "processing_per_lb": 1.6758,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      },
+      {
+        "loading_wt_pct": 1,
+        "selling_price_per_lb": 337.0808,
+        "materials_per_lb": 244.5506,
+        "processing_per_lb": 1.6758,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      },
+      {
+        "loading_wt_pct": 2,
+        "selling_price_per_lb": 671.4797,
+        "materials_per_lb": 488.8181,
+        "processing_per_lb": 1.6758,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      },
+      {
+        "loading_wt_pct": 3,
+        "selling_price_per_lb": 1005.8787,
+        "materials_per_lb": 733.0855,
+        "processing_per_lb": 1.6758,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      },
+      {
+        "loading_wt_pct": 4,
+        "selling_price_per_lb": 1340.2777,
+        "materials_per_lb": 977.353,
+        "processing_per_lb": 1.6758,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      },
+      {
+        "loading_wt_pct": 5,
+        "selling_price_per_lb": 1674.6767,
+        "materials_per_lb": 1221.6204,
+        "processing_per_lb": 1.6758,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      }
+    ]
+  },
+  "order_size": {
+    "ni": [
+      {
+        "order_size_tons": 1,
+        "selling_price_per_lb": 20.9617,
+        "materials_per_lb": 1.7461,
+        "processing_per_lb": 9.8152,
+        "margin_pct": 39.19,
+        "scale": "small",
+        "campaign_days": 1.5,
+        "substitutions": [
+          {
+            "from": "kiln_continuous_indirect",
+            "to": "kiln_batch"
+          }
+        ]
+      },
+      {
+        "order_size_tons": 2,
+        "selling_price_per_lb": 16.4142,
+        "materials_per_lb": 1.7461,
+        "processing_per_lb": 8.1793,
+        "margin_pct": 33.33,
+        "scale": "small",
+        "campaign_days": 2.5,
+        "substitutions": [
+          {
+            "from": "kiln_continuous_indirect",
+            "to": "kiln_batch"
+          }
+        ]
+      },
+      {
+        "order_size_tons": 5,
+        "selling_price_per_lb": 7.6894,
+        "materials_per_lb": 1.7461,
+        "processing_per_lb": 3.3515,
+        "margin_pct": 26.91,
+        "scale": "medium",
+        "campaign_days": 1.5,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 10,
+        "selling_price_per_lb": 5.691,
+        "materials_per_lb": 1.7461,
+        "processing_per_lb": 2.2344,
+        "margin_pct": 22.89,
+        "scale": "medium",
+        "campaign_days": 2.0,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 20,
+        "selling_price_per_lb": 4.6845,
+        "materials_per_lb": 1.7461,
+        "processing_per_lb": 1.6758,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 50,
+        "selling_price_per_lb": 4.0377,
+        "materials_per_lb": 1.7461,
+        "processing_per_lb": 1.3406,
+        "margin_pct": 15.72,
+        "scale": "medium",
+        "campaign_days": 6.0,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 70,
+        "selling_price_per_lb": 2.867,
+        "materials_per_lb": 1.7461,
+        "processing_per_lb": 0.4765,
+        "margin_pct": 14.53,
+        "scale": "large",
+        "campaign_days": 1.47,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 100,
+        "selling_price_per_lb": 2.7045,
+        "materials_per_lb": 1.7461,
+        "processing_per_lb": 0.379,
+        "margin_pct": 13.37,
+        "scale": "large",
+        "campaign_days": 1.67,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 200,
+        "selling_price_per_lb": 2.5021,
+        "materials_per_lb": 1.7461,
+        "processing_per_lb": 0.2653,
+        "margin_pct": 11.37,
+        "scale": "large",
+        "campaign_days": 2.33,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 500,
+        "selling_price_per_lb": 2.3589,
+        "materials_per_lb": 1.7461,
+        "processing_per_lb": 0.1971,
+        "margin_pct": 9.18,
+        "scale": "large",
+        "campaign_days": 4.33,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 1000,
+        "selling_price_per_lb": 2.2966,
+        "materials_per_lb": 1.7461,
+        "processing_per_lb": 0.1744,
+        "margin_pct": 7.81,
+        "scale": "large",
+        "campaign_days": 7.67,
+        "substitutions": []
+      }
+    ],
+    "ru": [
+      {
+        "order_size_tons": 1,
+        "selling_price_per_lb": 904.0639,
+        "materials_per_lb": 488.8181,
+        "processing_per_lb": 9.8152,
+        "margin_pct": 39.19,
+        "scale": "small",
+        "campaign_days": 1.5,
+        "substitutions": [
+          {
+            "from": "kiln_continuous_indirect",
+            "to": "kiln_batch"
+          }
+        ]
+      },
+      {
+        "order_size_tons": 2,
+        "selling_price_per_lb": 821.9076,
+        "materials_per_lb": 488.8181,
+        "processing_per_lb": 8.1793,
+        "margin_pct": 33.33,
+        "scale": "small",
+        "campaign_days": 2.5,
+        "substitutions": [
+          {
+            "from": "kiln_continuous_indirect",
+            "to": "kiln_batch"
+          }
+        ]
+      },
+      {
+        "order_size_tons": 5,
+        "selling_price_per_lb": 742.3984,
+        "materials_per_lb": 488.8181,
+        "processing_per_lb": 3.3515,
+        "margin_pct": 26.91,
+        "scale": "medium",
+        "campaign_days": 1.5,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 10,
+        "selling_price_per_lb": 702.0716,
+        "materials_per_lb": 488.8181,
+        "processing_per_lb": 2.2344,
+        "margin_pct": 22.89,
+        "scale": "medium",
+        "campaign_days": 2.0,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 20,
+        "selling_price_per_lb": 671.4797,
+        "materials_per_lb": 488.8181,
+        "processing_per_lb": 1.6758,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 50,
+        "selling_price_per_lb": 641.1589,
+        "materials_per_lb": 488.8181,
+        "processing_per_lb": 1.3406,
+        "margin_pct": 15.72,
+        "scale": "medium",
+        "campaign_days": 6.0,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 70,
+        "selling_price_per_lb": 631.1334,
+        "materials_per_lb": 488.8181,
+        "processing_per_lb": 0.4765,
+        "margin_pct": 14.53,
+        "scale": "large",
+        "campaign_days": 1.47,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 100,
+        "selling_price_per_lb": 622.549,
+        "materials_per_lb": 488.8181,
+        "processing_per_lb": 0.379,
+        "margin_pct": 13.37,
+        "scale": "large",
+        "campaign_days": 1.67,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 200,
+        "selling_price_per_lb": 608.3732,
+        "materials_per_lb": 488.8181,
+        "processing_per_lb": 0.2653,
+        "margin_pct": 11.37,
+        "scale": "large",
+        "campaign_days": 2.33,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 500,
+        "selling_price_per_lb": 593.6177,
+        "materials_per_lb": 488.8181,
+        "processing_per_lb": 0.1971,
+        "margin_pct": 9.18,
+        "scale": "large",
+        "campaign_days": 4.33,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 1000,
+        "selling_price_per_lb": 584.757,
+        "materials_per_lb": 488.8181,
+        "processing_per_lb": 0.1744,
+        "margin_pct": 7.81,
+        "scale": "large",
+        "campaign_days": 7.67,
+        "substitutions": []
+      }
+    ]
+  },
+  "preparation": [
+    {
+      "template_id": "wet_impregnation_metal_oxide",
+      "template_name": "Incipient Wetness Impregnation - Metal on Oxide Support",
+      "operations": 6,
+      "uncosted_operations": [],
+      "selling_price_per_lb": 4.6845,
+      "materials_per_lb": 1.7461,
+      "processing_per_lb": 1.6758,
+      "margin_pct": 19.47,
+      "scale": "medium",
+      "campaign_days": 3.0,
+      "substitutions": []
+    },
+    {
+      "template_id": "excess_solution_impregnation_metal_oxide",
+      "template_name": "Excess-Solution (Wet) Impregnation - Metal on Oxide Support",
+      "operations": 7,
+      "uncosted_operations": [],
+      "selling_price_per_lb": 4.8812,
+      "materials_per_lb": 1.7461,
+      "processing_per_lb": 1.8194,
+      "margin_pct": 19.47,
+      "scale": "medium",
+      "campaign_days": 3.0,
+      "substitutions": []
+    },
+    {
+      "template_id": "deposition_precipitation_metal_oxide",
+      "template_name": "Deposition-Precipitation - Metal on Oxide Support",
+      "operations": 7,
+      "uncosted_operations": [],
+      "selling_price_per_lb": 5.2581,
+      "materials_per_lb": 1.7461,
+      "processing_per_lb": 2.0947,
+      "margin_pct": 19.47,
+      "scale": "medium",
+      "campaign_days": 3.0,
+      "substitutions": []
+    },
+    {
+      "template_id": "coprecipitation_metal_oxide",
+      "template_name": "Co-precipitation - Metal on Oxide Support",
+      "operations": 7,
+      "uncosted_operations": [],
+      "selling_price_per_lb": 4.8812,
+      "materials_per_lb": 1.7461,
+      "processing_per_lb": 1.8194,
+      "margin_pct": 19.47,
+      "scale": "medium",
+      "campaign_days": 3.0,
+      "substitutions": []
+    },
+    {
+      "template_id": "sol_gel_metal_oxide",
+      "template_name": "Sol-Gel - Metal on Oxide Support",
+      "operations": 6,
+      "uncosted_operations": [],
+      "selling_price_per_lb": 4.7665,
+      "materials_per_lb": 1.7461,
+      "processing_per_lb": 1.7356,
+      "margin_pct": 19.47,
+      "scale": "medium",
+      "campaign_days": 3.0,
+      "substitutions": []
+    }
+  ],
+  "equal_cost": {
+    "comparison": "Ru/Al2O3 at its baseline loading against Ni/Al2O3 at its baseline loading, same support, template and order size",
+    "ru_selling_price_without_metal_per_lb": 2.674,
+    "selling_price_slope_per_metal_price": 0.027379741558812263,
+    "equal_cost_ru_price_per_lb": 73.43020370303363,
+    "equal_cost_over_reference": 0.0030061047625640747,
+    "price_ratio_ru_over_ni_catalyst": 143.34074074074073,
+    "ru_history_months": 92,
+    "ru_history_min_per_lb": 3645.825,
+    "ru_history_max_per_lb": 24906.74077851,
+    "months_below_equal_cost": 0,
+    "verified_selling_price_per_lb": 4.6845
+  }
+}

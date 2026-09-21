@@ -20,7 +20,7 @@ def test_si_publication_labels_preserve_every_frozen_screening_value():
     section = text.split("Table S6. ", 1)[1].split("Names identify", 1)[0]
     rows = [line.strip("|").split("|") for line in section.splitlines()
             if line.startswith("| ")][1:]
-    source = si.load("docs/paper/submission-2026-09-08/all_families_2026-09-08.json")
+    source = si.load(f"{si.RUN}/all_families_{si.RUN_DATE}.json")
     expected = [(f["family"], c) for f in source["families"] for c in f["candidates"]]
     assert len(rows) == len(expected) == 116
     for row, (family, candidate) in zip(rows, expected, strict=True):
@@ -113,9 +113,10 @@ def test_reference_example_matches_a_fresh_calculation():
 def test_note_reuses_the_manuscript_numbers():
     run = note_builder.load_run()
     text = note_builder.note(run)
-    assert "submission-2026-09-08/paper_summary_2026-09-08.json:table62[0].comet_usd_per_lb" in text
-    assert "robustness-2026-09-08/decision_robustness.json:summary.candidate_removal_winner_changes" in text
-    assert "methods-2026-09-09/methods_study.json:normalization.example.rows[0].total_after" in text
+    assert f"{note_builder.RUN}/paper_summary_{note_builder.RUN_DATE}.json:table62[0].comet_usd_per_lb" in text
+    assert f"{note_builder.ROBUSTNESS}:summary.candidate_removal_winner_changes" in text
+    assert f"{note_builder.METHODS}:normalization.example.rows[0].total_after" in text
+    assert f"{note_builder.WHATIF}:order_size.ni[10].selling_price_per_lb" in text
     assert "mean absolute percentage error was not calculated" in text
 
 
@@ -157,7 +158,7 @@ def test_rank_reversal_cost_difference_matches_independent_ammonia_example():
     try:
         ax = fig.axes[-1]
         labels = [label.get_text().replace("\n", " ") for label in ax.get_yticklabels()]
-        assert len(ax.patches) == len(labels) == 9
+        assert len(ax.patches) == len(labels) == methods["normalization"]["changed"]
         bar = ax.patches[labels.index("Ammonia cracking")]
         assert bar.get_width() == pytest.approx(expected)
         assert bar.get_x() == 0
@@ -195,3 +196,19 @@ def test_figure_decks_embed_the_current_numeric_panels():
     manifest = json.loads((figures.PANELS / "panels.json").read_text(encoding="utf-8"))
     assert {row["figure"] for row in manifest["panels"]} == set(figures.PANEL_LAYOUTS)
     assert len(manifest["panels"]) == 2 * sum(len(boxes) for _f, boxes in figures.PANEL_LAYOUTS.values())
+
+
+def test_note_states_the_cost_only_scope_and_the_planned_performance_coupling():
+    text = note_builder.note(note_builder.load_run())
+    limitations = text.split("### Limitations", 1)[1].split("## Conclusions", 1)[0]
+    conclusions = text.split("## Conclusions", 1)[1].split("## Supporting Information", 1)[0]
+    assert "manufacturing cost only" in limitations and "not measured or predicted activity" in limitations
+    assert "performance-prediction models" in conclusions
+
+
+def test_whatif_study_matches_a_fresh_calculation():
+    from scripts import note_whatif_study as whatif
+
+    stored = json.loads(whatif.OUTPUT.read_text(encoding="utf-8"))
+    assert stored == json.loads(json.dumps(whatif.study()))
+    assert stored["inputs"]["reference_basis"].endswith(f"reference_basis_{note_builder.RUN_DATE}.json")

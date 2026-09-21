@@ -1,7 +1,7 @@
 {
   "target": "Journal of Chemical Information and Modeling, Application Note",
   "word_limit_abstract_text_graphics": 5000,
-  "abstract_words": 115,
+  "abstract_words": 113,
   "text_words_excluding_references": 2182,
   "graphics": [
     {
@@ -26,18 +26,18 @@
     }
   ],
   "graphics_word_equivalent": 2400,
-  "total_word_equivalent": 4697,
+  "total_word_equivalent": 4695,
   "toc_word_equivalent_allowance": 300,
-  "total_word_equivalent_with_toc": 4997,
+  "total_word_equivalent_with_toc": 4995,
   "toc_count_note": "A conservative 300-word allowance is tracked separately because the Application Note rule does not explicitly resolve TOC inclusion.",
   "figure_count": 4,
   "table_count": 0,
   "software_named_in_title": true,
-  "json_key_references": 88,
+  "json_key_references": 93,
   "publication_mass_unit": "kg",
   "publication_conversions": [
     {
-      "source": "submission-2026-09-08/paper_summary_2026-09-08.json",
+      "source": "submission-2026-09-21/paper_summary_2026-09-21.json",
       "key": "table62[0].comet_usd_per_lb",
       "source_value": 27.3695,
       "factor": 2.2046226218487757,
@@ -45,7 +45,7 @@
       "display": "60.3394"
     },
     {
-      "source": "submission-2026-09-08/paper_summary_2026-09-08.json",
+      "source": "submission-2026-09-21/paper_summary_2026-09-21.json",
       "key": "table62[0].published_usd_per_lb",
       "source_value": 27.37,
       "factor": 2.2046226218487757,
@@ -53,7 +53,7 @@
       "display": "60.341"
     },
     {
-      "source": "submission-2026-09-08/paper_summary_2026-09-08.json",
+      "source": "submission-2026-09-21/paper_summary_2026-09-21.json",
       "key": "table62[1].comet_usd_per_lb",
       "source_value": 19.2206,
       "factor": 2.2046226218487757,
@@ -61,7 +61,7 @@
       "display": "42.3742"
     },
     {
-      "source": "submission-2026-09-08/paper_summary_2026-09-08.json",
+      "source": "submission-2026-09-21/paper_summary_2026-09-21.json",
       "key": "table62[1].published_usd_per_lb",
       "source_value": 20.59,
       "factor": 2.2046226218487757,
@@ -69,7 +69,7 @@
       "display": "45.393"
     },
     {
-      "source": "submission-2026-09-08/paper_summary_2026-09-08.json",
+      "source": "submission-2026-09-21/paper_summary_2026-09-21.json",
       "key": "table62[2].comet_usd_per_lb",
       "source_value": 2.438,
       "factor": 2.2046226218487757,
@@ -77,7 +77,7 @@
       "display": "5.3749"
     },
     {
-      "source": "submission-2026-09-08/paper_summary_2026-09-08.json",
+      "source": "submission-2026-09-21/paper_summary_2026-09-21.json",
       "key": "table62[2].published_usd_per_lb",
       "source_value": 2.41,
       "factor": 2.2046226218487757,
@@ -85,7 +85,7 @@
       "display": "5.313"
     },
     {
-      "source": "submission-2026-09-08/paper_summary_2026-09-08.json",
+      "source": "submission-2026-09-21/paper_summary_2026-09-21.json",
       "key": "table62[2].effective_rate_ton_per_day",
       "source_value": 67.0,
       "factor": 907.18474,
@@ -93,7 +93,7 @@
       "display": "60,781.4"
     },
     {
-      "source": "submission-2026-09-08/table62_reproduction_2026-09-08.json",
+      "source": "submission-2026-09-21/table62_reproduction_2026-09-21.json",
       "key": "[2].with_published_rate.estimated_price_per_lb",
       "source_value": 2.438,
       "factor": 2.2046226218487757,
@@ -101,7 +101,7 @@
       "display": "5.3749"
     },
     {
-      "source": "submission-2026-09-08/table62_reproduction_2026-09-08.json",
+      "source": "submission-2026-09-21/table62_reproduction_2026-09-21.json",
       "key": "[2].market.market_price_per_lb",
       "source_value": 2.73,
       "factor": 2.2046226218487757,
@@ -119,18 +119,18 @@
     {
       "source": "figures-note-2026-09-09/reference_example_ni_al2o3.json",
       "key": "step_method.estimated_price_per_lb",
-      "source_value": 4.9382,
+      "source_value": 4.6845,
       "factor": 2.2046226218487757,
-      "converted_value": 10.886867431213624,
-      "display": "10.89"
+      "converted_value": 10.327554672050589,
+      "display": "10.33"
     },
     {
       "source": "figures-note-2026-09-09/reference_example_ni_al2o3.json",
       "key": "materials.components[0].cost_per_lb_cat",
-      "source_value": 1.70486,
+      "source_value": 1.51958,
       "factor": 2.2046226218487757,
-      "converted_value": 3.758572923085104,
-      "display": "3.76"
+      "converted_value": 3.3501004437089623,
+      "display": "3.35"
     },
     {
       "source": "figures-note-2026-09-09/reference_example_ni_al2o3.json",
@@ -149,7 +149,71 @@
       "display": "3.69"
     },
     {
-      "source": "price-crossovers-2026-09-13/crossover_mechanisms.json",
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "key": "loading.ni[0].selling_price_per_lb",
+      "source_value": 3.1825,
+      "factor": 2.2046226218487757,
+      "converted_value": 7.016211494033729,
+      "display": "7.02"
+    },
+    {
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "key": "loading.ni[5].selling_price_per_lb",
+      "source_value": 5.6859,
+      "factor": 2.2046226218487757,
+      "converted_value": 12.535263765569955,
+      "display": "12.54"
+    },
+    {
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "key": "order_size.ni[0].order_size_tons",
+      "source_value": 1,
+      "factor": 907.18474,
+      "converted_value": 907.18474,
+      "display": "907.2"
+    },
+    {
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "key": "order_size.ni[10].order_size_tons",
+      "source_value": 1000,
+      "factor": 907.18474,
+      "converted_value": 907184.74,
+      "display": "907,184.7"
+    },
+    {
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "key": "order_size.ni[0].selling_price_per_lb",
+      "source_value": 20.9617,
+      "factor": 2.2046226218487757,
+      "converted_value": 46.21263801240748,
+      "display": "46.21"
+    },
+    {
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "key": "order_size.ni[10].selling_price_per_lb",
+      "source_value": 2.2966,
+      "factor": 2.2046226218487757,
+      "converted_value": 5.063136313337899,
+      "display": "5.06"
+    },
+    {
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "key": "preparation[0].selling_price_per_lb",
+      "source_value": 4.6845,
+      "factor": 2.2046226218487757,
+      "converted_value": 10.327554672050589,
+      "display": "10.33"
+    },
+    {
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "key": "preparation[2].selling_price_per_lb",
+      "source_value": 5.2581,
+      "factor": 2.2046226218487757,
+      "converted_value": 11.592126207943046,
+      "display": "11.59"
+    },
+    {
+      "source": "price-crossovers-2026-09-21/crossover_mechanisms.json",
       "key": "cases[0].metal_effects.Co.price_before",
       "source_value": 15.1872,
       "factor": 2.2046226218487757,
@@ -157,7 +221,7 @@
       "display": "33.48"
     },
     {
-      "source": "price-crossovers-2026-09-13/crossover_mechanisms.json",
+      "source": "price-crossovers-2026-09-21/crossover_mechanisms.json",
       "key": "cases[0].metal_effects.Co.price_after",
       "source_value": 19.5706,
       "factor": 2.2046226218487757,
@@ -165,103 +229,77 @@
       "display": "43.15"
     },
     {
-      "source": "price-crossovers-2026-09-13/crossover_mechanisms.json",
+      "source": "price-crossovers-2026-09-21/crossover_mechanisms.json",
       "key": "cases[0].costs_after.ni-alumina-baseline",
-      "source_value": 4.0319,
+      "source_value": 3.968,
       "factor": 2.2046226218487757,
-      "converted_value": 8.88881794903208,
-      "display": "8.89"
+      "converted_value": 8.747942563495942,
+      "display": "8.75"
     },
     {
-      "source": "price-crossovers-2026-09-13/crossover_mechanisms.json",
+      "source": "price-crossovers-2026-09-21/crossover_mechanisms.json",
       "key": "cases[0].costs_after.co-mgo-la2o3",
-      "source_value": 4.307,
+      "source_value": 4.2125,
       "factor": 2.2046226218487757,
-      "converted_value": 9.495309632302678,
-      "display": "9.50"
+      "converted_value": 9.286972794537968,
+      "display": "9.29"
     },
     {
-      "source": "methods-2026-09-09/methods_study.json",
-      "key": "normalization.example.rows[0].cost",
-      "source_value": 4.7411,
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "key": "catalysts.ru.baseline.selling_price_per_lb",
+      "source_value": 671.4797,
       "factor": 2.2046226218487757,
-      "converted_value": 10.452336312447231,
-      "display": "10.45"
+      "converted_value": 1480.3593367322294,
+      "display": "1,480.36"
     },
     {
-      "source": "methods-2026-09-09/methods_study.json",
-      "key": "normalization.example.rows[1].cost",
-      "source_value": 5.8131,
-      "factor": 2.2046226218487757,
-      "converted_value": 12.815691763069118,
-      "display": "12.82"
-    },
-    {
-      "source": "methods-2026-09-09/methods_study.json",
-      "key": "normalization.example.rows[2].cost",
-      "source_value": 4.3573,
-      "factor": 2.2046226218487757,
-      "converted_value": 9.606202150181671,
-      "display": "9.61"
-    },
-    {
-      "source": "methods-2026-09-09/methods_study.json",
+      "source": "methods-2026-09-21/methods_study.json",
       "key": "normalization.example.removed_cost",
-      "source_value": 1265.9574,
+      "source_value": 1327.12,
       "factor": 2.2046226218487757,
-      "converted_value": 2790.958322336859,
-      "display": "2,790.96"
+      "converted_value": 2925.7987739079467,
+      "display": "2,925.80"
     }
   ],
   "derived_values": [
     {
-      "display": "2,781",
-      "source": "methods-2026-09-09/methods_study.json",
-      "rule": "normalization.example: (max of retained and removed cost - min retained cost) converted to USD/kg"
-    },
-    {
-      "display": "3.2",
-      "source": "methods-2026-09-09/methods_study.json",
-      "rule": "normalization.example: max - min of retained costs converted to USD/kg"
-    },
-    {
-      "display": "0.85",
-      "source": "methods-2026-09-09/methods_study.json",
+      "display": "1.17",
+      "source": "methods-2026-09-21/methods_study.json",
       "rule": "normalization.example: |rows[0].cost - rows[2].cost| converted to USD/kg"
     },
     {
       "display": "4",
-      "source": "submission-2026-09-08/paper_summary_2026-09-08.json",
+      "source": "submission-2026-09-21/paper_summary_2026-09-21.json",
       "rule": "screening_basis_counts: sum of bases other than literature-architecture and engineering proxies"
     },
     {
       "display": "-10.7",
-      "source": "submission-2026-09-08/table62_reproduction_2026-09-08.json",
+      "source": "submission-2026-09-21/table62_reproduction_2026-09-21.json",
       "rule": "[2]: 100 * (with_published_rate.estimated_price_per_lb / market.market_price_per_lb - 1)"
     },
     {
       "display": "23",
-      "source": "submission-2026-09-08/all_families_2026-09-08.json",
+      "source": "submission-2026-09-21/all_families_2026-09-21.json",
       "rule": "families with catalyst_domain thermal"
     },
     {
       "display": "3",
-      "source": "submission-2026-09-08/all_families_2026-09-08.json",
+      "source": "submission-2026-09-21/all_families_2026-09-21.json",
       "rule": "thermal lowest-cost candidates with materials_cost_per_lb above 50% of landed_cost_per_lb"
     },
     {
-      "display": "10",
-      "source": "submission-2026-09-08/all_families_2026-09-08.json",
+      "display": "12",
+      "source": "submission-2026-09-21/all_families_2026-09-21.json",
       "rule": "thermal lowest-cost candidates with processing_cost_per_lb above materials_cost_per_lb"
     },
     {
       "display": "24",
-      "source": "submission-2026-09-08/all_families_2026-09-08.json",
+      "source": "submission-2026-09-21/all_families_2026-09-21.json",
       "rule": "minimum share of landed cost outside materials and processing among thermal lowest-cost candidates"
     },
     {
       "display": "42",
-      "source": "submission-2026-09-08/all_families_2026-09-08.json",
+      "source": "submission-2026-09-21/all_families_2026-09-21.json",
       "rule": "maximum share of landed cost outside materials and processing among thermal lowest-cost candidates"
     },
     {
@@ -286,12 +324,37 @@
     },
     {
       "display": "99.7",
-      "source": "price-crossovers-2026-09-13/price_crossovers.json",
+      "source": "price-crossovers-2026-09-21/price_crossovers.json",
       "rule": "ammonia-cracking monthly records: minimum economics score of co-mgo-la2o3 and ni-alumina-baseline"
+    },
+    {
+      "display": "0.22",
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "rule": "loading.ni: selling-price change per wt% between the first and last loading, USD/kg"
+    },
+    {
+      "display": "737",
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "rule": "loading.ru: selling-price change per wt% between the first and last loading, USD/kg"
+    },
+    {
+      "display": "9.1",
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "rule": "order_size.ni: selling price at the smallest order divided by that at the largest order"
+    },
+    {
+      "display": "1.5",
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "rule": "order_size.ru: selling price at the smallest order divided by that at the largest order"
+    },
+    {
+      "display": "0.30",
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "rule": "equal_cost.equal_cost_over_reference as a percentage"
     }
   ],
-  "primary_run": "submission-2026-09-08",
-  "basis_month": "2026-05",
+  "primary_run": "submission-2026-09-21",
+  "basis_month": "2026-08",
   "seed": 20260906,
   "count_note": "Lexical count of the abstract and text from Introduction through Competing interests, including headings and placeholders. Figure captions and references are excluded; graphics add 300/600 word equivalents for single/double-column figures."
 }

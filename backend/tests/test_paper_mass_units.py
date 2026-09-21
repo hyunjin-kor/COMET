@@ -28,13 +28,12 @@ def test_note_converts_every_mass_value_and_preserves_source_references():
     assert not re.search(r"USD/lb|USD/troy|per lb|in lb|short ton", visible)
     assert "60.3394" in visible and "60,781.4" in visible and "18,143.7" in visible
     records = run.publication_conversions
-    # 17 original conversions, the four cobalt-price and October-2025 cost values of the crossover paragraph,
-    # and the alumina contribution of the May 2026 reference example.
-    assert len(records) == 22
-    assert sum("per_lb" in row["key"] for row in records) == 12
+    # Verification, worked example, what-if analyses, crossover paragraph and the removed-candidate cost.
+    assert len(records) == 28
+    assert sum("per_lb" in row["key"] for row in records) == 19
     for row in records:
         assert row["display"] + "<!-- " + row["source"] + ":" + row["key"] + " -->" in text
-    assert re.search(r"0\.85 USD/kg (?:cost )?difference", visible)
+    assert re.search(r"1\.17 USD/kg difference", visible)
 
 
 def test_all_metal_history_points_are_converted_without_smoothing():
@@ -48,7 +47,7 @@ def test_all_metal_history_points_are_converted_without_smoothing():
                 divisor = 0.0311034768 if series[symbol]["unit"] == "$/troy_oz" else 0.45359237
                 expected = [point["price"] / divisor for point in series[symbol]["points"]]
                 assert list(line.get_ydata()) == pytest.approx(expected)
-                assert len(expected) == 89
+                assert len(expected) == 92
     finally:
         figures.plt.close(fig)
 

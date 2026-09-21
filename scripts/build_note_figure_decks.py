@@ -173,18 +173,24 @@ def build_fig3(records):
 
 
 def build_fig4(records):
-    deck = new_deck(178, 181)
+    deck = new_deck(178, 128)
     for lang in LANGS:
         slide = blank_slide(deck)
         rows = records[("fig4_ranking", lang)]
-        place(slide, rows, "a", 0, 0)
-        place(slide, rows, "b", 89, 0)
-        place(slide, rows, "c", 0, 60)
-        place(slide, rows, "d", 0, 131)
-        letter(slide, "a", 2, 0.5)
-        letter(slide, "b", 91, 0.5)
-        letter(slide, "c", 2, 60.5)
-        letter(slide, "d", 2, 131.5)
+        for panel, x, y in (("a", 0, 0), ("b", 59, 0), ("c", 118, 0), ("d", 0, 64), ("e", 89, 64)):
+            place(slide, rows, panel, x, y)
+            letter(slide, panel, x + 2, y + 0.5)
+    return deck
+
+
+def build_ranking(records):
+    deck = new_deck(178, 203)
+    for lang in LANGS:
+        slide = blank_slide(deck)
+        rows = records[("figS6_ranking_tests", lang)]
+        for panel, x, y in (("a", 0, 0), ("b", 0, 132), ("c", 89, 132)):
+            place(slide, rows, panel, x, y)
+            letter(slide, panel, x + 2, y + 0.5)
     return deck
 
 
@@ -279,7 +285,7 @@ def main():
         "figS3_monte_carlo": lambda: build_s3(records),
         "figS7_evidence": lambda: build_single("figS7_evidence", 178, 118, records),
         "figS5_crossovers": lambda: build_s5(records),
-        "figS6_ranking_tests": lambda: build_single("figS6_ranking_tests", 89, 71, records),
+        "figS6_ranking_tests": lambda: build_ranking(records),
         "figS9_interface": build_s6,
         "figS1_allocation": lambda: build_concept("figS1_allocation"),
         "figS8_provenance": lambda: build_concept("figS8_provenance"),

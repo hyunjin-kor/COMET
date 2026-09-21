@@ -1,8 +1,8 @@
 {
-  "basis": "May 2026 reference prices",
+  "basis": "2026-08 reference prices",
   "inputs": {
-    "reference_basis": "docs/paper/submission-2026-09-08/reference_basis_2026-09-08.json",
-    "reference_basis_sha256": "f3eeac99ff67bc6e3152ede19195f8438aa2a8c9e0a781e7645897cff681882a",
+    "reference_basis": "docs/paper/submission-2026-09-21/reference_basis_2026-09-21.json",
+    "reference_basis_sha256": "40d01ac747d195bc009926d5a56722fad660d66f770baf69e8866f0f29549131",
     "materials_library_sha256": "391502d24d75c16509c33bd2c7f4240225efb9f1a46e4dd8708a2d6769fe2e0d"
   },
   "request": {
@@ -23,7 +23,7 @@
         "role": "active_metal",
         "name": "Ni",
         "wt_pct": 20,
-        "price_per_lb": 8.5243
+        "price_per_lb": 7.5979
       },
       {
         "role": "support",
@@ -36,10 +36,10 @@
   "nickel_quote": {
     "symbol": "Ni",
     "name": "Nickel",
-    "price": 8.5243,
+    "price": 7.5979,
     "unit": "$/lb",
     "source": "IMF PCPS (monthly average)",
-    "fetched_at": "2026-05-31"
+    "fetched_at": "2026-08-31"
   },
   "alumina_row": {
     "material_key": "lit:comtrade-calcined-alumina-2024",
@@ -54,12 +54,12 @@
   },
   "template_name": "Incipient Wetness Impregnation - Metal on Oxide Support",
   "summary": {
-    "estimated_price_per_lb": 4.9382,
-    "estimated_price_per_kg": 10.8869,
-    "net_cost_per_lb": 4.9382,
-    "net_cost_per_kg": 10.8869,
-    "materials_pct": 39.1,
-    "processing_pct": 33.9,
+    "estimated_price_per_lb": 4.6845,
+    "estimated_price_per_kg": 10.3275,
+    "net_cost_per_lb": 4.6845,
+    "net_cost_per_kg": 10.3275,
+    "materials_pct": 37.3,
+    "processing_pct": 35.8,
     "gwp_kg_co2eq_per_kg_catalyst": 8.1029,
     "ced_mj_per_kg_catalyst": 132.3522,
     "lca_coverage_pct": 100.0
@@ -71,10 +71,10 @@
         "name": "Ni",
         "wt_pct": 20.0,
         "wt_frac": 0.2,
-        "price_per_lb": 8.5243,
+        "price_per_lb": 7.5979,
         "precursor_markup": 1.0,
-        "cost_per_lb_cat": 1.70486,
-        "cost_pct": 88.3
+        "cost_per_lb_cat": 1.51958,
+        "cost_pct": 87.0
       },
       {
         "role": "support",
@@ -84,10 +84,10 @@
         "price_per_lb": 0.2832,
         "precursor_markup": 1.0,
         "cost_per_lb_cat": 0.22656,
-        "cost_pct": 11.7
+        "cost_pct": 13.0
       }
     ],
-    "total_materials_cost_per_lb": 1.93142
+    "total_materials_cost_per_lb": 1.74614
   },
   "step_method": {
     "scale": "medium",
@@ -98,16 +98,16 @@
     "chemppi_escalation": 1.3299711815561959,
     "campaign_cost": 67030.55,
     "total_production_lb": 40000.0,
-    "materials_cost_per_lb": 1.9314,
+    "materials_cost_per_lb": 1.7461,
     "processing_cost_per_lb": 1.6758,
-    "subtotal_per_lb": 3.6072,
-    "ga_per_lb": 0.1804,
-    "sard_per_lb": 0.1894,
-    "pre_margin_per_lb": 3.9769,
+    "subtotal_per_lb": 3.4219,
+    "ga_per_lb": 0.1711,
+    "sard_per_lb": 0.1796,
+    "pre_margin_per_lb": 3.7726,
     "margin_pct": 19.47,
-    "margin_per_lb": 0.9613,
-    "estimated_price_per_lb": 4.9382,
-    "estimated_price_per_kg": 10.8868,
+    "margin_per_lb": 0.9119,
+    "estimated_price_per_lb": 4.6845,
+    "estimated_price_per_kg": 10.3276,
     "step_details": [
       {
         "step": "mixer_slurry",

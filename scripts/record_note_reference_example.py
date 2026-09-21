@@ -1,7 +1,7 @@
-"""Record the worked Ni/Al2O3 example of the Application Note on the May 2026 reference basis.
+"""Record the worked Ni/Al2O3 example of the Application Note on the frozen reference basis.
 
 The example uses the same inputs as the calculator: the incipient-wetness template, a
-20 short-ton order, 20 wt% nickel priced at the IMF May 2026 monthly average stored in the
+20 short-ton order, 20 wt% nickel priced at the IMF monthly average of the basis month stored in the
 frozen reference basis, and 80 wt% alumina resolved from the public UN Comtrade 2024
 import-unit-value row of the materials library (escalated by the application's ChemPPI rule).
 The calculation runs through the FastAPI /api/calculate endpoint against an in-memory
@@ -27,7 +27,7 @@ from sqlmodel import Session, SQLModel, create_engine  # noqa: E402
 from backend.database import get_session, sync_material_library  # noqa: E402
 from backend.main import app  # noqa: E402
 
-REFERENCE = "docs/paper/submission-2026-09-08/reference_basis_2026-09-08.json"
+REFERENCE = "docs/paper/submission-2026-09-21/reference_basis_2026-09-21.json"
 OUTPUT = ROOT / "docs/paper/figures-note-2026-09-09/reference_example_ni_al2o3.json"
 TEMPLATE = "wet_impregnation_metal_oxide"
 ALUMINA_KEY = "lit:comtrade-calcined-alumina-2024"
@@ -79,7 +79,7 @@ def record():
     if [c["name"] for c in components][:1] != ["Ni"]:
         raise ValueError("Unexpected component order in the calculation result")
     return {
-        "basis": "May 2026 reference prices",
+        "basis": f"{reference['basis_month']} reference prices",
         "inputs": {"reference_basis": REFERENCE, "reference_basis_sha256": sha256(REFERENCE),
                    "materials_library_sha256": sha256("backend/data/materials_library.json")},
         "request": request,

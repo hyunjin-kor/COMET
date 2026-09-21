@@ -7,11 +7,19 @@ from collections import Counter
 from pathlib import Path
 
 from scripts.paper_labels import CANDIDATE_LABELS, FAMILY_LABELS, STATUS_LABELS
-from scripts.paper_units import PER_LB_TO_PER_KG
+from scripts.paper_units import KG_PER_SHORT_TON, PER_LB_TO_PER_KG
 
 ROOT = Path(__file__).resolve().parents[1]
 PAPER = ROOT / "docs/paper"
 OUTPUT = PAPER / "supporting-information-2026-09-15.md"
+RUN_DATE = "2026-09-21"
+RUN = f"docs/paper/submission-{RUN_DATE}"
+MONTHS = ("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
+
+
+def month_label(value):
+    """2026-08 -> August 2026."""
+    return f"{MONTHS[int(value[5:7]) - 1]} {value[:4]}"
 
 
 def load(path):
@@ -27,17 +35,19 @@ def render():
         "study": "docs/paper/manufacturing-study-2026-09-15/manufacturing_study.json",
         "library": "backend/data/manufacturing_literature.json",
         "operating": "backend/data/manufacturing_operating_references.json",
-        "screening": "docs/paper/submission-2026-09-08/all_families_2026-09-08.json",
-        "live": "docs/paper/submission-2026-09-08/all_families_live_2026-09-08.json",
-        "summary": "docs/paper/submission-2026-09-08/paper_summary_2026-09-08.json",
-        "live_basis": "docs/paper/submission-2026-09-08/live_basis_2026-09-08.json",
-        "robustness": "docs/paper/robustness-2026-09-08/decision_robustness.json",
-        "methods": "docs/paper/methods-2026-09-09/methods_study.json",
+        "screening": f"{RUN}/all_families_{RUN_DATE}.json",
+        "live": f"{RUN}/all_families_live_{RUN_DATE}.json",
+        "summary": f"{RUN}/paper_summary_{RUN_DATE}.json",
+        "live_basis": f"{RUN}/live_basis_{RUN_DATE}.json",
+        "reference_basis": f"{RUN}/reference_basis_{RUN_DATE}.json",
+        "robustness": f"docs/paper/robustness-{RUN_DATE}/decision_robustness.json",
+        "methods": f"docs/paper/methods-{RUN_DATE}/methods_study.json",
+        "whatif": f"docs/paper/whatif-{RUN_DATE}/whatif_study.json",
     }
     data = {key: load(path) for key, path in sources.items()}
     study, library = data["study"], data["library"]
-    crossover = load("docs/paper/price-crossovers-2026-09-13/crossover_mechanisms.json")
-    with (PAPER / "price-crossovers-2026-09-13/family_summary.csv").open(encoding="utf-8-sig", newline="") as handle:
+    crossover = load(f"docs/paper/price-crossovers-{RUN_DATE}/crossover_mechanisms.json")
+    with (PAPER / f"price-crossovers-{RUN_DATE}/family_summary.csv").open(encoding="utf-8-sig", newline="") as handle:
         census = {(row["family"], row["period"]): row for row in csv.DictReader(handle)}
     states = {row["date"]: row for row in crossover["ammonia_boundary"]["observations"]}
     changes = {family: int(census[(family, "monthly")]["cost_changes"]) for family in ("ammonia-cracking", "dry-reforming", "water-gas-shift")}
@@ -60,6 +70,14 @@ def render():
     if len(live_changes) != comparison["changed_by_profile"]["balanced"]:
         raise ValueError("Live-quotation leader changes do not match the stored summary")
     observed = data["live_basis"]["observation_started_at_utc"][:10]
+    basis = month_label(data["summary"]["basis_month"])
+    robust = data["robustness"]["summary"]
+    support_months = sorted(q["fetched_at"][:7] for q in data["reference_basis"]["price_basis"].values() if q["source"].startswith("UN Comtrade"))
+    example = data["methods"]["normalization"]["example"]
+    if example["family"] != "ammonia-cracking" or example["reference_winner"] == example["renormalized_winner"]:
+        raise ValueError("The SI describes a ranking reversal in ammonia cracking after candidate removal")
+    whatif = data["whatif"]
+    labels = CANDIDATE_LABELS["ammonia-cracking"]
     linked = Counter(c["status"] for c in library["candidates"] if c["profile_ids"])
     unlinked = Counter(c["status"] for c in library["candidates"] if not c["profile_ids"])
     if set(linked) != {"variant_available", "source_mismatch"} or set(unlinked) != {"screening_only", "source_mismatch"}:
@@ -69,8 +87,8 @@ def render():
     mc = study["monte_carlo"]
     lines = ["# Supporting Information", "", "COMET: Catalyst Overall Manufacturing Estimation Tool", "",
              "## S1. Calculation methods and boundaries", "",
-             "This Supporting Information describes the manufacturing calculation, declared inputs, numerical verification, screening results, observed-price cost crossovers, leaders under stored live quotations, preparation-evidence coverage and application views. "
-             "The May 2026 screening results retain their original formulations and assumptions. "
+             "This Supporting Information describes the manufacturing calculation, declared inputs, numerical verification, screening results, calculator what-if inputs, observed-price cost crossovers, ranking sensitivity, leaders under stored live quotations, preparation-evidence coverage and application views. "
+             f"The {basis} screening results retain their original formulations and assumptions. "
              "The later preparation review does not retrospectively validate those formulations. The new manufacturing example is a hypothetical software demonstration, "
              "not an experimental catalyst cost or a comparison of matched catalytic performance.", "",
              "The screening calculations use the published Step Method and its cost-accounting framework.<sup>1,2</sup> "
@@ -170,14 +188,17 @@ def render():
               "Figure S3 shows the distribution of the trial results and the sampled dry output against the resulting selling price; the sampled dry output accounts for most of the spread.", "",
               f"![Figure S3. Monte Carlo samples. (a) Selling-price histogram of the {mc['n_simulations']} seeded trials with the mean (solid line) and the 5th and 95th percentiles (dashed lines). (b) Sampled dry output against selling price for the same trials. Bounds are scenario assumptions, not measured variability.](figures-si-2026-09-16/figS3_monte_carlo.png)", "",
               "## S5. Frozen price and screening basis", "",
-              "The following May 2026 costs use the original screening formulations and route assumptions, not the subsequently curated preparation records. "
+              f"The following {basis} costs use the original screening formulations and route assumptions, not the subsequently curated preparation records. "
               "Table S6 reports estimated selling prices for 116 screening candidates; it does not report measured manufacturing costs. "
               "Powder values are converted from the stored legacy USD/lb fields using 1 lb = 0.45359237 kg. "
               "An electrode candidate's powder price is distinct from assembly cost per area. These observations do not establish equivalent activity or commercial quotation validity.", "",
               "Johnson Matthey<sup>3</sup> and Westmetall<sup>4</sup> supply current metal quotations. Figure S4 summarizes the monthly historical inputs from Johnson Matthey and the International Monetary Fund (IMF).<sup>5</sup> "
               "Environmental mass coverage is the fraction assigned a screening inventory factor, including compound proxies; it is not a measure of inventory accuracy.<sup>6</sup>", "",
-              "![Figure S4. Metal price history. Monthly averages from January 2019 to May 2026: (a) precious metals; (b) base metals. Prices are USD/kg; both price axes use logarithmic scales. Histories are unsmoothed observations, not forecasts.](figures-si-2026-09-16/figS4_metal_prices.png)", "",
-              "Table S6. Estimated powder selling prices and environmental mass coverage at May 2026 prices.", "",
+              f"Reference metal prices are the {basis} monthly averages. U.S. import unit values of support materials are published several months later, so each support uses its latest verified "
+              f"monthly value at or before that month ({month_label(support_months[0])} to {month_label(support_months[-1])}); the observation month is recorded with the price and no month is interpolated. "
+              "Metals without a published monthly series keep their annual reference values.", "",
+              f"![Figure S4. Metal price history. Monthly averages from January 2019 to {basis}: (a) precious metals; (b) base metals. Prices are USD/kg; both price axes use logarithmic scales. Histories are unsmoothed observations, not forecasts.](figures-si-2026-09-16/figS4_metal_prices.png)", "",
+              f"Table S6. Estimated powder selling prices and environmental mass coverage at {basis} prices.", "",
               "| Reaction family | Candidate model | Selling price (USD/kg) | Mass coverage (%) |", "|---|---|---:|---:|"]
     for family in data["screening"]["families"]:
         for c in family["candidates"]:
@@ -186,29 +207,65 @@ def render():
               "Family membership follows the original screening catalog, including related reaction variants; it does not imply identical reaction conditions. "
               "g-C₃N₄ denotes graphitic carbon nitride; h-BN, hexagonal boron nitride; SAPO, silicoaluminophosphate. "
               "MIL-101, ZSM-5 and SSZ-13 retain their established material identifiers.", "",
+              "Figure 4(a)–(c) of the main article varies one calculator input at a time for two alumina-supported catalysts prepared by incipient wetness impregnation. "
+              f"Table S7 lists the inputs and the resulting selling prices at {basis} prices. Order sizes are entered in short tons and shown in kilograms; "
+              "operations that are unavailable at the production scale of an order are replaced by the application's scale equivalents (a batch kiln for the continuous kiln at the small scale). "
+              "Precious-metal value is part of the materials cost and carries overheads and margin; no spent-catalyst credit is applied. "
+              "The selling price is linear in the metal price, so the ruthenium price at which the two catalysts cost the same per kilogram follows from two evaluations and was confirmed by a third. "
+              "These analyses compare manufacturing cost only; they do not compare catalytic performance.", "",
+              f"Table S7. Calculator what-if analyses at {basis} prices.", "",
+              "| Catalyst | Varied input | Range | Selling price (USD/kg) |", "|---|---|---|---|"]
+    for key in ("ni", "ru"):
+        spec = whatif["catalysts"][key]
+        name = spec["label"].replace("Al2O3", "Al₂O₃")
+        loading, order = whatif["loading"][key], whatif["order_size"][key]
+        lines.append(f"| {spec['loading_wt_pct']} wt% {name} | Baseline ({spec['order_size_tons'] * KG_PER_SHORT_TON:,.1f} kg order) | — | {spec['baseline']['selling_price_per_lb'] * PER_LB_TO_PER_KG:,.2f} |")
+        lines.append(f"| {name} | Metal loading | {loading[0]['loading_wt_pct']:g}–{loading[-1]['loading_wt_pct']:g} wt% | "
+                     f"{loading[0]['selling_price_per_lb'] * PER_LB_TO_PER_KG:,.2f}–{loading[-1]['selling_price_per_lb'] * PER_LB_TO_PER_KG:,.2f} |")
+        lines.append(f"| {spec['loading_wt_pct']} wt% {name} | Order size | {order[0]['order_size_tons'] * KG_PER_SHORT_TON:,.1f}–{order[-1]['order_size_tons'] * KG_PER_SHORT_TON:,.1f} kg | "
+                     f"{order[0]['selling_price_per_lb'] * PER_LB_TO_PER_KG:,.2f}–{order[-1]['selling_price_per_lb'] * PER_LB_TO_PER_KG:,.2f} |")
+    preparation = sorted(whatif["preparation"], key=lambda row: row["selling_price_per_lb"])
+    nickel = whatif["catalysts"]["ni"]
+    lines.append(f"| {nickel['loading_wt_pct']} wt% Ni/Al₂O₃ | Preparation procedure | {len(preparation)} procedures | "
+                 f"{preparation[0]['selling_price_per_lb'] * PER_LB_TO_PER_KG:,.2f}–{preparation[-1]['selling_price_per_lb'] * PER_LB_TO_PER_KG:,.2f} |")
+    equal = whatif["equal_cost"]
+    lines += ["", f"Nickel is priced at {nickel['metal_price_per_lb'] * PER_LB_TO_PER_KG:,.2f} USD/kg and ruthenium at {whatif['catalysts']['ru']['metal_price_per_lb'] * PER_LB_TO_PER_KG:,.0f} USD/kg. "
+              f"The procedures are: {'; '.join(row['template_name'].split(' - ')[0] for row in whatif['preparation'])}. "
+              f"The two baseline catalysts would cost the same per kilogram at a ruthenium price of {equal['equal_cost_ru_price_per_lb'] * PER_LB_TO_PER_KG:,.0f} USD/kg, "
+              f"{100 * equal['equal_cost_over_reference']:.2f}% of the {basis} price; the lowest monthly ruthenium price of the {equal['ru_history_months']}-month record is "
+              f"{equal['ru_history_min_per_lb'] * PER_LB_TO_PER_KG:,.0f} USD/kg.", "",
               "Ranking calculations use the original four criterion weights and assigned route/performance scores retained in the frozen methods and robustness files. "
-              "The complete 0.05 weight grid contains 1,771 nonnegative combinations summing to one. With 89 months and 30 families, it defines 4,728,570 scenarios. "
+              f"The complete 0.05 weight grid contains {robust['weight_points']['0.05']:,} nonnegative combinations summing to one. With {robust['months']} months and {robust['families']} families, "
+              f"it defines {robust['joint_scenarios_all_families']['0.05']:,} scenarios. "
               "Support prices remain at baseline in monthly metal-price tests. Candidate removal is tested both with recomputed and retained cost normalization ranges. "
               "Score tests lower the baseline candidate and raise alternatives by 2, 5 or 10 points, bounded by 0 and 100. "
-              "Frequencies are conditional on these enumerated scenarios. No probability distribution for future market prices or catalyst performance is inferred.", "",
-              "Figure 4 of the main article replays the frozen screening calculation for ammonia cracking under the 89 monthly metal-price states with formulations, order sizes, route assumptions, support prices, price-source grades and route and performance scores fixed.<sup>3,5</sup> "
+              "Frequencies are conditional on these enumerated scenarios. No probability distribution for future market prices or catalyst performance is inferred. "
+              "Route and performance scores are screening judgments assigned from the literature, not measured or predicted activity.", "",
+              f"Figure 4(d) of the main article replays the frozen screening calculation for ammonia cracking under the {robust['months']} monthly metal-price states with formulations, order sizes, route assumptions, support prices, price-source grades and route and performance scores fixed.<sup>3,5</sup> "
               f"Figure S5 shows the same replay for methane dry reforming and water–gas shift, where the lowest-cost candidate changes {changes['dry-reforming']} and {changes['water-gas-shift']} times "
               f"({changes['ammonia-cracking']} times for ammonia cracking) while the balanced-weight recommendation of these families does not change. "
               f"The September–October 2025 cobalt price increase from {states['2025-09']['Co'] * PER_LB_TO_PER_KG:.2f} to {states['2025-10']['Co'] * PER_LB_TO_PER_KG:.2f} USD/kg "
               "also reverses the lowest-cost candidate in methane dry reforming while nickel is nearly unchanged. "
               "These are conditional model comparisons between screening candidates, not contemporaneous supplier quotations or performance comparisons.", "",
-              "![Figure S5. Observed-price cost crossovers. Costs (modeled selling prices) under the 89 monthly price states for the candidates that attain the lowest cost at any state in (a) methane dry reforming and (b) water–gas shift; lines connect observed states and do not locate a crossover date. Ni–Co/Al–Mg denotes Ni–Co/Al–Mg–O; Ni/CeO₂, Ni/CeO₂ single sites; Cu–ZnO, Cu/ZnO/Al₂O₃; Fe–Cr, Fe₂O₃–Cr₂O₃(–CuO) (Table S6). Other prices and engineering assumptions remain at reference values.](figures-si-2026-09-16/figS5_crossovers.png)", "",
-              "Figure S6 counts, for each sensitivity test of the main article, the families whose baseline candidate ranks first in at least half of the joint scenarios or is retained under candidate removal and under route/performance-score changes of 2, 5 and 10 points. Passing one test does not establish robustness to the others.", "",
-              "![Figure S6. Ranking sensitivity tests. Number of the 30 reaction families retaining the baseline candidate under each test.](figures-si-2026-09-16/figS6_ranking_tests.png)", "",
-              f"The monthly replays hold price-source grades fixed. Replacing the May 2026 reference with the stored live quotations collected on {observed} "
+              f"![Figure S5. Observed-price cost crossovers. Costs (modeled selling prices) under the {robust['months']} monthly price states for the candidates that attain the lowest cost at any state in (a) methane dry reforming and (b) water–gas shift; lines connect observed states and do not locate a crossover date. Ni–Co/Al–Mg denotes Ni–Co/Al–Mg–O; Ni/CeO₂, Ni/CeO₂ single sites; Cu–ZnO, Cu/ZnO/Al₂O₃; Fe–Cr, Fe₂O₃–Cr₂O₃(–CuO) (Table S6). Other prices and engineering assumptions remain at reference values.](figures-si-2026-09-16/figS5_crossovers.png)", "",
+              f"Figure S6 summarizes the ranking sensitivity. Panel (a) separates, for every family, how often the baseline candidate, its most frequent alternative and the other candidates rank first over the joint scenarios; "
+              f"the median baseline frequency is {robust['reference_winner_joint_share_median_pct']:.2f}%. Panel (b) counts the families whose baseline candidate ranks first in at least half of the joint scenarios "
+              "or is retained under candidate removal and under route/performance-score changes of 2, 5 and 10 points; passing one test does not establish robustness to the others. "
+              f"Removing one candidate that does not rank first changes the leader in {robust['candidate_removal_winner_changes']} of {robust['candidate_removal_cases']} tests. "
+              f"In ammonia cracking, removing {labels[example['removed']]} ({example['removed_cost'] * PER_LB_TO_PER_KG:,.2f} USD/kg) leaves the other costs unchanged but contracts their range, "
+              f"so renormalization changes the scores of {labels[example['rows'][0]['slug']]} and {labels[example['rows'][2]['slug']]} from "
+              f"{example['rows'][0]['total_before']:.1f} and {example['rows'][2]['total_before']:.1f} to {example['rows'][0]['total_after']:.1f} and {example['rows'][2]['total_after']:.1f} and reverses their order; "
+              "retaining the original range prevents every such reversal. Panel (c) gives 100 × (C₁ − C₀)/C₀ for the affected families, where C₀ and C₁ are the costs of the leaders before and after removal.", "",
+              f"![Figure S6. Ranking sensitivity. (a) First-rank frequencies over the joint price and weight scenarios; dashed line, 50%. (b) Number of the {robust['families']} reaction families retaining the baseline candidate under each test. (c) Cost differences between leaders before and after candidate removal; negative values indicate less expensive replacements. PEM, proton exchange membrane; AEM, anion exchange membrane; OER, oxygen evolution reaction; ORR, oxygen reduction reaction; SCR, selective catalytic reduction; RWGS, reverse water–gas shift.](figures-si-2026-09-16/figS6_ranking_tests.png)", "",
+              f"The monthly replays hold price-source grades fixed. Replacing the {basis} reference with the stored live quotations collected on {observed} "
               "also changes these grades: a metal without a stored live quotation falls back to a stored reference price, and each candidate's price-reliability score "
               "weights its sources by materials-cost share. With all other inputs unchanged, the leader changes in "
               f"{comparison['changed_by_profile']['balanced']} families with balanced weights, {comparison['changed_by_profile']['cost-first']} with cost-first weights, "
               f"{comparison['changed_by_profile']['evidence-first']} with evidence-first weights and {comparison['changed_by_profile']['performance_zero']} with the performance weight set to zero. "
-              "Table S7 lists the balanced-weight changes with the price-reliability and cost scores of the former leader. "
+              "Table S8 lists the balanced-weight changes with the price-reliability and cost scores of the former leader. "
               "The live quotations are a single stored snapshot, not a replay of current prices at another date.", "",
-              "Table S7. Balanced-weight leaders under the May 2026 reference and the stored live quotations.", "",
-              "| Reaction family | May 2026 leader | Live-quotation leader | Former leader: price reliability | Former leader: cost score |",
+              f"Table S8. Balanced-weight leaders under the {basis} reference and the stored live quotations.", "",
+              f"| Reaction family | {basis} leader | Live-quotation leader | Former leader: price reliability | Former leader: cost score |",
               "|---|---|---|---:|---:|"]
     for family, before, after, reference_scores, live_scores in live_changes:
         lines.append(f"| {FAMILY_LABELS[family]} | {CANDIDATE_LABELS[family][before]} | {CANDIDATE_LABELS[family][after]} | "
@@ -219,8 +276,8 @@ def render():
               f"Of {len(library['candidates'])} screening candidates, {sum(bool(c['profile_ids']) for c in library['candidates'])} link to at least one preparation; "
               f"{sum(not c['profile_ids'] for c in library['candidates'])} have no curated preparation. Bibliographic verification covers {len(library['sources'])} digital object identifiers (DOIs). "
               "Links may describe variants. No candidate has jointly verified catalog composition, complete preparation, utilities, recovered output and prices. "
-              "Table S8 counts source/formulation discrepancies even where a related preparation is available.", "",
-              "Table S8. Preparation-evidence coverage and unresolved source/formulation discrepancies.", "",
+              "Table S9 counts source/formulation discrepancies even where a related preparation is available.", "",
+              "Table S9. Preparation-evidence coverage and unresolved source/formulation discrepancies.", "",
               "| Reaction family | Candidates | With preparation | Source mismatch flagged |", "|---|---:|---:|---:|"]
     for family in sorted({c["family"] for c in library["candidates"]}):
         rows = [c for c in library["candidates"] if c["family"] == family]
@@ -252,9 +309,9 @@ def render():
               "## S8. References", "",
               "[1] Baddour, F. G.; Snowden-Swan, L.; Super, J. D.; Van Allsburg, K. M. Estimating Precommercial Heterogeneous Catalyst Price: A Simple Step-Based Method. *Organic Process Research & Development* **2018**, *22* (12), 1599–1605. https://doi.org/10.1021/acs.oprd.8b00245.", "",
               "[2] Van Allsburg, K. M.; Tan, E. C. D.; Super, J. D.; Schaidle, J. A.; Baddour, F. G. Early-stage evaluation of catalyst manufacturing cost and environmental impact using CatCost. *Nature Catalysis* **2022**, *5* (4), 342–353. https://doi.org/10.1038/s41929-022-00759-6.", "",
-              "[3] Johnson Matthey. PGM Prices and Trading. https://matthey.com/products-and-markets/pgms-and-circularity/pgm-management (accessed September 11, 2026).", "",
-              "[4] Westmetall. Market Data: Prices and LME Stocks. https://www.westmetall.com/en/markdaten.php (accessed September 11, 2026).", "",
-              "[5] International Monetary Fund. Primary Commodity Price System (PCPS), SDMX 2.1 data service. https://api.imf.org/external/sdmx/2.1/dataflow/IMF.RES/PCPS (accessed September 11, 2026).", "",
+              "[3] Johnson Matthey. PGM Prices and Trading. https://matthey.com/products-and-markets/pgms-and-circularity/pgm-management (accessed September 21, 2026).", "",
+              "[4] Westmetall. Market Data: Prices and LME Stocks. https://www.westmetall.com/en/markdaten.php (accessed September 21, 2026).", "",
+              "[5] International Monetary Fund. Primary Commodity Price System (PCPS), SDMX 2.1 data service. https://api.imf.org/external/sdmx/2.1/dataflow/IMF.RES/PCPS (accessed September 21, 2026).", "",
               "[6] Nuss, P.; Eckelman, M. J. Life Cycle Assessment of Metals: A Scientific Synthesis. *PLoS ONE* **2014**, *9* (7), e101298. https://doi.org/10.1371/journal.pone.0101298.", "",
               "[7] Niu, H.; Ma, J.; Gan, L.; Li, K. The Acid Roles of PtSn@Al₂O₃ in the Synthesis and Performance of Propane Dehydrogenation. *Molecules* **2024**, *29* (13), 2959. https://doi.org/10.3390/molecules29132959.", ""]
     return "\n".join(lines)

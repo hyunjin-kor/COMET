@@ -33,3 +33,14 @@ docs/sources/paper-methods-access-2026-09-09.json -text
 backend/data/manufacturing_literature.json -text
 backend/data/manufacturing_operating_references.json -text
 docs/paper/manufacturing-2026-09-14/*.json -text
+docs/paper/submission-2026-09-21/*.json -text
+docs/paper/submission-2026-09-21/*.md -text
+docs/paper/submission-2026-09-21/figures/*.svg -text
+docs/paper/robustness-2026-09-21/*.json -text
+docs/paper/robustness-2026-09-21/*.svg -text
+docs/paper/robustness-2026-09-21/*.csv -text
+docs/paper/methods-2026-09-21/*.json -text
+docs/paper/price-crossovers-2026-09-21/*.json -text
+docs/paper/price-crossovers-2026-09-21/*.csv -text
+docs/paper/whatif-2026-09-21/*.json -text
+docs/sources/comtrade-preview-2026-09-21.json -text
