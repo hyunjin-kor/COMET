@@ -113,7 +113,9 @@ TEXT = {
         "f4_ni_x": "Ni price (USD/kg)", "f4_co_y": "Co price (USD/kg)",
         "w_ni": "Ni/Al$_2$O$_3$", "w_ru": "Ru/Al$_2$O$_3$", "w_price_y": "Selling price (USD/kg)",
         "w_loading_x": "Metal loading (wt%)", "w_order_x": "Order size (t)", "w_per_wt": " per wt%",
-        "w_scales": ["small", "medium", "large"], "w_processing": "Processing", "w_rest": "Other costs",
+        "w_scales": ["small", "medium", "large"],
+        "w_items": ["Materials", "Processing", "G&A", "SARD", "Margin"],
+        "f4_move": "Sep → Oct 2025", "f4_move_co": "Co {before:.2f} → {after:.2f}",
         "w_templates": {"wet_impregnation_metal_oxide": "Incipient wetness",
                         "excess_solution_impregnation_metal_oxide": "Wet impregnation",
                         "deposition_precipitation_metal_oxide": "Deposition–\nprecipitation",
@@ -155,7 +157,9 @@ TEXT = {
         "f4_ni_x": "Ni 가격 (USD/kg)", "f4_co_y": "Co 가격 (USD/kg)",
         "w_ni": "Ni/Al$_2$O$_3$", "w_ru": "Ru/Al$_2$O$_3$", "w_price_y": "판매 단가 (USD/kg)",
         "w_loading_x": "금속 담지량 (wt%)", "w_order_x": "주문량 (t)", "w_per_wt": " (wt%당)",
-        "w_scales": ["소규모", "중규모", "대규모"], "w_processing": "가공비", "w_rest": "그 밖의 비용",
+        "w_scales": ["소규모", "중규모", "대규모"],
+        "w_items": ["재료비", "가공비", "G&A", "SARD", "마진"],
+        "f4_move": "2025년 9월 → 10월", "f4_move_co": "Co {before:.2f} → {after:.2f}",
         "w_templates": {"wet_impregnation_metal_oxide": "초기습윤 함침",
                         "excess_solution_impregnation_metal_oxide": "습식 함침",
                         "deposition_precipitation_metal_oxide": "침착–침전",
@@ -982,17 +986,20 @@ def figure4_whatif():
     b.set_xlabel(L["w_order_x"], fontsize=9)
     _clean(b)
 
-    # (c) preparation template of the same Ni/Al2O3 composition
-    c = fig.add_axes([147 / 178, 1 - 50 / height, 25 / 178, 41 / height])
+    # (c) preparation template of the same Ni/Al2O3 composition, with every item of the selling price
+    c = fig.add_axes([147 / 178, 1 - 50 / height, 25 / 178, 36 / height])
     rows = whatif["preparation"]
     ys = list(range(len(rows)))
-    processing = [row["processing_per_lb"] * factor for row in rows]
-    total = [row["selling_price_per_lb"] * factor for row in rows]
-    c.barh(ys, processing, color=ACC_MID, height=0.62, label=L["w_processing"])
-    c.barh(ys, [t - q for t, q in zip(total, processing, strict=True)], left=processing, color="#D9DEE1", height=0.62,
-           edgecolor="white", lw=0.5, label=L["w_rest"])
-    for y, value in zip(ys, total, strict=True):
-        c.text(value + 0.3, y, f"{value:.2f}", va="center", fontsize=8)
+    left = [0.0] * len(rows)
+    items = ("materials_per_lb", "processing_per_lb", "ga_per_lb", "sard_per_lb", "margin_per_lb")
+    for key, label, colour in zip(items, L["w_items"], (ACC, ACC_MID, GREY, "#D9DEE1", WARN), strict=True):
+        values = [row[key] * factor for row in rows]
+        c.barh(ys, values, left=left, color=colour, height=0.62, edgecolor="white", lw=0.4, label=label)
+        left = [a + b for a, b in zip(left, values, strict=True)]
+    for y, row, total in zip(ys, rows, left, strict=True):
+        if abs(total - row["selling_price_per_lb"] * factor) > 5e-4 * factor:
+            raise ValueError("The items of the selling price do not add up")
+        c.text(total + 0.3, y, f"{total:.2f}", va="center", fontsize=8)
     c.set_yticks(ys)
     c.set_yticklabels([L["w_templates"][row["template_id"]] for row in rows], fontsize=8)
     c.invert_yaxis()
@@ -1000,8 +1007,8 @@ def figure4_whatif():
     c.set_xticks([0, 5, 10])
     c.set_xlabel(L["w_price_y"], fontsize=9)
     handles, labels = c.get_legend_handles_labels()
-    fig.legend(handles, labels, fontsize=8, frameon=False, loc="lower right", bbox_to_anchor=(174 / 178, 1 - 8.5 / height),
-               ncol=2, handlelength=1.0, columnspacing=0.8, handletextpad=0.4, borderaxespad=0.0)
+    fig.legend(handles, labels, fontsize=8, frameon=False, loc="lower right", bbox_to_anchor=(176 / 178, 1 - 13 / height),
+               ncol=3, handlelength=0.9, columnspacing=0.7, handletextpad=0.35, labelspacing=0.25, borderaxespad=0.0)
     _clean(c)
     c.tick_params(axis="y", length=0)
 
@@ -1036,14 +1043,17 @@ def figure4_whatif():
         e.scatter(point["Ni"] * factor, point["Co"] * factor, s=10, c=colour, alpha=0.65, linewidths=0.25, edgecolors="white")
     selected = {point["date"]: (point["Ni"] * factor, point["Co"] * factor)
                 for point in boundary["observations"] if point["date"] in ("2025-09", "2025-10")}
-    for day, (nickel, cobalt) in selected.items():
+    for nickel, cobalt in selected.values():
         e.scatter(nickel, cobalt, s=30, marker="D", facecolor="white", edgecolor=INK, lw=0.8, zorder=5)
-        # A white backing keeps the month labels legible where they cross the boundary line and nearby states.
-        e.annotate(day, (nickel, cobalt), xytext=(-7, -12 if day == "2025-09" else 5), ha="right",
-                   textcoords="offset points", fontsize=8, color=INK, zorder=6,
-                   bbox={"boxstyle": "round,pad=0.15", "facecolor": "white", "edgecolor": "none", "alpha": 0.9})
-    e.annotate("", xy=selected["2025-10"], xytext=selected["2025-09"],
-               arrowprops={"arrowstyle": "->", "lw": 0.8, "color": INK})
+    e.annotate("", xy=selected["2025-10"], xytext=selected["2025-09"], zorder=6,
+               arrowprops={"arrowstyle": "-|>", "lw": 1.1, "color": INK, "shrinkA": 3, "shrinkB": 3, "mutation_scale": 7})
+    # One callout in the empty corner names the move instead of two date labels beside the crowded states.
+    before, after = selected["2025-09"], selected["2025-10"]
+    e.annotate(L["f4_move"] + "\n" + L["f4_move_co"].format(before=before[1], after=after[1]),
+               xy=((before[0] + after[0]) / 2, (before[1] + after[1]) / 2), xytext=(0.04, 0.785), textcoords="axes fraction",
+               ha="left", va="center", fontsize=8, color=INK, linespacing=1.25, zorder=6,
+               arrowprops={"arrowstyle": "-", "lw": 0.5, "color": MUTED, "shrinkA": 1, "shrinkB": 4,
+                           "connectionstyle": "angle,angleA=0,angleB=90,rad=0"})
     e.text(0.04, 0.9, L["f4_ni"], color=WARN, fontsize=8.5, transform=e.transAxes)
     e.text(0.5, 0.07, L["f4_co"], color=ACC, fontsize=8.5, transform=e.transAxes)
     e.set_xlim(4 * factor, 16 * factor)

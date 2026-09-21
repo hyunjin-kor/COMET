@@ -117,7 +117,7 @@
       "file": "fig4_ranking.c.png",
       "width_mm": 60,
       "height_mm": 64,
-      "sha256": "5498d8b49bc4ca1ac829facc37a820651c757593e78ecb3d836609f7490961d7"
+      "sha256": "57893f696c58a72be3a86b6d9d901876e54dcffec310a87741f4bc3706a959d9"
     },
     {
       "figure": "fig4_ranking",
@@ -126,7 +126,7 @@
       "file": "fig4_ranking.c.ko.png",
       "width_mm": 60,
       "height_mm": 64,
-      "sha256": "f53d54f1466a91bd52f41f1fa2b53e918325f8e84f5880b1814bba6a4643b5cd"
+      "sha256": "a8f7975b0c6e60dd6f15207d429fbb9873aacafd75756915e8d3d6b8465bd7ea"
     },
     {
       "figure": "fig4_ranking",
@@ -153,7 +153,7 @@
       "file": "fig4_ranking.e.png",
       "width_mm": 89,
       "height_mm": 64,
-      "sha256": "39f0065200683a474b3e52d5bd3ea4a4e268eacdbc7f801faef0d5107e02d664"
+      "sha256": "c794fb9d3a0c07c776b18e643789c49ec8e5dd7c876e6efd638868be212a6f80"
     },
     {
       "figure": "fig4_ranking",
@@ -162,7 +162,7 @@
       "file": "fig4_ranking.e.ko.png",
       "width_mm": 89,
       "height_mm": 64,
-      "sha256": "a7f9c9aa754c9ac13602a417dd971faf71e0ff095ce3459387e19d1d05e426a4"
+      "sha256": "d196d892f533f3a456dfe2cb17ac21cdb8b8b433d07610dfdd4935d6f4ba2e33"
     },
     {
       "figure": "figS2_sensitivity",

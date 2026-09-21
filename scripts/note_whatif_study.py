@@ -93,6 +93,8 @@ def study():
                 return {"selling_price_per_lb": method["estimated_price_per_lb"],
                         "materials_per_lb": method["materials_cost_per_lb"],
                         "processing_per_lb": method["processing_cost_per_lb"],
+                        "ga_per_lb": method["ga_per_lb"], "sard_per_lb": method["sard_per_lb"],
+                        "margin_per_lb": method["margin_per_lb"],
                         "margin_pct": method["margin_pct"], "scale": method["scale"],
                         "campaign_days": method["campaign_days"],
                         "substitutions": route(template, order)["substitutions"]}
