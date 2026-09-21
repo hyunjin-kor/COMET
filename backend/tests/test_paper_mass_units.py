@@ -26,11 +26,11 @@ def test_note_converts_every_mass_value_and_preserves_source_references():
     text = note.note(run)
     visible = re.sub(r"<!--.*?-->", "", text)
     assert not re.search(r"USD/lb|USD/troy|per lb|in lb|short ton", visible)
-    assert "60.3394" in visible and "60,781.4" in visible and "18,143.7" in visible
+    assert "60.34" in visible and "60,781.4" in visible and "18,143.7" in visible
     records = run.publication_conversions
     # Verification, worked example, what-if analyses, crossover paragraph and the removed-candidate cost.
-    assert len(records) == 28
-    assert sum("per_lb" in row["key"] for row in records) == 19
+    assert len(records) == 22
+    assert sum("per_lb" in row["key"] for row in records) == 13
     for row in records:
         assert row["display"] + "<!-- " + row["source"] + ":" + row["key"] + " -->" in text
     assert re.search(r"1\.17 USD/kg difference", visible)

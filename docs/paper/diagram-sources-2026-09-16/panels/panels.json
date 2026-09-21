@@ -8,8 +8,8 @@
       "language": "en",
       "file": "fig2_cost_model.b.png",
       "width_mm": 178,
-      "height_mm": 102,
-      "sha256": "21519b1767a45ddd2b404adb0b4f1d7a94213e1561220cd2fe6e5ba146cd6fa4"
+      "height_mm": 46,
+      "sha256": "be464206408f0a1ac5f1059c36ff7e411b0867945ce4c986ab2a19a0a89f9e12"
     },
     {
       "figure": "fig2_cost_model",
@@ -17,8 +17,8 @@
       "language": "ko",
       "file": "fig2_cost_model.b.ko.png",
       "width_mm": 178,
-      "height_mm": 102,
-      "sha256": "7b1c687250030d53d091fdd2b18677d819206ff26c808e869678d19b6c278b5d"
+      "height_mm": 46,
+      "sha256": "381bb7165bef5ff781aca50ee8baf74f2ef9ebb14495cd47c2c4dd81b5ec8bcb"
     },
     {
       "figure": "fig2_cost_model",
@@ -26,8 +26,8 @@
       "language": "en",
       "file": "fig2_cost_model.c.png",
       "width_mm": 178,
-      "height_mm": 46,
-      "sha256": "be464206408f0a1ac5f1059c36ff7e411b0867945ce4c986ab2a19a0a89f9e12"
+      "height_mm": 102,
+      "sha256": "58348db9fa17be72b493cead315a8bfb179ebfb192bcfe044852221e9bbd0454"
     },
     {
       "figure": "fig2_cost_model",
@@ -35,8 +35,8 @@
       "language": "ko",
       "file": "fig2_cost_model.c.ko.png",
       "width_mm": 178,
-      "height_mm": 46,
-      "sha256": "381bb7165bef5ff781aca50ee8baf74f2ef9ebb14495cd47c2c4dd81b5ec8bcb"
+      "height_mm": 102,
+      "sha256": "4bc63254bf29ff5f7028250cf8abce0174ea920305ab90de43c4418c66a74e97"
     },
     {
       "figure": "fig3_manufacturing",

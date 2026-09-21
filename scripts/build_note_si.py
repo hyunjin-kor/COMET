@@ -44,6 +44,8 @@ def render():
         "robustness": f"docs/paper/robustness-{RUN_DATE}/decision_robustness.json",
         "methods": f"docs/paper/methods-{RUN_DATE}/methods_study.json",
         "whatif": f"docs/paper/whatif-{RUN_DATE}/whatif_study.json",
+        "examples": f"docs/paper/verification-{RUN_DATE}/step_method_examples.json",
+        "table62": f"{RUN}/table62_reproduction_{RUN_DATE}.json",
     }
     data = {key: load(path) for key, path in sources.items()}
     study, library = data["study"], data["library"]
@@ -91,6 +93,14 @@ def render():
         raise ValueError("The SI describes a ranking reversal in ammonia cracking after candidate removal")
     whatif = data["whatif"]
     labels = CANDIDATE_LABELS["ammonia-cracking"]
+    # Table S1: the stand-alone record adds the effective-rate lines of the FCC case to the frozen primary-run record.
+    examples = data["examples"]
+    for case, frozen in zip(examples, data["table62"], strict=True):
+        if {k: v for k, v in case.items() if k != "with_published_rate"} != {k: v for k, v in frozen.items() if k != "with_published_rate"} \
+                or {k: v for k, v in case.get("with_published_rate", {}).items() if k != "rows"} != frozen.get("with_published_rate", {}):
+            raise ValueError("The Step Method example record differs from the frozen primary run")
+    example_rows = [{row["key"]: row for row in rows} for rows in (examples[0]["rows"], examples[1]["rows"], examples[2]["with_published_rate"]["rows"])]
+    nickel_margin = examples[1]["margin"]
     linked = Counter(c["status"] for c in library["candidates"] if c["profile_ids"])
     unlinked = Counter(c["status"] for c in library["candidates"] if not c["profile_ids"])
     if set(linked) != {"variant_available", "source_mismatch"} or set(unlinked) != {"screening_only", "source_mismatch"}:
@@ -105,6 +115,23 @@ def render():
              "The later preparation review does not retrospectively validate those formulations. The new manufacturing example is a hypothetical software demonstration, "
              "not an experimental catalyst cost or a comparison of matched catalytic performance.", "",
              "The screening calculations use the published Step Method and its cost-accounting framework.<sup>1,2</sup> "
+             "A component with mass fraction w in the catalyst, mass fraction f in the pure precursor, precursor purity p and retention y requires w/(f p y) kg of precursor per kg of catalyst. "
+             "Table S1 compares every line of the three demonstration cases of the method with the COMET calculation from the published inputs.<sup>1</sup> "
+             "The lines before the margin agree within the rounding of the published table. "
+             f"For Ni/Al₂O₃ the published table applies a margin of {nickel_margin['table_footnote_pct_of_premargin']:.0f}% of the pre-margin cost, whereas COMET applies the order-size correlation of the same source, "
+             f"which gives {nickel_margin['comet_pct_of_premargin']:.2f}% at this order size. For the fluid catalytic cracking (FCC) catalyst the source states an effective production rate of "
+             f"{examples[2]['with_published_rate']['effective_rate_ton_per_day'] * KG_PER_SHORT_TON:,.1f} kg/day in place of the nominal rate, and Table S1 uses that rate. "
+             f"Its margin differs in the same way ({examples[2]['margin']['table_footnote_pct_of_premargin']:.0f}% of the pre-margin cost in the table, {examples[2]['margin']['comet_pct_of_premargin']:.2f}% from the correlation). "
+             "Prices are converted from the published values per pound.", "",
+             "Table S1. Line-by-line reproduction of the published Step Method examples (published value / COMET).", "",
+             "| Line | 2 wt% Pt/C | 21 wt% Ni/Al₂O₃ | FCC catalyst |", "|---|---:|---:|---:|",
+             *[f"| {name} | " + " | ".join(f"{rows[key]['published'] * factor:{spec}} / {rows[key]['comet'] * factor:{spec}}" for rows in example_rows) + " |"
+               for key, name, factor, spec in (("step_cost_per_hr", "Hourly step cost (USD/h)", 1, ",.0f"), ("campaign_days", "Campaign duration (d)", 1, ".2f"),
+                                               ("campaign_cost", "Campaign cost (USD)", 1, ",.0f"), ("processing_cost_per_lb", "Processing cost (USD/kg)", PER_LB_TO_PER_KG, ".2f"),
+                                               ("subtotal_per_lb", "Materials and processing (USD/kg)", PER_LB_TO_PER_KG, ".2f"), ("ga_per_lb", "G&A (USD/kg)", PER_LB_TO_PER_KG, ".2f"),
+                                               ("sard_per_lb", "SARD (USD/kg)", PER_LB_TO_PER_KG, ".2f"), ("margin_per_lb", "Margin (USD/kg)", PER_LB_TO_PER_KG, ".2f"),
+                                               ("estimated_price_per_lb", "Selling price (USD/kg)", PER_LB_TO_PER_KG, ".2f"))],
+             "", "G&A, general and administrative; SARD, sales, administrative, research and distribution. The Pt/C prices exclude platinum value.", "",
              "In the batch calculation, purchases replace composition-based materials costs and operation costs replace Step Method processing costs. "
              "For each operation, electricity is measured kWh or the sum of mean power multiplied by ramp, hold and additional durations. "
              "For temperatures in °C and a ramp rate in °C/min, eq S1 gives the ramp duration in hours. Equipment occupancy is charged for the full entered operation duration; "
@@ -142,14 +169,14 @@ def render():
              "Every numerical input below is an assumption chosen for arithmetic verification. The example does not identify a specific active phase or precursor chemistry. "
              "Dry output is independently specified; precursor stoichiometry and material yield are not inferred. The composition fields retained by the application "
              "are inactive for the purchase-based materials calculation.", "",
-             "Tables S1 and S2 specify the operating conditions and purchases used in eqs S1–S6. "
+             "Tables S2 and S3 specify the operating conditions and purchases used in eqs S1–S6. "
              f"Final dry output: {protocol['finished_batch_mass_kg']:.3f} kg. Electricity: {protocol['electricity_usd_kwh']:.2f} USD/kWh. "
              f"Labor: {protocol['labor_usd_h']:.2f} USD/person-hour. G&A and SARD: {request['ga_overhead_pct']:.2f} and {request['sard_pct']:.2f}; "
              f"selling margin: {protocol['selling_margin_fraction']:.2f}. One batch is evaluated. The 2025 price-basis fields do not apply an index escalation to this direct batch calculation.", "",
              "All thermal operations start at 20 °C and ramp at 5 °C/min. Each includes one additional hour of passive cooling/handling with explicitly zero additional electricity "
              "but continued equipment occupancy. Cooling is a declared duration, not a heat-transfer calculation. Reduction gas flows throughout ramp, hold and additional time "
              "at 0.1 L/min and costs 10 USD/m³; both flow and price refer to 0 °C and 1 atm. Its chemical composition is unspecified because this is an arithmetic scenario.", "",
-             "Table S1. Assumed operating conditions for the 0.030 kg manufacturing example.", "",
+             "Table S2. Assumed operating conditions for the 0.030 kg manufacturing example.", "",
              "| Operation | Hold target (°C) | Hold or mixing (h) | Ramp / hold power (kW) | Equipment (USD/h) | Attendance (person-h) |",
              "|---|---:|---:|---|---:|---:|"]
     for op in protocol["operations"]:
@@ -158,17 +185,17 @@ def render():
         hours = thermal[0]["hold_h"] if thermal else op["duration_h"]
         power = f"{thermal[0]['ramp_power_kw']} / {thermal[0]['hold_power_kw']}" if thermal else f"Constant {op['average_power_kw']}"
         lines.append(f"| {op['name']} | {target} | {hours} | {power} | {op['equipment_usd_h']} | {op['attended_labor_h']} |")
-    lines += ["", "Table S2. Assumed purchases charged at impregnation.", "", "| Purchase at impregnation | Quantity | Unit price | Batch expenditure (USD) |", "|---|---:|---:|---:|"]
+    lines += ["", "Table S3. Assumed purchases charged at impregnation.", "", "| Purchase at impregnation | Quantity | Unit price | Batch expenditure (USD) |", "|---|---:|---:|---:|"]
     for item in protocol["operations"][0]["purchases"]:
         lines.append(f"| {item['name']} | {item['quantity']} {item['unit']} | {item['price_usd_per_unit']} USD/{item['unit']} | {item['quantity']*item['price_usd_per_unit']:.4f} |")
     lines += ["", "## S3. Independent arithmetic verification", "",
-              "Tables S3 and S4 report an independent scalar evaluation of eqs S1–S6. Thermal durations include ramp, hold and the additional hour. "
+              "Tables S4 and S5 report an independent scalar evaluation of eqs S1–S6. Thermal durations include ramp, hold and the additional hour. "
               "The application programming interface (API) produces the same baseline and endpoint results. The regression also checks the application's seeded Monte Carlo summary and histogram counts.", "",
-              "Table S3. Calculated operation durations and electricity consumption.", "",
+              "Table S4. Calculated operation durations and electricity consumption.", "",
               "| Operation | Occupancy (h) | Electricity (kWh) |", "|---|---:|---:|"]
     for op, hours, energy in zip(protocol["operations"], hand["hours"], hand["kwh"], strict=True):
         lines.append(f"| {op['name']} | {hours:.6f} | {energy:.6f} |")
-    lines += ["", "Table S4. Manufacturing-cost contributions, overheads and selling margin.", "", "| Cost component | Contribution per batch (USD) | Per dry product (USD/kg) |", "|---|---:|---:|"]
+    lines += ["", "Table S5. Manufacturing-cost contributions, overheads and selling margin.", "", "| Cost component | Contribution per batch (USD) | Per dry product (USD/kg) |", "|---|---:|---:|"]
     for key, label in [("materials_usd", "Purchases"), ("electricity_usd", "Electricity"), ("equipment_usd", "Equipment occupancy"),
                        ("labor_usd", "Attended labor"), ("gas_usd", "Gas"), ("ga_usd", "G&A"), ("sard_usd", "SARD"), ("margin_usd", "Margin")]:
         lines.append(f"| {label} | {hand[key]:.6f} | {hand[key]/protocol['finished_batch_mass_kg']:.6f} |")
@@ -180,15 +207,15 @@ def render():
               "One extra calcination hour costs (1.2 kW × 0.1 USD/kWh + 3 USD/h)/0.030 kg × 1.05 × 1.05/0.90 "
               f"= {study['marginal_calcination_hour_usd_kg']:.2f} USD/kg. Attendance does not change in this scenario.", "",
               "## S4. Manufacturing sensitivity and uncertainty", "",
-              "Table S5 changes only the named input at each endpoint; all other batch inputs remain fixed. Temperature does not determine an assumed power change. "
+              "Table S6 changes only the named input at each endpoint; all other batch inputs remain fixed. Temperature does not determine an assumed power change. "
               "The dry-output endpoints therefore assess cost allocation, not predicted chemical yields or scale economies.", "",
-              "Table S5. One-at-a-time sensitivity endpoints for the manufacturing example.", "",
+              "Table S6. One-at-a-time sensitivity endpoints for the manufacturing example.", "",
               "| Varied input | Low | High | Selling price at low (USD/kg) | Selling price at high (USD/kg) |", "|---|---:|---:|---:|---:|"]
     for row in study["sensitivity"]:
         lines.append(f"| {row['label']} | {row['low']} {row['unit']} | {row['high']} {row['unit']} | {row['low_usd_kg']:.4f} | {row['high_usd_kg']:.4f} |")
     lines += ["", "Figure S2 plots the same endpoints as departures from the baseline selling price. Dry output dominates because the fixed batch expenditure is divided by the recovered mass; "
-              "calcination power changes the price little because electricity is a small part of the assumed operating cost compared with equipment occupancy (Table S4).", "",
-              f"![Figure S2. Sensitivity endpoints. Selling price at the low and high value of each input in Table S5; the vertical line marks the baseline of {hand['selling_price_usd_kg']:.2f} USD/kg. Each bar changes one input while all other batch inputs remain fixed.](figures-si-2026-09-16/figS2_sensitivity.png)", "",
+              "calcination power changes the price little because electricity is a small part of the assumed operating cost compared with equipment occupancy (Table S5).", "",
+              f"![Figure S2. Sensitivity endpoints. Selling price at the low and high value of each input in Table S6; the vertical line marks the baseline of {hand['selling_price_usd_kg']:.2f} USD/kg. Each bar changes one input while all other batch inputs remain fixed.](figures-si-2026-09-16/figS2_sensitivity.png)", "",
               "Figure 3(c) evaluates 21 calcination-hold values from 1 to 6 h at each of three dry masses (0.015, 0.030 and 0.045 kg), giving 63 scenarios. "
               "The machine-readable manufacturing data retain all 63 input–output pairs.", "",
               f"Monte Carlo uses seed {mc['seed']} and {mc['n_simulations']} trials. Independent uniform bounds are 0.024–0.036 kg dry output, "
@@ -202,7 +229,7 @@ def render():
               f"![Figure S3. Monte Carlo samples. (a) Selling-price histogram of the {mc['n_simulations']} seeded trials with the mean (solid line) and the 5th and 95th percentiles (dashed lines). (b) Sampled dry output against selling price for the same trials. Bounds are scenario assumptions, not measured variability.](figures-si-2026-09-16/figS3_monte_carlo.png)", "",
               "## S5. Frozen price and screening basis", "",
               f"The following {basis} costs use the original screening formulations and route assumptions, not the subsequently curated preparation records. "
-              "Table S6 reports estimated selling prices for 116 screening candidates; it does not report measured manufacturing costs. "
+              "Table S7 reports estimated selling prices for 116 screening candidates; it does not report measured manufacturing costs. "
               "Powder values are converted from the stored legacy USD/lb fields using 1 lb = 0.45359237 kg. "
               "An electrode candidate's powder price is distinct from assembly cost per area. These observations do not establish equivalent activity or commercial quotation validity.", "",
               "Johnson Matthey<sup>3</sup> and Westmetall<sup>4</sup> supply current metal quotations. Figure S4 summarizes the monthly historical inputs from Johnson Matthey and the International Monetary Fund (IMF).<sup>5</sup> "
@@ -211,7 +238,7 @@ def render():
               f"monthly value at or before that month ({month_label(support_months[0])} to {month_label(support_months[-1])}); the observation month is recorded with the price and no month is interpolated. "
               "Metals without a published monthly series keep their annual reference values.", "",
               f"![Figure S4. Metal price history. Monthly averages from January 2019 to {basis}: (a) precious metals; (b) base metals. Prices are USD/kg; both price axes use logarithmic scales. Histories are unsmoothed observations, not forecasts.](figures-si-2026-09-16/figS4_metal_prices.png)", "",
-              f"Table S6. Estimated powder selling prices and environmental mass coverage at {basis} prices.", "",
+              f"Table S7. Estimated powder selling prices and environmental mass coverage at {basis} prices.", "",
               "| Reaction family | Candidate model | Selling price (USD/kg) | Mass coverage (%) |", "|---|---|---:|---:|"]
     for family in data["screening"]["families"]:
         for c in family["candidates"]:
@@ -221,12 +248,12 @@ def render():
               "g-C₃N₄ denotes graphitic carbon nitride; h-BN, hexagonal boron nitride; SAPO, silicoaluminophosphate. "
               "MIL-101, ZSM-5 and SSZ-13 retain their established material identifiers.", "",
               "Figure 4(a)–(c) of the main article varies one calculator input at a time for two alumina-supported catalysts prepared by incipient wetness impregnation. "
-              f"Table S7 lists the inputs and the resulting selling prices at {basis} prices. Order sizes are entered in short tons and shown in kilograms; "
+              f"Table S8 lists the inputs and the resulting selling prices at {basis} prices. Order sizes are entered in short tons and shown in kilograms; "
               "operations that are unavailable at the production scale of an order are replaced by the application's scale equivalents (a batch kiln for the continuous kiln at the small scale). "
               "Precious-metal value is part of the materials cost and carries overheads and margin; no spent-catalyst credit is applied. "
               "The selling price is linear in the metal price, so the ruthenium price at which the two catalysts cost the same per kilogram follows from two evaluations and was confirmed by a third. "
               "These analyses compare manufacturing cost only; they do not compare catalytic performance.", "",
-              f"Table S7. Calculator what-if analyses at {basis} prices.", "",
+              f"Table S8. Calculator what-if analyses at {basis} prices.", "",
               "| Catalyst | Varied input | Range | Selling price (USD/kg) |", "|---|---|---|---|"]
     for key in ("ni", "ru"):
         spec = whatif["catalysts"][key]
@@ -262,7 +289,7 @@ def render():
               f"The September–October 2025 cobalt price increase from {states['2025-09']['Co'] * PER_LB_TO_PER_KG:.2f} to {states['2025-10']['Co'] * PER_LB_TO_PER_KG:.2f} USD/kg "
               "also reverses the lowest-cost candidate in methane dry reforming while nickel is nearly unchanged. "
               "These are conditional model comparisons between screening candidates, not contemporaneous supplier quotations or performance comparisons.", "",
-              f"![Figure S5. Observed-price cost crossovers. Costs (modeled selling prices) under the {robust['months']} monthly price states for the candidates that attain the lowest cost at any state in (a) methane dry reforming and (b) water–gas shift; lines connect observed states and do not locate a crossover date. (c) Conditional equal-cost boundary between Co/MgO–La₂O₃ (Co/Mg–La) and Ni/γ-Al₂O₃ (Ni/Al₂O₃) in the nickel–cobalt price plane; points are monthly states colored by the cheaper candidate, and the enlarged view names September and October 2025. Ni–Co/Al–Mg denotes Ni–Co/Al–Mg–O; Ni/CeO₂, Ni/CeO₂ single sites; Cu–ZnO, Cu/ZnO/Al₂O₃; Fe–Cr, Fe₂O₃–Cr₂O₃(–CuO) (Table S6). Other prices and engineering assumptions remain at reference values.](figures-si-2026-09-16/figS5_crossovers.png)", "",
+              f"![Figure S5. Observed-price cost crossovers. Costs (modeled selling prices) under the {robust['months']} monthly price states for the candidates that attain the lowest cost at any state in (a) methane dry reforming and (b) water–gas shift; lines connect observed states and do not locate a crossover date. (c) Conditional equal-cost boundary between Co/MgO–La₂O₃ (Co/Mg–La) and Ni/γ-Al₂O₃ (Ni/Al₂O₃) in the nickel–cobalt price plane; points are monthly states colored by the cheaper candidate, and the enlarged view names September and October 2025. Ni–Co/Al–Mg denotes Ni–Co/Al–Mg–O; Ni/CeO₂, Ni/CeO₂ single sites; Cu–ZnO, Cu/ZnO/Al₂O₃; Fe–Cr, Fe₂O₃–Cr₂O₃(–CuO) (Table S7). Other prices and engineering assumptions remain at reference values.](figures-si-2026-09-16/figS5_crossovers.png)", "",
               f"![Figure S6. Ranking sensitivity. (a) First-rank frequencies over the joint price and weight scenarios; dashed line, 50%. (b) Number of the {robust['families']} reaction families retaining the baseline candidate under each test. (c) Cost differences between leaders before and after candidate removal; negative values indicate less expensive replacements. PEM, proton exchange membrane; AEM, anion exchange membrane; OER, oxygen evolution reaction; ORR, oxygen reduction reaction; SCR, selective catalytic reduction; RWGS, reverse water–gas shift.](figures-si-2026-09-16/figS6_ranking_tests.png)", "",
               f"Figure S6 summarizes the ranking sensitivity. Panel (a) separates, for every family, how often the baseline candidate, its most frequent alternative and the other candidates rank first over the joint scenarios; "
               f"the median baseline frequency is {robust['reference_winner_joint_share_median_pct']:.2f}%. Panel (b) counts the families whose baseline candidate ranks first in at least half of the joint scenarios "
@@ -277,9 +304,9 @@ def render():
               "weights its sources by materials-cost share. With all other inputs unchanged, the leader changes in "
               f"{comparison['changed_by_profile']['balanced']} families with balanced weights, {comparison['changed_by_profile']['cost-first']} with cost-first weights, "
               f"{comparison['changed_by_profile']['evidence-first']} with evidence-first weights and {comparison['changed_by_profile']['performance_zero']} with the performance weight set to zero. "
-              "Table S8 lists the balanced-weight changes with the price-reliability and cost scores of the former leader. "
+              "Table S9 lists the balanced-weight changes with the price-reliability and cost scores of the former leader. "
               "The live quotations are a single stored snapshot, not a replay of current prices at another date.", "",
-              f"Table S8. Balanced-weight leaders under the {basis} reference and the stored live quotations.", "",
+              f"Table S9. Balanced-weight leaders under the {basis} reference and the stored live quotations.", "",
               f"| Reaction family | {basis} leader | Live-quotation leader | Former leader: price reliability | Former leader: cost score |",
               "|---|---|---|---:|---:|"]
     for family, before, after, reference_scores, live_scores in live_changes:
@@ -291,8 +318,8 @@ def render():
               f"Of {len(library['candidates'])} screening candidates, {sum(bool(c['profile_ids']) for c in library['candidates'])} link to at least one preparation; "
               f"{sum(not c['profile_ids'] for c in library['candidates'])} have no curated preparation. Bibliographic verification covers {len(library['sources'])} digital object identifiers (DOIs). "
               "Links may describe variants. No candidate has jointly verified catalog composition, complete preparation, utilities, recovered output and prices. "
-              "Table S9 counts source/formulation discrepancies even where a related preparation is available.", "",
-              "Table S9. Preparation-evidence coverage and unresolved source/formulation discrepancies.", "",
+              "Table S10 counts source/formulation discrepancies even where a related preparation is available.", "",
+              "Table S10. Preparation-evidence coverage and unresolved source/formulation discrepancies.", "",
               "| Reaction family | Candidates | With preparation | Source mismatch flagged |", "|---|---:|---:|---:|"]
     for family in sorted({c["family"] for c in library["candidates"]}):
         rows = [c for c in library["candidates"] if c["family"] == family]
@@ -319,7 +346,7 @@ def render():
               "Figure S9 shows two views of COMET 1.4.0 recorded with an isolated database and no external price service. Panel (a) shows the source attached to one imported input: "
               "the purchased quantity of a reagent in the first operation of the PtSn/Al₂O₃ pellet preparation record imported from its Methods section,<sup>7</sup> "
               "with the citation, locator, DOI, access date and recorded value. Unreported conditions of imported records remain blank. "
-              "Panel (b) shows the evidence section of the result page for the illustrative batch of Tables S1–S4, with the time, electricity and the electricity, equipment, labor and gas costs of each operation.", "",
+              "Panel (b) shows the evidence section of the result page for the illustrative batch of Tables S2–S5, with the time, electricity and the electricity, equipment, labor and gas costs of each operation.", "",
               "![Figure S9. Application views. (a) Source record of one imported input in the preparation editor. (b) Operation-level time, electricity and cost contributions of the illustrative batch on the result page. Interface text is English; the Korean interface presents the same content.](figures-si-2026-09-16/figS9_interface.png)", "",
               "## S8. References", "",
               "[1] Baddour, F. G.; Snowden-Swan, L.; Super, J. D.; Van Allsburg, K. M. Estimating Precommercial Heterogeneous Catalyst Price: A Simple Step-Based Method. *Organic Process Research & Development* **2018**, *22* (12), 1599–1605. https://doi.org/10.1021/acs.oprd.8b00245.", "",

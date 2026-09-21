@@ -83,7 +83,7 @@ TEXT = {
     "en": {
         "font": "Arial",
         "share_x": "Share of the selling price (%)",
-        "seg_materials": "Materials", "seg_processing": "Processing", "seg_overhead": "Overheads + profit margin + route allowances",
+        "seg_materials": "Materials", "seg_processing": "Processing", "seg_overhead": "G&A + SARD + margin + route allowances",
         "total_head": "USD/kg",
         "c_x": "Selling price (USD per kg, log scale)",
         "c_comet": "COMET", "c_published": "Baddour et al. [1]", "c_market": "Published market price",
@@ -126,7 +126,7 @@ TEXT = {
     "ko": {
         "font": "Malgun Gothic",
         "share_x": "판매 단가 대비 비율 (%)",
-        "seg_materials": "재료비", "seg_processing": "가공비", "seg_overhead": "간접비·판매 마진·경로별 추가 비용",
+        "seg_materials": "재료비", "seg_processing": "가공비", "seg_overhead": "G&A·SARD·마진·경로별 추가 비용",
         "total_head": "USD/kg",
         "c_x": "판매 단가 (USD/kg, 로그 축)",
         "c_comet": "COMET", "c_published": "Baddour 등 [1]", "c_market": "발표된 시장 가격",
@@ -334,7 +334,7 @@ def _structure_panel(fig):
         rows.append((family["family"], total, 100 * materials / total, 100 * processing / total,
                      100 * (total - materials - processing) / total))
     rows.sort(key=lambda r: r[2])
-    ax = fig.add_axes([59 / 178, 57 / 212, 104 / 178, 79 / 212])
+    ax = fig.add_axes([59 / 178, 11 / 212, 104 / 178, 79 / 212])
     ys = range(len(rows))
     ax.barh(ys, [r[2] for r in rows], color=ACC, height=0.74, label=L["seg_materials"])
     ax.barh(ys, [r[3] for r in rows], left=[r[2] for r in rows], color=ACC_MID, height=0.74, edgecolor="white", lw=0.5,
@@ -355,7 +355,7 @@ def _structure_panel(fig):
     ax.grid(axis="x", color="#E6EAEC", lw=0.5)
     ax.set_xlabel(L["share_x"], fontsize=9)
     handles, labels = ax.get_legend_handles_labels()
-    fig.legend(handles, labels, fontsize=8.5, frameon=False, loc="upper left", bbox_to_anchor=(59 / 178, 144 / 212), ncol=3,
+    fig.legend(handles, labels, fontsize=8.5, frameon=False, loc="upper left", bbox_to_anchor=(59 / 178, 98 / 212), ncol=3,
               handlelength=1.0, columnspacing=0.8, handletextpad=0.4, borderaxespad=0.0)
     _clean(ax)
     ax.tick_params(axis="y", length=0, labelsize=8.5)
@@ -366,7 +366,7 @@ def _validation_panel(fig):
     cases = json.loads(VALIDATION.read_text(encoding="utf-8"))
     comparison_colors = ("#7762A7", "#D99545")
     for index, case in enumerate(cases):
-        ax = fig.add_axes([(14 + index * 59) / 178, 13 / 212, 43 / 178, 21 / 212])
+        ax = fig.add_axes([(14 + index * 59) / 178, 115 / 212, 43 / 178, 21 / 212])
         market = case["market"]["market_price_per_lb"]
         estimate = next(r for r in case["rows"] if r["key"] == "estimated_price_per_lb")
         ours = case.get("with_published_rate", {}).get("estimated_price_per_lb", estimate["comet"])
@@ -385,9 +385,9 @@ def _validation_panel(fig):
         if index == 0:
             handles, labels = ax.get_legend_handles_labels()
             fig.legend(handles, labels, frameon=False, fontsize=8.5, ncol=2,
-                       loc="upper right", bbox_to_anchor=(0.97, 44 / 212), borderaxespad=0,
+                       loc="upper right", bbox_to_anchor=(0.97, 146 / 212), borderaxespad=0,
                        handlelength=1.0, handletextpad=0.5, columnspacing=1.4)
-    fig.text(0.5, 1.8 / 212, L["c_y"], fontsize=9, ha="center", va="bottom")
+    fig.text(0.5, 103.8 / 212, L["c_y"], fontsize=9, ha="center", va="bottom")
 
 
 PRECIOUS = ("Pt", "Pd", "Rh", "Ru", "Ir", "Au", "Ag", "Os")
@@ -508,7 +508,7 @@ def figure2_cost_model():
     _cost_model_panel(fig)
     _structure_panel(fig)
     _validation_panel(fig)
-    for label, top in (("(b)", 67), ("(c)", 169)):
+    for label, top in (("(b)", 67), ("(c)", 113)):
         fig.text(0.012, 1 - top / 212, label, fontsize=10, fontweight="bold", va="top")
     return fig
 
@@ -1138,7 +1138,7 @@ def figure4_whatif():
 
 # Panel boxes in mm from the top-left corner of each composite (x, y, width, height).
 PANEL_LAYOUTS = {
-    "fig2_cost_model": (figure2_cost_model, {"b": (0, 64, 178, 102), "c": (0, 166, 178, 46)}),
+    "fig2_cost_model": (figure2_cost_model, {"b": (0, 64, 178, 46), "c": (0, 110, 178, 102)}),
     "fig3_manufacturing": (lambda: figure_manufacturing(MANUFACTURING),
                            {"b": (0, 62, 89, 80), "c": (89, 62, 89, 80)}),
     "fig4_ranking": (figure4_whatif, {"a": (0, 0, 59, 64), "b": (59, 0, 59, 64), "c": (118, 0, 60, 64),

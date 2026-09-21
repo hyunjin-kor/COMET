@@ -152,10 +152,10 @@ def build_fig2(records):
         slide = blank_slide(deck)
         transplant(H26 / "fig2a_cost_model.pptx", index, slide, 0, 2, 1.0)
         place(slide, records[("fig2_cost_model", lang)], "b", 0, 64)
-        place(slide, records[("fig2_cost_model", lang)], "c", 0, 166)
+        place(slide, records[("fig2_cost_model", lang)], "c", 0, 110)
         letter(slide, "a", 2, 0.5)
         letter(slide, "b", 2, 64.5)
-        letter(slide, "c", 2, 166.5)
+        letter(slide, "c", 2, 110.5)
     return deck
 
 

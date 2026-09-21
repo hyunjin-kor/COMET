@@ -17,7 +17,7 @@ def test_si_publication_labels_preserve_every_frozen_screening_value():
 
     text = si.render()
     assert text == si.OUTPUT.read_text(encoding="utf-8")
-    section = text.split("Table S6. ", 1)[1].split("Names identify", 1)[0]
+    section = text.split("Table S7. ", 1)[1].split("Names identify", 1)[0]
     rows = [line.strip("|").split("|") for line in section.splitlines()
             if line.startswith("| ")][1:]
     source = si.load(f"{si.RUN}/all_families_{si.RUN_DATE}.json")
@@ -115,9 +115,9 @@ def test_note_reuses_the_manuscript_numbers():
     text = note_builder.note(run)
     assert f"{note_builder.RUN}/paper_summary_{note_builder.RUN_DATE}.json:table62[0].comet_usd_per_lb" in text
     assert f"{note_builder.ROBUSTNESS}:summary.candidate_removal_winner_changes" in text
-    assert f"{note_builder.METHODS}:normalization.example.rows[0].total_after" in text
+    assert f"{note_builder.MARKET}:[1].margin.comet_pct_of_premargin" in text
     assert f"{note_builder.WHATIF}:order_size.ni[10].selling_price_per_lb" in text
-    assert "mean absolute percentage error was not calculated" in text
+    assert "Accuracy against industrial prices is not established" in text
 
 
 def test_trade_plot_preserves_months_with_missing_observations():

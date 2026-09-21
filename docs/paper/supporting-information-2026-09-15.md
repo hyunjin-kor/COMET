@@ -6,7 +6,25 @@ COMET: Catalyst Overall Manufacturing Estimation Tool
 
 This Supporting Information describes the manufacturing calculation, declared inputs, numerical verification, screening results, calculator what-if inputs, observed-price cost crossovers, ranking sensitivity, leaders under stored live quotations, preparation-evidence coverage and application views. The August 2026 screening results retain their original formulations and assumptions. The later preparation review does not retrospectively validate those formulations. The new manufacturing example is a hypothetical software demonstration, not an experimental catalyst cost or a comparison of matched catalytic performance.
 
-The screening calculations use the published Step Method and its cost-accounting framework.<sup>1,2</sup> In the batch calculation, purchases replace composition-based materials costs and operation costs replace Step Method processing costs. For each operation, electricity is measured kWh or the sum of mean power multiplied by ramp, hold and additional durations. For temperatures in °C and a ramp rate in °C/min, eq S1 gives the ramp duration in hours. Equipment occupancy is charged for the full entered operation duration; attended labor is a separate input. Gas volume is flow multiplied by its selected duration, using matching reference conditions for flow and price. Temperature, stirring speed and pressure are retained as preparation conditions; they do not infer equipment power, staffing, chemical yield or performance.
+The screening calculations use the published Step Method and its cost-accounting framework.<sup>1,2</sup> A component with mass fraction w in the catalyst, mass fraction f in the pure precursor, precursor purity p and retention y requires w/(f p y) kg of precursor per kg of catalyst. Table S1 compares every line of the three demonstration cases of the method with the COMET calculation from the published inputs.<sup>1</sup> The lines before the margin agree within the rounding of the published table. For Ni/Al₂O₃ the published table applies a margin of 33% of the pre-margin cost, whereas COMET applies the order-size correlation of the same source, which gives 24.17% at this order size. For the fluid catalytic cracking (FCC) catalyst the source states an effective production rate of 60,781.4 kg/day in place of the nominal rate, and Table S1 uses that rate. Its margin differs in the same way (11% of the pre-margin cost in the table, 12.83% from the correlation). Prices are converted from the published values per pound.
+
+Table S1. Line-by-line reproduction of the published Step Method examples (published value / COMET).
+
+| Line | 2 wt% Pt/C | 21 wt% Ni/Al₂O₃ | FCC catalyst |
+|---|---:|---:|---:|
+| Hourly step cost (USD/h) | 390 / 390 | 1,200 / 1,200 | 6,725 / 6,725 |
+| Campaign duration (d) | 2.50 / 2.50 | 3.00 / 3.00 | 4.00 / 3.99 |
+| Campaign cost (USD) | 23,400 / 23,400 | 86,400 / 86,400 | 645,600 / 643,191 |
+| Processing cost (USD/kg) | 12.90 / 12.90 | 4.76 / 4.76 | 3.55 / 3.55 |
+| Materials and processing (USD/kg) | 36.49 / 36.49 | 30.95 / 30.95 | 4.34 / 4.32 |
+| G&A (USD/kg) | 1.83 / 1.82 | 1.54 / 1.55 | 0.22 / 0.22 |
+| SARD (USD/kg) | 1.92 / 1.92 | 1.63 / 1.63 | 0.22 / 0.23 |
+| Margin (USD/kg) | 20.11 / 20.11 | 11.27 / 8.25 | 0.53 / 0.61 |
+| Selling price (USD/kg) | 60.34 / 60.34 | 45.39 / 42.37 | 5.31 / 5.37 |
+
+G&A, general and administrative; SARD, sales, administrative, research and distribution. The Pt/C prices exclude platinum value.
+
+In the batch calculation, purchases replace composition-based materials costs and operation costs replace Step Method processing costs. For each operation, electricity is measured kWh or the sum of mean power multiplied by ramp, hold and additional durations. For temperatures in °C and a ramp rate in °C/min, eq S1 gives the ramp duration in hours. Equipment occupancy is charged for the full entered operation duration; attended labor is a separate input. Gas volume is flow multiplied by its selected duration, using matching reference conditions for flow and price. Temperature, stirring speed and pressure are retained as preparation conditions; they do not infer equipment power, staffing, chemical yield or performance.
 
 Intermediate charges are allocated by used/recovered mass or used/prepared volume of a homogeneous solution, with successive fractions multiplied along a chain. An explicit whole-batch option assigns the full incurred expenditure to its destination before subsequent transfers. Actual operation times and incurred expenditures remain distinct from their allocated shares. Unknown recovery prevents proportional allocation. Branching transfers, co-products and density-based conversions are not inferred. Figure S1 illustrates the allocation chain: a solution aliquot charged by volume fraction, an intermediate solid transferred by mass fraction, and the final dry batch that carries the allocated shares.
 
@@ -34,11 +52,11 @@ In eq S4, Bᵢ is incurred expenditure (USD), Bᵖᵢ is purchases assigned to t
 
 Every numerical input below is an assumption chosen for arithmetic verification. The example does not identify a specific active phase or precursor chemistry. Dry output is independently specified; precursor stoichiometry and material yield are not inferred. The composition fields retained by the application are inactive for the purchase-based materials calculation.
 
-Tables S1 and S2 specify the operating conditions and purchases used in eqs S1–S6. Final dry output: 0.030 kg. Electricity: 0.10 USD/kWh. Labor: 10.00 USD/person-hour. G&A and SARD: 0.05 and 0.05; selling margin: 0.10. One batch is evaluated. The 2025 price-basis fields do not apply an index escalation to this direct batch calculation.
+Tables S2 and S3 specify the operating conditions and purchases used in eqs S1–S6. Final dry output: 0.030 kg. Electricity: 0.10 USD/kWh. Labor: 10.00 USD/person-hour. G&A and SARD: 0.05 and 0.05; selling margin: 0.10. One batch is evaluated. The 2025 price-basis fields do not apply an index escalation to this direct batch calculation.
 
 All thermal operations start at 20 °C and ramp at 5 °C/min. Each includes one additional hour of passive cooling/handling with explicitly zero additional electricity but continued equipment occupancy. Cooling is a declared duration, not a heat-transfer calculation. Reduction gas flows throughout ramp, hold and additional time at 0.1 L/min and costs 10 USD/m³; both flow and price refer to 0 °C and 1 atm. Its chemical composition is unspecified because this is an arithmetic scenario.
 
-Table S1. Assumed operating conditions for the 0.030 kg manufacturing example.
+Table S2. Assumed operating conditions for the 0.030 kg manufacturing example.
 
 | Operation | Hold target (°C) | Hold or mixing (h) | Ramp / hold power (kW) | Equipment (USD/h) | Attendance (person-h) |
 |---|---:|---:|---|---:|---:|
@@ -47,7 +65,7 @@ Table S1. Assumed operating conditions for the 0.030 kg manufacturing example.
 | Calcination | 500 | 3 | 2 / 1.2 | 3 | 0.1 |
 | Reduction | 400 | 2 | 1.5 / 0.6 | 2 | 0.25 |
 
-Table S2. Assumed purchases charged at impregnation.
+Table S3. Assumed purchases charged at impregnation.
 
 | Purchase at impregnation | Quantity | Unit price | Batch expenditure (USD) |
 |---|---:|---:|---:|
@@ -57,9 +75,9 @@ Table S2. Assumed purchases charged at impregnation.
 
 ## S3. Independent arithmetic verification
 
-Tables S3 and S4 report an independent scalar evaluation of eqs S1–S6. Thermal durations include ramp, hold and the additional hour. The application programming interface (API) produces the same baseline and endpoint results. The regression also checks the application's seeded Monte Carlo summary and histogram counts.
+Tables S4 and S5 report an independent scalar evaluation of eqs S1–S6. Thermal durations include ramp, hold and the additional hour. The application programming interface (API) produces the same baseline and endpoint results. The regression also checks the application's seeded Monte Carlo summary and histogram counts.
 
-Table S3. Calculated operation durations and electricity consumption.
+Table S4. Calculated operation durations and electricity consumption.
 
 | Operation | Occupancy (h) | Electricity (kWh) |
 |---|---:|---:|
@@ -68,7 +86,7 @@ Table S3. Calculated operation durations and electricity consumption.
 | Calcination | 5.600000 | 6.800000 |
 | Reduction | 4.266667 | 3.100000 |
 
-Table S4. Manufacturing-cost contributions, overheads and selling margin.
+Table S5. Manufacturing-cost contributions, overheads and selling margin.
 
 | Cost component | Contribution per batch (USD) | Per dry product (USD/kg) |
 |---|---:|---:|
@@ -87,9 +105,9 @@ Manufacturing cost before overheads and margin is 1738.977778 USD/kg; selling pr
 
 ## S4. Manufacturing sensitivity and uncertainty
 
-Table S5 changes only the named input at each endpoint; all other batch inputs remain fixed. Temperature does not determine an assumed power change. The dry-output endpoints therefore assess cost allocation, not predicted chemical yields or scale economies.
+Table S6 changes only the named input at each endpoint; all other batch inputs remain fixed. Temperature does not determine an assumed power change. The dry-output endpoints therefore assess cost allocation, not predicted chemical yields or scale economies.
 
-Table S5. One-at-a-time sensitivity endpoints for the manufacturing example.
+Table S6. One-at-a-time sensitivity endpoints for the manufacturing example.
 
 | Varied input | Low | High | Selling price at low (USD/kg) | Selling price at high (USD/kg) |
 |---|---:|---:|---:|---:|
@@ -102,9 +120,9 @@ Table S5. One-at-a-time sensitivity endpoints for the manufacturing example.
 | Reduction hold | 1.0 h | 4.0 h | 2043.6812 | 2303.3810 |
 | Electricity tariff | 0.05 USD/kWh | 0.2 USD/kWh | 2107.5173 | 2175.7088 |
 
-Figure S2 plots the same endpoints as departures from the baseline selling price. Dry output dominates because the fixed batch expenditure is divided by the recovered mass; calcination power changes the price little because electricity is a small part of the assumed operating cost compared with equipment occupancy (Table S4).
+Figure S2 plots the same endpoints as departures from the baseline selling price. Dry output dominates because the fixed batch expenditure is divided by the recovered mass; calcination power changes the price little because electricity is a small part of the assumed operating cost compared with equipment occupancy (Table S5).
 
-![Figure S2. Sensitivity endpoints. Selling price at the low and high value of each input in Table S5; the vertical line marks the baseline of 2130.25 USD/kg. Each bar changes one input while all other batch inputs remain fixed.](figures-si-2026-09-16/figS2_sensitivity.png)
+![Figure S2. Sensitivity endpoints. Selling price at the low and high value of each input in Table S6; the vertical line marks the baseline of 2130.25 USD/kg. Each bar changes one input while all other batch inputs remain fixed.](figures-si-2026-09-16/figS2_sensitivity.png)
 
 Figure 3(c) evaluates 21 calcination-hold values from 1 to 6 h at each of three dry masses (0.015, 0.030 and 0.045 kg), giving 63 scenarios. The machine-readable manufacturing data retain all 63 input–output pairs.
 
@@ -114,7 +132,7 @@ Monte Carlo uses seed 20260915 and 1000 trials. Independent uniform bounds are 0
 
 ## S5. Frozen price and screening basis
 
-The following August 2026 costs use the original screening formulations and route assumptions, not the subsequently curated preparation records. Table S6 reports estimated selling prices for 116 screening candidates; it does not report measured manufacturing costs. Powder values are converted from the stored legacy USD/lb fields using 1 lb = 0.45359237 kg. An electrode candidate's powder price is distinct from assembly cost per area. These observations do not establish equivalent activity or commercial quotation validity.
+The following August 2026 costs use the original screening formulations and route assumptions, not the subsequently curated preparation records. Table S7 reports estimated selling prices for 116 screening candidates; it does not report measured manufacturing costs. Powder values are converted from the stored legacy USD/lb fields using 1 lb = 0.45359237 kg. An electrode candidate's powder price is distinct from assembly cost per area. These observations do not establish equivalent activity or commercial quotation validity.
 
 Johnson Matthey<sup>3</sup> and Westmetall<sup>4</sup> supply current metal quotations. Figure S4 summarizes the monthly historical inputs from Johnson Matthey and the International Monetary Fund (IMF).<sup>5</sup> Environmental mass coverage is the fraction assigned a screening inventory factor, including compound proxies; it is not a measure of inventory accuracy.<sup>6</sup>
 
@@ -122,7 +140,7 @@ Reference metal prices are the August 2026 monthly averages. U.S. import unit va
 
 ![Figure S4. Metal price history. Monthly averages from January 2019 to August 2026: (a) precious metals; (b) base metals. Prices are USD/kg; both price axes use logarithmic scales. Histories are unsmoothed observations, not forecasts.](figures-si-2026-09-16/figS4_metal_prices.png)
 
-Table S6. Estimated powder selling prices and environmental mass coverage at August 2026 prices.
+Table S7. Estimated powder selling prices and environmental mass coverage at August 2026 prices.
 
 | Reaction family | Candidate model | Selling price (USD/kg) | Mass coverage (%) |
 |---|---|---:|---:|
@@ -245,9 +263,9 @@ Table S6. Estimated powder selling prices and environmental mass coverage at Aug
 
 Names identify the original screening models, not experimentally verified compositions or performance-equivalent catalysts. Family membership follows the original screening catalog, including related reaction variants; it does not imply identical reaction conditions. g-C₃N₄ denotes graphitic carbon nitride; h-BN, hexagonal boron nitride; SAPO, silicoaluminophosphate. MIL-101, ZSM-5 and SSZ-13 retain their established material identifiers.
 
-Figure 4(a)–(c) of the main article varies one calculator input at a time for two alumina-supported catalysts prepared by incipient wetness impregnation. Table S7 lists the inputs and the resulting selling prices at August 2026 prices. Order sizes are entered in short tons and shown in kilograms; operations that are unavailable at the production scale of an order are replaced by the application's scale equivalents (a batch kiln for the continuous kiln at the small scale). Precious-metal value is part of the materials cost and carries overheads and margin; no spent-catalyst credit is applied. The selling price is linear in the metal price, so the ruthenium price at which the two catalysts cost the same per kilogram follows from two evaluations and was confirmed by a third. These analyses compare manufacturing cost only; they do not compare catalytic performance.
+Figure 4(a)–(c) of the main article varies one calculator input at a time for two alumina-supported catalysts prepared by incipient wetness impregnation. Table S8 lists the inputs and the resulting selling prices at August 2026 prices. Order sizes are entered in short tons and shown in kilograms; operations that are unavailable at the production scale of an order are replaced by the application's scale equivalents (a batch kiln for the continuous kiln at the small scale). Precious-metal value is part of the materials cost and carries overheads and margin; no spent-catalyst credit is applied. The selling price is linear in the metal price, so the ruthenium price at which the two catalysts cost the same per kilogram follows from two evaluations and was confirmed by a third. These analyses compare manufacturing cost only; they do not compare catalytic performance.
 
-Table S7. Calculator what-if analyses at August 2026 prices.
+Table S8. Calculator what-if analyses at August 2026 prices.
 
 | Catalyst | Varied input | Range | Selling price (USD/kg) |
 |---|---|---|---|
@@ -265,15 +283,15 @@ Ranking calculations use the original four criterion weights and assigned route/
 
 Figure 4(d) of the main article replays the frozen screening calculation for ammonia cracking under the 92 monthly metal-price states with formulations, order sizes, route assumptions, support prices, price-source grades and route and performance scores fixed.<sup>3,5</sup> Figure 4(e) marks the lowest-cost candidate of every month in the 6 families where it changes. The numbers of months as the lowest-cost candidate are ammonia cracking: Co/MgO–La₂O₃ 53, Ni/γ-Al₂O₃ 39 (8 changes); dry reforming of methane: Ni–Co/Al–Mg–O 55, Ni/zeolite 26, Ni/CeO₂ single sites 11 (9 changes); water–gas shift: Cu/ZnO/Al₂O₃ 69, Fe₂O₃–Cr₂O₃(–CuO) 23 (13 changes); CO₂ electroreduction: Cu cathode for multicarbon products 60, Sn cathode for formate production 32 (7 changes); hydrogen evolution reaction: NiMo cathode (alkaline) 91, MoS₂ cathode (acidic) 1 (2 changes); nitrogen reduction reaction: Cu in aqueous electrolyte 77, Plasma-assisted ammonia synthesis 15 (1 change). Figure S5 shows the same replay for methane dry reforming and water–gas shift, where the lowest-cost candidate changes 9 and 13 times (8 times for ammonia cracking) while the balanced-weight recommendation of these families does not change. Panel (c) places the monthly states of ammonia cracking in the nickel–cobalt price plane: they cluster near the conditional equal-cost boundary, so modest cobalt moves change the lowest-cost candidate. The September–October 2025 cobalt price increase from 33.48 to 43.15 USD/kg also reverses the lowest-cost candidate in methane dry reforming while nickel is nearly unchanged. These are conditional model comparisons between screening candidates, not contemporaneous supplier quotations or performance comparisons.
 
-![Figure S5. Observed-price cost crossovers. Costs (modeled selling prices) under the 92 monthly price states for the candidates that attain the lowest cost at any state in (a) methane dry reforming and (b) water–gas shift; lines connect observed states and do not locate a crossover date. (c) Conditional equal-cost boundary between Co/MgO–La₂O₃ (Co/Mg–La) and Ni/γ-Al₂O₃ (Ni/Al₂O₃) in the nickel–cobalt price plane; points are monthly states colored by the cheaper candidate, and the enlarged view names September and October 2025. Ni–Co/Al–Mg denotes Ni–Co/Al–Mg–O; Ni/CeO₂, Ni/CeO₂ single sites; Cu–ZnO, Cu/ZnO/Al₂O₃; Fe–Cr, Fe₂O₃–Cr₂O₃(–CuO) (Table S6). Other prices and engineering assumptions remain at reference values.](figures-si-2026-09-16/figS5_crossovers.png)
+![Figure S5. Observed-price cost crossovers. Costs (modeled selling prices) under the 92 monthly price states for the candidates that attain the lowest cost at any state in (a) methane dry reforming and (b) water–gas shift; lines connect observed states and do not locate a crossover date. (c) Conditional equal-cost boundary between Co/MgO–La₂O₃ (Co/Mg–La) and Ni/γ-Al₂O₃ (Ni/Al₂O₃) in the nickel–cobalt price plane; points are monthly states colored by the cheaper candidate, and the enlarged view names September and October 2025. Ni–Co/Al–Mg denotes Ni–Co/Al–Mg–O; Ni/CeO₂, Ni/CeO₂ single sites; Cu–ZnO, Cu/ZnO/Al₂O₃; Fe–Cr, Fe₂O₃–Cr₂O₃(–CuO) (Table S7). Other prices and engineering assumptions remain at reference values.](figures-si-2026-09-16/figS5_crossovers.png)
 
 ![Figure S6. Ranking sensitivity. (a) First-rank frequencies over the joint price and weight scenarios; dashed line, 50%. (b) Number of the 30 reaction families retaining the baseline candidate under each test. (c) Cost differences between leaders before and after candidate removal; negative values indicate less expensive replacements. PEM, proton exchange membrane; AEM, anion exchange membrane; OER, oxygen evolution reaction; ORR, oxygen reduction reaction; SCR, selective catalytic reduction; RWGS, reverse water–gas shift.](figures-si-2026-09-16/figS6_ranking_tests.png)
 
 Figure S6 summarizes the ranking sensitivity. Panel (a) separates, for every family, how often the baseline candidate, its most frequent alternative and the other candidates rank first over the joint scenarios; the median baseline frequency is 58.95%. Panel (b) counts the families whose baseline candidate ranks first in at least half of the joint scenarios or is retained under candidate removal and under route/performance-score changes of 2, 5 and 10 points; passing one test does not establish robustness to the others. Removing one candidate that does not rank first changes the leader in 8 of 86 tests. In ammonia cracking, removing Ru/MgO (2,925.80 USD/kg) leaves the other costs unchanged but contracts their range, so renormalization changes the scores of Co/MgO–La₂O₃ and Ni/γ-Al₂O₃ from 89.4 and 87.4 to 72.2 and 87.4 and reverses their order; retaining the original range prevents every such reversal. Panel (c) gives 100 × (C₁ − C₀)/C₀ for the affected families, where C₀ and C₁ are the costs of the leaders before and after removal.
 
-The monthly replays hold price-source grades fixed. Replacing the August 2026 reference with the stored live quotations collected on 2026-09-21 also changes these grades: a metal without a stored live quotation falls back to a stored reference price, and each candidate's price-reliability score weights its sources by materials-cost share. With all other inputs unchanged, the leader changes in 4 families with balanced weights, 4 with cost-first weights, 10 with evidence-first weights and 4 with the performance weight set to zero. Table S8 lists the balanced-weight changes with the price-reliability and cost scores of the former leader. The live quotations are a single stored snapshot, not a replay of current prices at another date.
+The monthly replays hold price-source grades fixed. Replacing the August 2026 reference with the stored live quotations collected on 2026-09-21 also changes these grades: a metal without a stored live quotation falls back to a stored reference price, and each candidate's price-reliability score weights its sources by materials-cost share. With all other inputs unchanged, the leader changes in 4 families with balanced weights, 4 with cost-first weights, 10 with evidence-first weights and 4 with the performance weight set to zero. Table S9 lists the balanced-weight changes with the price-reliability and cost scores of the former leader. The live quotations are a single stored snapshot, not a replay of current prices at another date.
 
-Table S8. Balanced-weight leaders under the August 2026 reference and the stored live quotations.
+Table S9. Balanced-weight leaders under the August 2026 reference and the stored live quotations.
 
 | Reaction family | August 2026 leader | Live-quotation leader | Former leader: price reliability | Former leader: cost score |
 |---|---|---|---:|---:|
@@ -286,9 +304,9 @@ Scores are on a 0–100 scale; route and performance scores are unchanged betwee
 
 ## S6. Preparation evidence and unresolved inputs
 
-The library has 92 source-specific preparations from 71 primary sources. Of 116 screening candidates, 75 link to at least one preparation; 41 have no curated preparation. Bibliographic verification covers 401 digital object identifiers (DOIs). Links may describe variants. No candidate has jointly verified catalog composition, complete preparation, utilities, recovered output and prices. Table S9 counts source/formulation discrepancies even where a related preparation is available.
+The library has 92 source-specific preparations from 71 primary sources. Of 116 screening candidates, 75 link to at least one preparation; 41 have no curated preparation. Bibliographic verification covers 401 digital object identifiers (DOIs). Links may describe variants. No candidate has jointly verified catalog composition, complete preparation, utilities, recovered output and prices. Table S10 counts source/formulation discrepancies even where a related preparation is available.
 
-Table S9. Preparation-evidence coverage and unresolved source/formulation discrepancies.
+Table S10. Preparation-evidence coverage and unresolved source/formulation discrepancies.
 
 | Reaction family | Candidates | With preparation | Source mismatch flagged |
 |---|---:|---:|---:|
@@ -337,7 +355,7 @@ Figure S8 illustrates the record structure preserved for each imported preparati
 
 ## S7. Application interface
 
-Figure S9 shows two views of COMET 1.4.0 recorded with an isolated database and no external price service. Panel (a) shows the source attached to one imported input: the purchased quantity of a reagent in the first operation of the PtSn/Al₂O₃ pellet preparation record imported from its Methods section,<sup>7</sup> with the citation, locator, DOI, access date and recorded value. Unreported conditions of imported records remain blank. Panel (b) shows the evidence section of the result page for the illustrative batch of Tables S1–S4, with the time, electricity and the electricity, equipment, labor and gas costs of each operation.
+Figure S9 shows two views of COMET 1.4.0 recorded with an isolated database and no external price service. Panel (a) shows the source attached to one imported input: the purchased quantity of a reagent in the first operation of the PtSn/Al₂O₃ pellet preparation record imported from its Methods section,<sup>7</sup> with the citation, locator, DOI, access date and recorded value. Unreported conditions of imported records remain blank. Panel (b) shows the evidence section of the result page for the illustrative batch of Tables S2–S5, with the time, electricity and the electricity, equipment, labor and gas costs of each operation.
 
 ![Figure S9. Application views. (a) Source record of one imported input in the preparation editor. (b) Operation-level time, electricity and cost contributions of the illustrative batch on the result page. Interface text is English; the Korean interface presents the same content.](figures-si-2026-09-16/figS9_interface.png)
 

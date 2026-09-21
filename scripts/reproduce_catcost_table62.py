@@ -211,12 +211,17 @@ def run_case(case: dict) -> dict:
         sard = (sub + ga) * 0.05
         pre = sub + ga + sard
         margin = pre * m_sell / (1 - m_sell)
+        values = {"step_cost_per_hr": float(result["step_cost_per_hr"]), "campaign_days": days, "campaign_cost": campaign,
+                  "processing_cost_per_lb": proc, "subtotal_per_lb": sub, "ga_per_lb": ga, "sard_per_lb": sard,
+                  "margin_per_lb": margin, "estimated_price_per_lb": pre + margin}
         out["with_published_rate"] = {
             "effective_rate_ton_per_day": eff,
             "campaign_days": round(days, 3),
             "processing_cost_per_lb": round(proc, 4),
             "estimated_price_per_lb": round(pre + margin, 4),
             "dev_pct_vs_published": round(pct(pre + margin, pub["estimated_price_per_lb"]), 2),
+            "rows": [{"key": key, "comet": round(values[key], 4), "published": float(pub[key]),
+                      "dev_pct": pct(values[key], float(pub[key]))} for key in COMPARE_KEYS],
         }
     return out
 
@@ -254,7 +259,8 @@ def main() -> None:
     results = [run_case(c) for c in CASES]
     print_report(results)
     if args.json:
-        args.json.write_text(json.dumps(results, indent=2), encoding="utf-8")
+        args.json.parent.mkdir(parents=True, exist_ok=True)
+        args.json.write_text(json.dumps(results, indent=2) + "\n", encoding="utf-8", newline="\n")
         print(f"\nwrote {args.json}")
 
 

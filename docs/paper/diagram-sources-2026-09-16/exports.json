@@ -3,7 +3,7 @@
     "diagrams":  [
                      {
                          "source":  "fig2_cost_model.pptx",
-                         "source_sha256":  "c7a6b48824a338fb2960ea24836bbeb5bd876d64b0478b8a459dedd7e99b4973",
+                         "source_sha256":  "1d432db14240b14b5578dc0552ebdd77ed9b22c9713f05926c4da40d3ec6253a",
                          "width_mm":  178.02,
                          "height_mm":  212.019,
                          "png_dpi_at_slide_size":  400,
@@ -11,16 +11,16 @@
                                          {
                                              "language":  "en",
                                              "png":  "exports/fig2_cost_model.en.png",
-                                             "png_sha256":  "2a9f969ce4e1f610e2f7fefccda2c49206aaf4e4f1410eaf9e7128b649a5c74c",
+                                             "png_sha256":  "88c591d3fb69c8b7c7c78a72228806bff29e5b28a0ef4f8b06f6b184d803feab",
                                              "svg":  "exports/fig2_cost_model.en.svg",
-                                             "svg_sha256":  "dd101536c9db3efa225fd7e2f5ca2c325e89c5dbe27ee695ed795da316bb9f84"
+                                             "svg_sha256":  "423575ac1b4c189f5c06b6990f4c7cc480bf6c50e7985065a7c33bcf98c59e65"
                                          },
                                          {
                                              "language":  "ko",
                                              "png":  "exports/fig2_cost_model.ko.png",
-                                             "png_sha256":  "caa811c3c55380c4d825f66d1edec8de8126fbe81c51814f40d071556e83e56b",
+                                             "png_sha256":  "20c6038ffdcd3c6b1e0c28a2499fe7c189b34774f56fb78fdf03cc5a8dbd41f5",
                                              "svg":  "exports/fig2_cost_model.ko.svg",
-                                             "svg_sha256":  "8f0963945767cb85c8b07e8469ab589c3189958f52fc18910683834d3e5fa46d"
+                                             "svg_sha256":  "d0b7d104944417f0e98ab3e2236465c9d6068454631367c502861a2355479bcd"
                                          }
                                      ]
                      },

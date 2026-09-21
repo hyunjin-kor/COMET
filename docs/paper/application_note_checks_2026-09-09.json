@@ -1,8 +1,8 @@
 {
   "target": "Journal of Chemical Information and Modeling, Application Note",
   "word_limit_abstract_text_graphics": 5000,
-  "abstract_words": 113,
-  "text_words_excluding_references": 2184,
+  "abstract_words": 136,
+  "text_words_excluding_references": 2162,
   "graphics": [
     {
       "figure": 1,
@@ -26,14 +26,14 @@
     }
   ],
   "graphics_word_equivalent": 2400,
-  "total_word_equivalent": 4697,
+  "total_word_equivalent": 4698,
   "toc_word_equivalent_allowance": 300,
-  "total_word_equivalent_with_toc": 4997,
+  "total_word_equivalent_with_toc": 4998,
   "toc_count_note": "A conservative 300-word allowance is tracked separately because the Application Note rule does not explicitly resolve TOC inclusion.",
   "figure_count": 4,
   "table_count": 0,
   "software_named_in_title": true,
-  "json_key_references": 94,
+  "json_key_references": 83,
   "publication_mass_unit": "kg",
   "publication_conversions": [
     {
@@ -42,15 +42,7 @@
       "source_value": 27.3695,
       "factor": 2.2046226218487757,
       "converted_value": 60.339418848690066,
-      "display": "60.3394"
-    },
-    {
-      "source": "submission-2026-09-21/paper_summary_2026-09-21.json",
-      "key": "table62[0].published_usd_per_lb",
-      "source_value": 27.37,
-      "factor": 2.2046226218487757,
-      "converted_value": 60.34052116000099,
-      "display": "60.341"
+      "display": "60.34"
     },
     {
       "source": "submission-2026-09-21/paper_summary_2026-09-21.json",
@@ -58,7 +50,7 @@
       "source_value": 19.2206,
       "factor": 2.2046226218487757,
       "converted_value": 42.37416956550658,
-      "display": "42.3742"
+      "display": "42.37"
     },
     {
       "source": "submission-2026-09-21/paper_summary_2026-09-21.json",
@@ -66,23 +58,7 @@
       "source_value": 20.59,
       "factor": 2.2046226218487757,
       "converted_value": 45.39317978386629,
-      "display": "45.393"
-    },
-    {
-      "source": "submission-2026-09-21/paper_summary_2026-09-21.json",
-      "key": "table62[2].comet_usd_per_lb",
-      "source_value": 2.438,
-      "factor": 2.2046226218487757,
-      "converted_value": 5.374869952067315,
-      "display": "5.3749"
-    },
-    {
-      "source": "submission-2026-09-21/paper_summary_2026-09-21.json",
-      "key": "table62[2].published_usd_per_lb",
-      "source_value": 2.41,
-      "factor": 2.2046226218487757,
-      "converted_value": 5.313140518655549,
-      "display": "5.313"
+      "display": "45.39"
     },
     {
       "source": "submission-2026-09-21/paper_summary_2026-09-21.json",
@@ -93,20 +69,20 @@
       "display": "60,781.4"
     },
     {
-      "source": "submission-2026-09-21/table62_reproduction_2026-09-21.json",
-      "key": "[2].with_published_rate.estimated_price_per_lb",
+      "source": "submission-2026-09-21/paper_summary_2026-09-21.json",
+      "key": "table62[2].comet_usd_per_lb",
       "source_value": 2.438,
       "factor": 2.2046226218487757,
       "converted_value": 5.374869952067315,
-      "display": "5.3749"
+      "display": "5.37"
     },
     {
-      "source": "submission-2026-09-21/table62_reproduction_2026-09-21.json",
-      "key": "[2].market.market_price_per_lb",
-      "source_value": 2.73,
+      "source": "submission-2026-09-21/paper_summary_2026-09-21.json",
+      "key": "table62[2].published_usd_per_lb",
+      "source_value": 2.41,
       "factor": 2.2046226218487757,
-      "converted_value": 6.018619757647158,
-      "display": "6.02"
+      "converted_value": 5.313140518655549,
+      "display": "5.31"
     },
     {
       "source": "figures-note-2026-09-09/reference_example_ni_al2o3.json",
@@ -123,30 +99,6 @@
       "factor": 2.2046226218487757,
       "converted_value": 10.327554672050589,
       "display": "10.33"
-    },
-    {
-      "source": "figures-note-2026-09-09/reference_example_ni_al2o3.json",
-      "key": "materials.components[0].cost_per_lb_cat",
-      "source_value": 1.51958,
-      "factor": 2.2046226218487757,
-      "converted_value": 3.3501004437089623,
-      "display": "3.35"
-    },
-    {
-      "source": "figures-note-2026-09-09/reference_example_ni_al2o3.json",
-      "key": "materials.components[1].cost_per_lb_cat",
-      "source_value": 0.22656,
-      "factor": 2.2046226218487757,
-      "converted_value": 0.49947930120605866,
-      "display": "0.50"
-    },
-    {
-      "source": "figures-note-2026-09-09/reference_example_ni_al2o3.json",
-      "key": "step_method.processing_cost_per_lb",
-      "source_value": 1.6758,
-      "factor": 2.2046226218487757,
-      "converted_value": 3.694506589694178,
-      "display": "3.69"
     },
     {
       "source": "whatif-2026-09-21/whatif_study.json",
@@ -351,10 +303,30 @@
       "display": "0.30",
       "source": "whatif-2026-09-21/whatif_study.json",
       "rule": "equal_cost.equal_cost_over_reference as a percentage"
+    },
+    {
+      "display": "0.4",
+      "source": "submission-2026-09-21/table62_reproduction_2026-09-21.json",
+      "rule": "[0] and [1] rows: largest |dev_pct| among the lines before the margin"
+    },
+    {
+      "display": "7",
+      "source": "submission-2026-09-21/all_families_2026-09-21.json",
+      "rule": "families with catalyst_domain electrocatalyst"
+    },
+    {
+      "display": "0.40",
+      "source": "submission-2026-09-21/all_families_2026-09-21.json",
+      "rule": "smallest balanced weight of the cost score"
+    },
+    {
+      "display": "0.45",
+      "source": "submission-2026-09-21/all_families_2026-09-21.json",
+      "rule": "largest balanced weight of the cost score"
     }
   ],
   "primary_run": "submission-2026-09-21",
   "basis_month": "2026-08",
   "seed": 20260906,
-  "count_note": "Lexical count of the abstract and text from Introduction through Competing interests, including headings and placeholders. Figure captions and references are excluded; graphics add 300/600 word equivalents for single/double-column figures."
+  "count_note": "Whitespace-delimited words of the typeset abstract and of the text from Introduction through Competing interests, including headings and placeholders; provenance comments and sub/superscript markup are not counted, and a superscript citation number belongs to the preceding word. Figure captions and references are excluded; graphics add 300/600 word equivalents for single/double-column figures."
 }
