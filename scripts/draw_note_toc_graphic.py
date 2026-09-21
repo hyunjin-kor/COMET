@@ -3,7 +3,7 @@
 ACS asks for a graphic that fits 3.25 x 1.75 inches, so this is drawn at that size and saved
 as SVG and a 300 dpi LZW TIFF. Shapes are drawn in code without generative image-model
 outputs, and every plotted quantity comes from the frozen records of the article: the itemized
-selling price and the order-size curve of the Ni/Al2O3 base case (what-if study) and the monthly
+selling price and the production-scale curve of the Ni/Al2O3 base case (what-if study) and the monthly
 costs of the two ammonia-cracking candidates that attain the lowest cost (price-crossover study). Run:
 
     python scripts/draw_note_toc_graphic.py --out-dir docs/paper/figures-note-2026-09-09
@@ -32,14 +32,14 @@ PER_LB_TO_PER_KG = 1 / 0.45359237
 
 TEXT = {
     "en": {"font": "Arial", "title": "COMET", "subtitle": "catalyst manufacturing cost",
-           "inputs_head": "Inputs", "inputs": ["Composition", "Procedure", "Order size", "Dated prices"],
+           "inputs_head": "Inputs", "inputs": ["Composition", "Preparation\nmethod", "Production\nscale", "Material\nprices"],
            "price": "Estimated price", "items": ["Materials", "Processing", "G&A, SARD", "Margin"],
-           "order_head": "Larger order, lower price", "order": "Order size",
+           "order_head": "Larger scale, lower price", "order": "Production scale",
            "switch_head": "Metal prices switch\nthe cheaper catalyst", "reaction": "NH$_3$ cracking", "co": "Co", "ni": "Ni"},
     "ko": {"font": "Malgun Gothic", "title": "COMET", "subtitle": "촉매 제조 원가 추정",
-           "inputs_head": "입력", "inputs": ["조성", "제조 절차", "주문량", "날짜별 가격"],
+           "inputs_head": "입력", "inputs": ["조성", "제조법", "생산 규모", "원료 가격"],
            "price": "추정 판매 단가", "items": ["재료비", "가공비", "G&A, SARD", "마진"],
-           "order_head": "주문량이 클수록 낮은 단가", "order": "주문량",
+           "order_head": "생산 규모가 클수록 낮은 단가", "order": "생산 규모",
            "switch_head": "금속 가격에 따라 바뀌는\n더 저렴한 촉매", "reaction": "NH$_3$ 분해", "co": "Co", "ni": "Ni"},
 }
 
@@ -99,7 +99,7 @@ def graphic(lang):
     for index, (kind, name) in enumerate(zip(("composition", "procedure", "order", "prices"), label["inputs"], strict=True)):
         y = 1.07 - index * 0.275
         _icon(ax, kind, 0.07, y, 0.21)
-        ax.text(0.33, y + 0.105, name, ha="left", va="center", fontsize=6.2)
+        ax.text(0.33, y + 0.105, name, ha="left", va="center", fontsize=6.2, linespacing=1.05)
 
     # itemized selling price of the Ni/Al2O3 base case
     base = whatif["catalysts"]["ni"]["baseline"]
@@ -118,7 +118,7 @@ def graphic(lang):
         ax.add_patch(FancyArrowPatch((start, 0.78), (stop, 0.78), arrowstyle="-|>", mutation_scale=7, color=MUTED, lw=0.9,
                                      shrinkA=0, shrinkB=0))
 
-    # selling price of the base case against order size, with both ends written out
+    # selling price of the base case against production scale, with both ends written out
     left, right = 2.04, 3.18
     rows = whatif["order_size"]["ni"]
     tonnes = [row["order_size_tons"] * KG_PER_SHORT_TON / 1000 for row in rows]

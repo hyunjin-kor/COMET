@@ -118,8 +118,8 @@ def render():
              "A component with mass fraction w in the catalyst, mass fraction f in the pure precursor, precursor purity p and retention y requires w/(f p y) kg of precursor per kg of catalyst. "
              "Table S1 compares every line of the three demonstration cases of the method with the COMET calculation from the published inputs.<sup>1</sup> "
              "The lines before the margin agree within the rounding of the published table. "
-             f"For Ni/Al₂O₃ the published table applies a margin of {nickel_margin['table_footnote_pct_of_premargin']:.0f}% of the pre-margin cost, whereas COMET applies the order-size correlation of the same source, "
-             f"which gives {nickel_margin['comet_pct_of_premargin']:.2f}% at this order size. For the fluid catalytic cracking (FCC) catalyst the source states an effective production rate of "
+             f"For Ni/Al₂O₃ the published table applies a margin of {nickel_margin['table_footnote_pct_of_premargin']:.0f}% of the pre-margin cost, whereas COMET applies the production-scale correlation of the same source, "
+             f"which gives {nickel_margin['comet_pct_of_premargin']:.2f}% at this production scale. For the fluid catalytic cracking (FCC) catalyst the source states an effective production rate of "
              f"{examples[2]['with_published_rate']['effective_rate_ton_per_day'] * KG_PER_SHORT_TON:,.1f} kg/day in place of the nominal rate, and Table S1 uses that rate. "
              f"Its margin differs in the same way ({examples[2]['margin']['table_footnote_pct_of_premargin']:.0f}% of the pre-margin cost in the table, {examples[2]['margin']['comet_pct_of_premargin']:.2f}% from the correlation). "
              "Prices are converted from the published values per pound.", "",
@@ -248,7 +248,7 @@ def render():
               "g-C₃N₄ denotes graphitic carbon nitride; h-BN, hexagonal boron nitride; SAPO, silicoaluminophosphate. "
               "MIL-101, ZSM-5 and SSZ-13 retain their established material identifiers.", "",
               "Figure 4(a)–(c) of the main article varies one calculator input at a time for two alumina-supported catalysts prepared by incipient wetness impregnation. "
-              f"Table S8 lists the inputs and the resulting selling prices at {basis} prices. Order sizes are entered in short tons and shown in kilograms; "
+              f"Table S8 lists the inputs and the resulting selling prices at {basis} prices. Production scales (the catalyst mass of one order) are entered in short tons and shown in kilograms; "
               "operations that are unavailable at the production scale of an order are replaced by the application's scale equivalents (a batch kiln for the continuous kiln at the small scale). "
               "Precious-metal value is part of the materials cost and carries overheads and margin; no spent-catalyst credit is applied. "
               "The selling price is linear in the metal price, so the ruthenium price at which the two catalysts cost the same per kilogram follows from two evaluations and was confirmed by a third. "
@@ -262,15 +262,15 @@ def render():
         lines.append(f"| {spec['loading_wt_pct']} wt% {name} | Baseline ({spec['order_size_tons'] * KG_PER_SHORT_TON:,.1f} kg order) | — | {spec['baseline']['selling_price_per_lb'] * PER_LB_TO_PER_KG:,.2f} |")
         lines.append(f"| {name} | Metal loading | {loading[0]['loading_wt_pct']:g}–{loading[-1]['loading_wt_pct']:g} wt% | "
                      f"{loading[0]['selling_price_per_lb'] * PER_LB_TO_PER_KG:,.2f}–{loading[-1]['selling_price_per_lb'] * PER_LB_TO_PER_KG:,.2f} |")
-        lines.append(f"| {spec['loading_wt_pct']} wt% {name} | Order size | {order[0]['order_size_tons'] * KG_PER_SHORT_TON:,.1f}–{order[-1]['order_size_tons'] * KG_PER_SHORT_TON:,.1f} kg | "
+        lines.append(f"| {spec['loading_wt_pct']} wt% {name} | Production scale | {order[0]['order_size_tons'] * KG_PER_SHORT_TON:,.1f}–{order[-1]['order_size_tons'] * KG_PER_SHORT_TON:,.1f} kg | "
                      f"{order[0]['selling_price_per_lb'] * PER_LB_TO_PER_KG:,.2f}–{order[-1]['selling_price_per_lb'] * PER_LB_TO_PER_KG:,.2f} |")
     preparation = sorted(whatif["preparation"], key=lambda row: row["selling_price_per_lb"])
     nickel = whatif["catalysts"]["ni"]
-    lines.append(f"| {nickel['loading_wt_pct']} wt% Ni/Al₂O₃ | Preparation procedure | {len(preparation)} procedures | "
+    lines.append(f"| {nickel['loading_wt_pct']} wt% Ni/Al₂O₃ | Preparation method | {len(preparation)} methods | "
                  f"{preparation[0]['selling_price_per_lb'] * PER_LB_TO_PER_KG:,.2f}–{preparation[-1]['selling_price_per_lb'] * PER_LB_TO_PER_KG:,.2f} |")
     equal = whatif["equal_cost"]
     lines += ["", f"Nickel is priced at {nickel['metal_price_per_lb'] * PER_LB_TO_PER_KG:,.2f} USD/kg and ruthenium at {whatif['catalysts']['ru']['metal_price_per_lb'] * PER_LB_TO_PER_KG:,.0f} USD/kg. "
-              f"The procedures are: {'; '.join(row['template_name'].split(' - ')[0] for row in whatif['preparation'])}. "
+              f"The preparation methods are: {'; '.join(row['template_name'].split(' - ')[0] for row in whatif['preparation'])}. "
               f"The two baseline catalysts would cost the same per kilogram at a ruthenium price of {equal['equal_cost_ru_price_per_lb'] * PER_LB_TO_PER_KG:,.0f} USD/kg, "
               f"{100 * equal['equal_cost_over_reference']:.2f}% of the {basis} price; the lowest monthly ruthenium price of the {equal['ru_history_months']}-month record is "
               f"{equal['ru_history_min_per_lb'] * PER_LB_TO_PER_KG:,.0f} USD/kg.", "",
@@ -281,7 +281,7 @@ def render():
               "Score tests lower the baseline candidate and raise alternatives by 2, 5 or 10 points, bounded by 0 and 100. "
               "Frequencies are conditional on these enumerated scenarios. No probability distribution for future market prices or catalyst performance is inferred. "
               "Route and performance scores are screening judgments assigned from the literature, not measured or predicted activity.", "",
-              f"Figure 4(d) of the main article replays the frozen screening calculation for ammonia cracking under the {robust['months']} monthly metal-price states with formulations, order sizes, route assumptions, support prices, price-source grades and route and performance scores fixed.<sup>3,5</sup> "
+              f"Figure 4(d) of the main article replays the frozen screening calculation for ammonia cracking under the {robust['months']} monthly metal-price states with formulations, production scales, route assumptions, support prices, price-source grades and route and performance scores fixed.<sup>3,5</sup> "
               f"Figure 4(e) marks the lowest-cost candidate of every month in the {len(leaders)} families where it changes. The numbers of months as the lowest-cost candidate are {'; '.join(leaders)}. "
               f"Figure S5 shows the same replay for methane dry reforming and water–gas shift, where the lowest-cost candidate changes {changes['dry-reforming']} and {changes['water-gas-shift']} times "
               f"({changes['ammonia-cracking']} times for ammonia cracking) while the balanced-weight recommendation of these families does not change. "

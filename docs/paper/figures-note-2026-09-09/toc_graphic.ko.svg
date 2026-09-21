@@ -294,13 +294,13 @@ L 15.624 100.044
     <text style="font-size: 6.2px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="23.76" y="43.020719" transform="rotate(-0 23.76 43.020719)">조성</text>
    </g>
    <g id="text_5">
-    <text style="font-size: 6.2px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="23.76" y="62.820719" transform="rotate(-0 23.76 62.820719)">제조 절차</text>
+    <text style="font-size: 6.2px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="23.76" y="62.820719" transform="rotate(-0 23.76 62.820719)">제조법</text>
    </g>
    <g id="text_6">
-    <text style="font-size: 6.2px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="23.76" y="82.620719" transform="rotate(-0 23.76 82.620719)">주문량</text>
+    <text style="font-size: 6.2px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="23.76" y="82.620719" transform="rotate(-0 23.76 82.620719)">생산 규모</text>
    </g>
    <g id="text_7">
-    <text style="font-size: 6.2px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="23.76" y="102.420719" transform="rotate(-0 23.76 102.420719)">날짜별 가격</text>
+    <text style="font-size: 6.2px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="23.76" y="102.420719" transform="rotate(-0 23.76 102.420719)">원료 가격</text>
    </g>
    <g id="text_8">
     <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="96.48" y="95.747242" transform="rotate(-0 96.48 95.747242)">재료비</text>
@@ -321,7 +321,7 @@ L 15.624 100.044
     <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #5b6870" x="85.32" y="115.6725" transform="rotate(-0 85.32 115.6725)">USD/kg</text>
    </g>
    <g id="text_14">
-    <text style="font-weight: 700; font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="146.88" y="26.153" transform="rotate(-0 146.88 26.153)">주문량이 클수록 낮은 단가</text>
+    <text style="font-weight: 700; font-size: 6.4px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #1f2a30" x="146.88" y="26.153" transform="rotate(-0 146.88 26.153)">생산 규모가 클수록 낮은 단가</text>
    </g>
    <g id="text_15">
     <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: start; fill: #5b6870" x="149.04" y="60.968437" transform="rotate(-0 149.04 60.968437)">0.9 t</text>
@@ -330,7 +330,7 @@ L 15.624 100.044
     <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: end; fill: #5b6870" x="228.96" y="60.968437" transform="rotate(-0 228.96 60.968437)">907 t</text>
    </g>
    <g id="text_17">
-    <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="189" y="60.968437" transform="rotate(-0 189 60.968437)">주문량</text>
+    <text style="font-size: 6px; font-family: 'Malgun Gothic'; text-anchor: middle; fill: #1f2a30" x="189" y="60.968437" transform="rotate(-0 189 60.968437)">생산 규모</text>
    </g>
    <g id="text_18">
     <text style="font-weight: 700; font-size: 6.4px; font-family: 'Malgun Gothic'; fill: #1f2a30" transform="translate(146.88 72.40405)">금속 가격에 따라 바뀌는</text>

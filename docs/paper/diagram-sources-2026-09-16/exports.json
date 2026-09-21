@@ -3,7 +3,7 @@
     "diagrams":  [
                      {
                          "source":  "fig2_cost_model.pptx",
-                         "source_sha256":  "1d432db14240b14b5578dc0552ebdd77ed9b22c9713f05926c4da40d3ec6253a",
+                         "source_sha256":  "ae8f0b1da7e8fe5d6a78460d6b248679283738571ac83613fe1db4fe0bf6f006",
                          "width_mm":  178.02,
                          "height_mm":  212.019,
                          "png_dpi_at_slide_size":  400,
@@ -11,16 +11,16 @@
                                          {
                                              "language":  "en",
                                              "png":  "exports/fig2_cost_model.en.png",
-                                             "png_sha256":  "88c591d3fb69c8b7c7c78a72228806bff29e5b28a0ef4f8b06f6b184d803feab",
+                                             "png_sha256":  "7b5fa93ce8e3710c31e693f6f8359f391f2ec023241f5d99fab80d8bf65cc3fd",
                                              "svg":  "exports/fig2_cost_model.en.svg",
-                                             "svg_sha256":  "423575ac1b4c189f5c06b6990f4c7cc480bf6c50e7985065a7c33bcf98c59e65"
+                                             "svg_sha256":  "2a564305c0f28ac5100b9e4168d38cba82b11a0e8e79607d335f5da4edf00935"
                                          },
                                          {
                                              "language":  "ko",
                                              "png":  "exports/fig2_cost_model.ko.png",
-                                             "png_sha256":  "20c6038ffdcd3c6b1e0c28a2499fe7c189b34774f56fb78fdf03cc5a8dbd41f5",
+                                             "png_sha256":  "12f244e985d5d88e6a3eb0026293b5b6fa4b479e8a28d5dcba2cfa0bd07ac74f",
                                              "svg":  "exports/fig2_cost_model.ko.svg",
-                                             "svg_sha256":  "d0b7d104944417f0e98ab3e2236465c9d6068454631367c502861a2355479bcd"
+                                             "svg_sha256":  "f17112c161a8e05a0ac84638acdf36499d88d48299f6a8ddd078e8e6425c5fe5"
                                          }
                                      ]
                      },
@@ -49,7 +49,7 @@
                      },
                      {
                          "source":  "fig4_ranking.pptx",
-                         "source_sha256":  "dadbf4c63bd05b472b4e5710db23e43a4f7b3cc309234bb3d923ceb51244dbcd",
+                         "source_sha256":  "05d9a8a7e81db8757ee7cd4f43c4d39db7e451afc9163d845fe7b5d97c97aa3d",
                          "width_mm":  178.02,
                          "height_mm":  128.014,
                          "png_dpi_at_slide_size":  400,
@@ -57,16 +57,16 @@
                                          {
                                              "language":  "en",
                                              "png":  "exports/fig4_ranking.en.png",
-                                             "png_sha256":  "54346b99c9ea43c8e3d15c497e62085d8ddbb7b06650b3b6605f68c870fcb206",
+                                             "png_sha256":  "217e6b31e7af26814b2a172c8f50f2304eba39c5c3d6cb208fcff27702ec1b89",
                                              "svg":  "exports/fig4_ranking.en.svg",
-                                             "svg_sha256":  "99b052551d5eff5f2c5600f27624172c167632de3f8495b524a85a4e3a60e87d"
+                                             "svg_sha256":  "0bf06487cfdfb4c4e4fb133a371b96cc15ad4ce985faa1282350431514739cbd"
                                          },
                                          {
                                              "language":  "ko",
                                              "png":  "exports/fig4_ranking.ko.png",
-                                             "png_sha256":  "ded542ce84b97c9f89bb058d25cb1182b1be76caa5df08697c4617f3696e7ba4",
+                                             "png_sha256":  "e6a63299ce2cb47f112134b65cea5e7740e5faae17f6687d9f4fe194e4f3701c",
                                              "svg":  "exports/fig4_ranking.ko.svg",
-                                             "svg_sha256":  "baede0bed0be19b819540c98bb29c7c6afee5eba1ec39bd2de14a6bd589641fe"
+                                             "svg_sha256":  "d4d0f08e573cfd782668283c9e9e22f5517cf8c30166cbc9f04ee7c9723e637e"
                                          }
                                      ]
                      },

@@ -1903,3 +1903,19 @@ ACS 파일 형식 목록은 검색 색인에서 ZIP 허용을 확인했으며, �
 - 본문·수치·분량은 H55와 같다(4,998/5,000, Word 통계 일치). 검사: 노트·SI `--check`, ruff, 노트·질량 단위 테스트(18 passed).
 - Word v56(`_local/docx/rebuild_v56.py`): EN 15쪽, KO 20쪽, SI 22쪽, 서식 검사 통과. 패키지는 `_local/submission-2026-09-21-v56/`다.
 - 외부 업로드·푸시 없음. 읽기 전용으로 ACS 저자 안내 페이지를 열었다.
+
+### H57 — 2026-09-21: 용어를 앱 화면과 촉매 분야 관행어로 통일(production scale, preparation method, price histories)
+
+- 저자 지적: TOC의 "Order size"는 production scale이나 생산 능력 쪽이 낫고, "Procedure"는 문헌의 합성·제조 방법으로 읽혀야 하며, "Dated prices"는 촉매 합성 논문에서 쓰지 않는 말이다.
+  - 확인해 보니 앱 화면이 이미 이 입력을 "Production scale"(생산 규모), "Preparation method"(제조법)라고 부른다(`frontend/src/lib/i18n.tsx`, `Calculator.tsx`). CatCost 논문(Nature Catalysis 2022)도 "production scale"을 쓴다. 원고만 "order size", "procedure"를 쓰고 있었다.
+  - "생산 능력(capacity)"은 연간 설비 능력을 뜻해 주문 한 건의 촉매 질량과 다르므로 쓰지 않았다.
+- **본문.** order size → production scale(원가 모델 절에서 "kg of catalyst per order"로 한 번 정의), procedure → preparation method, dated price histories → metal price histories, "order-size correlation" → "scale correlation".
+  - what-if 절 첫 문장의 "At production scale"은 새 용어와 겹쳐 "For industrial production"으로 바꿨다.
+  - 초록에서 Step Method를 가리키던 "a published procedure"는 "a published method"로 바꿔 제조법과 혼동되지 않게 했다.
+  - 분량은 136 + 2,161 + 2,400 = 4,697, TOC 포함 **4,997/5,000**이며 Word 통계와 일치한다.
+- **그림.** Figure 4(b) 가로축 "Production scale (t)"(한글 "생산 규모 (t)"), Figure 4 캡션의 점선 설명은 "small, medium, and large equipment"로 고쳤다. Figure 2(a)의 편집 가능한 라벨 "Route and order size"를 덱 빌더에서 "Preparation method and production scale"(한글 "제조법 및 생산 규모")로 바꾼다(`relabel`, 대상 라벨을 못 찾으면 실패).
+  - TOC 그래픽 입력 라벨: Composition, Preparation method, Production scale, Material prices(한글 조성, 제조법, 생산 규모, 원료 가격). 오른쪽 위 제목은 "Larger scale, lower price", 축은 "Production scale"이다.
+- **SI.** Table S8의 행 이름(Production scale, Preparation method), S1·S5절 문장, 생산 규모의 뜻("the catalyst mass of one order")을 같은 용어로 맞췄다.
+- **한글 원고.** 주문량 → 생산 규모, 제조 절차 → 제조법, 기준일이 있는 가격 이력 → 금속 가격 이력. 숫자는 영문과 모두 일치한다.
+- 검사: 노트·SI `--check`, ruff, 노트·질량 단위 테스트(18 passed). 계산 코드와 동결 자료는 바꾸지 않았다(내부 키 `order_size_tons`는 그대로).
+- Word v57(`_local/docx/rebuild_v57.py`): EN 15쪽, KO 20쪽, SI 22쪽, 서식 검사 통과. 패키지는 `_local/submission-2026-09-21-v57/`다. 외부 업로드·푸시 없음.

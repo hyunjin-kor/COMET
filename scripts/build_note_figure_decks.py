@@ -146,16 +146,42 @@ def place(slide, records, panel, x, y):
     picture(slide, PANELS / row["file"], x, y, row["width_mm"], row["height_mm"], f"panel-{panel}-image")
 
 
+# The transplanted Figure 2(a) drawing predates the application's vocabulary for these two inputs.
+FIG2A_LABELS = {"Route and order size": "Preparation method and production scale", "제조 경로 및 주문량": "제조법 및 생산 규모"}
+
+
+def relabel(slide, labels):
+    """Replace the text of transplanted labels, keeping the formatting of their first run and the box centre."""
+    found = set()
+    for shape in slide.shapes:
+        text = shape.text_frame.text.strip() if shape.has_text_frame else ""
+        if text in labels:
+            runs = shape.text_frame.paragraphs[0].runs
+            grow = len(labels[text]) / len(text)
+            centre = shape.left + shape.width // 2
+            shape.width = int(shape.width * max(grow, 1))
+            shape.left = centre - shape.width // 2
+            runs[0].text = labels[text]
+            for run in runs[1:]:
+                run.text = ""
+            found.add(text)
+    return found
+
+
 def build_fig2(records):
     deck = new_deck(178, 212)
+    relabelled = set()
     for index, lang in enumerate(LANGS):
         slide = blank_slide(deck)
         transplant(H26 / "fig2a_cost_model.pptx", index, slide, 0, 2, 1.0)
+        relabelled |= relabel(slide, FIG2A_LABELS)
         place(slide, records[("fig2_cost_model", lang)], "b", 0, 64)
         place(slide, records[("fig2_cost_model", lang)], "c", 0, 110)
         letter(slide, "a", 2, 0.5)
         letter(slide, "b", 2, 64.5)
         letter(slide, "c", 2, 110.5)
+    if relabelled != set(FIG2A_LABELS):
+        raise ValueError("A Figure 2(a) label to be replaced was not found")
     return deck
 
 

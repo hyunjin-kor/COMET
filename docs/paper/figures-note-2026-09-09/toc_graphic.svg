@@ -294,13 +294,16 @@ L 15.624 100.044
     <text style="font-size: 6.2px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="23.76" y="43.040578" transform="rotate(-0 23.76 43.040578)">Composition</text>
    </g>
    <g id="text_5">
-    <text style="font-size: 6.2px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="23.76" y="62.802797" transform="rotate(-0 23.76 62.802797)">Procedure</text>
+    <text style="font-size: 6.2px; font-family: 'Arial'; fill: #1f2a30" transform="translate(23.76 59.856804)">Preparation</text>
+    <text style="font-size: 6.2px; font-family: 'Arial'; fill: #1f2a30" transform="translate(23.76 65.74879)">method</text>
    </g>
    <g id="text_6">
-    <text style="font-size: 6.2px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="23.76" y="82.602797" transform="rotate(-0 23.76 82.602797)">Order size</text>
+    <text style="font-size: 6.2px; font-family: 'Arial'; fill: #1f2a30" transform="translate(23.76 79.656804)">Production</text>
+    <text style="font-size: 6.2px; font-family: 'Arial'; fill: #1f2a30" transform="translate(23.76 85.54879)">scale</text>
    </g>
    <g id="text_7">
-    <text style="font-size: 6.2px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="23.76" y="102.402797" transform="rotate(-0 23.76 102.402797)">Dated prices</text>
+    <text style="font-size: 6.2px; font-family: 'Arial'; fill: #1f2a30" transform="translate(23.76 99.456804)">Material</text>
+    <text style="font-size: 6.2px; font-family: 'Arial'; fill: #1f2a30" transform="translate(23.76 105.34879)">prices</text>
    </g>
    <g id="text_8">
     <text style="font-size: 6px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="96.48" y="95.729899" transform="rotate(-0 96.48 95.729899)">Materials</text>
@@ -321,7 +324,7 @@ L 15.624 100.044
     <text style="font-size: 6px; font-family: 'Arial'; text-anchor: middle; fill: #5b6870" x="85.32" y="115.6725" transform="rotate(-0 85.32 115.6725)">USD/kg</text>
    </g>
    <g id="text_14">
-    <text style="font-weight: 700; font-size: 6.4px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="146.88" y="26.097" transform="rotate(-0 146.88 26.097)">Larger order, lower price</text>
+    <text style="font-weight: 700; font-size: 6.4px; font-family: 'Arial'; text-anchor: start; fill: #1f2a30" x="146.88" y="26.097" transform="rotate(-0 146.88 26.097)">Larger scale, lower price</text>
    </g>
    <g id="text_15">
     <text style="font-size: 6px; font-family: 'Arial'; text-anchor: start; fill: #5b6870" x="149.04" y="60.951094" transform="rotate(-0 149.04 60.951094)">0.9 t</text>
@@ -330,7 +333,7 @@ L 15.624 100.044
     <text style="font-size: 6px; font-family: 'Arial'; text-anchor: end; fill: #5b6870" x="228.96" y="60.951094" transform="rotate(-0 228.96 60.951094)">907 t</text>
    </g>
    <g id="text_17">
-    <text style="font-size: 6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="189" y="60.951094" transform="rotate(-0 189 60.951094)">Order size</text>
+    <text style="font-size: 6px; font-family: 'Arial'; text-anchor: middle; fill: #1f2a30" x="189" y="60.951094" transform="rotate(-0 189 60.951094)">Production scale</text>
    </g>
    <g id="text_18">
     <text style="font-weight: 700; font-size: 6.4px; font-family: 'Arial'; fill: #1f2a30" transform="translate(146.88 72.62595)">Metal prices switch</text>
