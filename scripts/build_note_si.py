@@ -3,6 +3,7 @@
 import argparse
 import csv
 import json
+import re
 from collections import Counter
 from pathlib import Path
 
@@ -53,6 +54,18 @@ def render():
     changes = {family: int(census[(family, "monthly")]["cost_changes"]) for family in ("ammonia-cracking", "dry-reforming", "water-gas-shift")}
     if any(int(census[(family, "monthly")]["app_changes"]) for family in changes):
         raise ValueError("The SI text states that the balanced recommendation does not change in these families")
+    # Families of Figure 4(e): months as the lowest-cost candidate and number of changes, thermal families first.
+    replay = load(f"docs/paper/price-crossovers-{RUN_DATE}/price_crossovers.json")
+    leaders = []
+    for row in sorted(replay["families"], key=lambda row: (row["domain"] != "thermal", row["family"])):
+        months = row["periods"]["monthly"]["summary"]["winner_counts"]["cost_winner"]
+        if len(months) > 1:
+            named = ", ".join(f"{CANDIDATE_LABELS[row['family']][slug]} {count}" for slug, count in sorted(months.items(), key=lambda item: -item[1]))
+            name = re.sub(r"^[A-Z]+ \((.+)\)$", r"\1", FAMILY_LABELS[row["family"]])
+            count = int(census[(row["family"], "monthly")]["cost_changes"])
+            leaders.append(f"{name if name.startswith('CO') else name[0].lower() + name[1:]}: {named} ({count} change{'s' if count != 1 else ''})")
+    if len(leaders) != replay["summary"]["monthly"]["cost_winner"]:
+        raise ValueError("The families of Figure 4(e) differ from the stored count of lowest-cost changes")
     comparison = data["summary"]["live_reference_comparison"]
     reference_families = {row["family"]: row for row in data["screening"]["families"]}
     live_families = {row["family"]: row for row in data["live"]["families"]}
@@ -242,12 +255,15 @@ def render():
               "Frequencies are conditional on these enumerated scenarios. No probability distribution for future market prices or catalyst performance is inferred. "
               "Route and performance scores are screening judgments assigned from the literature, not measured or predicted activity.", "",
               f"Figure 4(d) of the main article replays the frozen screening calculation for ammonia cracking under the {robust['months']} monthly metal-price states with formulations, order sizes, route assumptions, support prices, price-source grades and route and performance scores fixed.<sup>3,5</sup> "
+              f"Figure 4(e) marks the lowest-cost candidate of every month in the {len(leaders)} families where it changes. The numbers of months as the lowest-cost candidate are {'; '.join(leaders)}. "
               f"Figure S5 shows the same replay for methane dry reforming and water–gas shift, where the lowest-cost candidate changes {changes['dry-reforming']} and {changes['water-gas-shift']} times "
               f"({changes['ammonia-cracking']} times for ammonia cracking) while the balanced-weight recommendation of these families does not change. "
+              "Panel (c) places the monthly states of ammonia cracking in the nickel–cobalt price plane: they cluster near the conditional equal-cost boundary, so modest cobalt moves change the lowest-cost candidate. "
               f"The September–October 2025 cobalt price increase from {states['2025-09']['Co'] * PER_LB_TO_PER_KG:.2f} to {states['2025-10']['Co'] * PER_LB_TO_PER_KG:.2f} USD/kg "
               "also reverses the lowest-cost candidate in methane dry reforming while nickel is nearly unchanged. "
               "These are conditional model comparisons between screening candidates, not contemporaneous supplier quotations or performance comparisons.", "",
-              f"![Figure S5. Observed-price cost crossovers. Costs (modeled selling prices) under the {robust['months']} monthly price states for the candidates that attain the lowest cost at any state in (a) methane dry reforming and (b) water–gas shift; lines connect observed states and do not locate a crossover date. Ni–Co/Al–Mg denotes Ni–Co/Al–Mg–O; Ni/CeO₂, Ni/CeO₂ single sites; Cu–ZnO, Cu/ZnO/Al₂O₃; Fe–Cr, Fe₂O₃–Cr₂O₃(–CuO) (Table S6). Other prices and engineering assumptions remain at reference values.](figures-si-2026-09-16/figS5_crossovers.png)", "",
+              f"![Figure S5. Observed-price cost crossovers. Costs (modeled selling prices) under the {robust['months']} monthly price states for the candidates that attain the lowest cost at any state in (a) methane dry reforming and (b) water–gas shift; lines connect observed states and do not locate a crossover date. (c) Conditional equal-cost boundary between Co/MgO–La₂O₃ (Co/Mg–La) and Ni/γ-Al₂O₃ (Ni/Al₂O₃) in the nickel–cobalt price plane; points are monthly states colored by the cheaper candidate, and the enlarged view names September and October 2025. Ni–Co/Al–Mg denotes Ni–Co/Al–Mg–O; Ni/CeO₂, Ni/CeO₂ single sites; Cu–ZnO, Cu/ZnO/Al₂O₃; Fe–Cr, Fe₂O₃–Cr₂O₃(–CuO) (Table S6). Other prices and engineering assumptions remain at reference values.](figures-si-2026-09-16/figS5_crossovers.png)", "",
+              f"![Figure S6. Ranking sensitivity. (a) First-rank frequencies over the joint price and weight scenarios; dashed line, 50%. (b) Number of the {robust['families']} reaction families retaining the baseline candidate under each test. (c) Cost differences between leaders before and after candidate removal; negative values indicate less expensive replacements. PEM, proton exchange membrane; AEM, anion exchange membrane; OER, oxygen evolution reaction; ORR, oxygen reduction reaction; SCR, selective catalytic reduction; RWGS, reverse water–gas shift.](figures-si-2026-09-16/figS6_ranking_tests.png)", "",
               f"Figure S6 summarizes the ranking sensitivity. Panel (a) separates, for every family, how often the baseline candidate, its most frequent alternative and the other candidates rank first over the joint scenarios; "
               f"the median baseline frequency is {robust['reference_winner_joint_share_median_pct']:.2f}%. Panel (b) counts the families whose baseline candidate ranks first in at least half of the joint scenarios "
               "or is retained under candidate removal and under route/performance-score changes of 2, 5 and 10 points; passing one test does not establish robustness to the others. "
@@ -256,7 +272,6 @@ def render():
               f"so renormalization changes the scores of {labels[example['rows'][0]['slug']]} and {labels[example['rows'][2]['slug']]} from "
               f"{example['rows'][0]['total_before']:.1f} and {example['rows'][2]['total_before']:.1f} to {example['rows'][0]['total_after']:.1f} and {example['rows'][2]['total_after']:.1f} and reverses their order; "
               "retaining the original range prevents every such reversal. Panel (c) gives 100 × (C₁ − C₀)/C₀ for the affected families, where C₀ and C₁ are the costs of the leaders before and after removal.", "",
-              f"![Figure S6. Ranking sensitivity. (a) First-rank frequencies over the joint price and weight scenarios; dashed line, 50%. (b) Number of the {robust['families']} reaction families retaining the baseline candidate under each test. (c) Cost differences between leaders before and after candidate removal; negative values indicate less expensive replacements. PEM, proton exchange membrane; AEM, anion exchange membrane; OER, oxygen evolution reaction; ORR, oxygen reduction reaction; SCR, selective catalytic reduction; RWGS, reverse water–gas shift.](figures-si-2026-09-16/figS6_ranking_tests.png)", "",
               f"The monthly replays hold price-source grades fixed. Replacing the {basis} reference with the stored live quotations collected on {observed} "
               "also changes these grades: a metal without a stored live quotation falls back to a stored reference price, and each candidate's price-reliability score "
               "weights its sources by materials-cost share. With all other inputs unchanged, the leader changes in "

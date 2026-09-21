@@ -50,7 +50,7 @@ from matplotlib.transforms import Bbox  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from scripts.paper_labels import STATUS_LABELS  # noqa: E402
+from scripts.paper_labels import CANDIDATE_LABELS, STATUS_LABELS  # noqa: E402
 from scripts.paper_units import (  # noqa: E402
     KG_PER_SHORT_TON,
     PER_LB_TO_PER_KG,
@@ -110,12 +110,14 @@ TEXT = {
                       "source_mismatch": STATUS_LABELS["source_mismatch"],
                       "screening_only": STATUS_LABELS["screening_only"]},
         "f4_co": "Co/MgO–La$_2$O$_3$", "f4_ni": "Ni/γ-Al$_2$O$_3$", "f4_cost_y": "Cost (USD/kg)",
-        "f4_ni_x": "Ni price (USD/kg)", "f4_co_y": "Co price (USD/kg)",
+        "f4_short": {"ni-single-atom-ceria": "Ni/CeO$_2$", "cu-multicarbon-co2rr": "Cu (multicarbon)",
+                     "sn-formate-co2rr": "Sn (formate)", "nimo-alkaline-her-cathode": "NiMo (alkaline)",
+                     "mos2-acidic-her-cathode": "MoS$_2$ (acidic)", "aqueous-nrr-cu": "Cu (aqueous)",
+                     "plasma-nrr": "Plasma-assisted"},
         "w_ni": "Ni/Al$_2$O$_3$", "w_ru": "Ru/Al$_2$O$_3$", "w_price_y": "Selling price (USD/kg)",
         "w_loading_x": "Metal loading (wt%)", "w_order_x": "Order size (t)", "w_per_wt": " per wt%",
         "w_scales": ["small", "medium", "large"],
         "w_items": ["Materials", "Processing", "G&A", "SARD", "Margin"],
-        "f4_move": "Sep → Oct 2025", "f4_move_co": "Co {before:.2f} → {after:.2f}",
         "w_templates": {"wet_impregnation_metal_oxide": "Incipient wetness",
                         "excess_solution_impregnation_metal_oxide": "Wet impregnation",
                         "deposition_precipitation_metal_oxide": "Deposition–\nprecipitation",
@@ -154,12 +156,14 @@ TEXT = {
                       "source_mismatch": "출처/조성 불일치 표시",
                       "screening_only": "정리된 제조 기록 없음"},
         "f4_co": "Co/MgO–La$_2$O$_3$", "f4_ni": "Ni/γ-Al$_2$O$_3$", "f4_cost_y": "원가 (USD/kg)",
-        "f4_ni_x": "Ni 가격 (USD/kg)", "f4_co_y": "Co 가격 (USD/kg)",
+        "f4_short": {"ni-single-atom-ceria": "Ni/CeO$_2$", "cu-multicarbon-co2rr": "Cu (다탄소 생성물)",
+                     "sn-formate-co2rr": "Sn (포름산염)", "nimo-alkaline-her-cathode": "NiMo (알칼리)",
+                     "mos2-acidic-her-cathode": "MoS$_2$ (산성)", "aqueous-nrr-cu": "Cu (수계)",
+                     "plasma-nrr": "플라즈마 보조"},
         "w_ni": "Ni/Al$_2$O$_3$", "w_ru": "Ru/Al$_2$O$_3$", "w_price_y": "판매 단가 (USD/kg)",
         "w_loading_x": "금속 담지량 (wt%)", "w_order_x": "주문량 (t)", "w_per_wt": " (wt%당)",
         "w_scales": ["소규모", "중규모", "대규모"],
         "w_items": ["재료비", "가공비", "G&A", "SARD", "마진"],
-        "f4_move": "2025년 9월 → 10월", "f4_move_co": "Co {before:.2f} → {after:.2f}",
         "w_templates": {"wet_impregnation_metal_oxide": "초기습윤 함침",
                         "excess_solution_impregnation_metal_oxide": "습식 함침",
                         "deposition_precipitation_metal_oxide": "침착–침전",
@@ -836,10 +840,76 @@ def draw_crossovers(directory, out, lang):
     (out / f"layout_checks{suffix}.json").write_text(json.dumps(layout_checks, indent=2) + "\n", encoding="utf-8")
 
 
-def _crossover_figure():
+def figure_s5_crossovers():
+    """Cost histories of two thermal families and the nickel-cobalt price plane of ammonia cracking, in one row."""
     study = json.loads((CROSSOVERS / "price_crossovers.json").read_text(encoding="utf-8"))
     mechanisms = json.loads((CROSSOVERS / "crossover_mechanisms.json").read_text(encoding="utf-8"))
-    return figure_price_crossovers(study, mechanisms, LANG)
+    families = {row["family"]: row for row in study["families"]}
+    height = 70
+    fig = plt.figure(figsize=(178 / 25.4, height / 25.4))
+    cases = [("dry-reforming", 13, [("ni-co-almgo", "Ni–Co/Al–Mg"), ("ni-zeolite-stable", "Ni/zeolite"), ("ni-single-atom-ceria", "Ni/CeO$_2$")]),
+             ("water-gas-shift", 65, [("cu-zno-baseline", "Cu–ZnO"), ("fe-cr-hts", "Fe–Cr")])]
+    for family, left, series in cases:
+        ax = fig.add_axes([left / 178, 1 - 58 / height, 36 / 178, 48 / height])
+        records = families[family]["periods"]["monthly"]["records"]
+        values = []
+        for index, (slug, label) in enumerate(series):
+            costs = [publication_cost(row["costs"][slug], families[family]["unit"]) for row in records]
+            values.extend(costs)
+            ax.plot(_crossover_dates(records), costs, color=(ACC, WARN, RU_COLOUR)[index], lw=1.2, ls=("-", "--", "-.")[index], label=label)
+        low, high = min(values), max(values)
+        ax.set_ylim(low - (high - low) * 0.08, high + (high - low) * 0.55)
+        ax.set_xlim(datetime(2019, 1, 1), datetime(2026, 10, 1))
+        ax.xaxis.set_major_locator(mdates.YearLocator(2))
+        ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+        ax.set_ylabel(L["f4_cost_y"], fontsize=9)
+        ax.set_title(FAMILY_NAMES[LANG][family].replace("\n", " "), loc="left", fontsize=9, pad=4)
+        ax.legend(loc="upper left", frameon=False, fontsize=8, handlelength=1.6, labelspacing=0.25, borderpad=0.2)
+        _clean(ax)
+
+    ax = fig.add_axes([118 / 178, 1 - 58 / height, 56 / 178, 48 / height])
+    boundary = mechanisms["ammonia_boundary"]
+    factor = PER_LB_TO_PER_KG
+    x = [point["Ni"] * factor for point in boundary["points"]]
+    y = [point["Co_threshold"] * factor for point in boundary["points"]]
+    monthly = families["ammonia-cracking"]["periods"]["monthly"]["records"]
+    selected = {point["date"]: (point["Ni"] * factor, point["Co"] * factor)
+                for point in boundary["observations"] if point["date"] in ("2025-09", "2025-10")}
+    # The two months sit among crowded states, so they are named in an enlarged view placed where no state lies.
+    inset = ax.inset_axes([0.035, 0.61, 0.37, 0.36])
+    for view, size, alpha in ((ax, 9, 0.55), (inset, 11, 0.35)):
+        view.fill_between(x, 5 * factor, y, color=ACC, alpha=0.07)
+        view.fill_between(x, y, 50 * factor, color=WARN, alpha=0.07)
+        view.plot(x, y, color=INK, lw=1.0)
+        for point, row in zip(boundary["observations"], monthly, strict=True):
+            colour = ACC if row["cost_winner"] == "co-mgo-la2o3" else WARN
+            view.scatter(point["Ni"] * factor, point["Co"] * factor, s=size, c=colour, alpha=alpha, linewidths=0)
+    if any(9.0 < point["Ni"] * factor < 20.0 and point["Co"] * factor > 60.5 for point in boundary["observations"]):
+        raise ValueError("A monthly state lies under the enlarged view")
+    months = {"2025-09": "Sep 2025", "2025-10": "Oct 2025"} if LANG == "en" else {"2025-09": "2025년 9월", "2025-10": "2025년 10월"}
+    for day, colour, shift in (("2025-09", ACC, -1.6), ("2025-10", WARN, 2.2)):
+        inset.scatter(*selected[day], s=30, c=colour, edgecolors=INK, linewidths=0.7, zorder=5)
+        inset.text(selected[day][0] + 0.26, selected[day][1] + shift, months[day], fontsize=7.5, va="center", color=INK, zorder=4,
+                   bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.8, "pad": 0.6})
+    inset.annotate("", xy=selected["2025-10"], xytext=selected["2025-09"], zorder=6,
+                   arrowprops={"arrowstyle": "-|>", "lw": 0.9, "color": INK, "shrinkA": 3.8, "shrinkB": 3.8, "mutation_scale": 7})
+    inset.set_xlim(14.6, 17.8)
+    inset.set_ylim(26, 50)
+    inset.set_xticks([])
+    inset.set_yticks([])
+    for spine in inset.spines.values():
+        spine.set_linewidth(0.5)
+    ax.indicate_inset_zoom(inset, edgecolor=MUTED, lw=0.5, alpha=0.9)
+    cheaper = "{} cheaper" if LANG == "en" else "{}가 더 저렴"
+    ax.text(0.45, 0.92, cheaper.format("Ni/Al$_2$O$_3$"), color=WARN, fontsize=8.5, transform=ax.transAxes)
+    ax.text(0.97, 0.06, cheaper.format("Co/Mg–La"), color=ACC, fontsize=8.5, ha="right", transform=ax.transAxes)
+    ax.set_xlim(4 * factor, 16 * factor)
+    ax.set_ylim(5 * factor, 42 * factor)
+    ax.set_xlabel("Ni (USD/kg)" if LANG == "en" else "Ni 가격 (USD/kg)", fontsize=9)
+    ax.set_ylabel("Co (USD/kg)" if LANG == "en" else "Co 가격 (USD/kg)", fontsize=9)
+    ax.set_title(FAMILY_NAMES[LANG]["ammonia-cracking"], loc="left", fontsize=9, pad=4)
+    _clean(ax)
+    return fig
 
 
 def _sensitivity_label(row):
@@ -936,7 +1006,6 @@ def figure4_whatif():
     """What-if analyses of the calculator beside the observed-price crossover of the ammonia-cracking candidates."""
     whatif = json.loads(WHATIF.read_text(encoding="utf-8"))
     crossovers = json.loads((CROSSOVERS / "price_crossovers.json").read_text(encoding="utf-8"))
-    mechanisms = json.loads((CROSSOVERS / "crossover_mechanisms.json").read_text(encoding="utf-8"))
     height = 128
     fig = plt.figure(figsize=(178 / 25.4, height / 25.4))
     factor = PER_LB_TO_PER_KG
@@ -1030,37 +1099,40 @@ def figure4_whatif():
     d.legend(loc="upper left", frameon=False, fontsize=8.5, handlelength=1.6, labelspacing=0.3)
     _clean(d)
 
-    # (e) conditional equal-cost boundary in the nickel-cobalt price plane
-    boundary = mechanisms["ammonia_boundary"]
-    e = fig.add_axes([106 / 178, 1 - 114 / height, 66 / 178, 42 / height])
-    x = [point["Ni"] * factor for point in boundary["points"]]
-    y = [point["Co_threshold"] * factor for point in boundary["points"]]
-    e.fill_between(x, 5 * factor, y, color=ACC, alpha=0.07)
-    e.fill_between(x, y, 42 * factor, color=WARN, alpha=0.07)
-    e.plot(x, y, color=INK, lw=1.0)
-    for point, row in zip(boundary["observations"], records, strict=True):
-        colour = ACC if row["cost_winner"] == "co-mgo-la2o3" else WARN
-        e.scatter(point["Ni"] * factor, point["Co"] * factor, s=10, c=colour, alpha=0.65, linewidths=0.25, edgecolors="white")
-    selected = {point["date"]: (point["Ni"] * factor, point["Co"] * factor)
-                for point in boundary["observations"] if point["date"] in ("2025-09", "2025-10")}
-    for nickel, cobalt in selected.values():
-        e.scatter(nickel, cobalt, s=30, marker="D", facecolor="white", edgecolor=INK, lw=0.8, zorder=5)
-    e.annotate("", xy=selected["2025-10"], xytext=selected["2025-09"], zorder=6,
-               arrowprops={"arrowstyle": "-|>", "lw": 1.1, "color": INK, "shrinkA": 3, "shrinkB": 3, "mutation_scale": 7})
-    # One callout in the empty corner names the move instead of two date labels beside the crowded states.
-    before, after = selected["2025-09"], selected["2025-10"]
-    e.annotate(L["f4_move"] + "\n" + L["f4_move_co"].format(before=before[1], after=after[1]),
-               xy=((before[0] + after[0]) / 2, (before[1] + after[1]) / 2), xytext=(0.04, 0.785), textcoords="axes fraction",
-               ha="left", va="center", fontsize=8, color=INK, linespacing=1.25, zorder=6,
-               arrowprops={"arrowstyle": "-", "lw": 0.5, "color": MUTED, "shrinkA": 1, "shrinkB": 4,
-                           "connectionstyle": "angle,angleA=0,angleB=90,rad=0"})
-    e.text(0.04, 0.9, L["f4_ni"], color=WARN, fontsize=8.5, transform=e.transAxes)
-    e.text(0.5, 0.07, L["f4_co"], color=ACC, fontsize=8.5, transform=e.transAxes)
-    e.set_xlim(4 * factor, 16 * factor)
-    e.set_ylim(5 * factor, 42 * factor)
-    e.set_xlabel(L["f4_ni_x"], fontsize=9)
-    e.set_ylabel(L["f4_co_y"], fontsize=9)
+    # (e) the lowest-cost candidate of every month, for each family in which it changes
+    changing = sorted((row for row in crossovers["families"]
+                       if len(row["periods"]["monthly"]["summary"]["winner_counts"]["cost_winner"]) > 1),
+                      key=lambda row: (row["domain"] != "thermal", row["family"]))
+    if len(changing) != crossovers["summary"]["monthly"]["cost_winner"]:
+        raise ValueError("The strip of lowest-cost candidates does not cover the families counted in the text")
+    e = fig.add_axes([96 / 178, 1 - 114 / height, 77 / 178, 46 / height])
+    e.set_xlim(0, len(records))
+    e.set_ylim(len(changing) - 0.44, -0.56)
+    renderer = fig.canvas.get_renderer()
+    for index, row in enumerate(changing):
+        winners = [state["cost_winner"] for state in row["periods"]["monthly"]["records"]]
+        months = row["periods"]["monthly"]["summary"]["winner_counts"]["cost_winner"]
+        slugs = sorted(months, key=months.get, reverse=True)
+        colours = dict(zip(slugs, (ACC, WARN, RU_COLOUR), strict=False))
+        start = 0
+        for stop in range(1, len(winners) + 1):
+            if stop == len(winners) or winners[stop] != winners[start]:
+                e.broken_barh([(start, stop - start)], (index + 0.1, 0.4), facecolors=colours[winners[start]], linewidth=0)
+                start = stop
+        e.text(0, index - 0.03, FAMILY_NAMES[LANG][row["family"]].replace("\n", " "), fontsize=8, color=INK, ha="left", va="baseline")
+        right = len(winners)
+        for slug in reversed(slugs):
+            label = L["f4_short"].get(slug) or CANDIDATE_LABELS[row["family"]][slug].replace("₂", "$_2$").replace("₃", "$_3$")
+            name = e.text(right, index - 0.03, label, fontsize=7.5, color=colours[slug], ha="right", va="baseline")
+            right = name.get_window_extent(renderer).transformed(e.transData.inverted()).x0 - 2.5
+    first = datetime.fromisoformat(records[0]["date"] + "-01")
+    years = (2020, 2022, 2024, 2026)
+    e.set_xticks([(year - first.year) * 12 - (first.month - 1) for year in years])
+    e.set_xticklabels([str(year) for year in years])
+    e.set_yticks([])
     _clean(e)
+    for side in ("top", "right", "left"):
+        e.spines[side].set_visible(False)
     return fig
 
 
@@ -1075,7 +1147,7 @@ PANEL_LAYOUTS = {
     "figS2_sensitivity": (figure_s2_sensitivity, {"a": (0, 0, 150, 82)}),
     "figS3_monte_carlo": (figure_s3_monte_carlo, {"a": (0, 0, 89, 72), "b": (89, 0, 89, 72)}),
     "figS7_evidence": (figure_s4_evidence, {"a": (0, 0, 178, 118)}),
-    "figS5_crossovers": (_crossover_figure, {"a": (95, 0, 83, 82.5), "b": (0, 82.5, 89, 88.5)}),
+    "figS5_crossovers": (figure_s5_crossovers, {"a": (0, 0, 52, 70), "b": (52, 0, 52, 70), "c": (104, 0, 74, 70)}),
     "figS6_ranking_tests": (figure4_diagnostics, {"a": (0, 0, 178, 132), "b": (0, 132, 89, 71), "c": (89, 132, 89, 71)}),
 }
 # Deck name -> (destination folder under docs/paper, published stem).

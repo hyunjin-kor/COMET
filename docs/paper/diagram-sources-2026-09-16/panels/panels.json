@@ -153,7 +153,7 @@
       "file": "fig4_ranking.e.png",
       "width_mm": 89,
       "height_mm": 64,
-      "sha256": "c794fb9d3a0c07c776b18e643789c49ec8e5dd7c876e6efd638868be212a6f80"
+      "sha256": "8c36884799b48546c702e27b8719b48b031d42c477264a02621a04513c73153e"
     },
     {
       "figure": "fig4_ranking",
@@ -162,7 +162,7 @@
       "file": "fig4_ranking.e.ko.png",
       "width_mm": 89,
       "height_mm": 64,
-      "sha256": "d196d892f533f3a456dfe2cb17ac21cdb8b8b433d07610dfdd4935d6f4ba2e33"
+      "sha256": "f22e1240ecf808d21580d2e5910d44ef1f7ac2714a5f5bbb3913783a54d0d474"
     },
     {
       "figure": "figS2_sensitivity",
@@ -259,36 +259,54 @@
       "panel": "a",
       "language": "en",
       "file": "figS5_crossovers.a.png",
-      "width_mm": 83,
-      "height_mm": 82.5,
-      "sha256": "5f4ef93b22c89bc9a02b60c2fd17dabda5fb6b84bad763064612b30ffb7b237e"
+      "width_mm": 52,
+      "height_mm": 70,
+      "sha256": "f478d593c8df627a819faad5075eff6e03f5578f2e92e806dcf600153d6aaff6"
     },
     {
       "figure": "figS5_crossovers",
       "panel": "a",
       "language": "ko",
       "file": "figS5_crossovers.a.ko.png",
-      "width_mm": 83,
-      "height_mm": 82.5,
-      "sha256": "3423b48a43479bb9ff50fb76758e3ed866b4d4150312fb006c98fdf4d09fda0c"
+      "width_mm": 52,
+      "height_mm": 70,
+      "sha256": "2808c271d284f3a8b8ff8ef48b2bf8475a09471038e298f9ee27d38ce520b285"
     },
     {
       "figure": "figS5_crossovers",
       "panel": "b",
       "language": "en",
       "file": "figS5_crossovers.b.png",
-      "width_mm": 89,
-      "height_mm": 88.5,
-      "sha256": "2842190a8aa65584c22cbcf3913e6768f67293a289fa67a90d660060eb7ba9bb"
+      "width_mm": 52,
+      "height_mm": 70,
+      "sha256": "61d3f476b925962b95e0f2c9f3842faa471b7ec29181cdbb706ff4d6da29a9b7"
     },
     {
       "figure": "figS5_crossovers",
       "panel": "b",
       "language": "ko",
       "file": "figS5_crossovers.b.ko.png",
-      "width_mm": 89,
-      "height_mm": 88.5,
-      "sha256": "22399194e61e0883c34b4c0a6c720ebb302c9c70ddfc8594db785e11945853eb"
+      "width_mm": 52,
+      "height_mm": 70,
+      "sha256": "0573e2c71f33004b75dfa99ac4ab4b67aae7ae7c21ac26115252ebfe123df9ed"
+    },
+    {
+      "figure": "figS5_crossovers",
+      "panel": "c",
+      "language": "en",
+      "file": "figS5_crossovers.c.png",
+      "width_mm": 74,
+      "height_mm": 70,
+      "sha256": "5d50cc5c6df8c30ea97d4af14955576802f7bc6cef7c700246768db6e3d562d9"
+    },
+    {
+      "figure": "figS5_crossovers",
+      "panel": "c",
+      "language": "ko",
+      "file": "figS5_crossovers.c.ko.png",
+      "width_mm": 74,
+      "height_mm": 70,
+      "sha256": "e74e47cc94a04bb51b02bf19a434e4ddacf7e0464de0442525d3361961288db3"
     },
     {
       "figure": "figS6_ranking_tests",

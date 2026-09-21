@@ -227,14 +227,13 @@ def build_s3(records):
 
 
 def build_s5(records):
-    deck = new_deck(178, 88.5)
+    deck = new_deck(178, 70)
     for lang in LANGS:
         slide = blank_slide(deck)
         rows = records[("figS5_crossovers", lang)]
-        place(slide, rows, "a", 0, 0)
-        place(slide, rows, "b", 87, 0)
-        letter(slide, "a", 2, 0.5)
-        letter(slide, "b", 89, 0.5)
+        for panel, x in (("a", 0), ("b", 52), ("c", 104)):
+            place(slide, rows, panel, x, 0)
+            letter(slide, panel, x + 1, 3.5)
     return deck
 
 
