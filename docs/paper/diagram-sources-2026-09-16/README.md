@@ -42,4 +42,4 @@ embed the current panel images or an export whose checksum no longer matches
 Edit labels in the decks and re-export; do not retouch exported or published
 figure files. `build_note_figure_decks.py` overwrites label edits, so rerun it only
 for decks whose panels changed. The concept artwork carries an AI-use disclosure in
-the adjacent caption and the Acknowledgments under ACS policy; none of it is a TOC graphic.
+the Acknowledgments under ACS policy (not in the captions); none of it is a TOC graphic.

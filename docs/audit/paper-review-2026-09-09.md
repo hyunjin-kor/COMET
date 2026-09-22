@@ -1963,3 +1963,10 @@ ACS 파일 형식 목록은 검색 색인에서 ZIP 허용을 확인했으며, �
 - 남은 용어는 의도적으로 유지: Software design 문단의 구현 스택(FastAPI 등, JCIM 요건), 「Implementation」 절 제목(저널 구조), Figure 1 원본 그림의 「Input data」·「Analysis record」 라벨, preparation record(제조 기록; 제조 배치 기록과 같은 관용어).
 - 앱 화면 자체는 "Batch operating inputs"(EN)와 "배치 운전 조건"(KO)을 섞어 쓰고 있어 논문과 어긋난다. 앱 UI 문구 정리는 별도 작업으로 남긴다.
 - 검사: 노트·SI `--check`, ruff, 노트·질량 단위·재현 테스트 27 passed. Word v61(`_local/docx/rebuild_v61.py`): 쪽매김 탐색 결과가 v60 도판 위치와 같음, EN 15쪽·KO 20쪽·SI 27쪽, 서식 검사 통과. 패키지 `_local/submission-2026-09-21-v61/`. 외부 업로드·푸시 없음.
+
+### H62 — 2026-09-23: AI 이미지 도구 고지를 감사의 글 한 문장으로 통합
+
+- 저자 지적("본문이나 피규어에 이런 거 말하지 마. 제일 마지막에 이미지 형성에 도움 받았다고만 적으면 된다")에 따라 Figure 1–3 캡션의 "Conceptual artwork used OpenAI's image-generation tool" 계열 문장과 SI Figure S1·S8 캡션의 "Artwork used Google Gemini's image-generation tool; labels are native"를 지웠다. 한글 원고의 Fig. 1–3 캡션도 같다.
+- 감사의 글 문장을 "Image-generation tools assisted the conceptual artwork of Figures 1–3 (OpenAI) and Supporting Information Figures S1 and S8 (Google Gemini) in September 2026."로 바꿨다(한글: "Fig. 1–3과 보충자료 Fig. S1·S8의 개념도 제작에는 이미지 생성 도구(OpenAI, Google Gemini)의 도움을 받았다(2026년 9월)."). ACS의 AI 이미지 사용 고지 요건은 이 문장으로 충족하며, 도구·버전·기간 확인 자리표시자는 그대로다.
+- 테스트 `test_ai_artwork_is_disclosed_only_in_the_acknowledgments`로 바꿔 캡션에 도구 이름이 없고 감사의 글이 Figures 1–3과 Figures S1 and S8을 지목하는지 확인한다. 덱 README의 고지 위치 설명도 갱신했다.
+- 분량 4,996/5,000(캡션은 분량에 들어가지 않고 감사의 글이 3단어 줄었다). 검사: 노트·SI `--check`, ruff, 노트·질량 단위 테스트 18 passed. Word v62(`_local/docx/rebuild_v62.py`): 도판 위치 v61과 동일, EN 15쪽·KO 20쪽·SI 27쪽, 서식 검사 통과. 패키지 `_local/submission-2026-09-21-v62/`. 외부 업로드·푸시 없음.

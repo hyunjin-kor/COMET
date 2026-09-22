@@ -73,8 +73,8 @@ def _figure_numbers(captions, tool):
     return {match.group(1) for match in re.finditer(r"!\[Figure (S?\d+)\.([^\]]*)\]", captions) if tool in match.group(2)}
 
 
-def test_ai_artwork_acknowledgment_matches_the_disclosing_captions():
-    """Renumbered figures must not leave the Acknowledgments pointing at the wrong artwork."""
+def test_ai_artwork_is_disclosed_only_in_the_acknowledgments():
+    """Captions carry no tool names; the Acknowledgments name the figures whose artwork was AI-assisted."""
     import re
 
     from scripts import build_note_si as si
@@ -82,11 +82,12 @@ def test_ai_artwork_acknowledgment_matches_the_disclosing_captions():
     note_text = note_builder.note(note_builder.load_run())
     si_text = si.render()
     acknowledgment = note_text.split("## Acknowledgments", 1)[1].split("## Competing interests", 1)[0]
-    gemini = {"S" + n for n in re.findall(r"Supporting Information Figures? S(\d+)(?: and S(\d+))?", acknowledgment)[0] if n}
-    assert gemini == _figure_numbers(si_text, "Gemini")
-    openai = _figure_numbers(note_text, "OpenAI")
-    assert openai == {"1", "2", "3"} and "Figures 1–3" in acknowledgment
+    for tool in ("OpenAI", "Gemini"):
+        assert not _figure_numbers(note_text, tool) and not _figure_numbers(si_text, tool)
+    assert "Figures 1–3" in acknowledgment and "Figures S1 and S8" in acknowledgment
     assert "Anthropic Claude" in acknowledgment
+    assert {"1", "2", "3"} <= set(re.findall(r"!\[Figure (\d+)\.", note_text))
+    assert {"S1", "S8"} <= set(re.findall(r"!\[Figure (S\d+)\.", si_text))
 
 
 def test_si_tables_are_numbered_and_cited_in_order():

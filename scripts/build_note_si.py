@@ -191,7 +191,7 @@ def render():
              "Actual operation times and incurred expenditures remain distinct from their allocated shares. Unknown recovery prevents proportional allocation. "
              "Branching transfers, co-products and density-based conversions are not inferred. Figure S1 illustrates the allocation chain: a solution aliquot charged by volume fraction, "
              "an intermediate solid transferred by mass fraction, and the final dry batch that carries the allocated shares.", "",
-             "![Figure S1. Intermediate transfers. Conceptual sequence of a solution aliquot (volume fraction), an intermediate solid transfer (mass fraction) and the final dry batch used in eq S5. The drawing is conceptual and contains no numerical result. Artwork used Google Gemini's image-generation tool; labels are native.](figures-si-2026-09-16/figS1_allocation.png)", "",
+             "![Figure S1. Intermediate transfers. Conceptual sequence of a solution aliquot (volume fraction), an intermediate solid transfer (mass fraction) and the final dry batch used in eq S5. The drawing is conceptual and contains no numerical result.](figures-si-2026-09-16/figS1_allocation.png)", "",
              "Equations S1–S6 define the calculation. General and administrative (G&A) and sales, administrative, research and distribution (SARD) overheads "
              "are applied sequentially before the selling margin. The example excludes disposal, analytical testing, "
              "waste credits, catalyst use, tax, freight and any equipment cost not represented in the stated occupancy rate. "
@@ -409,7 +409,7 @@ def render():
               "Actual staffing, utility consumption and supplier prices require separate evidence.", "",
               "Figure S8 illustrates the record structure preserved for each imported preparation: the located source passage, the structured record in which reported values "
               "and later user modifications are distinguished, and the resulting cost contribution with its checksum.", "",
-              "![Figure S8. Source-linked record. Conceptual sequence from a located passage in a source, through a structured record that distinguishes reported values from user modifications, to the cost contribution and its checksum. The drawing is conceptual. Artwork used Google Gemini's image-generation tool; labels are native.](figures-si-2026-09-16/figS8_provenance.png)", "",
+              "![Figure S8. Source-linked record. Conceptual sequence from a located passage in a source, through a structured record that distinguishes reported values from user modifications, to the cost contribution and its checksum. The drawing is conceptual.](figures-si-2026-09-16/figS8_provenance.png)", "",
               "## S7. Published catalyst prices", "",
               f"The main article states that accuracy against industrial prices is not established. Table S12 lists the {len(evidence['cases'])} cases screened on {evidence['audit_date']} "
               "in a bounded search of free public sources (government cost reports, supplier product pages, filed commercial contracts, public procurement and open papers); "

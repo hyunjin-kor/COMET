@@ -345,7 +345,7 @@ COMET records these conditions with every estimate: it implements the Step Metho
 
 COMET is a desktop application (Figure 1): a formulation, preparation method, production scale, and price basis give an estimate listing its data sources, assumptions, and missing conditions; saved estimates can be repriced, compared, and ranked. A Python backend (FastAPI, SQLite) serves a React/TypeScript interface in English and Korean, packaged for Windows with Electron.
 
-![Figure 1. COMET workflow. Input data and a price basis with its date give a cost estimate, its breakdown, and a candidate ranking; every stage documents its data sources, model assumptions, and the information needed to reproduce it in an analysis record. Conceptual artwork used OpenAI's image-generation tool.](figures-note-2026-09-09/fig1_workflow_stack.png)
+![Figure 1. COMET workflow. Input data and a price basis with its date give a cost estimate, its breakdown, and a candidate ranking; every stage documents its data sources, model assumptions, and the information needed to reproduce it in an analysis record.](figures-note-2026-09-09/fig1_workflow_stack.png)
 
 ### Cost models
 
@@ -353,7 +353,7 @@ COMET has two cost models. Production-scale estimates follow the Step Method (Fi
 
 Laboratory batch costing replaces these terms with the batch's reagent purchases and operating conditions: electricity, equipment time, operator labor, gases, and transfers between operations (eqs S1–S6). The sum is divided by the recovered dry mass before overheads and margin are applied, and a missing required condition stops the calculation instead of assuming a value.
 
-![Figure 2. Cost estimation. (a) Step Method. (b) Deviations of the COMET and published estimates from the market prices reported by Baddour et al.<sup>1</sup>; negative values denote estimates below market. (c) Shares of the selling price, with prices in USD/kg, for the lowest-cost candidate of each powder-catalyst family. Gray combines G&A, SARD, margin, and assumed route allowances for quality assurance, activation, and additional overhead. USY, ultrastable zeolite Y; FCC, fluid catalytic cracking; SCR, selective catalytic reduction; RWGS, reverse water–gas shift. Conceptual artwork in (a) used OpenAI's image-generation tool.](figures-note-2026-09-09/fig2_cost_model.png)
+![Figure 2. Cost estimation. (a) Step Method. (b) Deviations of the COMET and published estimates from the market prices reported by Baddour et al.<sup>1</sup>; negative values denote estimates below market. (c) Shares of the selling price, with prices in USD/kg, for the lowest-cost candidate of each powder-catalyst family. Gray combines G&A, SARD, margin, and assumed route allowances for quality assurance, activation, and additional overhead. USY, ultrastable zeolite Y; FCC, fluid catalytic cracking; SCR, selective catalytic reduction; RWGS, reverse water–gas shift.](figures-note-2026-09-09/fig2_cost_model.png)
 
 ### Library and preparation records
 
@@ -379,7 +379,7 @@ Figure 2c divides the selling price of the lowest-cost candidate in each of the 
 
 Published preparations rarely report the operating conditions batch costing needs. In the {r(PREPARATION, 'profiles')} preparation records, all {n_segments} heating segments state a target temperature, {n_hold} a hold time, and {n_ramp} a ramp rate, but none the heating power, and only {n_mass} record reports the recovered batch mass. Figure 3 costs an illustrative {sn('[0].value', '.3f')} kg batch from stated conditions and assumed prices (Tables S2–S5). Operations account for {r(MANUFACTURING, 'baseline.summary.processing_pct', '.1f')}% of the baseline price of {r(MANUFACTURING, 'baseline.summary.estimated_price_per_kg', ',.2f')} USD/kg (Figure 3b). Duration outweighs power: calcination holds of {sn('[4].low', '.0f')}–{sn('[4].high', '.0f')} h span {sn('[4].low_usd_kg', ',.2f')}–{sn('[4].high_usd_kg', ',.2f')} USD/kg, whereas hold powers of {sn('[5].low', '.1f')}–{sn('[5].high', '.1f')} kW span only {sn('[5].low_usd_kg', ',.2f')}–{sn('[5].high_usd_kg', ',.2f')} USD/kg (Table S6). Recovered mass matters most because every cost is divided by it: halving it doubles the price to {sn('[0].low_usd_kg', ',.2f')} USD/kg (Figure 3c).
 
-![Figure 3. Manufacturing conditions. (a) Illustrative preparation sequence. (b) Operating cost contributions per kg of dry product, excluding purchases, overheads, and margin. (c) Selling price versus calcination hold for 0.015, 0.030, and 0.045 kg dry product masses; the point marks the baseline. Quantities, prices, and operating conditions are hypothetical. Panel (a) artwork used OpenAI's image-generation tool.](manufacturing-study-2026-09-15/figures/fig_manufacturing.png)
+![Figure 3. Manufacturing conditions. (a) Illustrative preparation sequence. (b) Operating cost contributions per kg of dry product, excluding purchases, overheads, and margin. (c) Selling price versus calcination hold for 0.015, 0.030, and 0.045 kg dry product masses; the point marks the baseline. Quantities, prices, and operating conditions are hypothetical.](manufacturing-study-2026-09-15/figures/fig_manufacturing.png)
 
 ### Production-scale parametric analyses
 
@@ -417,7 +417,7 @@ COMET version {r('m', 'project_version')} uses the PolyForm Noncommercial Licens
 
 ## Acknowledgments
 
-OpenAI Codex and GPT tools and Anthropic Claude assisted software development, analysis, and manuscript drafting. OpenAI's image-generation tool produced conceptual artwork in Figures 1–3, and Google Gemini produced conceptual artwork in Supporting Information Figures S1 and S8, in September 2026. The authors reviewed all AI-assisted content and are responsible for it. [Authors must confirm the tools, versions, and periods of AI use.] Funding: [author statement required].
+OpenAI Codex and GPT tools and Anthropic Claude assisted software development, analysis, and manuscript drafting. Image-generation tools assisted the conceptual artwork of Figures 1–3 (OpenAI) and Supporting Information Figures S1 and S8 (Google Gemini) in September 2026. The authors reviewed all AI-assisted content and are responsible for it. [Authors must confirm the tools, versions, and periods of AI use.] Funding: [author statement required].
 
 ## Competing interests
 
