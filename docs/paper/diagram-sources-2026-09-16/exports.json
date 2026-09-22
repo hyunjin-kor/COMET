@@ -26,7 +26,7 @@
                      },
                      {
                          "source":  "fig3_manufacturing.pptx",
-                         "source_sha256":  "fe3e677fb1d094c7e1b1e8a041131adf53026125506a1f19f9f21126f74cae8d",
+                         "source_sha256":  "1bc7fd88bfe5174ad64af4d485be8b9b0cabae3ea0ab8be5184e2adc42bf3ada",
                          "width_mm":  178.02,
                          "height_mm":  141.993,
                          "png_dpi_at_slide_size":  400,
@@ -34,9 +34,9 @@
                                          {
                                              "language":  "en",
                                              "png":  "exports/fig3_manufacturing.en.png",
-                                             "png_sha256":  "37edf3f56d6794854da6720a7c67b29672b773e88d6b785ed8867d3758546e78",
+                                             "png_sha256":  "acbc1beb4c5cd1cc33aa9e34cf8891c45f59a05c96e329cd440d2a10cf757a1d",
                                              "svg":  "exports/fig3_manufacturing.en.svg",
-                                             "svg_sha256":  "d46890201e9570daea9d5cb58237cfe2bbfa637cb8279803a5538f718c123e93"
+                                             "svg_sha256":  "44e6b9954293df22f969ae1f9edc05052a7857367d7047efb26e92f08f00331f"
                                          },
                                          {
                                              "language":  "ko",
@@ -95,7 +95,7 @@
                      },
                      {
                          "source":  "figS2_sensitivity.pptx",
-                         "source_sha256":  "6fa01639c6dd5f8c929b0851b4f61fa58825f9b6db19ead439237be0a04ab072",
+                         "source_sha256":  "ee3c1a3c5632dc9848e310009fe79364e80b0477ffcee2739488f01a5f60d3e9",
                          "width_mm":  150.019,
                          "height_mm":  82.021,
                          "png_dpi_at_slide_size":  400,
@@ -103,22 +103,22 @@
                                          {
                                              "language":  "en",
                                              "png":  "exports/figS2_sensitivity.en.png",
-                                             "png_sha256":  "66169e957dcdf2d344ca328e1b42a141ba43d4b66ba3ac6b708bbf903525c97b",
+                                             "png_sha256":  "5d6eecf4402722968b285e68eb146c9ef35efe1cf4265feefd21461d8769f096",
                                              "svg":  "exports/figS2_sensitivity.en.svg",
-                                             "svg_sha256":  "603fef0ada947327ab997696a7df00d0c2cc420abcbde27cfcaa944ba12ae4d2"
+                                             "svg_sha256":  "badd786ed63fedc0191166be1525f24c7760bc4a78ef91170f2e120e678ef441"
                                          },
                                          {
                                              "language":  "ko",
                                              "png":  "exports/figS2_sensitivity.ko.png",
-                                             "png_sha256":  "7f552ede195ebc44a4435629df2b6264ca243d328b2b1e4e7a16d7861ac19e60",
+                                             "png_sha256":  "32adc7b99e10dd3ebaa9e23849b04064a2a59c2f89a565c47fa0e92ae161535a",
                                              "svg":  "exports/figS2_sensitivity.ko.svg",
-                                             "svg_sha256":  "28d81a685789f1686951e4b568afdecd24451a115372c2364d60961a2c8953c1"
+                                             "svg_sha256":  "f0067da6e642695ca30e3c23fbdbb53b3e0eb725087e803ae7adfc387dceb240"
                                          }
                                      ]
                      },
                      {
                          "source":  "figS3_monte_carlo.pptx",
-                         "source_sha256":  "f3c00b7ae7065fe18589dc2a03773dc35ca3b83f152b0a8ed724c150cc3416e2",
+                         "source_sha256":  "01f26a9c7e1ea779c4084d43057befdaef42983190480e4afd330482c79e256e",
                          "width_mm":  178.02,
                          "height_mm":  72.011,
                          "png_dpi_at_slide_size":  400,
@@ -126,9 +126,9 @@
                                          {
                                              "language":  "en",
                                              "png":  "exports/figS3_monte_carlo.en.png",
-                                             "png_sha256":  "941fe46412e790c8c28793a8bc3b38dd3283f5cd9d97bbcc63a6536a2ca97b71",
+                                             "png_sha256":  "06df797dfc0e2a69bd7858b8e40baadddea3653e31c17f2104d121e7215b1daf",
                                              "svg":  "exports/figS3_monte_carlo.en.svg",
-                                             "svg_sha256":  "31f4bd25ac1de7b8779e00db9f8c4c2d0c74c273d82f48f763e9a900948b0699"
+                                             "svg_sha256":  "2d9caaa2e6a8ba81ac49bcbdb08507c20f1e97a0d4f3ae0a48641cdd39b5266b"
                                          },
                                          {
                                              "language":  "ko",
@@ -141,7 +141,7 @@
                      },
                      {
                          "source":  "figS7_evidence.pptx",
-                         "source_sha256":  "6b65aa1dd06e96517e4aca45835da58da2de94e2c0bdb2fce48200e513b19dc4",
+                         "source_sha256":  "acaf450aee3fb5259740bb80fbd972eaa09d9dac30a1d0e5677d95e82121581b",
                          "width_mm":  178.02,
                          "height_mm":  118.004,
                          "png_dpi_at_slide_size":  400,
@@ -149,16 +149,16 @@
                                          {
                                              "language":  "en",
                                              "png":  "exports/figS7_evidence.en.png",
-                                             "png_sha256":  "72358028029c1525ad5e2ab6b7333790c3bfd8a67bb317515ff246af2d2c4fa5",
+                                             "png_sha256":  "e8135a7a7585772bd9eb0e56a3a4dc570562e081f7383e06765ffb73354ec697",
                                              "svg":  "exports/figS7_evidence.en.svg",
-                                             "svg_sha256":  "913c5f11cd1d553bb1999a31f817900c83cbcf38aee4908c600f201f5dcd5682"
+                                             "svg_sha256":  "c2e61624fb18bf16c55a8842e2615fa15fc9704cad2d039855362ebfc6e4ad40"
                                          },
                                          {
                                              "language":  "ko",
                                              "png":  "exports/figS7_evidence.ko.png",
-                                             "png_sha256":  "5f40a913d340ee4fb07bd19d7cb6dd1877cb24cd6fb387f8e565fa93e0ac084a",
+                                             "png_sha256":  "2a6e59ddd560335aaf410bac6139af313915a929bcb9052211203eef766c9805",
                                              "svg":  "exports/figS7_evidence.ko.svg",
-                                             "svg_sha256":  "1f3647164183af00b435a4a12cd00f00bb07868e1e77a5d87c4fe0ab456252f5"
+                                             "svg_sha256":  "64ae6d8fc62fe55c69623e4400c087ca5e1721a8fc9f401d887f3be27a89c337"
                                          }
                                      ]
                      },

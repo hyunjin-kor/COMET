@@ -185,16 +185,23 @@ def build_fig2(records):
     return deck
 
 
+FIG3A_LABELS = {"Dry output": "Dry product"}
+
+
 def build_fig3(records):
     deck = new_deck(178, 142)
+    relabelled = set()
     for index, lang in enumerate(LANGS):
         slide = blank_slide(deck)
         transplant(H45 / "fig3a_manufacturing_v2.pptx", index, slide, 0, 1.7, 178 / 370.417)
+        relabelled |= relabel(slide, FIG3A_LABELS)
         place(slide, records[("fig3_manufacturing", lang)], "b", 0, 62)
         place(slide, records[("fig3_manufacturing", lang)], "c", 89, 62)
         letter(slide, "a", 2, 0.5)
         letter(slide, "b", 2, 64)
         letter(slide, "c", 91, 64)
+    if relabelled != set(FIG3A_LABELS):
+        raise ValueError("The Figure 3(a) label to be replaced was not found")
     return deck
 
 

@@ -34,9 +34,9 @@ FAMILY_LABELS = {
 }
 
 STATUS_LABELS = {
-    "screening_only": "Preparation unverified; no curated variant",
-    "source_mismatch": "Source/formulation discrepancy flagged",
-    "variant_available": "Source-specific variant available",
+    "screening_only": "No documented preparation",
+    "source_mismatch": "Source/formulation discrepancy noted",
+    "variant_available": "Source-specific preparation available",
 }
 
 # Use composition and structure rather than catalog marketing or ranking labels.
