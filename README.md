@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <strong>Compare catalyst manufacturing costs, environmental coverage and decision robustness.</strong>
+  <strong>Estimate what a catalyst costs to make, with the sources and the price date on record.</strong>
 </p>
 
 <p align="center">
@@ -21,17 +21,17 @@
   <a href="docs/roadmap.md">Roadmap</a>
 </p>
 
-**COMET** is independently developed software for catalyst manufacturing cost,
-environmental screening and decision analysis. It connects composition, preparation
-routes and production conditions to traceable prices, explicit calculation boundaries
-and reproducible comparisons. Use live quotes for a current screening or freeze a
-reference month for research. The default desktop app runs locally without an
-account. Its optional hosted service is in preparation.
+**COMET** estimates what a catalyst costs to manufacture. Describe the
+composition and the support, pick a preparation method and a production scale,
+and it prices that recipe with the published Step Method. Every line of the
+result carries its source and the date of the metal price behind it. It runs on
+your machine. No server, no account.
 
 Built for catalysis researchers with questions like:
 
 - If platinum moves 20%, what does that do to my cost?
-- Is the metal driving this number, or the preparation route?
+- Is the metal driving this number, or the preparation method?
+- Would the cheapest candidate still have been the cheapest at last year's prices?
 - How does my composition compare to published catalysts for the same reaction?
 
 ## Download
@@ -44,7 +44,8 @@ Get the installer from the [latest release](https://github.com/hyunjin-kor/COMET
 It works offline. Without API keys it falls back to indexed and manual prices.
 
 This branch prepares **1.4.0**; the latest verified public release is **v1.3.24**
-(2026-09-08). New distribution awaits the [data rights review](docs/commercial/rights-register-2026-09-07.md).
+(published 2026-08-31). A new public release waits on the
+[data rights review](docs/commercial/rights-register-2026-09-07.md).
 
 Since v1.3.13 the app updates itself: it checks GitHub Releases at startup,
 downloads in the background, and prompts you to restart. The binary is unsigned,
@@ -52,41 +53,58 @@ so SmartScreen will warn you the first time. Pick "More info → Run anyway".
 
 ## What it does
 
-- Estimates materials, scale-specific manufacturing steps, overhead and selling margin, with the adopted Step Method documented under [method basis](#method-basis)
+Costing
+
+- Prices the preparation method with the Step Method: materials, scale-specific processing steps, overheads and the selling margin. The basis is documented under [method basis](#method-basis)
 - Tags every price `LIVE`, `INDEXED` or `MANUAL`, and shows the source, quote year and freshness behind it
-- Switches between a practical basis (live quotes) and an academic basis (IMF and Johnson Matthey monthly averages), so a screening result can be quoted against a citable month
-- Ships thirty literature benchmark families you can load and edit: ammonia cracking, CO₂ hydrogenation, RWGS, dry reforming, water-gas shift, fuel-cell ORR, electrolyzer OER and more
-- Keeps bulk catalyst mass costs and electrode-assembly area costs on explicit functional units
-- Reports partial environmental inventories with their material coverage
-- Makes price, preference and candidate-set sensitivity reproducible through the research scripts
-- Runs Monte Carlo, so you get a range rather than one number
-- Credits spent-catalyst recovery on thermocatalyst runs, if you want it
+- Runs on two price bases. The practical basis uses live quotes. The academic basis uses IMF and Johnson Matthey monthly averages, so a screening result can be quoted against a citable month
 - Escalates older prices to this year with ChemPPI and CEPCI
-- Exports the cost ledger, price evidence and Monte Carlo range to CSV
-- Shows which manufacturing operations are costed, proxies or omitted, including scale substitutions
-- Accepts documented effective production rates and optional precursor content, purity, retention yield and net solvent purchases
-- Records ordered synthesis conditions, including temperature ramps, holds and reduction gases, with optional [batch operating-cost calculations](docs/manufacturing-protocol.md) from explicit equipment, utility and labor inputs
-- Compares 2–4 saved formulations under shared prices and production conditions, alongside their historical results
-- Keeps purchase provenance and actual-cost observations locally; reports errors only for matching, documented thermal full-cost observations
+- Credits spent-catalyst recovery on thermocatalyst runs, if you want it
+- Runs Monte Carlo, so you get a range rather than one number
+
+Preparation records
+
+- Records an ordered manufacturing protocol: temperature ramps and holds, reduction gases, washing, repeated impregnations. Nothing is inferred from a catalyst name
+- Loads source-checked preparation records from the literature, each with its DOI and section locator, into an editable protocol
+- Costs a laboratory batch from declared inputs (purchases, electricity, equipment time, labor, gases) and divides by the recovered mass. A missing required input stops the calculation instead of taking a default. See [docs/manufacturing-protocol.md](docs/manufacturing-protocol.md)
+- Keeps the original source value next to every edited number, and charges an intermediate batch only for the aliquot that was actually used
+
+Comparison
+
+- Ships thirty literature benchmark families you can load and edit: ammonia cracking, CO₂ hydrogenation, RWGS, dry reforming, water-gas shift, fuel-cell ORR, electrolyzer OER and more
+- Compares two to four saved estimates under shared prices and production conditions
+- Covers bulk supported catalysts on a mass basis and electrode assemblies on an area basis
+- Reports partial environmental inventories and says how much of the material mass they cover
+- Exports the cost breakdown, price evidence and Monte Carlo range to CSV
+
+The interface is in English and Korean.
 
 ## Scope and limitations
 
 COMET estimates what a catalyst costs to manufacture. It does not evaluate
 activity, selectivity or lifetime, so a more expensive catalyst can still be the
-more economical choice per unit of product, and a selection needs measured or
-predicted performance alongside these costs. Coupling COMET with catalyst
+more economical choice per unit of product. Combine these costs with measured or
+predicted performance before selecting a catalyst. Coupling COMET with catalyst
 performance-prediction models is planned as future work.
+
+Accuracy against industrial prices is not established. No public price so far
+matches a library formulation in grade, scale, date and delivery boundary, so
+the engine is verified against the published Step Method examples only.
 
 ## How a session goes
 
 Pick thermocatalyst or electrocatalyst, define the composition, choose a
-preparation route, run it. The result opens on its own screen with the full cost
-ledger and the evidence behind each price. Tweak the recipe and rerun; the draft
-stays put.
+preparation method and a production scale, run it. The result opens on its own
+screen with the full cost breakdown and the evidence behind each price. Tweak the
+recipe and rerun; the draft stays put. If you have the actual synthesis
+conditions, open the detailed manufacturing protocol and enter them, or start
+from a literature preparation record.
 
-The Prices page tracks every metal with its quote basis and history. The
-Benchmarks page lines up published routes for a reaction family, and loads any of
-them into the calculator.
+The Live Metal Prices page tracks every metal with its quote basis and history.
+The Literature Benchmarks page lines up published routes for a reaction family
+and loads any of them into the calculator. Estimate Range runs the Monte Carlo
+sweep, Capital & OpEx screens plant-level costs, and the Source Library lists
+every price and rate the calculator can use.
 
 ## Screens
 
@@ -123,42 +141,66 @@ automatically before a rebuild, or manually with `npm run desktop:stop`.
 
 ## Tests
 
-See the [release checklist](docs/release-checklist.md) and [Korean getting-started guide](docs/getting-started.ko.md).
+See the [release checklist](docs/release-checklist.md) and the [Korean getting-started guide](docs/getting-started.ko.md).
 
 ```bash
-python -m pytest backend/tests -q     # engine + API, includes CatCost validation cases
+python -m pytest backend/tests -q     # engine + API, includes the Step Method validation cases
 npm --prefix frontend run build      # type-check + build, from the repository root
 npm run smoke:desktop                 # packaged-app smoke test in a fresh temporary profile
 ```
 
-The engine reproduces the three published CatCost reference cases (2 wt% Pt/C,
-21 wt% Ni/Al₂O₃, USY-based FCC; User Guide Table 6.2) line by line from the
-published inputs. Pt/C matches to the cent. The other two land within 7%, and
-both residuals trace to footnotes in the table itself.
+The engine reproduces the three published Step Method reference cases (2 wt% Pt/C,
+21 wt% Ni/Al₂O₃, USY-based FCC; CatCost User Guide Table 6.2) line by line from
+the published inputs. Pt/C matches to the cent. Ni/Al₂O₃ lands within 7%, and
+the difference comes from the margin rule. FCC lands within 2% once the
+production rate from the table's own footnote is used.
 `scripts/reproduce_catcost_table62.py` prints the full comparison.
 
 ## Reproduce the paper
 
-The [current manuscript and SI](docs/paper/README.md) use the preserved May 2026 price basis. [Joint decision robustness](docs/paper/robustness-2026-09-08/README.md) tests prices and preferences together, candidate-set dependence and author-score sensitivity.
+The manuscript in preparation is a JCIM Application Note:
+[main text](docs/paper/application-note-2026-09-09.md) and
+[Supporting Information](docs/paper/supporting-information-2026-09-15.md).
+Both are generated from the frozen August 2026 reference basis in
+`docs/paper/submission-2026-09-21/` (92 monthly price states, 2019-01 to 2026-08),
+together with the [decision robustness](docs/paper/robustness-2026-09-21/),
+[price crossover](docs/paper/price-crossovers-2026-09-21/) and
+[what-if](docs/paper/whatif-2026-09-21/) studies of the same date. Earlier dated
+folders under `docs/paper/` are kept as records of previous runs.
+
+To replay the primary run from the committed inputs, without collecting new
+quotes or touching the committed files:
 
 ```bash
-python scripts/reproduce_paper.py --price-basis reference --month 2026-05 --seed 20260906 --date 2026-09-08 --history docs/paper/submission-2026-09-07/price_history_2026-09-07.json --live-basis docs/paper/submission-2026-09-07/live_basis_2026-09-07.json --support-history docs/paper/submission-2026-09-07/support_history_2026-09-07.json --out-dir _local/submission-replay-2026-09-08
-python scripts/run_decision_robustness.py --out-dir _local/robustness-replay-new --seed 20260906
+python scripts/reproduce_paper.py --price-basis reference --month 2026-08 --seed 20260906 --date 2026-09-21 --history docs/paper/submission-2026-09-21/monthly_history_2026-09-21.json --support-history docs/paper/submission-2026-09-21/support_history_2026-09-21.json --live-basis docs/paper/submission-2026-09-21/live_basis_2026-09-21.json --out-dir _local/submission-replay-2026-09-21
 ```
 
-Use a new or empty output directory. Matplotlib is needed for figures. Manifests record commands, input/code hashes and package versions; older results remain historical snapshots. See [methodology](docs/methodology.md#reproducing-the-paper) for source boundaries. Public cost observations remain unmatched for independent manufacturing-accuracy validation. All data acquisition must remain free.
+To check the manuscript, the SI and the what-if study against the frozen files:
+
+```bash
+python scripts/build_application_note.py --check
+python -m scripts.build_note_si --check
+python scripts/note_whatif_study.py --check
+```
+
+Use a new or empty output directory. Matplotlib is needed for the figures.
+Each run writes a manifest with the exact commands, input and code hashes and the
+package versions. Source boundaries are described in
+[methodology](docs/methodology.md#reproducing-the-paper). All data acquisition
+stays free: no purchased datasets, papers or paid API calls.
 
 ## Project and service preparation
 
 The [project portfolio](docs/project-portfolio.ko.md) connects design decisions to
 code, experiments and test evidence. The [publication checklist](docs/paper/author-readiness-2026-09-07.ko.md)
-records what authors must verify before submission.
+lists what the authors still have to confirm before submission.
 
-An opt-in hosted mode implements account-private calculations, subscription periods
-and seats, saved-result export after ordinary expiry, and tested backup/recovery.
-It has no public service endpoint or live billing. See the [service plan](docs/commercial/strategy.ko.md)
-and [operations guide](docs/commercial/hosted-operations.ko.md). Startup requires an
-actual commercial data-rights review; passing software tests does not grant those rights.
+An opt-in hosted mode exists in the code: account-private calculations,
+subscription periods and seats, saved-result export after expiry, and tested
+backup and recovery. It is off by default, has no public endpoint and no billing.
+See the [service plan](docs/commercial/strategy.ko.md) and the
+[operations guide](docs/commercial/hosted-operations.ko.md). Turning it on for
+real users needs the commercial data-rights review first.
 
 ## Optional API keys
 
@@ -168,26 +210,27 @@ COMET runs without any keys. Add them only if you want live price feeds:
 METALS_DEV_API_KEY=your_key      # metals.dev, free tier available
 METALPRICE_API_KEY=your_key      # metalpriceapi.com, free tier available
 BLS_API_KEY=your_key             # bls.gov, free with registration
-COMTRADE_API_KEY=your_key        # optional scheduled collection; verified shipped support observations work offline without a key
+COMTRADE_API_KEY=your_key        # optional scheduled collection; the shipped support-material observations work offline without a key
 ```
 
 ## Method basis
 
-COMET develops a catalyst-screening methodology around traceable price states,
-explicit manufacturing boundaries and reproducible decision analysis. Published
-Step Method costing and CatCost are prior work: COMET adopts their documented
-thermal step-cost, overhead and margin basis and checks its implementation against
-published reference cases. Those equations and rates are attributed to their
-sources; COMET's contribution is the connected workflow and its diagnostic analyses.
-The [contribution map](docs/research-contribution.md) links each contribution to
-implementation, evidence and limits. COMET is independently developed and is not
-affiliated with or endorsed by NREL. The source audit found legacy bundled files
-that declare CatCost workbook origins. Their reuse permissions are unresolved;
-the original workbook is excluded, but that alone does not clear extracted data.
-See the [data rights register](docs/commercial/rights-register-2026-09-07.md).
-New public releases are held by an exact-file rights check until review is complete.
+COMET is an independent implementation. It adopts the thermal step costs,
+overheads and margin rule of the published Step Method, checks that
+implementation against the published reference cases, and cites the method and
+CatCost academically. It does not redistribute CatCost source data and is not
+affiliated with or endorsed by NREL. COMET's own contribution is the workflow
+around those equations: source-linked preparation records, dated price bases and
+the sensitivity analyses. The [contribution map](docs/research-contribution.md)
+links each part to its implementation, evidence and limits.
 
-- Baddour, F. G., et al. (2018). Estimating Precommercial Heterogeneous Catalyst Price: A Simple Step-Based Method. *Organic Process Research & Development*. [Verified DOI](https://doi.org/10.1021/acs.oprd.8b00245).
+A source audit found legacy bundled files that declare CatCost workbook origins.
+Their reuse permissions are unresolved; the original workbook is excluded, but
+that alone does not clear the extracted data. See the
+[data rights register](docs/commercial/rights-register-2026-09-07.md). New public
+releases are held by an exact-file rights check until that review is complete.
+
+- Baddour, F. G., et al. (2018). Estimating Precommercial Heterogeneous Catalyst Price: A Simple Step-Based Method. *Organic Process Research & Development*. [DOI](https://doi.org/10.1021/acs.oprd.8b00245).
 - Van Allsburg, K. M., et al. (2022). Early-stage evaluation of catalyst manufacturing cost and environmental impact using CatCost. *Nature Catalysis*.
 
 Benchmark- and route-specific references are attached to the datasets inside the app.
@@ -205,11 +248,13 @@ pellet looks like. The acronym came afterwards.
 
 [PolyForm Noncommercial License 1.0.0](LICENSE) (`PolyForm-Noncommercial-1.0.0`).
 
-The code is available for noncommercial use under the license's terms. Commercial
-use requires a separate grant from the actual copyright holder. This is a
-source-available project; the license is not OSI approved.
+Free to use, modify and redistribute for any noncommercial purpose: research,
+education, personal study. Use by universities, public research organizations and
+government institutions is permitted regardless of funding source. Commercial use
+requires a separate license from the copyright holder. The license is not OSI
+approved.
 
-Third-party data and dependencies retain their own terms. The code license does
-not grant their redistribution rights. Company subscription preparation is tracked
-in the [commercialization plan](docs/commercial/strategy.ko.md); no hosted sale or
+Third-party data and dependencies keep their own terms; the code license does not
+grant their redistribution. Company subscription preparation is tracked in the
+[commercialization plan](docs/commercial/strategy.ko.md). No hosted sale or
 commercial data clearance is claimed.
