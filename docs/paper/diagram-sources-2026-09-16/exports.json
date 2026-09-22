@@ -49,7 +49,7 @@
                      },
                      {
                          "source":  "fig4_ranking.pptx",
-                         "source_sha256":  "05d9a8a7e81db8757ee7cd4f43c4d39db7e451afc9163d845fe7b5d97c97aa3d",
+                         "source_sha256":  "048e2caa92e68bccfab2814f58d07b9f0ff92d19efbbf36e9ee77c254dd4a7b6",
                          "width_mm":  178.02,
                          "height_mm":  128.014,
                          "png_dpi_at_slide_size":  400,
@@ -57,39 +57,39 @@
                                          {
                                              "language":  "en",
                                              "png":  "exports/fig4_ranking.en.png",
-                                             "png_sha256":  "217e6b31e7af26814b2a172c8f50f2304eba39c5c3d6cb208fcff27702ec1b89",
+                                             "png_sha256":  "4217bf1db3fc157630c06fc940b4acd203dc9985828c21c7707d00124aed2aca",
                                              "svg":  "exports/fig4_ranking.en.svg",
-                                             "svg_sha256":  "0bf06487cfdfb4c4e4fb133a371b96cc15ad4ce985faa1282350431514739cbd"
+                                             "svg_sha256":  "ca7b08c3cd26ce61873c59898c619b5d0f63969bb6fdab0a89c1264e5d67a65d"
                                          },
                                          {
                                              "language":  "ko",
                                              "png":  "exports/fig4_ranking.ko.png",
-                                             "png_sha256":  "e6a63299ce2cb47f112134b65cea5e7740e5faae17f6687d9f4fe194e4f3701c",
+                                             "png_sha256":  "f9fe718226df78e4a57539cf6cfc230d2c6be4722c7dd1d92aabfaadc56aed26",
                                              "svg":  "exports/fig4_ranking.ko.svg",
-                                             "svg_sha256":  "d4d0f08e573cfd782668283c9e9e22f5517cf8c30166cbc9f04ee7c9723e637e"
+                                             "svg_sha256":  "f2d67cd8be282cd4d0166bd62f3ae393b9ab63ecd41a1fdf780dd38b454c69ea"
                                          }
                                      ]
                      },
                      {
-                         "source":  "figS1_allocation.pptx",
-                         "source_sha256":  "87d18abd9bb8b3f038544132585de15657b4320fdc3836e7d6a19b591b8257f7",
-                         "width_mm":  178.02,
-                         "height_mm":  69.982,
+                         "source":  "figS4_metal_prices.pptx",
+                         "source_sha256":  "63f0d2cb69c5ab90a2d248fa2f5da03d7aadfae85a4696fe1427bfd7f6d9218d",
+                         "width_mm":  84.005,
+                         "height_mm":  122.017,
                          "png_dpi_at_slide_size":  400,
                          "exports":  [
                                          {
                                              "language":  "en",
-                                             "png":  "exports/figS1_allocation.en.png",
-                                             "png_sha256":  "581be43e71df899caeb37b45e573f7a18a587dd103759c2fe5f1cd3b35fb9eec",
-                                             "svg":  "exports/figS1_allocation.en.svg",
-                                             "svg_sha256":  "628dfad18e788d43d24e47afb9241f7a806a4df48e2dd2f836a1b613650dfe09"
+                                             "png":  "exports/figS4_metal_prices.en.png",
+                                             "png_sha256":  "5c1db21e2e6a5d6a025aef73a9384de66545d571d48bd618f99409ad15b12708",
+                                             "svg":  "exports/figS4_metal_prices.en.svg",
+                                             "svg_sha256":  "afbeabceee305d6baa9959949d69b207e3781850e02bd73d59f2f5901676fbb9"
                                          },
                                          {
                                              "language":  "ko",
-                                             "png":  "exports/figS1_allocation.ko.png",
-                                             "png_sha256":  "c3a4fc15eb9c865e833d85425ab57c24e8fc03d6d2767067ab40b935e8dd3073",
-                                             "svg":  "exports/figS1_allocation.ko.svg",
-                                             "svg_sha256":  "f434b8a7089f0dd278697aae4514a7d7f386402a08031a8aadc8db6be71df95e"
+                                             "png":  "exports/figS4_metal_prices.ko.png",
+                                             "png_sha256":  "637f232408933e82e1ca3b876f67692489dfe7b79f1697edbd2f998d387a68ea",
+                                             "svg":  "exports/figS4_metal_prices.ko.svg",
+                                             "svg_sha256":  "f098938b7c8c84be131e032e6911178b1d5d023af9213d12f9adbeb4e0793e39"
                                          }
                                      ]
                      },
@@ -140,25 +140,25 @@
                                      ]
                      },
                      {
-                         "source":  "figS4_metal_prices.pptx",
-                         "source_sha256":  "63f0d2cb69c5ab90a2d248fa2f5da03d7aadfae85a4696fe1427bfd7f6d9218d",
-                         "width_mm":  84.005,
-                         "height_mm":  122.017,
+                         "source":  "figS7_evidence.pptx",
+                         "source_sha256":  "6b65aa1dd06e96517e4aca45835da58da2de94e2c0bdb2fce48200e513b19dc4",
+                         "width_mm":  178.02,
+                         "height_mm":  118.004,
                          "png_dpi_at_slide_size":  400,
                          "exports":  [
                                          {
                                              "language":  "en",
-                                             "png":  "exports/figS4_metal_prices.en.png",
-                                             "png_sha256":  "5c1db21e2e6a5d6a025aef73a9384de66545d571d48bd618f99409ad15b12708",
-                                             "svg":  "exports/figS4_metal_prices.en.svg",
-                                             "svg_sha256":  "afbeabceee305d6baa9959949d69b207e3781850e02bd73d59f2f5901676fbb9"
+                                             "png":  "exports/figS7_evidence.en.png",
+                                             "png_sha256":  "72358028029c1525ad5e2ab6b7333790c3bfd8a67bb317515ff246af2d2c4fa5",
+                                             "svg":  "exports/figS7_evidence.en.svg",
+                                             "svg_sha256":  "913c5f11cd1d553bb1999a31f817900c83cbcf38aee4908c600f201f5dcd5682"
                                          },
                                          {
                                              "language":  "ko",
-                                             "png":  "exports/figS4_metal_prices.ko.png",
-                                             "png_sha256":  "637f232408933e82e1ca3b876f67692489dfe7b79f1697edbd2f998d387a68ea",
-                                             "svg":  "exports/figS4_metal_prices.ko.svg",
-                                             "svg_sha256":  "f098938b7c8c84be131e032e6911178b1d5d023af9213d12f9adbeb4e0793e39"
+                                             "png":  "exports/figS7_evidence.ko.png",
+                                             "png_sha256":  "5f40a913d340ee4fb07bd19d7cb6dd1877cb24cd6fb387f8e565fa93e0ac084a",
+                                             "svg":  "exports/figS7_evidence.ko.svg",
+                                             "svg_sha256":  "1f3647164183af00b435a4a12cd00f00bb07868e1e77a5d87c4fe0ab456252f5"
                                          }
                                      ]
                      },
@@ -209,25 +209,48 @@
                                      ]
                      },
                      {
-                         "source":  "figS7_evidence.pptx",
-                         "source_sha256":  "6b65aa1dd06e96517e4aca45835da58da2de94e2c0bdb2fce48200e513b19dc4",
+                         "source":  "figS9_interface.pptx",
+                         "source_sha256":  "75ad7e309f451fd01a1921f2b7eaf720840b6963cf326069f960f6d85b4e4aff",
                          "width_mm":  178.02,
-                         "height_mm":  118.004,
+                         "height_mm":  98.998,
                          "png_dpi_at_slide_size":  400,
                          "exports":  [
                                          {
                                              "language":  "en",
-                                             "png":  "exports/figS7_evidence.en.png",
-                                             "png_sha256":  "72358028029c1525ad5e2ab6b7333790c3bfd8a67bb317515ff246af2d2c4fa5",
-                                             "svg":  "exports/figS7_evidence.en.svg",
-                                             "svg_sha256":  "913c5f11cd1d553bb1999a31f817900c83cbcf38aee4908c600f201f5dcd5682"
+                                             "png":  "exports/figS9_interface.en.png",
+                                             "png_sha256":  "13ab0921e59bbe682aa1c3a172d1e8a2d686099e35d629954b9f2980b645afde",
+                                             "svg":  "exports/figS9_interface.en.svg",
+                                             "svg_sha256":  "6f22e33833b6897b47c3139a5a0ded4c60f408c6ba6df6306d473b5c71d4f1de"
                                          },
                                          {
                                              "language":  "ko",
-                                             "png":  "exports/figS7_evidence.ko.png",
-                                             "png_sha256":  "5f40a913d340ee4fb07bd19d7cb6dd1877cb24cd6fb387f8e565fa93e0ac084a",
-                                             "svg":  "exports/figS7_evidence.ko.svg",
-                                             "svg_sha256":  "1f3647164183af00b435a4a12cd00f00bb07868e1e77a5d87c4fe0ab456252f5"
+                                             "png":  "exports/figS9_interface.ko.png",
+                                             "png_sha256":  "3ea52038738b14b126941feef29731c8e50ca10d7ac08ac86662902a86658026",
+                                             "svg":  "exports/figS9_interface.ko.svg",
+                                             "svg_sha256":  "658d2d1ec677ab4859d33d331ff69c1f6994ee915946f2379cc3a8ab9fc4dc9c"
+                                         }
+                                     ]
+                     },
+                     {
+                         "source":  "figS1_allocation.pptx",
+                         "source_sha256":  "87d18abd9bb8b3f038544132585de15657b4320fdc3836e7d6a19b591b8257f7",
+                         "width_mm":  178.02,
+                         "height_mm":  69.982,
+                         "png_dpi_at_slide_size":  400,
+                         "exports":  [
+                                         {
+                                             "language":  "en",
+                                             "png":  "exports/figS1_allocation.en.png",
+                                             "png_sha256":  "581be43e71df899caeb37b45e573f7a18a587dd103759c2fe5f1cd3b35fb9eec",
+                                             "svg":  "exports/figS1_allocation.en.svg",
+                                             "svg_sha256":  "628dfad18e788d43d24e47afb9241f7a806a4df48e2dd2f836a1b613650dfe09"
+                                         },
+                                         {
+                                             "language":  "ko",
+                                             "png":  "exports/figS1_allocation.ko.png",
+                                             "png_sha256":  "c3a4fc15eb9c865e833d85425ab57c24e8fc03d6d2767067ab40b935e8dd3073",
+                                             "svg":  "exports/figS1_allocation.ko.svg",
+                                             "svg_sha256":  "f434b8a7089f0dd278697aae4514a7d7f386402a08031a8aadc8db6be71df95e"
                                          }
                                      ]
                      },
@@ -251,29 +274,6 @@
                                              "png_sha256":  "2cc8b9677bd0975413c124b4ce73856b8e7920110529f40eb485d6539a8d4b8b",
                                              "svg":  "exports/figS8_provenance.ko.svg",
                                              "svg_sha256":  "54991b3c707a4072bec68d03a1a268bb251d6d5d53f1535f552bbfdb548a8178"
-                                         }
-                                     ]
-                     },
-                     {
-                         "source":  "figS9_interface.pptx",
-                         "source_sha256":  "75ad7e309f451fd01a1921f2b7eaf720840b6963cf326069f960f6d85b4e4aff",
-                         "width_mm":  178.02,
-                         "height_mm":  98.998,
-                         "png_dpi_at_slide_size":  400,
-                         "exports":  [
-                                         {
-                                             "language":  "en",
-                                             "png":  "exports/figS9_interface.en.png",
-                                             "png_sha256":  "13ab0921e59bbe682aa1c3a172d1e8a2d686099e35d629954b9f2980b645afde",
-                                             "svg":  "exports/figS9_interface.en.svg",
-                                             "svg_sha256":  "6f22e33833b6897b47c3139a5a0ded4c60f408c6ba6df6306d473b5c71d4f1de"
-                                         },
-                                         {
-                                             "language":  "ko",
-                                             "png":  "exports/figS9_interface.ko.png",
-                                             "png_sha256":  "3ea52038738b14b126941feef29731c8e50ca10d7ac08ac86662902a86658026",
-                                             "svg":  "exports/figS9_interface.ko.svg",
-                                             "svg_sha256":  "658d2d1ec677ab4859d33d331ff69c1f6994ee915946f2379cc3a8ab9fc4dc9c"
                                          }
                                      ]
                      }

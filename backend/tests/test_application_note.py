@@ -26,8 +26,12 @@ def test_si_publication_labels_preserve_every_frozen_screening_value():
     for row, (family, candidate) in zip(rows, expected, strict=True):
         assert row[0].strip() == FAMILY_LABELS[family]
         assert row[1].strip() == CANDIDATE_LABELS[family][candidate["slug"]]
-        assert float(row[2]) == pytest.approx(candidate["landed_cost_per_lb"] * PER_LB_TO_PER_KG, abs=0.000051)
-        assert float(row[3]) == pytest.approx(candidate["lca"]["coverage_pct"], abs=0.0051)
+        assert row[2].strip() and "wt" not in row[2]  # active metal or phase with its loading, e.g. "Ni 12"
+        assert float(row[3].replace(",", "")) > 0  # production scale in kg
+        assert float(row[4]) == pytest.approx(candidate["landed_cost_per_lb"] * PER_LB_TO_PER_KG, abs=0.000051)
+        assert float(row[5]) == pytest.approx(candidate["lca"]["coverage_pct"], abs=0.0051)
+    ammonia = {row[1].strip(): row for row in rows if row[0].strip() == FAMILY_LABELS["ammonia-cracking"]}
+    assert ammonia["Co/MgO–La₂O₃"][2].strip() == "Co 5" and ammonia["Ni/γ-Al₂O₃"][2].strip() == "Ni 12"
     assert "RWGS (reverse water–gas shift)" in section
     assert "| rwgs |" not in text
     assert "premium" not in section and "workhorse" not in section and "lifetime play" not in section

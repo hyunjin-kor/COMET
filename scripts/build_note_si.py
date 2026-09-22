@@ -16,6 +16,19 @@ OUTPUT = PAPER / "supporting-information-2026-09-15.md"
 RUN_DATE = "2026-09-21"
 RUN = f"docs/paper/submission-{RUN_DATE}"
 MONTHS = ("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
+# Readable titles of the screened price-evidence cases (the record's own titles lack spacing).
+EVIDENCE_TITLES = {
+    "E01": "Axens STR111 commercial catalyst base-price schedule (filed technology-transfer agreement)",
+    "E02": "5 wt% Pt on Vulcan XC-72, 1 g public catalog offer",
+    "E03": "10 wt% Pt on Vulcan XC-72, 1 g public catalog offer",
+    "E04": "20 wt% Ni on Vulcan XC-72R Grade S, 1 g public catalog offer",
+    "E05": "Chloroplatinic-acid preparation quote within a DOE catalyst-ink cost model",
+    "E06": "Battelle reported bulk XC-72 carbon quote",
+    "E07": "Hog et al. 2026 mixed supplier/literature consumable-price regression",
+    "E08": "BPCL 2013 VGO hydrodesulfurization catalyst procurement price form",
+    "E09": "ESTCP PCB demonstration-informed treatment-cost model",
+    "E10": "Mendoza Suarez and Tatarchuk 2025 catalyst-price sensitivity assumptions",
+}
 
 
 def month_label(value):
@@ -29,6 +42,18 @@ def load(path):
 
 def cell(value):
     return str(value).replace("|", "/").replace("\n", " ")
+
+
+def formula(name):
+    """Digits that follow an element or a closing parenthesis become subscripts (Al2O3 -> Al₂O₃)."""
+    return re.sub(r"(?<=[A-Za-z)])\d+", lambda m: m.group().translate(str.maketrans("0123456789", "₀₁₂₃₄₅₆₇₈₉")), name)
+
+
+def active_phase(candidate):
+    """Active metals with their loadings, or the active phase of a bulk formulation."""
+    metals = [c for c in candidate["components"] if c["role"] == "active_metal"]
+    phases = metals or [c for c in candidate["components"] if c["role"] in ("active_catalyst", "co_active_catalyst")]
+    return "; ".join(f"{formula(c['name'])} {c['wt_pct']:g}" for c in phases)
 
 
 def render():
@@ -46,9 +71,18 @@ def render():
         "whatif": f"docs/paper/whatif-{RUN_DATE}/whatif_study.json",
         "examples": f"docs/paper/verification-{RUN_DATE}/step_method_examples.json",
         "table62": f"{RUN}/table62_reproduction_{RUN_DATE}.json",
+        "evidence": "docs/sources/external-cost-evidence-2026-09-07.json",
     }
     data = {key: load(path) for key, path in sources.items()}
     study, library = data["study"], data["library"]
+    # Library compositions and production scales of the screening candidates (Table S7).
+    catalogs = {}
+    for path in sorted((ROOT / "backend/data").glob("*_benchmark.json")):
+        catalog = json.loads(path.read_text(encoding="utf-8"))
+        catalogs[catalog["family"]] = {c["slug"]: c for c in catalog["candidates"]}
+    for family in data["screening"]["families"]:
+        if {c["slug"] for c in family["candidates"]} != set(catalogs[family["family"]]):
+            raise ValueError(f"The library candidates of {family['family']} differ from the frozen screening run")
     crossover = load(f"docs/paper/price-crossovers-{RUN_DATE}/crossover_mechanisms.json")
     with (PAPER / f"price-crossovers-{RUN_DATE}/family_summary.csv").open(encoding="utf-8-sig", newline="") as handle:
         census = {(row["family"], row["period"]): row for row in csv.DictReader(handle)}
@@ -93,6 +127,17 @@ def render():
         raise ValueError("The SI describes a ranking reversal in ammonia cracking after candidate removal")
     whatif = data["whatif"]
     labels = CANDIDATE_LABELS["ammonia-cracking"]
+    assignment = whatif["route_assignment"]
+    spreads = [max(v["selling_price_per_lb"] for v in row["by_template"].values()) - min(v["selling_price_per_lb"] for v in row["by_template"].values())
+               for family in assignment["families"] for row in family["candidates"]]
+    if max(spreads) - min(spreads) > 2e-4:
+        raise ValueError("The SI states one selling-price range of the five methods for every candidate")
+    method_spread = spreads[0]
+    if len(assignment["templates"]) != 5:
+        raise ValueError("The SI names five preparation methods")
+    excluded = [(family["family"], row) for family in assignment["families"] for row in family["excluded"]]
+    excluded_note = ("Candidates with a component role the calculator request does not accept are excluded: "
+                     + "; ".join(f"{CANDIDATE_LABELS[family][row['slug']]} ({', '.join(role.replace('_', ' ') for role in row['roles'])})" for family, row in excluded) + ". ") if excluded else ""
     # Table S1: the stand-alone record adds the effective-rate lines of the FCC case to the frozen primary-run record.
     examples = data["examples"]
     for case, frozen in zip(examples, data["table62"], strict=True):
@@ -105,12 +150,16 @@ def render():
     unlinked = Counter(c["status"] for c in library["candidates"] if not c["profile_ids"])
     if set(linked) != {"variant_available", "source_mismatch"} or set(unlinked) != {"screening_only", "source_mismatch"}:
         raise ValueError("The preparation-link reconciliation sentence no longer describes the library")
+    evidence = data["evidence"]
+    if evidence["overall_status"].startswith("partial") is False or any(
+            all(value == "matched" for value in case["match_requirements"].values()) for case in evidence["cases"]):
+        raise ValueError("The SI states that no screened external price case is fully matched")
     request, hand = study["request"], study["independent_balance"]
     protocol = request["manufacturing_protocol"]
     mc = study["monte_carlo"]
     lines = ["# Supporting Information", "", "COMET: Catalyst Overall Manufacturing Estimation Tool", "",
              "## S1. Calculation methods and boundaries", "",
-             "This Supporting Information describes the manufacturing calculation, declared inputs, numerical verification, screening results, calculator what-if inputs, observed-price cost crossovers, ranking sensitivity, leaders under stored live quotations, preparation-evidence coverage and application views. "
+             "This Supporting Information describes the manufacturing calculation, declared inputs, numerical verification, screening results with library loadings and production scales, calculator what-if inputs, observed-price and preparation-method cost crossovers, ranking sensitivity, leaders under stored live quotations, preparation-evidence coverage, the screened external price evidence and application views. "
              f"The {basis} screening results retain their original formulations and assumptions. "
              "The later preparation review does not retrospectively validate those formulations. The new manufacturing example is a hypothetical software demonstration, "
              "not an experimental catalyst cost or a comparison of matched catalytic performance.", "",
@@ -229,8 +278,9 @@ def render():
               f"![Figure S3. Monte Carlo samples. (a) Selling-price histogram of the {mc['n_simulations']} seeded trials with the mean (solid line) and the 5th and 95th percentiles (dashed lines). (b) Sampled dry output against selling price for the same trials. Bounds are scenario assumptions, not measured variability.](figures-si-2026-09-16/figS3_monte_carlo.png)", "",
               "## S5. Frozen price and screening basis", "",
               f"The following {basis} costs use the original screening formulations and route assumptions, not the subsequently curated preparation records. "
-              "Table S7 reports estimated selling prices for 116 screening candidates; it does not report measured manufacturing costs. "
-              "Powder values are converted from the stored legacy USD/lb fields using 1 lb = 0.45359237 kg. "
+              "Table S7 reports estimated selling prices for 116 screening candidates with the active-metal loading (or, for bulk formulations, the active phase) and the production scale recorded in the library for each candidate; it does not report measured manufacturing costs. "
+              "Each candidate is priced at its own library loading, which follows the cited source where it reports one and is otherwise an engineering assumption noted in the library; loadings are not normalized across candidates. "
+              "Powder values are converted from the stored legacy USD/lb fields using 1 lb = 0.45359237 kg, and production scales from short tons. "
               "An electrode candidate's powder price is distinct from assembly cost per area. These observations do not establish equivalent activity or commercial quotation validity.", "",
               "Johnson Matthey<sup>3</sup> and Westmetall<sup>4</sup> supply current metal quotations. Figure S4 summarizes the monthly historical inputs from Johnson Matthey and the International Monetary Fund (IMF).<sup>5</sup> "
               "Environmental mass coverage is the fraction assigned a screening inventory factor, including compound proxies; it is not a measure of inventory accuracy.<sup>6</sup>", "",
@@ -238,12 +288,15 @@ def render():
               f"monthly value at or before that month ({month_label(support_months[0])} to {month_label(support_months[-1])}); the observation month is recorded with the price and no month is interpolated. "
               "Metals without a published monthly series keep their annual reference values.", "",
               f"![Figure S4. Metal price history. Monthly averages from January 2019 to {basis}: (a) precious metals; (b) base metals. Prices are USD/kg; both price axes use logarithmic scales. Histories are unsmoothed observations, not forecasts.](figures-si-2026-09-16/figS4_metal_prices.png)", "",
-              f"Table S7. Estimated powder selling prices and environmental mass coverage at {basis} prices.", "",
-              "| Reaction family | Candidate model | Selling price (USD/kg) | Mass coverage (%) |", "|---|---|---:|---:|"]
+              f"Table S7. Library loadings, production scales, estimated powder selling prices and environmental mass coverage at {basis} prices.", "",
+              "| Reaction family | Candidate model | Active metal or phase (wt%) | Production scale (kg) | Selling price (USD/kg) | Mass coverage (%) |", "|---|---|---|---:|---:|---:|"]
     for family in data["screening"]["families"]:
         for c in family["candidates"]:
-            lines.append(f"| {FAMILY_LABELS[family['family']]} | {CANDIDATE_LABELS[family['family']][c['slug']]} | {c['landed_cost_per_lb']*PER_LB_TO_PER_KG:.4f} | {c['lca']['coverage_pct']:.2f} |")
+            entry = catalogs[family["family"]][c["slug"]]
+            lines.append(f"| {FAMILY_LABELS[family['family']]} | {CANDIDATE_LABELS[family['family']][c['slug']]} | {active_phase(entry)} | "
+                         f"{entry['order_size_tons'] * KG_PER_SHORT_TON:,.1f} | {c['landed_cost_per_lb']*PER_LB_TO_PER_KG:.4f} | {c['lca']['coverage_pct']:.2f} |")
     lines += ["", "Names identify the original screening models, not experimentally verified compositions or performance-equivalent catalysts. "
+              "Loadings are the library values; a bulk formulation lists its active phase at 100 wt% or the stated split. "
               "Family membership follows the original screening catalog, including related reaction variants; it does not imply identical reaction conditions. "
               "g-C₃N₄ denotes graphitic carbon nitride; h-BN, hexagonal boron nitride; SAPO, silicoaluminophosphate. "
               "MIL-101, ZSM-5 and SSZ-13 retain their established material identifiers.", "",
@@ -274,6 +327,21 @@ def render():
               f"The two baseline catalysts would cost the same per kilogram at a ruthenium price of {equal['equal_cost_ru_price_per_lb'] * PER_LB_TO_PER_KG:,.0f} USD/kg, "
               f"{100 * equal['equal_cost_over_reference']:.2f}% of the {basis} price; the lowest monthly ruthenium price of the {equal['ru_history_months']}-month record is "
               f"{equal['ru_history_min_per_lb'] * PER_LB_TO_PER_KG:,.0f} USD/kg.", "",
+              f"Table S9 prices every supported-metal candidate of the powder-catalyst families (a candidate with an active metal and a support) with its library composition under each of the "
+              f"{len(assignment['templates'])} preparation methods at {assignment['order_size_tons'] * KG_PER_SHORT_TON:,.1f} kg, on the {basis} reference basis and without the route allowances of the screening catalog. "
+              "Processing cost depends on the operation sequence and the production scale only, so the five methods span "
+              f"{method_spread * PER_LB_TO_PER_KG:.2f} USD/kg of selling price for every candidate, and a candidate can be the least expensive of its family under some assignment of methods "
+              "exactly when its lowest price lies below the highest price of every other candidate; with the same method applied to every candidate, the cost order never changes. "
+              f"{excluded_note}Figure 4(f) of the main article shows the ammonia-cracking pair for every pair of methods. These are cost orders at equal catalyst mass; catalytic performance is not compared.", "",
+              f"Table S9. Cost order under the five preparation methods at {assignment['order_size_tons'] * KG_PER_SHORT_TON:,.1f} kg.", "",
+              "| Reaction family | Candidates | Least expensive by materials | Materials difference to the next candidate (USD/kg) | Candidates that can be least expensive |",
+              "|---|---:|---|---:|---|"]
+    for family in assignment["families"]:
+        labels_of = CANDIDATE_LABELS[family["family"]]
+        by_materials = sorted(family["candidates"], key=lambda row: row["materials_per_lb"])
+        lines.append(f"| {FAMILY_LABELS[family['family']]} | {len(family['candidates'])} | {labels_of[by_materials[0]['slug']]} | "
+                     f"{family['materials_gap_per_lb'] * PER_LB_TO_PER_KG:,.2f} | {'; '.join(labels_of[slug] for slug in family['possible_lowest_cost'])} |")
+    lines += ["", f"Materials costs are per kilogram of catalyst. In {assignment['summary']['lowest_cost_depends_on_template']} of the {assignment['summary']['families']} families more than one candidate can be the least expensive.", "",
               "Ranking calculations use the original four criterion weights and assigned route/performance scores retained in the frozen methods and robustness files. "
               f"The complete 0.05 weight grid contains {robust['weight_points']['0.05']:,} nonnegative combinations summing to one. With {robust['months']} months and {robust['families']} families, "
               f"it defines {robust['joint_scenarios_all_families']['0.05']:,} scenarios. "
@@ -304,9 +372,9 @@ def render():
               "weights its sources by materials-cost share. With all other inputs unchanged, the leader changes in "
               f"{comparison['changed_by_profile']['balanced']} families with balanced weights, {comparison['changed_by_profile']['cost-first']} with cost-first weights, "
               f"{comparison['changed_by_profile']['evidence-first']} with evidence-first weights and {comparison['changed_by_profile']['performance_zero']} with the performance weight set to zero. "
-              "Table S9 lists the balanced-weight changes with the price-reliability and cost scores of the former leader. "
+              "Table S10 lists the balanced-weight changes with the price-reliability and cost scores of the former leader. "
               "The live quotations are a single stored snapshot, not a replay of current prices at another date.", "",
-              f"Table S9. Balanced-weight leaders under the {basis} reference and the stored live quotations.", "",
+              f"Table S10. Balanced-weight leaders under the {basis} reference and the stored live quotations.", "",
               f"| Reaction family | {basis} leader | Live-quotation leader | Former leader: price reliability | Former leader: cost score |",
               "|---|---|---|---:|---:|"]
     for family, before, after, reference_scores, live_scores in live_changes:
@@ -318,8 +386,8 @@ def render():
               f"Of {len(library['candidates'])} screening candidates, {sum(bool(c['profile_ids']) for c in library['candidates'])} link to at least one preparation; "
               f"{sum(not c['profile_ids'] for c in library['candidates'])} have no curated preparation. Bibliographic verification covers {len(library['sources'])} digital object identifiers (DOIs). "
               "Links may describe variants. No candidate has jointly verified catalog composition, complete preparation, utilities, recovered output and prices. "
-              "Table S10 counts source/formulation discrepancies even where a related preparation is available.", "",
-              "Table S10. Preparation-evidence coverage and unresolved source/formulation discrepancies.", "",
+              "Table S11 counts source/formulation discrepancies even where a related preparation is available.", "",
+              "Table S11. Preparation-evidence coverage and unresolved source/formulation discrepancies.", "",
               "| Reaction family | Candidates | With preparation | Source mismatch flagged |", "|---|---:|---:|---:|"]
     for family in sorted({c["family"] for c in library["candidates"]}):
         rows = [c for c in library["candidates"] if c["family"] == family]
@@ -342,13 +410,37 @@ def render():
               "Figure S8 illustrates the record structure preserved for each imported preparation: the located source passage, the structured record in which reported values "
               "and later user modifications are distinguished, and the resulting cost contribution with its checksum.", "",
               "![Figure S8. Source-linked record. Conceptual sequence from a located passage in a source, through a structured record that distinguishes reported values from user modifications, to the cost contribution and its checksum. The drawing is conceptual. Artwork used Google Gemini's image-generation tool; labels are native.](figures-si-2026-09-16/figS8_provenance.png)", "",
-              "## S7. Application interface", "",
+              "## S7. External price evidence", "",
+              f"The main article states that accuracy against industrial prices is not established. Table S12 lists the {len(evidence['cases'])} cases screened on {evidence['audit_date']} "
+              "in a bounded search of free public sources (government cost reports, supplier product pages, filed commercial contracts, public procurement and open papers); "
+              "a case is matched only when composition and grade, quantity and production scale, price date and currency, manufacturing route and yield, and cost boundary all agree with a library formulation, "
+              "and an unknown dimension is not matched. None of the cases is matched. Retail pack prices are arithmetic normalizations, not bulk quotations; a market price is not a manufacturing cost; "
+              "and the three demonstration cases of Table S1 are not independent validation. The search is bounded, so a failed match does not establish that no usable price exists elsewhere.", "",
+              f"Table S12. Public price evidence screened on {evidence['audit_date']}.", "",
+              "| Case | Evidence | Observation | Matched dimensions |", "|---|---|---|---|"]
+    for case in evidence["cases"]:
+        observation = case["observation"] or {}
+        if "price" in observation:
+            observed = f"{observation['price']:g} {observation['unit']}"
+            if observation.get("pack_mass_kg"):
+                observed += f" ({observation['pack_mass_kg'] * 1000:g} g pack)"
+            observed += f", {observation.get('basis_month') or observation.get('observed_date') or observation.get('signed_date')}"
+        elif "scenario_prices" in observation:
+            observed = " and ".join(f"{p:g}" for p in observation["scenario_prices"]) + f" {observation['unit']} (assumed scenarios)"
+        else:
+            observed = "no usable price"
+        matched = [key.replace("_", " ") for key, value in case["match_requirements"].items() if value == "matched"]
+        lines.append(f"| {EVIDENCE_TITLES[case['id']]} | {case['evidence_kind'].replace('_', ' ')} | {cell(observed)} | {'; '.join(matched) or 'none'} |")
+    if [case["id"] for case in evidence["cases"]] != list(EVIDENCE_TITLES):
+        raise ValueError("The screened evidence cases differ from the titled list")
+    lines += ["", "Cases are identified by the screening record E01–E10; the five dimensions are composition and grade, quantity and production scale, price date and currency, manufacturing route and yield, and cost boundary.", "",
+              "## S8. Application interface", "",
               "Figure S9 shows two views of COMET 1.4.0 recorded with an isolated database and no external price service. Panel (a) shows the source attached to one imported input: "
               "the purchased quantity of a reagent in the first operation of the PtSn/Al₂O₃ pellet preparation record imported from its Methods section,<sup>7</sup> "
               "with the citation, locator, DOI, access date and recorded value. Unreported conditions of imported records remain blank. "
               "Panel (b) shows the evidence section of the result page for the illustrative batch of Tables S2–S5, with the time, electricity and the electricity, equipment, labor and gas costs of each operation.", "",
               "![Figure S9. Application views. (a) Source record of one imported input in the preparation editor. (b) Operation-level time, electricity and cost contributions of the illustrative batch on the result page. Interface text is English; the Korean interface presents the same content.](figures-si-2026-09-16/figS9_interface.png)", "",
-              "## S8. References", "",
+              "## S9. References", "",
               "[1] Baddour, F. G.; Snowden-Swan, L.; Super, J. D.; Van Allsburg, K. M. Estimating Precommercial Heterogeneous Catalyst Price: A Simple Step-Based Method. *Organic Process Research & Development* **2018**, *22* (12), 1599–1605. https://doi.org/10.1021/acs.oprd.8b00245.", "",
               "[2] Van Allsburg, K. M.; Tan, E. C. D.; Super, J. D.; Schaidle, J. A.; Baddour, F. G. Early-stage evaluation of catalyst manufacturing cost and environmental impact using CatCost. *Nature Catalysis* **2022**, *5* (4), 342–353. https://doi.org/10.1038/s41929-022-00759-6.", "",
               "[3] Johnson Matthey. PGM Prices and Trading. https://matthey.com/products-and-markets/pgms-and-circularity/pgm-management (accessed September 21, 2026).", "",

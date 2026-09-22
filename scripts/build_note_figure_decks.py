@@ -203,7 +203,7 @@ def build_fig4(records):
     for lang in LANGS:
         slide = blank_slide(deck)
         rows = records[("fig4_ranking", lang)]
-        for panel, x, y in (("a", 0, 0), ("b", 59, 0), ("c", 118, 0), ("d", 0, 64), ("e", 89, 64)):
+        for panel, x, y in (("a", 0, 0), ("b", 59, 0), ("c", 118, 0), ("d", 0, 64), ("e", 64, 64), ("f", 130, 64)):
             place(slide, rows, panel, x, y)
             letter(slide, panel, x + 2, y + 0.5)
     return deck

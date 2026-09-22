@@ -133,36 +133,54 @@
       "panel": "d",
       "language": "en",
       "file": "fig4_ranking.d.png",
-      "width_mm": 89,
+      "width_mm": 64,
       "height_mm": 64,
-      "sha256": "89e67c76d13da8550d1d17a5c27d34361bf6684a8fcf0444460c7c9223d4df7e"
+      "sha256": "9e817b8a54e82a383e58eda913023cbd714bce40cceede0b2c07a2750a140f57"
     },
     {
       "figure": "fig4_ranking",
       "panel": "d",
       "language": "ko",
       "file": "fig4_ranking.d.ko.png",
-      "width_mm": 89,
+      "width_mm": 64,
       "height_mm": 64,
-      "sha256": "5eb32af1a3fd518093f14600b664f6ef29fa87f452b82fb3eb888a645a3e1e44"
+      "sha256": "e8f88127df5ee8d2a84cd8cc6b6bd8cc31c9b0c2633b353a7055f336b96fd84e"
     },
     {
       "figure": "fig4_ranking",
       "panel": "e",
       "language": "en",
       "file": "fig4_ranking.e.png",
-      "width_mm": 89,
+      "width_mm": 66,
       "height_mm": 64,
-      "sha256": "8c36884799b48546c702e27b8719b48b031d42c477264a02621a04513c73153e"
+      "sha256": "e37fbd6a3fb04e25a496fabe9c090953c5ff28053b6df3d198aed76fd6c8b1c1"
     },
     {
       "figure": "fig4_ranking",
       "panel": "e",
       "language": "ko",
       "file": "fig4_ranking.e.ko.png",
-      "width_mm": 89,
+      "width_mm": 66,
       "height_mm": 64,
-      "sha256": "f22e1240ecf808d21580d2e5910d44ef1f7ac2714a5f5bbb3913783a54d0d474"
+      "sha256": "ef5c3dc7471403fd449674a752644840317c265a5e11589bacd6a6ba1b2402de"
+    },
+    {
+      "figure": "fig4_ranking",
+      "panel": "f",
+      "language": "en",
+      "file": "fig4_ranking.f.png",
+      "width_mm": 48,
+      "height_mm": 64,
+      "sha256": "5ab1a083640f333fb4a3b5706822475696c336d8194a4d33f3cadef613b100d5"
+    },
+    {
+      "figure": "fig4_ranking",
+      "panel": "f",
+      "language": "ko",
+      "file": "fig4_ranking.f.ko.png",
+      "width_mm": 48,
+      "height_mm": 64,
+      "sha256": "1ab7e3e238b9be20091ffba258dbc53c406a8e58ec2593d531566f5e0502817c"
     },
     {
       "figure": "figS2_sensitivity",

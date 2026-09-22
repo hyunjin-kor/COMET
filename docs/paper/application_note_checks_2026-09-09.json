@@ -2,7 +2,7 @@
   "target": "Journal of Chemical Information and Modeling, Application Note",
   "word_limit_abstract_text_graphics": 5000,
   "abstract_words": 136,
-  "text_words_excluding_references": 2161,
+  "text_words_excluding_references": 2163,
   "graphics": [
     {
       "figure": 1,
@@ -26,16 +26,24 @@
     }
   ],
   "graphics_word_equivalent": 2400,
-  "total_word_equivalent": 4697,
+  "total_word_equivalent": 4699,
   "toc_word_equivalent_allowance": 300,
-  "total_word_equivalent_with_toc": 4997,
+  "total_word_equivalent_with_toc": 4999,
   "toc_count_note": "A conservative 300-word allowance is tracked separately because the Application Note rule does not explicitly resolve TOC inclusion.",
   "figure_count": 4,
   "table_count": 0,
   "software_named_in_title": true,
-  "json_key_references": 83,
+  "json_key_references": 93,
   "publication_mass_unit": "kg",
   "publication_conversions": [
+    {
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "key": "route_assignment.ammonia_cracking_pair.materials_gap_per_lb",
+      "source_value": 0.3891,
+      "factor": 2.2046226218487757,
+      "converted_value": 0.8578186621613586,
+      "display": "0.86"
+    },
     {
       "source": "submission-2026-09-21/paper_summary_2026-09-21.json",
       "key": "table62[0].comet_usd_per_lb",
@@ -205,6 +213,22 @@
       "display": "1,480.36"
     },
     {
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "key": "route_assignment.order_size_tons",
+      "source_value": 20,
+      "factor": 907.18474,
+      "converted_value": 18143.6948,
+      "display": "18,143.7"
+    },
+    {
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "key": "route_assignment.order_size_tons",
+      "source_value": 20,
+      "factor": 907.18474,
+      "converted_value": 18143.6948,
+      "display": "18,143.7"
+    },
+    {
       "source": "methods-2026-09-21/methods_study.json",
       "key": "normalization.example.removed_cost",
       "source_value": 1327.12,
@@ -323,6 +347,16 @@
       "display": "0.45",
       "source": "submission-2026-09-21/all_families_2026-09-21.json",
       "rule": "largest balanced weight of the cost score"
+    },
+    {
+      "display": "1.26",
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "rule": "route_assignment: selling-price range over the five templates, identical for every candidate, USD/kg"
+    },
+    {
+      "display": "0.09",
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "rule": "route_assignment.ammonia_cracking_pair: nickel catalyst by deposition-precipitation minus cobalt catalyst by incipient wetness, USD/kg"
     }
   ],
   "primary_run": "submission-2026-09-21",

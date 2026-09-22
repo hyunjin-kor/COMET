@@ -11,7 +11,7 @@ frozen COMET analysis files, embedded as images and listed with their checksums 
 |---|---|---|---|
 | `fig2_cost_model.pptx` | Figure 2 | (b) selling-price shares, (c) market deviations | (a) OpenAI schematic, labels from the h26 deck |
 | `fig3_manufacturing.pptx` | Figure 3 | (b) operating contributions, (c) calcination sweep | (a) OpenAI preparation sequence, labels from the 2026-09-15 deck |
-| `fig4_ranking.pptx` | Figure 4 | calculator what-if analyses: (a) metal loading, (b) order size, (c) preparation procedure; (d) ammonia-cracking cost history, (e) Ni–Co equal-cost boundary | – |
+| `fig4_ranking.pptx` | Figure 4 | calculator what-if analyses: (a) metal loading, (b) production scale, (c) preparation method; (d) ammonia-cracking cost history, (e) lowest-cost candidate of each month in the families where it changes, (f) cobalt-minus-nickel selling price for every pair of preparation methods | – |
 | `figS4_metal_prices.pptx` | Figure S4 | (a) precious metals, (b) base metals | – |
 | `figS2_sensitivity.pptx` | Figure S2 | one-at-a-time endpoints | – |
 | `figS3_monte_carlo.pptx` | Figure S3 | (a) price histogram, (b) samples versus dry output | – |

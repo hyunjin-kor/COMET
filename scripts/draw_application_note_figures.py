@@ -114,6 +114,12 @@ TEXT = {
                      "sn-formate-co2rr": "Sn (formate)", "nimo-alkaline-her-cathode": "NiMo (alkaline)",
                      "mos2-acidic-her-cathode": "MoS$_2$ (acidic)", "aqueous-nrr-cu": "Cu (aqueous)",
                      "plasma-nrr": "Plasma-assisted"},
+        "f4_families": {"ammonia-cracking": "Ammonia cracking", "dry-reforming": "Methane dry reforming",
+                        "water-gas-shift": "Water–gas shift", "co2-electroreduction": "CO$_2$ electroreduction",
+                        "hydrogen-evolution-reaction": "Hydrogen evolution", "nitrogen-reduction-reaction": "N$_2$ electroreduction"},
+        "f4_methods": {"wet_impregnation_metal_oxide": "IW", "excess_solution_impregnation_metal_oxide": "WI",
+                       "deposition_precipitation_metal_oxide": "DP", "coprecipitation_metal_oxide": "CP", "sol_gel_metal_oxide": "SG"},
+        "f4_f_x": "Ni/γ-Al$_2$O$_3$ method", "f4_f_y": "Co/MgO–La$_2$O$_3$ method",
         "w_ni": "Ni/Al$_2$O$_3$", "w_ru": "Ru/Al$_2$O$_3$", "w_price_y": "Selling price (USD/kg)",
         "w_loading_x": "Metal loading (wt%)", "w_order_x": "Production scale (t)", "w_per_wt": " per wt%",
         "w_scales": ["small", "medium", "large"],
@@ -160,6 +166,12 @@ TEXT = {
                      "sn-formate-co2rr": "Sn (포름산염)", "nimo-alkaline-her-cathode": "NiMo (알칼리)",
                      "mos2-acidic-her-cathode": "MoS$_2$ (산성)", "aqueous-nrr-cu": "Cu (수계)",
                      "plasma-nrr": "플라즈마 보조"},
+        "f4_families": {"ammonia-cracking": "암모니아 분해", "dry-reforming": "메탄 건식 개질",
+                        "water-gas-shift": "수성가스 전이", "co2-electroreduction": "CO$_2$ 전기환원",
+                        "hydrogen-evolution-reaction": "수소 발생 반응", "nitrogen-reduction-reaction": "N$_2$ 전기환원"},
+        "f4_methods": {"wet_impregnation_metal_oxide": "IW", "excess_solution_impregnation_metal_oxide": "WI",
+                       "deposition_precipitation_metal_oxide": "DP", "coprecipitation_metal_oxide": "CP", "sol_gel_metal_oxide": "SG"},
+        "f4_f_x": "Ni/γ-Al$_2$O$_3$ 제조법", "f4_f_y": "Co/MgO–La$_2$O$_3$ 제조법",
         "w_ni": "Ni/Al$_2$O$_3$", "w_ru": "Ru/Al$_2$O$_3$", "w_price_y": "판매 단가 (USD/kg)",
         "w_loading_x": "금속 담지량 (wt%)", "w_order_x": "생산 규모 (t)", "w_per_wt": " (wt%당)",
         "w_scales": ["소규모", "중규모", "대규모"],
@@ -1081,13 +1093,20 @@ def figure4_whatif():
     _clean(c)
     c.tick_params(axis="y", length=0)
 
-    # (d) monthly costs of the two candidates that attain the lowest cost
+    # (d) monthly costs of the two candidates that attain the lowest cost, named with their library loadings
     family = next(row for row in crossovers["families"] if row["family"] == "ammonia-cracking")
     records = family["periods"]["monthly"]["records"]
-    d = fig.add_axes([15 / 178, 1 - 114 / height, 70 / 178, 42 / height])
+    assignment = whatif["route_assignment"]
+    ammonia = next(row for row in assignment["families"] if row["family"] == "ammonia-cracking")
+    loadings = {}
+    for row in ammonia["candidates"]:
+        if len(row["active_metal_wt_pct"]) != 1:
+            raise ValueError(f"{row['slug']} has more than one active metal; its label needs a different form")
+        loadings[row["slug"]] = next(iter(row["active_metal_wt_pct"].values()))
+    d = fig.add_axes([15 / 178, 1 - 114 / height, 46 / 178, 42 / height])
     for slug, label, colour, style in (("co-mgo-la2o3", L["f4_co"], ACC, "-"), ("ni-alumina-baseline", L["f4_ni"], WARN, "--")):
         d.plot(_crossover_dates(records), [publication_cost(row["costs"][slug], family["unit"]) for row in records],
-               color=colour, lw=1.3, ls=style, label=label)
+               color=colour, lw=1.3, ls=style, label=f"{loadings[slug]:g} wt% {label}")
     values = [publication_cost(row["costs"][slug], family["unit"]) for row in records
               for slug in ("co-mgo-la2o3", "ni-alumina-baseline")]
     low, high = min(values), max(values)
@@ -1105,9 +1124,9 @@ def figure4_whatif():
                       key=lambda row: (row["domain"] != "thermal", row["family"]))
     if len(changing) != crossovers["summary"]["monthly"]["cost_winner"]:
         raise ValueError("The strip of lowest-cost candidates does not cover the families counted in the text")
-    e = fig.add_axes([96 / 178, 1 - 114 / height, 77 / 178, 46 / height])
+    e = fig.add_axes([69 / 178, 1 - 121 / height, 58 / 178, 52 / height])
     e.set_xlim(0, len(records))
-    e.set_ylim(len(changing) - 0.44, -0.56)
+    e.set_ylim(len(changing) - 0.15, -0.5)
     renderer = fig.canvas.get_renderer()
     for index, row in enumerate(changing):
         winners = [state["cost_winner"] for state in row["periods"]["monthly"]["records"]]
@@ -1117,13 +1136,13 @@ def figure4_whatif():
         start = 0
         for stop in range(1, len(winners) + 1):
             if stop == len(winners) or winners[stop] != winners[start]:
-                e.broken_barh([(start, stop - start)], (index + 0.1, 0.4), facecolors=colours[winners[start]], linewidth=0)
+                e.broken_barh([(start, stop - start)], (index + 0.1, 0.32), facecolors=colours[winners[start]], linewidth=0)
                 start = stop
-        e.text(0, index - 0.03, FAMILY_NAMES[LANG][row["family"]].replace("\n", " "), fontsize=8, color=INK, ha="left", va="baseline")
+        e.text(0, index - 0.05, L["f4_families"][row["family"]], fontsize=7, color=INK, ha="left", va="baseline")
         right = len(winners)
         for slug in reversed(slugs):
             label = L["f4_short"].get(slug) or CANDIDATE_LABELS[row["family"]][slug].replace("₂", "$_2$").replace("₃", "$_3$")
-            name = e.text(right, index - 0.03, label, fontsize=7.5, color=colours[slug], ha="right", va="baseline")
+            name = e.text(right, index + 0.47, label, fontsize=6.5, color=colours[slug], ha="right", va="top")
             right = name.get_window_extent(renderer).transformed(e.transData.inverted()).x0 - 2.5
     first = datetime.fromisoformat(records[0]["date"] + "-01")
     years = (2020, 2022, 2024, 2026)
@@ -1133,6 +1152,29 @@ def figure4_whatif():
     _clean(e)
     for side in ("top", "right", "left"):
         e.spines[side].set_visible(False)
+
+    # (f) the selling price of the cobalt candidate minus that of the nickel candidate for every pair of preparation methods
+    pair = assignment["ammonia_cracking_pair"]
+    if (pair["co"], pair["ni"]) != ("co-mgo-la2o3", "ni-alumina-baseline"):
+        raise ValueError("Panel (f) compares the two candidates of panel (d)")
+    templates = assignment["templates"]
+    f = fig.add_axes([143 / 178, 1 - 110 / height, 32 / 178, 32 / height])
+    for i, co_template in enumerate(templates):
+        for j, ni_template in enumerate(templates):
+            value = pair["co_minus_ni_selling_price_per_lb"][co_template][ni_template] * factor
+            f.bar(j + 0.5, 1, width=1, bottom=i, color=ACC if value < 0 else WARN, alpha=0.55, edgecolor="white", lw=0.6)
+            f.text(j + 0.5, i + 0.5, f"{value:.2f}", ha="center", va="center", fontsize=6.2, color=INK)
+    f.set_xlim(0, len(templates))
+    f.set_ylim(len(templates), 0)
+    f.set_xticks([k + 0.5 for k in range(len(templates))])
+    f.set_xticklabels([L["f4_methods"][t] for t in templates], fontsize=7)
+    f.set_yticks([k + 0.5 for k in range(len(templates))])
+    f.set_yticklabels([L["f4_methods"][t] for t in templates], fontsize=7)
+    f.tick_params(length=0, pad=1.5)
+    f.set_xlabel(L["f4_f_x"], fontsize=8)
+    f.set_ylabel(L["f4_f_y"], fontsize=8)
+    _clean(f)
+    f.tick_params(length=0)
     return fig
 
 
@@ -1142,7 +1184,7 @@ PANEL_LAYOUTS = {
     "fig3_manufacturing": (lambda: figure_manufacturing(MANUFACTURING),
                            {"b": (0, 62, 89, 80), "c": (89, 62, 89, 80)}),
     "fig4_ranking": (figure4_whatif, {"a": (0, 0, 59, 64), "b": (59, 0, 59, 64), "c": (118, 0, 60, 64),
-                                     "d": (0, 64, 89, 64), "e": (89, 64, 89, 64)}),
+                                     "d": (0, 64, 64, 64), "e": (64, 64, 66, 64), "f": (130, 64, 48, 64)}),
     "figS4_metal_prices": (figure3_metal_prices, {"a": (0, 0, 84, 60), "b": (0, 60, 84, 62)}),
     "figS2_sensitivity": (figure_s2_sensitivity, {"a": (0, 0, 150, 82)}),
     "figS3_monte_carlo": (figure_s3_monte_carlo, {"a": (0, 0, 89, 72), "b": (89, 0, 89, 72)}),
@@ -1179,7 +1221,7 @@ def render_panels(directory):
         for name, (function, boxes) in PANEL_LAYOUTS.items():
             figure = function()
             for text in figure.texts:
-                if re.fullmatch(r"\([a-e]\)", text.get_text()):
+                if re.fullmatch(r"\([a-f]\)", text.get_text()):
                     text.set_visible(False)
             height_mm = figure.get_size_inches()[1] * 25.4
             for panel, (x, y, width, height) in boxes.items():
