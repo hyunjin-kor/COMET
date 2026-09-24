@@ -163,7 +163,7 @@ def render():
              f"The {basis} screening results retain their original formulations and assumptions. "
              "The later preparation review does not retrospectively validate those formulations. The new manufacturing example is a hypothetical software demonstration, "
              "not an experimental catalyst cost or a comparison of matched catalytic performance.", "",
-             "The screening calculations use the published Step Method and its cost-accounting framework.<sup>1,2</sup> "
+             "The screening calculations follow the Step Method of Baddour et al.<sup>1,2</sup> "
              "A component with mass fraction w in the catalyst, mass fraction f in the pure precursor, precursor purity p and retention y requires w/(f p y) kg of precursor per kg of catalyst. "
              "Table S1 compares every line of the three demonstration cases of the method with the COMET calculation from the published conditions and prices.<sup>1</sup> "
              "The lines before the margin agree within the rounding of the published table. "
@@ -172,7 +172,7 @@ def render():
              f"{examples[2]['with_published_rate']['effective_rate_ton_per_day'] * KG_PER_SHORT_TON:,.1f} kg/day in place of the nominal rate, and Table S1 uses that rate. "
              f"Its margin differs in the same way ({examples[2]['margin']['table_footnote_pct_of_premargin']:.0f}% of the pre-margin cost in the table, {examples[2]['margin']['comet_pct_of_premargin']:.2f}% from the correlation). "
              "Prices are converted from the published values per pound.", "",
-             "Table S1. Line-by-line reproduction of the published Step Method examples (published value / COMET).", "",
+             "Table S1. Line-by-line reproduction of the Step Method examples (published value / COMET).", "",
              "| Line | 2 wt% Pt/C | 21 wt% Ni/Al₂O₃ | FCC catalyst |", "|---|---:|---:|---:|",
              *[f"| {name} | " + " | ".join(f"{rows[key]['published'] * factor:{spec}} / {rows[key]['comet'] * factor:{spec}}" for rows in example_rows) + " |"
                for key, name, factor, spec in (("step_cost_per_hr", "Hourly step cost (USD/h)", 1, ",.0f"), ("campaign_days", "Campaign duration (d)", 1, ".2f"),

@@ -1970,3 +1970,19 @@ ACS 파일 형식 목록은 검색 색인에서 ZIP 허용을 확인했으며, �
 - 감사의 글 문장을 "Image-generation tools assisted the conceptual artwork of Figures 1–3 (OpenAI) and Supporting Information Figures S1 and S8 (Google Gemini) in September 2026."로 바꿨다(한글: "Fig. 1–3과 보충자료 Fig. S1·S8의 개념도 제작에는 이미지 생성 도구(OpenAI, Google Gemini)의 도움을 받았다(2026년 9월)."). ACS의 AI 이미지 사용 고지 요건은 이 문장으로 충족하며, 도구·버전·기간 확인 자리표시자는 그대로다.
 - 테스트 `test_ai_artwork_is_disclosed_only_in_the_acknowledgments`로 바꿔 캡션에 도구 이름이 없고 감사의 글이 Figures 1–3과 Figures S1 and S8을 지목하는지 확인한다. 덱 README의 고지 위치 설명도 갱신했다.
 - 분량 4,996/5,000(캡션은 분량에 들어가지 않고 감사의 글이 3단어 줄었다). 검사: 노트·SI `--check`, ruff, 노트·질량 단위 테스트 18 passed. Word v62(`_local/docx/rebuild_v62.py`): 도판 위치 v61과 동일, EN 15쪽·KO 20쪽·SI 27쪽, 서식 검사 통과. 패키지 `_local/submission-2026-09-21-v62/`. 외부 업로드·푸시 없음.
+
+### H63 — 2026-09-24: 한글판 v62 저자 메모 반영(서론 구조, Step Method 출처, 한국어 학술 문체)
+
+- 저자가 한글판 v62 Word 파일에 남긴 메모 5개를 반영했다. 메모 원문은 `_local/docx/COMET_Application_Note_JCIM_2026-09-09_한글판_v62.docx`에 그대로 남아 있다.
+  1. 초록 첫 문장이 번역투라 어색하다. 교수님들이 한글판으로 검토하므로 한글판을 고쳐야 한다.
+  2. "발표된 방법인 Step Method"라는 표현이 어색하다. 다른 사람의 고유한 방법인지, 전통적인 방법인지 밝혀야 한다.
+  3. "이 요구에 답한 도구가 두 가지 발표되어 있다"는 보고서 같다.
+  4. 응용 노트에서 이전 연구를 도구별 장단점으로 소개하는가.
+  5. "이 논문은 세 가지를 묻는다"는 중계하는 듯하다. "이 논문의 기여는 세 가지다. (1)…(2)…(3)…"으로 써야 한다.
+- 확인한 사실: Step Method는 Baddour 등(OPRD 2018, 22, 1599)이 제안한 명명된 방법이며 전통적인 일반 기법이 아니다. 따라서 초록·서론·SI에서 "Baddour 등이 제안한 Step Method"로 출처를 밝혔다. JCIM Application Note 선례 두 편(Chemprop, JCIM 2024, 64, 9; ChemFlow, JCIM 2023, 63, 407; Europe PMC 전문)은 선행 도구를 도구별 기능·장단점으로 나열하지 않고 문제 설명 속에 묶어 소개한 뒤 공백과 기여로 넘어간다.
+- 영문 생성기: 초록 첫 두 문장을 다시 썼다(Step Method를 Baddour 등의 방법으로 명시). 서론 2–4문단(도구 두 가지 나열, 세 문제, "We ask whether…")을 한 문단(선행 방법 → 공통 가정 → 남는 어려움)과 기여 세 가지 문단 "This work makes three contributions. (1)… (2)… (3)…"으로 바꿨다. 기여 (3)은 결과 절 순서(관측 가격 → 제조법 → 후보군)와 맞췄다. 분량 4,989/5,000(초록 149 + 본문 2,140; Word 통계 동일).
+- SI: "published Step Method" 문장을 "the Step Method of Baddour et al.<sup>1,2</sup>"로 바꿨다(한 줄이 늘어 표 S3가 다음 쪽으로 밀리던 배치를 원래 길이로 되돌림).
+- 한글판(`_local/docx/application-note-2026-09-09_ko.md`): 저자 블록·그림 경로·참고문헌을 제외한 본문과 캡션 전체를 한국어 학술 문체(~이다/~하였다)로 다시 썼다. 번역투(~에 의존하지만, ~하는 경우는 드물다의 명사 나열, 중계형 문장)를 풀고, 서론은 영문과 같은 구조로 바꿨다. 수치 전수 대조 결과 빠지거나 바뀐 숫자는 없다(새로 생긴 숫자는 기여 번호와 "2종", "1건당" 표기뿐).
+- Word v63(`_local/docx/rebuild_v63.py`): 한글 v62에 저자 메모가 들어 있어 서식 기준 파일을 메모 없는 v61로 바꿨다. 한글 도판 기준 문장을 새 문장으로 바꾸고 쪽매김 탐색으로 위치를 다시 정했다(KO Fig. 4: 매개변수 분석 문단 뒤). EN 15쪽, KO 21쪽, SI 27쪽, 서식 검사 통과.
+- 2026-09-24 이 PC에서 Windows PowerShell이 amsi.dll 적재 뒤 멈추는 현상이 생겨(보안 설정은 건드리지 않음), Word 검사 4종(도판 위치 탐색, 필드 갱신, 쪽 이미지, Word 단어 수)을 같은 절차의 Python(pywin32) 스크립트 `_local/docx/qa_v63/word_qa.py`로 옮겨 실행했다. 이 세션의 멈춘 PowerShell 두 개만 종료했고, 사용자가 연 Word 창과 다른 앱의 프로세스는 건드리지 않았다. 9월 23일 빌드에서 남은 창 없는 자동화용 Word 프로세스(`/Automation -Embedding`) 하나가 남아 있다.
+- 검사: 노트·SI `--check`, ruff, 노트·질량 단위 테스트 18 passed. 패키지 `_local/submission-2026-09-21-v63/`. 외부 업로드·푸시 없음.
