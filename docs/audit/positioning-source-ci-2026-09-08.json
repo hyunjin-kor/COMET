@@ -1,0 +1,30 @@
+{
+  "status": "completed",
+  "conclusion": "success",
+  "headSha": "6405e7ed482f40d34962a53cf2ffed8e87ed848c",
+  "url": "https://github.com/hyunjin-kor/COMET/actions/runs/34189857124",
+  "jobs": [
+    {
+      "name": "desktop",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-09-08T05:14:15Z",
+      "completedAt": "2026-09-08T05:18:19Z"
+    },
+    {
+      "name": "backend",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-09-08T05:14:15Z",
+      "completedAt": "2026-09-08T05:26:52Z"
+    },
+    {
+      "name": "frontend",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-09-08T05:14:15Z",
+      "completedAt": "2026-09-08T05:14:48Z"
+    }
+  ],
+  "backend_test_summary": "900 passed, 2 warnings in 716.44s (0:11:56)"
+}

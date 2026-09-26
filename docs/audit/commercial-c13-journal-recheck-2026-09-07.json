@@ -1,0 +1,38 @@
+{
+  "at": "2026-09-07T15:04:25.022037+00:00",
+  "observations": [
+    {
+      "url": "https://pubs.acs.org/engineeringau",
+      "status": 403,
+      "final_url": "https://pubs.acs.org/engineeringau",
+      "content_type": "text/html; charset=UTF-8",
+      "sha256": "bdda220b7454f8da8c30f9afe94349c92b929227c937669d72b8641f3779aadd"
+    },
+    {
+      "url": "https://pubs.acs.org/aeacb3/pages/about",
+      "status": 403,
+      "final_url": "https://pubs.acs.org/aeacb3/pages/about",
+      "content_type": "text/html; charset=UTF-8",
+      "sha256": "8057173f7d64be2688c7b2fc86d98e7449542127ecbed5360b5d7480e02a9f98"
+    },
+    {
+      "url": "https://pubs.acs.org/journal-metrics",
+      "status": 403,
+      "final_url": "https://pubs.acs.org/journal-metrics",
+      "content_type": "text/html; charset=UTF-8",
+      "sha256": "7c63c8013f75cc06e668b8efc8a69b6b6c5a30b8e6be0bdc94648457f26ba9fa"
+    },
+    {
+      "url": "https://journalinsights.elsevier.com/journals/2352-5509/impact_factor",
+      "status": 403,
+      "final_url": "https://www.sciencedirect.com/journal/sustainable-production-and-consumption",
+      "content_type": "text/html; charset=UTF-8",
+      "sha256": "2f58418cec63dde0d1e236c51649f6dcd85791a8aca4a82710305456fcaafc9c"
+    }
+  ],
+  "indexed_display_notes": [
+    "ACS Engineering Au journal search text again displays 2-year JIF9.0, but exact-year/JCR-category eligibility is not established by indexed snippets.",
+    "Elsevier journalinsights search text displays9.2, differing from the earlier June issue indexed9.6. Neither is promoted to a verified current JCR metric.",
+    "Third-party SJR/Q1 and unattributed JCR replicas were not accepted as official eligibility evidence."
+  ]
+}

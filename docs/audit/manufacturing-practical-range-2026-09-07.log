@@ -1,0 +1,15 @@
+✔ range preserves precursor consumption, purchase evidence, throughput, consumables and template identity (1.0591ms)
+✔ range rejects incomplete recipes, zero retention, missing production evidence and incomplete wash inputs (0.1293ms)
+✔ old thermal drafts retain nominal throughput, balanced support and legacy recovery defaults (0.0901ms)
+✔ split support retains each fraction and each optional recipe instead of auto-balancing one row (0.1187ms)
+✔ electrode range preserves its manufacturing scenario and material stack without thermal additions (0.1019ms)
+✔ the real range handler passes the currently selected reference price basis with the full draft input (3.3187ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 242.3372
+

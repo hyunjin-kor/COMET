@@ -1,0 +1,210 @@
+{
+  "purpose": "Verify exact committed Git blob bytes for strict manuscript guards; LF checkout simulation independent of Windows working-tree line endings. Does not emulate Linux execution.",
+  "checked_git_object": "index after byte-preserving re-add",
+  "checks": [
+    {
+      "file": "docs/paper/submission-2026-09-07/active_metal_breakeven_2026-09-07.json",
+      "blob_sha256": "d08a0ca8d91d84d7545f3c9b64d954eb8dbdeaf2128a31d6c1a3e4ec4a960ee5",
+      "expected_sha256": "d08a0ca8d91d84d7545f3c9b64d954eb8dbdeaf2128a31d6c1a3e4ec4a960ee5",
+      "matches": true
+    },
+    {
+      "file": "docs/paper/submission-2026-09-07/all_families_2026-09-07.json",
+      "blob_sha256": "d25a24e6a1cbb5ad384e1bf47d98bf04ce9586b86edfda5e81beea1167a4236e",
+      "expected_sha256": "d25a24e6a1cbb5ad384e1bf47d98bf04ce9586b86edfda5e81beea1167a4236e",
+      "matches": true
+    },
+    {
+      "file": "docs/paper/submission-2026-09-07/all_families_live_2026-09-07.json",
+      "blob_sha256": "5bc79f9454cd319229a6245c3a15b5454c7a15a9c3f8d155de03119a85ed0400",
+      "expected_sha256": "5bc79f9454cd319229a6245c3a15b5454c7a15a9c3f8d155de03119a85ed0400",
+      "matches": true
+    },
+    {
+      "file": "docs/paper/submission-2026-09-07/breakeven_sweep_points_2026-09-07.json",
+      "blob_sha256": "acd0a840524726fc36c717696c0ffb85dd1c2ab561643f8bec23ece3acbf350f",
+      "expected_sha256": "acd0a840524726fc36c717696c0ffb85dd1c2ab561643f8bec23ece3acbf350f",
+      "matches": true
+    },
+    {
+      "file": "docs/paper/submission-2026-09-07/figure_manifest_2026-09-07.json",
+      "blob_sha256": "18053d3f48cb992a520c3084aaf2e153bd4ef1c6a816743edbe88c21f9a67426",
+      "expected_sha256": "18053d3f48cb992a520c3084aaf2e153bd4ef1c6a816743edbe88c21f9a67426",
+      "matches": true
+    },
+    {
+      "file": "docs/paper/submission-2026-09-07/figures/figure1_architecture_2026-09-07.png",
+      "blob_sha256": "ae9e7e4af95f008381e94343379982a31eed62cd9df7e34a182d485ebf211cfd",
+      "expected_sha256": "ae9e7e4af95f008381e94343379982a31eed62cd9df7e34a182d485ebf211cfd",
+      "matches": true
+    },
+    {
+      "file": "docs/paper/submission-2026-09-07/figures/figure1_architecture_2026-09-07.svg",
+      "blob_sha256": "3356220f6946059fe5bf397c51e8644011915895d5d9a9f7c2ef7ce2f2e1ac07",
+      "expected_sha256": "3356220f6946059fe5bf397c51e8644011915895d5d9a9f7c2ef7ce2f2e1ac07",
+      "matches": true
+    },
+    {
+      "file": "docs/paper/submission-2026-09-07/figures/figure2_table62_2026-09-07.png",
+      "blob_sha256": "e39fa25ec37c56e5a36bf9d133d0b23c102e7b67e1d5082bd53a6f316055686c",
+      "expected_sha256": "e39fa25ec37c56e5a36bf9d133d0b23c102e7b67e1d5082bd53a6f316055686c",
+      "matches": true
+    },
+    {
+      "file": "docs/paper/submission-2026-09-07/figures/figure2_table62_2026-09-07.svg",
+      "blob_sha256": "d562ceef0e3206bc166af4a04ce66d6fe09966d8e1e4c4bb6d9f464114cb5aec",
+      "expected_sha256": "d562ceef0e3206bc166af4a04ce66d6fe09966d8e1e4c4bb6d9f464114cb5aec",
+      "matches": true
+    },
+    {
+      "file": "docs/paper/submission-2026-09-07/figures/figure3_gwp_cost_2026-09-07.png",
+      "blob_sha256": "4c4111c0075622bf6554f84ee2f39c182f5b02d3fc661bf63c734511eb1ebfa2",
+      "expected_sha256": "4c4111c0075622bf6554f84ee2f39c182f5b02d3fc661bf63c734511eb1ebfa2",
+      "matches": true
+    },
+    {
+      "file": "docs/paper/submission-2026-09-07/figures/figure3_gwp_cost_2026-09-07.svg",
+      "blob_sha256": "28a0b41316555fafde1f234c25866bf5b237efe286b5662a8cc4186af6667bef",
+      "expected_sha256": "28a0b41316555fafde1f234c25866bf5b237efe286b5662a8cc4186af6667bef",
+      "matches": true
+    },
+    {
+      "file": "docs/paper/submission-2026-09-07/figures/figure4_weight_sensitivity_2026-09-07.png",
+      "blob_sha256": "ba05032bac976187bd2692e32ec314435305dd1e9ab87b165524f07d564e5f13",
+      "expected_sha256": "ba05032bac976187bd2692e32ec314435305dd1e9ab87b165524f07d564e5f13",
+      "matches": true
+    },
+    {
+      "file": "docs/paper/submission-2026-09-07/figures/figure4_weight_sensitivity_2026-09-07.svg",
+      "blob_sha256": "b18c3771fe78ae116c5df4dba4d2d34f427f81abb202b7c9b7722a63c06da719",
+      "expected_sha256": "b18c3771fe78ae116c5df4dba4d2d34f427f81abb202b7c9b7722a63c06da719",
+      "matches": true
+    },
+    {
+      "file": "docs/paper/submission-2026-09-07/figures/figure5_live_reference_2026-09-07.png",
+      "blob_sha256": "5dcb1bd7c3fdf1af3d32b55dfc29832d592ca323594b266d5d08da9cbb27d8d9",
+      "expected_sha256": "5dcb1bd7c3fdf1af3d32b55dfc29832d592ca323594b266d5d08da9cbb27d8d9",
+      "matches": true
+    },
+    {
+      "file": "docs/paper/submission-2026-09-07/figures/figure5_live_reference_2026-09-07.svg",
+      "blob_sha256": "5cc61737f7d910884fb4228d73b3ab6baee1b5f49abb1007d88b855e66c4ce5d",
+      "expected_sha256": "5cc61737f7d910884fb4228d73b3ab6baee1b5f49abb1007d88b855e66c4ce5d",
+      "matches": true
+    },
+    {
+      "file": "docs/paper/submission-2026-09-07/figures/figure6_breakeven_sweeps_2026-09-07.png",
+      "blob_sha256": "af148736f4d7d1f278425fe8ad418042de0fd60de9d6759de0ee575a20626bfb",
+      "expected_sha256": "af148736f4d7d1f278425fe8ad418042de0fd60de9d6759de0ee575a20626bfb",
+      "matches": true
+    },
+    {
+      "file": "docs/paper/submission-2026-09-07/figures/figure6_breakeven_sweeps_2026-09-07.svg",
+      "blob_sha256": "496dfe3701ad2b44af0a55507f689c58c3411b45d776e24f8190973e62c8fbe0",
+      "expected_sha256": "496dfe3701ad2b44af0a55507f689c58c3411b45d776e24f8190973e62c8fbe0",
+      "matches": true
+    },
+    {
+      "file": "docs/paper/submission-2026-09-07/live_basis_2026-09-07.json",
+      "blob_sha256": "891ab156cb7bfc85af91afddd0736a32cd40a53785a4711dd0c43dee18395e05",
+      "expected_sha256": "891ab156cb7bfc85af91afddd0736a32cd40a53785a4711dd0c43dee18395e05",
+      "matches": true
+    },
+    {
+      "file": "docs/paper/submission-2026-09-07/manufacturing_costs_2026-09-07.json",
+      "blob_sha256": "6dbfef38ae81dbde0f026960178606dc46f9bb3ce0494dcd84dfd8e77e0dba5b",
+      "expected_sha256": "6dbfef38ae81dbde0f026960178606dc46f9bb3ce0494dcd84dfd8e77e0dba5b",
+      "matches": true
+    },
+    {
+      "file": "docs/paper/submission-2026-09-07/monthly_history_2026-09-07.json",
+      "blob_sha256": "0c1cfe4b239f6c5b3c72e4d15df748d0934f44010f2c99aa091f7e53d745d7e3",
+      "expected_sha256": "0c1cfe4b239f6c5b3c72e4d15df748d0934f44010f2c99aa091f7e53d745d7e3",
+      "matches": true
+    },
+    {
+      "file": "docs/paper/submission-2026-09-07/paper_summary_2026-09-07.json",
+      "blob_sha256": "c649c2c595b802448e429d6eb058df819bbee036f5ededa27712ef5e918381a6",
+      "expected_sha256": "c649c2c595b802448e429d6eb058df819bbee036f5ededa27712ef5e918381a6",
+      "matches": true
+    },
+    {
+      "file": "docs/paper/submission-2026-09-07/price_history_2026-09-07.json",
+      "blob_sha256": "84888f60f59d4a21a47945f1f98576c1824bc20babbde678c7419cf3806d4c69",
+      "expected_sha256": "84888f60f59d4a21a47945f1f98576c1824bc20babbde678c7419cf3806d4c69",
+      "matches": true
+    },
+    {
+      "file": "docs/paper/submission-2026-09-07/price_volatility_2026-09-07.json",
+      "blob_sha256": "65ea7d2f2bab3892d60c9441d21b3fc7f000e37682074280ae7e3ae4074552bb",
+      "expected_sha256": "65ea7d2f2bab3892d60c9441d21b3fc7f000e37682074280ae7e3ae4074552bb",
+      "matches": true
+    },
+    {
+      "file": "docs/paper/submission-2026-09-07/reference_basis_2026-09-07.json",
+      "blob_sha256": "6ec710eebc2bbee8a390b3fc413e8c70c9947beec1a8fe89f2bdc5167944f506",
+      "expected_sha256": "6ec710eebc2bbee8a390b3fc413e8c70c9947beec1a8fe89f2bdc5167944f506",
+      "matches": true
+    },
+    {
+      "file": "docs/paper/submission-2026-09-07/results_2026-09-07.md",
+      "blob_sha256": "ad5c6ab5d187901a8f15c033e6ad5554e2e7fe530934099417c52fe9419370e3",
+      "expected_sha256": "ad5c6ab5d187901a8f15c033e6ad5554e2e7fe530934099417c52fe9419370e3",
+      "matches": true
+    },
+    {
+      "file": "docs/paper/submission-2026-09-07/support_history_2026-09-07.json",
+      "blob_sha256": "b6ac7e3f3309d73c8cfe6c0a61547c576e68d522d5f25e94312a6d992a01fa29",
+      "expected_sha256": "b6ac7e3f3309d73c8cfe6c0a61547c576e68d522d5f25e94312a6d992a01fa29",
+      "matches": true
+    },
+    {
+      "file": "docs/paper/submission-2026-09-07/table62_reproduction_2026-09-07.json",
+      "blob_sha256": "1f5907208f1278b17ba4ed75171c09362de225a9e66711d198e67ff9ae48b136",
+      "expected_sha256": "1f5907208f1278b17ba4ed75171c09362de225a9e66711d198e67ff9ae48b136",
+      "matches": true
+    },
+    {
+      "file": "docs/paper/controlled-2026-09-07/controlled_cases.json",
+      "blob_sha256": "495b0fe9c5a60476bb29143082d745575976339aab5db4a3aca9c4c9fbd902ee",
+      "expected_sha256": "495b0fe9c5a60476bb29143082d745575976339aab5db4a3aca9c4c9fbd902ee",
+      "matches": true
+    },
+    {
+      "file": "docs/paper/submission-2026-09-07/reference_basis_2026-09-07.json",
+      "blob_sha256": "6ec710eebc2bbee8a390b3fc413e8c70c9947beec1a8fe89f2bdc5167944f506",
+      "expected_sha256": "6ec710eebc2bbee8a390b3fc413e8c70c9947beec1a8fe89f2bdc5167944f506",
+      "matches": true
+    },
+    {
+      "file": "docs/paper/submission-2026-09-07/live_basis_2026-09-07.json",
+      "blob_sha256": "891ab156cb7bfc85af91afddd0736a32cd40a53785a4711dd0c43dee18395e05",
+      "expected_sha256": "891ab156cb7bfc85af91afddd0736a32cd40a53785a4711dd0c43dee18395e05",
+      "matches": true
+    },
+    {
+      "file": "docs/sources/external-cost-evidence-2026-09-07.json",
+      "blob_sha256": "df0695b1963e0fb89b4eec40efdf174ac7b05be586a3fd276a5cd90e43280c15",
+      "expected_sha256": "df0695b1963e0fb89b4eec40efdf174ac7b05be586a3fd276a5cd90e43280c15",
+      "matches": true
+    },
+    {
+      "file": "docs/paper/controlled-2026-09-07/provenance.json",
+      "blob_sha256": "598ebde69a1d8f82a3f3bfe4223ce184929515cb5191b8c594889a1171e28dc7",
+      "expected_sha256": "598ebde69a1d8f82a3f3bfe4223ce184929515cb5191b8c594889a1171e28dc7",
+      "matches": true
+    },
+    {
+      "file": "docs/paper/controlled-2026-09-07/controlled_cases.svg",
+      "blob_sha256": "375f22216bbb63aa0b9b3bc459d3d83ca36bfdd3f0b490b65eac9587d42e9569",
+      "expected_sha256": "375f22216bbb63aa0b9b3bc459d3d83ca36bfdd3f0b490b65eac9587d42e9569",
+      "matches": true
+    },
+    {
+      "file": "docs/sources/independent-evidence-access-2026-09-07.json",
+      "blob_sha256": "1b068b560a9db16a66d2bc85ef4df3343860814f015a84b6d4cecdf18181f762",
+      "expected_sha256": "1b068b560a9db16a66d2bc85ef4df3343860814f015a84b6d4cecdf18181f762",
+      "matches": true
+    }
+  ]
+}

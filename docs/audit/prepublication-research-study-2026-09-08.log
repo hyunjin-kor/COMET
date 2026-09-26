@@ -1,0 +1,13 @@
+
+Traceback (most recent call last):
+  File "C:\Users\user\Desktop\COMET-autonomous-2026-09-06\scripts\run_decision_robustness.py", line 295, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\user\Desktop\COMET-autonomous-2026-09-06\scripts\run_decision_robustness.py", line 277, in main
+    result = run(history, baseline, args.seed)
+  File "C:\Users\user\Desktop\COMET-autonomous-2026-09-06\scripts\run_decision_robustness.py", line 159, in run
+    states, varying = historical_states(history, baseline)
+                      ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\COMET-autonomous-2026-09-06\scripts\run_decision_robustness.py", line 60, in historical_states
+    raise ValueError(f"{symbol}: published/normalized monthly averages required")
+ValueError: HS251990: published/normalized monthly averages required

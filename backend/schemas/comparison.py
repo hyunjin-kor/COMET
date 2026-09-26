@@ -1,20 +1,24 @@
 """Schemas for the multi-composition comparison endpoint."""
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
+
+from backend.schemas.cost_input import PriceUnit
 
 
 class CompareCompositionInput(BaseModel):
     """One composition submitted to the comparison endpoint."""
 
+    model_config = ConfigDict(allow_inf_nan=False)
+
     label: str = ""
     metal_symbol: str
     metal_price: float = Field(gt=0)
-    metal_price_unit: str = "$/troy_oz"
+    metal_price_unit: PriceUnit = "$/troy_oz"
     metal_loading_wt_pct: float = Field(gt=0, le=100)
     support_name: str = "Al2O3"
-    support_price_per_lb: float = 0.50
+    support_price_per_lb: float = Field(default=0.50, ge=0)
     steps: list[str] = ["mixer_slurry", "incipient_wetness", "dryer_rotary_100_300C"]
-    order_size_tons: float = 10.0
+    order_size_tons: float = Field(default=10.0, gt=0)
 
 
 class CompareRequest(BaseModel):

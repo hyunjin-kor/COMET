@@ -1,0 +1,87 @@
+{
+  "scientific_json_equal": {
+    "all_families": true,
+    "all_families_live": true,
+    "paper_summary": true,
+    "table62_reproduction": true,
+    "manufacturing_costs": true,
+    "breakeven_sweep_points": true,
+    "monthly_history": true
+  },
+  "explicit_metadata_excluded": {
+    "reference_basis": true,
+    "price_volatility": true,
+    "active_metal_breakeven": true
+  },
+  "metadata_differences": {
+    "reference_basis": {
+      "generated_at": {
+        "frozen": "2026-09-06T16:34:50.441715+00:00",
+        "replay": "2026-09-07T16:12:10.139687+00:00"
+      },
+      "history_file": {
+        "frozen": "C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06\\docs\\paper\\submission-2026-09-07\\monthly_history_2026-09-07.json",
+        "replay": "C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06\\_local\\prepublication-paper-replay\\monthly_history_2026-09-07.json"
+      }
+    },
+    "price_volatility": {
+      "generated_at": {
+        "frozen": "2026-09-06T16:34:58.556745+00:00",
+        "replay": "2026-09-07T16:12:20.342090+00:00"
+      },
+      "price_basis_source": {
+        "frozen": "C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06\\docs\\paper\\submission-2026-09-07\\reference_basis_2026-09-07.json",
+        "replay": "C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06\\_local\\prepublication-paper-replay\\reference_basis_2026-09-07.json"
+      },
+      "price_source": {
+        "frozen": "C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06\\docs\\paper\\submission-2026-09-07\\monthly_history_2026-09-07.json",
+        "replay": "C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06\\_local\\prepublication-paper-replay\\monthly_history_2026-09-07.json"
+      }
+    },
+    "active_metal_breakeven": {
+      "generated_at": {
+        "frozen": "2026-09-06T16:35:07.636156+00:00",
+        "replay": "2026-09-07T16:12:31.109821+00:00"
+      },
+      "history_file": {
+        "frozen": "C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06\\docs\\paper\\submission-2026-09-07\\monthly_history_2026-09-07.json",
+        "replay": "C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06\\_local\\prepublication-paper-replay\\monthly_history_2026-09-07.json"
+      },
+      "price_basis_source": {
+        "frozen": "C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06\\docs\\paper\\submission-2026-09-07\\reference_basis_2026-09-07.json",
+        "replay": "C:\\Users\\user\\Desktop\\COMET-autonomous-2026-09-06\\_local\\prepublication-paper-replay\\reference_basis_2026-09-07.json"
+      }
+    }
+  },
+  "figure_equal": {
+    "figure1_architecture_2026-09-07.png": true,
+    "figure1_architecture_2026-09-07.svg": true,
+    "figure2_table62_2026-09-07.png": true,
+    "figure2_table62_2026-09-07.svg": true,
+    "figure3_gwp_cost_2026-09-07.png": true,
+    "figure3_gwp_cost_2026-09-07.svg": true,
+    "figure4_weight_sensitivity_2026-09-07.png": true,
+    "figure4_weight_sensitivity_2026-09-07.svg": true,
+    "figure5_live_reference_2026-09-07.png": true,
+    "figure5_live_reference_2026-09-07.svg": true,
+    "figure6_breakeven_sweeps_2026-09-07.png": true,
+    "figure6_breakeven_sweeps_2026-09-07.svg": true
+  },
+  "status": "complete",
+  "code_changed_during_run": [],
+  "basis_month": "2026-05",
+  "seed": 20260906,
+  "history_status": "provided_snapshot",
+  "outputs_verified": 27,
+  "output_count": 27,
+  "code_inputs_match": true,
+  "data_inputs_match": true,
+  "controlled_equal": {
+    "controlled_cases.json": true,
+    "controlled_cases.png": true,
+    "controlled_cases.svg": true
+  },
+  "controlled_numerical_sha256": "495b0fe9c5a60476bb29143082d745575976339aab5db4a3aca9c4c9fbd902ee",
+  "controlled_provenance_note": "Provenance changes reflect the prepublication fixes; frozen scientific JSON and figures are compared separately.",
+  "frozen_primary_outputs_preserved": true
+}

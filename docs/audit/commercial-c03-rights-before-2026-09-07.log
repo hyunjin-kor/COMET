@@ -1,0 +1,17 @@
+
+=================================== ERRORS ====================================
+_____________ ERROR collecting backend/tests/test_data_rights.py ______________
+ImportError while importing test module 'C:\Users\user\Desktop\COMET-autonomous-2026-09-06\backend\tests\test_data_rights.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+C:\Python314\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\tests\test_data_rights.py:8: in <module>
+    from backend.core.data_rights import check_data_rights
+E   ModuleNotFoundError: No module named 'backend.core.data_rights'
+=========================== short test summary info ===========================
+ERROR backend/tests/test_data_rights.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.68s
+

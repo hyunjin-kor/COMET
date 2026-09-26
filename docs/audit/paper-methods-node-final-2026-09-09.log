@@ -1,0 +1,45 @@
+✔ hosted identity changes clear private drafts, preserve preferences and invalidate responses (2.0782ms)
+✔ optional recipes reject incomplete values, zero yield and double interpretation of percentages (0.5691ms)
+✔ CSV preserves calculation scope, production assumptions and purchased-input evidence (1.7034ms)
+✔ repeated operations remain distinct while order-only changes match (0.098ms)
+✔ unchecking and rechecking a repeated operation restores its count and original sequence (0.4881ms)
+✔ interleaved step toggles preserve other edits and restore repeated operations after draft reload (0.1286ms)
+✔ scale fitting keeps deliberate omissions and additions including an in-flight manual edit (0.1476ms)
+✔ editing a chosen method never silently adopts another method with matching steps (0.0915ms)
+✔ returning to a smaller scale does not reinsert a deliberately removed substituted kiln (0.0843ms)
+✔ selected card identity survives identical routes and scale fitting (0.118ms)
+✔ selected method waits for current-scale steps, while manual routes stay usable (0.1995ms)
+✔ fuel_cell × pem_fuel_cell_ccm defaults (5.2577ms)
+✔ direct_methanol_fuel_cell × dmfc_gde_route defaults (0.1272ms)
+✔ electrolyzer × pem_electrolyzer_ccm defaults (0.0592ms)
+✔ electrolyzer × alkaline_electrolyzer_gde defaults (0.0445ms)
+✔ AEM fuel-cell route retains existing application-family preference (0.1017ms)
+✔ equal chemistry ranks prefer source scope, then quoted price, then name (0.1062ms)
+✔ electrode displayed ledger uses area costs without thermal cost fields (0.1606ms)
+✔ electrode CSV exports the assembly ledger without a thermal campaign or selling margin (0.4619ms)
+About IPC: English fallback, Korean copy, English switch, and 5 invalid sender/payload cases passed.
+✔ scripts\test_desktop_about.mjs (200.247ms)
+✔ range preserves precursor consumption, purchase evidence, throughput, consumables and template identity (1.4998ms)
+✔ range rejects incomplete recipes, zero retention, missing production evidence and incomplete wash inputs (0.3141ms)
+✔ old thermal drafts retain nominal throughput, balanced support and legacy recovery defaults (0.1197ms)
+✔ split support retains each fraction and each optional recipe instead of auto-balancing one row (0.1342ms)
+✔ electrode range preserves its manufacturing scenario and material stack without thermal additions (0.1114ms)
+✔ the real range handler passes the currently selected reference price basis with the full draft input (3.0162ms)
+✔ electrode area prices never receive the kg/lb conversion used by thermal ranges (1.033ms)
+✔ range CSV keeps area baseline, metric, seed and failed-run disclosure (2.2531ms)
+✔ CSV treats formula-like user labels as quoted text without changing numeric values (0.9055ms)
+✔ stoichiometry, repeated groups and hydrate coefficients have distinct positions (1.5284ms)
+✔ fractional and variable stoichiometry are not mistaken for powers or model numbers (0.1241ms)
+✔ ionic charge, zero-valent metals and explicitly identified isotope mass are superscripts (0.1874ms)
+✔ area, volume, inverse units and numerical powers use superscripts (0.1683ms)
+✔ URLs, DOI, identifiers, product grades and source ambiguities remain intact (0.1236ms)
+✔ formatting is idempotent and search accepts displayed subscripts and powers (0.4579ms)
+ℹ tests 35
+ℹ suites 0
+ℹ pass 35
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 345.1331
+

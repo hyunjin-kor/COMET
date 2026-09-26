@@ -1,0 +1,31 @@
+# 저자 검토와 투고 준비
+
+대상 원고는 [manuscript_2026-09-08.md](manuscript_2026-09-08.md)이며, [저널 검토](journal-targets-2026-09-07.md)에 따라 ACS Engineering Au Article 형식으로 준비했다. 실제 Q1·JIF 연도·등재 범위·게재료 지원은 확인되지 않았다. 투고·게재 승인은 이 소프트웨어 실행으로 대신할 수 없다.
+
+2026-09-09 보완: 구매량·불확실성·정규화 수식과 검증 사례를 본문 및 SI S9–S12에 추가했다. 같은 날 연구실의 SCIE 조건에 따라 ACS Engineering Au(ESCI 표기)를 잠정 대상에서 제외하고 [JCIM Application Note](application-note-2026-09-09.md)를 준비했다. 결정 사항은 [투고 브리핑](submission-brief-2026-09-09.ko.md)에 있다. [선행연구 대조](../sources/paper-methods-prior-work-2026-09-09.md)는 새 산업 원가 실증이나 실제 연구자 평가를 제공하지 않는다.
+
+## 논문의 현재 주장
+
+2026-09-08 문서 연결 갱신: COMET의 자체 기여와 채택한 선행 방법은 [기여 표](../research-contribution.md)에 구분했다.
+
+연구의 중심은 고정한 가격 상태·제조 조건·가중치 아래에서 촉매 원가와 추천 결과를 다시 계산하고, 결과 변화가 어디서 나오는지 구분하는 것이다. CatCost 사례 재현은 방법 구현 검증이다. 추가한 교차 분석은 가격과 출처 점수의 영향을 분리하며, 제조 규모 경계와 전극 면적 단가의 해석 한계를 보여준다. 이는 관측된 산업 원가 정확도나 실험 성능의 검증을 대신하지 않는다.
+
+수치의 근거는 원고와 SI의 HTML 주석으로 실제 JSON 키에 연결했다. 주 분석은 기존 동결 실행을 보존하고, 후속 교차 분석은 같은 reference/live 스냅샷을 사용한다. 과거 월별 시세 재생과 두 가격 상태의 교차 분석은 서로 다른 실험이므로 결과 개수를 섞지 않는다.
+
+| 제출 전에 확인할 항목 | 현재 근거와 필요한 조치 |
+|---|---|
+| 독립 원가 검증 | [공개 자료 감사](../audit/external-cost-validation-2026-09-07.md)와 [추가 논문 검토](../sources/independent-evidence-extension-2026-09-07.md)는 완성된 조건 일치 실측 사례를 제공하지 못했다. 자발적으로 제공받은 실제 견적·제조 기록을 [관측 절차](../research/actual-cost-collection.ko.md)에 따라 검토한다. 적합 사례가 없으면 원가 예측 정확도를 주장하지 않는다. |
+| 외부 사용자 평가 | [평가 계획](../research/researcher-evaluation-2026-09-07.ko.md)은 작성했지만 실제 참가 결과는 없다. 기관 절차·참여 동의·실제 수행 자료를 확보한 뒤에만 사용성 결과를 쓴다. 개발자 브라우저 시험을 참가자로 세지 않는다. |
+| 데이터 배포 권리 | [등록부](../commercial/rights-register-2026-09-07.md)의 legacy workbook 유래 항목과 외부 가격 출처의 사용 범위를 확인한다. 논문을 인용할 권리, 원자료를 SI/DOI에 배포할 권리, 구독 서비스에서 상업적으로 사용할 권리를 따로 판단한다. 유료 데이터 구매로 해결하지 않는다. |
+| 저자·소속·기여·지원 | 실제 저자가 기여와 책임을 검토해 이름·순서·소속·연락처·연구비를 확정한다. AI는 저자가 아니며 지원 내용을 공개한다. |
+| 회사·기관·이해관계 | 교수님 회사와의 실제 관계, 대학/고용/연구비 규정, 코드 권리, 기여자 동의, 예정된 이용허락과 금융적 이해관계를 확인한다. 예정 사업을 이미 체결한 계약이나 실적으로 쓰지 않는다. |
+| 저널 | 공식 JCR의 해당 연도·분야·JIF·순위·Q1·등재 범위와 실제 APC 지원 여부를 확인한다. 저널 홈페이지의 수치와 발행 연도만으로 확정하지 않는다. |
+| 재현·제출 파일 | 아래 명령의 검증 결과, 주/보조 그림의 가독성, 참고문헌, 페이지 번호와 최종 DOCX/PDF를 확인한다. HTML 추적 주석은 제출 형식에 맞게 숨기되 원본 Markdown에는 보존한다. |
+| 공개 버전 | v1.4.0은 준비 버전이다. 권리와 최종 CI 검토 전에는 태그·릴리스·Zenodo 업로드를 실행하지 않는다. concept DOI를 새 버전 DOI로 쓰지 않는다. |
+
+```text
+python scripts/build_submission_manuscript.py --date 2026-09-08 --directory docs/paper/submission-2026-09-08 --robustness docs/paper/robustness-2026-09-08 --methods-study docs/paper/methods-2026-09-09/methods_study.json --check
+python scripts/run_controlled_cases.py --reference-basis docs/paper/submission-2026-09-07/reference_basis_2026-09-07.json --live-basis docs/paper/submission-2026-09-07/live_basis_2026-09-07.json --out-dir _local/controlled-replay --seed 20260906
+```
+
+전체 주 분석 재현 명령과 스냅샷 해시는 원고의 Data and code availability에 있다. 동결 산출물을 덮어쓰지 않는 새 출력 폴더를 지정해 검토한다. 실제 자료와 참여자가 없는 상태에서 그 부분을 완료로 처리하거나, 투고 성공을 보장하지 않는다.

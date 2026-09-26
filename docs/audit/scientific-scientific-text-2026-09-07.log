@@ -1,0 +1,15 @@
+✔ stoichiometry, repeated groups and hydrate coefficients have distinct positions (1.5417ms)
+✔ fractional and variable stoichiometry are not mistaken for powers or model numbers (0.1364ms)
+✔ ionic charge, zero-valent metals and explicitly identified isotope mass are superscripts (0.1869ms)
+✔ area, volume, inverse units and numerical powers use superscripts (0.1704ms)
+✔ URLs, DOI, identifiers, product grades and source ambiguities remain intact (0.136ms)
+✔ formatting is idempotent and search accepts displayed subscripts and powers (0.427ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6.2727
+

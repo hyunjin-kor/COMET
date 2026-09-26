@@ -1,0 +1,17 @@
+aem-electrolyzer-oer: 89 months, joint retention 70.86%
+ammonia-cracking: 89 months, joint retention 41.56%
+ammonia-synthesis: 89 months, joint retention 44.77%
+co-prox: 89 months, joint retention 23.61%
+
+Traceback (most recent call last):
+  File "C:\Users\user\Desktop\COMET-autonomous-2026-09-06\scripts\run_decision_robustness.py", line 299, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\user\Desktop\COMET-autonomous-2026-09-06\scripts\run_decision_robustness.py", line 281, in main
+    result = run(history, baseline, args.seed)
+  File "C:\Users\user\Desktop\COMET-autonomous-2026-09-06\scripts\run_decision_robustness.py", line 180, in run
+    joints = {step: joint_grid([m["candidates"] for m in monthly], grid)
+                    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\COMET-autonomous-2026-09-06\scripts\run_decision_robustness.py", line 107, in joint_grid
+    raise ValueError("Mixed functional units within a decision family")
+ValueError: Mixed functional units within a decision family

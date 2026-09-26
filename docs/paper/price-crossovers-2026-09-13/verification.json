@@ -1,0 +1,113 @@
+{
+  "candidate_csv_rows_verified": 30740,
+  "all_input_and_calculation_hashes_verified": true,
+  "jm_current_quote_column_crosschecks": 5,
+  "figure_layout_checks": 66,
+  "cost_atlas_pdf": [
+    {
+      "path": "docs/paper/price-crossovers-2026-09-13/figures/all_candidate_costs.pdf",
+      "pages": 30,
+      "sha256": "edf2b51da2631ce66dc58159320c2be10b7d88d1d3e55307541239ff9ead28e2"
+    },
+    {
+      "path": "docs/paper/price-crossovers-2026-09-13/figures/all_candidate_costs.ko.pdf",
+      "pages": 30,
+      "sha256": "c9628f81c55c85c07a57643f50c626bb8e426ccad8a13258180b9b71bff4a1ee"
+    }
+  ],
+  "figure_generator_sha256": "5dcf18ce581786246ebc4cb778e53a5cc23835fb0850c252df0b2456849afc4c",
+  "visual_review_complete": true,
+  "artifact_sha256": {
+    "figures/all_candidate_costs.ko.pdf": "c9628f81c55c85c07a57643f50c626bb8e426ccad8a13258180b9b71bff4a1ee",
+    "figures/all_candidate_costs.pdf": "edf2b51da2631ce66dc58159320c2be10b7d88d1d3e55307541239ff9ead28e2",
+    "figures/fig_crossover_atlas.ko.pdf": "919fc1063867f92815bf8751f14f0ecb1775bb3bf5d56bd8b9338b202d17df32",
+    "figures/fig_crossover_atlas.ko.png": "3e1a7cef6a096686e177b89266ce66a506b13460a050853e634b17012ad709ba",
+    "figures/fig_crossover_atlas.ko.svg": "6bd51e2d1864ab865473b92c22470f786c2126601afc3e42b9ad30de80d00468",
+    "figures/fig_crossover_atlas.pdf": "1d6d9bc793405f63aa4dcb46e89b5d4546763d9270108ee02c37b7932c446e3b",
+    "figures/fig_crossover_atlas.png": "6d815cf34d71f654e744388304017a171b16960df0b0fac0676a1a779b1e7af7",
+    "figures/fig_crossover_atlas.svg": "f21c239a273430ab672877f9ce7a8596612fd574016828d88efb707ba679332a",
+    "figures/fig_daily_rank_changes.ko.pdf": "396738cd502b7e0f8f40eff1cf431cd30dc3d01b706211945f35421ad9aebcd9",
+    "figures/fig_daily_rank_changes.ko.png": "d05eb4d8eb849d1e068ca7a1976aabd2e1270f90b750a67145438b2eb4896dfa",
+    "figures/fig_daily_rank_changes.ko.svg": "5bd14068521d31daddd870c665ee38b73936cdf6ac9e214e7fde2f04f11448e8",
+    "figures/fig_daily_rank_changes.pdf": "229fec53ff310f42aea19363a254e7d7c2fbb9cdc455c14deda0eb4ea43864ed",
+    "figures/fig_daily_rank_changes.png": "afbe75ee3a4652a02d9375efb897e6455d6c2cc3d6311e6c31437a914353a314",
+    "figures/fig_daily_rank_changes.svg": "7020c1084144cc252a3444447cd7626d352e519836b91679fc07ab69d0d12a37",
+    "figures/fig_price_crossovers.ko.pdf": "b2812384dfb633bbed2a8b25ea48517d94d36e1363e16dda8d231384958205f3",
+    "figures/fig_price_crossovers.ko.png": "617cb586ce3306e328db9c1b67c165d44166b200cd562857e650aab136523817",
+    "figures/fig_price_crossovers.ko.svg": "7e39e85912161bc6c2534a6a1f624d68f553e2c2894c23c8777c875e8dcd1c8f",
+    "figures/fig_price_crossovers.pdf": "0df5693f3835e4a9d65ca1c7dbce8e123de8047cf18979ccc707b7f3c28b0187",
+    "figures/fig_price_crossovers.png": "9868340e3c48f0fba24cb42810825f321b2a7a9ff8da7b7f043868df50517fd3",
+    "figures/fig_price_crossovers.svg": "6cd583798c0f6fa58eb57b20d09333a6bf7afeaf5eede830d3871cb22923e8b5",
+    "figures/layout_checks.json": "adf392a6507831b1ee7bce2adee356c97e226a13cfc5f7a599ba2caa81cc7318",
+    "figures/layout_checks.ko.json": "adf392a6507831b1ee7bce2adee356c97e226a13cfc5f7a599ba2caa81cc7318"
+  },
+  "review_date": "2026-09-14",
+  "visual_review_method": "Changed main Figures 2 and 3 and crossover R1 inspected in EN/KO; all 60 cost-atlas pages inspected in ten six-page PDFium contact sheets; 66 title/label/legend checks passed. Unchanged Figures 1 and 4 and crossover R2/R3 match previously reviewed H27 HEAD: PNG/PDF bytes are identical; SVG content is identical after CRLF/LF normalization.",
+  "unchanged_previously_verified_figures": [
+    "docs/paper/price-crossovers-2026-09-13/figures/fig_crossover_atlas.ko.pdf",
+    "docs/paper/price-crossovers-2026-09-13/figures/fig_crossover_atlas.ko.png",
+    "docs/paper/price-crossovers-2026-09-13/figures/fig_crossover_atlas.ko.svg",
+    "docs/paper/price-crossovers-2026-09-13/figures/fig_crossover_atlas.pdf",
+    "docs/paper/price-crossovers-2026-09-13/figures/fig_crossover_atlas.png",
+    "docs/paper/price-crossovers-2026-09-13/figures/fig_crossover_atlas.svg",
+    "docs/paper/price-crossovers-2026-09-13/figures/fig_daily_rank_changes.ko.pdf",
+    "docs/paper/price-crossovers-2026-09-13/figures/fig_daily_rank_changes.ko.png",
+    "docs/paper/price-crossovers-2026-09-13/figures/fig_daily_rank_changes.ko.svg",
+    "docs/paper/price-crossovers-2026-09-13/figures/fig_daily_rank_changes.pdf",
+    "docs/paper/price-crossovers-2026-09-13/figures/fig_daily_rank_changes.png",
+    "docs/paper/price-crossovers-2026-09-13/figures/fig_daily_rank_changes.svg",
+    "docs/paper/figures-note-2026-09-09/fig1_workflow_stack.ko.png",
+    "docs/paper/figures-note-2026-09-09/fig1_workflow_stack.ko.svg",
+    "docs/paper/figures-note-2026-09-09/fig1_workflow_stack.png",
+    "docs/paper/figures-note-2026-09-09/fig1_workflow_stack.svg",
+    "docs/paper/figures-note-2026-09-09/fig1_workflow_stack_raw_chatgpt.ko.png",
+    "docs/paper/figures-note-2026-09-09/fig1_workflow_stack_raw_chatgpt.png",
+    "docs/paper/figures-note-2026-09-09/fig4_decision_diagnostics.ko.png",
+    "docs/paper/figures-note-2026-09-09/fig4_decision_diagnostics.ko.svg",
+    "docs/paper/figures-note-2026-09-09/fig4_decision_diagnostics.png",
+    "docs/paper/figures-note-2026-09-09/fig4_decision_diagnostics.svg"
+  ],
+  "publication_units": {
+    "mass_cost": "USD/kg",
+    "electrode_area_cost": "USD/cm2",
+    "order_size": "kg",
+    "effective_rate": "kg/day",
+    "kg_per_lb": 0.45359237,
+    "kg_per_troy_oz": 0.0311034768,
+    "frozen_engine_units_unchanged": true,
+    "cost_boundary_unchanged": true
+  },
+  "required_checks_in_order": [
+    "draw_application_note_figures.py: passed",
+    "draw_application_note_figures.py --lang ko: passed",
+    "build_application_note.py --check: 4965/5000; 4 figures",
+    "test_application_note.py: 6 passed",
+    "ruff check scripts/: passed"
+  ],
+  "additional_checks": [
+    "test_paper_mass_units.py and test_price_crossovers.py: 10 passed",
+    "30740 CSV rows match converted frozen costs and unchanged scores/winners",
+    "1246 plotted metal-price observations checked against original mass-unit divisors",
+    "17 main-manuscript mass conversions retain exact JSON source keys",
+    "Frozen input and calculation source hashes unchanged"
+  ],
+  "main_manuscript_changed": true,
+  "main_manuscript_change": "Mass units only; the separate crossover study remains outside the four-figure manuscript.",
+  "manuscript_word_equivalent": 4965,
+  "word_visual_review": {
+    "version": 37,
+    "en_pages": 16,
+    "ko_pages": 19,
+    "individually_inspected_changed_pages": 16,
+    "pages_matching_verified_v36": 19,
+    "comments_preserved_each": 6,
+    "current_figures_each": 4
+  },
+  "publication_data_sha256": {
+    "docs/paper/price-crossovers-2026-09-13/candidate_costs.csv": "de5393c84a9061cbe56baafe9c1c985c71577e6a78fc2beb010a9109608c3c3f",
+    "docs/paper/price-crossovers-2026-09-13/family_summary.csv": "c830a2db1f8d232229981fc9123c5aeeca71fa4c25467cec5a720c80bbe92e78",
+    "docs/paper/price-crossovers-2026-09-13/publication_mechanisms_kg.json": "90d67d96a51f3be490ed792e2e697200d89e5dde613fdcc9226127bb0a397200",
+    "scripts/paper_units.py": "bd027e0d98b2e1d8f9573720386bba3d6add18d67156692c6e6f8e2c78046954",
+    "scripts/export_price_crossovers_kg.py": "04ccbaa76e881b8c051c77d52cb8822165b5e4dd324e12798a06173988c50f31"
+  }
+}

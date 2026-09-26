@@ -77,7 +77,7 @@ The package version is *not* automatically a published GitHub release. Before qu
 - **Don't invent.** No fabricated source links, blog URLs, benchmark values, prices, citations, or release status. If unknown, say so or check.
 - **Don't commit secrets.** `.env.example` holds key names only; never real values.
 - **Treat `CatCost_v1-1-1/` as proprietary.** Don't redistribute its raw data. Re-source materials from public references (ICIS public, Sigma-Aldrich, USGS).
-- **COMET is independent.** Cite CatCost methodology academically; never claim CatCost ownership or NREL endorsement.
+- **COMET is independent.** Lead with COMET's manufacturing-cost, environmental-screening and decision-analysis contributions (`docs/research-contribution.md`). CatCost is prior work and a published-method validation reference. Preserve adopted-method citations and actual data origins; never claim new authorship of adopted formulas, CatCost ownership or NREL endorsement.
 - **Co-update versioned references.** When a release ships, update `docs/project-links.md`, `README.md`, `package.json`, and `pyproject.toml` together — never one alone. Verify asset names from the GitHub Releases API.
 - **Stay inside the locked stack** in `AGENTS.md` (“Tech stack”). Don't introduce a new framework, ORM, or build tool without asking.
 

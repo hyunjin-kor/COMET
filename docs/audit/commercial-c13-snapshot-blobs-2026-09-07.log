@@ -1,0 +1,7 @@
+{"verified": 30, "count": 31, "failures": [{"file": "docs/paper/controlled-2026-09-07/controlled_cases.json", "blob_sha256": "24b68ebaa17c66301a906dfbef208f0b5ea3f206472069183711dec7fc09ac81", "expected_sha256": "495b0fe9c5a60476bb29143082d745575976339aab5db4a3aca9c4c9fbd902ee", "matches": false}]}
+
+Traceback (most recent call last):
+  File "C:\Users\user\Desktop\COMET-autonomous-2026-09-06\_local\check_c13_blobs.py", line 17, in <module>
+    print(json.dumps({'verified':sum(c['matches'] for c in checks),'count':len(checks),'failures':[c for c in checks if not c['matches']]}));assert all(c['matches'] for c in checks)
+                                                                                                                                                    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

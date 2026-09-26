@@ -1,0 +1,18 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+___ test_password_reset_revokes_a_sign_in_already_checking_the_old_password ___
+backend\tests\test_hosted_access.py:71: in test_password_reset_revokes_a_sign_in_already_checking_the_old_password
+    assert not session.exec(select(HostedLoginSession).where(HostedLoginSession.account_id == first.id)).all()
+E   AssertionError: assert not [HostedLoginSession(account_id='863a5cf8e5f24db4b0c8f6746ffc6f2d', expires_at=1788840288.885973)]
+E    +  where [HostedLoginSession(account_id='863a5cf8e5f24db4b0c8f6746ffc6f2d', expires_at=1788840288.885973)] = all()
+E    +    where all = <sqlalchemy.engine.result.ScalarResult object at 0x0000020EF1CDC730>.all
+E    +      where <sqlalchemy.engine.result.ScalarResult object at 0x0000020EF1CDC730> = exec(<sqlmodel.sql._expression_select_cls.SelectOfScalar object at 0x0000020EF1CDF390>)
+E    +        where exec = <sqlmodel.orm.session.Session object at 0x0000020EF1B67D50>.exec
+E    +        and   <sqlmodel.sql._expression_select_cls.SelectOfScalar object at 0x0000020EF1CDF390> = where(<sqlalchemy.orm.attributes.InstrumentedAttribute object at 0x0000020EC7EE4360> == '863a5cf8e5f24db4b0c8f6746ffc6f2d')
+E    +          where where = <sqlmodel.sql._expression_select_cls.SelectOfScalar object at 0x0000020EF1C9A990>.where
+E    +            where <sqlmodel.sql._expression_select_cls.SelectOfScalar object at 0x0000020EF1C9A990> = select(HostedLoginSession)
+E    +          and   <sqlalchemy.orm.attributes.InstrumentedAttribute object at 0x0000020EC7EE4360> = HostedLoginSession.account_id
+E    +          and   '863a5cf8e5f24db4b0c8f6746ffc6f2d' = HostedAccount(id='863a5cf8e5f24db4b0c8f6746ffc6f2d', username='fixture.first', enabled=True, organization_id='d69d0c02fcde456591111b41a9b30ac8').id
+=========================== short test summary info ===========================
+FAILED backend/tests/test_hosted_access.py::test_password_reset_revokes_a_sign_in_already_checking_the_old_password
+1 failed, 27 deselected in 2.69s

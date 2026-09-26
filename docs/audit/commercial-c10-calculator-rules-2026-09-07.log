@@ -1,0 +1,25 @@
+✔ optional recipes reject incomplete values, zero yield and double interpretation of percentages (0.5804ms)
+✔ CSV preserves calculation scope, production assumptions and purchased-input evidence (1.572ms)
+✔ repeated operations remain distinct while order-only changes match (0.0857ms)
+✔ unchecking and rechecking a repeated operation restores its count and original sequence (0.451ms)
+✔ interleaved step toggles preserve other edits and restore repeated operations after draft reload (0.1149ms)
+✔ scale fitting keeps deliberate omissions and additions including an in-flight manual edit (0.143ms)
+✔ editing a chosen method never silently adopts another method with matching steps (0.0875ms)
+✔ returning to a smaller scale does not reinsert a deliberately removed substituted kiln (0.0893ms)
+✔ selected card identity survives identical routes and scale fitting (0.1185ms)
+✔ selected method waits for current-scale steps, while manual routes stay usable (0.0991ms)
+✔ fuel_cell × pem_fuel_cell_ccm defaults (6.2048ms)
+✔ direct_methanol_fuel_cell × dmfc_gde_route defaults (0.0879ms)
+✔ electrolyzer × pem_electrolyzer_ccm defaults (0.0594ms)
+✔ electrolyzer × alkaline_electrolyzer_gde defaults (0.0432ms)
+✔ AEM fuel-cell route retains existing application-family preference (0.0531ms)
+✔ equal chemistry ranks prefer source scope, then quoted price, then name (0.1197ms)
+✔ electrode displayed ledger uses area costs without thermal cost fields (0.1552ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 15.0809

@@ -1,0 +1,67 @@
+{
+  "date": "2026-09-13",
+  "service": "OpenAI built-in image_gen",
+  "underlying_image_model": "Not exposed; 확인 못 함",
+  "selection": "Both English GPT v2 candidates selected by the author",
+  "additional_generation_calls_this_revision": 2,
+  "additional_calls_purpose": "Korean label localization using the selected English images as references",
+  "manual_image_editing": false,
+  "illustration_type": "Conceptual schematic; no experimental observations or numerical data marks",
+  "source_artwork": [
+    {
+      "file": "artwork/fig1_workflow.en.png",
+      "sha256": "ea9f08245e217834debd260757340bdafdb4d46b2603b8d78641b58a3f7f21ac",
+      "pixels": [
+        2060,
+        763
+      ],
+      "effective_dpi_at_178_mm": 293.96
+    },
+    {
+      "file": "artwork/fig1_workflow.ko.png",
+      "sha256": "a277e19ff8e855c3cb0f80ad5443cf8d90889a65e4601e5b0d41cb896a01d3d3",
+      "pixels": [
+        2060,
+        763
+      ],
+      "effective_dpi_at_178_mm": 293.96
+    },
+    {
+      "file": "artwork/fig2a_cost_model.en.png",
+      "sha256": "42a92ae95966d37e91537f2389e2f8fd1a298e7338d63b13f14dac35fd90782f",
+      "pixels": [
+        2172,
+        724
+      ],
+      "effective_dpi_at_178_mm": 309.94
+    },
+    {
+      "file": "artwork/fig2a_cost_model.ko.png",
+      "sha256": "fe035b2d7467c74fc0c4388b01165b7ec29f7f674e57bb6a86943cdc6a0bdfc2",
+      "pixels": [
+        2172,
+        724
+      ],
+      "effective_dpi_at_178_mm": 309.94
+    }
+  ],
+  "ppt_embedding": "Original PNG bytes preserved; one image and one white frame per slide",
+  "png_exports": "Microsoft PowerPoint 400 dpi canvas, resampled from original image pixels",
+  "svg_exports": "Embedded raster artwork; combined Figure 2 retains vector numerical panels",
+  "prompt_mapping": {
+    "artwork/fig1_workflow.en.png": [
+      "prompts/fig1.txt",
+      "prompts/fig1-gpt-refinement.txt"
+    ],
+    "artwork/fig2a_cost_model.en.png": [
+      "prompts/fig2a.txt",
+      "prompts/fig2a-refinement.txt"
+    ],
+    "artwork/fig1_workflow.ko.png": [
+      "korean-localization-prompts.md#figure-1"
+    ],
+    "artwork/fig2a_cost_model.ko.png": [
+      "korean-localization-prompts.md#figure-2a"
+    ]
+  }
+}

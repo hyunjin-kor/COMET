@@ -1,0 +1,105 @@
+# Figure 1 provenance (Application Note, 2026-09-09 draft)
+
+The current Figure 1 PNG and SVG are checked PowerPoint exports copied by scripts/draw_application_note_figures.py. The current source is docs/paper/diagram-sources-2026-09-13-h24/fig1_workflow.pptx: native English/Korean text overlays shared GPT artwork from which lettering was removed with the image-generation tool. Illustrations and connectors remain raster. This note preserves earlier revisions as history.
+
+## Files
+
+| File | Role |
+|---|---|
+| `fig1_workflow_stack_raw_chatgpt.png` | Raw image as downloaded from ChatGPT (1672 x 941 px), unmodified |
+| `../diagram-sources-2026-09-13/fig1_workflow.pptx` | Archived v31 source with native labels and connectors |
+| `../diagram-sources-2026-09-13-gpt/fig1_workflow.pptx` | Archived H22–H23 image-based slides |
+| `../diagram-sources-2026-09-13-gpt/artwork/fig1_workflow.en.png` | Selected GPT v2 output, 2060 × 763 pixels, unmodified |
+| `../diagram-sources-2026-09-13-gpt/artwork/fig1_workflow.ko.png` | Generated Korean localization, 2060 × 763 pixels, unmodified |
+| `fig1_workflow_stack.png`, `fig1_workflow_stack.svg` | Checked English PowerPoint exports copied by the figure generator |
+| `fig1_workflow_stack.ko.png`, `fig1_workflow_stack.ko.svg` | Checked Korean PowerPoint exports copied with `--lang ko` |
+| `scripts/straighten_note_fig1_leaders.py` | Historical connector correction; reproduces the previous illustration from the raw image, not the current figure |
+
+## Programmatic redraw — September 12, 2026
+
+The manuscript underwent a complete language review after the author identified ambiguous, abbreviated labels. That redraw retained the five-stage layout and associated records but removed pictograms and explanatory bullet fragments. Details of the data, costing procedures, and sensitivity analyses appear in the text and caption. In particular, the candidate-removal analysis is no longer labelled a leave-one-out test, which could be confused with cross-validation. The raw AI images and original prompts below are unchanged. No AI image generator was used for this redraw, and that version contained no raster pixels from the earlier illustration.
+
+The author subsequently requested an icon for each stage in the v27 document review. The v28 version added original geometric icons: a database, calendar, calculator, stacked cost bars, and ranking podium. The author then rejected their appearance and requested reuse of the earlier illustrated icons.
+
+The v29 version extracted five regions of the unchanged English raw image in `_workflow_icon()`: stacked price sheets, a calendar, a flask with a price tag, a cost ledger, and a balance scale. Only the pale background connected to each crop border was removed, then composited onto the stage fill before resampling to preserve the outlines. Icon proportions were preserved at a common height of 11.5 mm, with an aligned text column. The same icons were used in both languages.
+
+The author then requested editable PowerPoint sources for the non-data diagrams. The v30 deck embedded those same five icon images and retained the v29 layout with native slide text, boxes, and lines. Microsoft PowerPoint exports both slides to PNG and SVG. The SVG combines embedded raster icons with vector text and connectors; it is not an entirely vector illustration. No new image-generation call was made. Explanatory prose remains in the caption and text.
+
+## Horizontal workflow revision — September 13, 2026
+
+The v31 revision arranges the five original icons horizontally above one shared
+analysis-record band. The stage icons are 15 mm high; source, assumption, and
+reproduction details are given in the caption. The embedded image files are
+byte-identical to those in v30. A native PowerPoint
+[color-change effect](https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.drawing.colorchange)
+sets the previous flat stage-background color (#F4F6F7) to transparent, allowing
+the icons to sit on white without rectangular crop backgrounds. The original raw
+image and extracted image files are unchanged. This effect is part of the editable
+PPTX source and is rendered by PowerPoint, not applied to the exported figures.
+The previous source deck is retained in the September 12 folder for comparison.
+
+After editing the source deck, export it and regenerate the current figures with:
+
+```text
+./scripts/export_note_diagram_slides.ps1
+python scripts/draw_application_note_figures.py
+python scripts/draw_application_note_figures.py --lang ko
+```
+
+The v31 caption and acknowledgments disclosed reuse of icons from the earlier ChatGPT-generated illustration. The historical rights review below is retained; the redraw did not constitute a new legal determination.
+
+## Selected GPT illustration — September 13, 2026
+
+For v32, the author chose GPT v2 for both Figure 1 and Figure 2(a) after comparing
+actual OpenAI and Gemini outputs. The complete Figure 1 illustration was generated
+with the OpenAI built-in image-generation tool; it does not reuse the September 10
+icons. A further call localized the labels for the Korean review copy. The exact
+underlying model version was not exposed (확인 못 함).
+
+The English source is byte-identical to the selected candidate, and both language
+images are embedded in PowerPoint without manual image editing. Source hashes,
+actual pixel dimensions, prompt records, and export instructions are in
+[`../diagram-sources-2026-09-13-gpt/README.md`](../diagram-sources-2026-09-13-gpt/README.md).
+The raster source provides 293.96 dpi at 178 mm width; the 400 dpi Office export
+canvas and the SVG container do not establish additional image detail or vector
+editability. The illustrations are schematic, and the caption and acknowledgments
+now disclose generation of the full conceptual figure. The earlier rights review
+below remains unresolved; this adoption makes no new determination about rights.
+
+## Original image generation — September 10, 2026
+
+- Tool: ChatGPT image generation (OpenAI), used through the chatgpt.com web interface in a conversation titled "Generate Figure Schematic". The interface names the chat model tier ("Pro") but not the image model, so the image model version is not recorded here.
+- Dates: candidate versions A to D on 2026-09-09; a cleaned variant of D on 2026-09-10; the adopted version, with the labels rewritten in the conventional terminology of the field, later on 2026-09-10.
+- Content: every label, layer name and pictogram was specified in writing by the authors. The tool contributed the drawing only. The authors compared every word of the output with the specification; the only correction needed was `cm2` to `cm²`, which a later prompt fixed. The labels were rewritten once more so that the figure uses the same conventional terminology as the manuscript.
+- Authors' edits: the raw image had stepped dotted leaders between the five bands and the traceability panel. The script measures the band and panel geometry from the raw file, clears the gap between the bands and the panel, removes the leader stubs inside the panel and draws one straight horizontal dotted leader per band. Clearing is confined to the rows where the panel is at full width, so its rounded corners and border are left untouched. Nothing else was altered.
+
+## Prompts (verbatim, in order)
+
+1. Initial specification (version A):
+
+   > Generate an image (PNG, wide 16:9, print quality) of Figure 1 for a journal article, in the restrained style of a Nature or ACS schematic. Hard rules: white background; flat vector look; Helvetica-like sans-serif; thin dark-grey outlines; no drop shadows, no 3D, no gradients, no glow; one accent colour (teal #1B6F78) plus greys; NO title, NO caption, NO logo, NO watermark, NO words other than those listed; spell every label exactly; keep text small. Content: five horizontal layers stacked top to bottom as light-grey rounded bands, each with a small monoline icon at the left, a bold layer name, and short items; thin downward arrows between bands. Layer 1 (icon: database): 'Price sources' - 'IMF PCPS, Johnson Matthey, UN Comtrade, USGS' / 'Library: 116 catalysts, 30 reactions'. Layer 2 (icon: calendar): 'Price basis' - 'Live tier: current quotes' / 'Reference tier: frozen monthly averages'. Layer 3 (icon: flask with calculator): 'Cost model' - 'Materials and precursor recipe' / 'Step Method processing, overhead, margin' / 'Electrode per cm2; partial LCA'. Layer 4 (icon: ledger sheet): 'Cost ledger' - 'Price, source, date, grade per line' / 'Steps priced, substituted or uncosted' / 'Monte Carlo range; CSV export'. Layer 5 (icon: balance scale): 'Decision analysis' - 'Weighted composite score' / 'Weight sensitivity; monthly price replay' / 'Leave-one-out removal; score perturbation'. On the right, a tall narrow pale-teal panel headed 'Provenance' with eight bullet items: 'Source and quote date', 'Reliability grade', 'Price basis', 'Manufacturing scope', 'Functional unit', 'LCA coverage', 'SHA-256 input hashes', 'Seed and environment', linked to each layer by thin dotted leader lines.
+
+2. Version D (illustrated):
+
+   > Version D: generate another image with the same content, the same exact labels and the same hard rules (no title, no extra words, white background, one teal accent plus greys, flat, small text). Style change only: restrained two-tone flat illustration instead of icons - at the left of each band place one small flat illustration: a short stack of price tables for 'Price sources', a calendar with one month highlighted for 'Price basis', a reactor flask with a cost ticket for 'Cost model', a printed ledger sheet for 'Cost ledger', and a balance weighing three catalyst pellets for 'Decision analysis'; keep the five light-grey bands stacked top to bottom with thin downward arrows and the pale-teal 'Provenance' panel with its eight bullet items on the right.
+
+3. Clean-up of version D:
+
+   > Redo Version D (the fourth image) as a clean final image. Keep the five light-grey bands stacked top to bottom with thin teal downward arrows, the same exact labels and the same hard rules (no title, no caption, no logo, no words other than the labels, white background, teal #1B6F78 plus greys only, flat, no gradients, no shadows, small sharp text). Fix 1: the five flat illustrations at the left must be simple, clean and fully drawn with NO letters or text inside them - a neat stack of three blank price tables, a calendar with one cell highlighted in teal, a conical flask half-filled with teal beside a plain blank cost ticket, a printed ledger sheet with a blank grid, and a two-pan balance holding three round grey catalyst pellets; every shape closed, aligned and the same visual size. Fix 2: write 'Electrode per cm²; partial LCA' with a real superscript ². Fix 3: redesign the right-hand 'Provenance' panel - one pale-teal rounded panel spanning exactly the height of the five bands, a bold heading 'Provenance' at its top, and the eight items evenly spaced down the panel, each as a white rounded tag with a small teal monoline icon at its left: calendar for 'Source and quote date', shield with a check mark for 'Reliability grade', price tag for 'Price basis', factory for 'Manufacturing scope', ruler for 'Functional unit', leaf for 'LCA coverage', hash sign for 'SHA-256 input hashes', dice for 'Seed and environment'; a thin dotted leader runs from the right edge of each band to the panel; equal margins everywhere and all text horizontally aligned.
+
+4. Illustration variant D2, adopted for the layout:
+
+   > Variant D2: generate one more image, same as the last image (same bands, same exact labels, same rules, same right-hand 'Provenance' panel with the eight icon tags and dotted leaders, keep 'cm²'). Change only the five left illustrations: make them larger flat two-tone illustrations in the spirit of the fourth image rather than small icons - a neat stack of three blank price tables with ruled rows, a desk calendar with one cell filled teal, a conical flask half-filled with teal next to a blank cost ticket, a printed ledger sheet with a blank grid curling slightly at one corner, and a two-pan balance holding three round grey catalyst pellets - all drawn cleanly with closed shapes, no letters or text inside, all the same visual size and vertically centred in their bands.
+
+5. Adopted version, label wording only (this produced the raw file above):
+
+   > Generate the same image as the last one (Variant D2) with identical layout, illustrations, colours, spacing and rules - only nine text labels change, because the journal wants conventional terminology. Keep everything else pixel-for-pixel in the same style: five light-grey bands top to bottom with teal downward arrows, the same five flat illustrations at the left, the pale-teal panel on the right, no title, no caption, no extra words. Change only these: in band 2 replace 'Live tier: current quotes' with 'Spot quotes: current market' and 'Reference tier: frozen monthly averages' with 'Reference month: fixed monthly averages'. Change the band 4 heading 'Cost ledger' to 'Cost breakdown'. In band 5 replace 'Weight sensitivity; monthly price replay' with 'Weighting sensitivity; historical repricing' and 'Leave-one-out removal; score perturbation' with 'Leave-one-out test; score sensitivity'. In the right-hand panel change the heading 'Provenance' to 'Traceability', the tag 'Manufacturing scope' to 'Cost boundary', the tag 'SHA-256 input hashes' to 'SHA-256 checksums' and the tag 'Seed and environment' to 'Random seed and versions'. Every other label stays exactly as it is, including 'Electrode per cm²; partial LCA' with its superscript.
+
+## Journal policy and rights
+
+- ACS Publications, "Artificial Intelligence (AI) Best Practices and Policies" (https://researcher-resources.acs.org/publish/aipolicy, read 2026-09-10): the use of AI tools for image generation must be disclosed in the Acknowledgments with a description of when and how the tools were used, and "for graphics, a brief description of AI use should be included in the figure caption to explain to readers how the image was created". AI-generated images must not be used in the Table of Contents graphic. The manuscript caption and AI-use statement follow this wording; the TOC graphic must not reuse this illustration.
+- Rights to the output: 확인 못 함. The OpenAI Terms of Use page (https://openai.com/policies/terms-of-use/) could not be retrieved on 2026-09-10 (HTTP 403 to automated requests, browser load timed out). The authors must read the terms in force on the generation dates and confirm that the output may be used in a publication before submission.
+
+## Larger native typography — September 13, 2026 (H24)
+
+The author requested larger figure text, brief titles, and explanations in the body. OpenAI image generation removed lettering from the selected English workflow; the resulting 2060 × 763 PNG is retained unchanged in the H24 artwork folder and embedded in both slides. Nine native text objects per slide provide 9.5 pt stage labels and 8.5 pt record labels. The same process supplies Figure 2(a), with native cost symbols and subscripts. Exact prompts, input/output hashes, and the unverified model-version status are recorded in the H24 source folder. This is not a pixel-preserving edit of the earlier image; the new generated bytes are preserved. Figure captions and acknowledgments disclose this use. Detailed records and equations are explained in the body.

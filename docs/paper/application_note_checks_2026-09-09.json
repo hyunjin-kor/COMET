@@ -1,0 +1,366 @@
+{
+  "target": "Journal of Chemical Information and Modeling, Application Note",
+  "word_limit_abstract_text_graphics": 5000,
+  "abstract_words": 149,
+  "text_words_excluding_references": 2140,
+  "graphics": [
+    {
+      "figure": 1,
+      "width": "double",
+      "word_equivalent": 600
+    },
+    {
+      "figure": 2,
+      "width": "double",
+      "word_equivalent": 600
+    },
+    {
+      "figure": 3,
+      "width": "double",
+      "word_equivalent": 600
+    },
+    {
+      "figure": 4,
+      "width": "double",
+      "word_equivalent": 600
+    }
+  ],
+  "graphics_word_equivalent": 2400,
+  "total_word_equivalent": 4689,
+  "toc_word_equivalent_allowance": 300,
+  "total_word_equivalent_with_toc": 4989,
+  "toc_count_note": "A conservative 300-word allowance is tracked separately because the Application Note rule does not explicitly resolve TOC inclusion.",
+  "figure_count": 4,
+  "table_count": 0,
+  "software_named_in_title": true,
+  "json_key_references": 93,
+  "publication_mass_unit": "kg",
+  "publication_conversions": [
+    {
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "key": "route_assignment.ammonia_cracking_pair.materials_gap_per_lb",
+      "source_value": 0.3891,
+      "factor": 2.2046226218487757,
+      "converted_value": 0.8578186621613586,
+      "display": "0.86"
+    },
+    {
+      "source": "submission-2026-09-21/paper_summary_2026-09-21.json",
+      "key": "table62[0].comet_usd_per_lb",
+      "source_value": 27.3695,
+      "factor": 2.2046226218487757,
+      "converted_value": 60.339418848690066,
+      "display": "60.34"
+    },
+    {
+      "source": "submission-2026-09-21/paper_summary_2026-09-21.json",
+      "key": "table62[1].comet_usd_per_lb",
+      "source_value": 19.2206,
+      "factor": 2.2046226218487757,
+      "converted_value": 42.37416956550658,
+      "display": "42.37"
+    },
+    {
+      "source": "submission-2026-09-21/paper_summary_2026-09-21.json",
+      "key": "table62[1].published_usd_per_lb",
+      "source_value": 20.59,
+      "factor": 2.2046226218487757,
+      "converted_value": 45.39317978386629,
+      "display": "45.39"
+    },
+    {
+      "source": "submission-2026-09-21/paper_summary_2026-09-21.json",
+      "key": "table62[2].effective_rate_ton_per_day",
+      "source_value": 67.0,
+      "factor": 907.18474,
+      "converted_value": 60781.37758,
+      "display": "60,781.4"
+    },
+    {
+      "source": "submission-2026-09-21/paper_summary_2026-09-21.json",
+      "key": "table62[2].comet_usd_per_lb",
+      "source_value": 2.438,
+      "factor": 2.2046226218487757,
+      "converted_value": 5.374869952067315,
+      "display": "5.37"
+    },
+    {
+      "source": "submission-2026-09-21/paper_summary_2026-09-21.json",
+      "key": "table62[2].published_usd_per_lb",
+      "source_value": 2.41,
+      "factor": 2.2046226218487757,
+      "converted_value": 5.313140518655549,
+      "display": "5.31"
+    },
+    {
+      "source": "figures-note-2026-09-09/reference_example_ni_al2o3.json",
+      "key": "request.order_size_tons",
+      "source_value": 20,
+      "factor": 907.18474,
+      "converted_value": 18143.6948,
+      "display": "18,143.7"
+    },
+    {
+      "source": "figures-note-2026-09-09/reference_example_ni_al2o3.json",
+      "key": "step_method.estimated_price_per_lb",
+      "source_value": 4.6845,
+      "factor": 2.2046226218487757,
+      "converted_value": 10.327554672050589,
+      "display": "10.33"
+    },
+    {
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "key": "loading.ni[0].selling_price_per_lb",
+      "source_value": 3.1825,
+      "factor": 2.2046226218487757,
+      "converted_value": 7.016211494033729,
+      "display": "7.02"
+    },
+    {
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "key": "loading.ni[5].selling_price_per_lb",
+      "source_value": 5.6859,
+      "factor": 2.2046226218487757,
+      "converted_value": 12.535263765569955,
+      "display": "12.54"
+    },
+    {
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "key": "order_size.ni[0].order_size_tons",
+      "source_value": 1,
+      "factor": 907.18474,
+      "converted_value": 907.18474,
+      "display": "907.2"
+    },
+    {
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "key": "order_size.ni[10].order_size_tons",
+      "source_value": 1000,
+      "factor": 907.18474,
+      "converted_value": 907184.74,
+      "display": "907,184.7"
+    },
+    {
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "key": "order_size.ni[0].selling_price_per_lb",
+      "source_value": 20.9617,
+      "factor": 2.2046226218487757,
+      "converted_value": 46.21263801240748,
+      "display": "46.21"
+    },
+    {
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "key": "order_size.ni[10].selling_price_per_lb",
+      "source_value": 2.2966,
+      "factor": 2.2046226218487757,
+      "converted_value": 5.063136313337899,
+      "display": "5.06"
+    },
+    {
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "key": "preparation[0].selling_price_per_lb",
+      "source_value": 4.6845,
+      "factor": 2.2046226218487757,
+      "converted_value": 10.327554672050589,
+      "display": "10.33"
+    },
+    {
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "key": "preparation[2].selling_price_per_lb",
+      "source_value": 5.2581,
+      "factor": 2.2046226218487757,
+      "converted_value": 11.592126207943046,
+      "display": "11.59"
+    },
+    {
+      "source": "price-crossovers-2026-09-21/crossover_mechanisms.json",
+      "key": "cases[0].metal_effects.Co.price_before",
+      "source_value": 15.1872,
+      "factor": 2.2046226218487757,
+      "converted_value": 33.482044682541726,
+      "display": "33.48"
+    },
+    {
+      "source": "price-crossovers-2026-09-21/crossover_mechanisms.json",
+      "key": "cases[0].metal_effects.Co.price_after",
+      "source_value": 19.5706,
+      "factor": 2.2046226218487757,
+      "converted_value": 43.14578748315365,
+      "display": "43.15"
+    },
+    {
+      "source": "price-crossovers-2026-09-21/crossover_mechanisms.json",
+      "key": "cases[0].costs_after.ni-alumina-baseline",
+      "source_value": 3.968,
+      "factor": 2.2046226218487757,
+      "converted_value": 8.747942563495942,
+      "display": "8.75"
+    },
+    {
+      "source": "price-crossovers-2026-09-21/crossover_mechanisms.json",
+      "key": "cases[0].costs_after.co-mgo-la2o3",
+      "source_value": 4.2125,
+      "factor": 2.2046226218487757,
+      "converted_value": 9.286972794537968,
+      "display": "9.29"
+    },
+    {
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "key": "catalysts.ru.baseline.selling_price_per_lb",
+      "source_value": 671.4797,
+      "factor": 2.2046226218487757,
+      "converted_value": 1480.3593367322294,
+      "display": "1,480.36"
+    },
+    {
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "key": "route_assignment.order_size_tons",
+      "source_value": 20,
+      "factor": 907.18474,
+      "converted_value": 18143.6948,
+      "display": "18,143.7"
+    },
+    {
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "key": "route_assignment.order_size_tons",
+      "source_value": 20,
+      "factor": 907.18474,
+      "converted_value": 18143.6948,
+      "display": "18,143.7"
+    },
+    {
+      "source": "methods-2026-09-21/methods_study.json",
+      "key": "normalization.example.removed_cost",
+      "source_value": 1327.12,
+      "factor": 2.2046226218487757,
+      "converted_value": 2925.7987739079467,
+      "display": "2,925.80"
+    }
+  ],
+  "derived_values": [
+    {
+      "display": "1.17",
+      "source": "methods-2026-09-21/methods_study.json",
+      "rule": "normalization.example: |rows[0].cost - rows[2].cost| converted to USD/kg"
+    },
+    {
+      "display": "4",
+      "source": "submission-2026-09-21/paper_summary_2026-09-21.json",
+      "rule": "screening_basis_counts: sum of bases other than literature-architecture and engineering proxies"
+    },
+    {
+      "display": "-10.7",
+      "source": "submission-2026-09-21/table62_reproduction_2026-09-21.json",
+      "rule": "[2]: 100 * (with_published_rate.estimated_price_per_lb / market.market_price_per_lb - 1)"
+    },
+    {
+      "display": "23",
+      "source": "submission-2026-09-21/all_families_2026-09-21.json",
+      "rule": "families with catalyst_domain thermal"
+    },
+    {
+      "display": "3",
+      "source": "submission-2026-09-21/all_families_2026-09-21.json",
+      "rule": "thermal lowest-cost candidates with materials_cost_per_lb above 50% of landed_cost_per_lb"
+    },
+    {
+      "display": "12",
+      "source": "submission-2026-09-21/all_families_2026-09-21.json",
+      "rule": "thermal lowest-cost candidates with processing_cost_per_lb above materials_cost_per_lb"
+    },
+    {
+      "display": "24",
+      "source": "submission-2026-09-21/all_families_2026-09-21.json",
+      "rule": "minimum share of landed cost outside materials and processing among thermal lowest-cost candidates"
+    },
+    {
+      "display": "42",
+      "source": "submission-2026-09-21/all_families_2026-09-21.json",
+      "rule": "maximum share of landed cost outside materials and processing among thermal lowest-cost candidates"
+    },
+    {
+      "display": "272",
+      "source": "backend/data/manufacturing_literature.json",
+      "rule": "temperature_profile segments across all profiles"
+    },
+    {
+      "display": "208",
+      "source": "backend/data/manufacturing_literature.json",
+      "rule": "segments with hold_h"
+    },
+    {
+      "display": "52",
+      "source": "backend/data/manufacturing_literature.json",
+      "rule": "segments with ramp_c_per_min"
+    },
+    {
+      "display": "1",
+      "source": "backend/data/manufacturing_literature.json",
+      "rule": "profiles with finished_batch_mass_kg"
+    },
+    {
+      "display": "99.7",
+      "source": "price-crossovers-2026-09-21/price_crossovers.json",
+      "rule": "ammonia-cracking monthly records: minimum economics score of co-mgo-la2o3 and ni-alumina-baseline"
+    },
+    {
+      "display": "0.22",
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "rule": "loading.ni: selling-price change per wt% between the first and last loading, USD/kg"
+    },
+    {
+      "display": "737",
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "rule": "loading.ru: selling-price change per wt% between the first and last loading, USD/kg"
+    },
+    {
+      "display": "9.1",
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "rule": "order_size.ni: selling price at the smallest order divided by that at the largest order"
+    },
+    {
+      "display": "1.5",
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "rule": "order_size.ru: selling price at the smallest order divided by that at the largest order"
+    },
+    {
+      "display": "0.30",
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "rule": "equal_cost.equal_cost_over_reference as a percentage"
+    },
+    {
+      "display": "0.4",
+      "source": "submission-2026-09-21/table62_reproduction_2026-09-21.json",
+      "rule": "[0] and [1] rows: largest |dev_pct| among the lines before the margin"
+    },
+    {
+      "display": "7",
+      "source": "submission-2026-09-21/all_families_2026-09-21.json",
+      "rule": "families with catalyst_domain electrocatalyst"
+    },
+    {
+      "display": "0.40",
+      "source": "submission-2026-09-21/all_families_2026-09-21.json",
+      "rule": "smallest balanced weight of the cost score"
+    },
+    {
+      "display": "0.45",
+      "source": "submission-2026-09-21/all_families_2026-09-21.json",
+      "rule": "largest balanced weight of the cost score"
+    },
+    {
+      "display": "1.26",
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "rule": "route_assignment: selling-price range over the five templates, identical for every candidate, USD/kg"
+    },
+    {
+      "display": "0.09",
+      "source": "whatif-2026-09-21/whatif_study.json",
+      "rule": "route_assignment.ammonia_cracking_pair: nickel catalyst by deposition-precipitation minus cobalt catalyst by incipient wetness, USD/kg"
+    }
+  ],
+  "primary_run": "submission-2026-09-21",
+  "basis_month": "2026-08",
+  "seed": 20260906,
+  "count_note": "Whitespace-delimited words of the typeset abstract and of the text from Introduction through Competing interests, including headings and placeholders; provenance comments and sub/superscript markup are not counted, and a superscript citation number belongs to the preceding word. Figure captions and references are excluded; graphics add 300/600 word equivalents for single/double-column figures."
+}

@@ -12,6 +12,13 @@ class Settings(BaseSettings):
     # Database
     database_url: str = "sqlite:///./comet.db"
 
+    # Opt-in browser service; desktop storage and access remain unchanged.
+    hosted_mode: bool = False
+    hosted_origin: str = ""
+    hosted_storage_dir: str = ""
+    hosted_rights_manifest: str = "docs/commercial/data-rights-2026-09-07.json"
+    hosted_allow_local_http: bool = False
+
     # Metal price APIs
     metals_dev_api_key: str = ""
     metalprice_api_key: str = ""

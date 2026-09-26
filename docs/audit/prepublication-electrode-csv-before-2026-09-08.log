@@ -1,0 +1,46 @@
+✔ optional recipes reject incomplete values, zero yield and double interpretation of percentages (0.678ms)
+✔ CSV preserves calculation scope, production assumptions and purchased-input evidence (1.8581ms)
+✔ repeated operations remain distinct while order-only changes match (0.1031ms)
+✔ unchecking and rechecking a repeated operation restores its count and original sequence (0.5273ms)
+✔ interleaved step toggles preserve other edits and restore repeated operations after draft reload (0.1596ms)
+✔ scale fitting keeps deliberate omissions and additions including an in-flight manual edit (0.1579ms)
+✔ editing a chosen method never silently adopts another method with matching steps (0.0887ms)
+✔ returning to a smaller scale does not reinsert a deliberately removed substituted kiln (0.0844ms)
+✔ selected card identity survives identical routes and scale fitting (0.1101ms)
+✔ selected method waits for current-scale steps, while manual routes stay usable (0.1084ms)
+✔ fuel_cell × pem_fuel_cell_ccm defaults (8.7602ms)
+✔ direct_methanol_fuel_cell × dmfc_gde_route defaults (0.0963ms)
+✔ electrolyzer × pem_electrolyzer_ccm defaults (0.0536ms)
+✔ electrolyzer × alkaline_electrolyzer_gde defaults (0.0446ms)
+✔ AEM fuel-cell route retains existing application-family preference (0.1005ms)
+✔ equal chemistry ranks prefer source scope, then quoted price, then name (0.0763ms)
+✔ electrode displayed ledger uses area costs without thermal cost fields (0.1701ms)
+✖ electrode CSV exports the assembly ledger without a thermal campaign or selling margin (0.6849ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 17
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 19.0596
+
+✖ failing tests:
+
+test at scripts\test_calculator_rules.mjs:174:1
+✖ electrode CSV exports the assembly ledger without a thermal campaign or selling margin (0.6849ms)
+  AssertionError [ERR_ASSERTION]: Unexpected thermal value/label: 987654
+      at TestContext.<anonymous> (file:///C:/Users/user/Desktop/COMET-autonomous-2026-09-06/scripts/test_calculator_rules.mjs:187:12)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1103:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:785:18)
+      at Test.postRun (node:internal/test_runner/test:1232:19)
+      at Test.run (node:internal/test_runner/test:1160:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:785:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

@@ -46,9 +46,23 @@ $entryPoint = Join-Path $projectRoot "backend\launcher.py"
 
 Get-Process COMETBackend -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
 
-cmd /c "if exist ""$distPath"" rd /s /q ""$distPath"""
-cmd /c "if exist ""$workPath"" rd /s /q ""$workPath"""
-cmd /c "if exist ""$specPath"" rd /s /q ""$specPath"""
+$taskBuildRoot = [IO.Path]::GetFullPath((Join-Path $projectRoot "build"))
+if ((Test-Path -LiteralPath $taskBuildRoot) -and ((Get-Item -LiteralPath $taskBuildRoot).Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+    throw "Refusing to clean a redirected build root"
+}
+foreach ($taskBuildRelative in @($distPath, $workPath, $specPath)) {
+    $taskBuildTarget = [IO.Path]::GetFullPath((Join-Path $projectRoot $taskBuildRelative))
+    if (-not $taskBuildTarget.StartsWith($taskBuildRoot + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)) {
+        throw "Build cleanup target is outside the project build directory"
+    }
+    if (Test-Path -LiteralPath $taskBuildTarget) {
+        $taskBuildItem = Get-Item -LiteralPath $taskBuildTarget
+        if ($taskBuildItem.Attributes -band [IO.FileAttributes]::ReparsePoint) {
+            throw "Refusing to clean a redirected build directory"
+        }
+        Remove-Item -LiteralPath $taskBuildTarget -Recurse -Force
+    }
+}
 
 Write-Host "[COMET] Building backend sidecar..."
 

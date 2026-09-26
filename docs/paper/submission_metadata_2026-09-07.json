@@ -1,0 +1,33 @@
+{
+  "run_directory": "submission-2026-09-07",
+  "basis_month": "2026-05",
+  "support_series": 10,
+  "support_observations": 28,
+  "support_first_month": "2026-04",
+  "support_last_month": "2026-06",
+  "support_month_count": 3,
+  "support_counts": {
+    "HS251990": 3,
+    "HS281122": 2,
+    "HS281810": 2,
+    "HS281820": 3,
+    "HS281990": 3,
+    "HS282010": 3,
+    "HS282300": 3,
+    "HS284210": 3,
+    "HS284610": 3,
+    "HS380210": 3
+  },
+  "unit_note": "Model conversion constants, not newly measured data",
+  "kg_per_lb": 0.453592,
+  "kg_per_short_ton": 907.184,
+  "source_manifest_sha256": "0bbebb785a0fc1d74cc50a153a1a5b4d8005e84958171b6633aead92068cd127",
+  "external_audit_sha256": "a5d00b61494b5b93ab08a1c4b2b9838fd0bba8a4cf9d4cddbfa734f43a9ccb0f",
+  "controlled_output_sha256": "495b0fe9c5a60476bb29143082d745575976339aab5db4a3aca9c4c9fbd902ee",
+  "controlled_provenance_sha256": "598ebde69a1d8f82a3f3bfe4223ce184929515cb5191b8c594889a1171e28dc7",
+  "controlled_manufacturing_cases": 21,
+  "controlled_electrode_cases": 9,
+  "additional_primary_papers": 2,
+  "screened_evidence_total": 12,
+  "additional_evidence_sha256": "1b068b560a9db16a66d2bc85ef4df3343860814f015a84b6d4cecdf18181f762"
+}

@@ -1,0 +1,6 @@
+
+File C:\Users\user\Desktop\COMET-autonomous-2026-09-06\_local\commercial_frontend_checks.ps1 cannot be loaded because r
+unning scripts is disabled on this system. For more information, see about_Execution_Policies at https:/go.microsoft.co
+m/fwlink/?LinkID=135170.
+    + CategoryInfo          : SecurityError: (:) [], ParentContainsErrorRecordException
+    + FullyQualifiedErrorId : UnauthorizedAccess

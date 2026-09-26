@@ -8,7 +8,7 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 class EquipmentScalingItem(BaseModel):
     """One equipment line scaled via the power-law six-tenths rule."""
 
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra="ignore", allow_inf_nan=False)
 
     name: str = Field(..., min_length=1, max_length=120)
     base_cost_usd: float = Field(..., gt=0, description="Known purchased cost at base size, in USD.")
@@ -21,7 +21,7 @@ class EquipmentScalingItem(BaseModel):
 class OpExInputs(BaseModel):
     """Optional OpEx inputs layered on top of CapEx output."""
 
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra="ignore", allow_inf_nan=False)
 
     direct_labor_cost_usd: float = Field(default=0.0, ge=0)
     raw_materials_cost_usd: float = Field(default=0.0, ge=0)
@@ -39,7 +39,7 @@ class CapExRequest(BaseModel):
     At least one path must be populated.
     """
 
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra="ignore", allow_inf_nan=False)
 
     purchased_equipment_cost_usd: float | None = Field(default=None, ge=0)
     equipment: list[EquipmentScalingItem] | None = Field(

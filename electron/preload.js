@@ -7,6 +7,7 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('cometDesktop', {
   platform: process.platform,
+  setAboutCopy: (copy) => ipcRenderer.invoke('about:set-copy', copy),
 
   // Window controls
   minimizeWindow: () => ipcRenderer.invoke('window:minimize'),

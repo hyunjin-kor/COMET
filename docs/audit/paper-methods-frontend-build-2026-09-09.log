@@ -1,0 +1,43 @@
+
+> frontend@1.4.0 build
+> tsc -b && vite build
+
+vite v8.1.5 building client environment for production...
+[2K
+transforming...✓ 631 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                      0.83 kB │ gzip:   0.42 kB
+dist/assets/PretendardVariable-CJuje-Rk.woff2    2,057.68 kB
+dist/assets/index-4dLGx_eP.css                      67.87 kB │ gzip:  12.26 kB
+dist/assets/format-price-xyQn9blZ.js                 0.35 kB │ gzip:   0.18 kB │ map:     1.67 kB
+dist/assets/calculator-session-OVC9PJVi.js           0.59 kB │ gzip:   0.28 kB │ map:     5.12 kB
+dist/assets/rolldown-runtime-QTnfLwEv.js             0.69 kB │ gzip:   0.42 kB
+dist/assets/recipe-inputs-CyfhZpma.js                0.69 kB │ gzip:   0.28 kB │ map:     2.25 kB
+dist/assets/ScientificText-6DsLtQvI.js               0.80 kB │ gzip:   0.43 kB │ map:     1.63 kB
+dist/assets/ResultBreakdownPieChart-CJ-Wo8oJ.js      0.83 kB │ gzip:   0.54 kB │ map:     2.34 kB
+dist/assets/EstimateRangeBarChart-CkuWw1pf.js        1.01 kB │ gzip:   0.59 kB │ map:     2.66 kB
+dist/assets/Skeleton-a7cBJvy9.js                     1.42 kB │ gzip:   0.59 kB │ map:     4.45 kB
+dist/assets/FitPriceText-D6vJwrZ6.js                 1.56 kB │ gzip:   0.78 kB │ map:     4.81 kB
+dist/assets/MetalCompareChart-C5pK81FX.js            1.71 kB │ gzip:   0.90 kB │ map:     5.27 kB
+dist/assets/MetalTrendChart-DFX3fciS.js              1.78 kB │ gzip:   0.89 kB │ map:     5.06 kB
+dist/assets/WorkspaceSections-BqC7Yclb.js            3.36 kB │ gzip:   1.51 kB │ map:     9.67 kB
+dist/assets/Account-tS14VUUK.js                      6.50 kB │ gzip:   2.27 kB │ map:    12.76 kB
+dist/assets/export-csv-BbPdxbLz.js                   7.66 kB │ gzip:   2.94 kB │ map:    19.96 kB
+dist/assets/CostEvidencePanel-D1JIAXZB.js           15.31 kB │ gzip:   3.88 kB │ map:    34.94 kB
+dist/assets/CapEx-pZO-Ekch.js                       18.62 kB │ gzip:   4.40 kB │ map:    43.58 kB
+dist/assets/Compare-DKa-xylg.js                     18.70 kB │ gzip:   4.93 kB │ map:    42.20 kB
+dist/assets/Uncertainty-CgROFEvA.js                 20.69 kB │ gzip:   5.96 kB │ map:    47.58 kB
+dist/assets/Library-j1TBeI_A.js                     25.00 kB │ gzip:   6.00 kB │ map:    64.72 kB
+dist/assets/Prices-DeX6ZIIw.js                      33.21 kB │ gzip:   8.67 kB │ map:    80.74 kB
+dist/assets/CalculatorResult-BC1Ui04i.js            54.78 kB │ gzip:  12.60 kB │ map:   112.68 kB
+dist/assets/i18n-BSP2iIM8.js                        78.12 kB │ gzip:  28.44 kB │ map:   105.28 kB
+dist/assets/index-DzfRpEln.js                       78.97 kB │ gzip:  24.70 kB │ map:   549.17 kB
+dist/assets/Calculator-D7WSWqRd.js                  92.29 kB │ gzip:  23.45 kB │ map:   239.11 kB
+dist/assets/react-CC1klYW5.js                      189.64 kB │ gzip:  59.65 kB │ map:   841.37 kB
+dist/assets/recharts-KlhfxoSq.js                   390.73 kB │ gzip: 111.46 kB │ map: 1,913.19 kB
+
+✓ built in 1.54s
+
+[plugin @tailwindcss/vite:generate:build] [33m[SOURCEMAP_BROKEN] [0mSourcemap is likely to be incorrect: a plugin (@tailwindcss/vite:generate:build) was used to transform files, but didn't generate a sourcemap for the transformation. Consult the plugin documentation for help: https://rolldown.rs/guide/troubleshooting#warning-sourcemap-is-likely-to-be-incorrect
+

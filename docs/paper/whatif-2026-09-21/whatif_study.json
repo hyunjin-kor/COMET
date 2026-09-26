@@ -1,0 +1,3231 @@
+{
+  "basis_month": "2026-08",
+  "inputs": {
+    "reference_basis": "docs/paper/submission-2026-09-21/reference_basis_2026-09-21.json",
+    "reference_basis_sha256": "a037399e25863f31523db89ad7ad26ad2e9c6c55eaadf542c8171ef64af08ca3",
+    "monthly_history": "docs/paper/submission-2026-09-21/monthly_history_2026-09-21.json",
+    "monthly_history_sha256": "d86b1773a87f4c58173d6546f6e64f6077823f88d806e1761d64197e4e65e09e",
+    "materials_library_sha256": "4f456822f68155a83d0d33aa80d77d3944465d9bba341df11e3d6f73cdccf33f",
+    "primary_run_families": "docs/paper/submission-2026-09-21/all_families_2026-09-21.json",
+    "primary_run_families_sha256": "9335259fc4285d3cea0ef7b25079e8f4e0a49273a090bd489380b8a195bb2f15"
+  },
+  "scope": "Calculator requests on the reference basis; one input varied at a time. Precious-metal value is part of the materials cost and carries overheads and margin; no spent-catalyst credit is applied. Catalytic performance is not evaluated.",
+  "catalysts": {
+    "ni": {
+      "label": "Ni/Al2O3",
+      "metal": "Ni",
+      "loading_wt_pct": 20,
+      "sweep_wt_pct": [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30
+      ],
+      "support": "Al2O3",
+      "support_material_key": "lit:comtrade-calcined-alumina-2024",
+      "template_id": "wet_impregnation_metal_oxide",
+      "order_size_tons": 20,
+      "metal_quote": {
+        "symbol": "Ni",
+        "name": "Nickel",
+        "price": 7.5979,
+        "unit": "$/lb",
+        "source": "IMF PCPS (monthly average)",
+        "fetched_at": "2026-08-31"
+      },
+      "metal_price_per_lb": 7.5979,
+      "baseline": {
+        "selling_price_per_lb": 4.6845,
+        "materials_per_lb": 1.7461,
+        "processing_per_lb": 1.6758,
+        "ga_per_lb": 0.1711,
+        "sard_per_lb": 0.1796,
+        "margin_per_lb": 0.9119,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      }
+    },
+    "ru": {
+      "label": "Ru/Al2O3",
+      "metal": "Ru",
+      "loading_wt_pct": 2,
+      "sweep_wt_pct": [
+        0.5,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "support": "Al2O3",
+      "support_material_key": "lit:comtrade-calcined-alumina-2024",
+      "template_id": "wet_impregnation_metal_oxide",
+      "order_size_tons": 20,
+      "metal_quote": {
+        "symbol": "Ru",
+        "name": "Ruthenium",
+        "price": 1675.0,
+        "unit": "$/troy_oz",
+        "source": "Johnson Matthey (monthly average)",
+        "fetched_at": "2026-08-31"
+      },
+      "metal_price_per_lb": 24427.0275,
+      "baseline": {
+        "selling_price_per_lb": 671.4797,
+        "materials_per_lb": 488.8181,
+        "processing_per_lb": 1.6758,
+        "ga_per_lb": 24.5247,
+        "sard_per_lb": 25.7509,
+        "margin_per_lb": 130.7103,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      }
+    }
+  },
+  "loading": {
+    "ni": [
+      {
+        "loading_wt_pct": 5,
+        "selling_price_per_lb": 3.1825,
+        "materials_per_lb": 0.6489,
+        "processing_per_lb": 1.6758,
+        "ga_per_lb": 0.1162,
+        "sard_per_lb": 0.122,
+        "margin_per_lb": 0.6195,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      },
+      {
+        "loading_wt_pct": 10,
+        "selling_price_per_lb": 3.6832,
+        "materials_per_lb": 1.0147,
+        "processing_per_lb": 1.6758,
+        "ga_per_lb": 0.1345,
+        "sard_per_lb": 0.1412,
+        "margin_per_lb": 0.717,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      },
+      {
+        "loading_wt_pct": 15,
+        "selling_price_per_lb": 4.1839,
+        "materials_per_lb": 1.3804,
+        "processing_per_lb": 1.6758,
+        "ga_per_lb": 0.1528,
+        "sard_per_lb": 0.1604,
+        "margin_per_lb": 0.8144,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      },
+      {
+        "loading_wt_pct": 20,
+        "selling_price_per_lb": 4.6845,
+        "materials_per_lb": 1.7461,
+        "processing_per_lb": 1.6758,
+        "ga_per_lb": 0.1711,
+        "sard_per_lb": 0.1796,
+        "margin_per_lb": 0.9119,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      },
+      {
+        "loading_wt_pct": 25,
+        "selling_price_per_lb": 5.1852,
+        "materials_per_lb": 2.1119,
+        "processing_per_lb": 1.6758,
+        "ga_per_lb": 0.1894,
+        "sard_per_lb": 0.1989,
+        "margin_per_lb": 1.0094,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      },
+      {
+        "loading_wt_pct": 30,
+        "selling_price_per_lb": 5.6859,
+        "materials_per_lb": 2.4776,
+        "processing_per_lb": 1.6758,
+        "ga_per_lb": 0.2077,
+        "sard_per_lb": 0.2181,
+        "margin_per_lb": 1.1068,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      }
+    ],
+    "ru": [
+      {
+        "loading_wt_pct": 0.5,
+        "selling_price_per_lb": 169.8813,
+        "materials_per_lb": 122.4169,
+        "processing_per_lb": 1.6758,
+        "ga_per_lb": 6.2046,
+        "sard_per_lb": 6.5149,
+        "margin_per_lb": 33.0691,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      },
+      {
+        "loading_wt_pct": 1,
+        "selling_price_per_lb": 337.0808,
+        "materials_per_lb": 244.5506,
+        "processing_per_lb": 1.6758,
+        "ga_per_lb": 12.3113,
+        "sard_per_lb": 12.9269,
+        "margin_per_lb": 65.6162,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      },
+      {
+        "loading_wt_pct": 2,
+        "selling_price_per_lb": 671.4797,
+        "materials_per_lb": 488.8181,
+        "processing_per_lb": 1.6758,
+        "ga_per_lb": 24.5247,
+        "sard_per_lb": 25.7509,
+        "margin_per_lb": 130.7103,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      },
+      {
+        "loading_wt_pct": 3,
+        "selling_price_per_lb": 1005.8787,
+        "materials_per_lb": 733.0855,
+        "processing_per_lb": 1.6758,
+        "ga_per_lb": 36.7381,
+        "sard_per_lb": 38.575,
+        "margin_per_lb": 195.8044,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      },
+      {
+        "loading_wt_pct": 4,
+        "selling_price_per_lb": 1340.2777,
+        "materials_per_lb": 977.353,
+        "processing_per_lb": 1.6758,
+        "ga_per_lb": 48.9514,
+        "sard_per_lb": 51.399,
+        "margin_per_lb": 260.8985,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      },
+      {
+        "loading_wt_pct": 5,
+        "selling_price_per_lb": 1674.6767,
+        "materials_per_lb": 1221.6204,
+        "processing_per_lb": 1.6758,
+        "ga_per_lb": 61.1648,
+        "sard_per_lb": 64.223,
+        "margin_per_lb": 325.9926,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      }
+    ]
+  },
+  "order_size": {
+    "ni": [
+      {
+        "order_size_tons": 1,
+        "selling_price_per_lb": 20.9617,
+        "materials_per_lb": 1.7461,
+        "processing_per_lb": 9.8152,
+        "ga_per_lb": 0.5781,
+        "sard_per_lb": 0.607,
+        "margin_per_lb": 8.2153,
+        "margin_pct": 39.19,
+        "scale": "small",
+        "campaign_days": 1.5,
+        "substitutions": [
+          {
+            "from": "kiln_continuous_indirect",
+            "to": "kiln_batch"
+          }
+        ]
+      },
+      {
+        "order_size_tons": 2,
+        "selling_price_per_lb": 16.4142,
+        "materials_per_lb": 1.7461,
+        "processing_per_lb": 8.1793,
+        "ga_per_lb": 0.4963,
+        "sard_per_lb": 0.5211,
+        "margin_per_lb": 5.4714,
+        "margin_pct": 33.33,
+        "scale": "small",
+        "campaign_days": 2.5,
+        "substitutions": [
+          {
+            "from": "kiln_continuous_indirect",
+            "to": "kiln_batch"
+          }
+        ]
+      },
+      {
+        "order_size_tons": 5,
+        "selling_price_per_lb": 7.6894,
+        "materials_per_lb": 1.7461,
+        "processing_per_lb": 3.3515,
+        "ga_per_lb": 0.2549,
+        "sard_per_lb": 0.2676,
+        "margin_per_lb": 2.0692,
+        "margin_pct": 26.91,
+        "scale": "medium",
+        "campaign_days": 1.5,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 10,
+        "selling_price_per_lb": 5.691,
+        "materials_per_lb": 1.7461,
+        "processing_per_lb": 2.2344,
+        "ga_per_lb": 0.199,
+        "sard_per_lb": 0.209,
+        "margin_per_lb": 1.3025,
+        "margin_pct": 22.89,
+        "scale": "medium",
+        "campaign_days": 2.0,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 20,
+        "selling_price_per_lb": 4.6845,
+        "materials_per_lb": 1.7461,
+        "processing_per_lb": 1.6758,
+        "ga_per_lb": 0.1711,
+        "sard_per_lb": 0.1796,
+        "margin_per_lb": 0.9119,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 50,
+        "selling_price_per_lb": 4.0377,
+        "materials_per_lb": 1.7461,
+        "processing_per_lb": 1.3406,
+        "ga_per_lb": 0.1543,
+        "sard_per_lb": 0.1621,
+        "margin_per_lb": 0.6345,
+        "margin_pct": 15.72,
+        "scale": "medium",
+        "campaign_days": 6.0,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 70,
+        "selling_price_per_lb": 2.867,
+        "materials_per_lb": 1.7461,
+        "processing_per_lb": 0.4765,
+        "ga_per_lb": 0.1111,
+        "sard_per_lb": 0.1167,
+        "margin_per_lb": 0.4165,
+        "margin_pct": 14.53,
+        "scale": "large",
+        "campaign_days": 1.47,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 100,
+        "selling_price_per_lb": 2.7045,
+        "materials_per_lb": 1.7461,
+        "processing_per_lb": 0.379,
+        "ga_per_lb": 0.1063,
+        "sard_per_lb": 0.1116,
+        "margin_per_lb": 0.3615,
+        "margin_pct": 13.37,
+        "scale": "large",
+        "campaign_days": 1.67,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 200,
+        "selling_price_per_lb": 2.5021,
+        "materials_per_lb": 1.7461,
+        "processing_per_lb": 0.2653,
+        "ga_per_lb": 0.1006,
+        "sard_per_lb": 0.1056,
+        "margin_per_lb": 0.2844,
+        "margin_pct": 11.37,
+        "scale": "large",
+        "campaign_days": 2.33,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 500,
+        "selling_price_per_lb": 2.3589,
+        "materials_per_lb": 1.7461,
+        "processing_per_lb": 0.1971,
+        "ga_per_lb": 0.0972,
+        "sard_per_lb": 0.102,
+        "margin_per_lb": 0.2165,
+        "margin_pct": 9.18,
+        "scale": "large",
+        "campaign_days": 4.33,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 1000,
+        "selling_price_per_lb": 2.2966,
+        "materials_per_lb": 1.7461,
+        "processing_per_lb": 0.1744,
+        "ga_per_lb": 0.096,
+        "sard_per_lb": 0.1008,
+        "margin_per_lb": 0.1793,
+        "margin_pct": 7.81,
+        "scale": "large",
+        "campaign_days": 7.67,
+        "substitutions": []
+      }
+    ],
+    "ru": [
+      {
+        "order_size_tons": 1,
+        "selling_price_per_lb": 904.0639,
+        "materials_per_lb": 488.8181,
+        "processing_per_lb": 9.8152,
+        "ga_per_lb": 24.9317,
+        "sard_per_lb": 26.1782,
+        "margin_per_lb": 354.3207,
+        "margin_pct": 39.19,
+        "scale": "small",
+        "campaign_days": 1.5,
+        "substitutions": [
+          {
+            "from": "kiln_continuous_indirect",
+            "to": "kiln_batch"
+          }
+        ]
+      },
+      {
+        "order_size_tons": 2,
+        "selling_price_per_lb": 821.9076,
+        "materials_per_lb": 488.8181,
+        "processing_per_lb": 8.1793,
+        "ga_per_lb": 24.8499,
+        "sard_per_lb": 26.0924,
+        "margin_per_lb": 273.968,
+        "margin_pct": 33.33,
+        "scale": "small",
+        "campaign_days": 2.5,
+        "substitutions": [
+          {
+            "from": "kiln_continuous_indirect",
+            "to": "kiln_batch"
+          }
+        ]
+      },
+      {
+        "order_size_tons": 5,
+        "selling_price_per_lb": 742.3984,
+        "materials_per_lb": 488.8181,
+        "processing_per_lb": 3.3515,
+        "ga_per_lb": 24.6085,
+        "sard_per_lb": 25.8389,
+        "margin_per_lb": 199.7814,
+        "margin_pct": 26.91,
+        "scale": "medium",
+        "campaign_days": 1.5,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 10,
+        "selling_price_per_lb": 702.0716,
+        "materials_per_lb": 488.8181,
+        "processing_per_lb": 2.2344,
+        "ga_per_lb": 24.5526,
+        "sard_per_lb": 25.7803,
+        "margin_per_lb": 160.6863,
+        "margin_pct": 22.89,
+        "scale": "medium",
+        "campaign_days": 2.0,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 20,
+        "selling_price_per_lb": 671.4797,
+        "materials_per_lb": 488.8181,
+        "processing_per_lb": 1.6758,
+        "ga_per_lb": 24.5247,
+        "sard_per_lb": 25.7509,
+        "margin_per_lb": 130.7103,
+        "margin_pct": 19.47,
+        "scale": "medium",
+        "campaign_days": 3.0,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 50,
+        "selling_price_per_lb": 641.1589,
+        "materials_per_lb": 488.8181,
+        "processing_per_lb": 1.3406,
+        "ga_per_lb": 24.5079,
+        "sard_per_lb": 25.7333,
+        "margin_per_lb": 100.759,
+        "margin_pct": 15.72,
+        "scale": "medium",
+        "campaign_days": 6.0,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 70,
+        "selling_price_per_lb": 631.1334,
+        "materials_per_lb": 488.8181,
+        "processing_per_lb": 0.4765,
+        "ga_per_lb": 24.4647,
+        "sard_per_lb": 25.688,
+        "margin_per_lb": 91.6861,
+        "margin_pct": 14.53,
+        "scale": "large",
+        "campaign_days": 1.47,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 100,
+        "selling_price_per_lb": 622.549,
+        "materials_per_lb": 488.8181,
+        "processing_per_lb": 0.379,
+        "ga_per_lb": 24.4599,
+        "sard_per_lb": 25.6828,
+        "margin_per_lb": 83.2091,
+        "margin_pct": 13.37,
+        "scale": "large",
+        "campaign_days": 1.67,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 200,
+        "selling_price_per_lb": 608.3732,
+        "materials_per_lb": 488.8181,
+        "processing_per_lb": 0.2653,
+        "ga_per_lb": 24.4542,
+        "sard_per_lb": 25.6769,
+        "margin_per_lb": 69.1587,
+        "margin_pct": 11.37,
+        "scale": "large",
+        "campaign_days": 2.33,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 500,
+        "selling_price_per_lb": 593.6177,
+        "materials_per_lb": 488.8181,
+        "processing_per_lb": 0.1971,
+        "ga_per_lb": 24.4508,
+        "sard_per_lb": 25.6733,
+        "margin_per_lb": 54.4785,
+        "margin_pct": 9.18,
+        "scale": "large",
+        "campaign_days": 4.33,
+        "substitutions": []
+      },
+      {
+        "order_size_tons": 1000,
+        "selling_price_per_lb": 584.757,
+        "materials_per_lb": 488.8181,
+        "processing_per_lb": 0.1744,
+        "ga_per_lb": 24.4496,
+        "sard_per_lb": 25.6721,
+        "margin_per_lb": 45.6429,
+        "margin_pct": 7.81,
+        "scale": "large",
+        "campaign_days": 7.67,
+        "substitutions": []
+      }
+    ]
+  },
+  "preparation": [
+    {
+      "template_id": "wet_impregnation_metal_oxide",
+      "template_name": "Incipient Wetness Impregnation - Metal on Oxide Support",
+      "operations": 6,
+      "uncosted_operations": [],
+      "selling_price_per_lb": 4.6845,
+      "materials_per_lb": 1.7461,
+      "processing_per_lb": 1.6758,
+      "ga_per_lb": 0.1711,
+      "sard_per_lb": 0.1796,
+      "margin_per_lb": 0.9119,
+      "margin_pct": 19.47,
+      "scale": "medium",
+      "campaign_days": 3.0,
+      "substitutions": []
+    },
+    {
+      "template_id": "excess_solution_impregnation_metal_oxide",
+      "template_name": "Excess-Solution (Wet) Impregnation - Metal on Oxide Support",
+      "operations": 7,
+      "uncosted_operations": [],
+      "selling_price_per_lb": 4.8812,
+      "materials_per_lb": 1.7461,
+      "processing_per_lb": 1.8194,
+      "ga_per_lb": 0.1783,
+      "sard_per_lb": 0.1872,
+      "margin_per_lb": 0.9502,
+      "margin_pct": 19.47,
+      "scale": "medium",
+      "campaign_days": 3.0,
+      "substitutions": []
+    },
+    {
+      "template_id": "deposition_precipitation_metal_oxide",
+      "template_name": "Deposition-Precipitation - Metal on Oxide Support",
+      "operations": 7,
+      "uncosted_operations": [],
+      "selling_price_per_lb": 5.2581,
+      "materials_per_lb": 1.7461,
+      "processing_per_lb": 2.0947,
+      "ga_per_lb": 0.192,
+      "sard_per_lb": 0.2016,
+      "margin_per_lb": 1.0235,
+      "margin_pct": 19.47,
+      "scale": "medium",
+      "campaign_days": 3.0,
+      "substitutions": []
+    },
+    {
+      "template_id": "coprecipitation_metal_oxide",
+      "template_name": "Co-precipitation - Metal on Oxide Support",
+      "operations": 7,
+      "uncosted_operations": [],
+      "selling_price_per_lb": 4.8812,
+      "materials_per_lb": 1.7461,
+      "processing_per_lb": 1.8194,
+      "ga_per_lb": 0.1783,
+      "sard_per_lb": 0.1872,
+      "margin_per_lb": 0.9502,
+      "margin_pct": 19.47,
+      "scale": "medium",
+      "campaign_days": 3.0,
+      "substitutions": []
+    },
+    {
+      "template_id": "sol_gel_metal_oxide",
+      "template_name": "Sol-Gel - Metal on Oxide Support",
+      "operations": 6,
+      "uncosted_operations": [],
+      "selling_price_per_lb": 4.7665,
+      "materials_per_lb": 1.7461,
+      "processing_per_lb": 1.7356,
+      "ga_per_lb": 0.1741,
+      "sard_per_lb": 0.1828,
+      "margin_per_lb": 0.9278,
+      "margin_pct": 19.47,
+      "scale": "medium",
+      "campaign_days": 3.0,
+      "substitutions": []
+    }
+  ],
+  "equal_cost": {
+    "comparison": "Ru/Al2O3 at its baseline loading against Ni/Al2O3 at its baseline loading, same support, template and order size",
+    "ru_selling_price_without_metal_per_lb": 2.674,
+    "selling_price_slope_per_metal_price": 0.027379741558812263,
+    "equal_cost_ru_price_per_lb": 73.43020370303363,
+    "equal_cost_over_reference": 0.0030061047625640747,
+    "price_ratio_ru_over_ni_catalyst": 143.34074074074073,
+    "ru_history_months": 92,
+    "ru_history_min_per_lb": 3645.825,
+    "ru_history_max_per_lb": 24906.74077851,
+    "months_below_equal_cost": 0,
+    "verified_selling_price_per_lb": 4.6845
+  },
+  "route_assignment": {
+    "scope": "Library candidates with an active metal and a support, priced with their library compositions on the reference basis under each of the five preparation templates at one production scale; route allowances of the library are not added. Catalytic performance is not evaluated.",
+    "order_size_tons": 20,
+    "templates": [
+      "wet_impregnation_metal_oxide",
+      "excess_solution_impregnation_metal_oxide",
+      "deposition_precipitation_metal_oxide",
+      "coprecipitation_metal_oxide",
+      "sol_gel_metal_oxide"
+    ],
+    "processing_per_lb": {
+      "wet_impregnation_metal_oxide": 1.6758,
+      "excess_solution_impregnation_metal_oxide": 1.8194,
+      "deposition_precipitation_metal_oxide": 2.0947,
+      "coprecipitation_metal_oxide": 1.8194,
+      "sol_gel_metal_oxide": 1.7356
+    },
+    "processing_spread_per_lb": 0.41890000000000005,
+    "families": [
+      {
+        "family": "ammonia-cracking",
+        "candidates": [
+          {
+            "slug": "co-mgo-la2o3",
+            "active_metal_wt_pct": {
+              "Co": 5.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 1.6868,
+            "library_processing_per_lb": 1.4005,
+            "library_landed_cost_per_lb": 4.6465,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 4.6034,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 4.8,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 5.1769,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 4.8,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 4.6853,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "ni-mgo-ceo2-interface",
+            "active_metal_wt_pct": {
+              "Ni": 15.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 1.6655,
+            "library_processing_per_lb": 1.8194,
+            "library_landed_cost_per_lb": 5.5107,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 4.5741,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 4.7707,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 5.1476,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 4.7707,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 4.656,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "ni-alumina-baseline",
+            "active_metal_wt_pct": {
+              "Ni": 12.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 1.2977,
+            "library_processing_per_lb": 1.4005,
+            "library_landed_cost_per_lb": 4.1138,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 4.0707,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 4.2673,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 4.6442,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 4.2673,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 4.1526,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "ru-mgo-premium",
+            "active_metal_wt_pct": {
+              "Ru": 3.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 967.5934,
+            "library_processing_per_lb": 1.4005,
+            "library_landed_cost_per_lb": 1327.12,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 1326.9169,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 1327.1136,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 1327.4905,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 1327.1136,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 1326.9989,
+                "processing_per_lb": 1.7356
+              }
+            }
+          }
+        ],
+        "excluded": [],
+        "lowest_cost_same_template": "ni-alumina-baseline",
+        "materials_gap_per_lb": 0.3677999999999999,
+        "possible_lowest_cost": [
+          "co-mgo-la2o3",
+          "ni-mgo-ceo2-interface",
+          "ni-alumina-baseline"
+        ],
+        "lowest_cost_depends_on_template": true
+      },
+      {
+        "family": "ammonia-synthesis",
+        "candidates": [
+          {
+            "slug": "fused-iron-baseline",
+            "active_metal_wt_pct": {
+              "Fe": 68.6
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 2.2874,
+            "library_processing_per_lb": 1.1611,
+            "library_landed_cost_per_lb": 5.0709,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 5.4255,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 5.6222,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 5.999,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 5.6222,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 5.5074,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "ru-graphite-kaap",
+            "active_metal_wt_pct": {
+              "Ru": 8.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 2266.0255,
+            "library_processing_per_lb": 1.2808,
+            "library_landed_cost_per_lb": 3104.513,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 3104.4538,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 3104.6504,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 3105.0273,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 3104.6504,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 3104.5357,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "ru-cafh-lowtemp",
+            "active_metal_wt_pct": {
+              "Ru": 12.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 3668.4541,
+            "library_processing_per_lb": 0.802,
+            "library_landed_cost_per_lb": 5024.1642,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 5024.3604,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 5024.5571,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 5024.934,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 5024.5571,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 5024.4424,
+                "processing_per_lb": 1.7356
+              }
+            }
+          }
+        ],
+        "excluded": [],
+        "lowest_cost_same_template": "fused-iron-baseline",
+        "materials_gap_per_lb": 2263.7381,
+        "possible_lowest_cost": [
+          "fused-iron-baseline"
+        ],
+        "lowest_cost_depends_on_template": false
+      },
+      {
+        "family": "co2-methanation",
+        "candidates": [
+          {
+            "slug": "ni-ceo2-lowtemp",
+            "active_metal_wt_pct": {
+              "Ni": 10.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 1.5338,
+            "library_processing_per_lb": 1.4005,
+            "library_landed_cost_per_lb": 4.677,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 4.3939,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 4.5905,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 4.9674,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 4.5905,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 4.4758,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "ni-alumina-baseline",
+            "active_metal_wt_pct": {
+              "Ni": 20.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 1.8428,
+            "library_processing_per_lb": 1.4005,
+            "library_landed_cost_per_lb": 5.1,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 4.8169,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 5.0135,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 5.3904,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 5.0135,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 4.8988,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "ru-layered-titanate",
+            "active_metal_wt_pct": {
+              "Ru": 5.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 1344.1325,
+            "library_processing_per_lb": 1.8194,
+            "library_landed_cost_per_lb": 1843.7708,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 1842.3942,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 1842.5908,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 1842.9677,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 1842.5908,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 1842.4761,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "ru-mnox-photothermal",
+            "active_metal_wt_pct": {
+              "Ru": 5.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 1344.6143,
+            "library_processing_per_lb": 1.8194,
+            "library_landed_cost_per_lb": 1844.3703,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 1843.0537,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 1843.2503,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 1843.6272,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 1843.2503,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 1843.1356,
+                "processing_per_lb": 1.7356
+              }
+            }
+          }
+        ],
+        "excluded": [],
+        "lowest_cost_same_template": "ni-ceo2-lowtemp",
+        "materials_gap_per_lb": 0.30899999999999994,
+        "possible_lowest_cost": [
+          "ni-ceo2-lowtemp",
+          "ni-alumina-baseline"
+        ],
+        "lowest_cost_depends_on_template": true
+      },
+      {
+        "family": "co2-methanol",
+        "candidates": [
+          {
+            "slug": "cza-baseline",
+            "active_metal_wt_pct": {
+              "Cu": 45.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 3.534,
+            "library_processing_per_lb": 2.0588,
+            "library_landed_cost_per_lb": 8.4365,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 7.1322,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 7.3288,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 7.7057,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 7.3288,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 7.2141,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "cu-zrox-interface",
+            "active_metal_wt_pct": {
+              "Cu": 14.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 1.4533,
+            "library_processing_per_lb": 2.0588,
+            "library_landed_cost_per_lb": 5.848,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 4.2836,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 4.4803,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 4.8572,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 4.4803,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 4.3656,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "in2o3-zro2-lowtemp",
+            "active_metal_wt_pct": {
+              "In": 55.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 97.8581,
+            "library_processing_per_lb": 1.8194,
+            "library_landed_cost_per_lb": 137.5771,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 136.2605,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 136.4571,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 136.834,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 136.4571,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 136.3424,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "pd-in2o3",
+            "active_metal_wt_pct": {
+              "Pd": 0.75
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 324.3622,
+            "library_processing_per_lb": 2.0588,
+            "library_landed_cost_per_lb": 447.6462,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 446.3418,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 446.5384,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 446.9153,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 446.5384,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 446.4237,
+                "processing_per_lb": 1.7356
+              }
+            }
+          }
+        ],
+        "excluded": [],
+        "lowest_cost_same_template": "cu-zrox-interface",
+        "materials_gap_per_lb": 2.0806999999999998,
+        "possible_lowest_cost": [
+          "cu-zrox-interface"
+        ],
+        "lowest_cost_depends_on_template": false
+      },
+      {
+        "family": "co2-to-formate",
+        "candidates": [
+          {
+            "slug": "pdag-ndcarbon-co2fa",
+            "active_metal_wt_pct": {
+              "Pd": 5.0
+            },
+            "library_order_size_tons": 2,
+            "materials_per_lb": 1124.3777,
+            "library_processing_per_lb": 9.5758,
+            "library_landed_cost_per_lb": 1876.2114,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 1541.5526,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 1541.7493,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 1542.1262,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 1541.7493,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 1541.6346,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "ru-sa-ldh",
+            "active_metal_wt_pct": {
+              "Ru": 0.5
+            },
+            "library_order_size_tons": 2,
+            "materials_per_lb": 159.5717,
+            "library_processing_per_lb": 6.4836,
+            "library_landed_cost_per_lb": 275.1133,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 220.7457,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 220.9423,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 221.3192,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 220.9423,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 220.8276,
+                "processing_per_lb": 1.7356
+              }
+            }
+          }
+        ],
+        "excluded": [],
+        "lowest_cost_same_template": "ru-sa-ldh",
+        "materials_gap_per_lb": 964.806,
+        "possible_lowest_cost": [
+          "ru-sa-ldh"
+        ],
+        "lowest_cost_depends_on_template": false
+      },
+      {
+        "family": "co-prox",
+        "candidates": [
+          {
+            "slug": "cuo-ceo2",
+            "active_metal_wt_pct": {
+              "Cu": 5.6
+            },
+            "library_order_size_tons": 2,
+            "materials_per_lb": 1.1377,
+            "library_processing_per_lb": 5.9849,
+            "library_landed_cost_per_lb": 12.1789,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 3.8516,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 4.0482,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 4.4251,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 4.0482,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 3.9335,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "pt-fe-alumina",
+            "active_metal_wt_pct": {
+              "Pt": 0.5
+            },
+            "library_order_size_tons": 2,
+            "materials_per_lb": 150.8635,
+            "library_processing_per_lb": 6.5834,
+            "library_landed_cost_per_lb": 261.0772,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 208.8243,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 209.021,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 209.3978,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 209.021,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 208.9062,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "au-tio2-nanogold",
+            "active_metal_wt_pct": {
+              "Au": 2.0
+            },
+            "library_order_size_tons": 2,
+            "materials_per_lb": 1547.9942,
+            "library_processing_per_lb": 7.9798,
+            "library_landed_cost_per_lb": 2573.9863,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 2121.4782,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 2121.6748,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 2122.0517,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 2121.6748,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 2121.5601,
+                "processing_per_lb": 1.7356
+              }
+            }
+          }
+        ],
+        "excluded": [],
+        "lowest_cost_same_template": "cuo-ceo2",
+        "materials_gap_per_lb": 149.7258,
+        "possible_lowest_cost": [
+          "cuo-ceo2"
+        ],
+        "lowest_cost_depends_on_template": false
+      },
+      {
+        "family": "dry-reforming",
+        "candidates": [
+          {
+            "slug": "ni-co-almgo",
+            "active_metal_wt_pct": {
+              "Ni": 4.0,
+              "Co": 5.5
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 2.1386,
+            "library_processing_per_lb": 1.8194,
+            "library_landed_cost_per_lb": 5.9184,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 5.2218,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 5.4184,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 5.7953,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 5.4184,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 5.3037,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "ni-single-atom-ceria",
+            "active_metal_wt_pct": {
+              "Ni": 8.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 1.4186,
+            "library_processing_per_lb": 1.8194,
+            "library_landed_cost_per_lb": 5.4128,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 4.2362,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 4.4328,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 4.8097,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 4.4328,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 4.3181,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "ni-zeolite-stable",
+            "active_metal_wt_pct": {
+              "Ni": 12.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 1.6296,
+            "library_processing_per_lb": 1.6399,
+            "library_landed_cost_per_lb": 5.2959,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 4.525,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 4.7217,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 5.0986,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 4.7217,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 4.607,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "ir-ceria-premium",
+            "active_metal_wt_pct": {
+              "Ir": 0.6
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 756.3317,
+            "library_processing_per_lb": 1.4005,
+            "library_landed_cost_per_lb": 1038.3856,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 1037.7025,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 1037.8991,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 1038.276,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 1037.8991,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 1037.7844,
+                "processing_per_lb": 1.7356
+              }
+            }
+          }
+        ],
+        "excluded": [],
+        "lowest_cost_same_template": "ni-single-atom-ceria",
+        "materials_gap_per_lb": 0.21099999999999985,
+        "possible_lowest_cost": [
+          "ni-single-atom-ceria",
+          "ni-zeolite-stable"
+        ],
+        "lowest_cost_depends_on_template": true
+      },
+      {
+        "family": "ethylene-epoxidation",
+        "candidates": [
+          {
+            "slug": "agcs-industrial",
+            "active_metal_wt_pct": {
+              "Ag": 15.0
+            },
+            "library_order_size_tons": 50,
+            "materials_per_lb": 150.7632,
+            "library_processing_per_lb": 1.6949,
+            "library_landed_cost_per_lb": 200.085,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 208.687,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 208.8836,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 209.2605,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 208.8836,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 208.7689,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "ag-alumina-baseline",
+            "active_metal_wt_pct": {
+              "Ag": 15.0
+            },
+            "library_order_size_tons": 50,
+            "materials_per_lb": 150.5903,
+            "library_processing_per_lb": 1.6949,
+            "library_landed_cost_per_lb": 199.8188,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 208.4503,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 208.6469,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 209.0238,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 208.6469,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 208.5322,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "cu-ag-bimetallic",
+            "active_metal_wt_pct": {
+              "Ag": 14.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 148.3555,
+            "library_processing_per_lb": 2.1186,
+            "library_landed_cost_per_lb": 206.6572,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 205.3909,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 205.5875,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 205.9644,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 205.5875,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 205.4728,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "agcsre-modern",
+            "active_metal_wt_pct": {
+              "Ag": 15.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 153.8648,
+            "library_processing_per_lb": 2.1186,
+            "library_landed_cost_per_lb": 214.2794,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 212.9331,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 213.1297,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 213.5066,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 213.1297,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 213.015,
+                "processing_per_lb": 1.7356
+              }
+            }
+          }
+        ],
+        "excluded": [],
+        "lowest_cost_same_template": "cu-ag-bimetallic",
+        "materials_gap_per_lb": 2.234800000000007,
+        "possible_lowest_cost": [
+          "cu-ag-bimetallic"
+        ],
+        "lowest_cost_depends_on_template": false
+      },
+      {
+        "family": "fischer-tropsch-synthesis",
+        "candidates": [
+          {
+            "slug": "fe-silica-lower-olefin",
+            "active_metal_wt_pct": {
+              "Fe": 30.0
+            },
+            "library_order_size_tons": 50,
+            "materials_per_lb": 1.505,
+            "library_processing_per_lb": 1.8864,
+            "library_landed_cost_per_lb": 5.1762,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 4.3544,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 4.5511,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 4.9279,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 4.5511,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 4.4364,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "fe-cu-k-precipitated",
+            "active_metal_wt_pct": {
+              "Fe": 88.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 2.4223,
+            "library_processing_per_lb": 2.0588,
+            "library_landed_cost_per_lb": 6.6345,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 5.6101,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 5.8068,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 6.1837,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 5.8068,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 5.6921,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "co-alumina-fts",
+            "active_metal_wt_pct": {
+              "Co": 20.0
+            },
+            "library_order_size_tons": 50,
+            "materials_per_lb": 8.8812,
+            "library_processing_per_lb": 1.6949,
+            "library_landed_cost_per_lb": 14.6742,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 14.4524,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 14.649,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 15.0259,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 14.649,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 14.5343,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "co-cnt-structured",
+            "active_metal_wt_pct": {
+              "Co": 15.0
+            },
+            "library_order_size_tons": 5,
+            "materials_per_lb": 22.8803,
+            "library_processing_per_lb": 3.2797,
+            "library_landed_cost_per_lb": 40.4202,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 33.6169,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 33.8135,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 34.1904,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 33.8135,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 33.6988,
+                "processing_per_lb": 1.7356
+              }
+            }
+          }
+        ],
+        "excluded": [],
+        "lowest_cost_same_template": "fe-silica-lower-olefin",
+        "materials_gap_per_lb": 0.9173,
+        "possible_lowest_cost": [
+          "fe-silica-lower-olefin"
+        ],
+        "lowest_cost_depends_on_template": false
+      },
+      {
+        "family": "formic-acid-dehydrogenation",
+        "candidates": [
+          {
+            "slug": "co-nc-nonnoble",
+            "active_metal_wt_pct": {
+              "Co": 3.0
+            },
+            "library_order_size_tons": 5,
+            "materials_per_lb": 2.5973,
+            "library_processing_per_lb": 3.6388,
+            "library_landed_cost_per_lb": 10.2466,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 5.8497,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 6.0463,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 6.4232,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 6.0463,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 5.9316,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "ptmo-gasphase-premium",
+            "active_metal_wt_pct": {
+              "Pt": 3.0
+            },
+            "library_order_size_tons": 5,
+            "materials_per_lb": 827.2688,
+            "library_processing_per_lb": 3.6388,
+            "library_landed_cost_per_lb": 1254.3775,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 1134.8144,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 1135.011,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 1135.3879,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 1135.011,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 1134.8963,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "pd-carbon-baseline",
+            "active_metal_wt_pct": {
+              "Pd": 5.0
+            },
+            "library_order_size_tons": 5,
+            "materials_per_lb": 1074.3926,
+            "library_processing_per_lb": 2.8009,
+            "library_landed_cost_per_lb": 1625.44,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 1473.1237,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 1473.3203,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 1473.6972,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 1473.3203,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 1473.2056,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "aupd-mil101",
+            "active_metal_wt_pct": {
+              "Au": 2.0,
+              "Pd": 2.0
+            },
+            "library_order_size_tons": 2,
+            "materials_per_lb": 2056.9193,
+            "library_processing_per_lb": 6.4836,
+            "library_landed_cost_per_lb": 3413.145,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 2818.1901,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 2818.3867,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 2818.7636,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 2818.3867,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 2818.272,
+                "processing_per_lb": 1.7356
+              }
+            }
+          }
+        ],
+        "excluded": [],
+        "lowest_cost_same_template": "co-nc-nonnoble",
+        "materials_gap_per_lb": 824.6715,
+        "possible_lowest_cost": [
+          "co-nc-nonnoble"
+        ],
+        "lowest_cost_depends_on_template": false
+      },
+      {
+        "family": "hydrodeoxygenation",
+        "candidates": [
+          {
+            "slug": "comos-hdo",
+            "active_metal_wt_pct": {
+              "Mo": 12.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 5.6055,
+            "library_processing_per_lb": 2.1186,
+            "library_landed_cost_per_lb": 11.2743,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 9.968,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 10.1646,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 10.5415,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 10.1646,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 10.0499,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "nimo-carbon-hdo",
+            "active_metal_wt_pct": {
+              "Mo": 10.0
+            },
+            "library_order_size_tons": 5,
+            "materials_per_lb": 5.4162,
+            "library_processing_per_lb": 3.2797,
+            "library_landed_cost_per_lb": 13.7371,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 9.7088,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 9.9055,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 10.2823,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 9.9055,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 9.7908,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "pt-silica-hdo",
+            "active_metal_wt_pct": {
+              "Pt": 1.0
+            },
+            "library_order_size_tons": 5,
+            "materials_per_lb": 275.9951,
+            "library_processing_per_lb": 4.2373,
+            "library_landed_cost_per_lb": 423.4881,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 380.1278,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 380.3244,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 380.7013,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 380.3244,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 380.2097,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "ru-carbon-hdo",
+            "active_metal_wt_pct": {
+              "Ru": 5.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 1467.2227,
+            "library_processing_per_lb": 1.6399,
+            "library_landed_cost_per_lb": 2011.4738,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 2010.903,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 2011.0996,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 2011.4765,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 2011.0996,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 2010.9849,
+                "processing_per_lb": 1.7356
+              }
+            }
+          }
+        ],
+        "excluded": [],
+        "lowest_cost_same_template": "nimo-carbon-hdo",
+        "materials_gap_per_lb": 0.18930000000000025,
+        "possible_lowest_cost": [
+          "comos-hdo",
+          "nimo-carbon-hdo"
+        ],
+        "lowest_cost_depends_on_template": true
+      },
+      {
+        "family": "methane-pyrolysis",
+        "candidates": [
+          {
+            "slug": "fe-alumina-pyrolysis",
+            "active_metal_wt_pct": {
+              "Fe": 62.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 1.6086,
+            "library_processing_per_lb": 1.4005,
+            "library_landed_cost_per_lb": 4.5394,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 4.4963,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 4.6929,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 5.0698,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 4.6929,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 4.5782,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "ni-sio2-highload",
+            "active_metal_wt_pct": {
+              "Ni": 75.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 6.5166,
+            "library_processing_per_lb": 1.4005,
+            "library_landed_cost_per_lb": 11.3383,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 11.2152,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 11.4118,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 11.7887,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 11.4118,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 11.2971,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "molten-ni-bi",
+            "active_metal_wt_pct": {
+              "Ni": 27.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 16.6514,
+            "library_processing_per_lb": 0.383,
+            "library_landed_cost_per_lb": 23.47,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 25.0897,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 25.2863,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 25.6632,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 25.2863,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 25.1716,
+                "processing_per_lb": 1.7356
+              }
+            }
+          }
+        ],
+        "excluded": [],
+        "lowest_cost_same_template": "fe-alumina-pyrolysis",
+        "materials_gap_per_lb": 4.908,
+        "possible_lowest_cost": [
+          "fe-alumina-pyrolysis"
+        ],
+        "lowest_cost_depends_on_template": false
+      },
+      {
+        "family": "nh3-scr",
+        "candidates": [
+          {
+            "slug": "v2o5-wo3-tio2",
+            "active_metal_wt_pct": {
+              "V2O5": 2.5
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 2.3219,
+            "library_processing_per_lb": 1.7356,
+            "library_landed_cost_per_lb": 6.1546,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 5.4727,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 5.6693,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 6.0462,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 5.6693,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 5.5546,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "fe-zsm-5",
+            "active_metal_wt_pct": {
+              "Fe": 2.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 1.8581,
+            "library_processing_per_lb": 1.4005,
+            "library_landed_cost_per_lb": 5.1609,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 4.8378,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 5.0344,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 5.4113,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 5.0344,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 4.9197,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "cu-ssz-13",
+            "active_metal_wt_pct": {
+              "Cu": 2.5
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 11.8788,
+            "library_processing_per_lb": 1.8792,
+            "library_landed_cost_per_lb": 19.7345,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 18.556,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 18.7526,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 19.1295,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 18.7526,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 18.6379,
+                "processing_per_lb": 1.7356
+              }
+            }
+          }
+        ],
+        "excluded": [],
+        "lowest_cost_same_template": "fe-zsm-5",
+        "materials_gap_per_lb": 0.46379999999999977,
+        "possible_lowest_cost": [
+          "fe-zsm-5"
+        ],
+        "lowest_cost_depends_on_template": false
+      },
+      {
+        "family": "olefin-metathesis",
+        "candidates": [
+          {
+            "slug": "wo3-silica-oct",
+            "active_metal_wt_pct": {
+              "W": 7.0
+            },
+            "library_order_size_tons": 50,
+            "materials_per_lb": 2.5976,
+            "library_processing_per_lb": 1.6949,
+            "library_landed_cost_per_lb": 6.2749,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 5.8502,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 6.0468,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 6.4237,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 6.0468,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 5.9321,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "mo-silica-alumina",
+            "active_metal_wt_pct": {
+              "Mo": 8.0
+            },
+            "library_order_size_tons": 5,
+            "materials_per_lb": 3.7727,
+            "library_processing_per_lb": 3.2797,
+            "library_landed_cost_per_lb": 11.3379,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 7.4588,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 7.6555,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 8.0324,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 7.6555,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 7.5408,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "w-h-alumina",
+            "active_metal_wt_pct": {
+              "W": 4.0
+            },
+            "library_order_size_tons": 2,
+            "materials_per_lb": 1.4595,
+            "library_processing_per_lb": 3.4912,
+            "library_landed_cost_per_lb": 9.3871,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 4.2921,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 4.4887,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 4.8656,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 4.4887,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 4.374,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "re2o7-alumina-mild",
+            "active_metal_wt_pct": {
+              "Re": 8.0
+            },
+            "library_order_size_tons": 1,
+            "materials_per_lb": 49.9455,
+            "library_processing_per_lb": 12.0894,
+            "library_landed_cost_per_lb": 113.3146,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 70.6689,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 70.8655,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 71.2424,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 70.8655,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 70.7508,
+                "processing_per_lb": 1.7356
+              }
+            }
+          }
+        ],
+        "excluded": [],
+        "lowest_cost_same_template": "w-h-alumina",
+        "materials_gap_per_lb": 1.1381,
+        "possible_lowest_cost": [
+          "w-h-alumina"
+        ],
+        "lowest_cost_depends_on_template": false
+      },
+      {
+        "family": "propane-dehydrogenation",
+        "candidates": [
+          {
+            "slug": "crox-alumina-catofin",
+            "active_metal_wt_pct": {
+              "Cr2O3": 19.0
+            },
+            "library_order_size_tons": 50,
+            "materials_per_lb": 0.6919,
+            "library_processing_per_lb": 1.58,
+            "library_landed_cost_per_lb": 3.5718,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 3.2413,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 3.4379,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 3.8148,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 3.4379,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 3.3232,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "ptsn-alumina-pdh",
+            "active_metal_wt_pct": {
+              "Pt": 0.5
+            },
+            "library_order_size_tons": 50,
+            "materials_per_lb": 137.8937,
+            "library_processing_per_lb": 1.6949,
+            "library_landed_cost_per_lb": 183.4108,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 191.0688,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 191.2654,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 191.6423,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 191.2654,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 191.1507,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "ptzn-intermetallic-pdh",
+            "active_metal_wt_pct": {
+              "Pt": 0.5
+            },
+            "library_order_size_tons": 10,
+            "materials_per_lb": 144.9128,
+            "library_processing_per_lb": 2.1865,
+            "library_landed_cost_per_lb": 211.252,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 200.6778,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 200.8744,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 201.2513,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 200.8744,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 200.7597,
+                "processing_per_lb": 1.7356
+              }
+            }
+          }
+        ],
+        "excluded": [],
+        "lowest_cost_same_template": "crox-alumina-catofin",
+        "materials_gap_per_lb": 137.2018,
+        "possible_lowest_cost": [
+          "crox-alumina-catofin"
+        ],
+        "lowest_cost_depends_on_template": false
+      },
+      {
+        "family": "rwgs",
+        "candidates": [
+          {
+            "slug": "cu-ceria-baseline",
+            "active_metal_wt_pct": {
+              "Cu": 15.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 1.7124,
+            "library_processing_per_lb": 1.8194,
+            "library_landed_cost_per_lb": 5.6949,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 4.6383,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 4.8349,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 5.2118,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 4.8349,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 4.7202,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "mo2n-hightemp",
+            "active_metal_wt_pct": {
+              "Mo": 65.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 23.6876,
+            "library_processing_per_lb": 1.9391,
+            "library_landed_cost_per_lb": 36.1626,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 34.7221,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 34.9187,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 35.2956,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 34.9187,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 34.804,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "cs-fe-cu-alumina",
+            "active_metal_wt_pct": {
+              "Fe": 15.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 4.2541,
+            "library_processing_per_lb": 1.4005,
+            "library_landed_cost_per_lb": 8.1911,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 8.1179,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 8.3146,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 8.6915,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 8.3146,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 8.1999,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "pt-tio2-premium",
+            "active_metal_wt_pct": {
+              "Pt": 2.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 567.2459,
+            "library_processing_per_lb": 1.4005,
+            "library_landed_cost_per_lb": 779.4095,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 778.8464,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 779.043,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 779.4199,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 779.043,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 778.9283,
+                "processing_per_lb": 1.7356
+              }
+            }
+          }
+        ],
+        "excluded": [],
+        "lowest_cost_same_template": "cu-ceria-baseline",
+        "materials_gap_per_lb": 2.5417000000000005,
+        "possible_lowest_cost": [
+          "cu-ceria-baseline"
+        ],
+        "lowest_cost_depends_on_template": false
+      },
+      {
+        "family": "selective-acetylene-hydrogenation",
+        "candidates": [
+          {
+            "slug": "nizn-intermetallic",
+            "active_metal_wt_pct": {
+              "Ni": 15.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 1.552,
+            "library_processing_per_lb": 2.1186,
+            "library_landed_cost_per_lb": 5.6851,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 4.4188,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 4.6154,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 4.9923,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 4.6154,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 4.5007,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "pd-alumina-baseline",
+            "active_metal_wt_pct": {
+              "Pd": 0.04
+            },
+            "library_order_size_tons": 50,
+            "materials_per_lb": 8.835,
+            "library_processing_per_lb": 1.6949,
+            "library_landed_cost_per_lb": 14.4338,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 14.3891,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 14.5857,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 14.9626,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 14.5857,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 14.471,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "pdag-bimetallic",
+            "active_metal_wt_pct": {
+              "Pd": 0.04
+            },
+            "library_order_size_tons": 50,
+            "materials_per_lb": 10.8299,
+            "library_processing_per_lb": 1.6949,
+            "library_landed_cost_per_lb": 17.1232,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 17.1201,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 17.3167,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 17.6936,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 17.3167,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 17.202,
+                "processing_per_lb": 1.7356
+              }
+            }
+          }
+        ],
+        "excluded": [
+          {
+            "slug": "pdcu-saa",
+            "roles": [
+              "host_metal"
+            ]
+          }
+        ],
+        "lowest_cost_same_template": "nizn-intermetallic",
+        "materials_gap_per_lb": 7.283000000000001,
+        "possible_lowest_cost": [
+          "nizn-intermetallic"
+        ],
+        "lowest_cost_depends_on_template": false
+      },
+      {
+        "family": "steam-methane-reforming",
+        "candidates": [
+          {
+            "slug": "ni-calcium-aluminate",
+            "active_metal_wt_pct": {
+              "Ni": 14.5
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 1.5107,
+            "library_processing_per_lb": 2.0947,
+            "library_landed_cost_per_lb": 5.4358,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 4.3623,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 4.5589,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 4.9358,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 4.5589,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 4.4442,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "sn-ni-coking-resistant",
+            "active_metal_wt_pct": {
+              "Ni": 15.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 1.6049,
+            "library_processing_per_lb": 1.4005,
+            "library_landed_cost_per_lb": 4.5942,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 4.4911,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 4.6878,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 5.0647,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 4.6878,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 4.5731,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "rh-alumina-compact",
+            "active_metal_wt_pct": {
+              "Rh": 1.0
+            },
+            "library_order_size_tons": 2,
+            "materials_per_lb": 1458.3105,
+            "library_processing_per_lb": 6.5834,
+            "library_landed_cost_per_lb": 2423.1628,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 1998.7023,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 1998.899,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 1999.2758,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 1998.899,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 1998.7843,
+                "processing_per_lb": 1.7356
+              }
+            }
+          }
+        ],
+        "excluded": [],
+        "lowest_cost_same_template": "ni-calcium-aluminate",
+        "materials_gap_per_lb": 0.09420000000000006,
+        "possible_lowest_cost": [
+          "ni-calcium-aluminate",
+          "sn-ni-coking-resistant"
+        ],
+        "lowest_cost_depends_on_template": true
+      },
+      {
+        "family": "syngas-methanol",
+        "candidates": [
+          {
+            "slug": "cza-industrial",
+            "active_metal_wt_pct": {
+              "Cu": 48.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 4.266,
+            "library_processing_per_lb": 2.1785,
+            "library_landed_cost_per_lb": 9.3724,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 8.1342,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 8.3308,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 8.7077,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 8.3308,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 8.2161,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "ga-promoted-cza",
+            "active_metal_wt_pct": {
+              "Cu": 47.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 9.5329,
+            "library_processing_per_lb": 2.1785,
+            "library_landed_cost_per_lb": 16.6327,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 15.3445,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 15.5411,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 15.918,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 15.5411,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 15.4264,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "pd-zno-intermetallic",
+            "active_metal_wt_pct": {
+              "Pd": 2.5
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 597.2069,
+            "library_processing_per_lb": 0.8618,
+            "library_landed_cost_per_lb": 819.3984,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 819.8627,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 820.0593,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 820.4362,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 820.0593,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 819.9446,
+                "processing_per_lb": 1.7356
+              }
+            }
+          }
+        ],
+        "excluded": [],
+        "lowest_cost_same_template": "cza-industrial",
+        "materials_gap_per_lb": 5.2669,
+        "possible_lowest_cost": [
+          "cza-industrial"
+        ],
+        "lowest_cost_depends_on_template": false
+      },
+      {
+        "family": "water-gas-shift",
+        "candidates": [
+          {
+            "slug": "cu-zno-baseline",
+            "active_metal_wt_pct": {
+              "Cu": 40.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 3.1956,
+            "library_processing_per_lb": 2.0588,
+            "library_landed_cost_per_lb": 7.9532,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 6.6689,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 6.8655,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 7.2424,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 6.8655,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 6.7508,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "co-ceria-interface",
+            "active_metal_wt_pct": {
+              "Co": 18.0
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 5.6523,
+            "library_processing_per_lb": 1.8194,
+            "library_landed_cost_per_lb": 11.1687,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 10.032,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 10.2287,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 10.6056,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 10.2287,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 10.114,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "fe-cr-hts",
+            "active_metal_wt_pct": {
+              "Fe": 61.6
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 2.5282,
+            "library_processing_per_lb": 2.0349,
+            "library_landed_cost_per_lb": 6.7968,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 5.7552,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 5.9519,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 6.3287,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 5.9519,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 5.8372,
+                "processing_per_lb": 1.7356
+              }
+            }
+          },
+          {
+            "slug": "pt-ceria-premium",
+            "active_metal_wt_pct": {
+              "Pt": 2.5
+            },
+            "library_order_size_tons": 20,
+            "materials_per_lb": 707.9296,
+            "library_processing_per_lb": 1.4005,
+            "library_landed_cost_per_lb": 972.0837,
+            "by_template": {
+              "wet_impregnation_metal_oxide": {
+                "selling_price_per_lb": 971.4406,
+                "processing_per_lb": 1.6758
+              },
+              "excess_solution_impregnation_metal_oxide": {
+                "selling_price_per_lb": 971.6372,
+                "processing_per_lb": 1.8194
+              },
+              "deposition_precipitation_metal_oxide": {
+                "selling_price_per_lb": 972.0141,
+                "processing_per_lb": 2.0947
+              },
+              "coprecipitation_metal_oxide": {
+                "selling_price_per_lb": 971.6372,
+                "processing_per_lb": 1.8194
+              },
+              "sol_gel_metal_oxide": {
+                "selling_price_per_lb": 971.5225,
+                "processing_per_lb": 1.7356
+              }
+            }
+          }
+        ],
+        "excluded": [],
+        "lowest_cost_same_template": "fe-cr-hts",
+        "materials_gap_per_lb": 0.6674000000000002,
+        "possible_lowest_cost": [
+          "fe-cr-hts"
+        ],
+        "lowest_cost_depends_on_template": false
+      }
+    ],
+    "summary": {
+      "families": 20,
+      "candidates": 70,
+      "lowest_cost_depends_on_template": 5,
+      "families_depending_on_template": [
+        "ammonia-cracking",
+        "co2-methanation",
+        "dry-reforming",
+        "hydrodeoxygenation",
+        "steam-methane-reforming"
+      ]
+    },
+    "ammonia_cracking_pair": {
+      "co": "co-mgo-la2o3",
+      "ni": "ni-alumina-baseline",
+      "materials_gap_per_lb": 0.3891,
+      "co_minus_ni_selling_price_per_lb": {
+        "wet_impregnation_metal_oxide": {
+          "wet_impregnation_metal_oxide": 0.5326999999999993,
+          "excess_solution_impregnation_metal_oxide": 0.33610000000000007,
+          "deposition_precipitation_metal_oxide": -0.04079999999999995,
+          "coprecipitation_metal_oxide": 0.33610000000000007,
+          "sol_gel_metal_oxide": 0.4508000000000001
+        },
+        "excess_solution_impregnation_metal_oxide": {
+          "wet_impregnation_metal_oxide": 0.7292999999999994,
+          "excess_solution_impregnation_metal_oxide": 0.5327000000000002,
+          "deposition_precipitation_metal_oxide": 0.15580000000000016,
+          "coprecipitation_metal_oxide": 0.5327000000000002,
+          "sol_gel_metal_oxide": 0.6474000000000002
+        },
+        "deposition_precipitation_metal_oxide": {
+          "wet_impregnation_metal_oxide": 1.1061999999999994,
+          "excess_solution_impregnation_metal_oxide": 0.9096000000000002,
+          "deposition_precipitation_metal_oxide": 0.5327000000000002,
+          "coprecipitation_metal_oxide": 0.9096000000000002,
+          "sol_gel_metal_oxide": 1.0243000000000002
+        },
+        "coprecipitation_metal_oxide": {
+          "wet_impregnation_metal_oxide": 0.7292999999999994,
+          "excess_solution_impregnation_metal_oxide": 0.5327000000000002,
+          "deposition_precipitation_metal_oxide": 0.15580000000000016,
+          "coprecipitation_metal_oxide": 0.5327000000000002,
+          "sol_gel_metal_oxide": 0.6474000000000002
+        },
+        "sol_gel_metal_oxide": {
+          "wet_impregnation_metal_oxide": 0.6145999999999994,
+          "excess_solution_impregnation_metal_oxide": 0.41800000000000015,
+          "deposition_precipitation_metal_oxide": 0.041100000000000136,
+          "coprecipitation_metal_oxide": 0.41800000000000015,
+          "sol_gel_metal_oxide": 0.5327000000000002
+        }
+      },
+      "assignments_with_co_cheaper": 1
+    }
+  }
+}

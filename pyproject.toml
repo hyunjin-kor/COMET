@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "comet"
-version = "1.3.24"
-description = "COMET: Catalyst Overall Manufacturing Estimation Tool — real-time metal price based catalyst manufacturing cost estimation"
+version = "1.4.0"
+description = "COMET: independently developed software for catalyst manufacturing cost, environmental screening and decision analysis."
 readme = "README.md"
 license = "PolyForm-Noncommercial-1.0.0"
 license-files = ["LICENSE"]

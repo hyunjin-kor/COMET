@@ -1,0 +1,146 @@
+{
+  "date": "2026-09-07",
+  "environment": "Chrome 152.0.7977.76, actual frontend/dist and FastAPI at root-owned offline port 8765",
+  "synthetic_data_only": true,
+  "request": {
+    "calculation_input": {
+      "catalyst_domain": "thermal",
+      "template_id": "hydrothermal_oxide_nanostructure",
+      "production_rate_ton_per_day": 5,
+      "production_rate_note": "Synthetic throughput fixture - 5 short ton/day",
+      "consumables": [
+        {
+          "name": "UI synthetic wash",
+          "kg_per_kg_catalyst": 3,
+          "price_per_kg": 0.5,
+          "source_note": "Synthetic net-purchase fixture"
+        }
+      ],
+      "application_family": "fuel_cell",
+      "order_size_tons": 20,
+      "steps": [
+        "mixer_slurry",
+        "crystallizer",
+        "filter_rotary_vacuum",
+        "dryer_rotary_100_300C",
+        "kiln_continuous_indirect",
+        "mill"
+      ],
+      "include_spent_value": false,
+      "reactor_type": "fixed",
+      "catalyst_bulk_density": 50,
+      "components": [
+        {
+          "role": "active_metal",
+          "name": "Ni",
+          "wt_pct": 20,
+          "price_per_lb": 7.7362,
+          "recipe_consumption": {
+            "precursor_name": "UI synthetic Ni precursor",
+            "retained_component_fraction": 0.25,
+            "purity_fraction": 0.8,
+            "yield_fraction": 0.5,
+            "price_per_kg": 5,
+            "source_note": "Synthetic UI arithmetic fixture; not an observed industrial recipe"
+          },
+          "purchase_evidence": {
+            "supplier": "UI synthetic supplier",
+            "quote_date": "2026-05-07",
+            "quantity": 10,
+            "quantity_unit": "kg",
+            "grade": "Synthetic test grade",
+            "cost_boundary": "Synthetic retained-metal quote, excluding transport",
+            "reference": "Synthetic UI fixture - no actual purchase"
+          }
+        },
+        {
+          "role": "support",
+          "name": "Al2O3",
+          "material_key": "lit:comtrade-calcined-alumina-2024",
+          "wt_pct": 80
+        }
+      ],
+      "price_basis": "reference"
+    },
+    "n_simulations": 1000,
+    "uncertainties": {
+      "active_component_price": [
+        0.7,
+        1.3
+      ],
+      "promoter_price": [
+        0.8,
+        1.2
+      ],
+      "support_price": [
+        0.8,
+        1.2
+      ],
+      "electrode_adjunct_price": [
+        0.85,
+        1.15
+      ],
+      "order_size_tons": [
+        0.8,
+        1.2
+      ]
+    }
+  },
+  "result": {
+    "n_simulations": 1000,
+    "n_successful": 1000,
+    "mean": 11.9757,
+    "median": 11.9616,
+    "std": 1.0926,
+    "min": 9.8525,
+    "max": 14.1973,
+    "p5": 10.2555,
+    "p25": 11.0259,
+    "p75": 12.9465,
+    "p95": 13.6575,
+    "unit": "$/lb",
+    "baseline_price_per_lb": 11.9234,
+    "baseline_price_per_kg": 26.2866,
+    "composition": "20.0% Ni/Al2O3",
+    "catalyst_domain": "thermal",
+    "application_family": "fuel_cell",
+    "uncertainties_applied": {
+      "active_component_price": [
+        0.7,
+        1.3
+      ],
+      "promoter_price": [
+        0.8,
+        1.2
+      ],
+      "support_price": [
+        0.8,
+        1.2
+      ],
+      "electrode_adjunct_price": [
+        0.85,
+        1.15
+      ],
+      "order_size_tons": [
+        0.8,
+        1.2
+      ]
+    },
+    "fixed_recipe_assumptions": "Precursor content, purity, retention yield, production rate and consumable quantities/prices are fixed; precursor purchase prices follow their component role."
+  },
+  "calculate_baseline": {
+    "estimated_price_per_lb": 11.9234,
+    "estimated_price_per_kg": 26.2866,
+    "net_cost_per_lb": 11.9234,
+    "net_cost_per_kg": 26.2866,
+    "materials_pct": 45.4,
+    "processing_pct": 27.6,
+    "gwp_kg_co2eq_per_kg_catalyst": 8.1095,
+    "ced_mj_per_kg_catalyst": 132.5322,
+    "lca_coverage_pct": 100
+  },
+  "fixed_recipe_assumptions_visible": true,
+  "csv_fixed_assumptions_verified": true,
+  "runtime_errors": [],
+  "screenshot": "docs/audit/screens/practical-range-2026-09-07.png"
+}

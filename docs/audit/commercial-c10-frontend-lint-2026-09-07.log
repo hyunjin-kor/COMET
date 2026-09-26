@@ -1,0 +1,9 @@
+
+> frontend@1.4.0 lint
+> eslint .
+
+
+C:\Users\user\Desktop\COMET-autonomous-2026-09-06\frontend\src\pages\Account.tsx
+  19:6  warning  React Hook useEffect has a missing dependency: 'session.account'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+✖ 1 problem (0 errors, 1 warning)

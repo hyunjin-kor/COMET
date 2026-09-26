@@ -7,6 +7,8 @@ and materials cost.
 
 from __future__ import annotations
 
+from math import isfinite
+
 from backend.core.constants import (
     CLEANING_TIME,
     DEFAULT_GA_OVERHEAD_PCT,
@@ -142,6 +144,11 @@ def calculate_step_method(
     Raises:
         ValueError: If a step is unavailable at the determined scale.
     """
+    if not isfinite(order_size_tons) or order_size_tons <= 0:
+        raise ValueError("Production quantity must be finite and positive")
+    margin_frac = selling_margin_pct(order_size_tons)
+    if margin_frac >= 1:
+        raise ValueError("Production quantity is outside the selling-margin correlation's valid range (margin >= 100%)")
     scale = determine_scale(order_size_tons)
     campaign_days = calculate_campaign_length(order_size_tons, scale, production_rate_ton_per_day)
 
@@ -175,7 +182,6 @@ def calculate_step_method(
     sard = (subtotal + ga) * sard_pct
     pre_margin = subtotal + ga + sard
 
-    margin_frac = selling_margin_pct(order_size_tons)
     margin = pre_margin * margin_frac / (1 - margin_frac)
 
     estimated_price = pre_margin + margin

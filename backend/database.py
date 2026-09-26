@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 
+from fastapi import Request
 from sqlalchemy import inspect
 from sqlmodel import Session, SQLModel, create_engine, select
 
@@ -67,7 +68,9 @@ def _ensure_sqlite_schema_compatibility() -> None:
 def create_db_and_tables() -> None:
     """Create all tables defined by SQLModel metadata and patch legacy SQLite files."""
 
-    SQLModel.metadata.create_all(engine)
+    SQLModel.metadata.create_all(engine, tables=[
+        table for table in SQLModel.metadata.sorted_tables if not table.name.startswith("hosted_")
+    ])
     _ensure_sqlite_schema_compatibility()
 
 
@@ -228,8 +231,14 @@ def ensure_material_library_seeded(session: Session) -> None:
         sync_material_library(session, force=True)
 
 
-def get_session():
+def get_session(request: Request):
     """Yield a database session for dependency injection."""
 
-    with Session(engine) as session:
-        yield session
+    if settings.hosted_mode:
+        from backend.services.hosted_access import private_session
+
+        with private_session(request) as session:
+            yield session
+    else:
+        with Session(engine) as session:
+            yield session

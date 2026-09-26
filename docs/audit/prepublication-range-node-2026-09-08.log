@@ -1,0 +1,17 @@
+✔ range preserves precursor consumption, purchase evidence, throughput, consumables and template identity (2.397ms)
+✔ range rejects incomplete recipes, zero retention, missing production evidence and incomplete wash inputs (0.2966ms)
+✔ old thermal drafts retain nominal throughput, balanced support and legacy recovery defaults (0.1018ms)
+✔ split support retains each fraction and each optional recipe instead of auto-balancing one row (0.117ms)
+✔ electrode range preserves its manufacturing scenario and material stack without thermal additions (0.3404ms)
+✔ the real range handler passes the currently selected reference price basis with the full draft input (2.8297ms)
+✔ electrode area prices never receive the kg/lb conversion used by thermal ranges (1.3008ms)
+✔ range CSV keeps area baseline, metric, seed and failed-run disclosure (2.4657ms)
+✔ CSV treats formula-like user labels as quoted text without changing numeric values (0.9547ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 39.6518

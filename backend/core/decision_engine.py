@@ -10,6 +10,7 @@ from sqlmodel import Session, select
 
 from backend.core.constants import LB_PER_KG, TROY_OZ_PER_LB
 from backend.core.cost_engine import estimate_catalyst_cost
+from backend.core.manufacturing_library import candidate_manufacturing_evidence, reviewed_citation
 from backend.core.material_pricing import resolve_electrode_materials
 from backend.core.price_evidence import build_fixed_evidence, describe_price_evidence
 from backend.core.price_fetcher import get_reference_prices
@@ -105,8 +106,13 @@ def _latest_price_map(session: Session, basis: str = "live") -> dict[str, dict[s
 def _resolve_component_pricing(
     component: dict[str, Any],
     latest_prices: dict[str, dict[str, Any]],
+    basis: str = "live",
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     pricing = component["pricing"]
+    reference = latest_prices.get(pricing.get("reference_series")) if basis == "reference" else None
+    use_reference = reference is not None and reference.get("unit") in {"$/kg", "$/lb"}
+    if use_reference:
+        pricing = {**pricing, "type": "market_feed", "symbol": pricing["reference_series"]}
 
     if pricing["type"] == "market_feed":
         symbol = pricing["symbol"]
@@ -127,8 +133,12 @@ def _resolve_component_pricing(
             "source_type": "live" if evidence["tier"] != "indexed_reference" else "indexed",
             "source": latest["source"],
             "unit": latest["unit"],
-            "price_basis": "market_feed",
-            "pricing_note": pricing["note"],
+            "price_basis": "reference_series" if use_reference else "market_feed",
+            "pricing_note": (
+                f"Reference override: {pricing['reference_series']}, all-grade UN Comtrade import unit value; "
+                "not a catalyst-grade quotation. Fixed-price fallback note: "
+                if use_reference else ""
+            ) + pricing["note"],
             "fetched_at": latest["fetched_at"],
             "evidence": evidence,
         }
@@ -235,6 +245,13 @@ def _economic_scores(candidates: list[dict[str, Any]]) -> None:
     low = min(costs)
     spread = high - low
     for item in candidates:
+        if not use_basis:
+            # Some electrode candidates lack assembly inputs. The existing
+            # family comparison then uses powder cost for every candidate;
+            # display and tie-break that same basis instead of mixing units.
+            item["summary"]["economics_basis_value"] = item["summary"]["landed_cost_per_lb"]
+            item["summary"]["economics_basis_unit"] = "$/lb"
+            item["summary"]["economics_basis_label"] = "Catalyst powder screening"
         price = (
             float(item["summary"]["economics_basis_value"])
             if use_basis
@@ -255,6 +272,25 @@ def _apply_total_scores(candidates: list[dict[str, Any]], weights: dict[str, flo
             + item["scores"]["performance"] * weights["performance"],
             1,
         )
+
+
+def rank_candidates(
+    candidates: list[dict[str, Any]], weights: dict[str, float] | None = None,
+) -> list[dict[str, Any]]:
+    """Order by displayed score, then the priced functional unit and stable ID.
+
+    Supplying weights scores without mutating the candidates; paper sweeps use
+    the same rounding and tie policy as the application.
+    """
+    def key(item: dict[str, Any]) -> tuple[float, float, str]:
+        score = round(sum(item["scores"][dim] * weights[dim]
+                          for dim in ("economics", "evidence", "route", "performance")), 1) if weights is not None else item["scores"]["total"]
+        cost = item["summary"].get("economics_basis_value")
+        if cost is None:
+            cost = item["summary"]["landed_cost_per_lb"]
+        return -float(score), float(cost), item["slug"]
+
+    return sorted(candidates, key=key)
 
 
 def evaluate_benchmark_family(
@@ -286,7 +322,7 @@ def evaluate_benchmark_family(
 
     route_map = {item["id"]: item for item in catalog["route_templates"]}
     quote_map = {item["id"]: item for item in catalog["catalog_quotes"]}
-    citation_map = {item["id"]: item for item in catalog["citations"]}
+    citation_map = {item["id"]: reviewed_citation(item) for item in catalog["citations"]}
     latest_prices = prices if prices is not None else _latest_price_map(session, basis)
     family_domain = catalog.get("catalyst_domain", "thermal")
     family_application = catalog.get("application_family", "general")
@@ -302,7 +338,7 @@ def evaluate_benchmark_family(
         component_inputs: list[dict[str, Any]] = []
         component_meta: list[dict[str, Any]] = []
         for component in candidate["components"]:
-            component_input, meta = _resolve_component_pricing(component, latest_prices)
+            component_input, meta = _resolve_component_pricing(component, latest_prices, basis)
             component_inputs.append(component_input)
             component_meta.append(meta)
 
@@ -363,6 +399,7 @@ def evaluate_benchmark_family(
             economics_basis_label = "Electrode layer"
 
         candidate_result = {
+            "manufacturing_evidence": candidate_manufacturing_evidence(family, candidate["slug"]),
             "slug": candidate["slug"],
             "title": candidate["title"],
             "archetype": candidate["archetype"],
@@ -425,13 +462,7 @@ def evaluate_benchmark_family(
 
     _economic_scores(candidates)
     _apply_total_scores(candidates, score_weights)
-    candidates.sort(
-        key=lambda item: (
-            float(item["scores"]["total"]),
-            -float(item["summary"]["landed_cost_per_lb"]),
-        ),
-        reverse=True,
-    )
+    candidates = rank_candidates(candidates)
 
     return {
         "family": catalog["family"],
@@ -458,5 +489,5 @@ def evaluate_benchmark_family(
         "price_basis_updated_at": latest_update,
         "winner": candidates[0] if candidates else None,
         "candidates": candidates,
-        "citations": catalog["citations"],
+        "citations": list(citation_map.values()),
     }

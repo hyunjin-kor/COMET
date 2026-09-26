@@ -1,0 +1,168 @@
+{
+  "at": "2026-09-07T06:32:51.163971+00:00",
+  "source_commit": "aba3b3f200f468866db9e3a8847783f134980cb3",
+  "base_commit": "af46514a3d661bdb1bc0223574abd88d858473e0",
+  "python": "3.14.0",
+  "checks": [
+    {
+      "check": "pytest",
+      "command": [
+        "python",
+        "-m",
+        "pytest",
+        "backend/tests",
+        "-q"
+      ],
+      "exit_code": 0,
+      "seconds": 453.355,
+      "at": "2026-09-07T06:20:16.786543+00:00",
+      "log": "docs/audit/manufacturing-pytest-2026-09-07.log"
+    },
+    {
+      "check": "frontend-lint",
+      "command": [
+        "npm.cmd",
+        "run",
+        "lint",
+        "--prefix",
+        "frontend"
+      ],
+      "exit_code": 0,
+      "seconds": 3.742,
+      "at": "2026-09-07T06:20:32.661606+00:00",
+      "log": "docs/audit/manufacturing-frontend-lint-2026-09-07.log"
+    },
+    {
+      "check": "i18n",
+      "command": [
+        "npm.cmd",
+        "run",
+        "check:i18n",
+        "--prefix",
+        "frontend"
+      ],
+      "exit_code": 0,
+      "seconds": 0.629,
+      "at": "2026-09-07T06:20:33.370152+00:00",
+      "log": "docs/audit/manufacturing-i18n-2026-09-07.log"
+    },
+    {
+      "check": "frontend-build",
+      "command": [
+        "npm.cmd",
+        "run",
+        "build",
+        "--prefix",
+        "frontend"
+      ],
+      "exit_code": 0,
+      "seconds": 3.789,
+      "at": "2026-09-07T06:20:37.236268+00:00",
+      "log": "docs/audit/manufacturing-frontend-build-2026-09-07.log"
+    },
+    {
+      "check": "calculator-rules",
+      "command": [
+        "node",
+        "scripts/test_calculator_rules.mjs"
+      ],
+      "exit_code": 0,
+      "seconds": 0.279,
+      "at": "2026-09-07T06:24:11.617038+00:00",
+      "log": "docs/audit/manufacturing-calculator-rules-2026-09-07.log"
+    },
+    {
+      "check": "practical-range",
+      "command": [
+        "node",
+        "--test",
+        "scripts/test_practical_range.mjs"
+      ],
+      "exit_code": 0,
+      "seconds": 0.296,
+      "at": "2026-09-07T06:25:08.202807+00:00",
+      "log": "docs/audit/manufacturing-practical-range-2026-09-07.log"
+    },
+    {
+      "check": "ruff",
+      "command": [
+        "python",
+        "-m",
+        "ruff",
+        "check",
+        "backend",
+        "scripts"
+      ],
+      "exit_code": 0,
+      "seconds": 0.152,
+      "at": "2026-09-07T06:24:11.503360+00:00",
+      "log": "docs/audit/manufacturing-ruff-2026-09-07.log"
+    },
+    {
+      "check": "table62",
+      "command": [
+        "python",
+        "scripts/reproduce_catcost_table62.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.113,
+      "at": "2026-09-07T06:24:11.446338+00:00",
+      "log": "docs/audit/manufacturing-table62-2026-09-07.log"
+    },
+    {
+      "check": "desktop-build",
+      "command": [
+        "npm.cmd",
+        "run",
+        "build"
+      ],
+      "exit_code": 0,
+      "seconds": 203.033,
+      "at": "2026-09-07T06:28:07.542326+00:00",
+      "log": "docs/audit/manufacturing-desktop-build-2026-09-07.log"
+    },
+    {
+      "check": "desktop-smoke",
+      "command": [
+        "npm.cmd",
+        "run",
+        "smoke:desktop"
+      ],
+      "exit_code": 0,
+      "seconds": 17.643,
+      "at": "2026-09-07T06:28:36.124838+00:00",
+      "log": "docs/audit/manufacturing-desktop-smoke-2026-09-07.log"
+    }
+  ],
+  "source_sha256": {
+    "frontend/src/components/ManufacturingMethods.tsx": "e41a8cf6b9265d58ecd23bdfe1da589d211bf31514119b4410066db89e3330eb",
+    "frontend/src/lib/calculator-session.ts": "b7a598cbee960a9123a00372ad34d70f50f70acf5fd2866164003a6ea81f8f96",
+    "frontend/src/lib/i18n.tsx": "c4d56f8fc7596d211dd649170b232ee25de3e3a4908d84bb58a7688ec96e036a",
+    "frontend/src/lib/preparation-selection.ts": "9fad184fce0ad695c0847df628d0a9caba058fb22b78995083656d9b9cf5d541",
+    "frontend/src/pages/Calculator.tsx": "141853cd44ec52548aaf38455ad3af6c1ac501c1e4d43fd603257366b1e4fde1",
+    "scripts/test_calculator_rules.mjs": "6737b6a27d9ae5169de97e4ecf2c2d1463ff578dbb829dc216abda879aba9f17"
+  },
+  "ui": "docs/audit/manufacturing-ui-2026-09-07.json",
+  "installation": {
+    "version": "1.4.0",
+    "installer_exit_code": 0,
+    "package_hashes_match": true,
+    "hashes": {
+      "resources/app.asar": {
+        "packaged": "29f19b581cecb3edf9dcbb14b6ea5700bb5ae83bdc6e3c5792f242bb24628790",
+        "installed": "29f19b581cecb3edf9dcbb14b6ea5700bb5ae83bdc6e3c5792f242bb24628790"
+      },
+      "resources/backend-sidecar/COMETBackend.exe": {
+        "packaged": "044d2c86d6266531fd626a6acc59c04635bb073605ad5337084a9cb63842e0c4",
+        "installed": "044d2c86d6266531fd626a6acc59c04635bb073605ad5337084a9cb63842e0c4"
+      }
+    },
+    "database_quick_check": "ok",
+    "backup_created": true,
+    "health_status": "ok",
+    "health_version": "1.4.0",
+    "main_window_count": 1,
+    "packaged_backend_confirmed": true,
+    "desktop_shortcut_verified": true
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "scope": "Two additional free primary papers; no new model prices, full source text redistribution, or independent observed cost claims.",
+  "sources": [
+    {
+      "url": "https://pubs.acs.org/doi/10.1021/acssuschemeng.5c06752",
+      "checked_at_utc": "2026-09-07T13:21:19.516674+00:00",
+      "status": 403,
+      "final_url": "https://pubs.acs.org/doi/10.1021/acssuschemeng.5c06752",
+      "bytes": 5545,
+      "content_type": "text/html; charset=UTF-8",
+      "is_pdf": false,
+      "sha256": "42d47ecfbca16a68df812a82b72cd005638d16b45eb0754a1b549f61ec192179"
+    },
+    {
+      "url": "https://pubs.rsc.org/en/content/articlelanding/2025/cy/d5cy00189g",
+      "checked_at_utc": "2026-09-07T13:21:19.521888+00:00",
+      "status": 403,
+      "final_url": "https://pubs.rsc.org/en/content/articlelanding/2025/cy/d5cy00189g",
+      "bytes": 5578,
+      "content_type": "text/html; charset=UTF-8",
+      "is_pdf": false,
+      "sha256": "30df728f788cb03092460c947fe246c9ebb0ed5a118613cb9d0a815486ec2332"
+    },
+    {
+      "url": "https://www.osti.gov/servlets/purl/2588396",
+      "checked_at_utc": "2026-09-07T13:21:19.522068+00:00",
+      "status": 200,
+      "final_url": "https://www.osti.gov/servlets/purl/2588396",
+      "bytes": 1737273,
+      "content_type": "application/pdf",
+      "is_pdf": true,
+      "sha256": "d2b9db599394a6eeead856b678885f324bff9357b3bcd6be6f070a9e9506c4d4"
+    },
+    {
+      "url": "https://www.rsc.org/suppdata/d5/cy/d5cy00189g/d5cy00189g1.pdf",
+      "checked_at_utc": "2026-09-07T13:21:19.522147+00:00",
+      "status": 200,
+      "final_url": "https://www.rsc.org/hck-94155/?nocache=",
+      "bytes": 18296,
+      "content_type": "text/html",
+      "is_pdf": false,
+      "sha256": "7c63f7ad6f6ae079167ae66d1263d252230feecb6dee4a12d1828257aefd8a87"
+    },
+    {
+      "url": "https://api.crossref.org/works/10.1021%2Facssuschemeng.5c06752",
+      "checked_at_utc": "2026-09-07T13:21:19.522222+00:00",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.1021%2Facssuschemeng.5c06752",
+      "bytes": 8287,
+      "content_type": "application/json",
+      "is_pdf": false,
+      "sha256": "e2e869fdeef73ed1d08538f7a49365fb2fd8cf7f8f1f8045caa1e421f4a5d035",
+      "crossref": {
+        "DOI": "10.1021/acssuschemeng.5c06752",
+        "title": [
+          "Cost Evidence Yields the Viability of Metal Oxides Synthesis Routes"
+        ],
+        "container-title": [
+          "ACS Sustainable Chemistry &amp; Engineering"
+        ],
+        "published": {
+          "date-parts": [
+            [
+              2025,
+              10,
+              7
+            ]
+          ]
+        },
+        "volume": "13",
+        "issue": "41",
+        "page": "17370-17379",
+        "license": [
+          {
+            "start": {
+              "date-parts": [
+                [
+                  2025,
+                  10,
+                  7
+                ]
+              ],
+              "date-time": "2025-10-07T00:00:00Z",
+              "timestamp": 1759795200000
+            },
+            "content-version": "vor",
+            "delay-in-days": 0,
+            "URL": "https://creativecommons.org/licenses/by/4.0/"
+          }
+        ],
+        "URL": "https://doi.org/10.1021/acssuschemeng.5c06752",
+        "authors": [
+          "Despina A. Gkika",
+          "George Z. Kyzas"
+        ]
+      }
+    },
+    {
+      "url": "https://api.crossref.org/works/10.1039%2Fd5cy00189g",
+      "checked_at_utc": "2026-09-07T13:21:19.522299+00:00",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.1039%2Fd5cy00189g",
+      "bytes": 18821,
+      "content_type": "application/json",
+      "is_pdf": false,
+      "sha256": "0d7384ca444b492d8db8bfacb56203c3552aa6bef80e3b5d17851e599d11116d",
+      "crossref": {
+        "DOI": "10.1039/d5cy00189g",
+        "title": [
+          "Techno-economic and life cycle analyses of the synthesis of a platinum–strontium titanate catalyst"
+        ],
+        "container-title": [
+          "Catalysis Science &amp; Technology"
+        ],
+        "published": {
+          "date-parts": [
+            [
+              2025
+            ]
+          ]
+        },
+        "volume": "15",
+        "issue": "15",
+        "page": "4419-4429",
+        "license": [
+          {
+            "start": {
+              "date-parts": [
+                [
+                  2025,
+                  6,
+                  23
+                ]
+              ],
+              "date-time": "2025-06-23T00:00:00Z",
+              "timestamp": 1750636800000
+            },
+            "content-version": "vor",
+            "delay-in-days": 173,
+            "URL": "http://creativecommons.org/licenses/by-nc/3.0/"
+          }
+        ],
+        "URL": "https://doi.org/10.1039/d5cy00189g",
+        "authors": [
+          "Sultana Ferdous",
+          "Ulises R. Gracida-Alvarez",
+          "Magali Ferrandon",
+          "Massimiliano Delferro",
+          "Pahola Thathiana Benavides",
+          "Meltem Urgun-Demirtas"
+        ]
+      }
+    }
+  ]
+}

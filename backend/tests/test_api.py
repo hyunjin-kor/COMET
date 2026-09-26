@@ -563,7 +563,8 @@ class TestUncertainty:
         })
         assert resp.status_code == 200
         data = resp.json()
-        assert data["baseline_price_per_lb"] > 0
+        assert data["baseline"] > 0
+        assert data["unit"] == "$/cm2"
         assert data["catalyst_domain"] == "electrocatalyst"
         assert data["application_family"] == "fuel_cell"
 

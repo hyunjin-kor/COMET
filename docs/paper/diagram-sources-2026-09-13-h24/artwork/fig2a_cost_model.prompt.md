@@ -1,0 +1,6 @@
+# Letter-removal prompt — 2026-09-13
+
+Tool: OpenAI image generation; exact model/version 확인 못 함.
+Input: ../diagram-sources-2026-09-13-gpt/artwork/fig2a_cost_model.en.png (relative to the H24 source directory).
+
+Edit target: the attached accepted COMET Figure 2(a). Make a text-free artwork layer for exact editable typography in PowerPoint. Remove ONLY every letter and mathematical character: (a), Formulation and prices, Route and order size, Materials, Cₘ, Processing, Cₚ, Overheads and margin, Selling price, P, and the plus sign inside the small junction circle. Leave the removed text areas clean and empty using the immediately surrounding fill. Preserve all existing illustrations, their precise locations and relative scale, white background, fine charcoal contours, colours, every directed connector, all three large circular nodes, the small empty junction circle and the rectangular adjustment node. Preserve the original canvas and 3:1 aspect ratio. Do not resize, reposition, simplify or redesign the artwork. No text, letters, numbers, symbols, watermark, new marks, extra diagrams, invented data or chemical structures. This is ONLY removal of lettering for later native text and math placement. Output one clean artwork image.

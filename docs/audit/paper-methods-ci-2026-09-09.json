@@ -1,0 +1,32 @@
+{
+  "verified_at": "2026-09-09T02:37:43.275394+00:00",
+  "run_id": 34303202556,
+  "head_sha": "2e16f74aa6b8be55c4aa84473c85d6909c7dd12f",
+  "url": "https://github.com/hyunjin-kor/COMET/actions/runs/34303202556",
+  "conclusion": "success",
+  "jobs": [
+    {
+      "name": "desktop",
+      "conclusion": "success",
+      "startedAt": "2026-09-09T02:26:32Z",
+      "completedAt": "2026-09-09T02:30:34Z",
+      "url": "https://github.com/hyunjin-kor/COMET/actions/runs/34303202556/job/102314413471"
+    },
+    {
+      "name": "frontend",
+      "conclusion": "success",
+      "startedAt": "2026-09-09T02:26:32Z",
+      "completedAt": "2026-09-09T02:27:00Z",
+      "url": "https://github.com/hyunjin-kor/COMET/actions/runs/34303202556/job/102314413644"
+    },
+    {
+      "name": "backend",
+      "conclusion": "success",
+      "startedAt": "2026-09-09T02:26:32Z",
+      "completedAt": "2026-09-09T02:37:18Z",
+      "url": "https://github.com/hyunjin-kor/COMET/actions/runs/34303202556/job/102314413702"
+    }
+  ],
+  "backend_summary": "backend\tTest\t2026-09-09T02:37:16.4909766Z ================= 906 passed, 2 warnings in 607.62s (0:10:07) ==================",
+  "scope": "Source plus compatible dependency repair. The later report-only commit is checked again before the final PR handoff."
+}

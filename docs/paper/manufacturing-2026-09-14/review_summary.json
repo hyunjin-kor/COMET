@@ -1,0 +1,15 @@
+{
+  "review_date": "2026-09-15",
+  "candidates": 116,
+  "families": 30,
+  "profiles": 92,
+  "primary_sources": 71,
+  "candidates_with_profile": 75,
+  "source_mismatches": 26,
+  "crossref_dois": 401,
+  "source": "backend/data/manufacturing_literature.json",
+  "source_sha256": "11baf75cf1b2d175083b3e53703a5ebe93e54978bc0631e4356f062e6e4b29c6",
+  "operating_references": 5,
+  "operating_source": "backend/data/manufacturing_operating_references.json",
+  "operating_source_sha256": "cce47f24732a494453eef41c0df1b4d0034ef2309039ce49253a304cd21690c3"
+}

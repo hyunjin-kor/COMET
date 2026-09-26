@@ -1,0 +1,22 @@
+{
+  "captured_at": "2026-09-16T06:26:00+00:00",
+  "server": "http://127.0.0.1:8877",
+  "viewport": [
+    900,
+    900
+  ],
+  "device_scale_factor": 2,
+  "profile": {
+    "id": "ptsn-alumina-base-2024",
+    "sample": "PtSn/Al2O3 pellets",
+    "doi": "10.3390/molecules29132959"
+  },
+  "batch_scenario": "docs/paper/manufacturing-study-2026-09-15/manufacturing_study.json:request",
+  "database": "isolated review database; no user data",
+  "files": {
+    "figS9_interface.record.en.png": "eadf2bda7869f7c59259be588c39a4dc70538ca953c927a7e7151389f766f20a",
+    "figS9_interface.costs.en.png": "574f032c1a45d5d0e922d22a8b88b3138f64b11c2ad7c896ac96870fe1a46903",
+    "figS9_interface.record.ko.png": "8077638a5b251951017f94adb2f8e1503cdb670a407df001468cb94eeff491dd",
+    "figS9_interface.costs.ko.png": "7ff94bc134100d6824004dcd3595455e02bea9ec0bf16090e5bebb9194c30924"
+  }
+}

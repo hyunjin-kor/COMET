@@ -1,0 +1,16 @@
+
+> comet@1.4.0 smoke:desktop
+> powershell -NoProfile -ExecutionPolicy Bypass -File scripts/smoke_test_desktop.ps1
+
+[COMET] Launching packaged desktop app...
+[COMET] Re-launching app to verify single-instance recovery...
+
+
+Status              : ok
+Version             : 1.4.0
+MainWindowCount     : 1
+PricesStatus        : 200
+CalculateStatus     : 200
+EstimatedPricePerKg : 9.0374
+LauncherLog         : C:\Users\user\AppData\Local\Temp\COMET-smoke-955a3451ff6b46a2987d7094dbc1ec0c\comet-launcher.log
+IsolatedProfile     : C:\Users\user\AppData\Local\Temp\COMET-smoke-955a3451ff6b46a2987d7094dbc1ec0c

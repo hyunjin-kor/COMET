@@ -499,8 +499,10 @@ def list_templates(catalyst_domain: str | None = Query(default=None)):
 @router.get("/templates/{template_id}")
 def get_template(template_id: str):
     """Get a specific process template."""
+    if not re.fullmatch(r"[A-Za-z0-9_-]+", template_id):
+        raise HTTPException(status_code=404, detail="Template not found")
     path = _DATA_DIR / "process_templates" / f"{template_id}.json"
-    if not path.exists():
+    if not path.resolve().is_relative_to((_DATA_DIR / "process_templates").resolve()) or not path.is_file():
         raise HTTPException(status_code=404, detail=f"Template '{template_id}' not found")
     with open(path, encoding="utf-8") as f:
         data = json.load(f)

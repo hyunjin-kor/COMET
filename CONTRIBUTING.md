@@ -58,3 +58,11 @@ issue for vulnerabilities.
 COMET is licensed under the PolyForm Noncommercial License 1.0.0
 (`LICENSE`). By opening a PR you confirm that you authored the change and
 grant the maintainer permission to incorporate it under that license.
+
+That permission does not itself grant a separate commercial license. Before a
+contribution is included in a company offering, record any additional permission
+actually obtained from its rights holder. Do not presume retroactive consent or
+require contributors to transfer copyright by submitting a PR. Data contributions
+must identify their original source, reuse terms and transformations; a reachable
+URL or DOI is not evidence of redistribution permission. See the
+[rights register](docs/commercial/rights-register-2026-09-07.md).

@@ -1,3 +1,5 @@
+import { ScientificText } from '../components/shared/ScientificText';
+import { formatScientificText } from '../lib/scientific-text';
 import { useEffect, useMemo, useState } from 'react';
 import { SkeletonListRows } from '../components/shared/Skeleton';
 import { WorkspaceSectionFooter, WorkspaceSectionNav, useWorkspaceSections, type WorkspaceSection } from '../components/shared/WorkspaceSections';
@@ -18,13 +20,13 @@ import { useUnit } from '../lib/use-unit';
 type Tab = 'materials' | 'steps' | 'templates';
 type SortKey = 'name' | 'year_desc' | 'year_asc' | 'price_desc' | 'price_asc';
 
-function sortOptions(fmtLabel: string): Array<{ value: SortKey; label: string }> {
+function sortOptions(fmtLabel: string, t: (key: string) => string): Array<{ value: SortKey; label: string }> {
   return [
     { value: 'name', label: 'Name (A-Z)' },
     { value: 'year_desc', label: 'Quote year (newest)' },
     { value: 'year_asc', label: 'Quote year (oldest)' },
-    { value: 'price_desc', label: `In-calculator $${fmtLabel} (high-low)` },
-    { value: 'price_asc', label: `In-calculator $${fmtLabel} (low-high)` },
+    { value: 'price_desc', label: `${t('In-calculator price')} $${fmtLabel} (${t('high-low')})` },
+    { value: 'price_asc', label: `${t('In-calculator price')} $${fmtLabel} (${t('low-high')})` },
   ];
 }
 
@@ -180,9 +182,9 @@ function quoteYearLabel(year: number | null | undefined) {
 function LibraryMetricTile({ label, value, detail }: { label: string; value: string; detail: string }) {
   return (
     <div className="rounded-[22px] border border-slate-900/8 bg-white/58 p-4">
-      <div className="cp-subtle-label">{label}</div>
-      <div className="mt-2 text-2xl font-display text-[#191f28]">{value}</div>
-      <div className="mt-1 text-xs leading-5 text-slate-600">{detail}</div>
+      <div className="cp-subtle-label"><ScientificText text={label} /></div>
+      <div className="mt-2 text-2xl font-display text-[#191f28]"><ScientificText text={value} /></div>
+      <div className="mt-1 text-xs leading-5 text-slate-600"><ScientificText text={detail} /></div>
     </div>
   );
 }
@@ -191,10 +193,10 @@ function InspectorRow({ label, value, detail }: { label: string; value: string; 
   return (
     <div className="cp-data-row">
       <div>
-        <div className="cp-subtle-label">{label}</div>
-        {detail ? <div className="mt-1 text-xs leading-5 text-slate-600">{detail}</div> : null}
+        <div className="cp-subtle-label"><ScientificText text={label} /></div>
+        {detail ? <div className="mt-1 text-xs leading-5 text-slate-600"><ScientificText text={detail} /></div> : null}
       </div>
-      <div className="text-right text-sm font-semibold text-[#191f28]">{value}</div>
+      <div className="text-right text-sm font-semibold text-[#191f28]"><ScientificText text={value} /></div>
     </div>
   );
 }
@@ -351,7 +353,7 @@ export default function Library() {
 
         {error ? (
           <div className="mt-4 rounded-[18px] border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700" role="alert">
-            {error}
+            {t(error)}
           </div>
         ) : null}
 
@@ -377,7 +379,7 @@ export default function Library() {
                     <option value="">{t('All categories')}</option>
                     {categories.map((value) => (
                       <option key={value} value={value}>
-                        {value}
+                        {formatScientificText(value)}
                       </option>
                     ))}
                   </select>
@@ -426,7 +428,7 @@ export default function Library() {
                     onChange={(event) => setSortKey(event.target.value as SortKey)}
                     className="input-base"
                   >
-                    {sortOptions(fmtLabel).map((option) => (
+                    {sortOptions(fmtLabel, t).map((option) => (
                       <option key={option.value} value={option.value}>
                         {t(option.label)}
                       </option>
@@ -456,9 +458,9 @@ export default function Library() {
                 ) : sortedMaterials.length === 0 ? (
                   <div className="flex flex-col items-start gap-3 px-5 py-8 text-sm text-slate-600">
                     <div>
-                      <div className="font-semibold text-[#191f28]">No materials match the current filters.</div>
+                      <div className="font-semibold text-[#191f28]">{t("No materials match the current filters.")}</div>
                       <div className="mt-1 text-xs leading-5 text-slate-600">
-                        Try clearing the search box or category filter to see the full library.
+                        {t("Try clearing the search box or category filter to see the full library.")}
                       </div>
                     </div>
                     {(search || category) ? (
@@ -470,7 +472,7 @@ export default function Library() {
                         }}
                         className="cp-button-secondary px-3.5 py-2 text-xs"
                       >
-                        Clear filters
+                        {t("Clear filters")}
                       </button>
                     ) : null}
                   </div>
@@ -488,9 +490,9 @@ export default function Library() {
                         >
                           <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
                             <div className="min-w-0">
-                              <div className="truncate font-semibold text-[#191f28]">{material.name}</div>
-                              <div className="truncate text-xs text-slate-600">{material.symbol || material.formula || (lang === 'ko' ? '기호 없음' : 'No symbol')}</div>
-                              {material.notes ? <div className="mt-1 text-xs leading-5 text-slate-600">{material.notes}</div> : null}
+                              <div className="truncate font-semibold text-[#191f28]"><ScientificText text={material.name} /></div>
+                              <div className="truncate text-xs text-slate-600"><ScientificText text={material.formula || material.symbol || (lang === 'ko' ? '기호 없음' : t('No symbol'))} /></div>
+                              {material.notes ? <div className="mt-1 text-xs leading-5 text-slate-600"><ScientificText text={material.notes} /></div> : null}
                             </div>
                             <div className="text-left lg:text-right">
                               {material.normalized_price_per_lb != null ? (
@@ -499,23 +501,23 @@ export default function Library() {
                                     {formatPrice(toDisplay(material.normalized_price_per_lb))}{fmtLabel}
                                   </div>
                                   <div className="mt-1 text-xs text-slate-600">
-                                    {formatRawPrice(material)} · {formatPack(material, lang)}
+                                    <ScientificText text={formatRawPrice(material)} /> · <ScientificText text={formatPack(material, lang)} />
                                   </div>
                                 </>
                               ) : (
                                 <>
-                                  <div className="font-mono text-slate-900">{formatRawPrice(material)}</div>
-                                  <div className="mt-1 text-xs text-slate-600">{formatPack(material, lang)}</div>
+                                  <div className="font-mono text-slate-900"><ScientificText text={formatRawPrice(material)} /></div>
+                                  <div className="mt-1 text-xs text-slate-600"><ScientificText text={formatPack(material, lang)} /></div>
                                 </>
                               )}
                             </div>
                           </div>
                           <div className="mt-3 flex flex-wrap gap-2">
                             <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-medium ${usabilityTone(material)}`}>{t(usabilityLabel(material))}</span>
-                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-medium ${quoteYearTone(material.quote_year)}`}>{material.quote_year == null ? t('Year unknown') : (lang === 'ko' ? `${material.quote_year}년 견적` : quoteYearLabel(material.quote_year))}</span>
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-medium ${quoteYearTone(material.quote_year)}`}><ScientificText text={material.quote_year == null ? t('Year unknown') : (lang === 'ko' ? `${material.quote_year}년 견적` : quoteYearLabel(material.quote_year))} /></span>
                             <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${domainTone(material.catalyst_domain)}`}>{t(domainLabel(material.catalyst_domain))}</span>
                             <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${applicationTone(material.application_family)}`}>{t(applicationLabel(material.application_family))}</span>
-                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${categoryTone(material.category)}`}>{material.category || 'Uncategorised'}</span>
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${categoryTone(material.category)}`}><ScientificText text={material.category || 'Uncategorised'} /></span>
                             <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-medium ${sourceTrustTone(material)}`}>{t(sourceTrustLabel(material))}</span>
                           </div>
                         </button>
@@ -528,11 +530,11 @@ export default function Library() {
               <div className="cp-inspector-rail xl:max-h-[70vh] xl:overflow-auto">
                 <section className="cp-rail-panel">
                   <div className="cp-subtle-label">{t('Source Detail')}</div>
-                  <div className="mt-2 text-lg font-semibold text-[#191f28]">{selectedMaterial?.name ?? t('Choose a material row')}</div>
+                  <div className="mt-2 text-lg font-semibold text-[#191f28]"><ScientificText text={selectedMaterial?.name ?? t('Choose a material row')} /></div>
                   <div className="mt-3 flex flex-wrap gap-2">
                     {selectedMaterial ? <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${domainTone(selectedMaterial.catalyst_domain)}`}>{t(domainLabel(selectedMaterial.catalyst_domain))}</span> : null}
                     {selectedMaterial ? <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${applicationTone(selectedMaterial.application_family)}`}>{t(applicationLabel(selectedMaterial.application_family))}</span> : null}
-                    {selectedMaterial ? <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${categoryTone(selectedMaterial.category)}`}>{selectedMaterial.category || 'Uncategorised'}</span> : null}
+                    {selectedMaterial ? <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${categoryTone(selectedMaterial.category)}`}><ScientificText text={selectedMaterial.category || 'Uncategorised'} /></span> : null}
                   </div>
                   {selectedMaterial ? (
                     <>
@@ -555,7 +557,7 @@ export default function Library() {
                       </div>
                       {selectedMaterial.notes ? (
                         <div className="mt-3 rounded-[18px] border border-slate-900/8 bg-white/72 px-3 py-3 text-xs leading-6 text-slate-600">
-                          {selectedMaterial.notes}
+                          <ScientificText text={selectedMaterial.notes} />
                         </div>
                       ) : null}
                       {selectedMaterial.reference_url ? (
@@ -582,8 +584,8 @@ export default function Library() {
                 </div>
               ) : steps.length === 0 ? (
                 <div className="px-5 py-8 text-sm text-slate-600">
-                  <div className="font-semibold text-[#191f28]">No step rates loaded.</div>
-                  <div className="mt-1 text-xs leading-5 text-slate-600">The step library is empty — backend may not have published rates yet.</div>
+                  <div className="font-semibold text-[#191f28]">{t("No step rates loaded.")}</div>
+                  <div className="mt-1 text-xs leading-5 text-slate-600">{t("The step library is empty — backend may not have published rates yet.")}</div>
                 </div>
               ) : (
                 <div className="max-h-[68vh] space-y-2 overflow-auto px-4 py-4">
@@ -597,10 +599,10 @@ export default function Library() {
                       >
                         <div className="flex items-start justify-between gap-3">
                           <div>
-                            <div className="font-semibold text-[#191f28]">{step.name}</div>
-                            <div className="mt-1 text-xs text-slate-600">{step.basis}</div>
+                            <div className="font-semibold text-[#191f28]"><ScientificText text={step.name} /></div>
+                            <div className="mt-1 text-xs text-slate-600"><ScientificText text={step.basis} /></div>
                           </div>
-                          <span className="cp-chip">{step.key}</span>
+                          <span className="cp-chip"><ScientificText text={step.key} /></span>
                         </div>
                         <div className="mt-3 grid gap-2 sm:grid-cols-3">
                           <div className="rounded-[16px] border border-slate-900/8 bg-white/72 px-3 py-2 text-xs text-slate-600">{t('Small')}: {step.cost_small != null ? `${formatPrice(step.cost_small)}/hr` : 'N/A'}</div>
@@ -616,22 +618,22 @@ export default function Library() {
 
             <div className="cp-inspector-rail xl:max-h-[70vh] xl:overflow-auto">
               <section className="cp-rail-panel">
-                <div className="cp-subtle-label">Step Detail</div>
-                <div className="mt-2 text-lg font-semibold text-[#191f28]">{selectedStep?.name ?? 'Choose a step row'}</div>
+                <div className="cp-subtle-label">{t("Step Detail")}</div>
+                <div className="mt-2 text-lg font-semibold text-[#191f28]"><ScientificText text={selectedStep?.name ?? 'Choose a step row'} /></div>
                 {selectedStep ? (
                   <>
                     <div className="mt-3 space-y-1">
-                      <InspectorRow label="Small" value={selectedStep.cost_small != null ? `${formatPrice(selectedStep.cost_small)}/hr` : 'N/A'} />
-                      <InspectorRow label="Medium" value={selectedStep.cost_medium != null ? `${formatPrice(selectedStep.cost_medium)}/hr` : 'N/A'} />
-                      <InspectorRow label="Large" value={selectedStep.cost_large != null ? `${formatPrice(selectedStep.cost_large)}/hr` : 'N/A'} />
-                      <InspectorRow label="Basis" value={selectedStep.basis || 'N/A'} detail={selectedStep.key} />
+                      <InspectorRow label={t("Small")} value={selectedStep.cost_small != null ? `${formatPrice(selectedStep.cost_small)}/hr` : 'N/A'} />
+                      <InspectorRow label={t("Medium")} value={selectedStep.cost_medium != null ? `${formatPrice(selectedStep.cost_medium)}/hr` : 'N/A'} />
+                      <InspectorRow label={t("Large")} value={selectedStep.cost_large != null ? `${formatPrice(selectedStep.cost_large)}/hr` : 'N/A'} />
+                      <InspectorRow label={t("Basis")} value={selectedStep.basis || 'N/A'} detail={selectedStep.key} />
                     </div>
                     <div className="mt-3 rounded-[18px] border border-slate-900/8 bg-white/72 px-3 py-3 text-xs leading-6 text-slate-600">
-                      {selectedStep.note || 'No additional note stored for this step.'}
+                      <ScientificText text={selectedStep.note || 'No additional note stored for this step.'} />
                     </div>
                   </>
                 ) : (
-                  <div className="mt-3 text-xs leading-6 text-slate-600">Choose a step to inspect the hourly-rate basis here.</div>
+                  <div className="mt-3 text-xs leading-6 text-slate-600">{t("Choose a step to inspect the hourly-rate basis here.")}</div>
                 )}
               </section>
             </div>
@@ -665,8 +667,8 @@ export default function Library() {
                   <SkeletonListRows count={4} />
                 ) : templates.length === 0 ? (
                   <div className="rounded-[20px] border border-slate-200 bg-white/58 px-5 py-6 text-sm text-slate-600">
-                    <div className="font-semibold text-[#191f28]">No route templates loaded.</div>
-                    <div className="mt-1 text-xs leading-5 text-slate-600">No templates are stored for the current catalyst-domain filter. Switch to "All domains" to widen the search.</div>
+                    <div className="font-semibold text-[#191f28]">{t("No route templates loaded.")}</div>
+                    <div className="mt-1 text-xs leading-5 text-slate-600">{t("No templates are stored for the current catalyst-domain filter. Switch to \"All domains\" to widen the search.")}</div>
                   </div>
                 ) : (
                   templates.map((template) => {
@@ -679,15 +681,15 @@ export default function Library() {
                       >
                         <div className="flex items-start justify-between gap-3">
                           <div>
-                            <div className="cp-subtle-label">{template.category || 'Template'}</div>
-                            <div className="cp-heading-sm mt-2">{template.name}</div>
+                            <div className="cp-subtle-label"><ScientificText text={template.category || 'Template'} /></div>
+                            <div className="cp-heading-sm mt-2"><ScientificText text={template.name} /></div>
                           </div>
                           <div className="flex flex-wrap gap-2">
-                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${domainTone(template.catalyst_domain)}`}>{domainLabel(template.catalyst_domain)}</span>
-                            <span className="cp-chip">{lang === 'ko' ? `${template.steps.length}개 단계` : `${template.steps.length} steps`}</span>
+                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${domainTone(template.catalyst_domain)}`}><ScientificText text={domainLabel(template.catalyst_domain)} /></span>
+                            <span className="cp-chip"><ScientificText text={lang === 'ko' ? `${template.steps.length}개 단계` : `${template.steps.length} steps`} /></span>
                           </div>
                         </div>
-                        <div className="mt-3 text-sm leading-7 text-slate-600">{template.description}</div>
+                        <div className="mt-3 text-sm leading-7 text-slate-600"><ScientificText text={template.description} /></div>
                       </button>
                     );
                   })
@@ -696,32 +698,32 @@ export default function Library() {
 
               <div className="cp-inspector-rail">
                 <section className="cp-rail-panel">
-                  <div className="cp-subtle-label">Route Audit</div>
-                  <div className="mt-2 text-lg font-semibold text-[#191f28]">{selectedTemplate?.name ?? 'Choose a template'}</div>
+                  <div className="cp-subtle-label">{t("Route Audit")}</div>
+                  <div className="mt-2 text-lg font-semibold text-[#191f28]"><ScientificText text={selectedTemplate?.name ?? 'Choose a template'} /></div>
                   {selectedTemplate ? (
                     <>
                       <div className="mt-3 flex flex-wrap gap-2">
-                        <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${domainTone(selectedTemplate.catalyst_domain)}`}>{domainLabel(selectedTemplate.catalyst_domain)}</span>
-                        {selectedTemplate.application_family ? <span className="cp-chip">{applicationLabel(selectedTemplate.application_family)}</span> : null}
-                        {selectedTemplate.manufacturing_mode ? <span className="cp-chip">{selectedTemplate.manufacturing_mode}</span> : null}
+                        <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs ${domainTone(selectedTemplate.catalyst_domain)}`}><ScientificText text={domainLabel(selectedTemplate.catalyst_domain)} /></span>
+                        {selectedTemplate.application_family ? <span className="cp-chip"><ScientificText text={applicationLabel(selectedTemplate.application_family)} /></span> : null}
+                        {selectedTemplate.manufacturing_mode ? <span className="cp-chip"><ScientificText text={selectedTemplate.manufacturing_mode} /></span> : null}
                       </div>
                       <div className="mt-3 space-y-1">
-                        <InspectorRow label="Steps" value={String(selectedTemplate.steps.length)} detail={selectedTemplate.source || 'Source not stated'} />
-                        <InspectorRow label="Examples" value={selectedTemplate.example_catalysts.length ? String(selectedTemplate.example_catalysts.length) : '0'} detail="Stored catalyst examples in this route." />
+                        <InspectorRow label={t("Steps")} value={String(selectedTemplate.steps.length)} detail={selectedTemplate.source || t('Source not stated')} />
+                        <InspectorRow label={t("Examples")} value={selectedTemplate.example_catalysts.length ? String(selectedTemplate.example_catalysts.length) : '0'} detail={t("Stored catalyst examples in this route.")} />
                       </div>
                       <div className="mt-3 rounded-[18px] border border-slate-900/8 bg-white/72 px-3 py-3 text-xs leading-6 text-slate-600">
-                        {selectedTemplate.route_note || selectedTemplate.description}
+                        <ScientificText text={selectedTemplate.route_note || selectedTemplate.description} />
                       </div>
                       {(selectedTemplate.preprocess?.length || selectedTemplate.synthesis?.length || selectedTemplate.postprocess?.length) ? (
                         <div className="mt-3 space-y-3">
-                          {selectedTemplate.preprocess?.length ? <div><div className="cp-subtle-label">Pre-treatment</div><div className="mt-2 flex flex-wrap gap-2">{selectedTemplate.preprocess.map((value) => <span key={value} className="cp-chip">{value}</span>)}</div></div> : null}
-                          {selectedTemplate.synthesis?.length ? <div><div className="cp-subtle-label">Synthesis</div><div className="mt-2 flex flex-wrap gap-2">{selectedTemplate.synthesis.map((value) => <span key={value} className="cp-chip">{value}</span>)}</div></div> : null}
-                          {selectedTemplate.postprocess?.length ? <div><div className="cp-subtle-label">Post-treatment</div><div className="mt-2 flex flex-wrap gap-2">{selectedTemplate.postprocess.map((value) => <span key={value} className="cp-chip">{value}</span>)}</div></div> : null}
+                          {selectedTemplate.preprocess?.length ? <div><div className="cp-subtle-label">{t("Pre-treatment")}</div><div className="mt-2 flex flex-wrap gap-2">{selectedTemplate.preprocess.map((value) => <span key={value} className="cp-chip"><ScientificText text={value} /></span>)}</div></div> : null}
+                          {selectedTemplate.synthesis?.length ? <div><div className="cp-subtle-label">{t("Synthesis")}</div><div className="mt-2 flex flex-wrap gap-2">{selectedTemplate.synthesis.map((value) => <span key={value} className="cp-chip"><ScientificText text={value} /></span>)}</div></div> : null}
+                          {selectedTemplate.postprocess?.length ? <div><div className="cp-subtle-label">{t("Post-treatment")}</div><div className="mt-2 flex flex-wrap gap-2">{selectedTemplate.postprocess.map((value) => <span key={value} className="cp-chip"><ScientificText text={value} /></span>)}</div></div> : null}
                         </div>
                       ) : null}
                     </>
                   ) : (
-                    <div className="mt-3 text-xs leading-6 text-slate-600">Choose a route template to inspect its preparation stages and audit fields here.</div>
+                    <div className="mt-3 text-xs leading-6 text-slate-600">{t("Choose a route template to inspect its preparation stages and audit fields here.")}</div>
                   )}
                 </section>
               </div>

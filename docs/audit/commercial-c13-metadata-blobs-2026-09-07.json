@@ -1,0 +1,27 @@
+[
+  {
+    "file": "docs/paper/submission-2026-09-07/reproduction_manifest_2026-09-07.json",
+    "key": "source_manifest_sha256",
+    "matches": true
+  },
+  {
+    "file": "docs/audit/external-cost-validation-2026-09-07.json",
+    "key": "external_audit_sha256",
+    "matches": true
+  },
+  {
+    "file": "docs/paper/controlled-2026-09-07/controlled_cases.json",
+    "key": "controlled_output_sha256",
+    "matches": true
+  },
+  {
+    "file": "docs/paper/controlled-2026-09-07/provenance.json",
+    "key": "controlled_provenance_sha256",
+    "matches": true
+  },
+  {
+    "file": "docs/sources/independent-evidence-access-2026-09-07.json",
+    "key": "additional_evidence_sha256",
+    "matches": true
+  }
+]

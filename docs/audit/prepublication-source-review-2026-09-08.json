@@ -1,0 +1,16 @@
+{
+  "source_commit": "1c0d1dc920181c512dc73c38430ef39eac470cc0",
+  "base": "8bdbb08680571a052fc78a647c062dcf90257c42",
+  "protected_changes": [],
+  "tracked_files_changed": 82,
+  "code_inputs": 95,
+  "data_inputs": 81,
+  "live_input_verified": true,
+  "working_tree_clean": true,
+  "note": "Raw pytest logs preserve three whitespace-only diagnostic lines; source/document diff check excludes raw .log files.",
+  "documentation_links": {
+    "checked": 68,
+    "missing": [],
+    "scope": "Local file destinations in six changed documentation files; remote links and anchor names are outside this check."
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "tool": "OpenAI image generation tool",
+  "generated_on": "2026-09-15",
+  "purpose": "Conceptual manufacturing apparatus, without numerical results",
+  "artwork_sha256": "5f41378d1ad5eb56ad1112b545d78393ee44b04fd8ca93d5e091927a4a3c94e6",
+  "prompt": "artwork/manufacturing.prompt.md",
+  "labels": "Editable text in fig3a_manufacturing_v2.pptx",
+  "toc_use": false
+}

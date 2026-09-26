@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from collections import Counter
 from datetime import UTC, datetime
@@ -28,6 +29,7 @@ from backend.core.decision_engine import (  # noqa: E402
     _load_catalogs,
     evaluate_benchmark_family,
     list_benchmark_families,
+    rank_candidates,
 )
 from backend.database import (  # noqa: E402
     create_db_and_tables,
@@ -50,13 +52,7 @@ def simplex_grid(step: float) -> list[dict[str, float]]:
 
 
 def rank(cands: list[dict], w: dict[str, float]) -> list[str]:
-    def total(c: dict) -> float:
-        return sum(float(c["scores"][k]) * w[k] for k in DIMS)
-
-    return [
-        c["slug"]
-        for c in sorted(cands, key=lambda c: (total(c), -float(c["summary"]["landed_cost_per_lb"])), reverse=True)
-    ]
+    return [c["slug"] for c in rank_candidates(cands, w)]
 
 
 def slim(c: dict) -> dict:
@@ -93,6 +89,7 @@ def main() -> None:
     ap.add_argument("--out", type=Path, required=True)
     ap.add_argument("--grid", type=float, default=0.1, help="weight-simplex grid step")
     ap.add_argument("--price-basis", type=Path, help="frozen price basis JSON (a previous run's output, or its price_basis map) instead of the local database")
+    ap.add_argument("--basis-type", choices=("live", "reference"), default="live", help="price tier used when resolving benchmark components")
     args = ap.parse_args()
 
     create_db_and_tables()
@@ -106,7 +103,7 @@ def main() -> None:
             payload = json.loads(args.price_basis.read_text(encoding="utf-8"))
             price_basis = payload.get("price_basis", payload)
         else:
-            price_basis = _latest_price_map(session)
+            price_basis = _latest_price_map(session, basis=args.basis_type)
         catalogs = _load_catalogs()
 
         for fam in list_benchmark_families():
@@ -115,14 +112,14 @@ def main() -> None:
             profiles = list(catalog["decision_profiles"])
             by_profile: dict[str, dict] = {}
             for profile in profiles:
-                by_profile[profile] = evaluate_benchmark_family(session=session, family=key, profile=profile, prices=price_basis)
+                by_profile[profile] = evaluate_benchmark_family(session=session, family=key, profile=profile, prices=price_basis, basis=args.basis_type)
 
             balanced = by_profile.get("balanced") or by_profile[profiles[0]]
             base_w = dict(balanced["decision_profile"]["weights"])
             perf0 = {k: (0.0 if k == "performance" else base_w[k]) for k in DIMS}
             s = sum(perf0.values())
             perf0 = {k: v / s for k, v in perf0.items()}
-            perf0_res = evaluate_benchmark_family(session=session, family=key, profile=balanced["decision_profile"]["id"], weights=perf0, prices=price_basis)
+            perf0_res = evaluate_benchmark_family(session=session, family=key, profile=balanced["decision_profile"]["id"], weights=perf0, prices=price_basis, basis=args.basis_type)
 
             cands = balanced["candidates"]
             balanced_winner = cands[0]["slug"] if cands else None
@@ -164,8 +161,9 @@ def main() -> None:
             })
 
     out = {
-        "generated_at": datetime.now(UTC).isoformat(),
-        "price_basis_source": str(args.price_basis) if args.price_basis else "application database",
+        "generated_at": datetime.fromtimestamp(int(os.environ["SOURCE_DATE_EPOCH"]), UTC).isoformat() if "SOURCE_DATE_EPOCH" in os.environ else (None if args.price_basis else datetime.now(UTC).isoformat()),
+        "price_basis_source": args.price_basis.name if args.price_basis else "application database",
+        "basis_type": args.basis_type,
         "price_basis": price_basis,
         "simplex_grid_step": args.grid,
         "summary": summary,

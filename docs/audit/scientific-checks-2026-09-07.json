@@ -1,0 +1,213 @@
+{
+  "at": "2026-09-07T07:35:58.997942+00:00",
+  "source_commit": "a7f2d568c29874a8b5eea20d2114e5570bc38041",
+  "base_commit": "c963bbdb8a794aac1c7adbe14a316eef4bf211e7",
+  "python": "3.14.0",
+  "checks": [
+    {
+      "check": "pytest",
+      "command": [
+        "python",
+        "-m",
+        "pytest",
+        "backend/tests",
+        "-q"
+      ],
+      "exit_code": 0,
+      "seconds": 448.599,
+      "at": "2026-09-07T07:17:25.333701+00:00",
+      "log": "docs/audit/scientific-pytest-2026-09-07.log"
+    },
+    {
+      "check": "frontend-lint",
+      "command": [
+        "npm.cmd",
+        "--prefix",
+        "frontend",
+        "run",
+        "lint"
+      ],
+      "exit_code": 0,
+      "seconds": 4.683,
+      "at": "2026-09-07T07:26:39.760430+00:00",
+      "log": "docs/audit/scientific-frontend-lint-2026-09-07.log"
+    },
+    {
+      "check": "i18n",
+      "command": [
+        "npm.cmd",
+        "--prefix",
+        "frontend",
+        "run",
+        "check:i18n"
+      ],
+      "exit_code": 0,
+      "seconds": 0.812,
+      "at": "2026-09-07T07:26:35.890963+00:00",
+      "log": "docs/audit/scientific-i18n-2026-09-07.log"
+    },
+    {
+      "check": "frontend-build",
+      "command": [
+        "npm.cmd",
+        "--prefix",
+        "frontend",
+        "run",
+        "build"
+      ],
+      "exit_code": 0,
+      "seconds": 3.691,
+      "at": "2026-09-07T07:26:34.300338+00:00",
+      "log": "docs/audit/scientific-frontend-build-2026-09-07.log"
+    },
+    {
+      "check": "calculator-rules",
+      "command": [
+        "node",
+        "scripts/test_calculator_rules.mjs"
+      ],
+      "exit_code": 0,
+      "seconds": 0.352,
+      "at": "2026-09-07T07:26:35.450377+00:00",
+      "log": "docs/audit/scientific-calculator-rules-2026-09-07.log"
+    },
+    {
+      "check": "practical-range",
+      "command": [
+        "node",
+        "scripts/test_practical_range.mjs"
+      ],
+      "exit_code": 0,
+      "seconds": 0.326,
+      "at": "2026-09-07T07:26:35.437932+00:00",
+      "log": "docs/audit/scientific-practical-range-2026-09-07.log"
+    },
+    {
+      "check": "scientific-text",
+      "command": [
+        "node",
+        "scripts/test_scientific_text.mjs"
+      ],
+      "exit_code": 0,
+      "seconds": 0.41,
+      "at": "2026-09-07T07:26:35.508207+00:00",
+      "log": "docs/audit/scientific-scientific-text-2026-09-07.log"
+    },
+    {
+      "check": "ruff",
+      "command": [
+        "python",
+        "-m",
+        "ruff",
+        "check",
+        "backend",
+        "scripts"
+      ],
+      "exit_code": 0,
+      "seconds": 0.195,
+      "at": "2026-09-07T07:26:35.325032+00:00",
+      "log": "docs/audit/scientific-ruff-2026-09-07.log"
+    },
+    {
+      "check": "table62",
+      "command": [
+        "python",
+        "scripts/reproduce_catcost_table62.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.138,
+      "at": "2026-09-07T07:26:35.293583+00:00",
+      "log": "docs/audit/scientific-table62-2026-09-07.log"
+    },
+    {
+      "check": "desktop-build",
+      "command": [
+        "npm.cmd",
+        "run",
+        "build"
+      ],
+      "exit_code": 0,
+      "seconds": 198.068,
+      "at": "2026-09-07T07:30:09.969947+00:00",
+      "log": "docs/audit/scientific-desktop-build-2026-09-07.log"
+    },
+    {
+      "check": "desktop-smoke",
+      "command": [
+        "npm.cmd",
+        "run",
+        "smoke:desktop"
+      ],
+      "exit_code": 0,
+      "seconds": 17.604,
+      "at": "2026-09-07T07:30:44.968064+00:00",
+      "log": "docs/audit/scientific-desktop-smoke-2026-09-07.log"
+    }
+  ],
+  "source_sha256": {
+    ".github/workflows/ci.yml": "d51008368a59990746b1a12ca48951408d293e337f1825cfdbdd2e0c6913da76",
+    "frontend/src/components/CostEvidencePanel.tsx": "e8ae2dbed682c26a3b77b5c318f15c8b1fa646df943aa304587cbf1afeb586ce",
+    "frontend/src/components/ManufacturingMethods.tsx": "458eabc869da83e71f3d50f1d441c94d96c0ffbbe10fc16b94322cbf341b161a",
+    "frontend/src/components/PracticalCostingResult.tsx": "a11e397e5b21a5892a74e281a854733e796536e48bd76a0d72174b99fdb73705",
+    "frontend/src/components/SavedEstimateComparison.tsx": "bb048b0954338346a360c09ee6853bb90413603f472099a34497d2f7c57728af",
+    "frontend/src/components/charts/ResultBreakdownPieChart.tsx": "19a2ddb6ad718fc10021bc1e4303a3a69075139e07fe4443dbbfe3aa999c7fac",
+    "frontend/src/components/shared/ExportButton.tsx": "cdcca4c08cf978fff546193a8fae1bc084d8be3a8be16f337294b02d31c9ef08",
+    "frontend/src/components/shared/ScientificText.tsx": "690c9a4deabc2bc7eef3e00e51f541b63c1f8a380e263ddc5d767229c5859dbd",
+    "frontend/src/lib/api.ts": "ec606f2b9a825ffae85008842ad51960339e977a97b8d73fed0545f95018211d",
+    "frontend/src/lib/export-csv.ts": "2ae8233499d862f50c61122c76bc27d5464ef8fba9f2de5b1f9a37b4fc3fc544",
+    "frontend/src/lib/i18n.tsx": "b9f1cd89479e292beb852f0037ac8383d0845a3fb86e1de419c3171976bd21f3",
+    "frontend/src/lib/scientific-text.ts": "08780f8142c51867de75102e3795394068cdd5a36dcf83d17ae645748e19e046",
+    "frontend/src/pages/Calculator.tsx": "235670a43724d855cdbf16282f822a4fd75bbb782b11908720b4d88a1a811b7a",
+    "frontend/src/pages/CalculatorResult.tsx": "a5563e46d89314ebbae4fee2ba549fc6e0ce226ad5dd58d1bf5264c84f543d4c",
+    "frontend/src/pages/CapEx.tsx": "58d4ff479917edbd58a3824728db541ef92d79f5bb5c7dfc60ba6ec083928cab",
+    "frontend/src/pages/Compare.tsx": "21f2428f66fa70cf4db4635c76854c3ab644dc6bb4a2a79b18f675476345be73",
+    "frontend/src/pages/Library.tsx": "41d77e4b2fdd7144cba56e6cbef01f30594c4f4631590180b5a539567b56224f",
+    "frontend/src/pages/Prices.tsx": "db1b36477f0615707e29de5ccb7bbb273148680e7d002c9e567c6634071217d6",
+    "frontend/src/pages/Uncertainty.tsx": "16d61335dacc82e2815b8fda9a286e94571205e3abeca56c721b1437f4a1f061",
+    "scripts/test_calculator_rules.mjs": "560fcfab2d6a5514c1790ca7888308b395a49963d5fecb9be45bf968bf74470c",
+    "scripts/test_scientific_text.mjs": "5285a870febfcde8ef79049c006f5af19d560a477e66826cba7233da796e3cfe"
+  },
+  "ui": [
+    "docs/audit/scientific-ui-2026-09-07.json",
+    "docs/audit/scientific-manufacturing-regression-2026-09-07.json"
+  ],
+  "installation": {
+    "version": "1.4.0",
+    "installer_exit_code": 0,
+    "package_hashes_match": true,
+    "hashes": {
+      "resources/app.asar": {
+        "packaged": "0f5b311de8540107dc6b21cb8767167f2baba47558ecc82e20c7b593ba7f4314",
+        "installed": "0f5b311de8540107dc6b21cb8767167f2baba47558ecc82e20c7b593ba7f4314"
+      },
+      "resources/backend-sidecar/COMETBackend.exe": {
+        "packaged": "9647519fde78adcc6a926de6e37de3c83744ad38e5f73562c48fcc6f94c06b54",
+        "installed": "9647519fde78adcc6a926de6e37de3c83744ad38e5f73562c48fcc6f94c06b54"
+      }
+    },
+    "database_quick_check": "ok",
+    "table_counts_before": {
+      "estimates": 0,
+      "materials": 733,
+      "metal_prices": 5424,
+      "equipment": 0
+    },
+    "table_counts_after_startup": {
+      "estimates": 0,
+      "materials": 733,
+      "metal_prices": 5442,
+      "equipment": 0
+    },
+    "backup_created": true
+  },
+  "startup": {
+    "health": {
+      "status": "ok",
+      "version": "1.4.0",
+      "last_price_update": null,
+      "scheduler_running": true
+    },
+    "main_windows": 1,
+    "installed_app_and_backend_paths_verified": true
+  }
+}

@@ -6,7 +6,7 @@ from pydantic import BaseModel, ConfigDict, Field
 class MaterialCreate(BaseModel):
     """Payload used to create a custom material row."""
 
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
 
     name: str = Field(min_length=1)
     formula: str | None = None
@@ -33,7 +33,7 @@ class MaterialCreate(BaseModel):
 class MaterialUpdate(BaseModel):
     """Partial payload used to update a custom material row."""
 
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
 
     name: str | None = Field(default=None, min_length=1)
     formula: str | None = None

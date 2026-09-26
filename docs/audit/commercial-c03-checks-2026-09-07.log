@@ -1,0 +1,122 @@
+All checks passed!
+✔ optional recipes reject incomplete values, zero yield and double interpretation of percentages (1.1519ms)
+✔ CSV preserves calculation scope, production assumptions and purchased-input evidence (2.1621ms)
+✔ repeated operations remain distinct while order-only changes match (0.1095ms)
+✔ unchecking and rechecking a repeated operation restores its count and original sequence (1.3106ms)
+✔ interleaved step toggles preserve other edits and restore repeated operations after draft reload (0.3835ms)
+✔ scale fitting keeps deliberate omissions and additions including an in-flight manual edit (0.1811ms)
+✔ editing a chosen method never silently adopts another method with matching steps (0.0974ms)
+✔ returning to a smaller scale does not reinsert a deliberately removed substituted kiln (0.0834ms)
+✔ selected card identity survives identical routes and scale fitting (0.1181ms)
+✔ selected method waits for current-scale steps, while manual routes stay usable (0.1074ms)
+✔ fuel_cell × pem_fuel_cell_ccm defaults (6.8675ms)
+✔ direct_methanol_fuel_cell × dmfc_gde_route defaults (0.1091ms)
+✔ electrolyzer × pem_electrolyzer_ccm defaults (0.0565ms)
+✔ electrolyzer × alkaline_electrolyzer_gde defaults (0.0572ms)
+✔ AEM fuel-cell route retains existing application-family preference (0.0953ms)
+✔ equal chemistry ranks prefer source scope, then quoted price, then name (0.0955ms)
+✔ electrode displayed ledger uses area costs without thermal cost fields (0.1788ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 20.4242
+✔ range preserves precursor consumption, purchase evidence, throughput, consumables and template identity (1.6117ms)
+✔ range rejects incomplete recipes, zero retention, missing production evidence and incomplete wash inputs (0.1254ms)
+✔ old thermal drafts retain nominal throughput, balanced support and legacy recovery defaults (0.1341ms)
+✔ split support retains each fraction and each optional recipe instead of auto-balancing one row (0.2522ms)
+✔ electrode range preserves its manufacturing scenario and material stack without thermal additions (0.1187ms)
+✔ the real range handler passes the currently selected reference price basis with the full draft input (3.4926ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9.1089
+✔ stoichiometry, repeated groups and hydrate coefficients have distinct positions (1.6183ms)
+✔ fractional and variable stoichiometry are not mistaken for powers or model numbers (0.2262ms)
+✔ ionic charge, zero-valent metals and explicitly identified isotope mass are superscripts (0.3965ms)
+✔ area, volume, inverse units and numerical powers use superscripts (0.2002ms)
+✔ URLs, DOI, identifiers, product grades and source ambiguities remain intact (0.1563ms)
+✔ formatting is idempotent and search accepts displayed subscripts and powers (1.357ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7.9468
+
+## 2 wt% Pt/C  (order 2 ton)
+materials: published total 10.7  |  sum of rows 10.7013
+                                 COMET   Table 6.2    dev %
+step_cost_per_hr              390.0000    390.0000    +0.00
+campaign_days                   2.5000      2.5000    +0.00
+campaign_cost               23400.0000  23400.0000    +0.00
+processing_cost_per_lb          5.8500      5.8500    +0.00
+subtotal_per_lb                16.5500     16.5500    +0.00
+ga_per_lb                       0.8275      0.8300    -0.30
+sard_per_lb                     0.8689      0.8700    -0.13
+margin_per_lb                   9.1231      9.1200    +0.03
+estimated_price_per_lb         27.3695     27.3700    -0.00
+margin basis: COMET 33.33% of selling price = 50.0% of pre-margin  |  table footnote 50.0% of pre-margin
+vs market $34.09: COMET -19.7%  |  CatCost published -19.7%
+
+## 21 wt% Ni/Al2O3  (order 20 ton)
+materials: published total 11.88  |  sum of rows 11.8918
+                                 COMET   Table 6.2    dev %
+step_cost_per_hr             1200.0000   1200.0000    +0.00
+campaign_days                   3.0000      3.0000    +0.00
+campaign_cost               86400.0000  86400.0000    +0.00
+processing_cost_per_lb          2.1600      2.1600    +0.00
+subtotal_per_lb                14.0400     14.0400    +0.00
+ga_per_lb                       0.7020      0.7000    +0.29
+sard_per_lb                     0.7371      0.7400    -0.39
+margin_per_lb                   3.7415      5.1100   -26.78
+estimated_price_per_lb         19.2206     20.5900    -6.65
+margin basis: COMET 19.47% of selling price = 24.17% of pre-margin  |  table footnote 33.0% of pre-margin
+vs market $21.33: COMET -9.9%  |  CatCost published -3.5%
+
+## USY-based FCC (with RE)  (order 200 ton)
+materials: published total 0.352  |  sum of rows 0.3524
+                                 COMET   Table 6.2    dev %
+step_cost_per_hr             6725.0000   6725.0000    +0.00
+campaign_days                   2.3300      4.0000   -41.75
+campaign_cost              376600.0000 645600.0000   -41.67
+processing_cost_per_lb          0.9415      1.6100   -41.52
+subtotal_per_lb                 1.2935      1.9700   -34.34
+ga_per_lb                       0.0647      0.1000   -35.30
+sard_per_lb                     0.0679      0.1000   -32.10
+margin_per_lb                   0.1829      0.2400   -23.79
+estimated_price_per_lb          1.6090      2.4100   -33.24
+margin basis: COMET 11.37% of selling price = 12.83% of pre-margin  |  table footnote 11.0% of pre-margin
+vs market $2.73: COMET -41.1%  |  CatCost published -11.7%
+with footnote-b rate 67 t/d: campaign 3.985 d, processing 1.6080, price 2.4380 (+1.16% vs published)
+
+npm : File C:\Program Files\nodejs\npm.ps1 cannot be loaded because running scripts is disabled on this system. For mor
+e information, see about_Execution_Policies at https:/go.microsoft.com/fwlink/?LinkID=135170.
+At line:1 char:80
++ ... backend scripts; if ($LASTEXITCODE) {exit $LASTEXITCODE}; npm --prefi ...
++                                                               ~~~
+    + CategoryInfo          : SecurityError: (:) [], PSSecurityException
+    + FullyQualifiedErrorId : UnauthorizedAccess
+npm : File C:\Program Files\nodejs\npm.ps1 cannot be loaded because running scripts is disabled on this system. For mor
+e information, see about_Execution_Policies at https:/go.microsoft.com/fwlink/?LinkID=135170.
+At line:1 char:153
++ ... ontend run lint; if ($LASTEXITCODE) {exit $LASTEXITCODE}; npm --prefi ...
++                                                               ~~~
+    + CategoryInfo          : SecurityError: (:) [], PSSecurityException
+    + FullyQualifiedErrorId : UnauthorizedAccess
+npm : File C:\Program Files\nodejs\npm.ps1 cannot be loaded because running scripts is disabled on this system. For mor
+e information, see about_Execution_Policies at https:/go.microsoft.com/fwlink/?LinkID=135170.
+At line:1 char:227
++ ... ntend run build; if ($LASTEXITCODE) {exit $LASTEXITCODE}; npm --prefi ...
++                                                               ~~~
+    + CategoryInfo          : SecurityError: (:) [], PSSecurityException
+    + FullyQualifiedErrorId : UnauthorizedAccess

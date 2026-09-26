@@ -1,0 +1,43 @@
+{
+  "comparison_base": "c513e1ccaf37b7a61f6d3d31a0491627e654bc5c",
+  "source_head": "d972f188276258743dfe2ad248d810fe2d1834bc",
+  "protected_changes": [],
+  "deleted_files": [],
+  "tracked_private_workdirs": [],
+  "dependency_declarations_unchanged": true,
+  "root_package_script_change": {
+    "before": "cross-env VITE_BACKEND_PORT=8765 cd frontend && npm run dev",
+    "after": "cross-env VITE_BACKEND_PORT=8765 npm --prefix frontend run dev"
+  },
+  "changed_core_files": [
+    "backend/core/data_rights.py"
+  ],
+  "added_text_secret_pattern_counts": {
+    "private_key": 0,
+    "github_token": 0,
+    "openai_key": 0
+  },
+  "limitations": "Bounded source/metadata checks, not a complete security or dependency-license certification. Synthetic fixture passwords are intentional test data. Earlier raw logs and generated SVG whitespace remain preserved.",
+  "artifacts": [
+    {
+      "file": "dist-electron\\COMET.Setup.1.4.0.exe",
+      "sha256": "ac1556cf7683d4904301fd75df0461fdf42598ab2462945cbc491943629c2509",
+      "bytes": 154875564
+    },
+    {
+      "file": "dist-electron\\win-unpacked\\COMET.exe",
+      "sha256": "2ee56cf60b140d97a7202ccdc07eaa55a5b1c172d0f5305471caa4a83f86d979",
+      "bytes": 223870976
+    },
+    {
+      "file": "dist-electron\\win-unpacked\\resources\\app.asar",
+      "sha256": "a511b439563a8d3f37ca3574e694cfa25f39bba477e5302b1e1816e494b2c774",
+      "bytes": 11143749
+    },
+    {
+      "file": "dist-electron\\win-unpacked\\resources\\backend-sidecar\\COMETBackend.exe",
+      "sha256": "38813c40ef8fe828caed417da38106f9e4a1cded33f5f1db47b86c38737a1956",
+      "bytes": 24491873
+    }
+  ]
+}

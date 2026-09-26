@@ -1,0 +1,402 @@
+{
+  "renderer": "matplotlib",
+  "dpi": 400,
+  "panels": [
+    {
+      "figure": "fig2_cost_model",
+      "panel": "b",
+      "language": "en",
+      "file": "fig2_cost_model.b.png",
+      "width_mm": 178,
+      "height_mm": 46,
+      "sha256": "be464206408f0a1ac5f1059c36ff7e411b0867945ce4c986ab2a19a0a89f9e12"
+    },
+    {
+      "figure": "fig2_cost_model",
+      "panel": "b",
+      "language": "ko",
+      "file": "fig2_cost_model.b.ko.png",
+      "width_mm": 178,
+      "height_mm": 46,
+      "sha256": "381bb7165bef5ff781aca50ee8baf74f2ef9ebb14495cd47c2c4dd81b5ec8bcb"
+    },
+    {
+      "figure": "fig2_cost_model",
+      "panel": "c",
+      "language": "en",
+      "file": "fig2_cost_model.c.png",
+      "width_mm": 178,
+      "height_mm": 102,
+      "sha256": "58348db9fa17be72b493cead315a8bfb179ebfb192bcfe044852221e9bbd0454"
+    },
+    {
+      "figure": "fig2_cost_model",
+      "panel": "c",
+      "language": "ko",
+      "file": "fig2_cost_model.c.ko.png",
+      "width_mm": 178,
+      "height_mm": 102,
+      "sha256": "4bc63254bf29ff5f7028250cf8abce0174ea920305ab90de43c4418c66a74e97"
+    },
+    {
+      "figure": "fig3_manufacturing",
+      "panel": "b",
+      "language": "en",
+      "file": "fig3_manufacturing.b.png",
+      "width_mm": 89,
+      "height_mm": 80,
+      "sha256": "6be8c281b73c34903570147601dcf7d475d9ce0b7d4829b5dc54b554022e3685"
+    },
+    {
+      "figure": "fig3_manufacturing",
+      "panel": "b",
+      "language": "ko",
+      "file": "fig3_manufacturing.b.ko.png",
+      "width_mm": 89,
+      "height_mm": 80,
+      "sha256": "b2e45830e8db92f330b1f0691eaec3e7f60136ce0a3fa27e9423b894353fd4bb"
+    },
+    {
+      "figure": "fig3_manufacturing",
+      "panel": "c",
+      "language": "en",
+      "file": "fig3_manufacturing.c.png",
+      "width_mm": 89,
+      "height_mm": 80,
+      "sha256": "a66739356401c91f7e94ed4e746d3de6ccc287be5e57a1353ee71fe7b3b49859"
+    },
+    {
+      "figure": "fig3_manufacturing",
+      "panel": "c",
+      "language": "ko",
+      "file": "fig3_manufacturing.c.ko.png",
+      "width_mm": 89,
+      "height_mm": 80,
+      "sha256": "931eb69d9daf65561e143cc3312a03d5247201251b74cfadbafa83e1fbfe65a5"
+    },
+    {
+      "figure": "fig4_ranking",
+      "panel": "a",
+      "language": "en",
+      "file": "fig4_ranking.a.png",
+      "width_mm": 59,
+      "height_mm": 64,
+      "sha256": "559284ee413b74f2cbbce63a976a5bf130537e2a495e5ec142d3b9a419e47751"
+    },
+    {
+      "figure": "fig4_ranking",
+      "panel": "a",
+      "language": "ko",
+      "file": "fig4_ranking.a.ko.png",
+      "width_mm": 59,
+      "height_mm": 64,
+      "sha256": "2ca8bb2b184af1cc153373e87fd41866cb328a075037124f224944ccc7ee55d2"
+    },
+    {
+      "figure": "fig4_ranking",
+      "panel": "b",
+      "language": "en",
+      "file": "fig4_ranking.b.png",
+      "width_mm": 59,
+      "height_mm": 64,
+      "sha256": "a08916d6022904ca81bb340315b606b0d57b1429a5a0c67276fe9959220d0786"
+    },
+    {
+      "figure": "fig4_ranking",
+      "panel": "b",
+      "language": "ko",
+      "file": "fig4_ranking.b.ko.png",
+      "width_mm": 59,
+      "height_mm": 64,
+      "sha256": "d7e247a87e1d02c1100aad23b0e4329b6d47ebef4d5c1301561d521ec1ed45aa"
+    },
+    {
+      "figure": "fig4_ranking",
+      "panel": "c",
+      "language": "en",
+      "file": "fig4_ranking.c.png",
+      "width_mm": 60,
+      "height_mm": 64,
+      "sha256": "57893f696c58a72be3a86b6d9d901876e54dcffec310a87741f4bc3706a959d9"
+    },
+    {
+      "figure": "fig4_ranking",
+      "panel": "c",
+      "language": "ko",
+      "file": "fig4_ranking.c.ko.png",
+      "width_mm": 60,
+      "height_mm": 64,
+      "sha256": "a8f7975b0c6e60dd6f15207d429fbb9873aacafd75756915e8d3d6b8465bd7ea"
+    },
+    {
+      "figure": "fig4_ranking",
+      "panel": "d",
+      "language": "en",
+      "file": "fig4_ranking.d.png",
+      "width_mm": 64,
+      "height_mm": 64,
+      "sha256": "9e817b8a54e82a383e58eda913023cbd714bce40cceede0b2c07a2750a140f57"
+    },
+    {
+      "figure": "fig4_ranking",
+      "panel": "d",
+      "language": "ko",
+      "file": "fig4_ranking.d.ko.png",
+      "width_mm": 64,
+      "height_mm": 64,
+      "sha256": "e8f88127df5ee8d2a84cd8cc6b6bd8cc31c9b0c2633b353a7055f336b96fd84e"
+    },
+    {
+      "figure": "fig4_ranking",
+      "panel": "e",
+      "language": "en",
+      "file": "fig4_ranking.e.png",
+      "width_mm": 66,
+      "height_mm": 64,
+      "sha256": "e37fbd6a3fb04e25a496fabe9c090953c5ff28053b6df3d198aed76fd6c8b1c1"
+    },
+    {
+      "figure": "fig4_ranking",
+      "panel": "e",
+      "language": "ko",
+      "file": "fig4_ranking.e.ko.png",
+      "width_mm": 66,
+      "height_mm": 64,
+      "sha256": "ef5c3dc7471403fd449674a752644840317c265a5e11589bacd6a6ba1b2402de"
+    },
+    {
+      "figure": "fig4_ranking",
+      "panel": "f",
+      "language": "en",
+      "file": "fig4_ranking.f.png",
+      "width_mm": 48,
+      "height_mm": 64,
+      "sha256": "5ab1a083640f333fb4a3b5706822475696c336d8194a4d33f3cadef613b100d5"
+    },
+    {
+      "figure": "fig4_ranking",
+      "panel": "f",
+      "language": "ko",
+      "file": "fig4_ranking.f.ko.png",
+      "width_mm": 48,
+      "height_mm": 64,
+      "sha256": "1ab7e3e238b9be20091ffba258dbc53c406a8e58ec2593d531566f5e0502817c"
+    },
+    {
+      "figure": "figS2_sensitivity",
+      "panel": "a",
+      "language": "en",
+      "file": "figS2_sensitivity.a.png",
+      "width_mm": 150,
+      "height_mm": 82,
+      "sha256": "f918dc8b7bd3ce74942c5444cf464aaef3375147a506b93be3f57ce38875c7ee"
+    },
+    {
+      "figure": "figS2_sensitivity",
+      "panel": "a",
+      "language": "ko",
+      "file": "figS2_sensitivity.a.ko.png",
+      "width_mm": 150,
+      "height_mm": 82,
+      "sha256": "bd5bc80d96dcc4268095810acb02840085267f479778684b92d9c2d9deae9770"
+    },
+    {
+      "figure": "figS3_monte_carlo",
+      "panel": "a",
+      "language": "en",
+      "file": "figS3_monte_carlo.a.png",
+      "width_mm": 89,
+      "height_mm": 72,
+      "sha256": "5167c2992dc0f556bd3a03fe80580388e47c7b27b81a8dbaae760cfea1ebe1ea"
+    },
+    {
+      "figure": "figS3_monte_carlo",
+      "panel": "a",
+      "language": "ko",
+      "file": "figS3_monte_carlo.a.ko.png",
+      "width_mm": 89,
+      "height_mm": 72,
+      "sha256": "00e0f70044e1ea8f69b6c6439df20601e4e8347386038f4ed7664f4f0cb28bc5"
+    },
+    {
+      "figure": "figS3_monte_carlo",
+      "panel": "b",
+      "language": "en",
+      "file": "figS3_monte_carlo.b.png",
+      "width_mm": 89,
+      "height_mm": 72,
+      "sha256": "577de6a853b3a06ce2fe94e631f436e827101f6adfe8876515c81a5ab379a2c2"
+    },
+    {
+      "figure": "figS3_monte_carlo",
+      "panel": "b",
+      "language": "ko",
+      "file": "figS3_monte_carlo.b.ko.png",
+      "width_mm": 89,
+      "height_mm": 72,
+      "sha256": "bfca29f4b3b44517ec71e0b54a7db1725f13b5b6cba03cddda5874e32446fab8"
+    },
+    {
+      "figure": "figS4_metal_prices",
+      "panel": "a",
+      "language": "en",
+      "file": "figS4_metal_prices.a.png",
+      "width_mm": 84,
+      "height_mm": 60,
+      "sha256": "c9657901ee89be4a93f32843505218f727f6ed2b00f505278f4063a675a5c791"
+    },
+    {
+      "figure": "figS4_metal_prices",
+      "panel": "a",
+      "language": "ko",
+      "file": "figS4_metal_prices.a.ko.png",
+      "width_mm": 84,
+      "height_mm": 60,
+      "sha256": "7f7d7e94b83edc1e8d7053ec873638035027593718ec7d2cb2a4e2284cd50e72"
+    },
+    {
+      "figure": "figS4_metal_prices",
+      "panel": "b",
+      "language": "en",
+      "file": "figS4_metal_prices.b.png",
+      "width_mm": 84,
+      "height_mm": 62,
+      "sha256": "f57eeeda7c075d461a83d8237c2d26346d8e2f4436ae90e8fcf545c9b342493b"
+    },
+    {
+      "figure": "figS4_metal_prices",
+      "panel": "b",
+      "language": "ko",
+      "file": "figS4_metal_prices.b.ko.png",
+      "width_mm": 84,
+      "height_mm": 62,
+      "sha256": "b6684f3678fe576967b46481723248453f42bede00a5c1caf0ea410d8f7c3ffa"
+    },
+    {
+      "figure": "figS5_crossovers",
+      "panel": "a",
+      "language": "en",
+      "file": "figS5_crossovers.a.png",
+      "width_mm": 52,
+      "height_mm": 70,
+      "sha256": "f478d593c8df627a819faad5075eff6e03f5578f2e92e806dcf600153d6aaff6"
+    },
+    {
+      "figure": "figS5_crossovers",
+      "panel": "a",
+      "language": "ko",
+      "file": "figS5_crossovers.a.ko.png",
+      "width_mm": 52,
+      "height_mm": 70,
+      "sha256": "2808c271d284f3a8b8ff8ef48b2bf8475a09471038e298f9ee27d38ce520b285"
+    },
+    {
+      "figure": "figS5_crossovers",
+      "panel": "b",
+      "language": "en",
+      "file": "figS5_crossovers.b.png",
+      "width_mm": 52,
+      "height_mm": 70,
+      "sha256": "61d3f476b925962b95e0f2c9f3842faa471b7ec29181cdbb706ff4d6da29a9b7"
+    },
+    {
+      "figure": "figS5_crossovers",
+      "panel": "b",
+      "language": "ko",
+      "file": "figS5_crossovers.b.ko.png",
+      "width_mm": 52,
+      "height_mm": 70,
+      "sha256": "0573e2c71f33004b75dfa99ac4ab4b67aae7ae7c21ac26115252ebfe123df9ed"
+    },
+    {
+      "figure": "figS5_crossovers",
+      "panel": "c",
+      "language": "en",
+      "file": "figS5_crossovers.c.png",
+      "width_mm": 74,
+      "height_mm": 70,
+      "sha256": "5d50cc5c6df8c30ea97d4af14955576802f7bc6cef7c700246768db6e3d562d9"
+    },
+    {
+      "figure": "figS5_crossovers",
+      "panel": "c",
+      "language": "ko",
+      "file": "figS5_crossovers.c.ko.png",
+      "width_mm": 74,
+      "height_mm": 70,
+      "sha256": "e74e47cc94a04bb51b02bf19a434e4ddacf7e0464de0442525d3361961288db3"
+    },
+    {
+      "figure": "figS6_ranking_tests",
+      "panel": "a",
+      "language": "en",
+      "file": "figS6_ranking_tests.a.png",
+      "width_mm": 178,
+      "height_mm": 132,
+      "sha256": "590648b2f64b5b3252245296f3dccf9470f00269bbb63d541b89d3abc70261c2"
+    },
+    {
+      "figure": "figS6_ranking_tests",
+      "panel": "a",
+      "language": "ko",
+      "file": "figS6_ranking_tests.a.ko.png",
+      "width_mm": 178,
+      "height_mm": 132,
+      "sha256": "4305bc355b34dc8a77d51d4484a4fbd84f9621012f6b6706a3422f0427459400"
+    },
+    {
+      "figure": "figS6_ranking_tests",
+      "panel": "b",
+      "language": "en",
+      "file": "figS6_ranking_tests.b.png",
+      "width_mm": 89,
+      "height_mm": 71,
+      "sha256": "00ae020bc6d5b75116093bbf35b5ae2ef16542868e8e879fce6627b50d61a9b7"
+    },
+    {
+      "figure": "figS6_ranking_tests",
+      "panel": "b",
+      "language": "ko",
+      "file": "figS6_ranking_tests.b.ko.png",
+      "width_mm": 89,
+      "height_mm": 71,
+      "sha256": "f74c104d6b47f666a3632699c9d7a6ac65bc4e9c74b79718c621aedf20032698"
+    },
+    {
+      "figure": "figS6_ranking_tests",
+      "panel": "c",
+      "language": "en",
+      "file": "figS6_ranking_tests.c.png",
+      "width_mm": 89,
+      "height_mm": 71,
+      "sha256": "aa0c7beae2524c4cfdd14b138a5f3b8f9dc2224d94a61d78fc68ca6376d8df1c"
+    },
+    {
+      "figure": "figS6_ranking_tests",
+      "panel": "c",
+      "language": "ko",
+      "file": "figS6_ranking_tests.c.ko.png",
+      "width_mm": 89,
+      "height_mm": 71,
+      "sha256": "d93d205e170cfb6248acd2e2de85b52c8064a861ae3b846c41800d194d372a45"
+    },
+    {
+      "figure": "figS7_evidence",
+      "panel": "a",
+      "language": "en",
+      "file": "figS7_evidence.a.png",
+      "width_mm": 178,
+      "height_mm": 118,
+      "sha256": "765aed17c695c313a22c4102710ea375cf2c9158c2deeafddd9c46d537baa44b"
+    },
+    {
+      "figure": "figS7_evidence",
+      "panel": "a",
+      "language": "ko",
+      "file": "figS7_evidence.a.ko.png",
+      "width_mm": 178,
+      "height_mm": 118,
+      "sha256": "157dcc805ca119143f3c20fc4750b0d6b8b1db1a03e26967d810df2af2ac3cec"
+    }
+  ]
+}

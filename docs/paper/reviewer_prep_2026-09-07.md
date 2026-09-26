@@ -1,0 +1,25 @@
+# Reviewer preparation for the current manuscript
+
+These are anticipated questions and evidence-based draft answers, not actual reviewer comments or a guarantee of publication. Use the [current manuscript](manuscript_2026-09-07.md), [SI](si_2026-09-07.md) and [author-readiness record](author-readiness-2026-09-07.ko.md).
+
+1. **What is new beyond CatCost?** The claim is a reproducible study of how frozen prices, source-confidence scoring, preparation classes and environmental coverage affect screening. The published costing method is acknowledged prior art. The controlled crossed design identifies distinct price/evidence channels; software features alone are not the scientific novelty.
+
+2. **Does matching the published table validate real manufacturing costs?** No. The published material inputs, steps and effective-throughput case test implementation of that method. Margin/throughput departures are explicit. The [external audit](../audit/external-cost-validation-2026-09-07.md) has no condition-matched independent full-cost observations and reports no empirical MAPE. That limitation remains in the abstract and main text.
+
+3. **Are recommendation changes caused by metal prices?** Not all of them. The [controlled output](controlled-2026-09-07/controlled_cases.json), `summary.changed_winner_counts`, separates numeric price state, source annotations and combined endpoints under fixed balanced weights. Those inputs have different dates/support bases, so even the isolated price channel is not a same-date empirical market-causality estimate. The historical monthly replay is a separate analysis.
+
+4. **Are the evidence and performance scores objective probabilities?** No. Source confidence and route/performance scores are author-assigned screening rubrics. Removing performance weight retains the other rubrics. Weight sensitivity and source-state counterfactuals expose their influence; no calibrated correctness probability, experimentally measured utility or catalyst activity is claimed.
+
+5. **Why does a tiny quantity change produce a large price jump?** Discrete Small/Medium/Large production classes change nominal throughput and fitted equipment. The adjacent scenarios in SI Table S6 make this discontinuity visible. It is a model-class effect, not a factory-validated volume discount. Continuous equipment sizing or plant validation would need new evidence and has not been fabricated.
+
+6. **Do the electrode examples predict complete commercial assembly costs?** No. SI Table S7 fixes the catalog-resolved material stack and varies loading and a hypothetical powder-price multiplier. Powder mass cost and electrode-area cost have distinct boundaries. Industrial throughput, complete assembly, procurement grade, activity and lifetime are not held experimentally equivalent.
+
+7. **Can incomplete LCA coverage establish environmental superiority?** No. Matched mass is not a complete inventory. The GWP result is conditional on the reported coverage subset and supplied factors; omitted support, solvent, wastewater and equipment contributions remain gaps. Cost/GWP charts do not establish a complete Pareto frontier or use-phase benefit.
+
+8. **Can another group reproduce the results?** Frozen input hashes, environment records, deterministic analysis commands and JSON-key comments are retained. `build_submission_manuscript.py --check` validates the document against the original primary run and the controlled follow-up. A different code/environment may change provenance even when the numeric result matches. Source-data reuse permissions and reproducibility are separate questions.
+
+9. **Can all bundled data be redistributed or sold?** That has not been established. Existing records declare workbook-derived origins, and free source access does not automatically permit commercial reuse. [The rights register](../commercial/rights-register-2026-09-07.md) and distribution/startup gates preserve this unresolved status. Excluding the original workbook and retaining citations are insufficient to clear every derived value. No new source permissions are claimed.
+
+10. **Have external researchers used the product successfully, and is commercialization a conflict?** Actual participant results and customer adoption are absent. [A moderated evaluation protocol](../research/researcher-evaluation-2026-09-07.ko.md) is ready but has not been carried out. Automated browser/packaging checks show software behavior only. The proposed company relationship, institutional rights and financial interests need actual author review and disclosure before submission.
+
+Before submission, check that every main-text numeric comment resolves; the primary and controlled price snapshot hashes agree; the manuscript does not conflate historical and endpoint counts; figures show units and coverage; exclusions remain explicit; bibliography matches verified identifiers; actual authors approve contribution/funding/conflict declarations; and source-distribution rights and journal eligibility are resolved. Do not replace missing observations with proxy prices to obtain an apparently favorable validation metric.

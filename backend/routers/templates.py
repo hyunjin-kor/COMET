@@ -1,10 +1,15 @@
 """Dedicated process-template API endpoints."""
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, HTTPException, Query
 
 from backend.core.constants import LB_PER_KG
 from backend.core.price_escalation import get_escalation_factor, latest_index_year
-from backend.core.step_method import calculate_step_method, determine_scale, fit_steps_to_scale
+from backend.core.step_method import (
+    calculate_step_method,
+    determine_scale,
+    fit_steps_to_scale,
+    selling_margin_pct,
+)
 from backend.routers import materials
 
 router = APIRouter(prefix="/api/templates", tags=["templates"])
@@ -21,7 +26,7 @@ def list_templates(catalyst_domain: str | None = Query(default=None)):
 
 @router.get("/costs")
 def template_costs(
-    order_size_tons: float = Query(default=20.0, gt=0),
+    order_size_tons: float = Query(default=20.0, gt=0, allow_inf_nan=False),
     catalyst_domain: str | None = Query(default=None),
 ):
     """Processing cost of every template at one campaign size.
@@ -32,6 +37,8 @@ def template_costs(
     price. Materials are excluded, so the figure is the route's own cost.
     """
 
+    if selling_margin_pct(order_size_tons) >= 1:
+        raise HTTPException(422, "Production quantity is outside the selling-margin correlation's valid range (margin >= 100%)")
     scale = determine_scale(order_size_tons)
     target_year = latest_index_year("chemppi")
     try:

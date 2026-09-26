@@ -1,0 +1,8 @@
+
+> frontend@1.4.0 build
+> tsc -b && vite build
+
+src/pages/CalculatorResult.tsx(420,15): error TS1005: '}' expected.
+src/pages/CalculatorResult.tsx(430,16): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+src/pages/CalculatorResult.tsx(549,17): error TS1005: '}' expected.
+src/pages/CalculatorResult.tsx(558,18): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?

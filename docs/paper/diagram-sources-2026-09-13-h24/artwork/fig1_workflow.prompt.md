@@ -1,0 +1,6 @@
+# Letter-removal prompt — 2026-09-13
+
+Tool: OpenAI image generation; exact model/version 확인 못 함.
+Input: ../diagram-sources-2026-09-13-gpt/artwork/fig1_workflow.en.png (relative to the H24 source directory).
+
+Edit target: the attached accepted COMET Figure 1. Make a text-free artwork layer for precise editable typography in PowerPoint. Remove ONLY the nine text labels: Input data, Price basis, Cost estimation, Cost breakdown, Candidate ranking, Analysis record, Data sources, Model assumptions, Reproducibility. Fill their exact text areas with the adjoining clean white or very pale strip background. Leave their space empty. Preserve the original canvas dimensions and 2.70:1 aspect ratio, all five scientific illustrations, all small bottom icons, the five short arrows, the shared rail and its five stems, the center connection, the lower rounded strip and three separators, all positions, all colours, all object proportions and fine outlines. Do not resize, reposition, simplify, add or delete any non-text object. No text, letters, numerals, watermark, new data marks or formulas anywhere. Keep the selected scientific editorial illustration intact; this is ONLY removal of lettering for later native text placement. Output one clean artwork image, not an explanation.

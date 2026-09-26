@@ -1,0 +1,22 @@
+[
+  {
+    "File": "controlled_cases.json",
+    "SHA256": "495B0FE9C5A60476BB29143082D745575976339AAB5DB4A3ACA9C4C9FBD902EE",
+    "Identical": true
+  },
+  {
+    "File": "controlled_cases.png",
+    "SHA256": "0CA105EF257FC2495C8EA962EB9A337D8CEC72CE3035A5724A2C316816360024",
+    "Identical": true
+  },
+  {
+    "File": "controlled_cases.svg",
+    "SHA256": "375F22216BBB63AA0B9B3BC459D3D83CA36BFDD3F0B490B65EAC9587D42E9569",
+    "Identical": true
+  },
+  {
+    "File": "provenance.json",
+    "SHA256": "598EBDE69A1D8F82A3F3BFE4223CE184929515CB5191B8C594889A1171E28DC7",
+    "Identical": true
+  }
+]
