@@ -170,7 +170,7 @@ current layout — this list is a navigation aid, not a contract.
 - `backend/launcher.py`, `backend/paths.py`: PyInstaller-friendly resource resolution for the packaged sidecar
 - `backend/services/bls_updater.py`: ChemPPI auto-update from BLS API
 - `electron/preload.js`: contextBridge for window controls and menu IPC
-- `scripts/` highlights: `build_backend_bundle.ps1` (PyInstaller), `smoke_test_desktop.ps1`, `stop_comet_processes.ps1`, `validate_catcost_data.py` (local-only, requires gitignored CatCost workbook), `capture_readme_screens.mjs`, `generate_app_icons.py`
+- `scripts/` highlights: `build_backend_bundle.ps1` (PyInstaller), `smoke_test_desktop.ps1`, `stop_comet_processes.ps1`, `validate_catcost_data.py` (local-only, requires gitignored CatCost workbook), `generate_app_icons.py`
 
 ---
 

@@ -11,7 +11,7 @@ Start at the [README](../README.md) for what the app does and how to install it.
 | Page | What it covers |
 | --- | --- |
 | [Getting started](getting-started.md) | Install, first estimate, where results are saved |
-| [Screens](screens.md) | Every screen in the app, in the order a session visits them |
+| [User guide](user-guide.md) | A session in nine short steps, with screenshots |
 | [Methodology](methodology.md) | How the cost numbers are derived and what they can be trusted for |
 | [Desktop troubleshooting](desktop-troubleshooting.md) | SmartScreen, sidecar startup, update failures |
 | [Release notes](release-notes.md) | Where the changelog lives |

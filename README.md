@@ -108,10 +108,10 @@ every price and rate the calculator can use.
 
 ## Screens
 
-<img src="./docs/assets/screen-result.png" alt="Result screen: the full cost ledger with the price evidence behind every line" width="100%" />
+<img src="./docs/assets/guide/result.png" alt="Result screen: selling price, cost build-up, price evidence and preparation basis" width="100%" />
 
-Composition input, preparation routes, live metal prices, benchmark comparison,
-the Monte Carlo range and the source library are in [docs/screens.md](docs/screens.md).
+The [user guide](docs/user-guide.md) walks through a session in nine short
+steps, with a numbered screenshot for each.
 
 ## Building from source
 
