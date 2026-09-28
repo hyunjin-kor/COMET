@@ -21,7 +21,7 @@ function formula(text: string): string {
   if (text === 'Pt3M') return 'Pt₃M';
   if (text === 'CnH2n') return 'CₙH₂ₙ';
   if (text === 'CnH(2n+2)') return 'CₙH₂ₙ₊₂';
-  if (/^[A-Z][a-z]?[nx]$/.test(text)) return original;
+  if (/^[A-Z][a-z]?[nx](?:\([IV]+\))?$/.test(text)) return original;
   if (/^(?:Co|Pt|Ni|Fe|Cu)0$/.test(text)) return `${text.slice(0, -1)}⁰`;
   if (/^(?:13C|14C|15N2?|18O2?)$/.test(text)) return superscript(text.slice(0, 2)) + formula(text.slice(2));
   if (/^CO2(?:RR|eq|e)$/.test(text)) return text.replace('CO2', 'CO₂');

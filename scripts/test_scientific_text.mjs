@@ -30,6 +30,10 @@ test('URLs, DOI, identifiers, product grades and source ambiguities remain intac
   assert.equal(format(untouched), untouched);
   assert.equal(format('P5 / P25 / P50 / P75 / P95'), 'P5 / P25 / P50 / P75 / P95');
 });
+test('English words that tokenize as an element plus n or x stay plain, formulae with n or x keep subscripts', () => {
+  assert.equal(format('Tin(II) oxalate; Tin(IV) chloride; Iron(III) nitrate; Zinc nitrate'), 'Tin(II) oxalate; Tin(IV) chloride; Iron(III) nitrate; Zinc nitrate');
+  assert.equal(format('SnOx; NOx; MnOx; LixCoO2; Fe(III); Al2O3; Co3O4; C4+; CO <sub>2</sub>'), 'SnOₓ; NOₓ; MnOₓ; LiₓCoO₂; Fe(III); Al₂O₃; Co₃O₄; C₄+; CO₂');
+});
 test('formatting is idempotent and search accepts displayed subscripts and powers', () => {
   const text = 'Ni(NO3)2*6H2O; Fe3+; 15N2; CeO2-x; kg CO2-eq; cm2';
   assert.equal(format(format(text)), format(text));
